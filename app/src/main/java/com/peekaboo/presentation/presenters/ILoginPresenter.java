@@ -7,4 +7,5 @@ import com.peekaboo.presentation.views.ILoginView;
  */
 public interface ILoginPresenter extends IPresenter<ILoginView> {
     void onSignInButtonClick(String login, String password);
+    void onVkButtonClick();
 }
