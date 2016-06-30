@@ -8,6 +8,7 @@ import com.peekaboo.domain.SessionRepository;
 import com.peekaboo.domain.User;
 
 import rx.Observable;
+import rx.functions.Func1;
 
 /**
  * Created by Arkadiy on 05.06.2016.
