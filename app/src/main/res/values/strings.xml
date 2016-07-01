@@ -3,5 +3,6 @@
     <string name="pleaseWait">Please, wait...</string>
     <string name="username">Username</string>
     <string name="password">Password</string>
+    <string name="skip">Skip</string>
     <integer name="com_vk_sdk_AppId">5527207</integer>
 </resources>
