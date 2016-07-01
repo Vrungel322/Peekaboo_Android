@@ -29,6 +29,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void startApp() {
+        finish();
         int i = 0;
         if (i == 0) {
             mNavigator.startIntroScreen(this);
