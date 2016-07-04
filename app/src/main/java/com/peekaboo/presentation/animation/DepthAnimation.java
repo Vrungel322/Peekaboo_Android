@@ -52,6 +52,7 @@ public class DepthAnimation extends BaseAppIntro {
     }
 
     public void getStarted(View v){
+        finish();
         loadLogInActivity();
     }
 }
