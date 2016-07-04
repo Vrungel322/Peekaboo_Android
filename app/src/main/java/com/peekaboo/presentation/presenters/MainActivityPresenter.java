@@ -20,7 +20,7 @@ public class MainActivityPresenter {
     }
 
     public void createSharedPref(){
-        prefs = mContext.getSharedPreferences("com.peekaboo.Peekaboo", mContext.MODE_PRIVATE);
+        prefs = SharedPrefInstance.getShPrefInstance(mContext);
     }
 
     public boolean isFirstLaunch(){
@@ -29,5 +29,18 @@ public class MainActivityPresenter {
     public void setSecondLaunch(){
         prefs.edit().putBoolean("firstrun", false).apply();
         Log.wtf("prefs", String.valueOf(prefs.getBoolean("firstrun", true)));
+    }
+
+    private static class SharedPrefInstance{
+        private static SharedPreferences prefs;
+
+        private SharedPrefInstance(){}
+
+        public static SharedPreferences getShPrefInstance(Context mContext){
+            if (prefs == null){
+                prefs =  mContext.getSharedPreferences("com.peekaboo.Peekaboo", mContext.MODE_PRIVATE);
+            }
+            return prefs;
+        }
     }
 }
