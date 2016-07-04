@@ -1,7 +1,7 @@
 package com.peekaboo.presentation.di;
 
 import android.content.Context;
-import android.util.Log;
+import android.content.SharedPreferences;
 
 import com.peekaboo.data.di.DataModule;
 import com.peekaboo.domain.schedulers.ObserveOn;
@@ -39,6 +39,12 @@ public class ApplicationModule {
     @Provides
     ObserveOn provideObserveOn() {
         return AndroidSchedulers::mainThread;
+    }
+
+    @Singleton
+    @Provides
+    SharedPreferences provideSharedPreferences(Context mContext){
+        return mContext.getSharedPreferences("com.peekaboo.Peekaboo", mContext.MODE_PRIVATE);
     }
 
 //    @Singleton
