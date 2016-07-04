@@ -1,5 +1,6 @@
 package com.peekaboo.presentation.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
@@ -12,6 +13,10 @@ import com.peekaboo.presentation.fragments.ProgressDialogFragment;
 import com.peekaboo.presentation.presenters.LoginPresenter;
 import com.peekaboo.presentation.views.ILoginView;
 import com.peekaboo.utils.ActivityNavigator;
+import com.vk.sdk.VKAccessToken;
+import com.vk.sdk.VKCallback;
+import com.vk.sdk.VKSdk;
+import com.vk.sdk.api.VKError;
 
 import javax.inject.Inject;
 
@@ -42,6 +47,9 @@ public class LogInActivity extends AppCompatActivity implements ILoginView {
         loginPresenter.bind(this);
         //запускает отлов состояния Интернета
         loginPresenter.setCheckingInternet();
+//         get fingerprint for init in VK
+//         need be added in VKConsole for each developer to test
+//        loginPresenter.getFingerprint();
     }
 
     @Override
@@ -81,6 +89,32 @@ public class LogInActivity extends AppCompatActivity implements ILoginView {
         String login = etLogin.getText().toString();
         String password = etPassword.getText().toString();
         loginPresenter.onSignInButtonClick(login, password);
+    }
+
+    @OnClick(R.id.bVk)
+    void onVkButtonClick(){
+        loginPresenter.onVkButtonClick();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (!VKSdk.onActivityResult(requestCode, resultCode, data, new VKCallback<VKAccessToken>() {
+            @Override
+            public void onResult(VKAccessToken res) {
+                // Пользователь успешно авторизовался
+                Toast.makeText(getApplicationContext(),
+                        "userID: " + res.userId + " email: " + res.email
+                        , Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onError(VKError error) {
+                // Произошла ошибка авторизации (например, пользователь запретил авторизацию)
+                Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
+            }
+        })) {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
     }
 
     @Override

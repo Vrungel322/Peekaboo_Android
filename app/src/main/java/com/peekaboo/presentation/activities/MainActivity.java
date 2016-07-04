@@ -11,8 +11,6 @@ import com.peekaboo.utils.ActivityNavigator;
 
 import javax.inject.Inject;
 
-import butterknife.ButterKnife;
-
 public class MainActivity extends AppCompatActivity {
 
     @Inject
@@ -27,7 +25,24 @@ public class MainActivity extends AppCompatActivity {
 //        ButterKnife.bind(this);
         ApplicationComponent component = PeekabooApplication.getApp(this).getComponent();
         component.inject(this);
-        //запускает LodInActivity
-        mNavigator.startLogInActivity(this);
+        startApp();
+    }
+
+    private void startApp() {
+        mainActivityPresenter.createSharedPref();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (mainActivityPresenter.isFirstLaunch()) {
+            mainActivityPresenter.setSecondLaunch();
+            mNavigator.startIntroScreen(this);
+        }
+        else {
+            //запускает LodInActivity
+            mNavigator.startLogInActivity(this);
+        }
+        finish();
     }
 }
