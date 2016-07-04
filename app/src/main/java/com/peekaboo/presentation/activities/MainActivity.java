@@ -29,16 +29,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void startApp() {
-        finish();
-        int i = 0;
-        if (i == 0) {
+        mainActivityPresenter.createSharedPref();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (mainActivityPresenter.isFirstLaunch()) {
+            mainActivityPresenter.setSecondLaunch();
             mNavigator.startIntroScreen(this);
         }
         else {
             //запускает LodInActivity
             mNavigator.startLogInActivity(this);
         }
-
-
+        finish();
     }
 }
