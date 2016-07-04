@@ -29,7 +29,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void startApp() {
-        mainActivityPresenter.createSharedPref();
     }
 
     @Override
