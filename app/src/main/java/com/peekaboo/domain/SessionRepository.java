@@ -8,4 +8,6 @@ import rx.Observable;
  */
 public interface SessionRepository {
     Observable<User> askForUser(String login, String password);
+    Observable<User> signUp(String login, String password, String email);
+//    Observable<String> getKey();
 }

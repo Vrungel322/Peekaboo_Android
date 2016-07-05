@@ -1,11 +1,15 @@
 package com.peekaboo.data.di;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+
 import com.peekaboo.data.Constants;
 import com.peekaboo.data.mappers.MapperFactory;
 import com.peekaboo.data.repositories.SessionDataRepository;
 import com.peekaboo.data.rest.PeekabooApi;
 import com.peekaboo.data.rest.RestApi;
 import com.peekaboo.domain.SessionRepository;
+import com.peekaboo.domain.User;
 
 import java.util.concurrent.TimeUnit;
 
@@ -31,6 +35,7 @@ public class DataModule {
         return new OkHttpClient.Builder()
                 .readTimeout(10, TimeUnit.SECONDS)
                 .addInterceptor(interceptor)
+//                .addInterceptor(new AuthenticatingInterceptor(authentificator))
                 .build();
     }
 
@@ -47,7 +52,13 @@ public class DataModule {
 
     @Provides
     @Singleton
-    public SessionRepository provideRepository(Retrofit retrofit) {
-        return new SessionDataRepository(new RestApi(retrofit.create(PeekabooApi.class)), new MapperFactory());
+    public User provideUser(SharedPreferences prefs) {
+        return new User(prefs);
+    }
+
+    @Provides
+    @Singleton
+    public SessionRepository provideRepository(Retrofit retrofit, User user) {
+        return new SessionDataRepository(new RestApi(retrofit.create(PeekabooApi.class)), new MapperFactory(), user);
     }
 }

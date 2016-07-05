@@ -9,29 +9,31 @@ import android.util.Log;
 import com.peekaboo.domain.User;
 import com.peekaboo.domain.subscribers.BaseProgressSubscriber;
 import com.peekaboo.domain.usecase.LoginUseCase;
-import com.peekaboo.presentation.views.ILoginView;
+import com.peekaboo.presentation.views.ICredentialsView;
 import com.peekaboo.utils.InternetBroadcastReceiver;
 import com.vk.sdk.VKScope;
 import com.vk.sdk.VKSdk;
 import com.vk.sdk.util.VKUtil;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 /**
  * Created by sebastian on 28.06.16.
  */
-public class LoginPresenter extends BasePresenter<ILoginView> implements ILoginPresenter,
+@Singleton
+public class LoginPresenter extends ProgressPresenter<ICredentialsView> implements ILoginPresenter,
         BaseProgressSubscriber.ProgressSubscriberListener {
 
     private LoginUseCase useCase;
-    private  Context mContext;
+    private Context mContext;
     private IntentFilter ifInternetCheck;
     private InternetBroadcastReceiver ibrInternetCheck;
 
     @Inject
     public LoginPresenter(Context context, LoginUseCase useCase) {
+        super(context);
         this.useCase = useCase;
-        mContext = context;
     }
 
     @Override
@@ -41,6 +43,7 @@ public class LoginPresenter extends BasePresenter<ILoginView> implements ILoginP
             @Override
             public void onNext(User response) {
                 super.onNext(response);
+                Log.e("onNext", String.valueOf(response));
                 if (getView() != null) {
                     getView().navigateToProfile();
                 }

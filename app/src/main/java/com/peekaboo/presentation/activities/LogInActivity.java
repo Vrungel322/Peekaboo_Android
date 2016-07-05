@@ -11,7 +11,7 @@ import com.peekaboo.R;
 import com.peekaboo.presentation.PeekabooApplication;
 import com.peekaboo.presentation.fragments.ProgressDialogFragment;
 import com.peekaboo.presentation.presenters.LoginPresenter;
-import com.peekaboo.presentation.views.ILoginView;
+import com.peekaboo.presentation.views.ICredentialsView;
 import com.peekaboo.utils.ActivityNavigator;
 import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKCallback;
@@ -24,7 +24,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class LogInActivity extends AppCompatActivity implements ILoginView {
+public class LogInActivity extends AppCompatActivity implements ICredentialsView {
 
     public static final String PROGRESS_DIALOG = "progress_dialog";
     @BindView(R.id.etLogin)
@@ -45,7 +45,6 @@ public class LogInActivity extends AppCompatActivity implements ILoginView {
         ButterKnife.bind(this);
         PeekabooApplication.getApp(this).getComponent().inject(this);
         loginPresenter.bind(this);
-        //запускает отлов состояния Интернета
         loginPresenter.setCheckingInternet();
 //         get fingerprint for init in VK
 //         need be added in VKConsole for each developer to test

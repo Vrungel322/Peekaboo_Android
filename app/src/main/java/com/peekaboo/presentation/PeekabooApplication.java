@@ -12,6 +12,7 @@ import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKAccessTokenTracker;
 import com.vk.sdk.VKSdk;
 
+
 /**
  * Created by sebastian on 14.06.16.
  */
