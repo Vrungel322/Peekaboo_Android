@@ -1,5 +1,6 @@
 package com.peekaboo.data.rest;
 
+import com.peekaboo.data.rest.entity.TokenEntity;
 import com.peekaboo.data.rest.entity.UserEntity;
 import com.peekaboo.domain.User;
 
@@ -20,7 +21,7 @@ public class RestApi {
         return api.login(username, password);
     }
 
-    public Observable<String> signUp(String login, String password, String email) {
+    public Observable<TokenEntity> signUp(String login, String password, String email) {
         return api.signUp(login, password, email);
     }
 }

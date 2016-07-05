@@ -33,7 +33,7 @@ public class SessionDataRepository implements SessionRepository {
     @Override
     public Observable<User> signUp(String login, String password, String email) {
         return restApi.signUp(login, password, email).map(token -> {
-            user.saveBearer(token);
+            user.saveBearer(token.getToken());
             return user;
         });
     }

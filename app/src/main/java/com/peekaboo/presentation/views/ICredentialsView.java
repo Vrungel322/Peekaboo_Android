@@ -6,5 +6,4 @@ package com.peekaboo.presentation.views;
 
 public interface ICredentialsView extends IProgressView {
     void navigateToProfile();
-    void setCheckingInternet();
 }

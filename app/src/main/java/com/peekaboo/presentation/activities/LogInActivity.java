@@ -68,11 +68,6 @@ public class LogInActivity extends AppCompatActivity implements ICredentialsView
     }
 
     @Override
-    public void setCheckingInternet() {
-
-    }
-
-    @Override
     public void showProgress() {
         DialogFragment newFragment = ProgressDialogFragment.newInstance();
         newFragment.setCancelable(false);

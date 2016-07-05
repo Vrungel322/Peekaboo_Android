@@ -27,7 +27,7 @@ public class User {
 
     @Nullable
     public String getBearer() {
-        return bearer;
+        return "Bearer " + bearer;
     }
 
     public boolean isAuthorized() {

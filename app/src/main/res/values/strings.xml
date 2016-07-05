@@ -4,5 +4,7 @@
     <string name="username">Username</string>
     <string name="password">Password</string>
     <string name="skip">Skip</string>
+    <string name="confirmPassword">Confirm password</string>
+    <string name="email">Email</string>
     <integer name="com_vk_sdk_AppId">5527207</integer>
 </resources>
