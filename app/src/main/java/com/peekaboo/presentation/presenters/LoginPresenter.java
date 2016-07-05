@@ -8,6 +8,7 @@ import com.peekaboo.domain.ErrorHandler;
 import com.peekaboo.domain.User;
 import com.peekaboo.domain.subscribers.BaseProgressSubscriber;
 import com.peekaboo.domain.usecase.LoginUseCase;
+import com.peekaboo.presentation.utils.CredentialUtils;
 import com.peekaboo.presentation.views.ICredentialsView;
 import com.vk.sdk.VKScope;
 import com.vk.sdk.VKSdk;
@@ -33,17 +34,32 @@ public class LoginPresenter extends ProgressPresenter<ICredentialsView> implemen
 
     @Override
     public void onSignInButtonClick(String login, String password) {
-        useCase.setCredentials(login, password);
-        useCase.execute(new BaseProgressSubscriber<User>(this) {
-            @Override
-            public void onNext(User response) {
-                super.onNext(response);
-                Log.e("onNext", String.valueOf(response));
-                if (getView() != null) {
-                    getView().navigateToProfile();
+        if (isValid(login, password)) {
+            useCase.setCredentials(login, password);
+            useCase.execute(new BaseProgressSubscriber<User>(this) {
+                @Override
+                public void onNext(User response) {
+                    super.onNext(response);
+                    Log.e("onNext", String.valueOf(response));
+                    if (getView() != null) {
+                        getView().navigateToProfile();
+                    }
                 }
-            }
-        });
+            });
+        }
+    }
+
+
+    private boolean isValid(String login, String password) {
+
+        if (!CredentialUtils.isLoginValid(login)) {
+            if (getView() != null) getView().showInputError(ICredentialsView.InputFieldError.LOGIN);
+        } else if (!CredentialUtils.isPasswordValid(password)) {
+            if (getView() != null) getView().showInputError(ICredentialsView.InputFieldError.PASSWORD);
+        } else {
+            return true;
+        }
+        return false;
     }
 
     @Override

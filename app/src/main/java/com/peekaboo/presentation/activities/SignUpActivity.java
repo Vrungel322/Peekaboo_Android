@@ -85,6 +85,29 @@ public class SignUpActivity extends AppCompatActivity implements ICredentialsVie
         finish();
     }
 
+
+    @Override
+    public void showInputError(InputFieldError error) {
+        switch (error) {
+            case LOGIN:
+                etLogin.setError(getString(R.string.invalidLogin));
+                etLogin.setText("");
+                break;
+            case PASSWORD:
+                etPassword.setError(getString(R.string.invalidPassword));
+                etPassword.setText("");
+                break;
+            case PASSWORD_CONFIRM:
+                etPassword.setError(getString(R.string.invalidPasswordConfirm));
+                etPassword.setText("");
+                etPasswordConfirm.setText("");
+                break;
+            case EMAIL:
+                etEmail.setError(getString(R.string.invalidEmail));
+                etEmail.setText("");
+        }
+    }
+
     @Override
     public void onError(String text) {
         Toast.makeText(this, text, Toast.LENGTH_LONG).show();

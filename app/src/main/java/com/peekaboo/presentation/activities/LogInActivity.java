@@ -68,6 +68,20 @@ public class LogInActivity extends AppCompatActivity implements ICredentialsView
     }
 
     @Override
+    public void showInputError(InputFieldError error) {
+        switch (error) {
+            case LOGIN:
+                etLogin.setError(getString(R.string.invalidLogin));
+                etLogin.setText("");
+                break;
+            case PASSWORD:
+                etPassword.setError(getString(R.string.invalidPassword));
+                etPassword.setText("");
+                break;
+        }
+    }
+
+    @Override
     public void showProgress() {
         DialogFragment newFragment = ProgressDialogFragment.newInstance();
         newFragment.setCancelable(false);

@@ -13,6 +13,7 @@ import com.peekaboo.domain.ErrorHandler;
 import com.peekaboo.domain.User;
 import com.peekaboo.domain.subscribers.BaseProgressSubscriber;
 import com.peekaboo.domain.usecase.SignUpUseCase;
+import com.peekaboo.presentation.utils.CredentialUtils;
 import com.peekaboo.presentation.views.ICredentialsView;
 
 import java.io.IOException;
@@ -41,18 +42,36 @@ public class SignUpPresenter extends ProgressPresenter<ICredentialsView> impleme
 
     @Override
     public void onSignUpButtonClick(String login, String email, String password, String passwordConfirm) {
-        useCase.setCredentials(login, password, email);
-        useCase.execute(new BaseProgressSubscriber<User>(this) {
-            @Override
-            public void onNext(User response) {
-                super.onNext(response);
-                Log.e("onNext", String.valueOf(response));
+        if (isValid(login, email, password, passwordConfirm)) {
+            useCase.setCredentials(login, password, email);
+            useCase.execute(new BaseProgressSubscriber<User>(this) {
+                @Override
+                public void onNext(User response) {
+                    super.onNext(response);
+                    Log.e("onNext", String.valueOf(response));
 //                if (getView() != null) {
 //                    getView().navigateToProfile();
 //                }
-                start(response);
-            }
-        });
+                    start(response);
+                }
+            });
+        }
+    }
+
+    private boolean isValid(String login, String email, String password, String passwordConfirm) {
+
+        if (!CredentialUtils.isLoginValid(login)) {
+            if (getView() != null) getView().showInputError(ICredentialsView.InputFieldError.LOGIN);
+        } else if (!CredentialUtils.isPasswordValid(password)) {
+            if (getView() != null) getView().showInputError(ICredentialsView.InputFieldError.PASSWORD);
+        } else if (!CredentialUtils.isPasswordConfirmed(password, passwordConfirm)) {
+            if (getView() != null) getView().showInputError(ICredentialsView.InputFieldError.PASSWORD_CONFIRM);
+        } else if (!CredentialUtils.isEmailValid(email)) {
+            if (getView() != null) getView().showInputError(ICredentialsView.InputFieldError.EMAIL);
+        } else {
+            return true;
+        }
+        return false;
     }
 
 
