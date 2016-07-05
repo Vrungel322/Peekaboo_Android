@@ -3,6 +3,7 @@ package com.peekaboo.presentation.presenters;
 import android.content.Context;
 import android.util.Log;
 
+import com.peekaboo.domain.ErrorHandler;
 import com.peekaboo.domain.User;
 import com.peekaboo.domain.subscribers.BaseProgressSubscriber;
 import com.peekaboo.domain.usecase.SignUpUseCase;
@@ -21,8 +22,8 @@ public class SignUpPresenter extends ProgressPresenter<ICredentialsView> impleme
     private SignUpUseCase useCase;
 
     @Inject
-    public SignUpPresenter(Context context, SignUpUseCase useCase) {
-        super(context);
+    public SignUpPresenter(Context context, SignUpUseCase useCase, ErrorHandler errorHandler) {
+        super(context, errorHandler);
         this.useCase = useCase;
     }
 

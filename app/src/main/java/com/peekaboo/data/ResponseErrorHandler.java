@@ -18,12 +18,10 @@ import retrofit2.adapter.rxjava.HttpException;
 /**
  * Created by sebastian on 05.07.16.
  */
-@Singleton
 public class ResponseErrorHandler implements ErrorHandler {
     private Gson gson = new Gson();
     private Context context;
 
-    @Inject
     public ResponseErrorHandler(Context context) {
         this.context = context;
     }

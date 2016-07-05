@@ -4,10 +4,12 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.peekaboo.data.Constants;
+import com.peekaboo.data.ResponseErrorHandler;
 import com.peekaboo.data.mappers.MapperFactory;
 import com.peekaboo.data.repositories.SessionDataRepository;
 import com.peekaboo.data.rest.PeekabooApi;
 import com.peekaboo.data.rest.RestApi;
+import com.peekaboo.domain.ErrorHandler;
 import com.peekaboo.domain.SessionRepository;
 import com.peekaboo.domain.User;
 
@@ -60,5 +62,12 @@ public class DataModule {
     @Singleton
     public SessionRepository provideRepository(Retrofit retrofit, User user) {
         return new SessionDataRepository(new RestApi(retrofit.create(PeekabooApi.class)), new MapperFactory(), user);
+    }
+
+
+    @Provides
+    @Singleton
+    public ErrorHandler provideErrorHandler(Context context) {
+        return new ResponseErrorHandler(context);
     }
 }

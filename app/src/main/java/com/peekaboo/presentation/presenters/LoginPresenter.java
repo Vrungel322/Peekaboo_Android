@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.util.Log;
 
+import com.peekaboo.domain.ErrorHandler;
 import com.peekaboo.domain.User;
 import com.peekaboo.domain.subscribers.BaseProgressSubscriber;
 import com.peekaboo.domain.usecase.LoginUseCase;
@@ -25,8 +26,8 @@ public class LoginPresenter extends ProgressPresenter<ICredentialsView> implemen
     private LoginUseCase useCase;
 
     @Inject
-    public LoginPresenter(Context context, LoginUseCase useCase) {
-        super(context);
+    public LoginPresenter(Context context, LoginUseCase useCase, ErrorHandler errorHandler) {
+        super(context, errorHandler);
         this.useCase = useCase;
     }
 
