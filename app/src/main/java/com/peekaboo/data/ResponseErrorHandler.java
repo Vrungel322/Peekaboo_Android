@@ -1,16 +1,12 @@
 package com.peekaboo.data;
 
 import android.content.Context;
+import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
 import com.peekaboo.domain.Error;
 import com.peekaboo.domain.ErrorHandler;
-
-import java.io.IOException;
-
-import javax.inject.Inject;
-import javax.inject.Singleton;
 
 import okhttp3.ResponseBody;
 import retrofit2.adapter.rxjava.HttpException;
@@ -35,7 +31,7 @@ public class ResponseErrorHandler implements ErrorHandler {
             try {
                 Error error = adapter.fromJson(body.string());
                 return error.getMessage();
-            } catch (IOException e) {}
+            } catch (Exception e) {}
         }
         return t.getMessage();
     }
