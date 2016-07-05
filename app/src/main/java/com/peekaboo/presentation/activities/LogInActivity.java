@@ -10,7 +10,7 @@ import com.peekaboo.R;
 import com.peekaboo.presentation.PeekabooApplication;
 import com.peekaboo.presentation.fragments.ProgressDialogFragment;
 import com.peekaboo.presentation.presenters.LoginPresenter;
-import com.peekaboo.presentation.views.ILoginView;
+import com.peekaboo.presentation.views.ICredentialsView;
 import com.peekaboo.utils.ActivityNavigator;
 
 import javax.inject.Inject;
@@ -19,7 +19,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class LogInActivity extends AppCompatActivity implements ILoginView {
+public class LogInActivity extends AppCompatActivity implements ICredentialsView {
 
     public static final String PROGRESS_DIALOG = "progress_dialog";
     @BindView(R.id.etLogin)

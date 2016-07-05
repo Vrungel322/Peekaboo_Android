@@ -1,7 +1,5 @@
 package com.peekaboo.data.rest;
 
-import com.peekaboo.data.rest.entity.UserEntity;
-
 import retrofit2.http.Field;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.POST;
@@ -12,9 +10,23 @@ import rx.Observable;
  */
 public interface PeekabooApi {
 
+    String SIGNIN = "signin";
+    String SIGNUP = "signup";
+    String GET_KEY = "";
+
     @FormUrlEncoded
-    @POST("signin")
-    Observable<UserEntity> login(
-            @Field("username") String email,
-            @Field("password") String password);
+    @POST(SIGNIN)
+    Observable<String> login(
+            @Field("username") String username,
+            @Field("password") String password
+    );
+
+    @FormUrlEncoded
+    @POST(SIGNUP)
+    Observable<String> signUp(
+            @Field("username") String username,
+            @Field("password") String password,
+            @Field("email") String email
+    );
+
 }

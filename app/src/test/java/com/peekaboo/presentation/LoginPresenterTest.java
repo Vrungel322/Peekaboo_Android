@@ -6,9 +6,8 @@ import android.test.mock.MockContext;
 import com.peekaboo.domain.SessionRepository;
 import com.peekaboo.domain.User;
 import com.peekaboo.domain.usecase.LoginUseCase;
-import com.peekaboo.presentation.BasePresenterTest;
 import com.peekaboo.presentation.presenters.LoginPresenter;
-import com.peekaboo.presentation.views.ILoginView;
+import com.peekaboo.presentation.views.ICredentialsView;
 
 import org.junit.Test;
 import org.mockito.Mock;
@@ -25,7 +24,7 @@ import static org.mockito.Mockito.verify;
  */
 public class LoginPresenterTest extends BasePresenterTest {
     @Mock
-    private ILoginView loginView;
+    private ICredentialsView loginView;
     @Mock
     private Context context;
 

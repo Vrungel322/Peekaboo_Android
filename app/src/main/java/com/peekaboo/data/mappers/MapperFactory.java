@@ -8,7 +8,7 @@ import com.peekaboo.domain.User;
  */
 public class MapperFactory implements AbstractMapperFactory {
     @Override
-    public Mapper<UserEntity, User> getUserMapper() {
+    public Mapper<String, User> getUserMapper() {
         return new UserMapper();
     }
 }

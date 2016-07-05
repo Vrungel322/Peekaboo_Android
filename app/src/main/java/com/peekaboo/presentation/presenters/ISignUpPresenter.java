@@ -5,6 +5,6 @@ import com.peekaboo.presentation.views.ICredentialsView;
 /**
  * Created by sebastian on 28.06.16.
  */
-public interface ILoginPresenter extends IPresenter<ICredentialsView> {
-    void onSignInButtonClick(String login, String password);
+public interface ISignUpPresenter extends IPresenter<ICredentialsView> {
+    void onSignUpButtonClick(String login, String password, String email);
 }

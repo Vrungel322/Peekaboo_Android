@@ -1,15 +1,13 @@
 package com.peekaboo.presentation.presenters;
 
 import android.content.Context;
-import android.content.IntentFilter;
-import android.net.ConnectivityManager;
 import android.util.Log;
 
 import com.peekaboo.domain.User;
 import com.peekaboo.domain.subscribers.BaseProgressSubscriber;
 import com.peekaboo.domain.usecase.LoginUseCase;
+import com.peekaboo.domain.usecase.SignUpUseCase;
 import com.peekaboo.presentation.views.ICredentialsView;
-import com.peekaboo.utils.InternetBroadcastReceiver;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -18,21 +16,20 @@ import javax.inject.Singleton;
  * Created by sebastian on 28.06.16.
  */
 @Singleton
-public class LoginPresenter extends ProgressPresenter<ICredentialsView> implements ILoginPresenter,
+public class SignUpPresenter extends ProgressPresenter<ICredentialsView> implements ISignUpPresenter,
         BaseProgressSubscriber.ProgressSubscriberListener {
 
-    private LoginUseCase useCase;
+    private SignUpUseCase useCase;
 
     @Inject
-    public LoginPresenter(Context context, LoginUseCase useCase) {
+    public SignUpPresenter(Context context, SignUpUseCase useCase) {
         super(context);
         this.useCase = useCase;
     }
 
     @Override
-    public void onSignInButtonClick(String login, String password) {
-        if (isValid)
-        useCase.setCredentials(login, password);
+    public void onSignUpButtonClick(String login, String password, String email) {
+        useCase.setCredentials(login, password, email);
         useCase.execute(new BaseProgressSubscriber<User>(this) {
             @Override
             public void onNext(User response) {
