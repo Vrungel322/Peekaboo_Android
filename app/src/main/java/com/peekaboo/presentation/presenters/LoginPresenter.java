@@ -34,6 +34,7 @@ public class LoginPresenter extends ProgressPresenter<ICredentialsView> implemen
     public LoginPresenter(Context context, LoginUseCase useCase) {
         super(context);
         this.useCase = useCase;
+        this.mContext = context;
     }
 
     @Override
