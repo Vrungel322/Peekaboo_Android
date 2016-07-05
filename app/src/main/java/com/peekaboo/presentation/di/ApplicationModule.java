@@ -7,6 +7,7 @@ import com.peekaboo.data.di.DataModule;
 import com.peekaboo.domain.schedulers.ObserveOn;
 import com.peekaboo.domain.schedulers.SubscribeOn;
 import com.peekaboo.presentation.PeekabooApplication;
+import com.squareup.otto.Bus;
 
 import javax.inject.Singleton;
 
@@ -45,6 +46,11 @@ public class ApplicationModule {
     @Provides
     SharedPreferences provideSharedPreferences(Context mContext){
         return mContext.getSharedPreferences("com.peekaboo.Peekaboo", mContext.MODE_PRIVATE);
+    }
+
+    @Provides
+    Bus provideEventBus(){
+        return new Bus();
     }
 
 //    @Singleton

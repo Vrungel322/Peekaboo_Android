@@ -4,7 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
-import android.widget.TextView;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.peekaboo.R;
@@ -13,6 +13,7 @@ import com.peekaboo.presentation.fragments.ProgressDialogFragment;
 import com.peekaboo.presentation.presenters.LoginPresenter;
 import com.peekaboo.presentation.views.ICredentialsView;
 import com.peekaboo.utils.ActivityNavigator;
+import com.squareup.otto.Bus;
 import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKCallback;
 import com.vk.sdk.VKSdk;
@@ -28,14 +29,15 @@ public class LogInActivity extends AppCompatActivity implements ICredentialsView
 
     public static final String PROGRESS_DIALOG = "progress_dialog";
     @BindView(R.id.etLogin)
-    TextView etLogin;
+    EditText etLogin;
     @BindView(R.id.etPassword)
-    TextView etPassword;
-
+    EditText etPassword;
     @Inject
     LoginPresenter loginPresenter;
     @Inject
     ActivityNavigator navigator;
+    @Inject
+    static Bus bus;
 
 
     @Override
@@ -49,10 +51,12 @@ public class LogInActivity extends AppCompatActivity implements ICredentialsView
 //         get fingerprint for init in VK
 //         need be added in VKConsole for each developer to test
 //        loginPresenter.getFingerprint();
+        bus.register(this);
     }
 
     @Override
     protected void onDestroy() {
+        bus.unregister(this);
         loginPresenter.unbind();
         super.onDestroy();
     }
