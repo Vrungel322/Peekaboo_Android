@@ -22,6 +22,18 @@ public class LoginPresenter extends ProgressPresenter<ICredentialsView> implemen
         BaseProgressSubscriber.ProgressSubscriberListener {
 
     private LoginUseCase useCase;
+<<<<<<< Updated upstream
+=======
+    private  Context mContext;
+    private IntentFilter ifInternetCheck;
+    private InternetBroadcastReceiver ibrInternetCheck;
+@Singleton
+public class LoginPresenter extends ProgressPresenter<ICredentialsView> implements ILoginPresenter,
+        BaseProgressSubscriber.ProgressSubscriberListener {
+
+    private LoginUseCase useCase;
+>>>>>>> arkadii
+>>>>>>> Stashed changes
 
     @Inject
     public LoginPresenter(Context context, LoginUseCase useCase) {

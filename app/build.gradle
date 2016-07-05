@@ -33,6 +33,10 @@ repositories {
     maven { url "http://repository.codehaus.org/org/codehaus" }
 }
 
+repositories {
+    maven { url "http://repository.codehaus.org/org/codehaus" }
+}
+
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
