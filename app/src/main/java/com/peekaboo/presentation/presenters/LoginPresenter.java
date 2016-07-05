@@ -11,17 +11,15 @@ import com.peekaboo.presentation.views.ILoginView;
 import com.peekaboo.utils.InternetBroadcastReceiver;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 /**
  * Created by sebastian on 28.06.16.
  */
-@Singleton
 public class LoginPresenter extends BasePresenter<ILoginView> implements ILoginPresenter,
         BaseProgressSubscriber.ProgressSubscriberListener {
 
     private LoginUseCase useCase;
-    private Context mContext;
+    private  Context mContext;
     private IntentFilter ifInternetCheck;
     private InternetBroadcastReceiver ibrInternetCheck;
 

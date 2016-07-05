@@ -39,9 +39,7 @@ public class BaseProgressSubscriber<T> extends BaseUseCaseSubscriber<T> {
 
     public interface ProgressSubscriberListener {
         void onError(Throwable t);
-
         void onCompleted();
-
         void onStartLoading();
     }
 }

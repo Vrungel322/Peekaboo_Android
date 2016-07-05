@@ -40,6 +40,7 @@ public class LogInActivity extends AppCompatActivity implements ILoginView {
         ButterKnife.bind(this);
         PeekabooApplication.getApp(this).getComponent().inject(this);
         loginPresenter.bind(this);
+        //запускает отлов состояния Интернета
         loginPresenter.setCheckingInternet();
     }
 

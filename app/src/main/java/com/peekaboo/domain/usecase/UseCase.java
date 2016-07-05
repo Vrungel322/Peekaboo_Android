@@ -27,12 +27,12 @@ public abstract class UseCase<T> {
     public void execute(Subscriber<T> subscriber) {
         Log.e("subscription", "subscribe " + observable);
         if (observable == null)
-            observable = getUseCaseObservable()
-                    .subscribeOn(subscribeOn.getScheduler())
-                    .observeOn(observeOn.getScheduler())
-                    .cache()
-                    .doOnError((t) -> observable = null)
-                    .doOnCompleted(() -> observable = null);
+        observable = getUseCaseObservable()
+                .subscribeOn(subscribeOn.getScheduler())
+                .observeOn(observeOn.getScheduler())
+                .cache()
+                .doOnError((t) -> observable = null)
+                .doOnCompleted(() -> observable = null);
         subscription = observable.subscribe(subscriber);
     }
 
@@ -41,7 +41,6 @@ public abstract class UseCase<T> {
     public boolean isWorking() {
         return observable != null;
     }
-
     public void unsubscribe() {
         Log.e("subscription", "unsubscribe");
         if (!subscription.isUnsubscribed()) {
