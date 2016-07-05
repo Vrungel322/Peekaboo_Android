@@ -52,4 +52,9 @@ public class ProgressPresenter<V extends IProgressView> extends BasePresenter<V>
         //start checking Internet connection
         mContext.registerReceiver(ibrInternetCheck, ifInternetCheck);
     }
+
+    protected Context getContext() {
+        return mContext;
+    }
+
 }
