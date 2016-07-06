@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#5e8b8b8b">
+
+
+    <com.github.glomadrian.codeinputlib.CodeInput
+        android:id="@+id/ciConformation"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:hint_color="#545454"
+        app:hint_text="Conformation code"
+        app:text_color="#50c9a9"
+        app:underline_color="#777777"
+        app:underline_selected_color="#50c9a9" />
+
+</LinearLayout>
