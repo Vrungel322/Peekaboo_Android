@@ -2,6 +2,7 @@ package com.peekaboo.presentation.presenters;
 
 import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.neovisionaries.ws.client.WebSocket;
 import com.neovisionaries.ws.client.WebSocketAdapter;
@@ -42,29 +43,28 @@ public class SignUpPresenter extends ProgressPresenter<ISingUpView> implements I
 
     @Override
     public void onSignUpButtonClick(String login, String email, String password, String passwordConfirm) {
+        if (isValid(login, email, password, passwordConfirm)) {
+            useCase.setCredentials(login, password, email);
+            useCase.execute(new BaseProgressSubscriber<User>(this) {
+                @Override
+                public void onNext(User response) {
+                    super.onNext(response);
+                    Log.e("onNext", String.valueOf(response));
+//                if (getView() != null) {
+//                    getView().navigateToProfile();
+//                }
+                    start(response);
+                    Toast.makeText(getContext(), "onNext", Toast.LENGTH_LONG).show();
+                }
 
-        getView().showConfirmDialog();
-//        if (isValid(login, email, password, passwordConfirm)) {
-//            useCase.setCredentials(login, password, email);
-//            useCase.execute(new BaseProgressSubscriber<User>(this) {
-//                @Override
-//                public void onNext(User response) {
-//                    super.onNext(response);
-//                    Log.e("onNext", String.valueOf(response));
-////                if (getView() != null) {
-////                    getView().navigateToProfile();
-////                }
-//                    start(response);
-//                    Toast.makeText(getContext(), "onNext", Toast.LENGTH_LONG).show();
-//                }
-//
-//                @Override
-//                public void onCompleted() {
-//                    super.onCompleted();
-//                    Toast.makeText(getContext(), "onComplete", Toast.LENGTH_LONG).show();
-//                }
-//            });
-//        }
+                @Override
+                public void onCompleted() {
+                    super.onCompleted();
+                    getView().showConfirmDialog();
+                    Toast.makeText(getContext(), "onComplete", Toast.LENGTH_LONG).show();
+                }
+            });
+        }
     }
 
     private boolean isValid(String login, String email, String password, String passwordConfirm) {
