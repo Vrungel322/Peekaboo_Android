@@ -1,8 +1,9 @@
 package com.peekaboo.data.rest;
 
+import com.peekaboo.data.rest.entity.Credentials;
 import com.peekaboo.data.rest.entity.TokenEntity;
 
-import retrofit2.http.Field;
+import retrofit2.http.Body;
 import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.POST;
 import rx.Observable;
@@ -14,21 +15,23 @@ public interface PeekabooApi {
 
     String SIGNIN = "signin";
     String SIGNUP = "signup";
+    String CONFIRM = "confirm";
     String GET_KEY = "";
 
     @FormUrlEncoded
     @POST(SIGNIN)
-    Observable<String> login(
-            @Field("username") String username,
-            @Field("password") String password
+    Observable<TokenEntity> login(
+            @Body Credentials credentials
     );
 
-    @FormUrlEncoded
     @POST(SIGNUP)
     Observable<TokenEntity> signUp(
-            @Field("username") String username,
-            @Field("password") String password,
-            @Field("email") String email
+            @Body Credentials credentials
+    );
+
+    @POST(CONFIRM)
+    Observable<TokenEntity> confirm(
+            @Body ConfirmKey confirmKey
     );
 
 }

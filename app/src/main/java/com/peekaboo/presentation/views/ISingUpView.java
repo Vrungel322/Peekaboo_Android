@@ -1,4 +1,4 @@
-package com.peekaboo.presentation.presenters;
+package com.peekaboo.presentation.views;
 
 import com.peekaboo.presentation.views.ICredentialsView;
 

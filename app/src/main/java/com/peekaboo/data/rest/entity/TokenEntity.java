@@ -5,6 +5,11 @@ package com.peekaboo.data.rest.entity;
  */
 public class TokenEntity {
     private String token;
+    private String id;
+
+    public String getId() {
+        return id;
+    }
 
     public String getToken() {
         return token;

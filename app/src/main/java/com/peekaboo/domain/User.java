@@ -3,18 +3,18 @@ package com.peekaboo.domain;
 import android.content.SharedPreferences;
 import android.support.annotation.Nullable;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
-
 /**
  * Created by sebastian on 28.06.16.
  */
 public class User {
-    private static final String BEARER = "bearer";
+    private static final String TOKEN = "token";
+    public static final String ID = "user_id";
     private SharedPreferences preferences;
 
     @Nullable
-    private String bearer;
+    private String token;
+    @Nullable
+    private String id;
 
     public User(SharedPreferences preferences) {
         this.preferences = preferences;
@@ -27,26 +27,43 @@ public class User {
 
     @Nullable
     public String getBearer() {
-        return "Bearer " + bearer;
+        return "Bearer " + token;
+    }
+
+    @Nullable
+    public String getToken() {
+        return token;
+    }
+
+    @Nullable
+    public String getId() {
+        return id;
     }
 
     public boolean isAuthorized() {
-        return bearer != null;
+        return token != null;
     }
 
-    public void saveBearer(String bearer) {
-        this.bearer = bearer;
-        preferences.edit().putString(BEARER, bearer).commit();
+    public void saveToken(String token) {
+        this.token = token;
+        preferences.edit().putString(TOKEN, token).commit();
+    }
+
+    public void saveId(String id) {
+        this.id = id;
+        preferences.edit().putString(ID, id).commit();
     }
 
     private void restoreData() {
-        bearer = preferences.getString(BEARER, null);
+        token = preferences.getString(TOKEN, null);
+        id = preferences.getString(ID, null);
     }
 
     @Override
     public String toString() {
         return "User{" +
-                "bearer='" + bearer + '\'' +
+                "token='" + token + '\'' +
+                ", id='" + id + '\'' +
                 '}';
     }
 }

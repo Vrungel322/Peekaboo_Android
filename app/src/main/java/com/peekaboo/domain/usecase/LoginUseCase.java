@@ -29,6 +29,6 @@ public class LoginUseCase extends UseCase<User> {
     }
     @Override
     protected Observable<User> getUseCaseObservable() {
-        return sessionRepository.askForUser(login, password);
+        return sessionRepository.login(login, password);
     }
 }
