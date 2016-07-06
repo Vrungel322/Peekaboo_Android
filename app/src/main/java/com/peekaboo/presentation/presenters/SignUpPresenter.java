@@ -2,6 +2,7 @@ package com.peekaboo.presentation.presenters;
 
 import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.neovisionaries.ws.client.WebSocket;
 import com.neovisionaries.ws.client.WebSocketAdapter;
@@ -61,6 +62,18 @@ public class SignUpPresenter extends ProgressPresenter<ISingUpView> implements I
                     user = response;
                     if (getView() != null)
                         getView().showConfirmDialog();
+//                if (getView() != null) {
+//                    getView().navigateToProfile();
+//                }
+                    start(response);
+                    Toast.makeText(getContext(), "onNext", Toast.LENGTH_LONG).show();
+                }
+
+                @Override
+                public void onCompleted() {
+                    super.onCompleted();
+                    getView().showConfirmDialog();
+                    Toast.makeText(getContext(), "onComplete", Toast.LENGTH_LONG).show();
                 }
             });
         }
