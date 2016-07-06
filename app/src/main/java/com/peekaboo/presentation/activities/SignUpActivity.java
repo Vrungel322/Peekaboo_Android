@@ -11,7 +11,7 @@ import com.peekaboo.R;
 import com.peekaboo.presentation.PeekabooApplication;
 import com.peekaboo.presentation.fragments.ConfirmSignUpDialog;
 import com.peekaboo.presentation.fragments.ProgressDialogFragment;
-import com.peekaboo.presentation.presenters.ISingUpView;
+import com.peekaboo.presentation.views.ISingUpView;
 import com.peekaboo.presentation.presenters.SignUpPresenter;
 import com.peekaboo.utils.ActivityNavigator;
 
@@ -33,8 +33,6 @@ public class SignUpActivity extends AppCompatActivity implements ISingUpView {
     EditText etPassword;
     @BindView(R.id.etPasswordConfirm)
     EditText etPasswordConfirm;
-    @BindView(R.id.etEmail)
-    EditText etEmail;
     @Inject
     SignUpPresenter signUpPresenter;
     @Inject
@@ -72,7 +70,6 @@ public class SignUpActivity extends AppCompatActivity implements ISingUpView {
         etPasswordConfirm.setText("asdasd");
         etPassword.setText("asdasd");
         etLogin.setText("asdasd");
-        etEmail.setText("asdasd@mail.ru");
     }
 
     @Override
@@ -104,9 +101,6 @@ public class SignUpActivity extends AppCompatActivity implements ISingUpView {
                 etPassword.setText("");
                 etPasswordConfirm.setText("");
                 break;
-            case EMAIL:
-                etEmail.setError(getString(R.string.invalidEmail));
-                etEmail.setText("");
         }
     }
 
@@ -118,6 +112,7 @@ public class SignUpActivity extends AppCompatActivity implements ISingUpView {
     @Override
     public void showConfirmDialog() {
         FragmentTransaction ft = getFragmentManager().beginTransaction();
+        confirmSignUpDialog.setStyle(android.app.DialogFragment.STYLE_NO_TITLE, 0);
         confirmSignUpDialog.setStyle(android.app.DialogFragment.STYLE_NO_FRAME, 0);
         confirmSignUpDialog.show(ft, "dfNewPerson");
     }
@@ -127,7 +122,6 @@ public class SignUpActivity extends AppCompatActivity implements ISingUpView {
         String login = etLogin.getText().toString();
         String password = etPassword.getText().toString();
         String passwordConfirm = etPasswordConfirm.getText().toString();
-        String email = etEmail.getText().toString();
-        signUpPresenter.onSignUpButtonClick(login, email, password, passwordConfirm);
+        signUpPresenter.onSignUpButtonClick(login, password, passwordConfirm);
     }
 }

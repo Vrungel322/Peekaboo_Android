@@ -10,5 +10,6 @@
     <string name="invalidPassword">Invalid password</string>
     <string name="invalidPasswordConfirm">Passwords don\'t match</string>
     <string name="invalidEmail">Invalid email</string>
+    <string name="invalidKey">Invalid key</string>
     <integer name="com_vk_sdk_AppId">5527207</integer>
 </resources>

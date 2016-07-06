@@ -12,24 +12,24 @@ import rx.Observable;
 /**
  * Created by sebastian on 28.06.16.
  */
-public class SignUpUseCase extends UseCase<User> {
+public class ConfirmUseCase extends UseCase<User> {
     private SessionRepository sessionRepository;
-    private String login;
-    private String password;
+    private String id;
+    private String key;
 
     @Inject
-    public SignUpUseCase(SessionRepository sessionRepository, SubscribeOn subscribeOn, ObserveOn observeOn) {
+    public ConfirmUseCase(SessionRepository sessionRepository, SubscribeOn subscribeOn, ObserveOn observeOn) {
         super(subscribeOn, observeOn);
         this.sessionRepository = sessionRepository;
     }
 
-    public void setCredentials(String login, String password) {
-        this.login = login;
-        this.password = password;
+    public void setConfirmData(String id, String key) {
+        this.id = id;
+        this.key = key;
     }
 
     @Override
     protected Observable<User> getUseCaseObservable() {
-        return sessionRepository.signUp(login, password);
+        return sessionRepository.confirm(id, key);
     }
 }
