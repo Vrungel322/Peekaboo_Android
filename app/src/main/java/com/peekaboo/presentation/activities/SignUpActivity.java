@@ -1,7 +1,7 @@
 package com.peekaboo.presentation.activities;
 
+import android.app.FragmentTransaction;
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.EditText;
@@ -9,10 +9,10 @@ import android.widget.Toast;
 
 import com.peekaboo.R;
 import com.peekaboo.presentation.PeekabooApplication;
+import com.peekaboo.presentation.fragments.ConfirmSignUpDialog;
 import com.peekaboo.presentation.fragments.ProgressDialogFragment;
-import com.peekaboo.presentation.presenters.LoginPresenter;
+import com.peekaboo.presentation.presenters.ISingUpView;
 import com.peekaboo.presentation.presenters.SignUpPresenter;
-import com.peekaboo.presentation.views.ICredentialsView;
 import com.peekaboo.utils.ActivityNavigator;
 
 import javax.inject.Inject;
@@ -24,7 +24,7 @@ import butterknife.OnClick;
 /**
  * Created by sebastian on 05.07.16.
  */
-public class SignUpActivity extends AppCompatActivity implements ICredentialsView {
+public class SignUpActivity extends AppCompatActivity implements ISingUpView {
 
     public static final String PROGRESS_DIALOG = "progress_dialog";
     @BindView(R.id.etLogin)
@@ -39,6 +39,8 @@ public class SignUpActivity extends AppCompatActivity implements ICredentialsVie
     SignUpPresenter signUpPresenter;
     @Inject
     ActivityNavigator navigator;
+    @Inject
+    ConfirmSignUpDialog confirmSignUpDialog;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -111,6 +113,14 @@ public class SignUpActivity extends AppCompatActivity implements ICredentialsVie
     @Override
     public void onError(String text) {
         Toast.makeText(this, text, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void showConfirmDialog() {
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        confirmSignUpDialog.setStyle(android.app.DialogFragment.STYLE_NO_TITLE, 0);
+        confirmSignUpDialog.setStyle(android.app.DialogFragment.STYLE_NO_FRAME, 0);
+        confirmSignUpDialog.show(ft, "dfNewPerson");
     }
 
     @OnClick(R.id.bSignIn)
