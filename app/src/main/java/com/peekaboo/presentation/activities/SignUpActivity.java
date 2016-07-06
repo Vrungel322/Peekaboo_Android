@@ -118,7 +118,6 @@ public class SignUpActivity extends AppCompatActivity implements ISingUpView {
     @Override
     public void showConfirmDialog() {
         FragmentTransaction ft = getFragmentManager().beginTransaction();
-        confirmSignUpDialog.setStyle(android.app.DialogFragment.STYLE_NO_TITLE, 0);
         confirmSignUpDialog.setStyle(android.app.DialogFragment.STYLE_NO_FRAME, 0);
         confirmSignUpDialog.show(ft, "dfNewPerson");
     }
