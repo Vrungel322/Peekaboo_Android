@@ -9,7 +9,7 @@
         <item name="android:textColor">@color/textColor</item>
         <item name="android:textColorHint">@color/textColorHint</item>
         <item name="android:colorActivatedHighlight">@color/colorAccent2</item>
-        <item name="android:colorButtonNormal">@color/colorAccent</item>
+        <item name="colorButtonNormal">@color/colorAccent</item>
         <item name="android:editTextColor">@color/colorPrimary</item>
     </style>
 
