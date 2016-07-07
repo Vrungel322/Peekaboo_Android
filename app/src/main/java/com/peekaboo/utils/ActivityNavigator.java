@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 
 import com.peekaboo.presentation.activities.LogInActivity;
-import com.peekaboo.presentation.activities.MainActivity;
+import com.peekaboo.presentation.activities.ProfileActivity;
 import com.peekaboo.presentation.animation.DepthAnimation;
 
 import javax.inject.Inject;
@@ -25,7 +25,7 @@ public class ActivityNavigator {
     }
 
     public void startProfileActivity(Context mActivityContext){
-        Intent intent = new Intent(mActivityContext, MainActivity.class);
+        Intent intent = new Intent(mActivityContext, ProfileActivity.class);
         mActivityContext.startActivity(intent);
     }
 
