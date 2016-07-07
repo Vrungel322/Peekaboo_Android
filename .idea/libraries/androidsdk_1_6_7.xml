@@ -6,7 +6,6 @@
     </CLASSES>
     <JAVADOC />
     <SOURCES>
-      <root url="jar://$APPLICATION_HOME_DIR$/gradle/gradle-2.10/caches/modules-2/files-2.1/com.vk/androidsdk/1.6.7/a3bc908682925d07147710f64fc36f2b8c832a90/androidsdk-1.6.7-sources.jar!/" />
       <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.vk/androidsdk/1.6.7/a3bc908682925d07147710f64fc36f2b8c832a90/androidsdk-1.6.7-sources.jar!/" />
     </SOURCES>
   </library>

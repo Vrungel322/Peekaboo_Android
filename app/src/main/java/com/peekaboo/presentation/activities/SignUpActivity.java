@@ -30,9 +30,9 @@ public class SignUpActivity extends AppCompatActivity implements ISingUpView {
     @BindView(R.id.etLogin)
     EditText etLogin;
     @BindView(R.id.etPassword)
-    EditText etPassword;
-    @BindView(R.id.etPasswordConfirm)
-    EditText etPasswordConfirm;
+   EditText etPassword;
+//    @BindView(R.id.etPasswordConfirm)
+//    EditText etPasswordConfirm;
     @Inject
     SignUpPresenter signUpPresenter;
     @Inject
@@ -43,7 +43,7 @@ public class SignUpActivity extends AppCompatActivity implements ISingUpView {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sign_up);
+        setContentView(R.layout.activity_log_in);
         ButterKnife.bind(this);
         PeekabooApplication.getApp(this).getComponent().inject(this);
         signUpPresenter.bind(this);
@@ -66,10 +66,10 @@ public class SignUpActivity extends AppCompatActivity implements ISingUpView {
 
     @Override
     protected void onStart() {
-        super.onStart();
-        etPasswordConfirm.setText("asdasd");
-        etPassword.setText("asdasd");
-        etLogin.setText("nikita241296@gmail.com");
+          super.onStart();
+//        etPasswordConfirm.setText("asdasd");
+//        etPassword.setText("asdasd");
+//        etLogin.setText("nikita241296@gmail.com");
     }
 
     @Override
@@ -99,7 +99,7 @@ public class SignUpActivity extends AppCompatActivity implements ISingUpView {
             case PASSWORD_CONFIRM:
                 etPassword.setError(getString(R.string.invalidPasswordConfirm));
                 etPassword.setText("");
-                etPasswordConfirm.setText("");
+                //etPasswordConfirm.setText("");
                 break;
         }
     }
@@ -121,7 +121,7 @@ public class SignUpActivity extends AppCompatActivity implements ISingUpView {
     void onSignInButtonClick() {
         String login = etLogin.getText().toString();
         String password = etPassword.getText().toString();
-        String passwordConfirm = etPasswordConfirm.getText().toString();
-        signUpPresenter.onSignUpButtonClick(login, password, passwordConfirm);
+       // String passwordConfirm = etPasswordConfirm.getText().toString();
+       // signUpPresenter.onSignUpButtonClick(login, password, passwordConfirm);
     }
 }
