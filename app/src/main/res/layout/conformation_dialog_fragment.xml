@@ -3,15 +3,16 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#5e8b8b8b">
-
+    android:layout_margin="16dp"
+    android:background="#fdfdfd">
 
     <com.github.glomadrian.codeinputlib.CodeInput
         android:id="@+id/ciConformation"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_margin="16dp"
         app:codes="4"
-        app:hint_color="#545454"
+        app:hint_color="#c3edf4f2"
         app:hint_text="Conformation code"
         app:text_color="#50c9a9"
         app:underline_color="#777777"
@@ -21,9 +22,9 @@
         android:id="@+id/bOk"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/ciConformation"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
-        android:layout_below="@+id/ciConformation"
         android:layout_gravity="right"
         android:text="OK" />
 

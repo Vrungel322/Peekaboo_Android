@@ -51,7 +51,6 @@ public class SignUpPresenter extends ProgressPresenter<ISingUpView> implements I
 
     @Override
     public void onSignUpButtonClick(String login, String password, String passwordConfirm) {
-
         if (isValid(login, password, passwordConfirm)) {
             signUpUseCase.setCredentials(login, password);
             signUpUseCase.execute(new BaseProgressSubscriber<User>(this) {
@@ -74,7 +73,6 @@ public class SignUpPresenter extends ProgressPresenter<ISingUpView> implements I
                     super.onCompleted();
                     if (getView() != null)
                         getView().showConfirmDialog();
-//                    getView().showConfirmDialog();
                     Toast.makeText(getContext(), "onComplete", Toast.LENGTH_LONG).show();
                 }
             });
