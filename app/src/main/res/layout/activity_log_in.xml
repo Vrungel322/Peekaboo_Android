@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -9,19 +8,19 @@
         android:id="@+id/etLogin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/username"/>
+        android:hint="@string/username" />
 
     <EditText
         android:id="@+id/etPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/password"/>
+        android:hint="@string/password" />
 
     <EditText
         android:id="@+id/etPasswordConfirm"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="@string/confirmPassword"/>
+        android:hint="@string/confirmPassword" />
 
     <Button
         android:id="@+id/bSignIn"
@@ -29,9 +28,9 @@
         android:layout_height="wrap_content" />
 
     <Button
+        android:id="@+id/bVk"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="VK"
-        android:id="@+id/bVk"
-        android:layout_gravity="center_horizontal" />
+        android:layout_gravity="center_horizontal"
+        android:text="VK" />
 </LinearLayout>
