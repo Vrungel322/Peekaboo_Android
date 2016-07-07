@@ -60,19 +60,21 @@ public class SignUpPresenter extends ProgressPresenter<ISingUpView> implements I
                     super.onNext(response);
                     Log.e("onNext", String.valueOf(response));
                     user = response;
-                    if (getView() != null)
-                        getView().showConfirmDialog();
+//                    if (getView() != null)
+//                        getView().showConfirmDialog();
 //                if (getView() != null) {
 //                    getView().navigateToProfile();
 //                }
-                    start(response);
+//                    start(response);
                     Toast.makeText(getContext(), "onNext", Toast.LENGTH_LONG).show();
                 }
 
                 @Override
                 public void onCompleted() {
                     super.onCompleted();
-                    getView().showConfirmDialog();
+                    if (getView() != null)
+                        getView().showConfirmDialog();
+//                    getView().showConfirmDialog();
                     Toast.makeText(getContext(), "onComplete", Toast.LENGTH_LONG).show();
                 }
             });
@@ -96,7 +98,7 @@ public class SignUpPresenter extends ProgressPresenter<ISingUpView> implements I
     }
 
     private boolean isValid(String key) {
-        if (key.contains(" ") || key.length() != 8) {
+        if (key.contains(" ") || key.length() != 4) {
             if (getView() != null) getView().onError(getContext().getString(R.string.invalidKey));
         } else {
             return true;

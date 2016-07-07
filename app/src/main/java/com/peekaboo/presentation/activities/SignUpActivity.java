@@ -69,7 +69,7 @@ public class SignUpActivity extends AppCompatActivity implements ISingUpView {
         super.onStart();
         etPasswordConfirm.setText("asdasd");
         etPassword.setText("asdasd");
-        etLogin.setText("asdasd");
+        etLogin.setText("nikita241296@gmail.com");
     }
 
     @Override
