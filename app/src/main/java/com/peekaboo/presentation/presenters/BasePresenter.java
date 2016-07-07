@@ -7,7 +7,7 @@ import com.peekaboo.presentation.views.IView;
 /**
  * Created by Nikita on 27.06.2016.
  */
-public class BasePresenter<V extends IView> implements IPresenter<V> {
+public abstract class BasePresenter<V extends IView> implements IPresenter<V> {
 
     @Nullable
     private V view;

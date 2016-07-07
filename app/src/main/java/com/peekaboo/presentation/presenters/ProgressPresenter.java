@@ -19,7 +19,7 @@ import retrofit2.adapter.rxjava.HttpException;
 /**
  * Created by sebastian on 28.06.16.
  */
-public class ProgressPresenter<V extends IProgressView> extends BasePresenter<V> implements
+public abstract class ProgressPresenter<V extends IProgressView> extends BasePresenter<V> implements
         BaseProgressSubscriber.ProgressSubscriberListener {
 
     private Context mContext;

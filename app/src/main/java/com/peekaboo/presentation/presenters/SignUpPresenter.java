@@ -39,6 +39,29 @@ public class SignUpPresenter extends ProgressPresenter<ISingUpView> implements I
     private WebSocket ws;
     private String TAG = "socket";
     private User user;
+    private BaseProgressSubscriber<User> confirmSubscriber = new BaseProgressSubscriber<User>(this) {
+        @Override
+        public void onCompleted() {
+            super.onCompleted();
+            if (getView() != null) {
+                getView().navigateToProfile();
+            }
+        }
+    };
+    private BaseProgressSubscriber<User> signUpSubscriber = new BaseProgressSubscriber<User>(this) {
+        @Override
+        public void onNext(User response) {
+            super.onNext(response);
+            user = response;
+        }
+
+        @Override
+        public void onCompleted() {
+            super.onCompleted();
+            if (getView() != null)
+                getView().showConfirmDialog();
+        }
+    };
 
     @Inject
     public SignUpPresenter(Context context,
@@ -53,29 +76,7 @@ public class SignUpPresenter extends ProgressPresenter<ISingUpView> implements I
     public void onSignUpButtonClick(String login, String password, String passwordConfirm) {
         if (isValid(login, password, passwordConfirm)) {
             signUpUseCase.setCredentials(login, password);
-            signUpUseCase.execute(new BaseProgressSubscriber<User>(this) {
-                @Override
-                public void onNext(User response) {
-                    super.onNext(response);
-                    Log.e("onNext", String.valueOf(response));
-                    user = response;
-//                    if (getView() != null)
-//                        getView().showConfirmDialog();
-//                if (getView() != null) {
-//                    getView().navigateToProfile();
-//                }
-//                    start(response);
-                    Toast.makeText(getContext(), "onNext", Toast.LENGTH_LONG).show();
-                }
-
-                @Override
-                public void onCompleted() {
-                    super.onCompleted();
-                    if (getView() != null)
-                        getView().showConfirmDialog();
-                    Toast.makeText(getContext(), "onComplete", Toast.LENGTH_LONG).show();
-                }
-            });
+            signUpUseCase.execute(signUpSubscriber);
         }
     }
 
@@ -83,15 +84,7 @@ public class SignUpPresenter extends ProgressPresenter<ISingUpView> implements I
     public void onCodeConfirmButtonClick(String key) {
         if (isValid(key)) {
             confirmUseCase.setConfirmData(user.getId(), key);
-            confirmUseCase.execute(new BaseProgressSubscriber<User>(this) {
-                @Override
-                public void onNext(User response) {
-                    super.onNext(response);
-                    if (getView() != null) {
-                        getView().navigateToProfile();
-                    }
-                }
-            });
+            confirmUseCase.execute(confirmSubscriber);
         }
     }
 
@@ -117,6 +110,26 @@ public class SignUpPresenter extends ProgressPresenter<ISingUpView> implements I
         return false;
     }
 
+
+    @Override
+    public void unbind() {
+        super.unbind();
+        if (signUpUseCase.isWorking()) {
+            signUpUseCase.unsubscribe();
+        } else if (confirmUseCase.isWorking()) {
+            confirmUseCase.unsubscribe();
+        }
+    }
+
+    @Override
+    public void bind(ISingUpView view) {
+        super.bind(view);
+        if (signUpUseCase.isWorking()) {
+            signUpUseCase.execute(signUpSubscriber);
+        } else if (confirmUseCase.isWorking()) {
+            confirmUseCase.execute(confirmSubscriber);
+        }
+    }
 
     private void start(User user) {
 
@@ -159,7 +172,6 @@ public class SignUpPresenter extends ProgressPresenter<ISingUpView> implements I
             Log.e(TAG, "exception " + e);
         }
     }
-
 
     public void sendMessage() {
         if (ws != null)
