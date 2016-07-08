@@ -20,7 +20,7 @@
         android:textColorHint="@color/textColorHint">
 
         <android.support.design.widget.TextInputEditText
-            android:id="@+id/etUserName"
+            android:id="@+id/etUsername"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"

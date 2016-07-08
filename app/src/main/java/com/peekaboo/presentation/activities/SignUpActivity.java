@@ -27,6 +27,8 @@ import butterknife.OnClick;
 public class SignUpActivity extends AppCompatActivity implements ISingUpView {
 
     public static final String PROGRESS_DIALOG = "progress_dialog";
+    @BindView(R.id.etUsername)
+    EditText etUsername;
     @BindView(R.id.etLogin)
     EditText etLogin;
     @BindView(R.id.etPassword)
@@ -67,9 +69,10 @@ public class SignUpActivity extends AppCompatActivity implements ISingUpView {
     @Override
     protected void onStart() {
         super.onStart();
+        etUsername.setText("Vrungel");
+        etLogin.setText("nikita241296@gmail.com");
         etPasswordConfirm.setText("asdasd");
         etPassword.setText("asdasd");
-        etLogin.setText("nikita241296@gmail.com");
     }
 
     @Override
@@ -119,9 +122,10 @@ public class SignUpActivity extends AppCompatActivity implements ISingUpView {
 
     @OnClick(R.id.bSignIn)
     void onSignInButtonClick() {
+        String username = etUsername.getText().toString();
         String login = etLogin.getText().toString();
         String password = etPassword.getText().toString();
         String passwordConfirm = etPasswordConfirm.getText().toString();
-        signUpPresenter.onSignUpButtonClick(login, password, passwordConfirm);
+        signUpPresenter.onSignUpButtonClick(username, login, password, passwordConfirm);
     }
 }

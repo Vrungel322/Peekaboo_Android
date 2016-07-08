@@ -1,6 +1,7 @@
 package com.peekaboo.data.rest;
 
 import com.peekaboo.data.rest.entity.Credentials;
+import com.peekaboo.data.rest.entity.CredentialsSignUp;
 import com.peekaboo.data.rest.entity.TokenEntity;
 
 import retrofit2.http.Body;
@@ -26,7 +27,7 @@ public interface PeekabooApi {
 
     @POST(SIGNUP)
     Observable<TokenEntity> signUp(
-            @Body Credentials credentials
+            @Body CredentialsSignUp credentials
     );
 
     @POST(CONFIRM)
