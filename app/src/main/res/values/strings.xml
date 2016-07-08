@@ -5,6 +5,7 @@
     <string name="password">Password</string>
     <string name="emai">E-mail</string>
     <string name="createAccount">Create Account</string>
+    <string name="signIn">Sign In</string>
     <string name="skip">Skip</string>
     <string name="confirmPassword">Confirm password</string>
     <string name="email">Email</string>
@@ -13,5 +14,13 @@
     <string name="invalidPasswordConfirm">Passwords don\'t match</string>
     <string name="invalidEmail">Invalid email</string>
     <string name="invalidKey">Invalid key</string>
+    <string name="bySignUp1">By </string>
+    <string name="bySignUp2"> Sign Up </string>
+    <string name="bySignUp3"> you agree to the </string>
+    <string name="bySignUp4"> Terms of Use </string>
+    <string name="orSignIn">Or Sign In with</string>
+    <string name="existence_font">fonts/existence.otf</string>
+    <string name="helvetica_font">fonts/helvetika.ttf</string>
     <integer name="com_vk_sdk_AppId">5527207</integer>
+
 </resources>

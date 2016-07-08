@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.peekaboo.R;
@@ -32,6 +33,8 @@ public class LogInActivity extends AppCompatActivity implements ICredentialsView
     EditText etLogin;
     @BindView(R.id.etPassword)
     EditText etPassword;
+    @BindView(R.id.tvSingUp)
+    TextView tvSingUp;
     @Inject
     LoginPresenter loginPresenter;
     @Inject
@@ -96,17 +99,22 @@ public class LogInActivity extends AppCompatActivity implements ICredentialsView
         }
     }
 
+    @OnClick(R.id.tvSingUp)
+    void ontvSingUpClick(){
+        navigator.startSignUpActivity(this);
+    }
+
     @OnClick(R.id.bSignIn)
     void onSignInButtonClick() {
         String login = etLogin.getText().toString();
         String password = etPassword.getText().toString();
         loginPresenter.onSignInButtonClick(login, password);
     }
-//
-//    @OnClick(R.id.bVk)
-//    void onVkButtonClick(){
-//        loginPresenter.onVkButtonClick();
-//    }
+
+    @OnClick(R.id.bVk)
+    void onVkButtonClick(){
+        loginPresenter.onVkButtonClick();
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
