@@ -2,6 +2,7 @@ package com.peekaboo.presentation.presenters;
 
 import android.app.Activity;
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.peekaboo.domain.ErrorHandler;
@@ -36,17 +37,22 @@ public class LoginPresenter extends ProgressPresenter<ICredentialsView> implemen
     public void onSignInButtonClick(String login, String password) {
         if (isValid(login, password)) {
             useCase.setCredentials(login, password);
-            useCase.execute(new BaseProgressSubscriber<User>(this) {
-                @Override
-                public void onNext(User response) {
-                    super.onNext(response);
-                    Log.e("onNext", String.valueOf(response));
-                    if (getView() != null) {
-                        getView().navigateToProfile();
-                    }
-                }
-            });
+            useCase.execute(getSignInSubscriber());
         }
+    }
+
+    @NonNull
+    private BaseProgressSubscriber<User> getSignInSubscriber() {
+        return new BaseProgressSubscriber<User>(this) {
+            @Override
+            public void onNext(User response) {
+                super.onNext(response);
+                Log.e("onNext", String.valueOf(response));
+                if (getView() != null) {
+                    getView().navigateToProfile();
+                }
+            }
+        };
     }
 
 
