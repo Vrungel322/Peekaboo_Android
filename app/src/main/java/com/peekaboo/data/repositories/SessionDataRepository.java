@@ -4,6 +4,7 @@ import com.peekaboo.data.mappers.AbstractMapperFactory;
 import com.peekaboo.data.rest.ConfirmKey;
 import com.peekaboo.data.rest.RestApi;
 import com.peekaboo.data.rest.entity.Credentials;
+import com.peekaboo.data.rest.entity.CredentialsSignUp;
 import com.peekaboo.domain.SessionRepository;
 import com.peekaboo.domain.User;
 
@@ -25,7 +26,7 @@ public class SessionDataRepository implements SessionRepository {
     }
 
     @Override
-    public Observable<User> login(String login, String password) {
+    public Observable<User> login( String login, String password) {
         return restApi.login(new Credentials(login, password)).map(token -> {
             user.saveToken(token.getToken());
             user.saveId(token.getId());
@@ -34,8 +35,8 @@ public class SessionDataRepository implements SessionRepository {
     }
 
     @Override
-    public Observable<User> signUp(String login, String password) {
-        return restApi.signUp(new Credentials(login, password)).map(token -> {
+    public Observable<User> signUp(String username, String login, String password) {
+        return restApi.signUp(new CredentialsSignUp(username, login, password)).map(token -> {
             user.saveId(token.getId());
             return user;
         });
