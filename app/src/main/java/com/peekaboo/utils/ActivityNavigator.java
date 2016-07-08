@@ -5,6 +5,7 @@ import android.content.Intent;
 
 import com.peekaboo.presentation.activities.LogInActivity;
 import com.peekaboo.presentation.activities.ProfileActivity;
+import com.peekaboo.presentation.activities.SignUpActivity;
 import com.peekaboo.presentation.animation.DepthAnimation;
 
 import javax.inject.Inject;
@@ -31,6 +32,11 @@ public class ActivityNavigator {
 
     public void startIntroScreen(Context mActivityContext){
         Intent intent = new Intent(mActivityContext, DepthAnimation.class);
+        mActivityContext.startActivity(intent);
+    }
+
+    public void startSignUpActivity(Context mActivityContext){
+        Intent intent = new Intent(mActivityContext, SignUpActivity.class);
         mActivityContext.startActivity(intent);
     }
 
