@@ -34,35 +34,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 @Module
 public class DataModule {
 
-//    SSLSocketFactory sslSocketFactory() {
-//        // Create a trust manager that does not validate certificate chains
-//        final TrustManager[] trustAllCerts = new TrustManager[]{
-//                new X509TrustManager() {
-//                    @Override
-//                    public void checkClientTrusted(java.security.cert.X509Certificate[] chain, String authType) throws CertificateException {
-//                    }
-//
-//                    @Override
-//                    public void checkServerTrusted(java.security.cert.X509Certificate[] chain, String authType) throws CertificateException {
-//                    }
-//
-//                    @Override
-//                    public java.security.cert.X509Certificate[] getAcceptedIssuers() {
-//                        return new java.security.cert.X509Certificate[]{};
-//                    }
-//                }
-//        };
-//
-//        // Install the all-trusting trust manager
-//        try {
-//            final SSLContext sslContext = SSLContext.getInstance("TLS");
-//            sslContext.init(null, trustAllCerts, new java.security.SecureRandom());
-//            return sslContext.getSocketFactory();
-//        } catch (KeyManagementException | NoSuchAlgorithmException e) {
-//            return null;
-//        }
-//
-//    }
 
     private SSLSocketFactory newSslSocketFactory(Context context){
         try {
@@ -100,8 +71,8 @@ public class DataModule {
         return new OkHttpClient.Builder()
                 .readTimeout(10, TimeUnit.SECONDS)
                 .addInterceptor(interceptor)
-                .sslSocketFactory(newSslSocketFactory(context))
-                .hostnameVerifier((hostname, session) -> true)
+//                .sslSocketFactory(newSslSocketFactory(context))
+//                .hostnameVerifier((hostname, session) -> true)
 //                .addInterceptor(new AuthenticatingInterceptor(authentificator))
                 .build();
     }

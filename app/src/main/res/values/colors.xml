@@ -2,9 +2,10 @@
 <resources>
     <color name="colorPrimary">#8b8b8b</color>
     <color name="colorPrimaryDark">#c8555555</color>
-    <color name="colorAccent">#3d9981</color>
-    <color name="colorAccent2">#398e77</color>
+    <color name="colorAccent">#56d4b3</color>
+    <color name="colorAccentCredentials">#ffffff</color>
     <color name="colorPrimaryLight">#ffffff</color>
     <color name="textColor">#ffffff</color>
-    <color name="textColorHint">#c1c0c0</color>
+    <color name="textColorHint">#8e8d8d</color>
+    <color name="colorControlNormal">#969696</color>
 </resources>

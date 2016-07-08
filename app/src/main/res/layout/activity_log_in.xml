@@ -1,156 +1,177 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    style="@style/AppTheme"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/background"
+    android:layout_height="match_parent">
 
-    android:orientation="vertical"
-    android:paddingTop="8dp">
-
-
-    <android.support.design.widget.TextInputLayout
+    <ImageView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="60dp"
-        android:paddingLeft="@dimen/padding_signup_side"
-        android:paddingRight="@dimen/padding_signup_side"
-        android:paddingTop="@dimen/padding_top"
-        android:textColor="@color/textColor"
-        android:textColorHint="@color/textColorHint">
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/sign_in_background" />
 
-        <android.support.design.widget.TextInputEditText
-            android:id="@+id/etLogin"
+    <!--<ScrollView-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent">-->
+
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:hint="@string/username"
-            android:shadowColor="@color/colorAccent2"
-            android:textColor="@color/textColor"
-            android:textColorHighlight="@color/colorAccent2"
-            android:textColorHint="@color/textColorHint"
-            android:textColorLink="@color/colorAccent2" />
+            android:orientation="vertical"
+            android:paddingLeft="@dimen/padding_signup_side"
+            android:paddingRight="@dimen/padding_signup_side"
+            android:paddingTop="8dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="56dp"
+                android:text="@string/app_name"
+                android:textSize="36sp" />
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="60dp">
+
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/etLogin"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:hint="@string/username" />
 
 
-    </android.support.design.widget.TextInputLayout>
+            </android.support.design.widget.TextInputLayout>
 
-    <android.support.design.widget.TextInputLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:paddingLeft="@dimen/padding_signup_side"
-        android:paddingRight="@dimen/padding_signup_side"
-        android:paddingTop="@dimen/padding_top"
-        android:textColor="@color/textColor"
-        android:textColorHint="@color/textColorHint">
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingTop="@dimen/padding_top">
 
-        <android.support.design.widget.TextInputEditText
-            android:id="@+id/etPassword"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center_horizontal"
-            android:hint="@string/password"
-            android:password="true"
-            android:textColor="@color/textColor"
-            android:textColorHint="@color/textColorHint" />
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/etPassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:hint="@string/password"
+                    android:inputType="textPassword" />
 
-    </android.support.design.widget.TextInputLayout>
+            </android.support.design.widget.TextInputLayout>
 
-    <Button
-        android:id="@+id/bSignIn"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginLeft="@dimen/padding_signup_side"
-        android:layout_marginRight="@dimen/padding_signup_side"
-        android:layout_marginTop="@dimen/padding_top"
-        android:background="@drawable/rounded_button"
-        android:foregroundGravity="top"
-        android:text="@string/signIn" />
+            <Button
+                android:id="@+id/bSignIn"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/credentials_button_height"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/padding_signup_side"
+                android:text="@string/signIn" />
 
-    <LinearLayout
-        android:id="@+id/tvSignUp1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:orientation="horizontal"
-        android:padding="@dimen/padding_top">
+            <!--<LinearLayout-->
+            <!--android:id="@+id/tvSignUp1"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_gravity="center_horizontal"-->
+            <!--android:orientation="horizontal"-->
+            <!--android:padding="@dimen/padding_top">-->
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/text_padding"
-            android:text="@string/bySignUp1" />
+            <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:padding="@dimen/text_padding"-->
+            <!--android:text="@string/bySignUp1" />-->
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:clickable="true"
-            android:id="@+id/tvSingUp"
-            android:padding="@dimen/text_padding"
-            android:text="@string/bySignUp2"
-            android:textColor="@color/textColor" />
+            <!--<TextView-->
+            <!--android:id="@+id/tvSingUp"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:clickable="true"-->
+            <!--android:padding="@dimen/text_padding"-->
+            <!--android:text="@string/bySignUp2"-->
+            <!--android:textColor="@color/textColor" />-->
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:padding="@dimen/text_padding"
-            android:text="@string/bySignUp3" />
+            <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:padding="@dimen/text_padding"-->
+            <!--android:text="@string/bySignUp3" />-->
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:clickable="true"
-            android:padding="@dimen/text_padding"
-            android:text="@string/bySignUp4"
-            android:textColor="@color/textColor" />
+            <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:clickable="true"-->
+            <!--android:padding="@dimen/text_padding"-->
+            <!--android:text="@string/bySignUp4"-->
+            <!--android:textColor="@color/textColor" />-->
 
-    </LinearLayout>
+            <!--</LinearLayout>-->
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginTop="120dp"
-        android:padding="@dimen/text_padding"
-        android:text="@string/orSignIn" />
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:gravity="center_horizontal"
-        android:orientation="horizontal"
-        android:paddingLeft="@dimen/padding_signup_side"
-        android:paddingRight="@dimen/padding_signup_side">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:padding="@dimen/text_padding"
+                android:text="@string/orSignIn" />
 
-        <ImageButton
-            android:id="@+id/bGP"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/padding_button"
-            android:background="@drawable/google" />
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:layout_marginTop="@dimen/padding_top"
+                android:orientation="horizontal">
 
-        <ImageButton
-            android:id="@+id/bFb"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/padding_button"
-            android:background="@drawable/fb" />
+                <ImageButton
+                    android:id="@+id/bGP"
+                    android:layout_width="@dimen/social_network_button_size"
+                    android:layout_height="@dimen/social_network_button_size"
+                    android:background="@drawable/google" />
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"/>
+                <ImageButton
+                    android:id="@+id/bFb"
+                    android:layout_width="@dimen/social_network_button_size"
+                    android:layout_height="@dimen/social_network_button_size"
+                    android:background="@drawable/fb" />
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"/>
+                <ImageButton
+                    android:id="@+id/bSkype"
+                    android:layout_width="@dimen/social_network_button_size"
+                    android:layout_height="@dimen/social_network_button_size"
+                    android:background="@drawable/skype" />
+                <View
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1"/>
+                <ImageButton
+                    android:id="@+id/bVk"
+                    android:layout_width="@dimen/social_network_button_size"
+                    android:layout_height="@dimen/social_network_button_size"
+                    android:background="@drawable/vk" />
 
-        <ImageButton
-            android:id="@+id/bSkype"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/padding_button"
-            android:background="@drawable/skype" />
+            </LinearLayout>
 
-        <ImageButton
-            android:id="@+id/bVk"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
-            android:layout_margin="@dimen/padding_button"
-            android:background="@drawable/vk" />
-
-    </LinearLayout>
-
-
-</LinearLayout>
+            <TextView
+                android:id="@+id/tvSingUp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:clickable="true"
+                android:padding="@dimen/text_padding"
+                android:text="@string/bySignUp2"
+                android:textSize="18sp"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/padding_signup_side"
+                android:layout_marginBottom="@dimen/activity_vertical_margin"
+                android:textColor="@color/colorAccent" />
+        </LinearLayout>
+    <!--</ScrollView>-->
+</FrameLayout>

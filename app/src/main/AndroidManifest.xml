@@ -21,14 +21,16 @@
              </intent-filter>
         </activity>
 
-        <activity android:name=".presentation.activities.LogInActivity" >
+        <activity android:name=".presentation.activities.LogInActivity"
+            android:theme="@style/SignInTheme">
         <!--<intent-filter>-->
             <!--<action android:name="android.intent.action.MAIN" />-->
             <!--<category android:name="android.intent.category.LAUNCHER" />-->
         <!--</intent-filter>-->
         </activity>
 
-        <activity android:name=".presentation.activities.SignUpActivity">
+        <activity android:name=".presentation.activities.SignUpActivity"
+            android:theme="@style/SignInTheme">
             <!--<intent-filter>-->
                 <!--<action android:name="android.intent.action.MAIN" />-->
                 <!--<category android:name="android.intent.category.LAUNCHER" />-->

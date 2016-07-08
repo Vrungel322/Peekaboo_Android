@@ -1,9 +1,11 @@
 package com.peekaboo.presentation.activities;
 
 import android.content.Intent;
+import android.graphics.Paint;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -34,7 +36,7 @@ public class LogInActivity extends AppCompatActivity implements ICredentialsView
     @BindView(R.id.etPassword)
     EditText etPassword;
     @BindView(R.id.tvSingUp)
-    TextView tvSingUp;
+    TextView tvSignUp;
     @Inject
     LoginPresenter loginPresenter;
     @Inject
@@ -48,6 +50,8 @@ public class LogInActivity extends AppCompatActivity implements ICredentialsView
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log_in);
         ButterKnife.bind(this);
+        Log.e("actionBar", String.valueOf(getSupportActionBar()));
+        tvSignUp.setPaintFlags(tvSignUp.getPaintFlags() |   Paint.UNDERLINE_TEXT_FLAG);
         PeekabooApplication.getApp(this).getComponent().inject(this);
         loginPresenter.bind(this);
         loginPresenter.setCheckingInternet();
