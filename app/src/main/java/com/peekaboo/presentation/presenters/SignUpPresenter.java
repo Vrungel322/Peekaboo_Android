@@ -39,29 +39,35 @@ public class SignUpPresenter extends ProgressPresenter<ISingUpView> implements I
     private WebSocket ws;
     private String TAG = "socket";
     private User user;
-    private BaseProgressSubscriber<User> confirmSubscriber = new BaseProgressSubscriber<User>(this) {
-        @Override
-        public void onCompleted() {
-            super.onCompleted();
-            if (getView() != null) {
-                getView().navigateToProfile();
-            }
-        }
-    };
-    private BaseProgressSubscriber<User> signUpSubscriber = new BaseProgressSubscriber<User>(this) {
-        @Override
-        public void onNext(User response) {
-            super.onNext(response);
-            user = response;
-        }
 
-        @Override
-        public void onCompleted() {
-            super.onCompleted();
-            if (getView() != null)
-                getView().showConfirmDialog();
-        }
-    };
+    public BaseProgressSubscriber<User> getSignUpSubscriber() {
+        return new BaseProgressSubscriber<User>(this) {
+            @Override
+            public void onNext(User response) {
+                super.onNext(response);
+                user = response;
+            }
+
+            @Override
+            public void onCompleted() {
+                super.onCompleted();
+                if (getView() != null)
+                    getView().showConfirmDialog();
+            }
+        };
+    }
+
+    public BaseProgressSubscriber<User> getConfirmSubscriber() {
+        return new BaseProgressSubscriber<User>(this) {
+            @Override
+            public void onCompleted() {
+                super.onCompleted();
+                if (getView() != null) {
+                    getView().navigateToProfile();
+                }
+            }
+        };
+    }
 
     @Inject
     public SignUpPresenter(Context context,
@@ -76,7 +82,7 @@ public class SignUpPresenter extends ProgressPresenter<ISingUpView> implements I
     public void onSignUpButtonClick(String login, String password, String passwordConfirm) {
         if (isValid(login, password, passwordConfirm)) {
             signUpUseCase.setCredentials(login, password);
-            signUpUseCase.execute(signUpSubscriber);
+            signUpUseCase.execute(getSignUpSubscriber());
         }
     }
 
@@ -84,7 +90,7 @@ public class SignUpPresenter extends ProgressPresenter<ISingUpView> implements I
     public void onCodeConfirmButtonClick(String key) {
         if (isValid(key)) {
             confirmUseCase.setConfirmData(user.getId(), key);
-            confirmUseCase.execute(confirmSubscriber);
+            confirmUseCase.execute(getConfirmSubscriber());
         }
     }
 
@@ -125,9 +131,9 @@ public class SignUpPresenter extends ProgressPresenter<ISingUpView> implements I
     public void bind(ISingUpView view) {
         super.bind(view);
         if (signUpUseCase.isWorking()) {
-            signUpUseCase.execute(signUpSubscriber);
+            signUpUseCase.execute(getSignUpSubscriber());
         } else if (confirmUseCase.isWorking()) {
-            confirmUseCase.execute(confirmSubscriber);
+            confirmUseCase.execute(getConfirmSubscriber());
         }
     }
 
