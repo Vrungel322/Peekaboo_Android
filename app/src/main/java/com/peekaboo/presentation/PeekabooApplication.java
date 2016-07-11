@@ -3,11 +3,14 @@ package com.peekaboo.presentation;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
+import android.util.Log;
+import android.widget.Toast;
 
 import com.peekaboo.presentation.activities.LogInActivity;
 import com.peekaboo.presentation.di.ApplicationComponent;
 import com.peekaboo.presentation.di.ApplicationModule;
 import com.peekaboo.presentation.di.DaggerApplicationComponent;
+import com.peekaboo.presentation.services.NotificationService;
 import com.peekaboo.utils.ActivityNavigator;
 import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKAccessTokenTracker;
@@ -42,7 +45,7 @@ public class PeekabooApplication extends Application {
     public void onCreate() {
         super.onCreate();
         buildAppComponent();
-
+        NotificationService.launch(this, null);
         vkAccessTokenTracker.startTracking();
         VKSdk.initialize(this);
     }

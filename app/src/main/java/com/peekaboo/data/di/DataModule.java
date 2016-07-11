@@ -69,8 +69,8 @@ public class DataModule {
         return new OkHttpClient.Builder()
                 .readTimeout(10, TimeUnit.SECONDS)
                 .addInterceptor(interceptor)
-                .sslSocketFactory(newSslSocketFactory(context))
-                .hostnameVerifier((hostname, session) -> true)
+//                .sslSocketFactory(newSslSocketFactory(context))
+//                .hostnameVerifier((hostname, session) -> true)
 //                .addInterceptor(new AuthenticatingInterceptor(authentificator))
                 .build();
     }
