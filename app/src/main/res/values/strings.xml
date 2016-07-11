@@ -9,6 +9,7 @@
     <string name="confirmPassword">Confirm password</string>
     <string name="email">Email</string>
     <string name="invalidLogin">Invalid login</string>
+    <string name="invalidUsername">Invalid username</string>
     <string name="invalidPassword">Invalid password</string>
     <string name="invalidPasswordConfirm">Passwords don\'t match</string>
     <string name="invalidEmail">Invalid email</string>
@@ -20,6 +21,8 @@
     <string name="orSignIn">Or Sign In with</string>
     <string name="existence_font">fonts/existence.otf</string>
     <string name="helvetica_font">fonts/helvetika.ttf</string>
+    <string name="usernameOrLogin">Username or login</string>
+    <string name="emailOrPhoneNum">Email or phone number</string>
     <integer name="com_vk_sdk_AppId">5527207</integer>
 
 </resources>

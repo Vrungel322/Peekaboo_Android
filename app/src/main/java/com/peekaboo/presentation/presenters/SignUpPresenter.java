@@ -2,7 +2,6 @@ package com.peekaboo.presentation.presenters;
 
 import android.content.Context;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.neovisionaries.ws.client.WebSocket;
 import com.neovisionaries.ws.client.WebSocketAdapter;
@@ -80,7 +79,7 @@ public class SignUpPresenter extends ProgressPresenter<ISingUpView> implements I
 
     @Override
     public void onSignUpButtonClick(String username, String login, String password, String passwordConfirm) {
-        if (isValid(login, password, passwordConfirm)) {
+        if (isValid(username, login, password, passwordConfirm)) {
             signUpUseCase.setCredentials(username, login, password);
             signUpUseCase.execute(getSignUpSubscriber());
 
@@ -104,14 +103,16 @@ public class SignUpPresenter extends ProgressPresenter<ISingUpView> implements I
         return false;
     }
 
-    private boolean isValid(String login, String password, String passwordConfirm) {
-        if (!CredentialUtils.isLoginValid(login)) {
+    private boolean isValid(String username, String login, String password, String passwordConfirm) {
+        if (!(CredentialUtils.isEmailValid(login) || CredentialUtils.isPhoneNumberValid(login))) {
             if (getView() != null) getView().showInputError(ICredentialsView.InputFieldError.LOGIN);
         } else if (!CredentialUtils.isPasswordValid(password)) {
             if (getView() != null) getView().showInputError(ICredentialsView.InputFieldError.PASSWORD);
         } else if (!CredentialUtils.isPasswordConfirmed(password, passwordConfirm)) {
             if (getView() != null) getView().showInputError(ICredentialsView.InputFieldError.PASSWORD_CONFIRM);
-        } else {
+        } else if (!CredentialUtils.isUsernameValid(username)) {
+            if (getView() != null) getView().showInputError(ICredentialsView.InputFieldError.USERNAME);
+        }  else {
             return true;
         }
         return false;

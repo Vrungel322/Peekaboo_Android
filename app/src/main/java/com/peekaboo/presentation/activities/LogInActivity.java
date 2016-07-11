@@ -1,10 +1,7 @@
 package com.peekaboo.presentation.activities;
 
 import android.content.Intent;
-import android.graphics.Paint;
-import android.graphics.Typeface;
 import android.os.Bundle;
-import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -79,7 +76,7 @@ public class LogInActivity extends AppCompatActivity implements ICredentialsView
 //        tvSignUp3.setTypeface(helvetica_tf);
 //        tvSignUp4.setTypeface(helvetica_tf);
 //        tvSignIn.setTypeface(helvetica_tf);
-//        etLogin.setTypeface(helvetica_tf);
+//        etUsername.setTypeface(helvetica_tf);
 //        etPassword.setTypeface(helvetica_tf);
 //    }
 
