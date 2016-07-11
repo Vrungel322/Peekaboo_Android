@@ -4,7 +4,7 @@ package com.peekaboo.presentation.utils;
  * Created by sebastian on 04.07.16.
  */
 public class CredentialUtils {
-    public static boolean isLoginValid(String login) {
+    public static boolean isUsernameValid(String login) {
         return !(login.contains(" ") || login.length() < 6);
     }
 
@@ -18,5 +18,9 @@ public class CredentialUtils {
 
     public static boolean isPasswordConfirmed(String password, String passwordConfirm) {
         return password.equals(passwordConfirm);
+    }
+
+    public static boolean isPhoneNumberValid(String login) {
+        return false;
     }
 }

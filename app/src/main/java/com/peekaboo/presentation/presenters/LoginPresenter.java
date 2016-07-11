@@ -58,7 +58,9 @@ public class LoginPresenter extends ProgressPresenter<ICredentialsView> implemen
 
     private boolean isValid(String login, String password) {
 
-        if (!CredentialUtils.isLoginValid(login)) {
+        if (!(CredentialUtils.isUsernameValid(login)
+                || CredentialUtils.isEmailValid(login)
+                || CredentialUtils.isPhoneNumberValid(login))) {
             if (getView() != null) getView().showInputError(ICredentialsView.InputFieldError.LOGIN);
         } else if (!CredentialUtils.isPasswordValid(password)) {
             if (getView() != null) getView().showInputError(ICredentialsView.InputFieldError.PASSWORD);
