@@ -10,4 +10,5 @@
     <dimen name="sign_up_button_padding">8dp</dimen>
     <dimen name="credentials_button_height">56dp</dimen>
     <dimen name="social_network_button_size">68dp</dimen>
+    <dimen name="social_networks_margin_top">120dp</dimen>
 </resources>

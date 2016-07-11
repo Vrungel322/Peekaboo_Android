@@ -2,7 +2,9 @@ package com.peekaboo.presentation.activities;
 
 import android.content.Intent;
 import android.graphics.Paint;
+import android.graphics.Typeface;
 import android.os.Bundle;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -35,8 +37,16 @@ public class LogInActivity extends AppCompatActivity implements ICredentialsView
     EditText etLogin;
     @BindView(R.id.etPassword)
     EditText etPassword;
-    @BindView(R.id.tvSingUp)
-    TextView tvSignUp;
+    @BindView(R.id.tvSignUp1)
+    TextView tvSignUp1;
+    @BindView(R.id.tvSingUp2)
+    TextView tvSignUp2;
+    @BindView(R.id.tvSingUp3)
+    TextView tvSignUp3;
+    @BindView(R.id.tvSignUp4)
+    TextView tvSignUp4;
+    @BindView(R.id.tvOrSign)
+    TextView tvSignIn;
     @Inject
     LoginPresenter loginPresenter;
     @Inject
@@ -51,7 +61,7 @@ public class LogInActivity extends AppCompatActivity implements ICredentialsView
         setContentView(R.layout.activity_log_in);
         ButterKnife.bind(this);
         Log.e("actionBar", String.valueOf(getSupportActionBar()));
-        tvSignUp.setPaintFlags(tvSignUp.getPaintFlags() |   Paint.UNDERLINE_TEXT_FLAG);
+       // tvSignUp.setPaintFlags(tvSignUp.getPaintFlags() |   Paint.UNDERLINE_TEXT_FLAG);
         PeekabooApplication.getApp(this).getComponent().inject(this);
         loginPresenter.bind(this);
         loginPresenter.setCheckingInternet();
@@ -59,7 +69,19 @@ public class LogInActivity extends AppCompatActivity implements ICredentialsView
 //         need be added in VKConsole for each developer to test
 //        loginPresenter.getFingerprint();
         bus.register(this);
+//        setStyle();
     }
+//
+//    private void setStyle(){
+//        Typeface helvetica_tf = Typeface.createFromAsset(getAssets(), getString(R.string.helvetica_font));
+//        tvSignUp1.setTypeface(helvetica_tf);
+//        tvSignUp2.setTypeface(helvetica_tf);
+//        tvSignUp3.setTypeface(helvetica_tf);
+//        tvSignUp4.setTypeface(helvetica_tf);
+//        tvSignIn.setTypeface(helvetica_tf);
+//        etLogin.setTypeface(helvetica_tf);
+//        etPassword.setTypeface(helvetica_tf);
+//    }
 
     @Override
     protected void onDestroy() {
@@ -103,7 +125,7 @@ public class LogInActivity extends AppCompatActivity implements ICredentialsView
         }
     }
 
-    @OnClick(R.id.tvSingUp)
+    @OnClick(R.id.tvSingUp2)
     void ontvSingUpClick(){
         navigator.startSignUpActivity(this);
     }

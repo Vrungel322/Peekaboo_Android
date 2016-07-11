@@ -9,9 +9,9 @@
         android:scaleType="centerCrop"
         android:src="@drawable/sign_in_background" />
 
-    <!--<ScrollView-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="match_parent">-->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -21,20 +21,12 @@
             android:paddingRight="@dimen/padding_signup_side"
             android:paddingTop="8dp">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="56dp"
-                android:text="@string/app_name"
-                android:textSize="36sp" />
-
-            <android.support.design.widget.TextInputLayout
+            <com.peekaboo.presentation.app.view.HelveticaTextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="60dp">
 
-                <android.support.design.widget.TextInputEditText
+                <com.peekaboo.presentation.app.view.HelveticaEditText
                     android:id="@+id/etLogin"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -42,14 +34,14 @@
                     android:hint="@string/username" />
 
 
-            </android.support.design.widget.TextInputLayout>
+            </com.peekaboo.presentation.app.view.HelveticaTextInputLayout>
 
-            <android.support.design.widget.TextInputLayout
+            <com.peekaboo.presentation.app.view.HelveticaTextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:paddingTop="@dimen/padding_top">
 
-                <android.support.design.widget.TextInputEditText
+                <com.peekaboo.presentation.app.view.HelveticaEditText
                     android:id="@+id/etPassword"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
@@ -57,9 +49,9 @@
                     android:hint="@string/password"
                     android:inputType="textPassword" />
 
-            </android.support.design.widget.TextInputLayout>
+            </com.peekaboo.presentation.app.view.HelveticaTextInputLayout>
 
-            <Button
+            <com.peekaboo.presentation.app.view.HelveticaButton
                 android:id="@+id/bSignIn"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/credentials_button_height"
@@ -67,19 +59,96 @@
                 android:layout_marginTop="@dimen/padding_signup_side"
                 android:text="@string/signIn" />
 
-            <!--<LinearLayout-->
-            <!--android:id="@+id/tvSignUp1"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_gravity="center_horizontal"-->
-            <!--android:orientation="horizontal"-->
-            <!--android:padding="@dimen/padding_top">-->
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:orientation="horizontal"
+                android:padding="@dimen/padding_top">
 
-            <!--<TextView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:padding="@dimen/text_padding"-->
-            <!--android:text="@string/bySignUp1" />-->
+                <com.peekaboo.presentation.app.view.HelveticaTextView
+                    android:id="@+id/tvSignUp1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/text_padding"
+                    android:text="@string/bySignUp1" />
+
+                <com.peekaboo.presentation.app.view.HelveticaTextView
+                    android:id="@+id/tvSingUp2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:padding="@dimen/text_padding"
+                    android:text="@string/bySignUp2"
+                    android:textColor="@color/textColor" />
+
+                <com.peekaboo.presentation.app.view.HelveticaTextView
+                    android:id="@+id/tvSingUp3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:padding="@dimen/text_padding"
+                    android:text="@string/bySignUp3" />
+
+                <com.peekaboo.presentation.app.view.HelveticaTextView
+                    android:id="@+id/tvSignUp4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:clickable="true"
+                    android:padding="@dimen/text_padding"
+                    android:text="@string/bySignUp4"
+                    android:textColor="@color/textColor" />
+
+            </LinearLayout>
+
+            <com.peekaboo.presentation.app.view.HelveticaTextView
+                android:id="@+id/tvOrSign"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="@dimen/social_networks_margin_top"
+                android:padding="@dimen/text_padding"
+                android:text="@string/orSignIn" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/padding_top"
+                android:gravity="center_horizontal"
+                android:orientation="horizontal">
+
+                <com.peekaboo.presentation.app.view.SquareImageView
+                    android:id="@+id/bGP"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:layout_weight="1"
+                    android:src="@drawable/google" />
+
+                <com.peekaboo.presentation.app.view.SquareImageView
+                    android:id="@+id/bFb"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:layout_weight="1"
+                    android:src="@drawable/fb" />
+
+                <com.peekaboo.presentation.app.view.SquareImageView
+                    android:id="@+id/bSkype"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:layout_weight="1"
+                    android:src="@drawable/skype" />
+
+                <com.peekaboo.presentation.app.view.SquareImageView
+                    android:id="@+id/bVk"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="8dp"
+                    android:layout_weight="1"
+                    android:src="@drawable/vk" />
+
+            </LinearLayout>
 
             <!--<TextView-->
             <!--android:id="@+id/tvSingUp"-->
@@ -88,90 +157,11 @@
             <!--android:clickable="true"-->
             <!--android:padding="@dimen/text_padding"-->
             <!--android:text="@string/bySignUp2"-->
-            <!--android:textColor="@color/textColor" />-->
-
-            <!--<TextView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:padding="@dimen/text_padding"-->
-            <!--android:text="@string/bySignUp3" />-->
-
-            <!--<TextView-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:clickable="true"-->
-            <!--android:padding="@dimen/text_padding"-->
-            <!--android:text="@string/bySignUp4"-->
-            <!--android:textColor="@color/textColor" />-->
-
-            <!--</LinearLayout>-->
-
-            <View
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_horizontal"
-                android:padding="@dimen/text_padding"
-                android:text="@string/orSignIn" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:layout_marginTop="@dimen/padding_top"
-                android:orientation="horizontal">
-
-                <ImageButton
-                    android:id="@+id/bGP"
-                    android:layout_width="@dimen/social_network_button_size"
-                    android:layout_height="@dimen/social_network_button_size"
-                    android:background="@drawable/google" />
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"/>
-                <ImageButton
-                    android:id="@+id/bFb"
-                    android:layout_width="@dimen/social_network_button_size"
-                    android:layout_height="@dimen/social_network_button_size"
-                    android:background="@drawable/fb" />
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"/>
-                <ImageButton
-                    android:id="@+id/bSkype"
-                    android:layout_width="@dimen/social_network_button_size"
-                    android:layout_height="@dimen/social_network_button_size"
-                    android:background="@drawable/skype" />
-                <View
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1"/>
-                <ImageButton
-                    android:id="@+id/bVk"
-                    android:layout_width="@dimen/social_network_button_size"
-                    android:layout_height="@dimen/social_network_button_size"
-                    android:background="@drawable/vk" />
-
-            </LinearLayout>
-
-            <TextView
-                android:id="@+id/tvSingUp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:clickable="true"
-                android:padding="@dimen/text_padding"
-                android:text="@string/bySignUp2"
-                android:textSize="18sp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="@dimen/padding_signup_side"
-                android:layout_marginBottom="@dimen/activity_vertical_margin"
-                android:textColor="@color/colorAccent" />
+            <!--android:textSize="18sp"-->
+            <!--android:layout_gravity="center_horizontal"-->
+            <!--android:layout_marginTop="@dimen/padding_signup_side"-->
+            <!--android:layout_marginBottom="@dimen/activity_vertical_margin"-->
+            <!--android:textColor="@color/colorAccent" />-->
         </LinearLayout>
-    <!--</ScrollView>-->
+    </ScrollView>
 </FrameLayout>

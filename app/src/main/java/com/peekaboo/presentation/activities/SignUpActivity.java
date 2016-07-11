@@ -102,6 +102,7 @@ public class SignUpActivity extends AppCompatActivity implements ISingUpView {
             case PASSWORD_CONFIRM:
                 etPassword.setError(getString(R.string.invalidPasswordConfirm));
                 etPassword.setText("");
+                etPasswordConfirm.setText("");
                 //etPasswordConfirm.setText("");
                 break;
         }

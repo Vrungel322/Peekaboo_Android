@@ -19,7 +19,6 @@ public interface PeekabooApi {
     String CONFIRM = "confirm";
     String GET_KEY = "";
 
-    @FormUrlEncoded
     @POST(SIGNIN)
     Observable<TokenEntity> login(
             @Body Credentials credentials
