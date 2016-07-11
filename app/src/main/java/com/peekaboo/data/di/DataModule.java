@@ -35,17 +35,15 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class DataModule {
 
 
-    private SSLSocketFactory newSslSocketFactory(Context context){
+    private SSLSocketFactory newSslSocketFactory(Context context) {
         try {
             KeyStore trusted = KeyStore.getInstance("BKS");
-            // Open raw certificate from resources
             InputStream in = context.getResources().openRawResource(R.raw.keystore);
-            try{
-                // initialize keystore with provided certificates
-                // there is no password on keystore
+
+            try {
                 trusted.load(in, null);
             } finally {
-              in.close();
+                in.close();
             }
 
             String tmfAlgorithm = TrustManagerFactory.getDefaultAlgorithm();
@@ -71,8 +69,8 @@ public class DataModule {
         return new OkHttpClient.Builder()
                 .readTimeout(10, TimeUnit.SECONDS)
                 .addInterceptor(interceptor)
-//                .sslSocketFactory(newSslSocketFactory(context))
-//                .hostnameVerifier((hostname, session) -> true)
+                .sslSocketFactory(newSslSocketFactory(context))
+                .hostnameVerifier((hostname, session) -> true)
 //                .addInterceptor(new AuthenticatingInterceptor(authentificator))
                 .build();
     }

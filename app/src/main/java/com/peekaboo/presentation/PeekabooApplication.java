@@ -8,6 +8,7 @@ import com.peekaboo.presentation.activities.LogInActivity;
 import com.peekaboo.presentation.di.ApplicationComponent;
 import com.peekaboo.presentation.di.ApplicationModule;
 import com.peekaboo.presentation.di.DaggerApplicationComponent;
+import com.peekaboo.utils.ActivityNavigator;
 import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKAccessTokenTracker;
 import com.vk.sdk.VKSdk;
@@ -55,4 +56,5 @@ public class PeekabooApplication extends Application {
     public ApplicationComponent getComponent() {
         return component;
     }
+
 }

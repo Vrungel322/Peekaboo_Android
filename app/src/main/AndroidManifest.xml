@@ -14,7 +14,7 @@
         android:theme="@style/AppTheme">
         <activity android:name=".presentation.animation.DepthAnimation" />
 
-        <activity android:name=".presentation.activities.MainActivity">
+        <activity android:name=".presentation.activities.SplashActivity">
              <intent-filter>
              <action android:name="android.intent.action.MAIN" />
              <category android:name="android.intent.category.LAUNCHER" />
@@ -41,7 +41,7 @@
             android:name="com.vk.sdk.VKServiceActivity"
             android:label="ServiceActivity"
             android:theme="@style/VK.Transparent" />
-        <activity android:name=".presentation.activities.ProfileActivity"></activity>
+        <activity android:name=".presentation.activities.DialogActivity"></activity>
     </application>
 
 </manifest>
