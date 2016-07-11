@@ -62,23 +62,8 @@ public class LogInActivity extends AppCompatActivity implements ICredentialsView
         PeekabooApplication.getApp(this).getComponent().inject(this);
         loginPresenter.bind(this);
         loginPresenter.setCheckingInternet();
-//         get fingerprint for init in VK
-//         need be added in VKConsole for each developer to test
-//        loginPresenter.getFingerprint();
         bus.register(this);
-//        setStyle();
     }
-//
-//    private void setStyle(){
-//        Typeface helvetica_tf = Typeface.createFromAsset(getAssets(), getString(R.string.helvetica_font));
-//        tvSignUp1.setTypeface(helvetica_tf);
-//        tvSignUp2.setTypeface(helvetica_tf);
-//        tvSignUp3.setTypeface(helvetica_tf);
-//        tvSignUp4.setTypeface(helvetica_tf);
-//        tvSignIn.setTypeface(helvetica_tf);
-//        etUsername.setTypeface(helvetica_tf);
-//        etPassword.setTypeface(helvetica_tf);
-//    }
 
     @Override
     protected void onDestroy() {
