@@ -78,4 +78,8 @@ dependencies {
     compile 'com.neovisionaries:nv-websocket-client:1.28'
 
     compile 'com.github.glomadrian:CodeInput:1.1@aar'
+
+    compile('com.mikepenz.materialdrawer:library:0.9.5@aar') {
+        transitive = true
+    }
 }
