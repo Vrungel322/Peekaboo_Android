@@ -5,11 +5,11 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.peekaboo.R;
 
-public class DialogActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_dialog);
+        setContentView(R.layout.activity_main);
     }
 }
