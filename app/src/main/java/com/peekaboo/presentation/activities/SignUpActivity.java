@@ -27,10 +27,10 @@ import butterknife.OnClick;
 public class SignUpActivity extends AppCompatActivity implements ISingUpView {
 
     public static final String PROGRESS_DIALOG = "progress_dialog";
+    @BindView(R.id.etEmail)
+    EditText etLogin;
     @BindView(R.id.etUsername)
     EditText etUsername;
-    @BindView(R.id.etLogin)
-    EditText etLogin;
     @BindView(R.id.etPassword)
     EditText etPassword;
     @BindView(R.id.etPasswordConfirm)
@@ -91,9 +91,9 @@ public class SignUpActivity extends AppCompatActivity implements ISingUpView {
     @Override
     public void showInputError(InputFieldError error) {
         switch (error) {
-            case LOGIN:
-                etLogin.setError(getString(R.string.invalidLogin));
-                etLogin.setText("");
+            case USERNAME:
+                etUsername.setError(getString(R.string.invalidUsername));
+                etUsername.setText("");
                 break;
             case PASSWORD:
                 etPassword.setError(getString(R.string.invalidPassword));
@@ -103,8 +103,10 @@ public class SignUpActivity extends AppCompatActivity implements ISingUpView {
                 etPassword.setError(getString(R.string.invalidPasswordConfirm));
                 etPassword.setText("");
                 etPasswordConfirm.setText("");
-                //etPasswordConfirm.setText("");
                 break;
+            case LOGIN:
+                etLogin.setError(getString(R.string.invalidLogin));
+                etLogin.setText("");
         }
     }
 
