@@ -37,11 +37,17 @@
             <!--</intent-filter>-->
         </activity>
 
+        <activity android:name=".presentation.activities.DialogActivity">
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
+        </activity>
+
         <activity
             android:name="com.vk.sdk.VKServiceActivity"
             android:label="ServiceActivity"
             android:theme="@style/VK.Transparent" />
-        <activity android:name=".presentation.activities.ProfileActivity"></activity>
     </application>
 
 </manifest>
