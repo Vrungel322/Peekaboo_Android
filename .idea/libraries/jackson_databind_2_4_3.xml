@@ -6,6 +6,7 @@
     <JAVADOC />
     <SOURCES>
       <root url="jar://$APPLICATION_HOME_DIR$/gradle/gradle-2.10/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-databind/2.4.3/622aa2565d182ed609b25c4826124a5b687048a7/jackson-databind-2.4.3-sources.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.fasterxml.jackson.core/jackson-databind/2.4.3/622aa2565d182ed609b25c4826124a5b687048a7/jackson-databind-2.4.3-sources.jar!/" />
     </SOURCES>
   </library>
 </component>
