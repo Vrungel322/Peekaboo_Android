@@ -3,13 +3,13 @@ apply plugin: 'com.neenbedankt.android-apt'
 apply plugin: 'me.tatarka.retrolambda'
 
 android {
-    compileSdkVersion 24
-    buildToolsVersion "23.0.3"
+    compileSdkVersion 23
+    buildToolsVersion "23.0.1"
 
     defaultConfig {
         applicationId "com.peekaboo"
         minSdkVersion 15
-        targetSdkVersion 24
+        targetSdkVersion 23
         versionCode 1
         versionName "1.0"
     }
@@ -47,8 +47,8 @@ dependencies {
     testCompile 'org.powermock:powermock-module-junit4-rule:1.6.1'
     testCompile 'org.powermock:powermock-module-junit4:1.6.1'
 
-    compile 'com.android.support:appcompat-v7:24.0.0'
-    compile 'com.android.support:design:24.0.0'
+    compile 'com.android.support:appcompat-v7:23.2.0'
+    compile 'com.android.support:design:23.2.0'
     compile 'com.github.rahatarmanahmed:circularprogressview:2.5.0'
 
     compile 'com.jakewharton:butterknife:8.1.0'
@@ -79,7 +79,5 @@ dependencies {
 
     compile 'com.github.glomadrian:CodeInput:1.1@aar'
 
-    compile('com.mikepenz.materialdrawer:library:0.9.5@aar') {
-        transitive = true
-    }
+    compile 'de.hdodenhof:circleimageview:1.1.0'
 }
