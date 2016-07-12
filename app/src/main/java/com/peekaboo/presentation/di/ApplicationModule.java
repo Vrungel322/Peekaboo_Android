@@ -7,7 +7,6 @@ import com.peekaboo.data.di.DataModule;
 import com.peekaboo.domain.schedulers.ObserveOn;
 import com.peekaboo.domain.schedulers.SubscribeOn;
 import com.peekaboo.presentation.PeekabooApplication;
-import com.peekaboo.presentation.fragments.ConfirmSignUpDialog;
 import com.squareup.otto.Bus;
 
 import javax.inject.Singleton;
@@ -54,11 +53,11 @@ public class ApplicationModule {
         return new Bus();
     }
 
-    @Singleton
-    @Provides
-    ConfirmSignUpDialog provideConfirmSignUpDialog(){
-        return new ConfirmSignUpDialog();
-    }
+//    @Singleton
+//    @Provides
+//    ConfirmSignUpDialog provideConfirmSignUpDialog(){
+//        return new ConfirmSignUpDialog();
+//    }
 
 //    @Singleton
 //    @Provides
