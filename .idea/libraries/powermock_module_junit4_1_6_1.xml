@@ -6,7 +6,6 @@
     <JAVADOC />
     <SOURCES>
       <root url="jar://$APPLICATION_HOME_DIR$/gradle/gradle-2.10/caches/modules-2/files-2.1/org.powermock/powermock-module-junit4/1.6.1/a83243738ad1a30b4c1f8527166f41d48f608f/powermock-module-junit4-1.6.1-sources.jar!/" />
-      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.powermock/powermock-module-junit4/1.6.1/a83243738ad1a30b4c1f8527166f41d48f608f/powermock-module-junit4-1.6.1-sources.jar!/" />
     </SOURCES>
   </library>
 </component>
