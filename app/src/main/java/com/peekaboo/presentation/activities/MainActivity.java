@@ -1,16 +1,16 @@
 package com.peekaboo.presentation.activities;
 
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.widget.Toast;
 
 import com.peekaboo.R;
 
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -30,8 +30,4 @@ public class MainActivity extends AppCompatActivity {
         toggle.syncState();
     }
 
-    @OnClick(R.id.bt)
-    public void btClicked(){
-        Toast.makeText(getApplicationContext(), "Button", Toast.LENGTH_LONG).show();
-    }
 }
