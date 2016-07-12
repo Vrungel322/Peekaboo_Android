@@ -7,14 +7,14 @@
     <LinearLayout
         android:layout_width="@dimen/nav_header_width"
         android:layout_height="match_parent"
-        android:background="#f49c9c"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:background="#222222">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/nav_header_height"
-            android:background="#975bc7"
             android:weightSum="10"
+            android:background="#3eea94"
             android:orientation="horizontal">
 
             <LinearLayout
@@ -59,27 +59,49 @@
 
         </LinearLayout>
 
-        <Button
-            android:id="@+id/bt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:text="New Button" />
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/scrollView">
 
-        <Button
-            android:id="@+id/button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:text="New Button" />
+            <LinearLayout
+                android:orientation="vertical"
+                android:gravity="center_horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:text="Small Text"
-            android:textAppearance="?android:attr/textAppearanceSmall" />
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Dialogs"
+                    android:id="@+id/bDialogs" />
+
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Contacts"
+                    android:id="@+id/bContacts" />
+
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="My profile"
+                    android:id="@+id/bProfile" />
+
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Search"
+                    android:id="@+id/bSearch" />
+
+                <Button
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Settings"
+                    android:id="@+id/bSettings" />
+            </LinearLayout>
+        </ScrollView>
+
 
     </LinearLayout>
 

@@ -9,4 +9,16 @@
         <item name="android:windowTranslucentStatus">true</item>
     </style>
 
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">#52555555</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:textColor">@color/textColorHint</item>
+        <item name="android:textColorHint">@color/textColorHint</item>
+        <item name="android:editTextColor">@color/colorPrimary</item>
+    </style>
+
 </resources>
