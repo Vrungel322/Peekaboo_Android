@@ -4,6 +4,7 @@
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:elevation="8dp"
     android:fitsSystemWindows="true"
     tools:openDrawer="start">
 
@@ -15,13 +16,13 @@
     <FrameLayout
         android:layout_width="wrap_content"
         android:layout_height="match_parent"
-        android:layout_gravity="start"
-        android:fitsSystemWindows="true">
+        android:layout_gravity="start">
 
         <include
             layout="@layout/custom_drawer"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+            android:layout_height="match_parent"
+            android:fitsSystemWindows="true" />
     </FrameLayout>
 
 </android.support.v4.widget.DrawerLayout>
