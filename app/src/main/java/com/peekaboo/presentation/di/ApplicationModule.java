@@ -53,11 +53,6 @@ public class ApplicationModule {
         return new Bus();
     }
 
-//    @Singleton
-//    @Provides
-//    ConfirmSignUpDialog provideConfirmSignUpDialog(){
-//        return new ConfirmSignUpDialog();
-//    }
 
 //    @Singleton
 //    @Provides
