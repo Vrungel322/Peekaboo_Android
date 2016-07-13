@@ -8,4 +8,5 @@
     <color name="textColor">#ffffff</color>
     <color name="textColorHint">#8e8d8d</color>
     <color name="colorControlNormal">#969696</color>
+    <color name="peekaboo_color">#00c9a8</color>
 </resources>
