@@ -1,8 +1,6 @@
 package com.peekaboo.presentation.presenters;
 
 import android.content.Context;
-import android.content.SharedPreferences;
-import android.util.Log;
 
 import javax.inject.Inject;
 
@@ -11,20 +9,12 @@ import javax.inject.Inject;
  */
 public class MainActivityPresenter {
 
-    private SharedPreferences prefs = null;
     private Context mContext;
 
     @Inject
-    public MainActivityPresenter(Context context, SharedPreferences prefs) {
+    public MainActivityPresenter(Context context) {
         mContext = context;
-        this.prefs = prefs;
     }
 
-    public boolean isFirstLaunch(){
-        return prefs.getBoolean("firstrun", true);
-    }
-    public void setSecondLaunch(){
-        prefs.edit().putBoolean("firstrun", false).apply();
-        Log.wtf("prefs", String.valueOf(prefs.getBoolean("firstrun", true)));
-    }
+
 }
