@@ -3,6 +3,7 @@ package com.peekaboo.presentation.di;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.peekaboo.data.ChatArrayAdapter;
 import com.peekaboo.data.di.DataModule;
 import com.peekaboo.domain.schedulers.ObserveOn;
 import com.peekaboo.domain.schedulers.SubscribeOn;
@@ -47,6 +48,7 @@ public class ApplicationModule {
     SharedPreferences provideSharedPreferences(Context mContext){
         return mContext.getSharedPreferences("com.peekaboo.Peekaboo", mContext.MODE_PRIVATE);
     }
+
 
     @Provides
     Bus provideEventBus(){

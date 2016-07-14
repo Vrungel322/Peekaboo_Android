@@ -1,5 +1,6 @@
 package com.peekaboo.presentation.di;
 
+import com.peekaboo.presentation.activities.ChatActivity;
 import com.peekaboo.presentation.activities.LogInActivity;
 import com.peekaboo.presentation.activities.SplashActivity;
 import com.peekaboo.presentation.activities.SignUpActivity;
@@ -17,4 +18,5 @@ public interface ApplicationComponent {
     void inject(LogInActivity logInActivity);
     void inject(SignUpActivity signUpActivity);
     void inject (ConfirmSignUpDialog confirmSignUpDialog);
+    void inject (ChatActivity chatActivity);
 }
