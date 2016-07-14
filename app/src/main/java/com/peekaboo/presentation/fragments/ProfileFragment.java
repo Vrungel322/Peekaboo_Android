@@ -18,11 +18,9 @@ import butterknife.ButterKnife;
 /**
  * Created by Nikita on 14.07.2016.
  */
-@Singleton
 public class ProfileFragment extends Fragment {
     private View rootView;
 
-    @Inject
     public ProfileFragment(){}
 
     @Nullable
