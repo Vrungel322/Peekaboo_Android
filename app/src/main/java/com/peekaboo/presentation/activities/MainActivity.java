@@ -14,6 +14,8 @@ import com.peekaboo.presentation.di.ApplicationComponent;
 import com.peekaboo.presentation.fragments.ContactsFragment;
 import com.peekaboo.presentation.fragments.DialogsFragment;
 import com.peekaboo.presentation.fragments.ProfileFragment;
+import com.peekaboo.presentation.fragments.SearchFragment;
+import com.peekaboo.presentation.fragments.SettingsFragment;
 
 import javax.inject.Inject;
 
@@ -31,6 +33,10 @@ public class MainActivity extends AppCompatActivity {
     ContactsFragment contactsFragment;
     @Inject
     ProfileFragment profileFragment;
+    @Inject
+    SearchFragment searchFragment;
+    @Inject
+    SettingsFragment settingsFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,12 +75,12 @@ public class MainActivity extends AppCompatActivity {
 
     @OnClick(R.id.bSearch)
     public void bSearchClick(){
-
+        changeFragment(searchFragment, "searchFragment");
     }
 
     @OnClick(R.id.bSettings)
     public void bSettingsClick(){
-
+        changeFragment(settingsFragment, "settingsFragment");
     }
 
     private void changeFragment(Fragment fragment, String tag) {
