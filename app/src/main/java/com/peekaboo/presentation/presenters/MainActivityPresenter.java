@@ -15,6 +15,4 @@ public class MainActivityPresenter {
     public MainActivityPresenter(Context context) {
         mContext = context;
     }
-
-
 }
