@@ -10,19 +10,14 @@ import android.view.ViewGroup;
 
 import com.peekaboo.R;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
-
 import butterknife.ButterKnife;
 
 /**
  * Created by Nikita on 13.07.2016.
  */
-@Singleton
 public class DialogsFragment extends Fragment {
     private View rootView;
 
-    @Inject
     public DialogsFragment(){}
 
     @Nullable
