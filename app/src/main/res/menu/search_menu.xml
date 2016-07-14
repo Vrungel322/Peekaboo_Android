@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <group >
+        <item
+            android:title="search" />
+    </group>
+
+    <item android:title="multiMenu">
+        <menu>
+            <item
+                android:title="Share" />
+            <item
+                android:title="Send" />
+        </menu>
+    </item>
+
+</menu>
