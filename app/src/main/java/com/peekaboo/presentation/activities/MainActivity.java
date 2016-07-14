@@ -1,5 +1,6 @@
 package com.peekaboo.presentation.activities;
 
+import android.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -12,6 +13,7 @@ import com.peekaboo.presentation.PeekabooApplication;
 import com.peekaboo.presentation.di.ApplicationComponent;
 import com.peekaboo.presentation.fragments.ContactsFragment;
 import com.peekaboo.presentation.fragments.DialogsFragment;
+import com.peekaboo.presentation.fragments.ProfileFragment;
 
 import javax.inject.Inject;
 
@@ -27,6 +29,8 @@ public class MainActivity extends AppCompatActivity {
     DialogsFragment dialogsFragment;
     @Inject
     ContactsFragment contactsFragment;
+    @Inject
+    ProfileFragment profileFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,24 +53,19 @@ public class MainActivity extends AppCompatActivity {
 
     @OnClick(R.id.bDialogs)
     public void bDialogsClick(){
-        getFragmentManager().beginTransaction()
-                .replace(R.id.fragmentContainer, dialogsFragment, "dialogsFragment")
-        .commit();
-        drawer.closeDrawer(Gravity.LEFT);
+        changeFragment(dialogsFragment, "dialogsFragment");
     }
 
     @OnClick(R.id.bContacts)
     public void bContactsClick(){
-        getFragmentManager().beginTransaction()
-                .replace(R.id.fragmentContainer, contactsFragment, "contactsFragment")
-                .commit();
-        drawer.closeDrawer(Gravity.LEFT);
+        changeFragment(contactsFragment, "contactsFragment");
     }
 
     @OnClick(R.id.bProfile)
     public void bProfileClick(){
-
+        changeFragment(profileFragment, "profileFragment");
     }
+
 
     @OnClick(R.id.bSearch)
     public void bSearchClick(){
@@ -76,6 +75,13 @@ public class MainActivity extends AppCompatActivity {
     @OnClick(R.id.bSettings)
     public void bSettingsClick(){
 
+    }
+
+    private void changeFragment(Fragment fragment, String tag) {
+        getFragmentManager().beginTransaction()
+                .replace(R.id.fragmentContainer, fragment, tag)
+                .commit();
+        drawer.closeDrawer(Gravity.LEFT);
     }
 
 }
