@@ -17,8 +17,6 @@ import com.peekaboo.presentation.fragments.ProfileFragment;
 import com.peekaboo.presentation.fragments.SearchFragment;
 import com.peekaboo.presentation.fragments.SettingsFragment;
 
-import javax.inject.Inject;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -26,17 +24,6 @@ import butterknife.OnClick;
 public class MainActivity extends AppCompatActivity {
     @BindView(R.id.drawer_layout)
     DrawerLayout drawer;
-
-    @Inject
-    DialogsFragment dialogsFragment;
-    @Inject
-    ContactsFragment contactsFragment;
-    @Inject
-    ProfileFragment profileFragment;
-    @Inject
-    SearchFragment searchFragment;
-    @Inject
-    SettingsFragment settingsFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,32 +42,32 @@ public class MainActivity extends AppCompatActivity {
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
+
     }
 
     @OnClick(R.id.bDialogs)
     public void bDialogsClick(){
-        changeFragment(dialogsFragment, "dialogsFragment");
+        changeFragment(new DialogsFragment(), "dialogsFragment");
     }
 
     @OnClick(R.id.bContacts)
     public void bContactsClick(){
-        changeFragment(contactsFragment, "contactsFragment");
+        changeFragment(new ContactsFragment(), "contactsFragment");
     }
 
     @OnClick(R.id.bProfile)
     public void bProfileClick(){
-        changeFragment(profileFragment, "profileFragment");
+        changeFragment(new ProfileFragment(), "profileFragment");
     }
-
 
     @OnClick(R.id.bSearch)
     public void bSearchClick(){
-        changeFragment(searchFragment, "searchFragment");
+        changeFragment(new SearchFragment(), "searchFragment");
     }
 
     @OnClick(R.id.bSettings)
     public void bSettingsClick(){
-        changeFragment(settingsFragment, "settingsFragment");
+        changeFragment(new SettingsFragment(), "settingsFragment");
     }
 
     private void changeFragment(Fragment fragment, String tag) {
