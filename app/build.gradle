@@ -84,4 +84,6 @@ dependencies {
     compile 'com.github.glomadrian:CodeInput:1.1@aar'
 
     compile 'de.hdodenhof:circleimageview:1.1.0'
+
+    compile 'me.everything:overscroll-decor-android:1.0.3'
 }

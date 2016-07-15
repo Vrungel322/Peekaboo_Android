@@ -11,6 +11,8 @@
         android:layout_weight="1"
         android:background="@null"
         android:divider="@null"
+        android:listSelector="@android:color/transparent"
+        android:cacheColorHint="@android:color/transparent"
         android:stackFromBottom="true"
         android:transcriptMode="alwaysScroll"/>
 

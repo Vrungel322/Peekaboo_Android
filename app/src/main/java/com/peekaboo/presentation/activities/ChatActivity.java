@@ -18,6 +18,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
 
 /**
  * Created by Nataliia on 13.07.2016.
@@ -36,7 +37,7 @@ public class ChatActivity extends AppCompatActivity {
     ChatPresenter chatPresenter;
 
     private boolean side = true;
-    public ChatArrayAdapter chatArrayAdapter;
+    private ChatArrayAdapter chatArrayAdapter;
 
 
     @Override
@@ -44,15 +45,16 @@ public class ChatActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.chat_layout);
         ButterKnife.bind(this);
+        PeekabooApplication.getApp(this).getComponent().inject(this);
+
         chatArrayAdapter = new ChatArrayAdapter(getApplicationContext(), R.layout.list_item_chat_message_right);
 //        lvMessages.setTranscriptMode(AbsListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
         lvMessages.setAdapter(chatArrayAdapter);
-//        Log.e("actionBar", String.valueOf(getSupportActionBar()));
-        PeekabooApplication.getApp(this).getComponent().inject(this);
+        OverScrollDecoratorHelper.setUpOverScroll(lvMessages);
 
 //        sendOnKey();
 
-        // зачем етот метод если есть chatArrayAdapter.notifyDataSetChanged(); (97) ???
+        // зачем етот метод если есть chatArrayAdapter.notifyDataSetChanged(); (~93) ???
 //        chatArrayAdapter.registerDataSetObserver(new DataSetObserver() {
 //            @Override
 //            public void onChanged() {
@@ -62,9 +64,6 @@ public class ChatActivity extends AppCompatActivity {
 //            }
 //        });
 
-
-//        chatPresenter.bind(this);
-//        bus.register(this);
     }
     @OnClick(R.id.bSendMessage)
     void onButtonSendCLick(){
@@ -96,5 +95,4 @@ public class ChatActivity extends AppCompatActivity {
         //TODO: actually sending
         return true;
     }
-
 }
