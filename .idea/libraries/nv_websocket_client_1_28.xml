@@ -6,6 +6,7 @@
     <JAVADOC />
     <SOURCES>
       <root url="jar://$APPLICATION_HOME_DIR$/gradle/gradle-2.10/caches/modules-2/files-2.1/com.neovisionaries/nv-websocket-client/1.28/cb68df5c6afeeb5655a63a681de4cb454022274b/nv-websocket-client-1.28-sources.jar!/" />
+      <root url="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/com.neovisionaries/nv-websocket-client/1.28/cb68df5c6afeeb5655a63a681de4cb454022274b/nv-websocket-client-1.28-sources.jar!/" />
     </SOURCES>
   </library>
 </component>

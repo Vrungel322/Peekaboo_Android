@@ -22,7 +22,7 @@
             android:paddingRight="@dimen/padding_signup_side"
             android:focusable="true"
             android:focusableInTouchMode="true"
-            android:paddingTop="8dp">
+            android:paddingTop="@dimen/padding_top">
 
             <com.peekaboo.presentation.app.view.HelveticaTextInputLayout
                 android:layout_width="match_parent"
