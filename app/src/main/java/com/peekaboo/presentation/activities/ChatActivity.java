@@ -12,11 +12,11 @@ import android.widget.EditText;
 import android.widget.ListView;
 
 import com.peekaboo.R;
-import com.peekaboo.data.AttachmentChatDialog;
-import com.peekaboo.presentation.adapters.ChatArrayAdapter;
-import com.peekaboo.presentation.utils.ChatMessage;
 import com.peekaboo.presentation.PeekabooApplication;
+import com.peekaboo.presentation.adapters.ChatArrayAdapter;
+import com.peekaboo.presentation.fragments.AttachmentChatDialog;
 import com.peekaboo.presentation.presenters.ChatPresenter;
+import com.peekaboo.presentation.utils.ChatMessage;
 
 import javax.inject.Inject;
 

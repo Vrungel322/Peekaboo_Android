@@ -14,13 +14,14 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 ///**
 // * Created by Nataliia on 13.07.2016.
 // */
 public class ChatArrayAdapter extends ArrayAdapter<ChatMessage> {
 
-    private TextView chatText;
-    private TextView timeStamp;
     private List<ChatMessage> chatMessageList = new ArrayList<ChatMessage>();
     private Context context;
 
@@ -35,29 +36,48 @@ public class ChatArrayAdapter extends ArrayAdapter<ChatMessage> {
         this.context = context;
     }
 
+    public View getView(int position, View view, ViewGroup parent) {
+        ChatMessage chatMessageObj = getItem(position);
+        ViewHolder holder;
+        if (view != null) {
+            holder = (ViewHolder) view.getTag();
+        } else {
+            LayoutInflater inflater = (LayoutInflater) this.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            view = chatMessageObj.right
+                    ? inflater.inflate(R.layout.list_item_chat_message_right, parent, false)
+                    : inflater.inflate(R.layout.list_item_chat_message_left, parent, false);
+
+            holder = new ViewHolder(view);
+            view.setTag(holder);
+        }
+        holder.tvChatMessage.setText(chatMessageObj.message);
+        holder.tvChatTimestamp.setText(getTime());
+        return view;
+    }
+
+    static class ViewHolder {
+        @BindView(R.id.tvChatMessage)
+        TextView tvChatMessage;
+        @BindView(R.id.tvChatTimestamp)
+        TextView tvChatTimestamp;
+
+        public ViewHolder(View view) {
+            ButterKnife.bind(this, view);
+        }
+    }
+
+    public String getTime() {
+        long date = System.currentTimeMillis();
+        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm a");
+        return sdf.format(date);
+    }
+
     public int getCount() {
         return this.chatMessageList.size();
     }
 
     public ChatMessage getItem(int index) {
         return this.chatMessageList.get(index);
-    }
-
-    public View getView(int position, View convertView, ViewGroup parent) {
-        ChatMessage chatMessageObj = getItem(position);
-        View row = convertView;
-        LayoutInflater inflater = (LayoutInflater) this.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        row = chatMessageObj.left ? inflater.inflate(R.layout.list_item_chat_message_right, parent, false) : inflater.inflate(R.layout.list_item_chat_message_left, parent, false);
-        chatText = (TextView) row.findViewById(R.id.chat_message_text_view);
-        chatText.setText(chatMessageObj.message);
-        timeStamp = (TextView) row.findViewById(R.id.chat_timestamp);
-        timeStamp.setText(getTime());
-        return row;
-    }
-    public String getTime(){
-        long date = System.currentTimeMillis();
-        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm a");
-        return sdf.format(date);
     }
 }
 

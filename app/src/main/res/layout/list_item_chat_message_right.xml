@@ -17,7 +17,7 @@
             android:orientation="vertical">
 
             <TextView
-                android:id="@+id/chat_message_text_view"
+                android:id="@+id/tvChatMessage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
@@ -41,7 +41,7 @@
                     android:src="@drawable/ic_check" />
 
                 <TextView
-                    android:id="@+id/chat_timestamp"
+                    android:id="@+id/tvChatTimestamp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="16:45"
