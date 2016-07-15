@@ -1,7 +1,5 @@
 package com.peekaboo.presentation.presenters;
 
-import android.app.FragmentTransaction;
-
 import javax.inject.Inject;
 
 /**
@@ -11,11 +9,5 @@ public class ChatPresenter {
 
     @Inject
     public ChatPresenter() {
-    }
-
-    void openAttachDialog(){
-//        FragmentTransaction ft = getFragmentManager().beginTransaction();
-//        AttachmentDialog attachmentDialog = new AttachmentDialog();
-//        attachmentDialog.show(ft, "attachmentDialog");
     }
 }

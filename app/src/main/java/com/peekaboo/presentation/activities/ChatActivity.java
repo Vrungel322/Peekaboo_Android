@@ -1,13 +1,8 @@
 package com.peekaboo.presentation.activities;
 
 import android.app.FragmentTransaction;
-import android.database.DataSetObserver;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.KeyEvent;
-import android.view.View;
-import android.widget.AbsListView;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 
@@ -29,14 +24,14 @@ import butterknife.OnClick;
  */
 public class ChatActivity extends AppCompatActivity {
 
-    @BindView(R.id.attach_btn)
-    Button buttonAttach;
-    @BindView(R.id.send_message_btn)
-    Button buttonSend;
-    @BindView(R.id.edit_text_msg)
-    EditText messageText;
-    @BindView(R.id.msg_view)
-    ListView messageList;
+//    @BindView(R.id.attach_btn)
+//    Button buttonAttach;
+//    @BindView(R.id.bSendMessage)
+//    Button buttonSend;
+    @BindView(R.id.etMessageBody)
+    EditText etMessageBody;
+    @BindView(R.id.lvMessages)
+    ListView lvMessages;
     @Inject
     ChatPresenter chatPresenter;
 
@@ -50,26 +45,28 @@ public class ChatActivity extends AppCompatActivity {
         setContentView(R.layout.chat_layout);
         ButterKnife.bind(this);
         chatArrayAdapter = new ChatArrayAdapter(getApplicationContext(), R.layout.list_item_chat_message_right);
-        messageList.setTranscriptMode(AbsListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
-        messageList.setAdapter(chatArrayAdapter);
+//        lvMessages.setTranscriptMode(AbsListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
+        lvMessages.setAdapter(chatArrayAdapter);
 //        Log.e("actionBar", String.valueOf(getSupportActionBar()));
         PeekabooApplication.getApp(this).getComponent().inject(this);
 
-        sendOnKey();
+//        sendOnKey();
 
-        chatArrayAdapter.registerDataSetObserver(new DataSetObserver() {
-            @Override
-            public void onChanged() {
-                super.onChanged();
-                messageList.setSelection(chatArrayAdapter.getCount() - 1);
-            }
-        });
+        // зачем етот метод если есть chatArrayAdapter.notifyDataSetChanged(); (97) ???
+//        chatArrayAdapter.registerDataSetObserver(new DataSetObserver() {
+//            @Override
+//            public void onChanged() {
+//                super.onChanged();
+//                lvMessages.setSelection(chatArrayAdapter.getCount() - 1);
+//                Toast.makeText(getApplicationContext(), "onChange", Toast.LENGTH_SHORT).show();
+//            }
+//        });
 
 
 //        chatPresenter.bind(this);
 //        bus.register(this);
     }
-    @OnClick(R.id.send_message_btn)
+    @OnClick(R.id.bSendMessage)
     void onButtonSendCLick(){
         sendChatMessage();
     }
@@ -81,19 +78,21 @@ public class ChatActivity extends AppCompatActivity {
         attachmentChatDialog.show(ft, "attachmentDialog");
     }
 
-    public void sendOnKey(){
-        messageText.setOnKeyListener(new View.OnKeyListener() {
-            public boolean onKey(View v, int keyCode, KeyEvent event) {
-                if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
-                    return sendChatMessage();
-                }
-                return false;
-            }
-        });
-    }
+//    public void sendOnKey(){
+//        etMessageBody.setOnKeyListener(new View.OnKeyListener() {
+//            public boolean onKey(View v, int keyCode, KeyEvent event) {
+//                if ((event.getAction() == KeyEvent.ACTION_DOWN) && (keyCode == KeyEvent.KEYCODE_ENTER)) {
+//                    return sendChatMessage();
+//                }
+//                return false;
+//            }
+//        });
+//    }
+
     private boolean sendChatMessage() {
-        chatArrayAdapter.add(new ChatMessage(side, messageText.getText().toString()));
-        messageText.setText("");
+        chatArrayAdapter.add(new ChatMessage(side, etMessageBody.getText().toString()));
+        chatArrayAdapter.notifyDataSetChanged();
+        etMessageBody.setText("");
         //TODO: actually sending
         return true;
     }

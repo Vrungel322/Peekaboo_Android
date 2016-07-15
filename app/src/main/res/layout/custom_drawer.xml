@@ -7,7 +7,8 @@
     <LinearLayout
         android:layout_width="@dimen/nav_header_width"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:background="#ffffff">
 
         <ScrollView
             android:id="@+id/scrollView"
