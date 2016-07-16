@@ -39,8 +39,6 @@ public class SignUpActivity extends AppCompatActivity implements ISingUpView {
     SignUpPresenter signUpPresenter;
     @Inject
     ActivityNavigator navigator;
-    @Inject
-    ConfirmSignUpDialog confirmSignUpDialog;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -118,6 +116,7 @@ public class SignUpActivity extends AppCompatActivity implements ISingUpView {
     @Override
     public void showConfirmDialog() {
         FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ConfirmSignUpDialog confirmSignUpDialog = new ConfirmSignUpDialog();
         confirmSignUpDialog.setStyle(android.app.DialogFragment.STYLE_NO_TITLE, 0);
         confirmSignUpDialog.setStyle(android.app.DialogFragment.STYLE_NO_FRAME, 0);
         confirmSignUpDialog.show(ft, "confirmSignUpDialog");

@@ -54,16 +54,12 @@ public class ApplicationModule {
         return mContext.getSharedPreferences("com.peekaboo.Peekaboo", mContext.MODE_PRIVATE);
     }
 
+
     @Provides
     Bus provideEventBus(){
         return new Bus();
     }
 
-    @Singleton
-    @Provides
-    ConfirmSignUpDialog provideConfirmSignUpDialog(){
-        return new ConfirmSignUpDialog();
-    }
 
     @Provides
     @Singleton

@@ -14,24 +14,26 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".presentation.animation.DepthAnimation" />
+
         <activity
             android:name=".presentation.activities.SplashActivity"
             android:theme="@style/SplashTheme">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+            <!--<intent-filter>-->
+            <!--<action android:name="android.intent.action.MAIN" />-->
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
         </activity>
+
         <activity
             android:name=".presentation.activities.LogInActivity"
             android:theme="@style/SignInTheme">
-
             <!-- <intent-filter> -->
             <!-- <action android:name="android.intent.action.MAIN" /> -->
             <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
             <!-- </intent-filter> -->
         </activity>
+
         <activity
             android:name=".presentation.activities.SignUpActivity"
             android:theme="@style/SignInTheme">
@@ -41,13 +43,23 @@
             <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
             <!-- </intent-filter> -->
         </activity>
-        <activity android:name=".presentation.activities.MainActivity">
 
-            <!-- <intent-filter> -->
-            <!-- <action android:name="android.intent.action.MAIN" /> -->
-            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-            <!-- </intent-filter> -->
+        <activity android:name=".presentation.activities.MainActivity"
+            android:theme="@style/AppTheme">
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
         </activity>
+
+        <activity android:name=".presentation.activities.ChatActivity"
+            android:theme="@style/SignInTheme">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
         <activity
             android:name="com.vk.sdk.VKServiceActivity"
             android:label="ServiceActivity"
@@ -64,6 +76,18 @@
         <!--<service-->
             <!--android:name=".presentation.services.NotificationService"-->
             <!--android:enabled="true" />-->
+        <receiver
+            android:name=".presentation.services.ApplicationStartedReceiver"
+            android:enabled="true">
+            <intent-filter>
+                <action android:name="com.peekaboo.start" />
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+        <service
+            android:name=".presentation.services.NotificationService"
+            android:enabled="true" />
 
     </application>
 
