@@ -21,7 +21,6 @@ import javax.inject.Singleton;
 @Singleton
 public class SignUpPresenter extends ProgressPresenter<ISingUpView> implements ISignUpPresenter,
         BaseProgressSubscriber.ProgressSubscriberListener {
-
     private SignUpUseCase signUpUseCase;
     private ConfirmUseCase confirmUseCase;
     private User user;
