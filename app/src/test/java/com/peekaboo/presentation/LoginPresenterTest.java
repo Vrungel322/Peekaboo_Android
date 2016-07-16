@@ -1,4 +1,4 @@
-package me.gumenniy.arkadiy.vkmusic.presentation;
+package com.peekaboo.presentation;
 
 import android.test.mock.MockContext;
 
@@ -12,7 +12,11 @@ import com.peekaboo.presentation.views.ICredentialsView;
 import org.junit.Test;
 import org.mockito.Mock;
 
+import java.util.concurrent.TimeUnit;
+
 import rx.Observable;
+import rx.Subscriber;
+import rx.functions.Func0;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
@@ -44,7 +48,6 @@ public class LoginPresenterTest extends BasePresenterTest {
         loginPresenter.bind(loginView);
         loginPresenter.onSignInButtonClick("short", "aValidPassword");
 
-
         verify(loginView, timeout(WAIT).times(0)).navigateToProfile();
         verify(loginView, timeout(WAIT).times(1)).showInputError(ICredentialsView.InputFieldError.LOGIN);
     }
@@ -56,9 +59,18 @@ public class LoginPresenterTest extends BasePresenterTest {
         loginPresenter.bind(loginView);
         loginPresenter.onSignInButtonClick("aValidLogin", "short");
 
-
         verify(loginView, timeout(WAIT).times(0)).navigateToProfile();
         verify(loginView, timeout(WAIT).times(1)).showInputError(ICredentialsView.InputFieldError.PASSWORD);
+    }
+
+    @Test
+    public void whenExternalErrorFailureThenShowLoginError() {
+        LoginPresenter loginPresenter = new LoginPresenter(context, new LoginUseCaseFailure(), errorHandler);
+        loginPresenter.bind(loginView);
+        loginPresenter.onSignInButtonClick("aValidLogin", "aValidPassword");
+
+        verify(loginView, timeout(WAIT).times(0)).navigateToProfile();
+        verify(loginView, timeout(WAIT).times(1)).onError(any(String.class));
     }
 
     private class LoginUseCaseSuccess extends LoginUseCase {
@@ -71,21 +83,21 @@ public class LoginPresenterTest extends BasePresenterTest {
             return Observable.just(mock(User.class));
         }
     }
-//
-//    private class LoginUseCaseFailure extends LoginUseCase {
-//        public LoginUseCaseFailure() {
-//            super(mock(SessionRepository.class), subscribeOn, observeOn);
-//        }
-//
-//        @Override
-//        protected Observable<String> buildUseCaseObservable() {
-//            return Observable.create(new Observable.OnSubscribe<String>() {
-//                @Override
-//                public void call(Subscriber<? super String> subscriber) {
-//                    subscriber.onError(new RuntimeException("Not great"));
-//                }
-//            });
-//        }
-//    }
+
+    private class LoginUseCaseFailure extends LoginUseCase {
+        public LoginUseCaseFailure() {
+            super(mock(SessionRepository.class), subscribeOn, observeOn);
+        }
+
+        @Override
+        protected Observable<User> getUseCaseObservable() {
+            return Observable.create(new Observable.OnSubscribe<User>() {
+                @Override
+                public void call(Subscriber<? super User> subscriber) {
+                    subscriber.onError(new RuntimeException("Not great"));
+                }
+            });
+        }
+    }
 
 }
