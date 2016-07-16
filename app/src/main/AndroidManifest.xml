@@ -53,17 +53,17 @@
             android:label="ServiceActivity"
             android:theme="@style/VK.Transparent" />
 
-        <receiver
-            android:name=".presentation.services.ApplicationStartedReceiver"
-            android:enabled="true">
-            <intent-filter>
-                <action android:name="com.peekaboo.start" />
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-            </intent-filter>
-        </receiver>
-        <service
-            android:name=".presentation.services.NotificationService"
-            android:enabled="true" />
+        <!--<receiver-->
+            <!--android:name=".presentation.services.ApplicationStartedReceiver"-->
+            <!--android:enabled="true">-->
+            <!--<intent-filter>-->
+                <!--<action android:name="com.peekaboo.start" />-->
+                <!--<action android:name="android.intent.action.BOOT_COMPLETED" />-->
+            <!--</intent-filter>-->
+        <!--</receiver>-->
+        <!--<service-->
+            <!--android:name=".presentation.services.NotificationService"-->
+            <!--android:enabled="true" />-->
 
     </application>
 

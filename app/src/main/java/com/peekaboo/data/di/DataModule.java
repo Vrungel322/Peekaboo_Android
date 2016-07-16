@@ -88,12 +88,6 @@ public class DataModule {
 
     @Provides
     @Singleton
-    public User provideUser(SharedPreferences prefs) {
-        return new User(prefs);
-    }
-
-    @Provides
-    @Singleton
     public SessionRepository provideRepository(Retrofit retrofit, User user) {
         return new SessionDataRepository(new RestApi(retrofit.create(PeekabooApi.class)), new MapperFactory(), user);
     }

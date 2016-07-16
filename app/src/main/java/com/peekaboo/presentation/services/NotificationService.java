@@ -5,14 +5,26 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
-import android.os.StrictMode;
 import android.support.annotation.Nullable;
-import android.support.design.BuildConfig;
 import android.util.Log;
-import android.widget.Toast;
+
+import com.neovisionaries.ws.client.WebSocket;
+import com.neovisionaries.ws.client.WebSocketAdapter;
+import com.neovisionaries.ws.client.WebSocketException;
+import com.neovisionaries.ws.client.WebSocketFactory;
+import com.neovisionaries.ws.client.WebSocketFrame;
+import com.peekaboo.data.Constants;
+import com.peekaboo.domain.User;
+import com.peekaboo.presentation.PeekabooApplication;
+import com.peekaboo.presentation.di.ApplicationComponent;
+
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
+
+import javax.inject.Inject;
 
 public class NotificationService extends Service {
-    private final IBinder binder = new NotificationBinder();
 
     public static void launch(Context context, @Nullable String action) {
         Intent intent = new Intent(context, NotificationService.class);
@@ -24,16 +36,7 @@ public class NotificationService extends Service {
 
     @Override
     public IBinder onBind(Intent intent) {
-        return binder;
-    }
-
-    @Override
-    public void onCreate() {
-        super.onCreate();
-        if (BuildConfig.DEBUG) {
-            StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().detectAll().penaltyLog().build());
-            StrictMode.setVmPolicy(new StrictMode.VmPolicy.Builder().detectAll().penaltyLog().build());
-        }
+        return null;
     }
 
     @Override
@@ -45,11 +48,5 @@ public class NotificationService extends Service {
     public void onDestroy() {
         Intent intent = new Intent("com.peekaboo.start");
         sendBroadcast(intent);
-    }
-
-    public class NotificationBinder extends Binder {
-        public NotificationService getService() {
-            return NotificationService.this;
-        }
     }
 }
