@@ -23,9 +23,13 @@
                 android:layout_gravity="center"
                 android:layout_margin="@dimen/chat_message_text_margin"
                 android:maxWidth="240dp"
-                android:text="Hello World"
                 android:textSize="@dimen/chat_message_text_size"
                 android:textColor="@color/underline_selected_color"/>
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/iv_chat_image"/>
 
             <LinearLayout
                 android:layout_width="wrap_content"

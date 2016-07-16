@@ -1,6 +1,10 @@
 package com.peekaboo.presentation.fragments;
+import android.app.Activity;
 import android.app.DialogFragment;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,6 +28,8 @@ public class AttachmentChatDialog  extends DialogFragment {
 
     private String[] attach_list_strings;
 
+
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -40,7 +46,7 @@ public class AttachmentChatDialog  extends DialogFragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 switch(i){
                     case 0:
-                        Toast.makeText(getActivity(), "0", Toast.LENGTH_SHORT).show();
+                        takePhoto();
                         break;
                     case 1:
                         Toast.makeText(getActivity(), "1", Toast.LENGTH_SHORT).show();
@@ -55,5 +61,10 @@ public class AttachmentChatDialog  extends DialogFragment {
             }
         });
         return view;
+    }
+
+    public void takePhoto() {
+        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        getActivity().startActivityForResult(cameraIntent, 0);
     }
 }

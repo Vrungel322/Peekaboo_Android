@@ -1,10 +1,15 @@
 package com.peekaboo.presentation.adapters;
 
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.provider.MediaStore;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.peekaboo.R;
@@ -51,8 +56,11 @@ public class ChatArrayAdapter extends ArrayAdapter<ChatMessage> {
             view.setTag(holder);
         }
         holder.tvChatMessage.setText(chatMessageObj.message);
+        holder.ivChatImage.setImageBitmap(chatMessageObj.image);
+
         holder.tvChatTimestamp.setText(getTime());
         return view;
+
     }
 
     static class ViewHolder {
@@ -60,12 +68,14 @@ public class ChatArrayAdapter extends ArrayAdapter<ChatMessage> {
         TextView tvChatMessage;
         @BindView(R.id.tvChatTimestamp)
         TextView tvChatTimestamp;
+        @BindView(R.id.iv_chat_image)
+        ImageView ivChatImage;
+
 
         public ViewHolder(View view) {
             ButterKnife.bind(this, view);
         }
     }
-
     public String getTime() {
         long date = System.currentTimeMillis();
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm a");

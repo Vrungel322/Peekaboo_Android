@@ -1,7 +1,9 @@
 package com.peekaboo.presentation.activities;
 
 import android.app.FragmentTransaction;
+import android.content.Intent;
 import android.database.DataSetObserver;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
@@ -92,10 +94,21 @@ public class ChatActivity extends AppCompatActivity {
         });
     }
     private boolean sendChatMessage() {
-        chatArrayAdapter.add(new ChatMessage(side, messageText.getText().toString()));
+        chatArrayAdapter.add(new ChatMessage(side, messageText.getText().toString(), null));
         messageText.setText("");
         //TODO: actually sending
         return true;
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 0) {
+            Bitmap thumbnailBitmap = (Bitmap) data.getExtras().get("data");
+            sendPhoto(thumbnailBitmap);
+        }
+    }
+
+    private void sendPhoto(Bitmap photo){
+        chatArrayAdapter.add(new ChatMessage(side, "", photo));
+    }
 }
