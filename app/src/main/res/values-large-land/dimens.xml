@@ -1,0 +1,30 @@
+<resources>
+    <dimen name="activity_horizontal_margin">16dp</dimen>
+    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="icon_drawer_margin">16dp</dimen>
+    <dimen name="text_drawer_margin">16dp</dimen>
+    <dimen name="padding_dialog">20dp</dimen>
+    <dimen name="padding_signup_button">80dp</dimen>
+    <dimen name="padding_signup_side">48dp</dimen>
+    <dimen name="padding_top">6dp</dimen>
+    <dimen name="text_padding">2dp</dimen>
+    <dimen name="padding_button">6dp</dimen>
+    <dimen name="et_margin">8dp</dimen>
+    <dimen name="sign_up_button_padding">8dp</dimen>
+    <dimen name="credentials_button_height">56dp</dimen>
+    <dimen name="social_network_button_size">68dp</dimen>
+    <dimen name="social_networks_margin_top">120dp</dimen>
+    <dimen name="nav_header_vertical_spacing">16dp</dimen>
+    <dimen name="nav_header_height">160dp</dimen>
+    <dimen name="nav_header_width">280dp</dimen>
+    <dimen name="chat_message_text_size">16sp</dimen>
+    <dimen name="chat_message_text_margin">6dp</dimen>
+    <dimen name="chat_timestamp_text_size">12sp</dimen>
+    <dimen name="chat_message_status_size">16dp</dimen>
+    <dimen name="dialog_item_padding">8dp</dimen>
+    <dimen name="dialog_status_size">20dp</dimen>
+    <dimen name="dialog_timestamp_text_size">16sp</dimen>
+    <dimen name="dialog_username_text_size">20sp</dimen>
+    <dimen name="dialog_item_margin">6dp</dimen>
+    <dimen name="circle_photo_border_width">2dp</dimen>
+</resources>
