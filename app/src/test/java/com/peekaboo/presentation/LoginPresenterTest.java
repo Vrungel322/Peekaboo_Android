@@ -43,7 +43,7 @@ public class LoginPresenterTest extends BasePresenterTest {
     }
 
     @Test
-    public void whenInvalidLoginThenShowLoginError() {
+    public void whenInvalidLoginThenShowInputErrorIsCalled() {
         LoginPresenter loginPresenter = new LoginPresenter(context, new LoginUseCaseSuccess(), errorHandler);
         loginPresenter.bind(loginView);
         loginPresenter.onSignInButtonClick("short", "aValidPassword");
@@ -54,7 +54,7 @@ public class LoginPresenterTest extends BasePresenterTest {
 
 
     @Test
-    public void whenInvalidPasswordThenShowLoginError() {
+    public void whenInvalidPasswordThenShowInputErrorIsCalled() {
         LoginPresenter loginPresenter = new LoginPresenter(context, new LoginUseCaseSuccess(), errorHandler);
         loginPresenter.bind(loginView);
         loginPresenter.onSignInButtonClick("aValidLogin", "short");
@@ -64,7 +64,7 @@ public class LoginPresenterTest extends BasePresenterTest {
     }
 
     @Test
-    public void whenExternalErrorFailureThenShowLoginError() {
+    public void whenExternalErrorThenShowLoginErrorIsCalled() {
         LoginPresenter loginPresenter = new LoginPresenter(context, new LoginUseCaseFailure(), errorHandler);
         loginPresenter.bind(loginView);
         loginPresenter.onSignInButtonClick("aValidLogin", "aValidPassword");

@@ -10,7 +10,7 @@ import com.peekaboo.domain.usecase.ConfirmUseCase;
 import com.peekaboo.domain.usecase.SignUpUseCase;
 import com.peekaboo.presentation.utils.CredentialUtils;
 import com.peekaboo.presentation.views.ICredentialsView;
-import com.peekaboo.presentation.views.ISingUpView;
+import com.peekaboo.presentation.views.ISignUpView;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -19,7 +19,7 @@ import javax.inject.Singleton;
  * Created by sebastian on 28.06.16.
  */
 @Singleton
-public class SignUpPresenter extends ProgressPresenter<ISingUpView> implements ISignUpPresenter,
+public class SignUpPresenter extends ProgressPresenter<ISignUpView> implements ISignUpPresenter,
         BaseProgressSubscriber.ProgressSubscriberListener {
     private SignUpUseCase signUpUseCase;
     private ConfirmUseCase confirmUseCase;
@@ -119,7 +119,7 @@ public class SignUpPresenter extends ProgressPresenter<ISingUpView> implements I
     }
 
     @Override
-    public void bind(ISingUpView view) {
+    public void bind(ISignUpView view) {
         super.bind(view);
         if (signUpUseCase.isWorking()) {
             signUpUseCase.execute(getSignUpSubscriber());
