@@ -90,16 +90,36 @@ public class SignUpPresenterTest extends BasePresenterTest {
         verify(signUpView, timeout(WAIT).times(0)).showConfirmDialog();
         verify(signUpView, timeout(WAIT).times(1)).showInputError(ICredentialsView.InputFieldError.PASSWORD_CONFIRM);
     }
-//
-//    @Test
-//    public void whenConfirmSuccessThenNavigateToProfile() {
-//        SignUpPresenter signUpPresenter = new SignUpPresenter(context, new SignUpUseCaseSuccess(), new ConfirmUseCaseSuccess(), errorHandler);
-//        signUpPresenter.bind(signUpView);
-//        signUpPresenter.onSignUpButtonClick("aValidUsername", "aValid@mail", "aValidPassword", "aValidPassword");
-//        signUpPresenter.onCodeConfirmButtonClick("1234");
-//
-//        verify(signUpView, timeout(WAIT).times(1)).navigateToProfile();
-//    }
+
+    @Test
+    public void whenConfirmSuccessThenNavigateToProfile() {
+        SignUpPresenter signUpPresenter = new SignUpPresenter(context, new SignUpUseCaseSuccess(), new ConfirmUseCaseSuccess(), errorHandler);
+        signUpPresenter.setUser(new User("id"));
+        signUpPresenter.bind(signUpView);
+        signUpPresenter.onCodeConfirmButtonClick("1234");
+        verify(signUpView, timeout(WAIT).times(1)).navigateToProfile();
+    }
+
+
+    @Test
+    public void whenInvalidCodeThenShowError() {
+        SignUpPresenter signUpPresenter = new SignUpPresenter(context, new SignUpUseCaseSuccess(), new ConfirmUseCaseSuccess(), errorHandler);
+        signUpPresenter.setUser(new User("id"));
+        signUpPresenter.bind(signUpView);
+        signUpPresenter.onCodeConfirmButtonClick("123");
+        verify(signUpView, timeout(WAIT).times(1)).onError(any(String.class));
+        verify(signUpView, timeout(WAIT).times(0)).navigateToProfile();
+    }
+
+    @Test
+    public void whenExternalFailureThenShowError() {
+        SignUpPresenter signUpPresenter = new SignUpPresenter(context, new SignUpUseCaseSuccess(), new ConfirmUseCaseFailure(), errorHandler);
+        signUpPresenter.setUser(new User("id"));
+        signUpPresenter.bind(signUpView);
+        signUpPresenter.onCodeConfirmButtonClick("1234");
+        verify(signUpView, timeout(WAIT).times(1)).onError(any(String.class));
+        verify(signUpView, timeout(WAIT).times(0)).navigateToProfile();
+    }
 //
 //    @Test
 //    public void whenConfirmExternalErrorThenShowConfirmDialogIsCalled() {
@@ -118,7 +138,7 @@ public class SignUpPresenterTest extends BasePresenterTest {
 
         @Override
         protected Observable<User> getUseCaseObservable() {
-            return Observable.just(mock(User.class));
+            return Observable.just(new User("asd"));
         }
     }
 

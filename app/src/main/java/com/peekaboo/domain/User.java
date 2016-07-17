@@ -22,7 +22,7 @@ public class User {
     }
 
     public User(String str) {
-
+        this.id = str;
     }
 
     @Nullable

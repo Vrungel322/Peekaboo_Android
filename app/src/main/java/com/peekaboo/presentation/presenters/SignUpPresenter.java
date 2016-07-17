@@ -107,6 +107,9 @@ public class SignUpPresenter extends ProgressPresenter<ISignUpView> implements I
         return false;
     }
 
+    public void setUser(User user) {
+        this.user = user;
+    }
 
     @Override
     public void unbind() {
