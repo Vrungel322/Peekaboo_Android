@@ -1,19 +1,21 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/AppTheme"
     android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    style="@style/AppTheme">
+    android:layout_height="wrap_content">
 
     <FrameLayout
         android:id="@+id/chat_bubble"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:background="@drawable/bubble2"        >
+        android:background="@drawable/bubble2">
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:maxHeight="240dp"
+            android:maxWidth="240dp">
 
             <TextView
                 android:id="@+id/tvChatMessage"
@@ -22,9 +24,13 @@
                 android:layout_gravity="center"
                 android:layout_margin="@dimen/chat_message_text_margin"
                 android:maxWidth="240dp"
-                android:text="Hello World"
-                android:textSize="@dimen/chat_message_text_size"
-                android:textColor="@color/underline_selected_color"/>
+                android:textColor="@color/underline_selected_color"
+                android:textSize="@dimen/chat_message_text_size" />
+
+            <ImageView
+                android:id="@+id/iv_chat_image"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -44,8 +50,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="16:45"
-                    android:textSize="@dimen/chat_timestamp_text_size"
-                    android:textColor="@color/colorPrimaryDark"/>
+                    android:textColor="@color/colorPrimaryDark"
+                    android:textSize="@dimen/chat_timestamp_text_size" />
             </LinearLayout>
 
         </LinearLayout>

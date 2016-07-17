@@ -1,6 +1,8 @@
 package com.peekaboo.presentation.fragments;
 import android.app.DialogFragment;
+import android.content.Intent;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,10 +21,15 @@ import butterknife.ButterKnife;
  * Created by Nataliia on 12.07.2016.
  */
 public class AttachmentChatDialog  extends DialogFragment {
+    public static int REQUEST_CODE_CAMERA = 1818;
+    public static int REQUEST_CODE_GALERY = 1819;
+
     @BindView(R.id.attach_list)
     ListView lvAttachments;
 
     private String[] attach_list_strings;
+
+
 
     @Nullable
     @Override
@@ -40,10 +47,10 @@ public class AttachmentChatDialog  extends DialogFragment {
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 switch(i){
                     case 0:
-                        Toast.makeText(getActivity(), "0", Toast.LENGTH_SHORT).show();
+                        takePhoto();
                         break;
                     case 1:
-                        Toast.makeText(getActivity(), "1", Toast.LENGTH_SHORT).show();
+                        takeGaleryImage();
                         break;
                     case 2:
                         Toast.makeText(getActivity(), "2", Toast.LENGTH_SHORT).show();
@@ -55,5 +62,17 @@ public class AttachmentChatDialog  extends DialogFragment {
             }
         });
         return view;
+    }
+
+    private void takeGaleryImage() {
+        Intent intent = new Intent();
+        intent.setType("image/*"); // to open gallery
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        getActivity().startActivityForResult(Intent.createChooser(intent, "Select Image"), REQUEST_CODE_GALERY);
+    }
+
+    public void takePhoto() {
+        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        getActivity().startActivityForResult(cameraIntent, REQUEST_CODE_CAMERA);
     }
 }
