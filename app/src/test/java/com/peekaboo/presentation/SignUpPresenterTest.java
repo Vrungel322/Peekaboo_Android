@@ -94,9 +94,11 @@ public class SignUpPresenterTest extends BasePresenterTest {
     @Test
     public void whenConfirmSuccessThenNavigateToProfile() {
         SignUpPresenter signUpPresenter = new SignUpPresenter(context, new SignUpUseCaseSuccess(), new ConfirmUseCaseSuccess(), errorHandler);
-        signUpPresenter.setUser(new User("id"));
         signUpPresenter.bind(signUpView);
+        signUpPresenter.onSignUpButtonClick("aValidUsername", "aValid@mail", "aValidPassword", "aValidPassword");
+        sleep(200);
         signUpPresenter.onCodeConfirmButtonClick("1234");
+
         verify(signUpView, timeout(WAIT).times(1)).navigateToProfile();
     }
 
@@ -104,9 +106,11 @@ public class SignUpPresenterTest extends BasePresenterTest {
     @Test
     public void whenInvalidCodeThenShowError() {
         SignUpPresenter signUpPresenter = new SignUpPresenter(context, new SignUpUseCaseSuccess(), new ConfirmUseCaseSuccess(), errorHandler);
-        signUpPresenter.setUser(new User("id"));
         signUpPresenter.bind(signUpView);
+        signUpPresenter.onSignUpButtonClick("aValidUsername", "aValid@mail", "aValidPassword", "aValidPassword");
+        sleep(200);
         signUpPresenter.onCodeConfirmButtonClick("123");
+
         verify(signUpView, timeout(WAIT).times(1)).onError(any(String.class));
         verify(signUpView, timeout(WAIT).times(0)).navigateToProfile();
     }
@@ -114,11 +118,21 @@ public class SignUpPresenterTest extends BasePresenterTest {
     @Test
     public void whenExternalFailureThenShowError() {
         SignUpPresenter signUpPresenter = new SignUpPresenter(context, new SignUpUseCaseSuccess(), new ConfirmUseCaseFailure(), errorHandler);
-        signUpPresenter.setUser(new User("id"));
         signUpPresenter.bind(signUpView);
+        signUpPresenter.onSignUpButtonClick("aValidUsername", "aValid@mail", "aValidPassword", "aValidPassword");
+        sleep(200);
         signUpPresenter.onCodeConfirmButtonClick("1234");
+
         verify(signUpView, timeout(WAIT).times(1)).onError(any(String.class));
         verify(signUpView, timeout(WAIT).times(0)).navigateToProfile();
+    }
+
+    private void sleep(int millis) {
+        try {
+            Thread.sleep(millis);
+        } catch (InterruptedException e) {
+
+        }
     }
 //
 //    @Test
