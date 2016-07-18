@@ -11,7 +11,7 @@ import com.peekaboo.R;
 import com.peekaboo.presentation.PeekabooApplication;
 import com.peekaboo.presentation.fragments.ConfirmSignUpDialog;
 import com.peekaboo.presentation.fragments.ProgressDialogFragment;
-import com.peekaboo.presentation.views.ISingUpView;
+import com.peekaboo.presentation.views.ISignUpView;
 import com.peekaboo.presentation.presenters.SignUpPresenter;
 import com.peekaboo.utils.ActivityNavigator;
 
@@ -24,7 +24,7 @@ import butterknife.OnClick;
 /**
  * Created by sebastian on 05.07.16.
  */
-public class SignUpActivity extends AppCompatActivity implements ISingUpView {
+public class SignUpActivity extends AppCompatActivity implements ISignUpView {
 
     public static final String PROGRESS_DIALOG = "progress_dialog";
     @BindView(R.id.etEmail)

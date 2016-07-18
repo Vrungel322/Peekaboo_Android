@@ -1,4 +1,4 @@
-package me.gumenniy.arkadiy.vkmusic.presentation;
+package com.peekaboo.presentation;
 
 import com.peekaboo.domain.schedulers.ObserveOn;
 import com.peekaboo.domain.schedulers.SubscribeOn;
