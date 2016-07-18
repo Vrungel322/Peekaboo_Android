@@ -6,14 +6,19 @@ import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.peekaboo.R;
 import com.peekaboo.presentation.PeekabooApplication;
 import com.peekaboo.presentation.adapters.ChatArrayAdapter;
+import com.peekaboo.presentation.database.DBHelper;
+import com.peekaboo.presentation.database.PMessage;
 import com.peekaboo.presentation.fragments.AttachmentChatDialog;
 import com.peekaboo.presentation.presenters.ChatPresenter;
 import com.peekaboo.presentation.utils.ChatMessage;
@@ -32,10 +37,6 @@ import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
  */
 public class ChatActivity extends AppCompatActivity {
 
-//    @BindView(R.id.attach_btn)
-//    Button buttonAttach;
-//    @BindView(R.id.bSendMessage)
-//    Button buttonSend;
     @BindView(R.id.etMessageBody)
     EditText etMessageBody;
     @BindView(R.id.lvMessages)
@@ -55,11 +56,32 @@ public class ChatActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         PeekabooApplication.getApp(this).getComponent().inject(this);
 
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarChat);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
         chatArrayAdapter = new ChatArrayAdapter(getApplicationContext(), R.layout.list_item_chat_message_right);
         lvMessages.setAdapter(chatArrayAdapter);
         OverScrollDecoratorHelper.setUpOverScroll(lvMessages);
-
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.dialogs_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.dialogsDrop:{
+                DBHelper.dropTableAndCreate("test");
+                break;
+            }
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
     @OnClick(R.id.bSendMessage)
     void onButtonSendCLick(){
         sendChatMessage();
@@ -73,10 +95,19 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private boolean sendChatMessage() {
-        chatArrayAdapter.add(new ChatMessage(side, etMessageBody.getText().toString(), null));
+        String msgBody = etMessageBody.getText().toString();
+        chatArrayAdapter.add(new ChatMessage(side, msgBody, null));
         chatArrayAdapter.notifyDataSetChanged();
         etMessageBody.setText("");
         //TODO: actually sending
+        //TODO: save into db
+        //DB testing
+        chatPresenter.initdb();
+        chatPresenter.createTable("test");
+            chatPresenter.makeNoteInTable(new PMessage(msgBody,
+                    0, 0, 1, System.currentTimeMillis(), "idPack"), "test");
+        int size = DBHelper.getAllNotes("test").size();
+        Log.wtf("db",DBHelper.getAllNotes("test").get(size-1).getMesBody());
         return true;
     }
 
