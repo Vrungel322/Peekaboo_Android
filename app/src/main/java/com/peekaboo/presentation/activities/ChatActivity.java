@@ -102,12 +102,13 @@ public class ChatActivity extends AppCompatActivity {
         //TODO: actually sending
         //TODO: save into db
         //DB testing
-        chatPresenter.initdb();
-        chatPresenter.createTable("test");
+        chatPresenter.initdb(); // should be done on application layer
+        chatPresenter.createTable("test"); // should be done when friend add
             chatPresenter.makeNoteInTable(new PMessage(msgBody,
                     0, 0, 1, System.currentTimeMillis(), "idPack"), "test");
         int size = DBHelper.getAllNotes("test").size();
         Log.wtf("db",DBHelper.getAllNotes("test").get(size-1).getMesBody());
+        DBHelper.getTableAsString("test");
         return true;
     }
 
