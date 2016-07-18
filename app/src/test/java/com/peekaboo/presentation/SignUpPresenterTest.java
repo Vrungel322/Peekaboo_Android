@@ -11,6 +11,7 @@ import com.peekaboo.presentation.presenters.SignUpPresenter;
 import com.peekaboo.presentation.views.ICredentialsView;
 import com.peekaboo.presentation.views.ISignUpView;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mock;
 
@@ -22,9 +23,6 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.timeout;
 import static org.mockito.Mockito.verify;
 
-/**
- * Created by sebastian on 16.07.16.
- */
 public class SignUpPresenterTest extends BasePresenterTest {
     MockContext context = new MockContext();
     @Mock
@@ -93,10 +91,10 @@ public class SignUpPresenterTest extends BasePresenterTest {
 
     @Test
     public void whenConfirmSuccessThenNavigateToProfile() {
-        SignUpPresenter signUpPresenter = new SignUpPresenter(context, new SignUpUseCaseSuccess(), new ConfirmUseCaseSuccess(), errorHandler);
+        ConfirmUseCaseSuccess confirmUseCase = new ConfirmUseCaseSuccess();
+        confirmUseCase.setUserId("id");
+        SignUpPresenter signUpPresenter = new SignUpPresenter(context, new SignUpUseCaseSuccess(), confirmUseCase, errorHandler);
         signUpPresenter.bind(signUpView);
-        signUpPresenter.onSignUpButtonClick("aValidUsername", "aValid@mail", "aValidPassword", "aValidPassword");
-        sleep(200);
         signUpPresenter.onCodeConfirmButtonClick("1234");
 
         verify(signUpView, timeout(WAIT).times(1)).navigateToProfile();
@@ -105,10 +103,10 @@ public class SignUpPresenterTest extends BasePresenterTest {
 
     @Test
     public void whenInvalidCodeThenShowError() {
-        SignUpPresenter signUpPresenter = new SignUpPresenter(context, new SignUpUseCaseSuccess(), new ConfirmUseCaseSuccess(), errorHandler);
+        ConfirmUseCaseSuccess confirmUseCase = new ConfirmUseCaseSuccess();
+        confirmUseCase.setUserId("id");
+        SignUpPresenter signUpPresenter = new SignUpPresenter(context, new SignUpUseCaseSuccess(), confirmUseCase, errorHandler);
         signUpPresenter.bind(signUpView);
-        signUpPresenter.onSignUpButtonClick("aValidUsername", "aValid@mail", "aValidPassword", "aValidPassword");
-        sleep(200);
         signUpPresenter.onCodeConfirmButtonClick("123");
 
         verify(signUpView, timeout(WAIT).times(1)).onError(any(String.class));
@@ -117,35 +115,19 @@ public class SignUpPresenterTest extends BasePresenterTest {
 
     @Test
     public void whenExternalFailureThenShowError() {
-        SignUpPresenter signUpPresenter = new SignUpPresenter(context, new SignUpUseCaseSuccess(), new ConfirmUseCaseFailure(), errorHandler);
+        ConfirmUseCaseFailure confirmUseCase = new ConfirmUseCaseFailure();
+        confirmUseCase.setUserId("id");
+        SignUpPresenter signUpPresenter = new SignUpPresenter(context, new SignUpUseCaseSuccess(), confirmUseCase, errorHandler);
         signUpPresenter.bind(signUpView);
-        signUpPresenter.onSignUpButtonClick("aValidUsername", "aValid@mail", "aValidPassword", "aValidPassword");
-        sleep(200);
         signUpPresenter.onCodeConfirmButtonClick("1234");
 
         verify(signUpView, timeout(WAIT).times(1)).onError(any(String.class));
         verify(signUpView, timeout(WAIT).times(0)).navigateToProfile();
     }
 
-    private void sleep(int millis) {
-        try {
-            Thread.sleep(millis);
-        } catch (InterruptedException e) {
-
-        }
-    }
-//
-//    @Test
-//    public void whenConfirmExternalErrorThenShowConfirmDialogIsCalled() {
-//        SignUpPresenter signUpPresenter = new SignUpPresenter(context, new SignUpUseCaseSuccess(), new ConfirmUseCaseSuccess(), errorHandler);
-//        signUpPresenter.bind(signUpView);
-//        signUpPresenter.onSignUpButtonClick("aValidUsername", "aValid@mail", "aValidPassword", "aValidPassword");
-//
-//        verify(signUpView, timeout(WAIT).times(0)).showConfirmDialog();
-//        verify(signUpView, timeout(WAIT).times(1)).onError(any(String.class));
-//    }
 
     private class SignUpUseCaseSuccess extends SignUpUseCase {
+
         public SignUpUseCaseSuccess() {
             super(mock(SessionRepository.class), subscribeOn, observeOn);
         }
@@ -157,6 +139,7 @@ public class SignUpPresenterTest extends BasePresenterTest {
     }
 
     private class SignUpUseCaseFailure extends SignUpUseCase {
+
         public SignUpUseCaseFailure() {
             super(mock(SessionRepository.class), subscribeOn, observeOn);
         }
