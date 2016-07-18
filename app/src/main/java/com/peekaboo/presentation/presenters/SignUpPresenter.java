@@ -23,7 +23,6 @@ public class SignUpPresenter extends ProgressPresenter<ISignUpView> implements I
         BaseProgressSubscriber.ProgressSubscriberListener {
     private SignUpUseCase signUpUseCase;
     private ConfirmUseCase confirmUseCase;
-    private User user;
 
     @Inject
     public SignUpPresenter(Context context,
@@ -39,7 +38,7 @@ public class SignUpPresenter extends ProgressPresenter<ISignUpView> implements I
             @Override
             public void onNext(User response) {
                 super.onNext(response);
-                user = response;
+                confirmUseCase.setUserId(response.getId());
             }
 
             @Override
@@ -75,7 +74,7 @@ public class SignUpPresenter extends ProgressPresenter<ISignUpView> implements I
     @Override
     public void onCodeConfirmButtonClick(String key) {
         if (isValid(key)) {
-            confirmUseCase.setConfirmData(user.getId(), key);
+            confirmUseCase.setConfirmKey(key);
             confirmUseCase.execute(getConfirmSubscriber());
         }
     }
@@ -105,10 +104,6 @@ public class SignUpPresenter extends ProgressPresenter<ISignUpView> implements I
             return true;
         }
         return false;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
     }
 
     @Override

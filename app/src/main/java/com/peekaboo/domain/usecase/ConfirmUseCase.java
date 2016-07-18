@@ -23,13 +23,16 @@ public class ConfirmUseCase extends UseCase<User> {
         this.sessionRepository = sessionRepository;
     }
 
-    public void setConfirmData(String id, String key) {
-        this.id = id;
+    public void setConfirmKey(String key) {
         this.key = key;
     }
 
     @Override
     protected Observable<User> getUseCaseObservable() {
         return sessionRepository.confirm(id, key);
+    }
+
+    public void setUserId(String id) {
+        this.id = id;
     }
 }
