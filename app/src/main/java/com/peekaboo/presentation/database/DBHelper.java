@@ -76,6 +76,10 @@ public class DBHelper {
         createTable(table);
     }
 
+    public static void clseDB(){
+        if(mDB != null) mDB.close();
+    }
+
 
     /**
      Method for testing db
