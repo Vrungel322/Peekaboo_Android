@@ -19,10 +19,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-/**
- * Created by sebastian on 12.07.16.
- */
-
 public class WebSocketNotifier implements INotifier {
     public static final String BASE_URL_SOCKET = Constants.BASE_URL_SOCKET;
     public static final int TIMEOUT = 5000;
@@ -39,14 +35,12 @@ public class WebSocketNotifier implements INotifier {
         this.user = user;
         messageToStringMapper = abstractMapperFactory.getMessageToStringMapper();
         stringToMessageMapper = abstractMapperFactory.getStringToMessageMapper();
-        connectSocket();
     }
 
     private void connectSocket() {
         if (user.isAuthorized()) {
             if (ws == null) {
                 try {
-                    Log.e(TAG, "create new socket");
                     ws = new WebSocketFactory()
                             .createSocket(BASE_URL_SOCKET, TIMEOUT)
                             .addListener(new WebSocketAdapter() {
@@ -107,16 +101,18 @@ public class WebSocketNotifier implements INotifier {
     }
 
     @Override
-    public void sendMessage(Message message) {
+    public void sendMessage(String message, String receiver) {
         if (ws != null) {
-            ws.sendText(messageToStringMapper.transform(message));
+            ws.sendText(message);
         }
     }
 
+    @Override
     public void addListener(NotificationListener listener) {
         listeners.add(listener);
     }
 
+    @Override
     public void removeListener(NotificationListener listener) {
         listeners.remove(listener);
     }

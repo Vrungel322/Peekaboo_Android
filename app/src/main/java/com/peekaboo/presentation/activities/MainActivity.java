@@ -1,7 +1,7 @@
 package com.peekaboo.presentation.activities;
 
-import android.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
@@ -15,6 +15,7 @@ import com.peekaboo.presentation.fragments.ContactsFragment;
 import com.peekaboo.presentation.fragments.DialogsFragment;
 import com.peekaboo.presentation.fragments.ProfileFragment;
 import com.peekaboo.presentation.fragments.SearchFragment;
+import com.peekaboo.presentation.fragments.ServiceTestFragment;
 import com.peekaboo.presentation.fragments.SettingsFragment;
 
 import butterknife.BindView;
@@ -42,8 +43,9 @@ public class MainActivity extends AppCompatActivity {
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
-
+//        changeFragment(new ServiceTestFragment(), null);
     }
+
 
     @OnClick(R.id.bDialogs)
     public void bDialogsClick(){
@@ -71,7 +73,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void changeFragment(Fragment fragment, String tag) {
-        getFragmentManager().beginTransaction()
+        getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragmentContainer, fragment, tag)
                 .commit();
         drawer.closeDrawer(Gravity.LEFT);
