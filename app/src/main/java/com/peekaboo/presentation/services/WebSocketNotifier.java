@@ -14,8 +14,10 @@ import com.peekaboo.data.mappers.Mapper;
 import com.peekaboo.domain.User;
 
 import java.io.IOException;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * Created by sebastian on 12.07.16.
@@ -27,13 +29,16 @@ public class WebSocketNotifier implements INotifier {
     private final String TAG = "socket";
 
     private final User user;
-    private final Mapper<Message, String> messageMapper;
+    private final Mapper<Message, String> messageToStringMapper;
+    private final Mapper<String, Message> stringToMessageMapper;
     @Nullable
     private WebSocket ws;
+    private Set<NotificationListener> listeners = new HashSet<>();
 
     public WebSocketNotifier(User user, AbstractMapperFactory abstractMapperFactory) {
         this.user = user;
-        messageMapper = abstractMapperFactory.getMessageMapper();
+        messageToStringMapper = abstractMapperFactory.getMessageToStringMapper();
+        stringToMessageMapper = abstractMapperFactory.getStringToMessageMapper();
         connectSocket();
     }
 
@@ -47,9 +52,6 @@ public class WebSocketNotifier implements INotifier {
                             .addListener(new WebSocketAdapter() {
                                 @Override
                                 public void onConnected(WebSocket websocket, Map<String, List<String>> headers) throws Exception {
-                                    if (ws != null) {
-                                        ws.clearHeaders();
-                                    }
                                     Log.e(TAG, "Status: Connected to " + BASE_URL_SOCKET);
                                 }
 
@@ -67,6 +69,9 @@ public class WebSocketNotifier implements INotifier {
                                 @Override
                                 public void onTextMessage(WebSocket websocket, String text) throws Exception {
                                     Log.e(TAG, "Status: Text Message received" + text);
+                                    for (NotificationListener listener : listeners) {
+                                        listener.onMessageObtained(stringToMessageMapper.transform(text));
+                                    }
                                 }
                             })
                             .addHeader("Authorization", user.getBearer())
@@ -104,7 +109,15 @@ public class WebSocketNotifier implements INotifier {
     @Override
     public void sendMessage(Message message) {
         if (ws != null) {
-            ws.sendText(messageMapper.transform(message));
+            ws.sendText(messageToStringMapper.transform(message));
         }
+    }
+
+    public void addListener(NotificationListener listener) {
+        listeners.add(listener);
+    }
+
+    public void removeListener(NotificationListener listener) {
+        listeners.remove(listener);
     }
 }

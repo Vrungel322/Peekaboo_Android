@@ -107,7 +107,7 @@
             <!--android:layout_width="wrap_content"-->
             <!--android:layout_height="wrap_content"-->
             <!--android:padding="@dimen/text_padding"-->
-            <!--android:text="@string/bySignUp1" />-->
+            <!--android:payload="@string/bySignUp1" />-->
 
             <!--<com.peekaboo.presentation.app.view.HelveticaTextView-->
             <!--android:id="@+id/tvSingUp2"-->
@@ -115,7 +115,7 @@
             <!--android:layout_height="wrap_content"-->
             <!--android:clickable="true"-->
             <!--android:padding="@dimen/text_padding"-->
-            <!--android:text="@string/bySignUp2"-->
+            <!--android:payload="@string/bySignUp2"-->
             <!--android:textColor="@color/textColor" />-->
 
             <!--<com.peekaboo.presentation.app.view.HelveticaTextView-->
@@ -123,7 +123,7 @@
             <!--android:layout_width="wrap_content"-->
             <!--android:layout_height="wrap_content"-->
             <!--android:padding="@dimen/text_padding"-->
-            <!--android:text="@string/bySignUp3" />-->
+            <!--android:payload="@string/bySignUp3" />-->
 
             <!--<com.peekaboo.presentation.app.view.HelveticaTextView-->
             <!--android:id="@+id/tvSignUp4"-->
@@ -131,7 +131,7 @@
             <!--android:layout_height="wrap_content"-->
             <!--android:clickable="true"-->
             <!--android:padding="@dimen/text_padding"-->
-            <!--android:text="@string/bySignUp4"-->
+            <!--android:payload="@string/bySignUp4"-->
             <!--android:textColor="@color/textColor" />-->
 
             <!--</LinearLayout>-->
@@ -183,7 +183,7 @@
             <!--android:layout_height="wrap_content"-->
             <!--android:clickable="true"-->
             <!--android:padding="@dimen/text_padding"-->
-            <!--android:text="@string/bySignUp2"-->
+            <!--android:payload="@string/bySignUp2"-->
             <!--android:textSize="18sp"-->
             <!--android:layout_gravity="center_horizontal"-->
             <!--android:layout_marginTop="@dimen/padding_signup_side"-->
