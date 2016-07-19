@@ -7,7 +7,6 @@ import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.Toast;
@@ -42,23 +41,20 @@ public class AttachmentChatDialog  extends DialogFragment {
         ArrayAdapter<String> adapter = new ArrayAdapter<>(view.getContext(), R.layout.attach_dialog_item, attach_list_strings);
 
         lvAttachments.setAdapter(adapter);
-        lvAttachments.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                switch(i){
-                    case 0:
-                        takePhoto();
-                        break;
-                    case 1:
-                        takeGaleryImage();
-                        break;
-                    case 2:
-                        Toast.makeText(getActivity(), "2", Toast.LENGTH_SHORT).show();
-                        break;
-                    case 3:
-                        Toast.makeText(getActivity(), "3", Toast.LENGTH_SHORT).show();
-                        break;
-                }
+        lvAttachments.setOnItemClickListener((adapterView, view1, i, l) -> {
+            switch(i){
+                case 0:
+                    takePhoto();
+                    break;
+                case 1:
+                    takeGaleryImage();
+                    break;
+                case 2:
+                    Toast.makeText(getActivity().getApplicationContext(), "2", Toast.LENGTH_SHORT).show();
+                    break;
+                case 3:
+                    Toast.makeText(getActivity().getApplicationContext(), "3", Toast.LENGTH_SHORT).show();
+                    break;
             }
         });
         return view;
@@ -68,7 +64,7 @@ public class AttachmentChatDialog  extends DialogFragment {
         Intent intent = new Intent();
         intent.setType("image/*"); // to open gallery
         intent.setAction(Intent.ACTION_GET_CONTENT);
-        getActivity().startActivityForResult(Intent.createChooser(intent, "Select Image"), REQUEST_CODE_GALERY);
+        getActivity().startActivityForResult(Intent.createChooser(intent, getActivity().getString(R.string.selectImage)), REQUEST_CODE_GALERY);
     }
 
     public void takePhoto() {

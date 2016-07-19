@@ -55,8 +55,19 @@ public class SignUpPresenter extends ProgressPresenter<ISignUpView> implements I
             @Override
             public void onCompleted() {
                 super.onCompleted();
-                if (getView() != null) {
-                    getView().navigateToProfile();
+                ISignUpView view = getView();
+                if (view != null) {
+                    view.navigateToProfile();
+                }
+            }
+
+            @Override
+            public void onError(Throwable e) {
+                super.onError(e);
+                ISignUpView view = getView();
+                if (view != null) {
+                    view.showConfirmDialog();
+
                 }
             }
         };

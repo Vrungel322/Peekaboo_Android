@@ -145,6 +145,6 @@ public class LogInActivity extends AppCompatActivity implements ICredentialsView
 
     @Override
     public void onError(String text) {
-        Toast.makeText(this, text, Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG).show();
     }
 }

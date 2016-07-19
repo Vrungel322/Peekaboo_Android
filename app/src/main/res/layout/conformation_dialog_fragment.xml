@@ -26,6 +26,6 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_gravity="right"
-        android:text="OK" />
+        android:text="@string/ok" />
 
 </RelativeLayout>

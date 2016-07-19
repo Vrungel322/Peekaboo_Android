@@ -13,7 +13,11 @@ public class MapperFactory implements AbstractMapperFactory {
         return new UserMapper();
     }
 
-    public Mapper<Message, String> getMessageMapper() {
+    public Mapper<Message, String> getMessageToStringMapper() {
         return new MessageJsonMapper();
+    }
+
+    public Mapper<String, Message> getStringToMessageMapper() {
+        return new JsonMessageMapper();
     }
 }

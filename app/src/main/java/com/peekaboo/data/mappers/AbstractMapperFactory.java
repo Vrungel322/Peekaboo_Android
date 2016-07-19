@@ -11,5 +11,6 @@ import com.peekaboo.presentation.services.Message;
 public interface AbstractMapperFactory {
     Mapper<String, User> getUserMapper();
 
-    Mapper<Message, String> getMessageMapper();
+    Mapper<Message, String> getMessageToStringMapper();
+    Mapper<String, Message> getStringToMessageMapper();
 }

@@ -32,6 +32,7 @@ public class ConfirmSignUpDialog extends DialogFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         PeekabooApplication.getApp(getActivity()).getComponent().inject(this);
         View view = inflater.inflate(R.layout.conformation_dialog_fragment, container, false);
+        setCancelable(false);
         ButterKnife.bind(this, view);
         return view;
     }
