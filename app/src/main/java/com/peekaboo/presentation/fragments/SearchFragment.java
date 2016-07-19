@@ -1,8 +1,8 @@
 package com.peekaboo.presentation.fragments;
 
-import android.app.Fragment;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -21,7 +21,8 @@ import butterknife.ButterKnife;
 public class SearchFragment extends Fragment {
     private View rootView;
 
-    public SearchFragment(){}
+    public SearchFragment() {
+    }
 
     @Nullable
     @Override
@@ -29,7 +30,7 @@ public class SearchFragment extends Fragment {
         rootView = inflater.inflate(R.layout.fragment_search, container, false);
         ButterKnife.bind(this, rootView);
         setHasOptionsMenu(true);
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Search");
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Search");
 
         return rootView;
     }
