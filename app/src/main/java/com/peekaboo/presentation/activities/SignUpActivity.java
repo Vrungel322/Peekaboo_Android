@@ -110,7 +110,7 @@ public class SignUpActivity extends AppCompatActivity implements ISignUpView {
 
     @Override
     public void onError(String text) {
-        Toast.makeText(this, text, Toast.LENGTH_LONG).show();
+        Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG).show();
     }
 
     @Override
