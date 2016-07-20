@@ -11,7 +11,6 @@ import com.peekaboo.presentation.presenters.SignUpPresenter;
 import com.peekaboo.presentation.views.ICredentialsView;
 import com.peekaboo.presentation.views.ISignUpView;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mock;
 

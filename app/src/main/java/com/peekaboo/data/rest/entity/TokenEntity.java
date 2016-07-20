@@ -14,4 +14,9 @@ public class TokenEntity {
     public String getToken() {
         return token;
     }
+
+    public TokenEntity(String token, String id) {
+        this.token = token;
+        this.id = id;
+    }
 }
