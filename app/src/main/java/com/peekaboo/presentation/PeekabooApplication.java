@@ -3,15 +3,13 @@ package com.peekaboo.presentation;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
-import android.widget.Toast;
 
 import com.peekaboo.presentation.activities.LogInActivity;
+import com.peekaboo.presentation.database.DBHelper;
 import com.peekaboo.presentation.di.ApplicationComponent;
 import com.peekaboo.presentation.di.ApplicationModule;
 import com.peekaboo.presentation.di.DaggerApplicationComponent;
 import com.peekaboo.presentation.services.NotificationService;
-import com.peekaboo.utils.ActivityNavigator;
 import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKAccessTokenTracker;
 import com.vk.sdk.VKSdk;
@@ -48,6 +46,9 @@ public class PeekabooApplication extends Application {
         NotificationService.launch(this, null);
         vkAccessTokenTracker.startTracking();
         VKSdk.initialize(this);
+
+//        init DB
+        DBHelper.init(getApplicationContext(), "message_history");
     }
 
     private void buildAppComponent() {

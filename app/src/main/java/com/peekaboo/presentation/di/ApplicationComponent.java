@@ -7,7 +7,6 @@ import com.peekaboo.presentation.activities.SignUpActivity;
 import com.peekaboo.presentation.activities.SplashActivity;
 import com.peekaboo.presentation.fragments.ConfirmSignUpDialog;
 import com.peekaboo.presentation.fragments.ServiceTestFragment;
-import com.peekaboo.presentation.services.INotifier;
 import com.peekaboo.presentation.services.NotificationService;
 
 import javax.inject.Singleton;
@@ -23,9 +22,13 @@ public interface ApplicationComponent {
     void inject(LogInActivity logInActivity);
     void inject(SignUpActivity signUpActivity);
     void inject(MainActivity mainActivity);
-    void inject (ConfirmSignUpDialog confirmSignUpDialog);
-    void inject(NotificationService notificationService);
-    void inject (ChatActivity chatActivity);
+    void inject(ChatActivity chatActivity);
 
+
+//    Inject of Fragments
     void inject(ServiceTestFragment serviceTestFragment);
+    void inject(ConfirmSignUpDialog confirmSignUpDialog);
+
+//    Inject of Services
+    void inject(NotificationService notificationService);
 }
