@@ -24,9 +24,9 @@ import rx.schedulers.Schedulers;
 
 @Module(includes = DataModule.class)
 public class ApplicationModule {
-    private final PeekabooApplication application;
+    private final Context application;
 
-    public ApplicationModule(PeekabooApplication application) {
+    public ApplicationModule(Context application) {
         this.application = application;
     }
 

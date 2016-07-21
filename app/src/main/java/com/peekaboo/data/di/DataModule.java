@@ -88,8 +88,20 @@ public class DataModule {
 
     @Provides
     @Singleton
-    public SessionRepository provideRepository(Retrofit retrofit, User user) {
-        return new SessionDataRepository(new RestApi(retrofit.create(PeekabooApi.class)), new MapperFactory(), user);
+    public PeekabooApi providePeekabooApi(Retrofit retrofit) {
+        return retrofit.create(PeekabooApi.class);
+    }
+
+    @Provides
+    @Singleton
+    public RestApi provideRestApi(PeekabooApi api) {
+        return new RestApi(api);
+    }
+
+    @Provides
+    @Singleton
+    public SessionRepository provideRepository(User user, RestApi restApi) {
+        return new SessionDataRepository(restApi, new MapperFactory(), user);
     }
 
 

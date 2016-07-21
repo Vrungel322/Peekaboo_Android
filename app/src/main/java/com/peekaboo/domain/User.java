@@ -7,7 +7,7 @@ import android.support.annotation.Nullable;
  * Created by sebastian on 28.06.16.
  */
 public class User {
-    private static final String TOKEN = "token";
+    public static final String TOKEN = "token";
     public static final String ID = "user_id";
     private SharedPreferences preferences;
 
@@ -41,7 +41,7 @@ public class User {
     }
 
     public boolean isAuthorized() {
-        return token != null;
+        return token != null && id != null;
     }
 
     public void saveToken(String token) {

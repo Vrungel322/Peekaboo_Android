@@ -1,5 +1,6 @@
 package com.peekaboo.presentation.di;
 
+import com.peekaboo.data.rest.PeekabooApi;
 import com.peekaboo.presentation.activities.ChatActivity;
 import com.peekaboo.presentation.activities.LogInActivity;
 import com.peekaboo.presentation.activities.MainActivity;
@@ -31,4 +32,6 @@ public interface ApplicationComponent {
 
 //    Inject of Services
     void inject(NotificationService notificationService);
+
+    PeekabooApi api();
 }
