@@ -6,6 +6,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+import com.peekaboo.utils.Utility;
+
 import java.util.ArrayList;
 
 import javax.inject.Inject;
@@ -17,13 +19,12 @@ import javax.inject.Singleton;
 @Singleton
 public class PChatMessageDBHelper extends SQLiteOpenHelper {
 
-    private static PChatMessageDBHelper PChatMessageDBHelper;
     private static String dbName = "privateMessages";
     private static int dbVersion = 1;
     private SQLiteDatabase mDB;
 
     @Inject
-    private PChatMessageDBHelper(Context context) {
+    public PChatMessageDBHelper(Context context) {
         super(context, dbName, null, dbVersion);
         mDB = this.getWritableDatabase();
     }
@@ -39,6 +40,7 @@ public class PChatMessageDBHelper extends SQLiteOpenHelper {
                 "(" +
                 PMessageEntity._ID              + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
                 PMessageEntity.IDPack           + " TEXT NOT NULL," +
+                PMessageEntity.isMINE           + " INT," +
                 PMessageEntity.MESSAGE_BODY     + " TEXT NOT NULL," +
                 PMessageEntity.TIMESTAMP        + " BIGINT NOT NULL," +
                 PMessageEntity.status_SEND      + " INT," +
@@ -51,23 +53,26 @@ public class PChatMessageDBHelper extends SQLiteOpenHelper {
     public void insertToTable(PMessage msg, String tableName) {
         String insertPersonStmt1 = "INSERT INTO '"+tableName+"'('"
                 + PMessageEntity.IDPack             + "', '"
+                + PMessageEntity.isMINE             + "', '"
                 + PMessageEntity.MESSAGE_BODY       + "', '"
                 + PMessageEntity.TIMESTAMP          + "', '"
                 + PMessageEntity.status_SEND        + "', '"
                 + PMessageEntity.status_DELIVERED   + "', '"
                 + PMessageEntity.status_READ        +"') VALUES " +
                 "("
-                + "'" + msg.getIdPack() + "'"
+                + "'" + msg.getPackageId() + "'"
                 + ","
-                + "'" + msg.getMesBody() + "'"
+                + "'" + Utility.convertBooleanToInt(msg.isMine()) + "'"
+                + ","
+                + "'" + msg.getMessageBody() + "'"
                 + ","
                 + msg.getTimestamp()
                 + ","
-                + msg.getSend()
+                + Utility.convertBooleanToInt(msg.isSend())
                 + ","
-                + msg.getDelivered()
+                + Utility.convertBooleanToInt(msg.isDelivered())
                 + ","
-                + msg.getRead()
+                + Utility.convertBooleanToInt(msg.isRead())
                 + ")";
         mDB.execSQL(insertPersonStmt1);
     }
@@ -77,12 +82,16 @@ public class PChatMessageDBHelper extends SQLiteOpenHelper {
         Cursor c = mDB.rawQuery("SELECT * FROM " + tableName, null);
         if (c.moveToFirst()) {
             while ( !c.isAfterLast() ) {
-                list.add(new PMessage(c.getString(c.getColumnIndex(PMessageEntity.MESSAGE_BODY)),
-                        c.getInt(c.getColumnIndex(PMessageEntity.status_DELIVERED)),
-                        c.getInt(c.getColumnIndex(PMessageEntity.status_READ)),
-                        c.getInt(c.getColumnIndex(PMessageEntity.status_SEND)),
+                list.add(new PMessage(
+                        c.getString(c.getColumnIndex(PMessageEntity.IDPack)),
+                        Utility.convertIntToBoolean(c.getInt(c.getColumnIndex(PMessageEntity.isMINE))),
+                        c.getString(c.getColumnIndex(PMessageEntity.MESSAGE_BODY)),
                         c.getLong(c.getColumnIndex(PMessageEntity.TIMESTAMP)),
-                        c.getString(c.getColumnIndex(PMessageEntity.IDPack))));
+                        Utility.convertIntToBoolean(c.getInt(c.getColumnIndex(PMessageEntity.status_SEND))),
+                        Utility.convertIntToBoolean(c.getInt(c.getColumnIndex(PMessageEntity.status_DELIVERED))),
+                        Utility.convertIntToBoolean(c.getInt(c.getColumnIndex(PMessageEntity.status_READ)))
+
+                ));
                 c.moveToNext();
             }
         }

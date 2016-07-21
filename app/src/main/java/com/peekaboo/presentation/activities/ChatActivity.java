@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
@@ -102,8 +101,8 @@ public class ChatActivity extends AppCompatActivity {
         //TODO: save into db
         //DB testing
         chatPresenter.createTable("test"); // should be done when friend add
-            chatPresenter.makeNoteInTable(new PMessage(msgBody,
-                    0, 0, 1, System.currentTimeMillis(), "idPack"), "test");
+            chatPresenter.makeNoteInTable(new PMessage("idPack", true, msgBody,
+                    System.currentTimeMillis(), true, false, false), "test");
         chatPresenter.getTableAsString("test");
         return true;
     }

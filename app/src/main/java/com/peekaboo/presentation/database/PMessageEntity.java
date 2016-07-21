@@ -12,4 +12,5 @@ public class PMessageEntity implements BaseColumns {
     public static final String status_SEND = "status_SEND";
     public static final String status_DELIVERED = "status_DELIVERED";
     public static final String status_READ = "status_READ";
+    public static String isMINE = "isMINE";
 }
