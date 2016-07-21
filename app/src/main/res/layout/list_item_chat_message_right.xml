@@ -13,9 +13,8 @@
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:maxHeight="240dp"
-            android:maxWidth="240dp">
+            android:maxWidth="@dimen/chat_message_bubble_max_width"
+            android:orientation="vertical">
 
             <TextView
                 android:id="@+id/tvChatMessage"
@@ -23,12 +22,11 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_margin="@dimen/chat_message_text_margin"
-                android:maxWidth="240dp"
                 android:textColor="@color/underline_selected_color"
                 android:textSize="@dimen/chat_message_text_size" />
 
             <ImageView
-                android:id="@+id/iv_chat_image"
+                android:id="@+id/ivChatMessageStatus"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
@@ -49,7 +47,6 @@
                     android:id="@+id/tvChatTimestamp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="16:45"
                     android:textColor="@color/colorPrimaryDark"
                     android:textSize="@dimen/chat_timestamp_text_size" />
             </LinearLayout>

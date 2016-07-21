@@ -21,6 +21,7 @@
     <dimen name="chat_message_text_margin">6dp</dimen>
     <dimen name="chat_timestamp_text_size">12sp</dimen>
     <dimen name="chat_message_status_size">16dp</dimen>
+    <dimen name="chat_message_bubble_max_width">240dp</dimen>
     <dimen name="dialog_item_padding">8dp</dimen>
     <dimen name="dialog_status_size">20dp</dimen>
     <dimen name="dialog_timestamp_text_size">16sp</dimen>

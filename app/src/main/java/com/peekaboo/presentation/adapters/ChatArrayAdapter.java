@@ -11,7 +11,6 @@ import android.widget.TextView;
 import com.peekaboo.R;
 import com.peekaboo.presentation.utils.ChatMessage;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,7 +53,7 @@ public class ChatArrayAdapter extends ArrayAdapter<ChatMessage> {
         holder.tvChatMessage.setText(chatMessageObj.message);
         holder.ivChatImage.setImageBitmap(chatMessageObj.image);
 
-        holder.tvChatTimestamp.setText(getTime());
+        holder.tvChatTimestamp.setText("");
         return view;
 
     }
@@ -71,11 +70,6 @@ public class ChatArrayAdapter extends ArrayAdapter<ChatMessage> {
         public ViewHolder(View view) {
             ButterKnife.bind(this, view);
         }
-    }
-    public String getTime() {
-        long date = System.currentTimeMillis();
-        SimpleDateFormat sdf = new SimpleDateFormat("HH:mm a");
-        return sdf.format(date);
     }
 
     public int getCount() {
