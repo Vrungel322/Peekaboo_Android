@@ -19,7 +19,6 @@ import com.peekaboo.presentation.adapters.ChatArrayAdapter;
 import com.peekaboo.presentation.database.PMessage;
 import com.peekaboo.presentation.fragments.AttachmentChatDialog;
 import com.peekaboo.presentation.presenters.ChatPresenter;
-import com.peekaboo.presentation.utils.ChatMessage;
 
 import java.io.IOException;
 
@@ -58,7 +57,7 @@ public class ChatActivity extends AppCompatActivity {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        chatArrayAdapter = new ChatArrayAdapter(getApplicationContext(), R.layout.list_item_chat_message_right);
+        chatArrayAdapter = new ChatArrayAdapter(getApplicationContext(), R.layout.list_item_chat_message);
         lvMessages.setAdapter(chatArrayAdapter);
         OverScrollDecoratorHelper.setUpOverScroll(lvMessages);
     }
@@ -94,7 +93,8 @@ public class ChatActivity extends AppCompatActivity {
 
     private boolean sendChatMessage() {
         String msgBody = etMessageBody.getText().toString();
-        chatArrayAdapter.add(new ChatMessage(side, msgBody, null));
+        chatArrayAdapter.add(new PMessage("packageId", true, msgBody, System.currentTimeMillis(),
+                true, false, false));
         chatArrayAdapter.notifyDataSetChanged();
         etMessageBody.setText("");
         //TODO: actually sending
@@ -127,6 +127,7 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void sendPhoto(Bitmap photo){
-        chatArrayAdapter.add(new ChatMessage(side, "", photo));
+        chatArrayAdapter.add(new PMessage("photoId", true, "", System.currentTimeMillis(),
+                true, false, false));
     }
 }

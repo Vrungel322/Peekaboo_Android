@@ -68,7 +68,7 @@ public class PChatMessageDBHelper extends SQLiteOpenHelper {
                 + ","
                 + msg.getTimestamp()
                 + ","
-                + Utility.convertBooleanToInt(msg.isSend())
+                + Utility.convertBooleanToInt(msg.isSent())
                 + ","
                 + Utility.convertBooleanToInt(msg.isDelivered())
                 + ","
