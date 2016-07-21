@@ -2,7 +2,7 @@ package com.peekaboo.presentation.presenters;
 
 import android.content.Context;
 
-import com.peekaboo.presentation.database.DBHelper;
+import com.peekaboo.presentation.database.PChatMessageDBHelper;
 import com.peekaboo.presentation.database.PMessage;
 
 import javax.inject.Inject;
@@ -12,21 +12,19 @@ import javax.inject.Inject;
  */
 public class ChatPresenter {
     private Context context;
+    @Inject
+    PChatMessageDBHelper pChatMessageDBHelper;
 
     @Inject
     public ChatPresenter(Context context) {
         this.context = context;
     }
 
-    public void initdb(){
-        DBHelper.init(context, "message_history");
-    }
-
     public void createTable(String tableName){
-        DBHelper.createTable(tableName);
+        pChatMessageDBHelper.createTable(tableName);
     }
 
     public void makeNoteInTable(PMessage msg, String tableName){
-        DBHelper.insertToTable(msg, tableName);
+        pChatMessageDBHelper.insertToTable(msg, tableName);
     }
 }
