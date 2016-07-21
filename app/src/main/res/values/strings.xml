@@ -56,4 +56,7 @@
     <string name="selectImage">Select Image</string>
     <string name="ok">OK</string>
 
+    <string name="today">Today</string>
+    <string name="tomorrow">Tomorrow</string>
+
 </resources>

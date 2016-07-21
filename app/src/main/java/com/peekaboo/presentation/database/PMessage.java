@@ -8,7 +8,7 @@ public class PMessage {
     private boolean isMine;
     private String messageBody;
     private Long timestamp;
-    private boolean isSend;
+    private boolean isSent;
     private boolean isDelivered;
     private boolean isRead;
 
@@ -18,7 +18,7 @@ public class PMessage {
         this.isMine = isMine;
         this.messageBody = messageBody;
         this.timestamp = timestamp;
-        this.isSend = isSend;
+        this.isSent = isSend;
         this.isDelivered = isDelivered;
         this.isRead = isRead;
     }
@@ -55,12 +55,12 @@ public class PMessage {
         this.timestamp = timestamp;
     }
 
-    public boolean isSend() {
-        return isSend;
+    public boolean isSent() {
+        return isSent;
     }
 
-    public void setSend(boolean send) {
-        isSend = send;
+    public void setSent(boolean sent) {
+        isSent = sent;
     }
 
     public boolean isDelivered() {
