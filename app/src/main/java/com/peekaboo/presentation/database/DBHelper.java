@@ -23,19 +23,25 @@ public class DBHelper {
     public static void createTable(String tableName) {
         String createTable = "CREATE TABLE IF NOT EXISTS " + tableName + " " +
                 "(" +
-                "_id        INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
-                "idPack     TEXT NOT NULL," +
-                "mesBody    TEXT NOT NULL," +
-                "timestamp  BIGINT NOT NULL," +
-                "send       INT," +
-                "delivered  INT," +
-                "read       INT" +
+                PMessageEntity._ID              + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
+                PMessageEntity.IDPack           + " TEXT NOT NULL," +
+                PMessageEntity.MESSAGE_BODY     + " TEXT NOT NULL," +
+                PMessageEntity.TIMESTAMP        + " BIGINT NOT NULL," +
+                PMessageEntity.status_SEND      + " INT," +
+                PMessageEntity.status_DELIVERED + " INT," +
+                PMessageEntity.status_READ      + " INT" +
                 ");";
         mDB.execSQL(createTable);
     }
 
     public static void insertToTable(PMessage msg, String tableName) {
-        String insertPersonStmt1 = "INSERT INTO '"+tableName+"'('idPack', 'mesBody', 'timestamp', 'send', 'delivered', 'read') VALUES " +
+        String insertPersonStmt1 = "INSERT INTO '"+tableName+"'('"
+                + PMessageEntity.IDPack             + "', '"
+                + PMessageEntity.MESSAGE_BODY       + "', '"
+                + PMessageEntity.TIMESTAMP          + "', '"
+                + PMessageEntity.status_SEND        + "', '"
+                + PMessageEntity.status_DELIVERED   + "', '"
+                + PMessageEntity.status_READ        +"') VALUES " +
                 "("
                 + "'" + msg.getIdPack() + "'"
                 + ","
@@ -57,12 +63,12 @@ public class DBHelper {
         Cursor c = mDB.rawQuery("SELECT * FROM " + tableName, null);
         if (c.moveToFirst()) {
             while ( !c.isAfterLast() ) {
-                    list.add(new PMessage(c.getString(c.getColumnIndex("mesBody")),
-                            c.getInt(c.getColumnIndex("delivered")),
-                            c.getInt(c.getColumnIndex("read")),
-                            c.getInt(c.getColumnIndex("send")),
-                            c.getLong(c.getColumnIndex("timestamp")),
-                            c.getString(c.getColumnIndex("idPack"))));
+                    list.add(new PMessage(c.getString(c.getColumnIndex(PMessageEntity.MESSAGE_BODY)),
+                            c.getInt(c.getColumnIndex(PMessageEntity.status_DELIVERED)),
+                            c.getInt(c.getColumnIndex(PMessageEntity.status_READ)),
+                            c.getInt(c.getColumnIndex(PMessageEntity.status_SEND)),
+                            c.getLong(c.getColumnIndex(PMessageEntity.TIMESTAMP)),
+                            c.getString(c.getColumnIndex(PMessageEntity.IDPack))));
                 c.moveToNext();
             }
         }
