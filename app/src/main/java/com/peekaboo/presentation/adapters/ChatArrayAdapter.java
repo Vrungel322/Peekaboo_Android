@@ -69,11 +69,11 @@ public class ChatArrayAdapter extends ArrayAdapter<ChatMessage> {
         @BindView(R.id.iv_chat_image)
         ImageView ivChatImage;
 
-
         public ViewHolder(View view) {
             ButterKnife.bind(this, view);
         }
     }
+
     public String getTime() {
         long date = System.currentTimeMillis();
         SimpleDateFormat sdf = new SimpleDateFormat("HH:mm a");
@@ -95,6 +95,7 @@ public class ChatArrayAdapter extends ArrayAdapter<ChatMessage> {
     }
     public void deleteMess(int index){
         chatMessageList.remove(index);
+        // TODO remove from DB
         notifyDataSetChanged();
     }
 }

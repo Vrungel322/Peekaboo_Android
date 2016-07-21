@@ -1,7 +1,5 @@
 package com.peekaboo.presentation.activities;
 
-import android.app.DialogFragment;
-import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -38,7 +36,7 @@ import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
 /**
  * Created by Nataliia on 13.07.2016.
  */
-public class ChatActivity extends AppCompatActivity implements ChatItemDialog.onSomeEventListener{
+public class ChatActivity extends AppCompatActivity implements ChatItemDialog.IChatItemEventListener {
 
     @BindView(R.id.etMessageBody)
     EditText etMessageBody;
@@ -104,7 +102,6 @@ public class ChatActivity extends AppCompatActivity implements ChatItemDialog.on
         chatArrayAdapter.notifyDataSetChanged();
         etMessageBody.setText("");
         //TODO: actually sending
-        //TODO: save into db
         //DB testing
         chatPresenter.createTable("test"); // should be done when friend add
             chatPresenter.makeNoteInTable(new PMessage("idPack", true, msgBody,
@@ -148,10 +145,12 @@ public class ChatActivity extends AppCompatActivity implements ChatItemDialog.on
         return true;
     }
 
+    @Override
     public void copyText(int index){
         chatArrayAdapter.copyText(index);
     }
 
+    @Override
     public void deleteMess(int index){
         chatArrayAdapter.deleteMess(index);
     }
@@ -159,6 +158,7 @@ public class ChatActivity extends AppCompatActivity implements ChatItemDialog.on
     protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
     }
+
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
     }
