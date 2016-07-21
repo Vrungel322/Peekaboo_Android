@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.EditText;
@@ -18,6 +19,7 @@ import com.peekaboo.presentation.PeekabooApplication;
 import com.peekaboo.presentation.adapters.ChatArrayAdapter;
 import com.peekaboo.presentation.database.PMessage;
 import com.peekaboo.presentation.fragments.AttachmentChatDialog;
+import com.peekaboo.presentation.fragments.ChatItemDialog;
 import com.peekaboo.presentation.presenters.ChatPresenter;
 import com.peekaboo.presentation.utils.ChatMessage;
 
@@ -28,12 +30,13 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnItemLongClick;
 import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
 
 /**
  * Created by Nataliia on 13.07.2016.
  */
-public class ChatActivity extends AppCompatActivity {
+public class ChatActivity extends AppCompatActivity implements ChatItemDialog.IChatItemEventListener {
 
     @BindView(R.id.etMessageBody)
     EditText etMessageBody;
@@ -45,6 +48,7 @@ public class ChatActivity extends AppCompatActivity {
     private boolean side = true;
     private ChatArrayAdapter chatArrayAdapter;
     private AttachmentChatDialog attachmentChatDialog;
+    private ChatItemDialog chatItemDialog;
 
 
     @Override
@@ -98,7 +102,6 @@ public class ChatActivity extends AppCompatActivity {
         chatArrayAdapter.notifyDataSetChanged();
         etMessageBody.setText("");
         //TODO: actually sending
-        //TODO: save into db
         //DB testing
         chatPresenter.createTable("test"); // should be done when friend add
             chatPresenter.makeNoteInTable(new PMessage("idPack", true, msgBody,
@@ -128,5 +131,35 @@ public class ChatActivity extends AppCompatActivity {
 
     private void sendPhoto(Bitmap photo){
         chatArrayAdapter.add(new ChatMessage(side, "", photo));
+    }
+    @OnItemLongClick(R.id.lvMessages)
+    boolean onItemLongClick(int position) {
+        Log.e("TAG", chatArrayAdapter.getItem(position).message);
+
+        Bundle bundle = new Bundle();
+        bundle.putInt("index", position);
+        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        chatItemDialog = new ChatItemDialog();
+        chatItemDialog.setArguments(bundle);
+        chatItemDialog.show(ft, "chatItemDialog");
+        return true;
+    }
+
+    @Override
+    public void copyText(int index){
+        chatArrayAdapter.copyText(index);
+    }
+
+    @Override
+    public void deleteMess(int index){
+        chatArrayAdapter.deleteMess(index);
+    }
+
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+    }
+
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
     }
 }
