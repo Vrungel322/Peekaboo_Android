@@ -27,4 +27,16 @@ public class ChatPresenter {
     public void makeNoteInTable(PMessage msg, String tableName){
         pChatMessageDBHelper.insertToTable(msg, tableName);
     }
+
+    public void dropTableAndCreate(String tableName){
+        pChatMessageDBHelper.dropTableAndCreate(tableName);
+    }
+
+    public void getAllNotes (String tableName){
+        pChatMessageDBHelper.getAllNotes(tableName);
+    }
+
+    public void getTableAsString(String tableName){
+        pChatMessageDBHelper.getTableAsString(tableName);
+    }
 }

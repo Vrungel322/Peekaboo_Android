@@ -17,7 +17,6 @@ import android.widget.Toast;
 import com.peekaboo.R;
 import com.peekaboo.presentation.PeekabooApplication;
 import com.peekaboo.presentation.adapters.ChatArrayAdapter;
-import com.peekaboo.presentation.database.DBHelper;
 import com.peekaboo.presentation.database.PMessage;
 import com.peekaboo.presentation.fragments.AttachmentChatDialog;
 import com.peekaboo.presentation.presenters.ChatPresenter;
@@ -75,7 +74,7 @@ public class ChatActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.dialogsDrop:{
-                DBHelper.dropTableAndCreate("test");
+                chatPresenter.dropTableAndCreate("test");
                 break;
             }
         }
@@ -105,9 +104,7 @@ public class ChatActivity extends AppCompatActivity {
         chatPresenter.createTable("test"); // should be done when friend add
             chatPresenter.makeNoteInTable(new PMessage(msgBody,
                     0, 0, 1, System.currentTimeMillis(), "idPack"), "test");
-        int size = DBHelper.getAllNotes("test").size();
-        Log.wtf("db",DBHelper.getAllNotes("test").get(size-1).getMesBody());
-        DBHelper.getTableAsString("test");
+        chatPresenter.getTableAsString("test");
         return true;
     }
 
