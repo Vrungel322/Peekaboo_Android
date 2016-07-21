@@ -4,60 +4,47 @@ package com.peekaboo.presentation.database;
  * Created by Nikita on 18.07.2016.
  */
 public class PMessage {
-    private String idPack;
-    private String mesBody;
+    private String packageId;
+    private boolean isMine;
+    private String messageBody;
     private Long timestamp;
-    private int send;
-    private int delivered;
-    private int read;
+    private boolean isSend;
+    private boolean isDelivered;
+    private boolean isRead;
 
-    public PMessage(String mesBody, int delivered, int read, int send, Long timestamp, String idPack) {
-        this.delivered = delivered;
-        this.idPack = idPack;
-        this.mesBody = mesBody;
-        this.read = read;
-        this.send = send;
+    public PMessage(String packageId, boolean isMine, String messageBody,
+                    Long timestamp, boolean isSend, boolean isDelivered, boolean isRead) {
+        this.packageId = packageId;
+        this.isMine = isMine;
+        this.messageBody = messageBody;
         this.timestamp = timestamp;
+        this.isSend = isSend;
+        this.isDelivered = isDelivered;
+        this.isRead = isRead;
     }
 
-    public int getDelivered() {
-        return delivered;
+    public String getPackageId() {
+        return packageId;
     }
 
-    public void setDelivered(int delivered) {
-        this.delivered = delivered;
+    public void setPackageId(String packageId) {
+        this.packageId = packageId;
     }
 
-    public String getIdPack() {
-        return idPack;
+    public boolean isMine() {
+        return isMine;
     }
 
-    public void setIdPack(String idPack) {
-        this.idPack = idPack;
+    public void setMine(boolean mine) {
+        isMine = mine;
     }
 
-    public String getMesBody() {
-        return mesBody;
+    public String getMessageBody() {
+        return messageBody;
     }
 
-    public void setMesBody(String mesBody) {
-        this.mesBody = mesBody;
-    }
-
-    public int getRead() {
-        return read;
-    }
-
-    public void setRead(int read) {
-        this.read = read;
-    }
-
-    public int getSend() {
-        return send;
-    }
-
-    public void setSend(int send) {
-        this.send = send;
+    public void setMessageBody(String messageBody) {
+        this.messageBody = messageBody;
     }
 
     public Long getTimestamp() {
@@ -66,5 +53,29 @@ public class PMessage {
 
     public void setTimestamp(Long timestamp) {
         this.timestamp = timestamp;
+    }
+
+    public boolean isSend() {
+        return isSend;
+    }
+
+    public void setSend(boolean send) {
+        isSend = send;
+    }
+
+    public boolean isDelivered() {
+        return isDelivered;
+    }
+
+    public void setDelivered(boolean delivered) {
+        isDelivered = delivered;
+    }
+
+    public boolean isRead() {
+        return isRead;
+    }
+
+    public void setRead(boolean read) {
+        isRead = read;
     }
 }
