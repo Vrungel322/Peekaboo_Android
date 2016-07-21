@@ -98,6 +98,10 @@ public class ChatArrayAdapter extends ArrayAdapter<ChatMessage> {
         // TODO remove from DB
         notifyDataSetChanged();
     }
+
+    public List<ChatMessage> getChatMessageList() {
+        return chatMessageList;
+    }
 }
 
 

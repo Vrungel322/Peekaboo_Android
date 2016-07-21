@@ -76,7 +76,9 @@ public class ChatActivity extends AppCompatActivity implements ChatItemDialog.IC
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
-            case R.id.dialogsDrop:{
+            case R.id.itClaerDialog:{
+                chatArrayAdapter.getChatMessageList().clear();
+                chatArrayAdapter.notifyDataSetChanged();
                 chatPresenter.dropTableAndCreate("test");
                 break;
             }
