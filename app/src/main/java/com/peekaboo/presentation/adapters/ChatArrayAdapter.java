@@ -93,6 +93,10 @@ public class ChatArrayAdapter extends ArrayAdapter<ChatMessage> {
         ClipData clip = ClipData.newPlainText("", getItem(index).message.toString());
         clipboard.setPrimaryClip(clip);
     }
+    public void deleteMess(int index){
+        chatMessageList.remove(index);
+        notifyDataSetChanged();
+    }
 }
 
 

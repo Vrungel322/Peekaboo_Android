@@ -1,5 +1,6 @@
 package com.peekaboo.presentation.fragments;
 
+import android.app.Activity;
 import android.app.DialogFragment;
 import android.content.ClipData;
 import android.content.ClipboardManager;
@@ -33,7 +34,15 @@ public class ChatItemDialog extends DialogFragment{
     @BindView(R.id.chat_item_list)
     ListView lvChatItem;
 
+    public interface onSomeEventListener {
+        public void copyText(int index);
+        public void deleteMess(int index);
+    }
+
+    onSomeEventListener someEventListener;
+
     private String[] editChatItem;
+
     private ChatArrayAdapter chatArrayAdapter;
     private int itemIndex;
 
@@ -44,16 +53,15 @@ public class ChatItemDialog extends DialogFragment{
     }
 
 
-//    public static ChatItemDialog newInstance(int index) {
-//        ChatItemDialog f = new ChatItemDialog();
-//
-//        // Supply index input as an argument.
-//        Bundle args = new Bundle();
-//        args.putInt("index", index);
-//        f.setArguments(args);
-//
-//        return f;
-//    }
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+        try {
+            someEventListener = (onSomeEventListener) activity;
+        } catch (ClassCastException e) {
+            throw new ClassCastException(activity.toString() + " must implement onSomeEventListener");
+        }
+    }
 
     @Nullable
     @Override
@@ -72,8 +80,12 @@ public class ChatItemDialog extends DialogFragment{
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 switch(i){
                     case 0:
+                        someEventListener.copyText(itemIndex);
+                        dismiss();
                         break;
                     case 1:
+                        someEventListener.deleteMess(itemIndex);
+                        dismiss();
                         break;
                     case 2:
                         Toast.makeText(getActivity(), "2", Toast.LENGTH_SHORT).show();

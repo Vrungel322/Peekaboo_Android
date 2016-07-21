@@ -1,5 +1,7 @@
 package com.peekaboo.presentation.activities;
 
+import android.app.DialogFragment;
+import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -36,7 +38,7 @@ import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
 /**
  * Created by Nataliia on 13.07.2016.
  */
-public class ChatActivity extends AppCompatActivity {
+public class ChatActivity extends AppCompatActivity implements ChatItemDialog.onSomeEventListener{
 
     @BindView(R.id.etMessageBody)
     EditText etMessageBody;
@@ -147,7 +149,17 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     public void copyText(int index){
-
+        chatArrayAdapter.copyText(index);
     }
 
+    public void deleteMess(int index){
+        chatArrayAdapter.deleteMess(index);
+    }
+
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+    }
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+    }
 }
