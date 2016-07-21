@@ -1,5 +1,7 @@
 package com.peekaboo.presentation.adapters;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -84,6 +86,12 @@ public class ChatArrayAdapter extends ArrayAdapter<ChatMessage> {
 
     public ChatMessage getItem(int index) {
         return this.chatMessageList.get(index);
+    }
+
+    public void copyText(int index){
+        ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipData clip = ClipData.newPlainText("", getItem(index).message.toString());
+        clipboard.setPrimaryClip(clip);
     }
 }
 
