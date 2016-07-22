@@ -11,7 +11,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.peekaboo.R;
 import com.peekaboo.presentation.database.PMessage;
@@ -113,6 +112,10 @@ public class ChatArrayAdapter extends ArrayAdapter<PMessage> {
 
     public List<PMessage> getChatMessageList() {
         return chatMessageList;
+    }
+
+    public void setPreviousMessages(List<PMessage> chatMessageList) {
+        this.chatMessageList = chatMessageList;
     }
 
     static class ViewHolder {

@@ -5,6 +5,8 @@ import android.content.Context;
 import com.peekaboo.presentation.database.PChatMessageDBHelper;
 import com.peekaboo.presentation.database.PMessage;
 
+import java.util.ArrayList;
+
 import javax.inject.Inject;
 
 /**
@@ -32,8 +34,8 @@ public class ChatPresenter {
         pChatMessageDBHelper.dropTableAndCreate(tableName);
     }
 
-    public void getAllNotes (String tableName){
-        pChatMessageDBHelper.getAllNotes(tableName);
+    public ArrayList<PMessage> getAllNotes (String tableName){
+        return pChatMessageDBHelper.getAllNotes(tableName);
     }
 
     public void getTableAsString(String tableName){

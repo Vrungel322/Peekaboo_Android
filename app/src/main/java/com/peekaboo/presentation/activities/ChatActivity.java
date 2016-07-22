@@ -62,6 +62,8 @@ public class ChatActivity extends AppCompatActivity implements ChatItemDialog.IC
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         chatArrayAdapter = new ChatArrayAdapter(getApplicationContext(), R.layout.list_item_chat_message);
+        chatPresenter.createTable("test"); // should be done when friend add
+        chatArrayAdapter.setPreviousMessages(chatPresenter.getAllNotes("test"));
         lvMessages.setAdapter(chatArrayAdapter);
         OverScrollDecoratorHelper.setUpOverScroll(lvMessages);
     }
@@ -105,7 +107,6 @@ public class ChatActivity extends AppCompatActivity implements ChatItemDialog.IC
         etMessageBody.setText("");
         //TODO: actually sending
         //DB testing
-        chatPresenter.createTable("test"); // should be done when friend add
             chatPresenter.makeNoteInTable(new PMessage("idPack", true, msgBody,
                     System.currentTimeMillis(), true, true, true), "test");
         chatPresenter.getTableAsString("test");
