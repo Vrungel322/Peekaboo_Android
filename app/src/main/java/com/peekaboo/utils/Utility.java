@@ -48,7 +48,7 @@ public class Utility {
         int currentJulianDay = Time.getJulianDay(currentTime, time.gmtoff);
 
         if (julianDay == currentJulianDay) {
-            return new SimpleDateFormat("MM:hh").format(dateInMillis);
+            return new SimpleDateFormat("HH:mm").format(dateInMillis);
         } else if ( julianDay < currentJulianDay + 7 ) {
             // If the input date is less than a week in the future, just return the day name.
             return getDayName(context, dateInMillis);

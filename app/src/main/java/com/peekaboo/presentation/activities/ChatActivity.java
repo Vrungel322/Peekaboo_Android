@@ -48,6 +48,7 @@ public class ChatActivity extends AppCompatActivity implements ChatItemDialog.IC
     private ChatArrayAdapter chatArrayAdapter;
     private AttachmentChatDialog attachmentChatDialog;
     private ChatItemDialog chatItemDialog;
+    public static String sTESTdbName = "test";
 
 
     @Override
@@ -62,8 +63,8 @@ public class ChatActivity extends AppCompatActivity implements ChatItemDialog.IC
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         chatArrayAdapter = new ChatArrayAdapter(getApplicationContext(), R.layout.list_item_chat_message);
-        chatPresenter.createTable("test"); // should be done when friend add
-        chatArrayAdapter.setPreviousMessages(chatPresenter.getAllNotes("test"));
+        chatPresenter.createTable(sTESTdbName); // should be done when friend add
+        chatArrayAdapter.setPreviousMessages(chatPresenter.getAllNotes(sTESTdbName));
         lvMessages.setAdapter(chatArrayAdapter);
         OverScrollDecoratorHelper.setUpOverScroll(lvMessages);
     }
@@ -80,7 +81,7 @@ public class ChatActivity extends AppCompatActivity implements ChatItemDialog.IC
             case R.id.itClaerDialog:{
                 chatArrayAdapter.getChatMessageList().clear();
                 chatArrayAdapter.notifyDataSetChanged();
-                chatPresenter.dropTableAndCreate("test");
+                chatPresenter.dropTableAndCreate(sTESTdbName);
                 break;
             }
         }
@@ -108,8 +109,8 @@ public class ChatActivity extends AppCompatActivity implements ChatItemDialog.IC
         //TODO: actually sending
         //DB testing
             chatPresenter.makeNoteInTable(new PMessage("idPack", true, msgBody,
-                    System.currentTimeMillis(), true, true, true), "test");
-        chatPresenter.getTableAsString("test");
+                    System.currentTimeMillis(), true, true, true), sTESTdbName);
+        chatPresenter.getTableAsString(sTESTdbName);
         return true;
     }
 
@@ -142,6 +143,8 @@ public class ChatActivity extends AppCompatActivity implements ChatItemDialog.IC
 
         Bundle bundle = new Bundle();
         bundle.putInt("index", position);
+        bundle.putString("msgBody", chatArrayAdapter.getItem(position).getMessageBody());
+        bundle.putString("tableName", sTESTdbName);
         FragmentTransaction ft = getFragmentManager().beginTransaction();
         chatItemDialog = new ChatItemDialog();
         chatItemDialog.setArguments(bundle);
@@ -155,8 +158,9 @@ public class ChatActivity extends AppCompatActivity implements ChatItemDialog.IC
     }
 
     @Override
-    public void deleteMess(int index){
+    public void deleteMess(String tableName, int index, String msgBody){
         chatArrayAdapter.deleteMess(index);
+        chatPresenter.deleteCortegeFromDB(tableName, index, msgBody);
     }
 
     protected void onRestoreInstanceState(Bundle savedInstanceState) {

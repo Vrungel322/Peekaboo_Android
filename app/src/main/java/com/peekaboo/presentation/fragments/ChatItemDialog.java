@@ -28,7 +28,7 @@ public class ChatItemDialog extends DialogFragment{
 
     public interface IChatItemEventListener {
          void copyText(int index);
-         void deleteMess(int index);
+         void deleteMess(String tableName,int index, String msgBody);
     }
 
     IChatItemEventListener chatItemEventListener;
@@ -37,11 +37,15 @@ public class ChatItemDialog extends DialogFragment{
 
     private ChatArrayAdapter chatArrayAdapter;
     private int itemIndex;
+    private String tableName;
+    private String msgBody;
 
     @Override
     public void setArguments(Bundle args) {
         super.setArguments(args);
         itemIndex = args.getInt("index");
+        tableName = args.getString("tableName");
+        msgBody = args.getString("msgBody");
     }
 
 
@@ -60,7 +64,8 @@ public class ChatItemDialog extends DialogFragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         editChatItem = getResources().getStringArray(R.array.edit_chat_item);
 
-        itemIndex = getArguments().getInt("index");
+//        itemIndex = getArguments().getInt("index");
+//        tableName = getArguments().getString("tableName");
         View view = inflater.inflate(R.layout.chat_item_dialog, container, false);
         ButterKnife.bind(this, view);
 
@@ -76,7 +81,7 @@ public class ChatItemDialog extends DialogFragment{
                         dismiss();
                         break;
                     case 1:
-                        chatItemEventListener.deleteMess(itemIndex);
+                        chatItemEventListener.deleteMess(tableName,itemIndex, msgBody);
                         dismiss();
                         break;
                     case 2:

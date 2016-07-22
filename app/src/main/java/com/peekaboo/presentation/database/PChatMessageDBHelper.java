@@ -106,10 +106,20 @@ public class PChatMessageDBHelper extends SQLiteOpenHelper {
         createTable(table);
     }
 
+    public void deleteCortegeFromDB(String tableName, int index, String msgBody) {
+        String deleteCortege = "DELETE FROM "
+                + tableName
+                + " WHERE "
+                + PMessageEntity.MESSAGE_BODY
+                + " = "
+                + "'" + msgBody + "'";
+        mDB.execSQL(deleteCortege);
+        getTableAsString(tableName);
+    }
+
     public void clseDB() {
         if (mDB != null) mDB.close();
     }
-
 
     /**
      * Method for testing db
@@ -132,5 +142,4 @@ public class PChatMessageDBHelper extends SQLiteOpenHelper {
         Log.e("DB_LOG", tableString);
         return tableString;
     }
-
 }

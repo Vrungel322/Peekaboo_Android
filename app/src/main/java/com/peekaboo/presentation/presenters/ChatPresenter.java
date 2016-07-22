@@ -41,4 +41,8 @@ public class ChatPresenter {
     public void getTableAsString(String tableName){
         pChatMessageDBHelper.getTableAsString(tableName);
     }
+
+    public void deleteCortegeFromDB(String tableName, int index, String msgBody) {
+        pChatMessageDBHelper.deleteCortegeFromDB(tableName, index, msgBody);
+    }
 }
