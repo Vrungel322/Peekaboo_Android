@@ -1,8 +1,10 @@
 package com.peekaboo.data.mappers;
 
 
-import com.peekaboo.data.rest.entity.UserEntity;
+import android.content.ContentValues;
+
 import com.peekaboo.domain.User;
+import com.peekaboo.data.repositories.database.PMessage;
 import com.peekaboo.presentation.services.Message;
 
 /**
@@ -13,4 +15,5 @@ public interface AbstractMapperFactory {
 
     Mapper<Message, String> getMessageToStringMapper();
     Mapper<String, Message> getStringToMessageMapper();
+    Mapper<PMessage, ContentValues> getPMessageMapper();
 }
