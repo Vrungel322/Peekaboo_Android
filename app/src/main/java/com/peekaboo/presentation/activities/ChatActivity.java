@@ -7,20 +7,20 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AbsListView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.peekaboo.R;
 import com.peekaboo.presentation.PeekabooApplication;
-import com.peekaboo.presentation.adapters.ChatArrayAdapter;
-import com.peekaboo.presentation.database.PMessage;
+import com.peekaboo.presentation.adapters.ChatAdapter;
+import com.peekaboo.data.repositories.database.PMessage;
 import com.peekaboo.presentation.fragments.AttachmentChatDialog;
-import com.peekaboo.presentation.fragments.ChatItemDialog;
 import com.peekaboo.presentation.presenters.ChatPresenter;
+import com.peekaboo.utils.Constants;
 
 import java.io.IOException;
 
@@ -29,26 +29,26 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.OnItemLongClick;
 import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
+import rx.subscriptions.CompositeSubscription;
 
 /**
  * Created by Nataliia on 13.07.2016.
  */
-public class ChatActivity extends AppCompatActivity implements ChatItemDialog.IChatItemEventListener {
+public class ChatActivity extends AppCompatActivity {
 
     @BindView(R.id.etMessageBody)
     EditText etMessageBody;
     @BindView(R.id.lvMessages)
     ListView lvMessages;
+
     @Inject
     ChatPresenter chatPresenter;
 
-    private boolean side = true;
-    private ChatArrayAdapter chatArrayAdapter;
+    private ChatAdapter chatAdapter;
     private AttachmentChatDialog attachmentChatDialog;
-    private ChatItemDialog chatItemDialog;
-    public static String sTESTdbName = "test";
+    private CompositeSubscription subscriptions;
+    private String receiverName;
 
 
     @Override
@@ -57,16 +57,38 @@ public class ChatActivity extends AppCompatActivity implements ChatItemDialog.IC
         setContentView(R.layout.chat_layout);
         ButterKnife.bind(this);
         PeekabooApplication.getApp(this).getComponent().inject(this);
+        receiverName = getIntent().getStringExtra(Constants.EXTRA_RECEIVER_NAME);
+        receiverName = "test";
+
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarChat);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if(null != receiverName){
+            toolbar.setTitle(receiverName);
+        }
 
-        chatArrayAdapter = new ChatArrayAdapter(getApplicationContext(), R.layout.list_item_chat_message);
-        chatPresenter.createTable(sTESTdbName); // should be done when friend add
-        chatArrayAdapter.setPreviousMessages(chatPresenter.getAllNotes(sTESTdbName));
-        lvMessages.setAdapter(chatArrayAdapter);
+        chatAdapter = new ChatAdapter(getApplicationContext());
+        lvMessages.setAdapter(chatAdapter);
+        lvMessages.setStackFromBottom(true);
+        lvMessages.setTranscriptMode(AbsListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
         OverScrollDecoratorHelper.setUpOverScroll(lvMessages);
+
+        chatPresenter.createTable(receiverName);
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        subscriptions = new CompositeSubscription();
+        subscriptions.add(chatPresenter.getAllMessages(receiverName, chatAdapter));
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        subscriptions.unsubscribe();
     }
 
     @Override
@@ -78,10 +100,8 @@ public class ChatActivity extends AppCompatActivity implements ChatItemDialog.IC
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
-            case R.id.itClaerDialog:{
-                chatArrayAdapter.getChatMessageList().clear();
-                chatArrayAdapter.notifyDataSetChanged();
-                chatPresenter.dropTableAndCreate(sTESTdbName);
+            case R.id.dialogsDrop:{
+                chatPresenter.dropTableAndCreate(receiverName);
                 break;
             }
         }
@@ -101,16 +121,14 @@ public class ChatActivity extends AppCompatActivity implements ChatItemDialog.IC
     }
 
     private boolean sendChatMessage() {
-        String msgBody = etMessageBody.getText().toString();
-        chatArrayAdapter.add(new PMessage("packageId", true, msgBody, System.currentTimeMillis(),
-                true, true, true));
-        chatArrayAdapter.notifyDataSetChanged();
+        String msgBody = etMessageBody.getText().toString().trim();
+        chatPresenter.makeNoteInTable(receiverName, new PMessage("pckgId", true, msgBody,
+                false, false, false));
         etMessageBody.setText("");
         //TODO: actually sending
+        //TODO: save into db
         //DB testing
-            chatPresenter.makeNoteInTable(new PMessage("idPack", true, msgBody,
-                    System.currentTimeMillis(), true, true, true), sTESTdbName);
-        chatPresenter.getTableAsString(sTESTdbName);
+        chatPresenter.getTableAsString(receiverName);
         return true;
     }
 
@@ -134,40 +152,7 @@ public class ChatActivity extends AppCompatActivity implements ChatItemDialog.IC
     }
 
     private void sendPhoto(Bitmap photo){
-        chatArrayAdapter.add(new PMessage("photoId", true, "", System.currentTimeMillis(),
-                true, false, false));
-    }
-    @OnItemLongClick(R.id.lvMessages)
-    boolean onItemLongClick(int position) {
-        Log.e("TAG", chatArrayAdapter.getItem(position).getMessageBody());
-
-        Bundle bundle = new Bundle();
-        bundle.putInt("index", position);
-        bundle.putString("msgBody", chatArrayAdapter.getItem(position).getMessageBody());
-        bundle.putString("tableName", sTESTdbName);
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        chatItemDialog = new ChatItemDialog();
-        chatItemDialog.setArguments(bundle);
-        chatItemDialog.show(ft, "chatItemDialog");
-        return true;
-    }
-
-    @Override
-    public void copyText(int index){
-        chatArrayAdapter.copyText(index);
-    }
-
-    @Override
-    public void deleteMess(String tableName, int index, String msgBody){
-        chatArrayAdapter.deleteMess(index);
-        chatPresenter.deleteCortegeFromDB(tableName, index, msgBody);
-    }
-
-    protected void onRestoreInstanceState(Bundle savedInstanceState) {
-        super.onRestoreInstanceState(savedInstanceState);
-    }
-
-    protected void onSaveInstanceState(Bundle outState) {
-        super.onSaveInstanceState(outState);
+        chatPresenter.makeNoteInTable(receiverName, new PMessage("photoPckgId", true, "PHOTO",
+                false, false, false));
     }
 }

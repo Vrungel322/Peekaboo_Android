@@ -6,58 +6,75 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.peekaboo.R;
-import com.peekaboo.presentation.database.PMessage;
+import com.peekaboo.data.repositories.database.PMessageAbs;
 import com.peekaboo.utils.Utility;
 
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import rx.functions.Action1;
 
-///**
-// * Created by Nataliia on 13.07.2016.
-// */
-public class ChatArrayAdapter extends ArrayAdapter<PMessage> {
+/**
+ * Created by st1ch on 23.07.2016.
+ */
+public class ChatAdapter extends BaseAdapter implements Action1<List<PMessageAbs>> {
 
-    private List<PMessage> chatMessageList = new ArrayList<PMessage>();
+    private final LayoutInflater inflater;
     private Context context;
 
-    @Override
-    public void add(PMessage object) {
-        chatMessageList.add(object);
-        super.add(object);
-    }
+    private List<PMessageAbs> messages = Collections.emptyList();
 
-    public ChatArrayAdapter(Context context, int textViewResourceId) {
-        super(context, textViewResourceId);
+    public ChatAdapter(Context context) {
         this.context = context;
+        this.inflater = LayoutInflater.from(context);
     }
 
+    @Override
+    public void call(List<PMessageAbs> messages) {
+        this.messages = messages;
+        notifyDataSetChanged();
+    }
+
+    @Override
+    public int getCount() {
+        return messages.size();
+    }
+
+    @Override
+    public PMessageAbs getItem(int position) {
+        return messages.get(position);
+    }
+
+    @Override
+    public long getItemId(int position) {
+        return getItem(position).id();
+    }
+
+    @Override
     public View getView(int position, View view, ViewGroup parent) {
-        PMessage pMessageObj = getItem(position);
+        PMessageAbs pMessageObj = getItem(position);
         ViewHolder holder;
         if (view != null) {
             holder = (ViewHolder) view.getTag();
         } else {
-            LayoutInflater inflater = (LayoutInflater) this.getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
             view = inflater.inflate(R.layout.list_item_chat_message, parent, false);
 
             holder = new ViewHolder(view);
             view.setTag(holder);
-
             setAlignment(holder, pMessageObj.isMine());
         }
 
-        holder.tvChatMessage.setText(pMessageObj.getMessageBody());
-        holder.tvChatTimestamp.setText(Utility.getFriendlyDayString(context, pMessageObj.getTimestamp()));
+        holder.tvChatMessage.setText(pMessageObj.messageBody());
+        holder.tvChatTimestamp.setText(Utility.getFriendlyDayString(context, pMessageObj.timestamp()));
 
         if(pMessageObj.isSent() && !pMessageObj.isDelivered()){
             holder.ivChatImage.setVisibility(View.GONE);
@@ -72,6 +89,7 @@ public class ChatArrayAdapter extends ArrayAdapter<PMessage> {
     private void setAlignment(ViewHolder holder, boolean isMine) {
         if (!isMine) {
             holder.chatBubble.setBackgroundResource(R.drawable.bubble1);
+
             RelativeLayout.LayoutParams layoutParams
                     = (RelativeLayout.LayoutParams) holder.chatBubble.getLayoutParams();
             layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, 0);
@@ -79,6 +97,7 @@ public class ChatArrayAdapter extends ArrayAdapter<PMessage> {
             holder.chatBubble.setLayoutParams(layoutParams);
         } else {
             holder.chatBubble.setBackgroundResource(R.drawable.bubble2);
+
             RelativeLayout.LayoutParams layoutParams
                     = (RelativeLayout.LayoutParams) holder.chatBubble.getLayoutParams();
             layoutParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT, 0);
@@ -93,29 +112,13 @@ public class ChatArrayAdapter extends ArrayAdapter<PMessage> {
 
     public void copyText(int index) {
         ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
-        ClipData clip = ClipData.newPlainText("", getItem(index).getMessageBody());
+        ClipData clip = ClipData.newPlainText("", getItem(index).messageBody());
         clipboard.setPrimaryClip(clip);
     }
 
     public void deleteMess(int index) {
-        chatMessageList.remove(index);
+        messages.remove(index);
         notifyDataSetChanged();
-    }
-
-    public int getCount() {
-        return this.chatMessageList.size();
-    }
-
-    public PMessage getItem(int index) {
-        return this.chatMessageList.get(index);
-    }
-
-    public List<PMessage> getChatMessageList() {
-        return chatMessageList;
-    }
-
-    public void setPreviousMessages(List<PMessage> chatMessageList) {
-        this.chatMessageList = chatMessageList;
     }
 
     static class ViewHolder {

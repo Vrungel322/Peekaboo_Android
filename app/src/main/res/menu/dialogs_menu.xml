@@ -4,7 +4,7 @@
     <group >
         <item
             android:title="Clear dialogs"
-            android:id="@+id/itClaerDialog"/>
+            android:id="@+id/dialogsDrop"/>
     </group>
 
     <item android:title="multiMenu">

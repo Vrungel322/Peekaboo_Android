@@ -1,48 +1,64 @@
 package com.peekaboo.presentation.presenters;
 
 import android.content.Context;
+import android.util.Log;
 
-import com.peekaboo.presentation.database.PChatMessageDBHelper;
-import com.peekaboo.presentation.database.PMessage;
-
-import java.util.ArrayList;
+import com.peekaboo.data.mappers.AbstractMapperFactory;
+import com.peekaboo.data.repositories.database.PMessage;
+import com.peekaboo.data.repositories.database.PMessageAbs;
+import com.peekaboo.data.repositories.database.PMessageHelper;
 
 import javax.inject.Inject;
+
+import rx.Subscription;
+import rx.functions.Action1;
+import timber.log.Timber;
 
 /**
  * Created by Nataliia on 13.07.2016.
  */
 public class ChatPresenter {
+
     private Context context;
-    @Inject
-    PChatMessageDBHelper pChatMessageDBHelper;
+    PMessageHelper pMessageHelper;
+    AbstractMapperFactory mapperFactory;
 
     @Inject
-    public ChatPresenter(Context context) {
+    public ChatPresenter(Context context, PMessageHelper pMessageHelper,
+                         AbstractMapperFactory mapperFactory) {
         this.context = context;
+        this.pMessageHelper = pMessageHelper;
+        this.mapperFactory = mapperFactory;
     }
 
     public void createTable(String tableName){
-        pChatMessageDBHelper.createTable(tableName);
+        pMessageHelper.createTable(tableName);
     }
 
-    public void makeNoteInTable(PMessage msg, String tableName){
-        pChatMessageDBHelper.insertToTable(msg, tableName);
+    public void makeNoteInTable(String tableName, PMessage msg){
+        pMessageHelper.insert(tableName, mapperFactory.getPMessageMapper().transform(msg));
     }
 
     public void dropTableAndCreate(String tableName){
-        pChatMessageDBHelper.dropTableAndCreate(tableName);
+        pMessageHelper.dropTableAndCreate(tableName);
     }
 
-    public ArrayList<PMessage> getAllNotes (String tableName){
-        return pChatMessageDBHelper.getAllNotes(tableName);
+    public Subscription getAllMessages (String tableName, Action1 adapter){
+        return pMessageHelper.getAllMessages(tableName).subscribe(adapter);
     }
 
-    public void getTableAsString(String tableName){
-        pChatMessageDBHelper.getTableAsString(tableName);
-    }
-
-    public void deleteCortegeFromDB(String tableName, int index, String msgBody) {
-        pChatMessageDBHelper.deleteCortegeFromDB(tableName, index, msgBody);
+    public void getTableAsString(String tableName) {
+        pMessageHelper.getAllMessages(tableName)
+                .subscribe(pMessageAbses -> {
+                    for (PMessageAbs message : pMessageAbses) {
+                        Log.wtf("DB_LOG" ,"ID: " + message.id()
+                                + "PACKAGE_ID: " + message.packageId()
+                                + "BODY: " + message.messageBody()
+                                + "IS_MINE: " + message.isMine()
+                                + "IS_SENT: " + message.isSent()
+                                + "IS_DELIVERED: " + message.isDelivered()
+                                + "IS_READ: " + message.isRead());
+                    }
+                });
     }
 }

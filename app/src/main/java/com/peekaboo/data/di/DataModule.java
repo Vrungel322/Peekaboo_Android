@@ -1,11 +1,11 @@
 package com.peekaboo.data.di;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 
 import com.peekaboo.R;
 import com.peekaboo.data.Constants;
 import com.peekaboo.data.ResponseErrorHandler;
+import com.peekaboo.data.mappers.AbstractMapperFactory;
 import com.peekaboo.data.mappers.MapperFactory;
 import com.peekaboo.data.repositories.SessionDataRepository;
 import com.peekaboo.data.rest.PeekabooApi;
@@ -102,6 +102,11 @@ public class DataModule {
     @Singleton
     public SessionRepository provideRepository(User user, RestApi restApi) {
         return new SessionDataRepository(restApi, new MapperFactory(), user);
+    }
+
+    @Provides
+    public AbstractMapperFactory provideMapperFactory(){
+        return new MapperFactory();
     }
 
 

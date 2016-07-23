@@ -13,7 +13,6 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.peekaboo.R;
-import com.peekaboo.presentation.adapters.ChatArrayAdapter;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -35,7 +34,6 @@ public class ChatItemDialog extends DialogFragment{
 
     private String[] editChatItem;
 
-    private ChatArrayAdapter chatArrayAdapter;
     private int itemIndex;
     private String tableName;
     private String msgBody;
