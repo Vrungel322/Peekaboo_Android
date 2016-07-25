@@ -83,6 +83,7 @@ public class ChatActivity extends AppCompatActivity {
         super.onResume();
         subscriptions = new CompositeSubscription();
         subscriptions.add(chatPresenter.getAllMessages(receiverName, chatAdapter));
+        subscriptions.add(chatPresenter.getTableAsString(receiverName));
     }
 
     @Override
@@ -121,12 +122,15 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private boolean sendChatMessage() {
-        String msgBody = etMessageBody.getText().toString().trim();
+        String msgBody = etMessageBody.getText().toString().trim().replaceAll("[\\s&&[^\r?\n]]+", " ");
+        if(null == msgBody || msgBody.equals("")){
+            return false;
+        }
         chatPresenter.makeNoteInTable(receiverName, new PMessage("pckgId", true, msgBody,
-                false, false, false));
+                System.currentTimeMillis(), false, false, false));
         etMessageBody.setText("");
         //TODO: actually sending
-        //TODO: save into db
+
         //DB testing
         chatPresenter.getTableAsString(receiverName);
         return true;
@@ -153,6 +157,6 @@ public class ChatActivity extends AppCompatActivity {
 
     private void sendPhoto(Bitmap photo){
         chatPresenter.makeNoteInTable(receiverName, new PMessage("photoPckgId", true, "PHOTO",
-                false, false, false));
+                System.currentTimeMillis(), false, false, false));
     }
 }

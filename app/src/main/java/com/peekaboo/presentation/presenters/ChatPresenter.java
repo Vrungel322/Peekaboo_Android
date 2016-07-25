@@ -12,7 +12,6 @@ import javax.inject.Inject;
 
 import rx.Subscription;
 import rx.functions.Action1;
-import timber.log.Timber;
 
 /**
  * Created by Nataliia on 13.07.2016.
@@ -47,17 +46,18 @@ public class ChatPresenter {
         return pMessageHelper.getAllMessages(tableName).subscribe(adapter);
     }
 
-    public void getTableAsString(String tableName) {
-        pMessageHelper.getAllMessages(tableName)
+    public Subscription getTableAsString(String tableName) {
+        return pMessageHelper.getAllMessages(tableName)
                 .subscribe(pMessageAbses -> {
                     for (PMessageAbs message : pMessageAbses) {
                         Log.wtf("DB_LOG" ,"ID: " + message.id()
-                                + "PACKAGE_ID: " + message.packageId()
-                                + "BODY: " + message.messageBody()
-                                + "IS_MINE: " + message.isMine()
-                                + "IS_SENT: " + message.isSent()
-                                + "IS_DELIVERED: " + message.isDelivered()
-                                + "IS_READ: " + message.isRead());
+                                + "; PACKAGE_ID: " + message.packageId()
+                                + "; BODY: " + message.messageBody()
+                                + "; TIMESTAMP: " + message.timestamp()
+                                + "; IS_MINE: " + message.isMine()
+                                + "; IS_SENT: " + message.isSent()
+                                + "; IS_DELIVERED: " + message.isDelivered()
+                                + "; IS_READ: " + message.isRead());
                     }
                 });
     }
