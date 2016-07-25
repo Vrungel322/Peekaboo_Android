@@ -15,6 +15,7 @@ public class PMessageMapper implements Mapper<PMessage, ContentValues> {
                 .packageId(obj.packageId())
                 .isMine(obj.isMine())
                 .messageBody(obj.messageBody())
+                .timestamp(obj.timestamp())
                 .isSent(obj.isSent())
                 .isDelivered(obj.isDelivered())
                 .isRead(obj.isRead())

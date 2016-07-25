@@ -50,9 +50,14 @@ public class PMessageHelper {
                 .observeOn(AndroidSchedulers.mainThread());
     }
 
-    public int updateByPackageId(String tableName, ContentValues cv, String packageId){
-        String WHERE = "WHERE " + PMessageAbs.PACKAGE_ID + " = ?";
+    public int updateMessageByPackageId(String tableName, ContentValues cv, String packageId){
+        String WHERE = PMessageAbs.PACKAGE_ID + " = ?";
         return db.update(tableName, cv, WHERE, packageId);
+    }
+
+    public int deleteMessageByPackageId(String tableName, String packageId){
+        String WHERE = PMessageAbs.PACKAGE_ID + " = ?";
+        return db.delete(tableName, WHERE, packageId);
     }
 
     public void dropTableAndCreate(String tableName){

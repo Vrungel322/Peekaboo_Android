@@ -13,6 +13,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.peekaboo.R;
+import com.peekaboo.utils.Constants;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -27,7 +28,7 @@ public class ChatItemDialog extends DialogFragment{
 
     public interface IChatItemEventListener {
          void copyText(int index);
-         void deleteMess(String tableName,int index, String msgBody);
+         void deleteMess(int index);
     }
 
     IChatItemEventListener chatItemEventListener;
@@ -35,15 +36,11 @@ public class ChatItemDialog extends DialogFragment{
     private String[] editChatItem;
 
     private int itemIndex;
-    private String tableName;
-    private String msgBody;
 
     @Override
     public void setArguments(Bundle args) {
         super.setArguments(args);
-        itemIndex = args.getInt("index");
-        tableName = args.getString("tableName");
-        msgBody = args.getString("msgBody");
+        itemIndex = args.getInt(Constants.ARG_CHAT_MESSAGE_ITEM_INDEX);
     }
 
 
@@ -79,7 +76,7 @@ public class ChatItemDialog extends DialogFragment{
                         dismiss();
                         break;
                     case 1:
-                        chatItemEventListener.deleteMess(tableName,itemIndex, msgBody);
+                        chatItemEventListener.deleteMess(itemIndex);
                         dismiss();
                         break;
                     case 2:

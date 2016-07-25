@@ -1,7 +1,5 @@
 package com.peekaboo.presentation.adapters;
 
-import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -108,17 +106,6 @@ public class ChatAdapter extends BaseAdapter implements Action1<List<PMessageAbs
 
     private int getStatusImage(boolean isRead){
         return isRead ? R.drawable.ic_check_all : R.drawable.ic_check;
-    }
-
-    public void copyText(int index) {
-        ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
-        ClipData clip = ClipData.newPlainText("", getItem(index).messageBody());
-        clipboard.setPrimaryClip(clip);
-    }
-
-    public void deleteMess(int index) {
-        messages.remove(index);
-        notifyDataSetChanged();
     }
 
     static class ViewHolder {

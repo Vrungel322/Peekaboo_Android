@@ -15,14 +15,16 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.peekaboo.R;
+import com.peekaboo.data.repositories.database.PMessage;
 import com.peekaboo.presentation.PeekabooApplication;
 import com.peekaboo.presentation.adapters.ChatAdapter;
-import com.peekaboo.data.repositories.database.PMessage;
 import com.peekaboo.presentation.fragments.AttachmentChatDialog;
+import com.peekaboo.presentation.fragments.ChatItemDialog;
 import com.peekaboo.presentation.presenters.ChatPresenter;
 import com.peekaboo.utils.Constants;
 
 import java.io.IOException;
+import java.util.Random;
 
 import javax.inject.Inject;
 
@@ -31,11 +33,12 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
 import rx.subscriptions.CompositeSubscription;
+import timber.log.Timber;
 
 /**
  * Created by Nataliia on 13.07.2016.
  */
-public class ChatActivity extends AppCompatActivity {
+public class ChatActivity extends AppCompatActivity implements ChatItemDialog.IChatItemEventListener {
 
     @BindView(R.id.etMessageBody)
     EditText etMessageBody;
@@ -47,6 +50,7 @@ public class ChatActivity extends AppCompatActivity {
 
     private ChatAdapter chatAdapter;
     private AttachmentChatDialog attachmentChatDialog;
+    private ChatItemDialog chatItemDialog;
     private CompositeSubscription subscriptions;
     private String receiverName;
 
@@ -76,6 +80,15 @@ public class ChatActivity extends AppCompatActivity {
 
         chatPresenter.createTable(receiverName);
 
+        lvMessages.setOnItemLongClickListener((parent, view, position, id) -> {
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            chatItemDialog = new ChatItemDialog();
+            Bundle itemIndexBundle = new Bundle();
+            itemIndexBundle.putInt(Constants.ARG_CHAT_MESSAGE_ITEM_INDEX, position);
+            chatItemDialog.setArguments(itemIndexBundle);
+            chatItemDialog.show(ft, Constants.FRAGMENT_TAGS.CHAT_ITEM_DIALOG_FRAGMENT_TAG);
+            return true;
+        });
     }
 
     @Override
@@ -126,8 +139,10 @@ public class ChatActivity extends AppCompatActivity {
         if(null == msgBody || msgBody.equals("")){
             return false;
         }
-        chatPresenter.makeNoteInTable(receiverName, new PMessage("pckgId", true, msgBody,
-                System.currentTimeMillis(), false, false, false));
+        String pckgId = String.valueOf(new Random().nextInt(9999999));
+        long timestamp = System.currentTimeMillis();
+        chatPresenter.makeNoteInTable(receiverName, new PMessage(pckgId, true, msgBody,
+                timestamp, false, false, false));
         etMessageBody.setText("");
         //TODO: actually sending
 
@@ -158,5 +173,17 @@ public class ChatActivity extends AppCompatActivity {
     private void sendPhoto(Bitmap photo){
         chatPresenter.makeNoteInTable(receiverName, new PMessage("photoPckgId", true, "PHOTO",
                 System.currentTimeMillis(), false, false, false));
+    }
+
+    @Override
+    public void copyText(int index) {
+        Timber.tag("ChatActivity").v("copyText");
+        chatPresenter.copyMessageText(chatAdapter.getItem(index));
+    }
+
+    @Override
+    public void deleteMess(int index) {
+        Timber.tag("ChatActivity").v("deleteMess");
+        chatPresenter.deleteMessageByPackageId(receiverName, chatAdapter.getItem(index));
     }
 }

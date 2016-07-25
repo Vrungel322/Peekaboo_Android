@@ -1,5 +1,7 @@
 package com.peekaboo.presentation.presenters;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.util.Log;
 
@@ -60,5 +62,15 @@ public class ChatPresenter {
                                 + "; IS_READ: " + message.isRead());
                     }
                 });
+    }
+
+    public int deleteMessageByPackageId(String tableName, PMessageAbs message){
+        return pMessageHelper.deleteMessageByPackageId(tableName, message.packageId());
+    }
+
+    public void copyMessageText(PMessageAbs message){
+        ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipData clip = ClipData.newPlainText("", message.messageBody());
+        clipboard.setPrimaryClip(clip);
     }
 }
