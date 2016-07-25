@@ -7,7 +7,7 @@
     <LinearLayout
         android:layout_width="@dimen/nav_header_width"
         android:layout_height="match_parent"
-        android:background="@color/nav_background"
+        android:background="@drawable/nav_background_gradient"
         android:orientation="vertical">
 
         <ScrollView
