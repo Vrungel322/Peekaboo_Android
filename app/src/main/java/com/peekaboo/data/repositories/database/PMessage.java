@@ -14,11 +14,12 @@ public class PMessage extends PMessageAbs {
     private boolean isDelivered;
     private boolean isRead;
 
-    public PMessage(String packageId, boolean isMine, String messageBody,
+    public PMessage(String packageId, boolean isMine, String messageBody, long timestamp,
                     boolean isSent, boolean isDelivered, boolean isRead) {
         this.packageId = packageId;
         this.isMine = isMine;
         this.messageBody = messageBody;
+        this.timestamp = timestamp;
         this.isSent = isSent;
         this.isDelivered = isDelivered;
         this.isRead = isRead;

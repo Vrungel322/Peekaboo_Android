@@ -30,7 +30,7 @@ public class PMessageHelper {
                 PMessageAbs.PACKAGE_ID       + " TEXT NOT NULL," +
                 PMessageAbs.IS_MINE          + " INTEGER NOT NULL," +
                 PMessageAbs.MESSAGE_BODY     + " TEXT NOT NULL," +
-                PMessageAbs.TIMESTAMP        + " TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL," +
+                PMessageAbs.TIMESTAMP        + " INTEGER NOT NULL," +
                 PMessageAbs.STATUS_SENT      + " INTEGER DEFAULT 0 NOT NULL," +
                 PMessageAbs.STATUS_DELIVERED + " INTEGER DEFAULT 0 NOT NULL," +
                 PMessageAbs.STATUS_READ      + " INTEGER DEFAULT 0 NOT NULL" +
