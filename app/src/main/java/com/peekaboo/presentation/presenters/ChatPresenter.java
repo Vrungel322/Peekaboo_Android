@@ -12,7 +12,6 @@ import javax.inject.Inject;
 
 import rx.Subscription;
 import rx.functions.Action1;
-import timber.log.Timber;
 
 /**
  * Created by Nataliia on 13.07.2016.

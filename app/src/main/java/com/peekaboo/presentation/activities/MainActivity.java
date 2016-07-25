@@ -7,15 +7,15 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
+import android.widget.Toast;
 
 import com.peekaboo.R;
 import com.peekaboo.presentation.PeekabooApplication;
 import com.peekaboo.presentation.di.ApplicationComponent;
+import com.peekaboo.presentation.fragments.CallsFragment;
 import com.peekaboo.presentation.fragments.ContactsFragment;
 import com.peekaboo.presentation.fragments.DialogsFragment;
 import com.peekaboo.presentation.fragments.ProfileFragment;
-import com.peekaboo.presentation.fragments.SearchFragment;
-import com.peekaboo.presentation.fragments.ServiceTestFragment;
 import com.peekaboo.presentation.fragments.SettingsFragment;
 
 import butterknife.BindView;
@@ -47,29 +47,33 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    @OnClick(R.id.bDialogs)
-    public void bDialogsClick(){
+    @OnClick(R.id.lvDialogs)
+    public void lvDialogsClick(){
         changeFragment(new DialogsFragment(), "dialogsFragment");
     }
 
-    @OnClick(R.id.bContacts)
-    public void bContactsClick(){
+    @OnClick(R.id.lvCalls)
+    public void lvCallsClick(){
+        changeFragment(new CallsFragment(), "callsFragment");
+    }
+    @OnClick(R.id.lvContacts)
+    public void lvContactsClick(){
         changeFragment(new ContactsFragment(), "contactsFragment");
     }
 
-    @OnClick(R.id.bProfile)
-    public void bProfileClick(){
+    @OnClick(R.id.lvProfile)
+    public void lvProfileClick(){
         changeFragment(new ProfileFragment(), "profileFragment");
     }
 
-    @OnClick(R.id.bSearch)
-    public void bSearchClick(){
-        changeFragment(new SearchFragment(), "searchFragment");
+    @OnClick(R.id.lvSettings)
+    public void lvSettingsClick(){
+        changeFragment(new SettingsFragment(), "settingsFragment");
     }
 
-    @OnClick(R.id.bSettings)
-    public void bSettingsClick(){
-        changeFragment(new SettingsFragment(), "settingsFragment");
+    @OnClick(R.id.lvExit)
+    public void lvExitClick(){
+        Toast.makeText(getApplicationContext(), "Log out", Toast.LENGTH_LONG).show();
     }
 
     private void changeFragment(Fragment fragment, String tag) {
