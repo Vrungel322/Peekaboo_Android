@@ -2,8 +2,10 @@ package com.peekaboo.presentation.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v8.renderscript.ScriptGroup;
 import android.util.Log;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -11,6 +13,8 @@ import android.widget.Toast;
 
 import com.peekaboo.R;
 import com.peekaboo.presentation.PeekabooApplication;
+import com.peekaboo.presentation.app.view.HelveticaEditText;
+import com.peekaboo.presentation.app.view.HelveticaTextInputLayout;
 import com.peekaboo.presentation.fragments.ProgressDialogFragment;
 import com.peekaboo.presentation.presenters.LoginPresenter;
 import com.peekaboo.presentation.views.ICredentialsView;
@@ -26,6 +30,8 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnFocusChange;
+import butterknife.OnTouch;
 
 public class LogInActivity extends AppCompatActivity implements ICredentialsView {
 
@@ -44,6 +50,11 @@ public class LogInActivity extends AppCompatActivity implements ICredentialsView
     TextView tvSignUp4;
     @BindView(R.id.tvOrSign)
     TextView tvSignIn;
+    @BindView(R.id.ilUsername)
+    TextInputLayout ilUsername;
+    @BindView(R.id.ilPassword)
+    TextInputLayout ilPassword;
+
     @Inject
     LoginPresenter loginPresenter;
     @Inject
@@ -82,11 +93,10 @@ public class LogInActivity extends AppCompatActivity implements ICredentialsView
     public void showInputError(InputFieldError error) {
         switch (error) {
             case LOGIN:
-                etLogin.setError(getString(R.string.invalidLogin));
+                ilUsername.setError("wkjfdj");
                 etLogin.setText("");
-                break;
             case PASSWORD:
-                etPassword.setError(getString(R.string.invalidPassword));
+                ilPassword.setError("jkgftdrest");
                 etPassword.setText("");
                 break;
         }
@@ -117,6 +127,20 @@ public class LogInActivity extends AppCompatActivity implements ICredentialsView
         String login = etLogin.getText().toString();
         String password = etPassword.getText().toString();
         loginPresenter.onSignInButtonClick(login, password);
+    }
+
+    @OnTouch(R.id.etLogin)
+    boolean onUsernameEditText(){
+        ilUsername.setError(null);
+        return false;
+    }
+
+
+    @OnTouch(R.id.etPassword)
+    boolean onPasswordEditText(){
+        ilPassword.setError(null);
+        return false;
+
     }
 
     @OnClick(R.id.bVk)

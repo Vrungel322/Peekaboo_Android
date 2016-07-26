@@ -28,4 +28,5 @@ public class HelveticaTextInputLayout extends TextInputLayout {
     void setTypeface(Context context) {
         setTypeface(Typeface.getHelvetica(context));
     }
+
 }

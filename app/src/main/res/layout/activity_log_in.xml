@@ -27,7 +27,8 @@
             <com.peekaboo.presentation.app.view.HelveticaTextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="60dp">
+                android:layout_marginTop="60dp"
+                android:id="@+id/ilUsername">
 
                 <com.peekaboo.presentation.app.view.HelveticaEditText
                     android:id="@+id/etLogin"
@@ -42,7 +43,8 @@
             <com.peekaboo.presentation.app.view.HelveticaTextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingTop="@dimen/padding_top">
+                android:paddingTop="@dimen/padding_top"
+                android:id="@+id/ilPassword">
 
                 <com.peekaboo.presentation.app.view.HelveticaEditText
                     android:id="@+id/etPassword"
