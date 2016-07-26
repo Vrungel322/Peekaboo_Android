@@ -7,14 +7,13 @@
     <LinearLayout
         android:layout_width="@dimen/nav_header_width"
         android:layout_height="match_parent"
-        android:background="@drawable/nav_background_gradient"
+        android:background="@color/nav_background"
         android:orientation="vertical">
 
         <ScrollView
             android:id="@+id/scrollView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginTop="@dimen/nav_margin_top"
             android:scrollbars="none">
 
             <LinearLayout
@@ -30,6 +29,7 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/nav_header_height"
+                        android:layout_marginTop="@dimen/nav_margin_top"
                         android:orientation="vertical">
 
                         <RelativeLayout
@@ -59,14 +59,18 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:text="Raccoon Nigga"
-                                android:textAppearance="?android:attr/textAppearanceMedium" />
+                                android:textAppearance="?android:attr/textAppearanceMedium"
+                                android:textColor="@color/textColor"
+                                android:textSize="18sp" />
 
                             <TextView
                                 android:id="@+id/tvUsername"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="Raccoon"
-                                android:textAppearance="?android:attr/textAppearanceLarge" />
+                                android:text="online"
+                                android:textAppearance="?android:attr/textAppearanceLarge"
+                                android:textColor="@color/textColorHint"
+                                android:textSize="15sp" />
 
                         </LinearLayout>
 
@@ -76,13 +80,15 @@
 
                 <View
                     android:layout_width="match_parent"
-                    android:layout_height="2dp"
-                    android:layout_marginTop="@dimen/nav_padding_top"
-                    android:background="@drawable/divider" />
+                    android:layout_height="1dp"
+                    android:layout_marginLeft="@dimen/divider_margin"
+                    android:layout_marginRight="@dimen/divider_margin"
+                    android:background="@color/drawerDividerColor" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/items_margin"
                     android:layout_marginTop="@dimen/nav_padding_top"
                     android:orientation="vertical">
 
@@ -90,14 +96,13 @@
                         android:id="@+id/lvDialogs"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_marginLeft="@dimen/nav_content_margin_left"
                         android:orientation="horizontal">
 
                         <ImageView
                             android:id="@+id/ivIconChat"
                             android:layout_width="@dimen/nav_icon_width"
                             android:layout_height="@dimen/nav_icon_height"
-                            android:background="@drawable/chats" />
+                            android:src="@drawable/chats" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -112,7 +117,6 @@
                         android:id="@+id/lvCalls"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_marginLeft="@dimen/nav_content_margin_left"
                         android:layout_marginTop="@dimen/nav_padding_top"
                         android:orientation="horizontal">
 
@@ -120,7 +124,7 @@
                             android:id="@+id/ivIconCalls"
                             android:layout_width="@dimen/nav_icon_width"
                             android:layout_height="@dimen/nav_icon_height"
-                            android:background="@drawable/calls" />
+                            android:src="@drawable/calls" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -135,7 +139,6 @@
                         android:id="@+id/lvContacts"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_marginLeft="@dimen/nav_content_margin_left"
                         android:layout_marginTop="@dimen/nav_padding_top"
                         android:orientation="horizontal">
 
@@ -143,7 +146,7 @@
                             android:id="@+id/ivIconContacts"
                             android:layout_width="@dimen/nav_icon_width"
                             android:layout_height="@dimen/nav_icon_height"
-                            android:background="@drawable/contacts" />
+                            android:src="@drawable/contacts" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -158,7 +161,6 @@
                         android:id="@+id/lvProfile"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_marginLeft="@dimen/nav_content_margin_left"
                         android:layout_marginTop="@dimen/nav_padding_top"
                         android:orientation="horizontal">
 
@@ -166,7 +168,8 @@
                             android:id="@+id/ivIconProfile"
                             android:layout_width="@dimen/nav_icon_width"
                             android:layout_height="@dimen/nav_icon_height"
-                            android:background="@drawable/profile" />
+                            android:padding="3dp"
+                            android:src="@drawable/profile" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -177,17 +180,26 @@
                             android:textAppearance="?android:attr/textAppearanceMedium" />
                     </LinearLayout>
 
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="2dp"
-                        android:layout_marginTop="@dimen/nav_padding_top"
-                        android:background="@drawable/divider" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginLeft="@dimen/divider_margin"
+                    android:layout_marginRight="@dimen/divider_margin"
+                    android:layout_marginTop="@dimen/nav_padding_top"
+                    android:background="@color/drawerDividerColor" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/items_margin"
+                    android:orientation="vertical">
 
                     <LinearLayout
                         android:id="@+id/lvSettings"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_marginLeft="@dimen/nav_content_margin_left"
                         android:layout_marginTop="@dimen/nav_padding_top"
                         android:orientation="horizontal">
 
@@ -195,7 +207,7 @@
                             android:id="@+id/ivIconSettings"
                             android:layout_width="@dimen/nav_icon_width"
                             android:layout_height="@dimen/nav_icon_height"
-                            android:background="@drawable/settings" />
+                            android:src="@drawable/settings" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -210,15 +222,14 @@
                         android:id="@+id/lvExit"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_marginLeft="@dimen/nav_content_margin_left"
                         android:layout_marginTop="@dimen/nav_padding_top"
-                        android:orientation="horizontal" >
+                        android:orientation="horizontal">
 
                         <ImageView
                             android:id="@+id/ivIconExit"
                             android:layout_width="@dimen/nav_icon_width"
                             android:layout_height="@dimen/nav_icon_height"
-                            android:background="@drawable/exit" />
+                            android:src="@drawable/exit" />
 
                         <TextView
                             android:layout_width="wrap_content"
