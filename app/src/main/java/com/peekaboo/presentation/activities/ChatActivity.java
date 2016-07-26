@@ -117,6 +117,7 @@ public class ChatActivity extends AppCompatActivity implements ChatItemDialog.IC
         switch (item.getItemId()){
             case R.id.dialogsDrop:{
                 chatPresenter.dropTableAndCreate(receiverName);
+                chatAdapter.clearList();
                 break;
             }
         }

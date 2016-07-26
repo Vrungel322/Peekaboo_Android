@@ -109,6 +109,11 @@ public class ChatAdapter extends BaseAdapter implements Action1<List<PMessageAbs
         return isRead ? R.drawable.ic_check_all : R.drawable.ic_check;
     }
 
+    public void clearList(){
+        this.messages = Collections.emptyList();
+        notifyDataSetChanged();
+    }
+
     static class ViewHolder {
         @BindView(R.id.tvChatMessage)
         TextView tvChatMessage;
