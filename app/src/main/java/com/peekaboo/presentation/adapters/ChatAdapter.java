@@ -63,6 +63,7 @@ public class ChatAdapter extends BaseAdapter implements Action1<List<PMessageAbs
         ViewHolder holder;
         if (view != null) {
             holder = (ViewHolder) view.getTag();
+            setAlignment(holder, pMessageObj.isMine());
         } else {
             view = inflater.inflate(R.layout.list_item_chat_message, parent, false);
 
