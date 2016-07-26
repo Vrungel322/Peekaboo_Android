@@ -4,7 +4,11 @@ import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
+import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import com.peekaboo.R;
@@ -27,6 +31,7 @@ import butterknife.OnClick;
 public class SignUpActivity extends AppCompatActivity implements ISignUpView {
 
     public static final String PROGRESS_DIALOG = "progress_dialog";
+    public static final String CONFIRM_SIGN_UP_DIALOG = "confirmSignUpDialog";
     @BindView(R.id.etEmail)
     EditText etLogin;
     @BindView(R.id.etUsername)
@@ -68,7 +73,7 @@ public class SignUpActivity extends AppCompatActivity implements ISignUpView {
     protected void onStart() {
         super.onStart();
         etUsername.setText("Vrungel");
-        etLogin.setText("nikita241296@gmail.com");
+        etLogin.setText("geronimoapachi@gmail.com");
         etPasswordConfirm.setText("asdasd");
         etPassword.setText("asdasd");
     }
@@ -82,7 +87,6 @@ public class SignUpActivity extends AppCompatActivity implements ISignUpView {
     @Override
     public void navigateToProfile() {
         navigator.startProfileActivity(this);
-        finish();
     }
 
 
@@ -119,7 +123,7 @@ public class SignUpActivity extends AppCompatActivity implements ISignUpView {
         ConfirmSignUpDialog confirmSignUpDialog = new ConfirmSignUpDialog();
         confirmSignUpDialog.setStyle(android.app.DialogFragment.STYLE_NO_TITLE, 0);
         confirmSignUpDialog.setStyle(android.app.DialogFragment.STYLE_NO_FRAME, 0);
-        confirmSignUpDialog.show(ft, "confirmSignUpDialog");
+        confirmSignUpDialog.show(ft, CONFIRM_SIGN_UP_DIALOG);
     }
 
     @OnClick(R.id.bSignIn)

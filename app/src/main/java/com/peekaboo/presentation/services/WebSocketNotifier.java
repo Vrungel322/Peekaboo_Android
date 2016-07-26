@@ -25,16 +25,16 @@ public class WebSocketNotifier implements INotifier {
     private final String TAG = "socket";
 
     private final User user;
-    private final Mapper<Message, String> messageToStringMapper;
-    private final Mapper<String, Message> stringToMessageMapper;
+    private final Mapper<Message, byte[]> messageToByteMapper;
+    private final Mapper<byte[], Message> byteToMessageMapper;
     @Nullable
     private WebSocket ws;
     private Set<NotificationListener> listeners = new HashSet<>();
 
     public WebSocketNotifier(User user, AbstractMapperFactory abstractMapperFactory) {
         this.user = user;
-        messageToStringMapper = abstractMapperFactory.getMessageToStringMapper();
-        stringToMessageMapper = abstractMapperFactory.getStringToMessageMapper();
+        messageToByteMapper = abstractMapperFactory.getMessageToByteMapper();
+        byteToMessageMapper = abstractMapperFactory.getByteToMessageMapper();
     }
 
     private void connectSocket() {
@@ -63,9 +63,9 @@ public class WebSocketNotifier implements INotifier {
                                 @Override
                                 public void onTextMessage(WebSocket websocket, String text) throws Exception {
                                     Log.e(TAG, "Status: Text Message received" + text);
-                                    for (NotificationListener listener : listeners) {
-                                        listener.onMessageObtained(stringToMessageMapper.transform(text));
-                                    }
+//                                    for (NotificationListener listener : listeners) {
+//                                        listener.onMessageObtained(byteToMessageMapper.transform(text));
+//                                    }
                                 }
                             })
                             .addHeader("Authorization", user.getBearer())
@@ -101,9 +101,13 @@ public class WebSocketNotifier implements INotifier {
     }
 
     @Override
-    public void sendMessage(String message, String receiver) {
+    public void sendMessage(Message message) {
+        sendBinaryMessage(messageToByteMapper.transform(message));
+    }
+
+    public void sendBinaryMessage(byte[] message) {
         if (ws != null) {
-            ws.sendText(message);
+            ws.sendBinary(message);
         }
     }
 

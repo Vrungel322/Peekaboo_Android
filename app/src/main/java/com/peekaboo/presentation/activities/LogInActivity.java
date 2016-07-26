@@ -30,6 +30,8 @@ import butterknife.OnClick;
 public class LogInActivity extends AppCompatActivity implements ICredentialsView {
 
     public static final String PROGRESS_DIALOG = "progress_dialog";
+    @Inject
+    static Bus bus;
     @BindView(R.id.etLogin)
     EditText etLogin;
     @BindView(R.id.etPassword)
@@ -48,9 +50,6 @@ public class LogInActivity extends AppCompatActivity implements ICredentialsView
     LoginPresenter loginPresenter;
     @Inject
     ActivityNavigator navigator;
-    @Inject
-    static Bus bus;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,7 +57,6 @@ public class LogInActivity extends AppCompatActivity implements ICredentialsView
         setContentView(R.layout.activity_log_in);
         ButterKnife.bind(this);
         Log.e("actionBar", String.valueOf(getSupportActionBar()));
-       // tvSignUp.setPaintFlags(tvSignUp.getPaintFlags() |   Paint.UNDERLINE_TEXT_FLAG);
         PeekabooApplication.getApp(this).getComponent().inject(this);
         loginPresenter.bind(this);
         loginPresenter.setCheckingInternet();
@@ -75,7 +73,6 @@ public class LogInActivity extends AppCompatActivity implements ICredentialsView
     @Override
     public void navigateToProfile() {
         navigator.startProfileActivity(this);
-        finish();
     }
 
     @Override
@@ -108,7 +105,7 @@ public class LogInActivity extends AppCompatActivity implements ICredentialsView
     }
 
     @OnClick(R.id.tvSingUp2)
-    void ontvSingUpClick(){
+    void ontvSingUpClick() {
         navigator.startSignUpActivity(this);
     }
 
@@ -120,7 +117,7 @@ public class LogInActivity extends AppCompatActivity implements ICredentialsView
     }
 
     @OnClick(R.id.bVk)
-    void onVkButtonClick(){
+    void onVkButtonClick() {
         loginPresenter.onVkButtonClick();
     }
 

@@ -12,9 +12,14 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.peekaboo.R;
+import com.peekaboo.data.mappers.ByteArrayToMessageMapper;
+import com.peekaboo.data.mappers.MessageToByteArrayMapper;
 import com.peekaboo.presentation.PeekabooApplication;
 import com.peekaboo.presentation.services.INotifier;
 import com.peekaboo.presentation.services.Message;
+
+
+import java.nio.charset.Charset;
 
 import javax.inject.Inject;
 
@@ -36,6 +41,7 @@ public class ServiceTestFragment extends Fragment implements INotifier.Notificat
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         PeekabooApplication.getApp(getActivity()).getComponent().inject(this);
+
         notifier.tryConnect();
     }
 
@@ -56,7 +62,7 @@ public class ServiceTestFragment extends Fragment implements INotifier.Notificat
         getActivity().findViewById(R.id.send_button).setOnClickListener(v -> {
             Log.e("available", String.valueOf(notifier.isAvailable()));
             if (notifier.isAvailable()) {
-                notifier.sendMessage(message.getText().toString(), receiver.getText().toString());
+//                notifier.sendMessage(message.getText().toString(), receiver.getText().toString());
             }
         });
     }
@@ -69,6 +75,6 @@ public class ServiceTestFragment extends Fragment implements INotifier.Notificat
 
     @Override
     public void onMessageObtained(Message message) {
-        messages.setText(messages.getText() + "\n" + message.getPayload());
+//        messages.setText(messages.getText() + "\n" + message.getPayload());
     }
 }

@@ -13,4 +13,6 @@ public interface AbstractMapperFactory {
 
     Mapper<Message, String> getMessageToStringMapper();
     Mapper<String, Message> getStringToMessageMapper();
+    Mapper<byte[], Message> getByteToMessageMapper();
+    Mapper<Message, byte[]> getMessageToByteMapper();
 }

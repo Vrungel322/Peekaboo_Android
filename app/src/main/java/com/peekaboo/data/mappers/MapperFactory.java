@@ -20,4 +20,14 @@ public class MapperFactory implements AbstractMapperFactory {
     public Mapper<String, Message> getStringToMessageMapper() {
         return new JsonMessageMapper();
     }
+
+    @Override
+    public Mapper<byte[], Message> getByteToMessageMapper() {
+        return new ByteArrayToMessageMapper();
+    }
+
+    @Override
+    public Mapper<Message, byte[]> getMessageToByteMapper() {
+        return new MessageToByteArrayMapper();
+    }
 }
