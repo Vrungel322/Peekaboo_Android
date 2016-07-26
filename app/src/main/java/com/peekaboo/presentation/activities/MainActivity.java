@@ -7,6 +7,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.peekaboo.R;
@@ -25,6 +26,11 @@ import butterknife.OnClick;
 public class MainActivity extends AppCompatActivity {
     @BindView(R.id.drawer_layout)
     DrawerLayout drawer;
+
+    @BindView(R.id.llDialogs)
+    LinearLayout llDialogs;
+    @BindView(R.id.llCalls)
+    LinearLayout llCalls;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,31 +53,32 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    @OnClick(R.id.lvDialogs)
+    @OnClick(R.id.llDialogs)
     public void lvDialogsClick(){
         changeFragment(new DialogsFragment(), "dialogsFragment");
     }
 
-    @OnClick(R.id.lvCalls)
+    @OnClick(R.id.llCalls)
     public void lvCallsClick(){
         changeFragment(new CallsFragment(), "callsFragment");
     }
-    @OnClick(R.id.lvContacts)
+
+    @OnClick(R.id.llContacts)
     public void lvContactsClick(){
         changeFragment(new ContactsFragment(), "contactsFragment");
     }
 
-    @OnClick(R.id.lvProfile)
+    @OnClick(R.id.llProfile)
     public void lvProfileClick(){
         changeFragment(new ProfileFragment(), "profileFragment");
     }
 
-    @OnClick(R.id.lvSettings)
+    @OnClick(R.id.llSettings)
     public void lvSettingsClick(){
         changeFragment(new SettingsFragment(), "settingsFragment");
     }
 
-    @OnClick(R.id.lvExit)
+    @OnClick(R.id.llExit)
     public void lvExitClick(){
         Toast.makeText(getApplicationContext(), "Log out", Toast.LENGTH_LONG).show();
     }

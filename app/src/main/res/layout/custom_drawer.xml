@@ -90,12 +90,15 @@
                     android:layout_height="match_parent"
                     android:layout_marginLeft="@dimen/items_margin"
                     android:layout_marginTop="@dimen/nav_padding_top"
+                    android:layout_marginRight="@dimen/divider_margin"
                     android:orientation="vertical">
 
                     <LinearLayout
-                        android:id="@+id/lvDialogs"
+                        android:id="@+id/llDialogs"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:clickable="true"
+                        android:background="@drawable/list_item_background"
                         android:orientation="horizontal">
 
                         <ImageView
@@ -114,10 +117,11 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:id="@+id/lvCalls"
+                        android:id="@+id/llCalls"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginTop="@dimen/nav_padding_top"
+                        android:background="@drawable/list_item_background"
                         android:orientation="horizontal">
 
                         <ImageView
@@ -136,16 +140,19 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:id="@+id/lvContacts"
+                        android:id="@+id/llContacts"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginTop="@dimen/nav_padding_top"
+                        android:background="@drawable/list_item_background"
                         android:orientation="horizontal">
 
                         <ImageView
                             android:id="@+id/ivIconContacts"
                             android:layout_width="@dimen/nav_icon_width"
                             android:layout_height="@dimen/nav_icon_height"
+                            android:paddingBottom="3dp"
+                            android:paddingTop="3dp"
                             android:src="@drawable/contacts" />
 
                         <TextView
@@ -158,10 +165,11 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:id="@+id/lvProfile"
+                        android:id="@+id/llProfile"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginTop="@dimen/nav_padding_top"
+                        android:background="@drawable/list_item_background"
                         android:orientation="horizontal">
 
                         <ImageView
@@ -194,13 +202,15 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginLeft="@dimen/items_margin"
+                    android:layout_marginRight="@dimen/divider_margin"
                     android:orientation="vertical">
 
                     <LinearLayout
-                        android:id="@+id/lvSettings"
+                        android:id="@+id/llSettings"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginTop="@dimen/nav_padding_top"
+                        android:background="@drawable/list_item_background"
                         android:orientation="horizontal">
 
                         <ImageView
@@ -219,10 +229,11 @@
                     </LinearLayout>
 
                     <LinearLayout
-                        android:id="@+id/lvExit"
+                        android:id="@+id/llExit"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginTop="@dimen/nav_padding_top"
+                        android:background="@drawable/list_item_background"
                         android:orientation="horizontal">
 
                         <ImageView

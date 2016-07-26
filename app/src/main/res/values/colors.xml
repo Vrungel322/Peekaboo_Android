@@ -11,4 +11,5 @@
     <color name="drawerDividerColor">#5b5b5b</color>
     <color name="colorControlNormal">#969696</color>
     <color name="nav_background">#303030</color>
+    <color name="drawer_item_selected">#08ffffff</color>
 </resources>
