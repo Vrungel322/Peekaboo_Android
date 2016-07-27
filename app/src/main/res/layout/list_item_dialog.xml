@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/dialog_item_margin"
         android:src="@mipmap/ic_launcher"
-        app:border_color="@color/peekaboo_color"
+        app:border_color="@color/colorAccent"
         app:border_width="@dimen/circle_photo_border_width" />
 
     <LinearLayout

@@ -24,8 +24,6 @@ public class AttachmentChatDialog extends DialogFragment {
     @BindView(R.id.attach_list)
     ListView lvAttachments;
 
-    private String[] attach_list_strings;
-
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         return new AlertDialog.Builder(getActivity())
@@ -48,40 +46,9 @@ public class AttachmentChatDialog extends DialogFragment {
                 .create();
     }
 
-    //
-//    @Nullable
-//    @Override
-//    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-//        attach_list_strings = getResources().getStringArray(R.array.attacment_list);
-//
-//        View view = inflater.inflate(R.layout.attach_dialog, container, false);
-//        ButterKnife.bind(this, view);
-//
-//        ArrayAdapter<String> adapter = new ArrayAdapter<>(view.getContext(), R.layout.attach_dialog_item, attach_list_strings);
-//
-//        lvAttachments.setAdapter(adapter);
-//        lvAttachments.setOnItemClickListener((adapterView, view1, i, l) -> {
-//            switch(i){
-//                case 0:
-//                    takePhoto();
-//                    break;
-//                case 1:
-//                    takeGaleryImage();
-//                    break;
-//                case 2:
-//                    Toast.makeText(getActivity().getApplicationContext(), "2", Toast.LENGTH_SHORT).show();
-//                    break;
-//                case 3:
-//                    Toast.makeText(getActivity().getApplicationContext(), "3", Toast.LENGTH_SHORT).show();
-//                    break;
-//            }
-//        });
-//        return view;
-//    }
-
     private void takeGaleryImage() {
         Intent intent = new Intent();
-        intent.setType("image/*"); // to open gallery
+        intent.setType("image/*");
         intent.setAction(Intent.ACTION_GET_CONTENT);
         getActivity().startActivityForResult(Intent.createChooser(intent, getActivity().getString(R.string.selectImage)), REQUEST_CODE_GALERY);
     }

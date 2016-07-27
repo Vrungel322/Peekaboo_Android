@@ -3,7 +3,7 @@
 
     <group >
         <item
-            android:title="DropDialogs"
+            android:title="Clear dialogs"
             android:id="@+id/dialogsDrop"/>
     </group>
 

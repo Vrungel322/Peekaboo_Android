@@ -18,26 +18,26 @@ import butterknife.ButterKnife;
 /**
  * Created by Nikita on 14.07.2016.
  */
-public class SearchFragment extends Fragment {
+public class CallsFragment extends Fragment {
     private View rootView;
 
-    public SearchFragment() {
+    public CallsFragment() {
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_search, container, false);
+        rootView = inflater.inflate(R.layout.fragment_calls, container, false);
         ButterKnife.bind(this, rootView);
         setHasOptionsMenu(true);
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Search");
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Calls");
 
         return rootView;
     }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.search_menu, menu);
+        inflater.inflate(R.menu.calls_menu, menu);
         super.onCreateOptionsMenu(menu, inflater);
     }
 

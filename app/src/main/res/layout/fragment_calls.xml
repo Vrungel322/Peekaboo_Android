@@ -4,13 +4,13 @@
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
-    tools:context=".presentation.fragments.SearchFragment">
+    tools:context=".presentation.fragments.CallsFragment">
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Search"
+        android:text="Calls"
         android:id="@+id/tvSearch"
         android:layout_gravity="center" />
 </FrameLayout>

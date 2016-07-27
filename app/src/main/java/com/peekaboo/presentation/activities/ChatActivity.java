@@ -9,19 +9,23 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.AbsListView;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.peekaboo.R;
+import com.peekaboo.data.repositories.database.PMessage;
 import com.peekaboo.presentation.PeekabooApplication;
-import com.peekaboo.presentation.adapters.ChatArrayAdapter;
-import com.peekaboo.presentation.database.PMessage;
 import com.peekaboo.presentation.dialogs.AttachmentChatDialog;
+import com.peekaboo.presentation.adapters.ChatAdapter;
+import com.peekaboo.presentation.fragments.ChatItemDialog;
 import com.peekaboo.presentation.presenters.ChatPresenter;
-import com.peekaboo.presentation.utils.ChatMessage;
+import com.peekaboo.utils.Constants;
 
 import java.io.IOException;
+import java.util.Random;
+import java.util.UUID;
 
 import javax.inject.Inject;
 
@@ -29,22 +33,26 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
+import rx.subscriptions.CompositeSubscription;
 
 /**
  * Created by Nataliia on 13.07.2016.
  */
-public class ChatActivity extends AppCompatActivity {
+public class ChatActivity extends AppCompatActivity implements ChatItemDialog.IChatItemEventListener {
 
     @BindView(R.id.etMessageBody)
     EditText etMessageBody;
     @BindView(R.id.lvMessages)
     ListView lvMessages;
+
     @Inject
     ChatPresenter chatPresenter;
 
-    private boolean side = true;
-    private ChatArrayAdapter chatArrayAdapter;
+    private ChatAdapter chatAdapter;
     private AttachmentChatDialog attachmentChatDialog;
+    private ChatItemDialog chatItemDialog;
+    private CompositeSubscription subscriptions;
+    private String receiverName;
 
 
     @Override
@@ -53,14 +61,49 @@ public class ChatActivity extends AppCompatActivity {
         setContentView(R.layout.chat_layout);
         ButterKnife.bind(this);
         PeekabooApplication.getApp(this).getComponent().inject(this);
+        receiverName = getIntent().getStringExtra(Constants.EXTRA_RECEIVER_NAME);
+        receiverName = "test";
+
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarChat);
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        if(null != receiverName){
+            toolbar.setTitle(receiverName);
+        }
 
-        chatArrayAdapter = new ChatArrayAdapter(getApplicationContext(), R.layout.list_item_chat_message_right);
-        lvMessages.setAdapter(chatArrayAdapter);
+        chatAdapter = new ChatAdapter(getApplicationContext());
+        lvMessages.setAdapter(chatAdapter);
+        lvMessages.setStackFromBottom(true);
+        lvMessages.setTranscriptMode(AbsListView.TRANSCRIPT_MODE_ALWAYS_SCROLL);
         OverScrollDecoratorHelper.setUpOverScroll(lvMessages);
+
+        chatPresenter.createTable(receiverName);
+
+        lvMessages.setOnItemLongClickListener((parent, view, position, id) -> {
+            FragmentTransaction ft = getFragmentManager().beginTransaction();
+            chatItemDialog = new ChatItemDialog();
+            Bundle itemIndexBundle = new Bundle();
+            itemIndexBundle.putInt(Constants.ARG_CHAT_MESSAGE_ITEM_INDEX, position);
+            chatItemDialog.setArguments(itemIndexBundle);
+            chatItemDialog.show(ft, Constants.FRAGMENT_TAGS.CHAT_ITEM_DIALOG_FRAGMENT_TAG);
+            return true;
+        });
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        subscriptions = new CompositeSubscription();
+        subscriptions.add(chatPresenter.getAllMessages(receiverName, chatAdapter));
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        subscriptions.unsubscribe();
+        chatPresenter.onPause();
     }
 
     @Override
@@ -73,7 +116,8 @@ public class ChatActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.dialogsDrop:{
-                chatPresenter.dropTableAndCreate("test");
+                chatPresenter.dropTableAndCreate(receiverName);
+                chatAdapter.clearList();
                 break;
             }
         }
@@ -93,17 +137,22 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private boolean sendChatMessage() {
-        String msgBody = etMessageBody.getText().toString();
-        chatArrayAdapter.add(new ChatMessage(side, msgBody, null));
-        chatArrayAdapter.notifyDataSetChanged();
+        String msgBody = etMessageBody.getText().toString().trim().replaceAll("[\\s&&[^\r?\n]]+", " ");
+        if(null == msgBody || msgBody.equals("")){
+            return false;
+        }
+        String pckgId = UUID.randomUUID().toString();
+        long timestamp = System.currentTimeMillis();
+        // for test
+        Random random = new Random();
+        boolean isMine = random.nextBoolean();
+        chatPresenter.makeNoteInTable(receiverName, new PMessage(pckgId, isMine, msgBody,
+                timestamp, false, false, false));
         etMessageBody.setText("");
         //TODO: actually sending
-        //TODO: save into db
+
         //DB testing
-        chatPresenter.createTable("test"); // should be done when friend add
-            chatPresenter.makeNoteInTable(new PMessage("idPack", true, msgBody,
-                    System.currentTimeMillis(), true, false, false), "test");
-        chatPresenter.getTableAsString("test");
+//        chatPresenter.getTableAsString(receiverName);
         return true;
     }
 
@@ -127,6 +176,22 @@ public class ChatActivity extends AppCompatActivity {
     }
 
     private void sendPhoto(Bitmap photo){
-        chatArrayAdapter.add(new ChatMessage(side, "", photo));
+        chatPresenter.makeNoteInTable(receiverName, new PMessage("photoPckgId", true, "PHOTO",
+                System.currentTimeMillis(), false, false, false));
+    }
+
+    @Override
+    public void copyText(int index) {
+        chatPresenter.copyMessageText(chatAdapter.getItem(index));
+    }
+
+    @Override
+    public void deleteMess(int index) {
+        chatPresenter.deleteMessageByPackageId(receiverName, chatAdapter.getItem(index));
+    }
+
+    @Override
+    public void textToSpeech(int index) {
+        chatPresenter.convertTextToSpeech(chatAdapter.getItem(index));
     }
 }

@@ -5,6 +5,7 @@ import android.content.SharedPreferences;
 
 import com.peekaboo.data.di.DataModule;
 import com.peekaboo.data.mappers.MapperFactory;
+import com.peekaboo.data.repositories.database.DbModule;
 import com.peekaboo.domain.User;
 import com.peekaboo.domain.schedulers.ObserveOn;
 import com.peekaboo.domain.schedulers.SubscribeOn;
@@ -19,7 +20,7 @@ import dagger.Provides;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-@Module(includes = DataModule.class)
+@Module(includes = {DataModule.class, DbModule.class})
 public class ApplicationModule {
     private final Context application;
 
@@ -47,13 +48,13 @@ public class ApplicationModule {
 
     @Singleton
     @Provides
-    SharedPreferences provideSharedPreferences(Context mContext){
+    SharedPreferences provideSharedPreferences(Context mContext) {
         return mContext.getSharedPreferences("com.peekaboo.Peekaboo", mContext.MODE_PRIVATE);
     }
 
 
     @Provides
-    Bus provideEventBus(){
+    Bus provideEventBus() {
         return new Bus();
     }
 
