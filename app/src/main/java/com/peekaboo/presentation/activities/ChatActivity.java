@@ -25,6 +25,7 @@ import com.peekaboo.utils.Constants;
 
 import java.io.IOException;
 import java.util.Random;
+import java.util.UUID;
 
 import javax.inject.Inject;
 
@@ -116,6 +117,7 @@ public class ChatActivity extends AppCompatActivity implements ChatItemDialog.IC
         switch (item.getItemId()){
             case R.id.dialogsDrop:{
                 chatPresenter.dropTableAndCreate(receiverName);
+                chatAdapter.clearList();
                 break;
             }
         }
@@ -139,9 +141,12 @@ public class ChatActivity extends AppCompatActivity implements ChatItemDialog.IC
         if(null == msgBody || msgBody.equals("")){
             return false;
         }
-        String pckgId = String.valueOf(new Random().nextInt(9999999));
+        String pckgId = UUID.randomUUID().toString();
         long timestamp = System.currentTimeMillis();
-        chatPresenter.makeNoteInTable(receiverName, new PMessage(pckgId, true, msgBody,
+        // for test
+        Random random = new Random();
+        boolean isMine = random.nextBoolean();
+        chatPresenter.makeNoteInTable(receiverName, new PMessage(pckgId, isMine, msgBody,
                 timestamp, false, false, false));
         etMessageBody.setText("");
         //TODO: actually sending
