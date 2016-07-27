@@ -2,6 +2,7 @@ package com.peekaboo.data.di;
 
 import android.content.Context;
 import android.speech.tts.TextToSpeech;
+import android.widget.Toast;
 
 import com.peekaboo.R;
 import com.peekaboo.data.Constants;
@@ -111,7 +112,11 @@ public class DataModule {
     @Singleton
     public TextToSpeech provideTextToSpeech(Context context){
         textToSpeech = new TextToSpeech(context, status -> {
-            textToSpeech.setLanguage(Locale.US);
+            if(status == TextToSpeech.SUCCESS){
+                textToSpeech.setLanguage(Locale.US);
+            } else if (status == TextToSpeech.ERROR) {
+                Toast.makeText(context, "Sorry! Text To Speech failed...", Toast.LENGTH_LONG).show();
+            }
         });
         return textToSpeech;
     }
