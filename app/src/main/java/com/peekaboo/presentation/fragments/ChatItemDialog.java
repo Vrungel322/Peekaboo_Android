@@ -22,13 +22,14 @@ import butterknife.ButterKnife;
  * Created by Nataliia on 18.07.2016.
  */
 
-public class ChatItemDialog extends DialogFragment{
+public class ChatItemDialog extends DialogFragment {
     @BindView(R.id.chat_item_list)
     ListView lvChatItem;
 
     public interface IChatItemEventListener {
-         void copyText(int index);
-         void deleteMess(int index);
+        void copyText(int index);
+        void deleteMess(int index);
+        void textToSpeech(int index);
     }
 
     IChatItemEventListener chatItemEventListener;
@@ -70,14 +71,12 @@ public class ChatItemDialog extends DialogFragment{
         lvChatItem.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                switch(i){
+                switch (i) {
                     case 0:
                         chatItemEventListener.copyText(itemIndex);
-                        dismiss();
                         break;
                     case 1:
                         chatItemEventListener.deleteMess(itemIndex);
-                        dismiss();
                         break;
                     case 2:
                         Toast.makeText(getActivity(), "2", Toast.LENGTH_SHORT).show();
@@ -85,7 +84,11 @@ public class ChatItemDialog extends DialogFragment{
                     case 3:
                         Toast.makeText(getActivity(), "3", Toast.LENGTH_SHORT).show();
                         break;
+                    case 4:
+                        chatItemEventListener.textToSpeech(itemIndex);
+                        break;
                 }
+                dismiss();
             }
         });
         return view;

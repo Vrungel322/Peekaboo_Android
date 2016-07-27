@@ -13,6 +13,8 @@ import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKAccessTokenTracker;
 import com.vk.sdk.VKSdk;
 
+import timber.log.Timber;
+
 
 /**
  * Created by sebastian on 14.06.16.
@@ -45,6 +47,7 @@ public class PeekabooApplication extends Application {
         NotificationService.launch(this, null);
         vkAccessTokenTracker.startTracking();
         VKSdk.initialize(this);
+        Timber.plant(new Timber.DebugTree());
     }
 
     private void buildAppComponent() {
