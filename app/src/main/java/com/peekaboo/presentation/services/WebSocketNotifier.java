@@ -22,19 +22,20 @@ import java.util.Set;
 public class WebSocketNotifier implements INotifier {
     public static final String BASE_URL_SOCKET = Constants.BASE_URL_SOCKET;
     public static final int TIMEOUT = 5000;
+    public static final String AUTHORIZATION = "Authorization";
     private final String TAG = "socket";
 
     private final User user;
-    private final Mapper<Message, byte[]> messageToByteMapper;
-    private final Mapper<byte[], Message> byteToMessageMapper;
+    private final Mapper<Message, byte[]> mtb;
+    private final Mapper<byte[], Message> btm;
     @Nullable
     private WebSocket ws;
     private Set<NotificationListener> listeners = new HashSet<>();
 
     public WebSocketNotifier(User user, AbstractMapperFactory abstractMapperFactory) {
         this.user = user;
-        messageToByteMapper = abstractMapperFactory.getMessageToByteMapper();
-        byteToMessageMapper = abstractMapperFactory.getByteToMessageMapper();
+        mtb = abstractMapperFactory.getMessageToByteMapper();
+        btm = abstractMapperFactory.getByteToMessageMapper();
     }
 
     private void connectSocket() {
@@ -55,20 +56,25 @@ public class WebSocketNotifier implements INotifier {
                                 }
 
                                 @Override
-                                public void onDisconnected(WebSocket websocket, WebSocketFrame serverCloseFrame, WebSocketFrame clientCloseFrame, boolean closedByServer) throws Exception {
+                                public void onDisconnected(WebSocket websocket, WebSocketFrame serverCloseFrame,
+                                                           WebSocketFrame clientCloseFrame, boolean closedByServer) throws Exception {
                                     Log.e(TAG, "Status: Disconnected ");
-                                    reconnect();
+//                                    reconnect();
                                 }
 
                                 @Override
-                                public void onTextMessage(WebSocket websocket, String text) throws Exception {
-                                    Log.e(TAG, "Status: Text Message received" + text);
-//                                    for (NotificationListener listener : listeners) {
-//                                        listener.onMessageObtained(byteToMessageMapper.transform(text));
-//                                    }
+                                public void onBinaryMessage(WebSocket websocket, byte[] binary) throws Exception {
+                                    Message obtainedMessage = btm.transform(binary);
+                                    Log.e(TAG, "Status: Text Message received" + obtainedMessage);
+
+                                }
+
+                                @Override
+                                public void onPongFrame(WebSocket websocket, WebSocketFrame frame) throws Exception {
+                                    Log.e(TAG, "Status: Pong received " + frame);
                                 }
                             })
-                            .addHeader("Authorization", user.getBearer())
+                            .addHeader(AUTHORIZATION, user.getBearer())
                             .connectAsynchronously();
                 } catch (IOException e) {
                     Log.e(TAG, "exception " + e);
@@ -102,13 +108,12 @@ public class WebSocketNotifier implements INotifier {
 
     @Override
     public void sendMessage(Message message) {
-        sendBinaryMessage(messageToByteMapper.transform(message));
+        sendBinaryMessage(mtb.transform(message));
     }
 
     public void sendBinaryMessage(byte[] message) {
-        if (ws != null) {
-            ws.sendBinary(message);
-        }
+        Log.e("user", user.getId());
+        ws.sendBinary(message);
     }
 
     @Override

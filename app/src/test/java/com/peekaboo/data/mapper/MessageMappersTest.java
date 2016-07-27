@@ -15,40 +15,66 @@ public class MessageMappersTest {
 
     @Test
     public void checkBodylessConvertation() {
-
-
         Message message = new Message(Message.Command.SEND);
-        message.addParam(Message.Params.TYPE, "audio");
+        message.addParam(Message.Params.TYPE, Message.Type.TEXT);
         message.addParam(Message.Params.DATE, "asd1");
         message.addParam(Message.Params.REASON, "asd2");
 
-
-//        message.addParam(Message.Params.TYPE, "text");
-//        message.setBody(new byte[] {1,2,3});
-        assertEquals(message, btm.transform(mtb.transform(message)));
+        Message transform = btm.transform(mtb.transform(message));
+        assertEquals(message, transform);
     }
+
+    @Test
+    public void toStringTest() {
+        Message withBodyText = new Message(Message.Command.SEND)
+                .addParam(Message.Params.TYPE, Message.Type.TEXT)
+                .setTextBody("asd");
+
+        Message withoutBodyText = new Message(Message.Command.SEND)
+                .addParam(Message.Params.TYPE, Message.Type.TEXT);
+
+        Message withBodyBinary = new Message(Message.Command.SEND)
+                .addParam(Message.Params.TYPE, Message.Type.AUDIO)
+                .setBody(new byte[] {1,2,3});
+
+        Message withoutBodyBinary = new Message(Message.Command.SEND)
+                .addParam(Message.Params.TYPE, Message.Type.AUDIO);
+
+        btm.transform(mtb.transform(withBodyText)).toString();
+        btm.transform(mtb.transform(withoutBodyText)).toString();
+        btm.transform(mtb.transform(withBodyBinary)).toString();
+        btm.transform(mtb.transform(withoutBodyBinary)).toString();
+    }
+
 
     @Test
     public void checkTextBody() {
         Message message = new Message(Message.Command.SEND);
-        message.addParam(Message.Params.TYPE, "text");
+        message.addParam(Message.Params.TYPE, Message.Type.TEXT);
         message.addParam(Message.Params.DATE, "asd1");
         message.addParam(Message.Params.REASON, "asd2");
 
-        message.setTextBody("asdasd");
+        Message transform = btm.transform(mtb.transform(message));
+        assertEquals(message, transform);
 
-        assertEquals(message, btm.transform(mtb.transform(message)));
+        message.setTextBody("asdasd");
+        transform = btm.transform(mtb.transform(message));
+        assertEquals(message, transform);
+
     }
 
     @Test
     public void checkBinaryBody() {
         Message message = new Message(Message.Command.SEND);
-        message.addParam(Message.Params.TYPE, "text");
+        message.addParam(Message.Params.TYPE, Message.Type.AUDIO);
         message.addParam(Message.Params.DATE, "asd1");
         message.addParam(Message.Params.REASON, "asd2");
 
-        message.setBody(new byte[] {1,2,3});
+        Message transform = btm.transform(mtb.transform(message));
+        assertEquals(message, transform);
 
-        assertEquals(message, btm.transform(mtb.transform(message)));
+        message.setBody(new byte[]{1, 2, 3});
+        transform = btm.transform(mtb.transform(message));
+        assertEquals(message, transform);
     }
 }

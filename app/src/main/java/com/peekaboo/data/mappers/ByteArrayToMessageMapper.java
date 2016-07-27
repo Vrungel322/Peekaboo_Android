@@ -21,7 +21,7 @@ public class ByteArrayToMessageMapper implements Mapper<byte[], Message> {
         int bodyStart = paramsPair.second;
         if (bodyStart < obj.length) {
             byte[] body = getBody(obj, bodyStart);
-            if ("text".equals(paramsPair.first.get(Message.Params.TYPE))) {
+            if (Message.Type.TEXT.equals(paramsPair.first.get(Message.Params.TYPE))) {
                 message.setTextBody(new String(body));
             } else {
                 message.setBody(body);

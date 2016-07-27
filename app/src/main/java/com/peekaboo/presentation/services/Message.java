@@ -19,46 +19,58 @@ public class Message {
         this.command = command;
     }
 
-    public void addParam(Params param, String value) {
+    public Message addParam(Params param, String value) {
         params.put(param, value);
+        return this;
     }
 
     public byte[] getBody() {
         return body;
     }
 
-    public void setBody(byte[] body) {
+    public Message setBody(byte[] body) {
         this.body = body;
+        return this;
+
     }
 
-    public void setTextBody(String body) {
+    public Message setTextBody(String body) {
         this.body = body.getBytes(UTF_8);
+        return this;
     }
 
     public Command getCommand() {
         return command;
     }
 
-    public void setCommand(Command command) {
+    public Message setCommand(Command command) {
         this.command = command;
+        return this;
     }
 
     public Map<Params, String> getParams() {
         return params;
     }
 
-    public void setParams(Map<Params, String> params) {
+    public Message setParams(Map<Params, String> params) {
         for (Map.Entry<Params, String> param : params.entrySet()) {
             addParam(param.getKey(), param.getValue());
         }
+        return this;
     }
 
     @Override
     public String toString() {
+        String bodyString = body == null
+                ? "null" :
+                (Type.TEXT.equals(params.get(Params.TYPE))
+                        ? new String(body) :
+                        Arrays.toString(body));
+
         return "Message{" +
                 "command=" + command +
                 ", params=" + params +
-                ", body=" + Arrays.toString(body) +
+                ", body=" + bodyString +
                 '}';
     }
 
@@ -86,4 +98,9 @@ public class Message {
     public enum Command {ACCEPT, CALL, REJECT, SEND, MESSAGE, NONE}
 
     public enum Params {DESTINATION, FROM, TYPE, REASON, DATE}
+
+    public interface Type {
+        String TEXT = "text";
+        String AUDIO = "audio";
+    }
 }

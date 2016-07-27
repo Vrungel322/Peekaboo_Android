@@ -6,7 +6,7 @@ import com.peekaboo.presentation.activities.LogInActivity;
 import com.peekaboo.presentation.activities.MainActivity;
 import com.peekaboo.presentation.activities.SignUpActivity;
 import com.peekaboo.presentation.activities.SplashActivity;
-import com.peekaboo.presentation.fragments.ConfirmSignUpDialog;
+import com.peekaboo.presentation.dialogs.ConfirmSignUpDialog;
 import com.peekaboo.presentation.fragments.ServiceTestFragment;
 import com.peekaboo.presentation.services.NotificationService;
 

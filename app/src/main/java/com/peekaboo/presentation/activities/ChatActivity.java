@@ -17,7 +17,7 @@ import com.peekaboo.R;
 import com.peekaboo.presentation.PeekabooApplication;
 import com.peekaboo.presentation.adapters.ChatArrayAdapter;
 import com.peekaboo.presentation.database.PMessage;
-import com.peekaboo.presentation.fragments.AttachmentChatDialog;
+import com.peekaboo.presentation.dialogs.AttachmentChatDialog;
 import com.peekaboo.presentation.presenters.ChatPresenter;
 import com.peekaboo.presentation.utils.ChatMessage;
 

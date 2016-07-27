@@ -12,18 +12,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.peekaboo.R;
-import com.peekaboo.data.mappers.ByteArrayToMessageMapper;
-import com.peekaboo.data.mappers.MessageToByteArrayMapper;
+import com.peekaboo.domain.MessageUtils;
 import com.peekaboo.presentation.PeekabooApplication;
 import com.peekaboo.presentation.services.INotifier;
 import com.peekaboo.presentation.services.Message;
 
-
-import java.nio.charset.Charset;
-
 import javax.inject.Inject;
-
-import butterknife.ButterKnife;
 
 public class ServiceTestFragment extends Fragment implements INotifier.NotificationListener {
 
@@ -59,10 +53,20 @@ public class ServiceTestFragment extends Fragment implements INotifier.Notificat
         message = (EditText) getActivity().findViewById(R.id.message);
         messages = (TextView) getActivity().findViewById(R.id.messages);
         receiver = (EditText) getActivity().findViewById(R.id.receiver);
+
+        getActivity().findViewById(R.id.reconnect_button).setOnClickListener(v -> {
+            Log.e("available", String.valueOf(notifier.isAvailable()));
+            notifier.tryConnect();
+        });
+
         getActivity().findViewById(R.id.send_button).setOnClickListener(v -> {
             Log.e("available", String.valueOf(notifier.isAvailable()));
             if (notifier.isAvailable()) {
-//                notifier.sendMessage(message.getText().toString(), receiver.getText().toString());
+                String textMessage = this.message.getText().toString();
+                String receiver = this.receiver.getText().toString();
+                Message message = MessageUtils.createTextMessage(textMessage, "ff8081815611542b0156115e44bf0002");
+                Log.e("message", message.toString());
+                notifier.sendMessage(message);
             }
         });
     }
@@ -75,6 +79,6 @@ public class ServiceTestFragment extends Fragment implements INotifier.Notificat
 
     @Override
     public void onMessageObtained(Message message) {
-//        messages.setText(messages.getText() + "\n" + message.getPayload());
+        messages.setText(messages.getText() + "\n" + new String(message.getBody()));
     }
 }
