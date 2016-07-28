@@ -146,7 +146,7 @@ public class ChatActivity extends AppCompatActivity implements ChatItemDialog.IC
         // for test
         Random random = new Random();
         boolean isMine = random.nextBoolean();
-        chatPresenter.makeNoteInTable(receiverName, new PMessage(pckgId, isMine, msgBody,
+        chatPresenter.insertMessageToTable(receiverName, new PMessage(pckgId, isMine, msgBody,
                 timestamp, false, false, false));
         etMessageBody.setText("");
         //TODO: actually sending
@@ -176,7 +176,7 @@ public class ChatActivity extends AppCompatActivity implements ChatItemDialog.IC
     }
 
     private void sendPhoto(Bitmap photo){
-        chatPresenter.makeNoteInTable(receiverName, new PMessage("photoPckgId", true, "PHOTO",
+        chatPresenter.insertMessageToTable(receiverName, new PMessage("photoPckgId", true, "PHOTO",
                 System.currentTimeMillis(), false, false, false));
     }
 
