@@ -24,7 +24,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-public class SessiondataRepositoryTest {
+public class SessionDataRepositoryTest {
     public static final String TOKEN = "token";
     public static final String ID = "id";
     @Mock

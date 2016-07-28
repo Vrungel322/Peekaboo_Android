@@ -63,7 +63,6 @@
 
         </com.peekaboo.presentation.app.view.HelveticaTextInputLayout>
 
-
         <com.peekaboo.presentation.app.view.HelveticaTextInputLayout
             android:id="@+id/ilPasswordConfirm"
             android:layout_width="match_parent"
@@ -81,31 +80,25 @@
         </com.peekaboo.presentation.app.view.HelveticaTextInputLayout>
 
         <com.peekaboo.presentation.app.view.HelveticaButton
+
             android:id="@+id/bSignIn"
             android:layout_width="match_parent"
             android:layout_height="@dimen/credentials_button_height"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="@dimen/padding_signup_side"
             android:text="@string/createAccount"
-            android:background="@drawable/rounded_button_pressed"
             android:textAllCaps="false"
-            android:textSize="16sp"/>
+            android:textSize="16sp"
+            android:background="@drawable/button"
+            />
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
-            android:orientation="horizontal"
-            android:padding="@dimen/padding_top">
+            android:orientation="horizontal">
 
-            <com.peekaboo.presentation.app.view.HelveticaTextView
-                android:id="@+id/tvSignUp1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:padding="@dimen/text_padding"
-                android:text="@string/bySignUp1" />
-
-            <com.peekaboo.presentation.app.view.HelveticaTextView
+           <com.peekaboo.presentation.app.view.HelveticaTextView
                 android:id="@+id/tvSingUp2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -121,15 +114,20 @@
                 android:padding="@dimen/text_padding"
                 android:text="@string/bySignUp3" />
 
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal">
+
             <com.peekaboo.presentation.app.view.HelveticaTextView
                 android:id="@+id/tvSignUp4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:clickable="true"
-                android:padding="@dimen/text_padding"
                 android:text="@string/bySignUp4"
                 android:textColor="@color/textColor" />
-
         </LinearLayout>
 
     </LinearLayout>
