@@ -1,6 +1,8 @@
 package com.peekaboo.data.di;
 
 import android.content.Context;
+import android.speech.tts.TextToSpeech;
+import android.widget.Toast;
 
 import com.peekaboo.R;
 import com.peekaboo.data.Constants;
@@ -16,6 +18,7 @@ import com.peekaboo.domain.User;
 
 import java.io.InputStream;
 import java.security.KeyStore;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Singleton;
@@ -34,6 +37,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 @Module
 public class DataModule {
 
+    TextToSpeech textToSpeech;
 
     private SSLSocketFactory newSslSocketFactory(Context context) {
         try {
@@ -102,6 +106,19 @@ public class DataModule {
     @Singleton
     public SessionRepository provideRepository(User user, RestApi restApi) {
         return new SessionDataRepository(restApi, new MapperFactory(), user);
+    }
+
+    @Provides
+    @Singleton
+    public TextToSpeech provideTextToSpeech(Context context){
+        textToSpeech = new TextToSpeech(context, status -> {
+            if(status == TextToSpeech.SUCCESS){
+                textToSpeech.setLanguage(Locale.US);
+            } else if (status == TextToSpeech.ERROR) {
+                Toast.makeText(context, "Sorry! Text To Speech failed...", Toast.LENGTH_LONG).show();
+            }
+        });
+        return textToSpeech;
     }
 
     @Provides

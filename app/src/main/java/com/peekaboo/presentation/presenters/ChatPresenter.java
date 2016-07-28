@@ -3,6 +3,7 @@ package com.peekaboo.presentation.presenters;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.speech.tts.TextToSpeech;
 import android.util.Log;
 
 import com.peekaboo.data.mappers.AbstractMapperFactory;
@@ -23,28 +24,30 @@ public class ChatPresenter {
     private Context context;
     PMessageHelper pMessageHelper;
     AbstractMapperFactory mapperFactory;
+    TextToSpeech textToSpeech;
 
     @Inject
     public ChatPresenter(Context context, PMessageHelper pMessageHelper,
-                         AbstractMapperFactory mapperFactory) {
+                         AbstractMapperFactory mapperFactory, TextToSpeech textToSpeech) {
         this.context = context;
         this.pMessageHelper = pMessageHelper;
         this.mapperFactory = mapperFactory;
+        this.textToSpeech = textToSpeech;
     }
 
-    public void createTable(String tableName){
+    public void createTable(String tableName) {
         pMessageHelper.createTable(tableName);
     }
 
-    public void makeNoteInTable(String tableName, PMessage msg){
+    public void makeNoteInTable(String tableName, PMessage msg) {
         pMessageHelper.insert(tableName, mapperFactory.getPMessageMapper().transform(msg));
     }
 
-    public void dropTableAndCreate(String tableName){
+    public void dropTableAndCreate(String tableName) {
         pMessageHelper.dropTableAndCreate(tableName);
     }
 
-    public Subscription getAllMessages (String tableName, Action1 adapter){
+    public Subscription getAllMessages(String tableName, Action1 adapter) {
         return pMessageHelper.getAllMessages(tableName).subscribe(adapter);
     }
 
@@ -52,7 +55,7 @@ public class ChatPresenter {
         return pMessageHelper.getAllMessages(tableName)
                 .subscribe(pMessageAbses -> {
                     for (PMessageAbs message : pMessageAbses) {
-                        Log.wtf("DB_LOG" ,"ID: " + message.id()
+                        Log.wtf("DB_LOG", "ID: " + message.id()
                                 + "; PACKAGE_ID: " + message.packageId()
                                 + "; BODY: " + message.messageBody()
                                 + "; TIMESTAMP: " + message.timestamp()
@@ -64,13 +67,23 @@ public class ChatPresenter {
                 });
     }
 
-    public int deleteMessageByPackageId(String tableName, PMessageAbs message){
+    public int deleteMessageByPackageId(String tableName, PMessageAbs message) {
         return pMessageHelper.deleteMessageByPackageId(tableName, message.packageId());
     }
 
-    public void copyMessageText(PMessageAbs message){
+    public void copyMessageText(PMessageAbs message) {
         ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
         ClipData clip = ClipData.newPlainText("", message.messageBody());
         clipboard.setPrimaryClip(clip);
+    }
+
+    public void convertTextToSpeech(PMessageAbs message) {
+        textToSpeech.speak(message.messageBody(), TextToSpeech.QUEUE_FLUSH, null);
+    }
+
+    public void onPause(){
+        if(textToSpeech != null){
+            textToSpeech.stop();
+        }
     }
 }

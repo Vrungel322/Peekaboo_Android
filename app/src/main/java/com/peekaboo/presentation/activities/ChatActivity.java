@@ -34,7 +34,6 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
 import rx.subscriptions.CompositeSubscription;
-import timber.log.Timber;
 
 /**
  * Created by Nataliia on 13.07.2016.
@@ -90,6 +89,7 @@ public class ChatActivity extends AppCompatActivity implements ChatItemDialog.IC
             chatItemDialog.show(ft, Constants.FRAGMENT_TAGS.CHAT_ITEM_DIALOG_FRAGMENT_TAG);
             return true;
         });
+
     }
 
     @Override
@@ -97,13 +97,13 @@ public class ChatActivity extends AppCompatActivity implements ChatItemDialog.IC
         super.onResume();
         subscriptions = new CompositeSubscription();
         subscriptions.add(chatPresenter.getAllMessages(receiverName, chatAdapter));
-        subscriptions.add(chatPresenter.getTableAsString(receiverName));
     }
 
     @Override
     protected void onPause() {
         super.onPause();
         subscriptions.unsubscribe();
+        chatPresenter.onPause();
     }
 
     @Override
@@ -152,7 +152,7 @@ public class ChatActivity extends AppCompatActivity implements ChatItemDialog.IC
         //TODO: actually sending
 
         //DB testing
-        chatPresenter.getTableAsString(receiverName);
+//        chatPresenter.getTableAsString(receiverName);
         return true;
     }
 
@@ -182,13 +182,16 @@ public class ChatActivity extends AppCompatActivity implements ChatItemDialog.IC
 
     @Override
     public void copyText(int index) {
-        Timber.tag("ChatActivity").v("copyText");
         chatPresenter.copyMessageText(chatAdapter.getItem(index));
     }
 
     @Override
     public void deleteMess(int index) {
-        Timber.tag("ChatActivity").v("deleteMess");
         chatPresenter.deleteMessageByPackageId(receiverName, chatAdapter.getItem(index));
+    }
+
+    @Override
+    public void textToSpeech(int index) {
+        chatPresenter.convertTextToSpeech(chatAdapter.getItem(index));
     }
 }

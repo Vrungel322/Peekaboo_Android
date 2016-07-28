@@ -49,6 +49,7 @@
         <item>Delete</item>
         <item>Reply</item>
         <item>Forward</item>
+        <item>TEST: To speech</item>
     </string-array>
 
     <!-- TODO: Remove or change this placeholder payload -->
