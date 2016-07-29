@@ -44,7 +44,6 @@ public class ChatItemDialog extends DialogFragment {
         itemIndex = args.getInt(Constants.ARG_CHAT_MESSAGE_ITEM_INDEX);
     }
 
-
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);

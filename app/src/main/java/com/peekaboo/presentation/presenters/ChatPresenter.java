@@ -89,7 +89,7 @@ public class ChatPresenter implements IChatPresenter {
     }
 
     @Override
-    public void onPause(){
+    public void onPause() {
         if(textToSpeech != null){
             textToSpeech.stop();
         }
