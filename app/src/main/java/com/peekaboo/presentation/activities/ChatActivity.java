@@ -69,7 +69,7 @@ public class ChatActivity extends AppCompatActivity implements ChatItemDialog.IC
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         if(null != receiverName){
-            toolbar.setTitle(receiverName);
+            getSupportActionBar().setTitle(receiverName);
         }
 
         chatAdapter = new ChatAdapter(getApplicationContext());
