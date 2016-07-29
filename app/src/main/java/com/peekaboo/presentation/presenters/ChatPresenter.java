@@ -5,6 +5,7 @@ import android.content.ClipboardManager;
 import android.content.Context;
 import android.speech.tts.TextToSpeech;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.peekaboo.data.mappers.AbstractMapperFactory;
 import com.peekaboo.data.repositories.database.PMessage;
@@ -65,6 +66,12 @@ public class ChatPresenter {
                                 + "; IS_READ: " + message.isRead());
                     }
                 });
+    }
+
+    public Subscription getUnreadMessagesCount(String tableName){
+        return pMessageHelper.getUnreadMessagesCount(tableName)
+                .subscribe(pMessageAbses ->
+                        Toast.makeText(context, "Unread messages = "+pMessageAbses.size(), Toast.LENGTH_SHORT).show());
     }
 
     public int deleteMessageByPackageId(String tableName, PMessageAbs message) {

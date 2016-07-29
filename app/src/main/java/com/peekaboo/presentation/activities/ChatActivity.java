@@ -89,7 +89,6 @@ public class ChatActivity extends AppCompatActivity implements ChatItemDialog.IC
             chatItemDialog.show(ft, Constants.FRAGMENT_TAGS.CHAT_ITEM_DIALOG_FRAGMENT_TAG);
             return true;
         });
-
     }
 
     @Override
@@ -97,6 +96,7 @@ public class ChatActivity extends AppCompatActivity implements ChatItemDialog.IC
         super.onResume();
         subscriptions = new CompositeSubscription();
         subscriptions.add(chatPresenter.getAllMessages(receiverName, chatAdapter));
+        subscriptions.add(chatPresenter.getUnreadMessagesCount(receiverName));
     }
 
     @Override
