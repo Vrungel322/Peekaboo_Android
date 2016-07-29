@@ -42,6 +42,7 @@
         <item>Pic from gallery</item>
         <item>Audio</item>
         <item>Document</item>
+        <item>TEST: Voice</item>
     </string-array>
 
     <string-array name="edit_chat_item">

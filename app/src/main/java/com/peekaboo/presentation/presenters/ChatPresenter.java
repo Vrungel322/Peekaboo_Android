@@ -11,6 +11,7 @@ import com.peekaboo.data.mappers.AbstractMapperFactory;
 import com.peekaboo.data.repositories.database.PMessage;
 import com.peekaboo.data.repositories.database.PMessageAbs;
 import com.peekaboo.data.repositories.database.PMessageHelper;
+import com.peekaboo.presentation.views.IChatView;
 
 import javax.inject.Inject;
 
@@ -20,7 +21,7 @@ import rx.functions.Action1;
 /**
  * Created by Nataliia on 13.07.2016.
  */
-public class ChatPresenter {
+public class ChatPresenter implements IChatPresenter {
 
     private Context context;
     PMessageHelper pMessageHelper;
@@ -40,14 +41,18 @@ public class ChatPresenter {
         pMessageHelper.createTable(tableName);
     }
 
-    public void makeNoteInTable(String tableName, PMessage msg) {
-        pMessageHelper.insert(tableName, mapperFactory.getPMessageMapper().transform(msg));
+    @Override
+    public void insertMessageToTable(String tableName, PMessage message) {
+        pMessageHelper.insert(tableName, mapperFactory.getPMessageMapper().transform(message));
+
     }
 
+    @Override
     public void dropTableAndCreate(String tableName) {
         pMessageHelper.dropTableAndCreate(tableName);
     }
 
+    @Override
     public Subscription getAllMessages(String tableName, Action1 adapter) {
         return pMessageHelper.getAllMessages(tableName).subscribe(adapter);
     }
@@ -74,23 +79,42 @@ public class ChatPresenter {
                         Toast.makeText(context, "Unread messages = "+pMessageAbses.size(), Toast.LENGTH_SHORT).show());
     }
 
+    @Override
     public int deleteMessageByPackageId(String tableName, PMessageAbs message) {
         return pMessageHelper.deleteMessageByPackageId(tableName, message.packageId());
     }
 
+    @Override
     public void copyMessageText(PMessageAbs message) {
         ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
         ClipData clip = ClipData.newPlainText("", message.messageBody());
         clipboard.setPrimaryClip(clip);
     }
 
+    @Override
     public void convertTextToSpeech(PMessageAbs message) {
         textToSpeech.speak(message.messageBody(), TextToSpeech.QUEUE_FLUSH, null);
     }
 
-    public void onPause(){
+    @Override
+    public void onPause() {
         if(textToSpeech != null){
             textToSpeech.stop();
         }
+    }
+
+    @Override
+    public void onResume() {
+
+    }
+
+    @Override
+    public void bind(IChatView view) {
+
+    }
+
+    @Override
+    public void unbind() {
+
     }
 }
