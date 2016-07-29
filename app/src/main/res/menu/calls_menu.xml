@@ -3,7 +3,7 @@
 
     <group >
         <item
-            android:title="search" />
+            android:title="calls" />
     </group>
 
     <item android:title="multiMenu">
