@@ -2,6 +2,7 @@ package com.peekaboo.presentation.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -26,6 +27,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnTouch;
 
 public class LogInActivity extends AppCompatActivity implements ICredentialsView {
 
@@ -44,6 +46,11 @@ public class LogInActivity extends AppCompatActivity implements ICredentialsView
     TextView tvSignUp4;
     @BindView(R.id.tvOrSign)
     TextView tvSignIn;
+    @BindView(R.id.ilUsername)
+    TextInputLayout ilUsername;
+    @BindView(R.id.ilPassword)
+    TextInputLayout ilPassword;
+
     @Inject
     LoginPresenter loginPresenter;
     @Inject
@@ -55,7 +62,7 @@ public class LogInActivity extends AppCompatActivity implements ICredentialsView
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_log_in);
+        setContentView(R.layout.activity_log_in_old);
         ButterKnife.bind(this);
         Log.e("actionBar", String.valueOf(getSupportActionBar()));
        // tvSignUp.setPaintFlags(tvSignUp.getPaintFlags() |   Paint.UNDERLINE_TEXT_FLAG);
@@ -82,11 +89,10 @@ public class LogInActivity extends AppCompatActivity implements ICredentialsView
     public void showInputError(InputFieldError error) {
         switch (error) {
             case LOGIN:
-                etLogin.setError(getString(R.string.invalidLogin));
+                ilUsername.setError("wkjfdj");
                 etLogin.setText("");
-                break;
             case PASSWORD:
-                etPassword.setError(getString(R.string.invalidPassword));
+                ilPassword.setError("jkgftdrest");
                 etPassword.setText("");
                 break;
         }
@@ -117,6 +123,20 @@ public class LogInActivity extends AppCompatActivity implements ICredentialsView
         String login = etLogin.getText().toString();
         String password = etPassword.getText().toString();
         loginPresenter.onSignInButtonClick(login, password);
+    }
+
+    @OnTouch(R.id.etLogin)
+    boolean onUsernameEditText(){
+        ilUsername.setError(null);
+        return false;
+    }
+
+
+    @OnTouch(R.id.etPassword)
+    boolean onPasswordEditText(){
+        ilPassword.setError(null);
+        return false;
+
     }
 
     @OnClick(R.id.bVk)

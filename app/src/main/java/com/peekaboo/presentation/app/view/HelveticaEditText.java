@@ -20,8 +20,6 @@ public class HelveticaEditText extends TextInputEditText {
         super(context, attrs);
         setTypeface(context);
     }
-
-
     public HelveticaEditText(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         setTypeface(context);
@@ -30,4 +28,5 @@ public class HelveticaEditText extends TextInputEditText {
         Typeface font = Typeface.createFromAsset(context.getAssets(), context.getString(R.string.helvetica_font));
         setTypeface(font);
     }
+
 }
