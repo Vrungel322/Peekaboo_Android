@@ -100,7 +100,7 @@
                             android:layout_width="@dimen/nav_icon_width"
                             android:layout_height="@dimen/nav_icon_height"
                             android:layout_marginLeft="@dimen/nav_content_margin_left"
-                            android:src="@drawable/chats" />
+                            android:src="@drawable/chats_grey" />
 
                         <TextView
                             android:id="@+id/tvTextChat"
@@ -126,7 +126,7 @@
                             android:layout_width="@dimen/nav_icon_width"
                             android:layout_height="@dimen/nav_icon_height"
                             android:layout_marginLeft="@dimen/nav_content_margin_left"
-                            android:src="@drawable/calls" />
+                            android:src="@drawable/calls_grey" />
 
                         <TextView
                             android:id="@+id/tvTextCalls"
@@ -154,7 +154,7 @@
                             android:layout_marginLeft="@dimen/nav_content_margin_left"
                             android:paddingBottom="3dp"
                             android:paddingTop="3dp"
-                            android:src="@drawable/contacts" />
+                            android:src="@drawable/contacts_grey" />
 
                         <TextView
                             android:id="@+id/tvTextContacts"
@@ -182,7 +182,7 @@
                             android:layout_height="@dimen/nav_icon_height"
                             android:layout_marginLeft="@dimen/nav_content_margin_left"
                             android:padding="3dp"
-                            android:src="@drawable/profile" />
+                            android:src="@drawable/profile_grey" />
 
                         <TextView
                             android:id="@+id/tvTextProfile"
@@ -221,7 +221,7 @@
                             android:layout_width="@dimen/nav_icon_width"
                             android:layout_height="@dimen/nav_icon_height"
                             android:layout_marginLeft="@dimen/nav_content_margin_left"
-                            android:src="@drawable/settings" />
+                            android:src="@drawable/settings_grey" />
 
                         <TextView
                             android:id="@+id/tvTextSettings"
@@ -247,7 +247,7 @@
                             android:layout_width="@dimen/nav_icon_width"
                             android:layout_height="@dimen/nav_icon_height"
                             android:layout_marginLeft="@dimen/nav_content_margin_left"
-                            android:src="@drawable/exit" />
+                            android:src="@drawable/exit_grey" />
 
                         <TextView
                             android:id="@+id/tvTextExit"

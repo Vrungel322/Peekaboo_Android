@@ -130,6 +130,11 @@ public class MainActivity extends AppCompatActivity {
             tvTextContacts.setTextColor(getResources().getColor(R.color.textColorHint));
             tvTextProfile.setTextColor(getResources().getColor(R.color.textColorHint));
             tvTextSettings.setTextColor(getResources().getColor(R.color.textColorHint));
+            ivIconChat.setImageResource(R.drawable.chats_green);
+            ivIconCalls.setImageResource(R.drawable.calls_grey);
+            ivIconContacts.setImageResource(R.drawable.contacts_grey);
+            ivIconProfile.setImageResource(R.drawable.profile_grey);
+            ivIconSettings.setImageResource(R.drawable.settings_grey);
         }
         if(id == R.id.llCalls){
             llDialogs.setSelected(false);
@@ -142,6 +147,11 @@ public class MainActivity extends AppCompatActivity {
             tvTextContacts.setTextColor(getResources().getColor(R.color.textColorHint));
             tvTextProfile.setTextColor(getResources().getColor(R.color.textColorHint));
             tvTextSettings.setTextColor(getResources().getColor(R.color.textColorHint));
+            ivIconChat.setImageResource(R.drawable.chats_grey);
+            ivIconCalls.setImageResource(R.drawable.calls_green);
+            ivIconContacts.setImageResource(R.drawable.contacts_grey);
+            ivIconProfile.setImageResource(R.drawable.profile_grey);
+            ivIconSettings.setImageResource(R.drawable.settings_grey);
         }
         if(id == R.id.llContacts){
             llDialogs.setSelected(false);
@@ -154,6 +164,11 @@ public class MainActivity extends AppCompatActivity {
             tvTextContacts.setTextColor(getResources().getColor(R.color.colorAccent));
             tvTextProfile.setTextColor(getResources().getColor(R.color.textColorHint));
             tvTextSettings.setTextColor(getResources().getColor(R.color.textColorHint));
+            ivIconChat.setImageResource(R.drawable.chats_grey);
+            ivIconCalls.setImageResource(R.drawable.calls_grey);
+            ivIconContacts.setImageResource(R.drawable.contacts_green);
+            ivIconProfile.setImageResource(R.drawable.profile_grey);
+            ivIconSettings.setImageResource(R.drawable.settings_grey);
         }
         if(id == R.id.llProfile){
             llDialogs.setSelected(false);
@@ -166,6 +181,11 @@ public class MainActivity extends AppCompatActivity {
             tvTextContacts.setTextColor(getResources().getColor(R.color.textColorHint));
             tvTextProfile.setTextColor(getResources().getColor(R.color.colorAccent));
             tvTextSettings.setTextColor(getResources().getColor(R.color.textColorHint));
+            ivIconChat.setImageResource(R.drawable.chats_grey);
+            ivIconCalls.setImageResource(R.drawable.calls_grey);
+            ivIconContacts.setImageResource(R.drawable.contacts_grey);
+            ivIconProfile.setImageResource(R.drawable.profile_green);
+            ivIconSettings.setImageResource(R.drawable.settings_grey);
         }
         if(id == R.id.llSettings){
             llDialogs.setSelected(false);
@@ -178,6 +198,11 @@ public class MainActivity extends AppCompatActivity {
             tvTextContacts.setTextColor(getResources().getColor(R.color.textColorHint));
             tvTextProfile.setTextColor(getResources().getColor(R.color.textColorHint));
             tvTextSettings.setTextColor(getResources().getColor(R.color.colorAccent));
+            ivIconChat.setImageResource(R.drawable.chats_grey);
+            ivIconCalls.setImageResource(R.drawable.calls_grey);
+            ivIconContacts.setImageResource(R.drawable.contacts_grey);
+            ivIconProfile.setImageResource(R.drawable.profile_grey);
+            ivIconSettings.setImageResource(R.drawable.settings_green);
         }
 
     }
