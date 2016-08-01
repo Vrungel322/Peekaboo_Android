@@ -7,7 +7,7 @@
     <LinearLayout
         android:layout_width="@dimen/nav_header_width"
         android:layout_height="match_parent"
-        android:background="@color/nav_background"
+        android:background="@color/colorPrimaryLight"
         android:orientation="vertical">
 
         <ScrollView
@@ -29,12 +29,13 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/nav_header_height"
-                        android:layout_marginTop="@dimen/nav_margin_top"
+                        android:background="@color/nav_background"
                         android:orientation="vertical">
 
                         <RelativeLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/nav_margin_top"
                             android:gravity="center_horizontal">
 
                             <de.hdodenhof.circleimageview.CircleImageView
@@ -78,13 +79,6 @@
 
                 </FrameLayout>
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginLeft="@dimen/divider_margin"
-                    android:layout_marginRight="@dimen/divider_margin"
-                    android:background="@color/drawerDividerColor" />
-
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -109,6 +103,7 @@
                             android:src="@drawable/chats" />
 
                         <TextView
+                            android:id="@+id/tvTextChat"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
@@ -134,6 +129,7 @@
                             android:src="@drawable/calls" />
 
                         <TextView
+                            android:id="@+id/tvTextCalls"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
@@ -161,6 +157,7 @@
                             android:src="@drawable/contacts" />
 
                         <TextView
+                            android:id="@+id/tvTextContacts"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
@@ -173,6 +170,7 @@
                         android:id="@+id/llProfile"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:layout_marginBottom="@dimen/nav_padding_top"
                         android:layout_marginTop="@dimen/nav_padding_top"
                         android:background="@drawable/pressed_nav_item"
                         android:orientation="horizontal"
@@ -187,6 +185,7 @@
                             android:src="@drawable/profile" />
 
                         <TextView
+                            android:id="@+id/tvTextProfile"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
@@ -201,9 +200,6 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:layout_marginLeft="@dimen/divider_margin"
-                    android:layout_marginRight="@dimen/divider_margin"
-                    android:layout_marginTop="@dimen/nav_padding_top"
                     android:background="@color/drawerDividerColor" />
 
                 <LinearLayout
@@ -228,6 +224,7 @@
                             android:src="@drawable/settings" />
 
                         <TextView
+                            android:id="@+id/tvTextSettings"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
@@ -253,6 +250,7 @@
                             android:src="@drawable/exit" />
 
                         <TextView
+                            android:id="@+id/tvTextExit"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
