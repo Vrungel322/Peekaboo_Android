@@ -18,6 +18,7 @@ public interface IChatPresenter extends IPresenter<IChatView> {
     int deleteMessageByPackageId(String tableName, PMessageAbs message);
     void copyMessageText(PMessageAbs message);
     void convertTextToSpeech(PMessageAbs message);
+    Subscription recordAudio(boolean isRecording, String folderName); // for testing
     void onPause();
     void onResume();
 }

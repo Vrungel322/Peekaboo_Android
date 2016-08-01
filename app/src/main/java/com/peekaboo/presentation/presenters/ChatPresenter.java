@@ -11,6 +11,8 @@ import com.peekaboo.data.mappers.AbstractMapperFactory;
 import com.peekaboo.data.repositories.database.PMessage;
 import com.peekaboo.data.repositories.database.PMessageAbs;
 import com.peekaboo.data.repositories.database.PMessageHelper;
+import com.peekaboo.domain.AudioRecorder;
+import com.peekaboo.domain.Record;
 import com.peekaboo.presentation.views.IChatView;
 
 import javax.inject.Inject;
@@ -27,6 +29,8 @@ public class ChatPresenter implements IChatPresenter {
     PMessageHelper pMessageHelper;
     AbstractMapperFactory mapperFactory;
     TextToSpeech textToSpeech;
+
+    AudioRecorder recorder;
 
     @Inject
     public ChatPresenter(Context context, PMessageHelper pMessageHelper,
@@ -94,6 +98,17 @@ public class ChatPresenter implements IChatPresenter {
     @Override
     public void convertTextToSpeech(PMessageAbs message) {
         textToSpeech.speak(message.messageBody(), TextToSpeech.QUEUE_FLUSH, null);
+    }
+
+    @Override
+    public Subscription recordAudio(boolean isRecording, String folderName) {
+        if(!isRecording){
+            recorder = new AudioRecorder(new Record(folderName));
+            return recorder.startRecording().subscribe();
+        } else if(recorder != null) {
+            return recorder.stopRecording().subscribe();
+        }
+        return null;
     }
 
     @Override

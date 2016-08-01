@@ -56,6 +56,7 @@ public class ChatActivity extends AppCompatActivity implements ChatItemDialog.IC
     private ChatItemDialog chatItemDialog;
     private CompositeSubscription subscriptions;
     private String receiverName;
+    private boolean isRecording = false; // for test
 
 
     @Override
@@ -236,6 +237,12 @@ public class ChatActivity extends AppCompatActivity implements ChatItemDialog.IC
 
     @Override
     public void takeSpeech() {
-
+        if(!isRecording){
+            chatPresenter.recordAudio(isRecording, receiverName);
+            isRecording = true;
+        } else {
+            chatPresenter.recordAudio(isRecording, receiverName);
+            isRecording = false;
+        }
     }
 }

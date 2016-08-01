@@ -20,12 +20,13 @@ public class Constants {
     }
 
     public interface SOUND_RECORDING {
+        public static final String LOG_TAG = "SOUND_RECORDING";
         public static final int RECORDER_BPP = 16;
         public static final String AUDIO_RECORDER_FILE_EXT_WAV = ".wav";
         public static final String AUDIO_RECORDER_FOLDER = "PeekabooAudio";
         public static final String AUDIO_RECORDER_TEMP_FILE = "record_temp.raw";
         public static final int RECORDER_SAMPLERATE = 44100;
-        public static final int RECORDER_CHANNELS = AudioFormat.CHANNEL_IN_STEREO;
+        public static final int RECORDER_CHANNELS = AudioFormat.CHANNEL_IN_MONO;
         public static final int RECORDER_AUDIO_ENCODING = AudioFormat.ENCODING_PCM_16BIT;
     }
 }
