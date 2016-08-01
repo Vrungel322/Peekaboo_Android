@@ -27,7 +27,7 @@ public class Record {
 
     public Record(String folderName) {
         this.folderName = folderName;
-        bufferSize = AudioRecord.getMinBufferSize(8000,
+        bufferSize = AudioRecord.getMinBufferSize(44100,
                 AudioFormat.CHANNEL_IN_MONO,
                 AudioFormat.ENCODING_PCM_16BIT);
 
@@ -57,8 +57,9 @@ public class Record {
 
         File tempFile = new File(file.getAbsolutePath(), Constants.SOUND_RECORDING.AUDIO_RECORDER_TEMP_FILE);
 
-        if (tempFile.exists())
-            tempFile.delete();
+        if (tempFile.exists()){
+           // tempFile.delete();
+        }
 
         return (file.getAbsolutePath() + "/" + Constants.SOUND_RECORDING.AUDIO_RECORDER_TEMP_FILE);
     }
@@ -77,7 +78,7 @@ public class Record {
         if (recorderState == AudioRecord.STATE_INITIALIZED) recorder.startRecording();
         isRecording = true;
 
-
+        writeAudioDataToFile();
     }
 
     private void writeAudioDataToFile() {
@@ -139,7 +140,7 @@ public class Record {
         long totalAudioLen;
         long totalDataLen;
         long longSampleRate = Constants.SOUND_RECORDING.RECORDER_SAMPLERATE;
-        int channels = 2;
+        int channels = 1;
         long byteRate = Constants.SOUND_RECORDING.RECORDER_BPP
                 * Constants.SOUND_RECORDING.RECORDER_SAMPLERATE * channels / 8;
 
