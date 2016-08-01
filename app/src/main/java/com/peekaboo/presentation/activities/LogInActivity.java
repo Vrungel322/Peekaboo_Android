@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v8.renderscript.ScriptGroup;
 import android.util.Log;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -13,8 +12,6 @@ import android.widget.Toast;
 
 import com.peekaboo.R;
 import com.peekaboo.presentation.PeekabooApplication;
-import com.peekaboo.presentation.app.view.HelveticaEditText;
-import com.peekaboo.presentation.app.view.HelveticaTextInputLayout;
 import com.peekaboo.presentation.fragments.ProgressDialogFragment;
 import com.peekaboo.presentation.presenters.LoginPresenter;
 import com.peekaboo.presentation.views.ICredentialsView;
@@ -30,7 +27,6 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.OnFocusChange;
 import butterknife.OnTouch;
 
 public class LogInActivity extends AppCompatActivity implements ICredentialsView {
@@ -66,7 +62,7 @@ public class LogInActivity extends AppCompatActivity implements ICredentialsView
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_log_in);
+        setContentView(R.layout.activity_log_in_old);
         ButterKnife.bind(this);
         Log.e("actionBar", String.valueOf(getSupportActionBar()));
        // tvSignUp.setPaintFlags(tvSignUp.getPaintFlags() |   Paint.UNDERLINE_TEXT_FLAG);
