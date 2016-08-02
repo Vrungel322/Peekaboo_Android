@@ -6,6 +6,7 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.peekaboo.R;
@@ -15,6 +16,7 @@ import com.peekaboo.presentation.fragments.ProgressDialogFragment;
 import com.peekaboo.presentation.views.ISignUpView;
 import com.peekaboo.presentation.presenters.SignUpPresenter;
 import com.peekaboo.utils.ActivityNavigator;
+import com.peekaboo.utils.OnSwipeTouchListener;
 
 import javax.inject.Inject;
 
@@ -45,6 +47,9 @@ public class SignUpActivity extends AppCompatActivity implements ISignUpView {
     TextInputLayout ilLogin;
     @BindView(R.id.ilPasswordConfirm)
     TextInputLayout ilPasswordCongirm;
+//    @BindView(R.id.layoutSignUp)
+//    RelativeLayout lSignUp;
+
 
     @Inject
     SignUpPresenter signUpPresenter;
@@ -58,6 +63,8 @@ public class SignUpActivity extends AppCompatActivity implements ISignUpView {
         ButterKnife.bind(this);
         PeekabooApplication.getApp(this).getComponent().inject(this);
         signUpPresenter.bind(this);
+        //onSwipe();
+
     }
 
     @Override
@@ -166,5 +173,13 @@ public class SignUpActivity extends AppCompatActivity implements ISignUpView {
         String password = etPassword.getText().toString();
         String passwordConfirm = etPasswordConfirm.getText().toString();
         signUpPresenter.onSignUpButtonClick(username, login, password, passwordConfirm);
+    }
+
+    private void onSwipe(){
+//        lSignUp.setOnTouchListener(new OnSwipeTouchListener(SignUpActivity.this) {
+//            public void onSwipeBottom() {
+//                navigator.startLogInActivity(SignUpActivity.this);
+//            }
+//        });
     }
 }

@@ -4,7 +4,7 @@
     <string name="username">Имя пользователя</string>
     <string name="password">Пароль</string>
     <string name="createAccount">Создать аккаунт</string>
-    <string name="signIn">Войти</string>
+    <string name="signIn">Аутентификация</string>
     <string name="skip">Пропустить</string>
     <string name="confirmPassword">Пдтверждение пароля</string>
     <string name="email">Email</string>
