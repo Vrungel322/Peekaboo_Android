@@ -89,7 +89,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="@dimen/padding_signup_side"
             android:text="@string/createAccount"
-            android:background="@drawable/rounded_button_pressed"
+            android:background="@drawable/button"
             android:textAllCaps="false"
             android:textSize="16sp"/>
 

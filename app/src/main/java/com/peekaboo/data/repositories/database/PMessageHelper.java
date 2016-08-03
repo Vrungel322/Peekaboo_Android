@@ -65,4 +65,11 @@ public class PMessageHelper {
         db.execute(dropTable);
         createTable(tableName);
     }
+
+    public Observable<List<PMessageAbs>> getUnreadMessagesCount(String tableName) {
+        String selectUnread = "SELECT * FROM " + tableName + " WHERE " + PMessageAbs.STATUS_READ + " = 0";
+        return db.createQuery(tableName, selectUnread)
+                .mapToList(PMessageAbs.MAPPER)
+                .observeOn(AndroidSchedulers.mainThread());
+    }
 }

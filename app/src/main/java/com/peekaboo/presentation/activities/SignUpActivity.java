@@ -6,17 +6,15 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.EditText;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.peekaboo.R;
 import com.peekaboo.presentation.PeekabooApplication;
 import com.peekaboo.presentation.fragments.ConfirmSignUpDialog;
 import com.peekaboo.presentation.fragments.ProgressDialogFragment;
-import com.peekaboo.presentation.views.ISignUpView;
 import com.peekaboo.presentation.presenters.SignUpPresenter;
+import com.peekaboo.presentation.views.ISignUpView;
 import com.peekaboo.utils.ActivityNavigator;
-import com.peekaboo.utils.OnSwipeTouchListener;
 
 import javax.inject.Inject;
 

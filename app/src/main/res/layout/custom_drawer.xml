@@ -7,7 +7,7 @@
     <LinearLayout
         android:layout_width="@dimen/nav_header_width"
         android:layout_height="match_parent"
-        android:background="@color/nav_background"
+        android:background="@color/colorPrimaryLight"
         android:orientation="vertical">
 
         <ScrollView
@@ -29,12 +29,13 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/nav_header_height"
-                        android:layout_marginTop="@dimen/nav_margin_top"
+                        android:background="@color/nav_background"
                         android:orientation="vertical">
 
                         <RelativeLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/nav_margin_top"
                             android:gravity="center_horizontal">
 
                             <de.hdodenhof.circleimageview.CircleImageView
@@ -78,155 +79,152 @@
 
                 </FrameLayout>
 
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginLeft="@dimen/divider_margin"
-                    android:layout_marginRight="@dimen/divider_margin"
-                    android:background="@color/drawerDividerColor" />
 
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="@dimen/nav_padding_list"
+                    android:orientation="vertical">
 
                     <LinearLayout
+                        android:id="@+id/llDialogs"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_marginLeft="@dimen/items_margin"
-                        android:layout_marginRight="@dimen/divider_margin"
-                        android:layout_marginTop="@dimen/nav_padding_list"
-                        android:orientation="vertical">
+                        android:background="@drawable/pressed_nav_item"
+                        android:clickable="true"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/padding_each_item">
 
-                        <LinearLayout
-                            android:id="@+id/llDialogs"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:clickable="true"
-                            android:padding="@dimen/padding_each_item"
-                            android:background="@drawable/pressed_nav_item"
-                            android:orientation="horizontal">
+                        <ImageView
+                            android:id="@+id/ivIconChat"
+                            android:layout_width="@dimen/nav_icon_width"
+                            android:layout_height="@dimen/nav_icon_height"
+                            android:layout_marginLeft="@dimen/nav_content_margin_left"
+                            android:src="@drawable/chats_grey" />
 
-                            <ImageView
-                                android:id="@+id/ivIconChat"
-                                android:layout_width="@dimen/nav_icon_width"
-                                android:layout_height="@dimen/nav_icon_height"
-                                android:src="@drawable/chats" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
-                                android:layout_marginLeft="@dimen/nav_matgin_left_text"
-                                android:text="@string/dialogs"
-                                android:textAppearance="?android:attr/textAppearanceMedium" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:id="@+id/llCalls"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:padding="@dimen/padding_each_item"
-                            android:layout_marginTop="@dimen/nav_padding_top"
-                            android:background="@drawable/pressed_nav_item"
-                            android:orientation="horizontal">
-
-                            <ImageView
-                                android:id="@+id/ivIconCalls"
-                                android:layout_width="@dimen/nav_icon_width"
-                                android:layout_height="@dimen/nav_icon_height"
-                                android:src="@drawable/calls" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
-                                android:layout_marginLeft="@dimen/nav_matgin_left_text"
-                                android:text="@string/calls"
-                                android:textAppearance="?android:attr/textAppearanceMedium" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:id="@+id/llContacts"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:padding="@dimen/padding_each_item"
-                            android:layout_marginTop="@dimen/nav_padding_top"
-                            android:background="@drawable/pressed_nav_item"
-                            android:orientation="horizontal">
-
-                            <ImageView
-                                android:id="@+id/ivIconContacts"
-                                android:layout_width="@dimen/nav_icon_width"
-                                android:layout_height="@dimen/nav_icon_height"
-                                android:paddingBottom="3dp"
-                                android:paddingTop="3dp"
-                                android:src="@drawable/contacts" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
-                                android:layout_marginLeft="@dimen/nav_matgin_left_text"
-                                android:text="@string/contacts"
-                                android:textAppearance="?android:attr/textAppearanceMedium" />
-                        </LinearLayout>
-
-                        <LinearLayout
-                            android:id="@+id/llProfile"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:padding="@dimen/padding_each_item"
-                            android:layout_marginTop="@dimen/nav_padding_top"
-                            android:background="@drawable/pressed_nav_item"
-                            android:orientation="horizontal">
-
-                            <ImageView
-                                android:id="@+id/ivIconProfile"
-                                android:layout_width="@dimen/nav_icon_width"
-                                android:layout_height="@dimen/nav_icon_height"
-                                android:padding="3dp"
-                                android:src="@drawable/profile" />
-
-                            <TextView
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_gravity="center_vertical"
-                                android:layout_marginLeft="@dimen/nav_matgin_left_text"
-                                android:text="@string/profile"
-                                android:textAppearance="?android:attr/textAppearanceMedium" />
-                        </LinearLayout>
-
-
+                        <com.peekaboo.presentation.app.view.RobotoTextView
+                            android:id="@+id/tvTextChat"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="@dimen/nav_matgin_left_text"
+                            android:text="@string/dialogs"
+                            android:textAppearance="?android:attr/textAppearanceMedium" />
                     </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/llCalls"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="@dimen/nav_padding_top"
+                        android:background="@drawable/pressed_nav_item"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/padding_each_item">
+
+                        <ImageView
+                            android:id="@+id/ivIconCalls"
+                            android:layout_width="@dimen/nav_icon_width"
+                            android:layout_height="@dimen/nav_icon_height"
+                            android:layout_marginLeft="@dimen/nav_content_margin_left"
+                            android:src="@drawable/calls_grey" />
+
+                        <com.peekaboo.presentation.app.view.RobotoTextView
+                            android:id="@+id/tvTextCalls"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="@dimen/nav_matgin_left_text"
+                            android:text="@string/calls"
+                            android:textAppearance="?android:attr/textAppearanceMedium" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/llContacts"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="@dimen/nav_padding_top"
+                        android:background="@drawable/pressed_nav_item"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/padding_each_item">
+
+                        <ImageView
+                            android:id="@+id/ivIconContacts"
+                            android:layout_width="@dimen/nav_icon_width"
+                            android:layout_height="@dimen/nav_icon_height"
+                            android:layout_marginLeft="@dimen/nav_content_margin_left"
+                            android:paddingBottom="3dp"
+                            android:paddingTop="3dp"
+                            android:src="@drawable/contacts_grey" />
+
+                        <com.peekaboo.presentation.app.view.RobotoTextView
+                            android:id="@+id/tvTextContacts"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="@dimen/nav_matgin_left_text"
+                            android:text="@string/contacts"
+                            android:textAppearance="?android:attr/textAppearanceMedium" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/llProfile"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginBottom="@dimen/nav_padding_top"
+                        android:layout_marginTop="@dimen/nav_padding_top"
+                        android:background="@drawable/pressed_nav_item"
+                        android:orientation="horizontal"
+                        android:padding="@dimen/padding_each_item">
+
+                        <ImageView
+                            android:id="@+id/ivIconProfile"
+                            android:layout_width="@dimen/nav_icon_width"
+                            android:layout_height="@dimen/nav_icon_height"
+                            android:layout_marginLeft="@dimen/nav_content_margin_left"
+                            android:padding="3dp"
+                            android:src="@drawable/profile_grey" />
+
+                        <com.peekaboo.presentation.app.view.RobotoTextView
+                            android:id="@+id/tvTextProfile"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="@dimen/nav_matgin_left_text"
+                            android:text="@string/profile"
+                            android:textAppearance="?android:attr/textAppearanceMedium" />
+                    </LinearLayout>
+
+
+                </LinearLayout>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:layout_marginLeft="@dimen/divider_margin"
-                    android:layout_marginRight="@dimen/divider_margin"
-                    android:layout_marginTop="@dimen/nav_padding_top"
                     android:background="@color/drawerDividerColor" />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="@dimen/items_margin"
-                    android:layout_marginRight="@dimen/divider_margin"
                     android:orientation="vertical">
 
                     <LinearLayout
                         android:id="@+id/llSettings"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:padding="@dimen/padding_each_item"
                         android:layout_marginTop="@dimen/nav_padding_top"
                         android:background="@drawable/pressed_nav_item"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:padding="@dimen/padding_each_item">
 
                         <ImageView
                             android:id="@+id/ivIconSettings"
                             android:layout_width="@dimen/nav_icon_width"
                             android:layout_height="@dimen/nav_icon_height"
-                            android:src="@drawable/settings" />
+                            android:layout_marginLeft="@dimen/nav_content_margin_left"
+                            android:src="@drawable/settings_grey" />
 
-                        <TextView
+                        <com.peekaboo.presentation.app.view.RobotoTextView
+                            android:id="@+id/tvTextSettings"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
@@ -239,18 +237,20 @@
                         android:id="@+id/llExit"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:padding="@dimen/padding_each_item"
                         android:layout_marginTop="@dimen/nav_padding_top"
                         android:background="@drawable/pressed_nav_item"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:padding="@dimen/padding_each_item">
 
                         <ImageView
                             android:id="@+id/ivIconExit"
                             android:layout_width="@dimen/nav_icon_width"
                             android:layout_height="@dimen/nav_icon_height"
-                            android:src="@drawable/exit" />
+                            android:layout_marginLeft="@dimen/nav_content_margin_left"
+                            android:src="@drawable/exit_grey" />
 
-                        <TextView
+                        <com.peekaboo.presentation.app.view.RobotoTextView
+                            android:id="@+id/tvTextExit"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"

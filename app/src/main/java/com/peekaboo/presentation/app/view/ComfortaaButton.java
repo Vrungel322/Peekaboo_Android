@@ -1,11 +1,8 @@
 package com.peekaboo.presentation.app.view;
 
 import android.content.Context;
-import android.graphics.*;
 import android.support.v7.widget.AppCompatButton;
 import android.util.AttributeSet;
-
-import com.peekaboo.R;
 
 /**
  * Created by Nataliia on 01.08.2016.

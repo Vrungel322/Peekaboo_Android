@@ -8,7 +8,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.peekaboo.R;
@@ -38,6 +40,30 @@ public class MainActivity extends AppCompatActivity {
     LinearLayout llProfile;
     @BindView(R.id.llSettings)
     LinearLayout llSettings;
+    @BindView(R.id.ivIconChat)
+    ImageView ivIconChat;
+    @BindView(R.id.tvTextChat)
+    TextView tvTextChat;
+    @BindView(R.id.ivIconCalls)
+    ImageView ivIconCalls;
+    @BindView(R.id.tvTextCalls)
+    TextView tvTextCalls;
+    @BindView(R.id.ivIconContacts)
+    ImageView ivIconContacts;
+    @BindView(R.id.tvTextContacts)
+    TextView tvTextContacts;
+    @BindView(R.id.ivIconProfile)
+    ImageView ivIconProfile;
+    @BindView(R.id.tvTextProfile)
+    TextView tvTextProfile;
+    @BindView(R.id.ivIconSettings)
+    ImageView ivIconSettings;
+    @BindView(R.id.tvTextSettings)
+    TextView tvTextSettings;
+    @BindView(R.id.ivIconExit)
+    ImageView ivIconExit;
+    @BindView(R.id.tvTextExit)
+    TextView tvTextExit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -99,6 +125,16 @@ public class MainActivity extends AppCompatActivity {
             llContacts.setSelected(false);
             llProfile.setSelected(false);
             llSettings.setSelected(false);
+            tvTextChat.setTextColor(getResources().getColor(R.color.colorAccent));
+            tvTextCalls.setTextColor(getResources().getColor(R.color.textColorHint));
+            tvTextContacts.setTextColor(getResources().getColor(R.color.textColorHint));
+            tvTextProfile.setTextColor(getResources().getColor(R.color.textColorHint));
+            tvTextSettings.setTextColor(getResources().getColor(R.color.textColorHint));
+            ivIconChat.setImageResource(R.drawable.chats_green);
+            ivIconCalls.setImageResource(R.drawable.calls_grey);
+            ivIconContacts.setImageResource(R.drawable.contacts_grey);
+            ivIconProfile.setImageResource(R.drawable.profile_grey);
+            ivIconSettings.setImageResource(R.drawable.settings_grey);
         }
         if(id == R.id.llCalls){
             llDialogs.setSelected(false);
@@ -106,6 +142,16 @@ public class MainActivity extends AppCompatActivity {
             llContacts.setSelected(false);
             llProfile.setSelected(false);
             llSettings.setSelected(false);
+            tvTextChat.setTextColor(getResources().getColor(R.color.textColorHint));
+            tvTextCalls.setTextColor(getResources().getColor(R.color.colorAccent));
+            tvTextContacts.setTextColor(getResources().getColor(R.color.textColorHint));
+            tvTextProfile.setTextColor(getResources().getColor(R.color.textColorHint));
+            tvTextSettings.setTextColor(getResources().getColor(R.color.textColorHint));
+            ivIconChat.setImageResource(R.drawable.chats_grey);
+            ivIconCalls.setImageResource(R.drawable.calls_green);
+            ivIconContacts.setImageResource(R.drawable.contacts_grey);
+            ivIconProfile.setImageResource(R.drawable.profile_grey);
+            ivIconSettings.setImageResource(R.drawable.settings_grey);
         }
         if(id == R.id.llContacts){
             llDialogs.setSelected(false);
@@ -113,6 +159,16 @@ public class MainActivity extends AppCompatActivity {
             llContacts.setSelected(true);
             llProfile.setSelected(false);
             llSettings.setSelected(false);
+            tvTextChat.setTextColor(getResources().getColor(R.color.textColorHint));
+            tvTextCalls.setTextColor(getResources().getColor(R.color.textColorHint));
+            tvTextContacts.setTextColor(getResources().getColor(R.color.colorAccent));
+            tvTextProfile.setTextColor(getResources().getColor(R.color.textColorHint));
+            tvTextSettings.setTextColor(getResources().getColor(R.color.textColorHint));
+            ivIconChat.setImageResource(R.drawable.chats_grey);
+            ivIconCalls.setImageResource(R.drawable.calls_grey);
+            ivIconContacts.setImageResource(R.drawable.contacts_green);
+            ivIconProfile.setImageResource(R.drawable.profile_grey);
+            ivIconSettings.setImageResource(R.drawable.settings_grey);
         }
         if(id == R.id.llProfile){
             llDialogs.setSelected(false);
@@ -120,6 +176,16 @@ public class MainActivity extends AppCompatActivity {
             llContacts.setSelected(false);
             llProfile.setSelected(true);
             llSettings.setSelected(false);
+            tvTextChat.setTextColor(getResources().getColor(R.color.textColorHint));
+            tvTextCalls.setTextColor(getResources().getColor(R.color.textColorHint));
+            tvTextContacts.setTextColor(getResources().getColor(R.color.textColorHint));
+            tvTextProfile.setTextColor(getResources().getColor(R.color.colorAccent));
+            tvTextSettings.setTextColor(getResources().getColor(R.color.textColorHint));
+            ivIconChat.setImageResource(R.drawable.chats_grey);
+            ivIconCalls.setImageResource(R.drawable.calls_grey);
+            ivIconContacts.setImageResource(R.drawable.contacts_grey);
+            ivIconProfile.setImageResource(R.drawable.profile_green);
+            ivIconSettings.setImageResource(R.drawable.settings_grey);
         }
         if(id == R.id.llSettings){
             llDialogs.setSelected(false);
@@ -127,6 +193,16 @@ public class MainActivity extends AppCompatActivity {
             llContacts.setSelected(false);
             llProfile.setSelected(false);
             llSettings.setSelected(true);
+            tvTextChat.setTextColor(getResources().getColor(R.color.textColorHint));
+            tvTextCalls.setTextColor(getResources().getColor(R.color.textColorHint));
+            tvTextContacts.setTextColor(getResources().getColor(R.color.textColorHint));
+            tvTextProfile.setTextColor(getResources().getColor(R.color.textColorHint));
+            tvTextSettings.setTextColor(getResources().getColor(R.color.colorAccent));
+            ivIconChat.setImageResource(R.drawable.chats_grey);
+            ivIconCalls.setImageResource(R.drawable.calls_grey);
+            ivIconContacts.setImageResource(R.drawable.contacts_grey);
+            ivIconProfile.setImageResource(R.drawable.profile_grey);
+            ivIconSettings.setImageResource(R.drawable.settings_green);
         }
 
     }
