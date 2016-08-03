@@ -24,6 +24,7 @@ public class Record {
     private AudioRecord recorder = null;
     private int bufferSize = 0;
     private String folderName;
+    private String filename;
 
     public Record(String folderName) {
         this.folderName = folderName;
@@ -42,8 +43,12 @@ public class Record {
             file.mkdirs();
         }
 
-        return (file.getAbsolutePath() + "/" + System.currentTimeMillis()
+        String filename = (file.getAbsolutePath() + "/" + System.currentTimeMillis()
                 + Constants.SOUND_RECORDING.AUDIO_RECORDER_FILE_EXT_WAV);
+
+        setFilename(filename);
+
+        return filename;
     }
 
     public String getTempFileName() {
@@ -223,4 +228,19 @@ public class Record {
         out.write(header, 0, 44);
     }
 
+    public String getFolderName() {
+        return folderName;
+    }
+
+    public void setFolderName(String folderName) {
+        this.folderName = folderName;
+    }
+
+    public String getFilename() {
+        return filename;
+    }
+
+    public void setFilename(String filename) {
+        this.filename = filename;
+    }
 }

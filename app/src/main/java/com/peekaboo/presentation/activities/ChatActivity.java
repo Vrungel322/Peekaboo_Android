@@ -23,11 +23,11 @@ import com.peekaboo.presentation.fragments.AttachmentChatDialog;
 import com.peekaboo.presentation.fragments.ChatItemDialog;
 import com.peekaboo.presentation.presenters.ChatPresenter;
 import com.peekaboo.utils.Constants;
+import com.peekaboo.utils.Utility;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.UUID;
 
 import javax.inject.Inject;
 
@@ -145,12 +145,12 @@ public class ChatActivity extends AppCompatActivity implements ChatItemDialog.IC
         if(null == msgBody || msgBody.equals("")){
             return false;
         }
-        String pckgId = UUID.randomUUID().toString();
+        String pckgId = Utility.getPackageId();
         long timestamp = System.currentTimeMillis();
         // for test
         Random random = new Random();
         boolean isMine = random.nextBoolean();
-        chatPresenter.insertMessageToTable(receiverName, new PMessage(pckgId, isMine, msgBody,
+        chatPresenter.insertMessageToTable(receiverName, new PMessage(pckgId, isMine, false, msgBody,
                 timestamp, false, false, false));
         etMessageBody.setText("");
         //TODO: actually sending
@@ -182,17 +182,17 @@ public class ChatActivity extends AppCompatActivity implements ChatItemDialog.IC
 
                 ArrayList<String> result = data
                         .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-                String pckgId = UUID.randomUUID().toString();
+                String pckgId = Utility.getPackageId();
                 long timestamp = System.currentTimeMillis();
-                chatPresenter.insertMessageToTable(receiverName, new PMessage(pckgId, true, result.get(0),
-                        timestamp, false, false, false));
+                chatPresenter.insertMessageToTable(receiverName, new PMessage(pckgId, true, false,
+                        result.get(0), timestamp, false, false, false));
             }
         }
     }
 
     private void sendPhoto(Bitmap photo){
-        chatPresenter.insertMessageToTable(receiverName, new PMessage("photoPckgId", true, "PHOTO",
-                System.currentTimeMillis(), false, false, false));
+        chatPresenter.insertMessageToTable(receiverName, new PMessage(Utility.getPackageId(), true, true,
+                "PHOTO", System.currentTimeMillis(), false, false, false));
     }
 
     @Override
@@ -238,11 +238,12 @@ public class ChatActivity extends AppCompatActivity implements ChatItemDialog.IC
     @Override
     public void takeSpeech() {
         if(!isRecording){
-            subscriptions.add(chatPresenter.recordAudio(isRecording, receiverName));
+            subscriptions.add(chatPresenter.startRecordingAudio(receiverName));
             isRecording = true;
         } else {
-            subscriptions.add(chatPresenter.recordAudio(isRecording, receiverName));
+            subscriptions.add(chatPresenter.stopRecordingAudio(receiverName));
             isRecording = false;
+            etMessageBody.setText("");
         }
     }
 }

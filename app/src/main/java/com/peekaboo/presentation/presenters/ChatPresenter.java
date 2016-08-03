@@ -14,6 +14,7 @@ import com.peekaboo.data.repositories.database.PMessageHelper;
 import com.peekaboo.domain.AudioRecorder;
 import com.peekaboo.domain.Record;
 import com.peekaboo.presentation.views.IChatView;
+import com.peekaboo.utils.Utility;
 
 import javax.inject.Inject;
 
@@ -77,10 +78,10 @@ public class ChatPresenter implements IChatPresenter {
                 });
     }
 
-    public Subscription getUnreadMessagesCount(String tableName){
+    public Subscription getUnreadMessagesCount(String tableName) {
         return pMessageHelper.getUnreadMessagesCount(tableName)
                 .subscribe(pMessageAbses ->
-                        Toast.makeText(context, "Unread messages = "+pMessageAbses.size(), Toast.LENGTH_SHORT).show());
+                        Toast.makeText(context, "Unread messages = " + pMessageAbses.size(), Toast.LENGTH_SHORT).show());
     }
 
     @Override
@@ -101,19 +102,25 @@ public class ChatPresenter implements IChatPresenter {
     }
 
     @Override
-    public Subscription recordAudio(boolean isRecording, String folderName) {
-        if(!isRecording){
-            recorder = new AudioRecorder(new Record(folderName));
-            return recorder.startRecording().subscribe();
-        } else if(recorder != null) {
-            return recorder.stopRecording().subscribe();
+    public Subscription startRecordingAudio(String folderName) {
+        recorder = new AudioRecorder(new Record(folderName));
+        return recorder.startRecording().subscribe();
+    }
+
+    @Override
+    public Subscription stopRecordingAudio(String tableName) {
+        if (recorder != null) {
+            return recorder.stopRecording().subscribe(record -> {
+                insertMessageToTable(tableName, new PMessage(Utility.getPackageId(), true, false, record.getFilename(),
+                        System.currentTimeMillis(), false, false, false));
+            });
         }
         return null;
     }
 
     @Override
     public void onPause() {
-        if(textToSpeech != null){
+        if (textToSpeech != null) {
             textToSpeech.stop();
         }
     }
