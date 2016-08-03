@@ -102,7 +102,7 @@
                             android:layout_marginLeft="@dimen/nav_content_margin_left"
                             android:src="@drawable/chats_grey" />
 
-                        <TextView
+                        <com.peekaboo.presentation.app.view.RobotoTextView
                             android:id="@+id/tvTextChat"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -128,7 +128,7 @@
                             android:layout_marginLeft="@dimen/nav_content_margin_left"
                             android:src="@drawable/calls_grey" />
 
-                        <TextView
+                        <com.peekaboo.presentation.app.view.RobotoTextView
                             android:id="@+id/tvTextCalls"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -156,7 +156,7 @@
                             android:paddingTop="3dp"
                             android:src="@drawable/contacts_grey" />
 
-                        <TextView
+                        <com.peekaboo.presentation.app.view.RobotoTextView
                             android:id="@+id/tvTextContacts"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -184,7 +184,7 @@
                             android:padding="3dp"
                             android:src="@drawable/profile_grey" />
 
-                        <TextView
+                        <com.peekaboo.presentation.app.view.RobotoTextView
                             android:id="@+id/tvTextProfile"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -223,7 +223,7 @@
                             android:layout_marginLeft="@dimen/nav_content_margin_left"
                             android:src="@drawable/settings_grey" />
 
-                        <TextView
+                        <com.peekaboo.presentation.app.view.RobotoTextView
                             android:id="@+id/tvTextSettings"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -249,7 +249,7 @@
                             android:layout_marginLeft="@dimen/nav_content_margin_left"
                             android:src="@drawable/exit_grey" />
 
-                        <TextView
+                        <com.peekaboo.presentation.app.view.RobotoTextView
                             android:id="@+id/tvTextExit"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
