@@ -6,11 +6,15 @@
     android:orientation="vertical"
     tools:context=".presentation.fragments.DialogsFragment">
 
-    <TextView
-        android:layout_width="wrap_content"
+
+    <include
+        layout="@layout/listview"
+        android:id="@+id/listview"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Dialogs"
-        android:id="@+id/tvDialogs"
-        android:layout_gravity="center" />
-</FrameLayout>
+        android:layout_weight="1"
+        android:layout_marginLeft="2sp"
+        android:layout_marginRight="2sp"
+        />
+
+    </FrameLayout>

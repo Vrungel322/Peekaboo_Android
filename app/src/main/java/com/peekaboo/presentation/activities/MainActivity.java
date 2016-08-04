@@ -19,6 +19,7 @@ import com.peekaboo.presentation.di.ApplicationComponent;
 import com.peekaboo.presentation.fragments.CallsFragment;
 import com.peekaboo.presentation.fragments.ContactsFragment;
 import com.peekaboo.presentation.fragments.DialogsFragment;
+import com.peekaboo.presentation.fragments.ListViewExample;
 import com.peekaboo.presentation.fragments.ProfileFragment;
 import com.peekaboo.presentation.fragments.SettingsFragment;
 
@@ -90,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
         selectionMode(v.getId());
         switch (v.getId()){
             case R.id.llDialogs:{
-                changeFragment(new DialogsFragment(), "dialogsFragment");
+                changeFragment(new DialogsFragment(), "dialogsFragment");//new dialogsfragment
                 break;
             }
             case R.id.llCalls:{

@@ -50,7 +50,7 @@ public class ApplicationModule {
     @Singleton
     @Provides
     SharedPreferences provideSharedPreferences(Context mContext){
-        return mContext.getSharedPreferences("com.peekaboo.Peekaboo", mContext.MODE_PRIVATE);
+        return mContext.getSharedPreferences("com.peekaboo.Peekaboo", Context.MODE_PRIVATE);
     }
 
 

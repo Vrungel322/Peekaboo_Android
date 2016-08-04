@@ -5,7 +5,8 @@ package com.peekaboo.presentation.views;
  */
 
 public interface ICredentialsView extends IProgressView {
-    enum InputFieldError {USERNAME, LOGIN, PASSWORD, PASSWORD_CONFIRM};
+    enum InputFieldError {USERNAME, LOGIN, PASSWORD, PASSWORD_CONFIRM}
+
     void navigateToProfile();
     void showInputError(InputFieldError error);
 }
