@@ -2,7 +2,9 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:id="@+id/layoutSignUp">
+    android:id="@+id/layoutSignUp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
 
     <!--<ScrollView-->
     <!--android:layout_width="match_parent"-->
@@ -21,7 +23,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="60dp"
-            android:id="@+id/ilUsername">
+            android:id="@+id/ilUsername"
+
+            app:errorTextAppearance="@style/Error.Design">
 
             <com.peekaboo.presentation.app.view.HelveticaEditText
                 android:id="@+id/etUsername"
@@ -37,7 +41,8 @@
             android:id="@+id/ilLogin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="@dimen/padding_top">
+            android:paddingTop="@dimen/padding_top"
+            app:errorTextAppearance="@style/Error.Design">
 
             <com.peekaboo.presentation.app.view.HelveticaEditText
                 android:id="@+id/etLogin"
@@ -53,7 +58,8 @@
             android:id="@+id/ilPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="@dimen/padding_top">
+            android:paddingTop="@dimen/padding_top"
+            app:errorTextAppearance="@style/Error.Design">
 
             <com.peekaboo.presentation.app.view.HelveticaEditText
                 android:id="@+id/etPassword"
@@ -70,7 +76,8 @@
             android:id="@+id/ilPasswordConfirm"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="@dimen/padding_top">
+            android:paddingTop="@dimen/padding_top"
+            app:errorTextAppearance="@style/Error.Design">
 
             <com.peekaboo.presentation.app.view.HelveticaEditText
                 android:id="@+id/etPasswordConfirm"
