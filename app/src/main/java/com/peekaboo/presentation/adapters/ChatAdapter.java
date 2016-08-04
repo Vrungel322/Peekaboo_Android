@@ -61,7 +61,7 @@ public class ChatAdapter extends BaseAdapter implements Action1<List<PMessageAbs
     public View getView(int position, View view, ViewGroup parent) {
         PMessageAbs pMessageObj = getItem(position);
         ViewHolder holder;
-        if (view != null) {
+        if (view != null){
             holder = (ViewHolder) view.getTag();
             setAlignment(holder, pMessageObj.isMine());
         } else {
@@ -79,6 +79,11 @@ public class ChatAdapter extends BaseAdapter implements Action1<List<PMessageAbs
             holder.ivChatImage.setVisibility(View.GONE);
         } else {
             holder.ivChatImage.setImageResource(getStatusImage(pMessageObj.isRead()));
+        }
+
+        // for testing media
+        if(pMessageObj.isMedia()){
+            holder.tvChatMessage.setText(pMessageObj.messageBody());
         }
 
         return view;
