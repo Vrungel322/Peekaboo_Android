@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.klinker.android.sliding.SlidingActivity;
 import com.peekaboo.R;
 import com.peekaboo.presentation.PeekabooApplication;
 import com.peekaboo.presentation.fragments.ConfirmSignUpDialog;
@@ -26,7 +27,7 @@ import butterknife.OnTouch;
 /**
  * Created by sebastian on 05.07.16.
  */
-public class SignUpActivity extends AppCompatActivity implements ISignUpView {
+public class SignUpActivity extends SlidingActivity implements ISignUpView {
 
     public static final String PROGRESS_DIALOG = "progress_dialog";
     @BindView(R.id.etLogin)
@@ -55,12 +56,25 @@ public class SignUpActivity extends AppCompatActivity implements ISignUpView {
     ActivityNavigator navigator;
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_sign_up);
+    public void init(Bundle savedInstanceState) {
+        //super.onCreate(savedInstanceState);
+        //init(savedInstanceState);
+
+//        setTitle("Activity Title");
+//
+//        setPrimaryColors(
+//                getResources().getColor(R.color.colorPrimary),
+//                getResources().getColor(R.color.colorPrimaryDark)
+//        );
+
+
+
+        setContent(R.layout.activity_sign_up);
         ButterKnife.bind(this);
         PeekabooApplication.getApp(this).getComponent().inject(this);
         signUpPresenter.bind(this);
+        enableFullscreen();
+        disableHeader();
         //onSwipe();
 
     }

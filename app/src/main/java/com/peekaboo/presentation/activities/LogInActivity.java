@@ -44,6 +44,8 @@ public class LogInActivity extends AppCompatActivity implements ICredentialsView
     TextInputLayout ilPassword;
     @BindView(R.id.lLogIn)
     RelativeLayout lLogin;
+    @BindView(R.id.tvSignUp)
+    TextView tvSignUp;
 
     @Inject
     LoginPresenter loginPresenter;
@@ -86,10 +88,10 @@ public class LogInActivity extends AppCompatActivity implements ICredentialsView
     public void showInputError(InputFieldError error) {
         switch (error) {
             case LOGIN:
-                ilUsername.setError("wkjfdj");
+                ilUsername.setError(getResources().getString(R.string.invalidUsername));
                 etLogin.setText("");
             case PASSWORD:
-                ilPassword.setError("jkgftdrest");
+                ilPassword.setError(getResources().getString(R.string.invalidPassword));
                 etPassword.setText("");
                 break;
         }
@@ -137,7 +139,6 @@ public class LogInActivity extends AppCompatActivity implements ICredentialsView
 
     }
 
-
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (!VKSdk.onActivityResult(requestCode, resultCode, data, new VKCallback<VKAccessToken>() {
@@ -164,6 +165,11 @@ public class LogInActivity extends AppCompatActivity implements ICredentialsView
 
     private void onSwipe(){
         lLogin.setOnTouchListener(new OnSwipeTouchListener(LogInActivity.this) {
+            public void onSwipeTop() {
+                navigator.startSignUpActivity(LogInActivity.this);
+            }
+        });
+        tvSignUp.setOnTouchListener(new OnSwipeTouchListener(LogInActivity.this) {
             public void onSwipeTop() {
                 navigator.startSignUpActivity(LogInActivity.this);
             }
