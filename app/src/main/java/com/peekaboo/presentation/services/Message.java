@@ -95,12 +95,16 @@ public class Message {
         return result;
     }
 
-    public enum Command {ACCEPT, CALL, REJECT, SEND, MESSAGE, NONE}
+    public enum Command {ACCEPT, CALL, REJECT, SEND, MESSAGE}
 
     public enum Params {DESTINATION, FROM, TYPE, REASON, DATE}
 
     public interface Type {
         String TEXT = "text";
         String AUDIO = "audio";
+    }
+
+    public interface Reason {
+        String END = "end";
     }
 }

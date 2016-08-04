@@ -11,6 +11,7 @@ import com.neovisionaries.ws.client.WebSocketFrame;
 import com.peekaboo.data.Constants;
 import com.peekaboo.data.mappers.AbstractMapperFactory;
 import com.peekaboo.data.mappers.Mapper;
+import com.peekaboo.domain.MessageUtils;
 import com.peekaboo.domain.User;
 
 import java.io.IOException;
@@ -59,12 +60,17 @@ public class WebSocketNotifier implements INotifier {
                                 public void onDisconnected(WebSocket websocket, WebSocketFrame serverCloseFrame,
                                                            WebSocketFrame clientCloseFrame, boolean closedByServer) throws Exception {
                                     Log.e(TAG, "Status: Disconnected ");
+                                    ws = null;
 //                                    reconnect();
                                 }
 
                                 @Override
                                 public void onBinaryMessage(WebSocket websocket, byte[] binary) throws Exception {
+                                    Log.e(TAG, "Status: Binary Message received");
                                     Message obtainedMessage = btm.transform(binary);
+                                    for (NotificationListener listener : listeners) {
+                                        listener.onMessageObtained(obtainedMessage);
+                                    }
                                     Log.e(TAG, "Status: Text Message received" + obtainedMessage);
 
                                 }
@@ -79,26 +85,38 @@ public class WebSocketNotifier implements INotifier {
                 } catch (IOException e) {
                     Log.e(TAG, "exception " + e);
                 }
-            } else if (!ws.isOpen()) {
-                Log.e(TAG, "reconnect socket");
-                reconnect();
             }
+//            else if (!ws.isOpen()) {
+//                Log.e(TAG, "reconnect socket");
+//                reconnect();
+//            }
         }
     }
 
-    private void reconnect() {
-        try {
-            if (ws != null) {
-                ws.recreate().connectAsynchronously();
-            }
-        } catch (IOException e) {
-            Log.e(TAG, "exception recreate " + e);
-        }
-    }
+//    private void reconnect() {
+//        try {
+//            connectSocket();
+//            if (ws != null) {
+//                ws.recreate().connectAsynchronously();
+//            }
+//        } catch (IOException e) {
+//            Log.e(TAG, "exception recreate " + e);
+//        }
+//    }
 
     @Override
     public void tryConnect() {
         connectSocket();
+    }
+
+    @Override
+    public void sendFile(Message message, String file) {
+//        int maxPayloadSize = ws.getMaxPayloadSize();
+        List<Message> fileMessage = MessageUtils.createFileMessage(message, file, 6000);
+        for (Message m : fileMessage) {
+            Log.e("message", m.getCommand() + " " + m.getParams());
+            sendBinaryMessage(mtb.transform(m));
+        }
     }
 
     @Override
@@ -107,12 +125,21 @@ public class WebSocketNotifier implements INotifier {
     }
 
     @Override
+    public void disconnect() {
+        if (ws != null) {
+            ws.disconnect();
+            ws = null;
+        }
+    }
+
+
+
+    @Override
     public void sendMessage(Message message) {
         sendBinaryMessage(mtb.transform(message));
     }
 
     public void sendBinaryMessage(byte[] message) {
-        Log.e("user", user.getId());
         ws.sendBinary(message);
     }
 

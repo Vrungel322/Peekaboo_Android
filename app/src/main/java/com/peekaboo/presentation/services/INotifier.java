@@ -5,13 +5,15 @@ package com.peekaboo.presentation.services;
  */
 public interface INotifier {
     void sendMessage(Message message);
-//    void sendBinaryMessage(byte[] s, String receiver);
     boolean isAvailable();
     void tryConnect();
 
+    void sendFile(Message message, String file);
     void addListener(NotificationListener listener);
 
     void removeListener(NotificationListener listener);
+
+    void disconnect();
 
     interface NotificationListener {
         void onMessageObtained(Message message);

@@ -1,4 +1,4 @@
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
 
     <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:windowContentOverlay">@null</item>
@@ -16,6 +16,8 @@
         <item name="colorButtonNormal">@color/colorAccent</item>
         <item name="android:textColorHint">@color/textColorHint</item>
         <item name="colorControlNormal">@color/colorControlNormal</item>
+        <!--<item name="editTextStyle">@style/EditTextStyle</item>-->
+        <!--<item name="android:editTextStyle">@style/EditTextStyle</item>-->
     </style>
 
     <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">
@@ -27,9 +29,12 @@
         <item name="windowNoTitle">true</item>
     </style>
 
-    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar">
-    </style>
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"></style>
 
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" >
-    </style>
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"></style>
+
+    <!--<style name="EditTextStyle" parent="Base.V7.Widget.AppCompat.EditText">-->
+        <!--<item name="android:background">@drawable/edit_text_background</item>-->
+        <!--<item name="android:editTextBackground">@drawable/edit_text_background</item>-->
+    <!--</style>-->
 </resources>

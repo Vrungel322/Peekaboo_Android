@@ -28,6 +28,7 @@ public class MessageMappersTest {
     public void toStringTest() {
         Message withBodyText = new Message(Message.Command.SEND)
                 .addParam(Message.Params.TYPE, Message.Type.TEXT)
+
                 .setTextBody("asd");
 
         Message withoutBodyText = new Message(Message.Command.SEND)

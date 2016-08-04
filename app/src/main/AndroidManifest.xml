@@ -10,6 +10,7 @@
     <uses-permission android:name="android.permission.WRITE_INTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_INTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
     <application
         android:name=".presentation.PeekabooApplication"
@@ -42,26 +43,26 @@
             android:name=".presentation.activities.SignUpActivity"
             android:theme="@style/SignInTheme">
 
-            <!-- <intent-filter> -->
-            <!-- <action android:name="android.intent.action.MAIN" /> -->
-            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-            <!-- </intent-filter> -->
+             <!--<intent-filter>-->
+             <!--<action android:name="android.intent.action.MAIN" />-->
+             <!--<category android:name="android.intent.category.LAUNCHER" />-->
+             <!--</intent-filter>-->
         </activity>
 
         <activity android:name=".presentation.activities.MainActivity"
-            android:theme="@style/AppTheme">
-             <!--<intent-filter>-->
-                 <!--<action android:name="android.intent.action.MAIN" />-->
-                 <!--<category android:name="android.intent.category.LAUNCHER" />-->
-             <!--</intent-filter>-->
+            android:theme="@style/SignInTheme">
+             <intent-filter>
+                 <action android:name="android.intent.action.MAIN" />
+                 <category android:name="android.intent.category.LAUNCHER" />
+             </intent-filter>
         </activity>
 
         <activity android:name=".presentation.activities.ChatActivity"
             android:theme="@style/SignInTheme">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            <!--<intent-filter>-->
+                <!--<action android:name="android.intent.action.MAIN" />-->
+                <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
         </activity>
 
         <activity
@@ -83,10 +84,10 @@
         <receiver
             android:name=".presentation.services.ApplicationStartedReceiver"
             android:enabled="true">
-            <intent-filter>
-                <action android:name="com.peekaboo.start" />
-                <action android:name="android.intent.action.BOOT_COMPLETED" />
-            </intent-filter>
+            <!--<intent-filter>-->
+                <!--<action android:name="com.peekaboo.start" />-->
+                <!--<action android:name="android.intent.action.BOOT_COMPLETED" />-->
+            <!--</intent-filter>-->
         </receiver>
 
         <service

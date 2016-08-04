@@ -28,7 +28,7 @@ public class SignUpActivity extends AppCompatActivity implements ISignUpView {
 
     public static final String PROGRESS_DIALOG = "progress_dialog";
     public static final String CONFIRM_SIGN_UP_DIALOG = "confirmSignUpDialog";
-    @BindView(R.id.etEmail)
+    @BindView(R.id.etLogin)
     EditText etLogin;
     @BindView(R.id.etUsername)
     EditText etUsername;
