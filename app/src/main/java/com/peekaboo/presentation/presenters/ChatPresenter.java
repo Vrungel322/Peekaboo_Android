@@ -30,7 +30,6 @@ public class ChatPresenter implements IChatPresenter {
     PMessageHelper pMessageHelper;
     AbstractMapperFactory mapperFactory;
     TextToSpeech textToSpeech;
-
     AudioRecorder recorder;
 
     @Inject
@@ -111,7 +110,7 @@ public class ChatPresenter implements IChatPresenter {
     public Subscription stopRecordingAudio(String tableName) {
         if (recorder != null) {
             return recorder.stopRecording().subscribe(record -> {
-                insertMessageToTable(tableName, new PMessage(Utility.getPackageId(), true, false, record.getFilename(),
+                insertMessageToTable(tableName, new PMessage(Utility.getPackageId(), true, true, record.getFilename(),
                         System.currentTimeMillis(), false, false, false));
             });
         }
