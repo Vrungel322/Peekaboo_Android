@@ -1,6 +1,8 @@
 package com.peekaboo.presentation.adapters;
 
 import android.content.Context;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +16,9 @@ import com.peekaboo.R;
 import com.peekaboo.data.repositories.database.PMessageAbs;
 import com.peekaboo.utils.Utility;
 
+import java.io.FileDescriptor;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
@@ -28,6 +33,8 @@ public class ChatAdapter extends BaseAdapter implements Action1<List<PMessageAbs
 
     private final LayoutInflater inflater;
     private Context context;
+    private ViewHolder holder;
+    private MediaPlayer mediaPlayer;
 
     private List<PMessageAbs> messages = Collections.emptyList();
 
@@ -60,8 +67,8 @@ public class ChatAdapter extends BaseAdapter implements Action1<List<PMessageAbs
     @Override
     public View getView(int position, View view, ViewGroup parent) {
         PMessageAbs pMessageObj = getItem(position);
-        ViewHolder holder;
-        if (view != null){
+
+        if (view != null) {
             holder = (ViewHolder) view.getTag();
             setAlignment(holder, pMessageObj.isMine());
         } else {
@@ -75,15 +82,19 @@ public class ChatAdapter extends BaseAdapter implements Action1<List<PMessageAbs
         holder.tvChatMessage.setText(pMessageObj.messageBody());
         holder.tvChatTimestamp.setText(Utility.getFriendlyDayString(context, pMessageObj.timestamp()));
 
-        if(pMessageObj.isSent() && !pMessageObj.isDelivered()){
+        if (pMessageObj.isSent() && !pMessageObj.isDelivered()) {
             holder.ivChatImage.setVisibility(View.GONE);
         } else {
             holder.ivChatImage.setImageResource(getStatusImage(pMessageObj.isRead()));
         }
 
         // for testing media
-        if(pMessageObj.isMedia()){
-            holder.tvChatMessage.setText(pMessageObj.messageBody());
+        if (pMessageObj.isMedia()) {
+            holder.tvChatMessage.setVisibility(View.GONE);
+            holder.ibPlayRecord.setVisibility(View.VISIBLE);
+            holder.ibPlayRecord.setOnClickListener(v -> playRecord(pMessageObj.messageBody()));
+        } else {
+            holder.ibPlayRecord.setVisibility(View.GONE);
         }
 
         return view;
@@ -110,13 +121,41 @@ public class ChatAdapter extends BaseAdapter implements Action1<List<PMessageAbs
         }
     }
 
-    private int getStatusImage(boolean isRead){
+    private int getStatusImage(boolean isRead) {
         return isRead ? R.drawable.ic_check_all : R.drawable.ic_check;
     }
 
-    public void clearList(){
+    public void clearList() {
         this.messages = Collections.emptyList();
         notifyDataSetChanged();
+    }
+
+    public void playRecord(String filepath) {
+        if (mediaPlayer == null && filepath != null) {
+            try {
+                FileInputStream fis = new FileInputStream(filepath);
+                FileDescriptor fd = fis.getFD();
+                if(fd != null){
+                    mediaPlayer = new MediaPlayer();
+                    mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+                    mediaPlayer.setDataSource(fd);
+                    mediaPlayer.prepareAsync();
+                    mediaPlayer.setOnPreparedListener(mp1 -> {
+                        mp1.start();
+                    });
+                    mediaPlayer.setOnCompletionListener(mp -> {
+                        mediaPlayer.release();
+                        mediaPlayer = null;
+                    });
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        } else if (mediaPlayer != null) {
+            mediaPlayer.stop();
+            mediaPlayer.release();
+            mediaPlayer = null;
+        }
     }
 
     static class ViewHolder {
@@ -128,9 +167,12 @@ public class ChatAdapter extends BaseAdapter implements Action1<List<PMessageAbs
         ImageView ivChatImage;
         @BindView(R.id.chat_bubble)
         FrameLayout chatBubble;
+        @BindView(R.id.ibPlayRecord)
+        ImageView ibPlayRecord;
 
         public ViewHolder(View view) {
             ButterKnife.bind(this, view);
         }
     }
+
 }

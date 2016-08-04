@@ -47,7 +47,6 @@ public class ChatActivity extends AppCompatActivity implements ChatItemDialog.IC
     EditText etMessageBody;
     @BindView(R.id.lvMessages)
     ListView lvMessages;
-
     @Inject
     ChatPresenter chatPresenter;
 
@@ -57,7 +56,6 @@ public class ChatActivity extends AppCompatActivity implements ChatItemDialog.IC
     private CompositeSubscription subscriptions;
     private String receiverName;
     private boolean isRecording = false; // for test
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -246,4 +244,5 @@ public class ChatActivity extends AppCompatActivity implements ChatItemDialog.IC
             etMessageBody.setText("");
         }
     }
+
 }
