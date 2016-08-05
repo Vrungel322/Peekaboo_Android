@@ -79,7 +79,6 @@ public class ChatAdapter extends BaseAdapter implements Action1<List<PMessageAbs
             setAlignment(holder, pMessageObj.isMine());
         }
 
-        holder.tvChatMessage.setText(pMessageObj.messageBody());
         holder.tvChatTimestamp.setText(Utility.getFriendlyDayString(context, pMessageObj.timestamp()));
 
         if (pMessageObj.isSent() && !pMessageObj.isDelivered()) {
@@ -89,11 +88,13 @@ public class ChatAdapter extends BaseAdapter implements Action1<List<PMessageAbs
         }
 
         // for testing media
-        if (pMessageObj.isMedia()) {
+        if (pMessageObj.isMedia()){
             holder.tvChatMessage.setVisibility(View.GONE);
             holder.ibPlayRecord.setVisibility(View.VISIBLE);
             holder.ibPlayRecord.setOnClickListener(v -> playRecord(pMessageObj.messageBody()));
-        } else {
+        }else {
+            holder.tvChatMessage.setVisibility(View.VISIBLE);
+            holder.tvChatMessage.setText(pMessageObj.messageBody());
             holder.ibPlayRecord.setVisibility(View.GONE);
         }
 
