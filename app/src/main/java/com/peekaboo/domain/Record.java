@@ -26,12 +26,17 @@ public class Record {
     private String folderName;
     private String filename;
 
-    public Record(String folderName) {
+    //test
+    private int SAMPLERATE = 0;
+
+    //todo убрать семплрейт
+    public Record(String folderName, int samplerate) {
         this.folderName = folderName;
         bufferSize = AudioRecord.getMinBufferSize(44100,
                 AudioFormat.CHANNEL_IN_MONO,
                 AudioFormat.ENCODING_PCM_16BIT);
-
+        //test
+        SAMPLERATE = samplerate;
     }
 
     public String getFileName() {
@@ -72,9 +77,9 @@ public class Record {
     /**
      * RUN ONLY IN SEPARATE THREAD!
      */
-    public void startRecording() {
+    public void startRecording(){
         recorder = new AudioRecord(MediaRecorder.AudioSource.MIC,
-                Constants.SOUND_RECORDING.RECORDER_SAMPLERATE,
+                SAMPLERATE,
                 Constants.SOUND_RECORDING.RECORDER_CHANNELS,
                 Constants.SOUND_RECORDING.RECORDER_AUDIO_ENCODING,
                 bufferSize);
@@ -144,10 +149,10 @@ public class Record {
         FileOutputStream out;
         long totalAudioLen;
         long totalDataLen;
-        long longSampleRate = Constants.SOUND_RECORDING.RECORDER_SAMPLERATE;
+        long longSampleRate = SAMPLERATE;
         int channels = 1;
         long byteRate = Constants.SOUND_RECORDING.RECORDER_BPP
-                * Constants.SOUND_RECORDING.RECORDER_SAMPLERATE * channels / 8;
+                * SAMPLERATE * channels / 8;
 
         byte[] data = new byte[bufferSize];
 
