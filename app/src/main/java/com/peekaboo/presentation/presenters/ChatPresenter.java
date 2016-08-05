@@ -12,7 +12,10 @@ import com.peekaboo.data.repositories.database.PMessage;
 import com.peekaboo.data.repositories.database.PMessageAbs;
 import com.peekaboo.data.repositories.database.PMessageHelper;
 import com.peekaboo.domain.AudioRecorder;
+import com.peekaboo.domain.MessageUtils;
 import com.peekaboo.domain.Record;
+import com.peekaboo.presentation.services.INotifier;
+import com.peekaboo.presentation.services.Message;
 import com.peekaboo.presentation.views.IChatView;
 import com.peekaboo.utils.Utility;
 
@@ -30,15 +33,17 @@ public class ChatPresenter implements IChatPresenter {
     PMessageHelper pMessageHelper;
     AbstractMapperFactory mapperFactory;
     TextToSpeech textToSpeech;
+    private INotifier notifier;
     AudioRecorder recorder;
 
     @Inject
     public ChatPresenter(Context context, PMessageHelper pMessageHelper,
-                         AbstractMapperFactory mapperFactory, TextToSpeech textToSpeech) {
+                         AbstractMapperFactory mapperFactory, TextToSpeech textToSpeech, INotifier notifier) {
         this.context = context;
         this.pMessageHelper = pMessageHelper;
         this.mapperFactory = mapperFactory;
         this.textToSpeech = textToSpeech;
+        this.notifier = notifier;
     }
 
     public void createTable(String tableName) {
@@ -46,9 +51,12 @@ public class ChatPresenter implements IChatPresenter {
     }
 
     @Override
-    public void insertMessageToTable(String tableName, PMessage message) {
+    public void sendMessage(String tableName, PMessage message) {
         pMessageHelper.insert(tableName, mapperFactory.getPMessageMapper().transform(message));
-
+//        if (notifier.isAvailable()) {
+//            Message textMessage = MessageUtils.createTextMessage(message.messageBody(), receiver);
+//            notifier.sendMessage(textMessage);
+//        }
     }
 
     @Override
@@ -110,7 +118,7 @@ public class ChatPresenter implements IChatPresenter {
     public Subscription stopRecordingAudio(String tableName) {
         if (recorder != null) {
             return recorder.stopRecording().subscribe(record -> {
-                insertMessageToTable(tableName, new PMessage(Utility.getPackageId(), true, true, record.getFilename(),
+                sendMessage(tableName, new PMessage(Utility.getPackageId(), true, true, record.getFilename(),
                         System.currentTimeMillis(), false, false, false));
             });
         }

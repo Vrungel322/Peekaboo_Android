@@ -12,7 +12,10 @@ import rx.functions.Action1;
  */
 public interface IChatPresenter extends IPresenter<IChatView> {
     void createTable(String tableName);
-    void insertMessageToTable(String tableName, PMessage message);
+
+
+    void sendMessage(String tableName, PMessage message);
+
     void dropTableAndCreate(String tableName);
     Subscription getAllMessages(String tableName, Action1 adapter);
     int deleteMessageByPackageId(String tableName, PMessageAbs message);
