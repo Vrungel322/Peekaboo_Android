@@ -2,19 +2,23 @@ package com.peekaboo.presentation.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.EditText;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.peekaboo.R;
 import com.peekaboo.presentation.PeekabooApplication;
+import com.peekaboo.presentation.app.view.PasswordView;
 import com.peekaboo.presentation.dialogs.ProgressDialogFragment;
 import com.peekaboo.presentation.presenters.LoginPresenter;
 import com.peekaboo.presentation.views.ICredentialsView;
 import com.peekaboo.utils.ActivityNavigator;
+import com.peekaboo.utils.OnSwipeTouchListener;
 import com.squareup.otto.Bus;
 import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKCallback;
@@ -26,6 +30,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnTouch;
 
 public class LogInActivity extends AppCompatActivity implements ICredentialsView {
 
@@ -34,18 +39,17 @@ public class LogInActivity extends AppCompatActivity implements ICredentialsView
     static Bus bus;
     @BindView(R.id.etLogin)
     EditText etLogin;
-    @BindView(R.id.etPassword)
-    EditText etPassword;
-    @BindView(R.id.tvSignUp1)
-    TextView tvSignUp1;
-    @BindView(R.id.tvSingUp2)
-    TextView tvSignUp2;
-    @BindView(R.id.tvSingUp3)
-    TextView tvSignUp3;
-    @BindView(R.id.tvSignUp4)
-    TextView tvSignUp4;
-    @BindView(R.id.tvOrSign)
-    TextView tvSignIn;
+//    @BindView(R.id.etPassword)
+//    EditText etPassword;
+    @BindView(R.id.ilUsername)
+    TextInputLayout ilUsername;
+//    @BindView(R.id.ilPassword)
+//    TextInputLayout ilPassword;
+    @BindView(R.id.pvPassword)
+    PasswordView passwordView;
+    @BindView(R.id.lLogIn)
+    RelativeLayout lLogin;
+
     @Inject
     LoginPresenter loginPresenter;
     @Inject
@@ -61,7 +65,10 @@ public class LogInActivity extends AppCompatActivity implements ICredentialsView
         loginPresenter.bind(this);
         loginPresenter.setCheckingInternet();
         bus.register(this);
+        onSwipe();
     }
+
+
 
     @Override
     protected void onDestroy() {
@@ -79,12 +86,13 @@ public class LogInActivity extends AppCompatActivity implements ICredentialsView
     public void showInputError(InputFieldError error) {
         switch (error) {
             case LOGIN:
-                etLogin.setError(getString(R.string.invalidLogin));
+                ilUsername.setError("wkjfdj");
                 etLogin.setText("");
-                break;
             case PASSWORD:
-                etPassword.setError(getString(R.string.invalidPassword));
-                etPassword.setText("");
+//                ilPassword.setError("jkgftdrest");
+//                etPassword.setText("");
+                passwordView.setError("jkgftdrest");
+                passwordView.setText("");
                 break;
         }
     }
@@ -104,22 +112,31 @@ public class LogInActivity extends AppCompatActivity implements ICredentialsView
         }
     }
 
-    @OnClick(R.id.tvSingUp2)
-    void ontvSingUpClick() {
+    @OnClick(R.id.tvSignUp)
+    void onSignUpClick(){
         navigator.startSignUpActivity(this);
     }
 
     @OnClick(R.id.bSignIn)
     void onSignInButtonClick() {
         String login = etLogin.getText().toString();
-        String password = etPassword.getText().toString();
+        String password = passwordView.getPassword();
         loginPresenter.onSignInButtonClick(login, password);
     }
 
-    @OnClick(R.id.bVk)
-    void onVkButtonClick() {
-        loginPresenter.onVkButtonClick();
+    @OnTouch(R.id.etLogin)
+    boolean onUsernameEditText(){
+        ilUsername.setError(null);
+        return false;
     }
+
+
+    @OnTouch(R.id.pvPassword)
+    boolean onPasswordEditText(){
+        passwordView.setError(null);
+        return false;
+    }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -143,5 +160,13 @@ public class LogInActivity extends AppCompatActivity implements ICredentialsView
     @Override
     public void onError(String text) {
         Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG).show();
+    }
+
+    private void onSwipe(){
+        lLogin.setOnTouchListener(new OnSwipeTouchListener(LogInActivity.this) {
+            public void onSwipeTop() {
+                navigator.startSignUpActivity(LogInActivity.this);
+            }
+        });
     }
 }

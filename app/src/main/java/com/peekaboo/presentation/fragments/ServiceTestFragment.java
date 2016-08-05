@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.Html;
+import android.text.SpannedString;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -81,8 +83,9 @@ public class ServiceTestFragment extends Fragment implements INotifier.Notificat
                         RequestBody.create(MediaType.parse("audio/flac"), file))
                 .build();
         Request request = new Request.Builder()
-//                .url("http://text-to-speech-java-oleksiiromanko.mybluemix.net/UploadServlet")
-                .url("http://10.0.1.5:8080/UploadServlet")
+                .url("http://text-to-speech-java-oleksiiromanko.mybluemix.net/UploadServlet")
+//                .url("http://10.0.1.5:8080/UploadServlet")
+                .addHeader("Level", "0.3")
                 .post(requestBody)
                 .build();
 //
@@ -100,7 +103,7 @@ public class ServiceTestFragment extends Fragment implements INotifier.Notificat
 
                 String string = response.body().string();
                 Log.e("response", String.valueOf(Thread.currentThread()));
-                messages.post(() -> messages.setText(string));
+                messages.post(() -> messages.setText(Html.fromHtml(string)));
             }
         });
     }

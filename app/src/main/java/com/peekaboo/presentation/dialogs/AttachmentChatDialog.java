@@ -57,4 +57,14 @@ public class AttachmentChatDialog extends DialogFragment {
         Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         getActivity().startActivityForResult(cameraIntent, REQUEST_CODE_CAMERA);
     }
+
+
+    public interface IAttachmentDialogEventListener {
+        void takeGalleryImage();
+        void takePhoto();
+        void takeAudio();
+        void takeDocument();
+        void takeSpeech();
+    }
+
 }

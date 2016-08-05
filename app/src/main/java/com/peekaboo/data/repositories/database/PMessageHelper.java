@@ -29,6 +29,7 @@ public class PMessageHelper {
                 PMessageAbs.ID               + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
                 PMessageAbs.PACKAGE_ID       + " TEXT NOT NULL," +
                 PMessageAbs.IS_MINE          + " INTEGER NOT NULL," +
+                PMessageAbs.IS_MEDIA         + " INTEGER DEFAULT 0 NOT NULL," +
                 PMessageAbs.MESSAGE_BODY     + " TEXT NOT NULL," +
                 PMessageAbs.TIMESTAMP        + " INTEGER NOT NULL," +
                 PMessageAbs.STATUS_SENT      + " INTEGER DEFAULT 0 NOT NULL," +
@@ -44,7 +45,6 @@ public class PMessageHelper {
 
     public Observable<List<PMessageAbs>> getAllMessages(String tableName){
         String selectAll = "SELECT * FROM " + tableName;
-        String order = " ORDER BY ASC";
         return db.createQuery(tableName, selectAll)
                 .mapToList(PMessageAbs.MAPPER)
                 .observeOn(AndroidSchedulers.mainThread());
@@ -64,5 +64,12 @@ public class PMessageHelper {
         String dropTable = "DROP TABLE IF EXISTS " + " " + tableName;
         db.execute(dropTable);
         createTable(tableName);
+    }
+
+    public Observable<List<PMessageAbs>> getUnreadMessagesCount(String tableName) {
+        String selectUnread = "SELECT * FROM " + tableName + " WHERE " + PMessageAbs.STATUS_READ + " = 0";
+        return db.createQuery(tableName, selectUnread)
+                .mapToList(PMessageAbs.MAPPER)
+                .observeOn(AndroidSchedulers.mainThread());
     }
 }

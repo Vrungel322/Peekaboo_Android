@@ -6,6 +6,7 @@ import android.text.format.Time;
 import com.peekaboo.R;
 
 import java.text.SimpleDateFormat;
+import java.util.UUID;
 
 /**
  * Created by st1ch on 21.07.2016.
@@ -82,5 +83,9 @@ public class Utility {
             SimpleDateFormat dayFormat = new SimpleDateFormat("EEEE");
             return dayFormat.format(dateInMillis);
         }
+    }
+
+    public static String getPackageId(){
+        return UUID.randomUUID().toString();
     }
 }

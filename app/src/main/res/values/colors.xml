@@ -4,13 +4,14 @@
     <color name="colorPrimaryDark">#c8555555</color>
     <!--<color name="colorAccent">#56d4b3</color>-->
     <color name="colorAccent">#00c9a8</color>
-    <color name="colorDarkAccent">#008973</color>
+    <color name="colorDarkAccent">#009179</color>
     <color name="colorAccentCredentials">#ffffff</color>
     <color name="colorPrimaryLight">#ffffff</color>
     <color name="textColor">#ffffff</color>
     <color name="textColorHint">#b6b6b6</color>
     <color name="drawerDividerColor">#5b5b5b</color>
     <color name="colorControlNormal">#969696</color>
+    <color name="colorMistake">#ef5350</color>
     <color name="nav_background">#303030</color>
     <color name="drawer_item_selected">#08ffffff</color>
 </resources>

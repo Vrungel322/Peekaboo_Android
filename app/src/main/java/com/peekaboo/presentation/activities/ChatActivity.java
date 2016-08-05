@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.speech.RecognizerIntent;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
@@ -22,10 +23,11 @@ import com.peekaboo.presentation.adapters.ChatAdapter;
 import com.peekaboo.presentation.fragments.ChatItemDialog;
 import com.peekaboo.presentation.presenters.ChatPresenter;
 import com.peekaboo.utils.Constants;
+import com.peekaboo.utils.Utility;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Random;
-import java.util.UUID;
 
 import javax.inject.Inject;
 
@@ -38,7 +40,8 @@ import rx.subscriptions.CompositeSubscription;
 /**
  * Created by Nataliia on 13.07.2016.
  */
-public class ChatActivity extends AppCompatActivity implements ChatItemDialog.IChatItemEventListener {
+public class ChatActivity extends AppCompatActivity implements ChatItemDialog.IChatItemEventListener,
+                                AttachmentChatDialog.IAttachmentDialogEventListener{
 
     @BindView(R.id.etMessageBody)
     EditText etMessageBody;
@@ -53,7 +56,9 @@ public class ChatActivity extends AppCompatActivity implements ChatItemDialog.IC
     private ChatItemDialog chatItemDialog;
     private CompositeSubscription subscriptions;
     private String receiverName;
+    private boolean isRecording = false; // for test
 
+    
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,7 +74,7 @@ public class ChatActivity extends AppCompatActivity implements ChatItemDialog.IC
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         if(null != receiverName){
-            toolbar.setTitle(receiverName);
+            getSupportActionBar().setTitle(receiverName);
         }
 
         chatAdapter = new ChatAdapter(getApplicationContext());
@@ -89,7 +94,6 @@ public class ChatActivity extends AppCompatActivity implements ChatItemDialog.IC
             chatItemDialog.show(ft, Constants.FRAGMENT_TAGS.CHAT_ITEM_DIALOG_FRAGMENT_TAG);
             return true;
         });
-
     }
 
     @Override
@@ -97,6 +101,7 @@ public class ChatActivity extends AppCompatActivity implements ChatItemDialog.IC
         super.onResume();
         subscriptions = new CompositeSubscription();
         subscriptions.add(chatPresenter.getAllMessages(receiverName, chatAdapter));
+        subscriptions.add(chatPresenter.getUnreadMessagesCount(receiverName));
     }
 
     @Override
@@ -141,12 +146,12 @@ public class ChatActivity extends AppCompatActivity implements ChatItemDialog.IC
         if(null == msgBody || msgBody.equals("")){
             return false;
         }
-        String pckgId = UUID.randomUUID().toString();
+        String pckgId = Utility.getPackageId();
         long timestamp = System.currentTimeMillis();
         // for test
         Random random = new Random();
         boolean isMine = random.nextBoolean();
-        chatPresenter.makeNoteInTable(receiverName, new PMessage(pckgId, isMine, msgBody,
+        chatPresenter.insertMessageToTable(receiverName, new PMessage(pckgId, isMine, false, msgBody,
                 timestamp, false, false, false));
         etMessageBody.setText("");
         //TODO: actually sending
@@ -158,12 +163,12 @@ public class ChatActivity extends AppCompatActivity implements ChatItemDialog.IC
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == AttachmentChatDialog.REQUEST_CODE_CAMERA) {
+        if (requestCode == Constants.REQUEST_CODES.REQUEST_CODE_CAMERA) {
             Toast.makeText(getApplicationContext(), "" + resultCode, Toast.LENGTH_SHORT).show();
             Bitmap thumbnailBitmap = (Bitmap) data.getExtras().get("data");
             sendPhoto(thumbnailBitmap);
         }
-        if (requestCode == AttachmentChatDialog.REQUEST_CODE_GALERY){
+        if (requestCode == Constants.REQUEST_CODES.REQUEST_CODE_GALERY){
             Toast.makeText(getApplicationContext(), "" + resultCode, Toast.LENGTH_SHORT).show();
             Bitmap thumbnailBitmap = null;
             try {
@@ -173,11 +178,22 @@ public class ChatActivity extends AppCompatActivity implements ChatItemDialog.IC
             }
             sendPhoto(thumbnailBitmap);
         }
+        if(requestCode == Constants.REQUEST_CODES.REQUEST_CODE_SPEECH_INPUT){
+            if (resultCode == RESULT_OK && null != data) {
+
+                ArrayList<String> result = data
+                        .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                String pckgId = Utility.getPackageId();
+                long timestamp = System.currentTimeMillis();
+                chatPresenter.insertMessageToTable(receiverName, new PMessage(pckgId, true, false,
+                        result.get(0), timestamp, false, false, false));
+            }
+        }
     }
 
     private void sendPhoto(Bitmap photo){
-        chatPresenter.makeNoteInTable(receiverName, new PMessage("photoPckgId", true, "PHOTO",
-                System.currentTimeMillis(), false, false, false));
+        chatPresenter.insertMessageToTable(receiverName, new PMessage(Utility.getPackageId(), true, true,
+                "PHOTO", System.currentTimeMillis(), false, false, false));
     }
 
     @Override
@@ -193,5 +209,42 @@ public class ChatActivity extends AppCompatActivity implements ChatItemDialog.IC
     @Override
     public void textToSpeech(int index) {
         chatPresenter.convertTextToSpeech(chatAdapter.getItem(index));
+    }
+
+    @Override
+    public void takeGalleryImage() {
+        Intent intent = new Intent();
+        intent.setType("image/*"); // to open gallery
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, getString(R.string.selectImage)),
+                Constants.REQUEST_CODES.REQUEST_CODE_GALERY);
+    }
+
+    @Override
+    public void takePhoto() {
+        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(cameraIntent, Constants.REQUEST_CODES.REQUEST_CODE_CAMERA);
+    }
+
+    @Override
+    public void takeAudio() {
+        Toast.makeText(this, "2", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void takeDocument() {
+        Toast.makeText(this, "3", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void takeSpeech() {
+        if(!isRecording){
+            subscriptions.add(chatPresenter.startRecordingAudio(receiverName));
+            isRecording = true;
+        } else {
+            subscriptions.add(chatPresenter.stopRecordingAudio(receiverName));
+            isRecording = false;
+            etMessageBody.setText("");
+        }
     }
 }

@@ -1,0 +1,69 @@
+<resources>
+    <string name="app_name">Peekaboo</string>
+    <string name="pleaseWait">Подождите...</string>
+    <string name="username">Имя пользователя</string>
+    <string name="password">Пароль</string>
+    <string name="createAccount">Создать аккаунт</string>
+    <string name="signIn">Аутентификация</string>
+    <string name="skip">Пропустить</string>
+    <string name="confirmPassword">Пдтверждение пароля</string>
+    <string name="email">Email</string>
+    <string name="invalidLogin">Неподходящий логин</string>
+    <string name="invalidUsername">Неподходящий логин</string>
+    <string name="invalidPassword">Неподходящий пароль</string>
+    <string name="invalidPasswordConfirm">пароли не совпадают</string>
+    <string name="invalidEmail">Неподходящий email</string>
+    <string name="invalidKey">Неподходящий код</string>
+    <string name="bySignUp1">В процессе </string>
+    <string name="bySignUp2"> Регистрируясь </string>
+    <string name="bySignUp3"> Вы соглашаетесь с </string>
+    <string name="bySignUp4"> Правилами использования </string>
+    <string name="orSignIn">Или войдите с:</string>
+    <string name="existence_font">fonts/existence.otf</string>
+    <string name="helvetica_font">fonts/helvetika.ttf</string>
+    <string name="usernameOrLogin">Имя или логин</string>
+    <string name="emailOrPhoneNum">Email или номер телефона</string>
+    <integer name="com_vk_sdk_AppId">5527207</integer>
+
+    <string name="action_settings">Настройки</string>
+    <string name="drawer_item_home">Домой</string>
+    <string name="drawer_item_free_play">Free Play</string>
+    <string name="drawer_item_custom">Custom</string>
+    <string name="drawer_item_settings">Настройки</string>
+    <string name="drawer_item_help">Помощь</string>
+    <string name="drawer_item_open_source">Open Source</string>
+    <string name="drawer_item_contact">Контакт</string>
+
+    <string name="navigation_drawer_open">Открыть боковую панель</string>
+    <string name="navigation_drawer_close">Закрыть боковую панель</string>
+
+    <string-array name="attacment_list">
+        <item>Фото</item>
+        <item>Изображение с галерии</item>
+        <item>Аудио</item>
+        <item>Документ</item>
+        <item>ТЕСТ: Запись голоса</item>
+    </string-array>
+
+    <string-array name="edit_chat_item">
+        <item>Скопировать</item>
+        <item>Удалить</item>
+        <item>Ответить</item>
+        <item>Переслать</item>
+    </string-array>
+
+    <!-- TODO: Remove or change this placeholder payload -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="selectImage">Выберите изображение</string>
+    <string name="ok">OK</string>
+
+    <string name="today">Сегодня</string>
+    <string name="tomorrow">Завтра</string>
+    <string name="dialogs">Диалоги</string>
+    <string name="calls">Звонки</string>
+    <string name="contacts">Контакты</string>
+    <string name="profile">Профиль</string>
+    <string name="settings">Настройки</string>
+    <string name="exit">Выход</string>
+
+</resources>

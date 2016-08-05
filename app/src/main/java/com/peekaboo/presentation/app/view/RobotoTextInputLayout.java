@@ -3,30 +3,31 @@ package com.peekaboo.presentation.app.view;
 import android.content.Context;
 import android.support.design.widget.TextInputLayout;
 import android.util.AttributeSet;
-import android.widget.TextView;
 
 /**
- * Created by sebastian on 09.07.16.
+ * Created by Nataliia on 01.08.2016.
  */
-public class HelveticaTextInputLayout extends TextInputLayout {
-    public HelveticaTextInputLayout(Context context) {
+
+public class RobotoTextInputLayout extends TextInputLayout {
+    public RobotoTextInputLayout(Context context) {
         super(context);
         setTypeface(context);
     }
 
-    public HelveticaTextInputLayout(Context context, AttributeSet attrs) {
+    public RobotoTextInputLayout(Context context, AttributeSet attrs) {
         super(context, attrs);
         setTypeface(context);
     }
 
 
-    public HelveticaTextInputLayout(Context context, AttributeSet attrs, int defStyleAttr) {
+    public RobotoTextInputLayout(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         setTypeface(context);
     }
 
     void setTypeface(Context context) {
-        setTypeface(Typeface.getHelvetica(context));
+        setTypeface(Typeface.getRoboto(context));
     }
 
 }
+

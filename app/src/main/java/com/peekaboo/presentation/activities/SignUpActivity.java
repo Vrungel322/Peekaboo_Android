@@ -2,6 +2,7 @@ package com.peekaboo.presentation.activities;
 
 import android.app.FragmentTransaction;
 import android.os.Bundle;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.EditText;
@@ -13,6 +14,7 @@ import com.peekaboo.presentation.dialogs.ConfirmSignUpDialog;
 import com.peekaboo.presentation.dialogs.ProgressDialogFragment;
 import com.peekaboo.presentation.views.ISignUpView;
 import com.peekaboo.presentation.presenters.SignUpPresenter;
+import com.peekaboo.presentation.views.ISignUpView;
 import com.peekaboo.utils.ActivityNavigator;
 
 import javax.inject.Inject;
@@ -20,6 +22,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnTouch;
 
 /**
  * Created by sebastian on 05.07.16.
@@ -36,6 +39,18 @@ public class SignUpActivity extends AppCompatActivity implements ISignUpView {
     EditText etPassword;
     @BindView(R.id.etPasswordConfirm)
     EditText etPasswordConfirm;
+    @BindView(R.id.ilUsername)
+    TextInputLayout ilUsername;
+    @BindView(R.id.ilPassword)
+    TextInputLayout ilPassword;
+    @BindView(R.id.ilLogin)
+    TextInputLayout ilLogin;
+    @BindView(R.id.ilPasswordConfirm)
+    TextInputLayout ilPasswordCongirm;
+//    @BindView(R.id.layoutSignUp)
+//    RelativeLayout lSignUp;
+
+
     @Inject
     SignUpPresenter signUpPresenter;
     @Inject
@@ -48,6 +63,8 @@ public class SignUpActivity extends AppCompatActivity implements ISignUpView {
         ButterKnife.bind(this);
         PeekabooApplication.getApp(this).getComponent().inject(this);
         signUpPresenter.bind(this);
+        //onSwipe();
+
     }
 
     @Override
@@ -90,23 +107,49 @@ public class SignUpActivity extends AppCompatActivity implements ISignUpView {
     public void showInputError(InputFieldError error) {
         switch (error) {
             case USERNAME:
-                etUsername.setError(getString(R.string.invalidUsername));
+                ilUsername.setError(getString(R.string.invalidUsername));
                 etUsername.setText("");
                 break;
             case PASSWORD:
-                etPassword.setError(getString(R.string.invalidPassword));
+                ilPassword.setError(getString(R.string.invalidPassword));
                 etPassword.setText("");
                 break;
             case PASSWORD_CONFIRM:
-                etPassword.setError(getString(R.string.invalidPasswordConfirm));
+                ilPassword.setError(getString(R.string.invalidPasswordConfirm));
+                ilPasswordCongirm.setError(getString(R.string.invalidPasswordConfirm));
                 etPassword.setText("");
                 etPasswordConfirm.setText("");
                 break;
             case LOGIN:
-                etLogin.setError(getString(R.string.invalidLogin));
+                ilLogin.setError(getString(R.string.invalidLogin));
                 etLogin.setText("");
         }
     }
+
+    @OnTouch(R.id.etUsername)
+    boolean onUsernameEditText(){
+        ilUsername.setError(null);
+        return false;
+    }
+
+
+    @OnTouch(R.id.etPassword)
+    boolean onPasswordEditText(){
+        ilPassword.setError(null);
+        return false;
+    }
+    @OnTouch(R.id.etPasswordConfirm)
+    boolean onPasswordConfirmEditText(){
+        ilPasswordCongirm.setError(null);
+        return false;
+    }
+    @OnTouch(R.id.etLogin)
+    boolean onLoginEditText(){
+        ilLogin.setError(null);
+        return false;
+    }
+
+
 
     @Override
     public void onError(String text) {
@@ -129,5 +172,13 @@ public class SignUpActivity extends AppCompatActivity implements ISignUpView {
         String password = etPassword.getText().toString();
         String passwordConfirm = etPasswordConfirm.getText().toString();
         signUpPresenter.onSignUpButtonClick(username, login, password, passwordConfirm);
+    }
+
+    private void onSwipe(){
+//        lSignUp.setOnTouchListener(new OnSwipeTouchListener(SignUpActivity.this) {
+//            public void onSwipeBottom() {
+//                navigator.startLogInActivity(SignUpActivity.this);
+//            }
+//        });
     }
 }
