@@ -129,7 +129,7 @@ public class ChatAdapter extends BaseAdapter implements Action1<List<PMessageAbs
         this.messages = Collections.emptyList();
         notifyDataSetChanged();
     }
-    
+
     static class ViewHolder {
         @BindView(R.id.tvChatMessage)
         TextView tvChatMessage;
