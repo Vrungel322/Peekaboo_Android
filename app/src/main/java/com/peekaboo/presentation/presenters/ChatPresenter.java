@@ -12,6 +12,7 @@ import com.peekaboo.data.repositories.database.PMessage;
 import com.peekaboo.data.repositories.database.PMessageAbs;
 import com.peekaboo.data.repositories.database.PMessageHelper;
 import com.peekaboo.domain.AudioRecorder;
+import com.peekaboo.domain.MPlayer;
 import com.peekaboo.domain.Record;
 import com.peekaboo.presentation.views.IChatView;
 import com.peekaboo.utils.Utility;
@@ -20,17 +21,20 @@ import javax.inject.Inject;
 
 import rx.Subscription;
 import rx.functions.Action1;
+import rx.subscriptions.CompositeSubscription;
 
 /**
  * Created by Nataliia on 13.07.2016.
  */
-public class ChatPresenter implements IChatPresenter {
+public class ChatPresenter extends BasePresenter<IChatView> implements IChatPresenter {
 
     private Context context;
+    CompositeSubscription subscriptions;
     PMessageHelper pMessageHelper;
     AbstractMapperFactory mapperFactory;
     TextToSpeech textToSpeech;
     AudioRecorder recorder;
+    MPlayer mPlayer;
 
     @Inject
     public ChatPresenter(Context context, PMessageHelper pMessageHelper,
@@ -118,24 +122,32 @@ public class ChatPresenter implements IChatPresenter {
     }
 
     @Override
+    public Subscription startPlayingMPlayer(String filepath) {
+        return mPlayer.play(filepath);
+    }
+
+    @Override
+    public Subscription stopPlayingMPlayer() {
+        return mPlayer.stop();
+    }
+
+    @Override
+    public Subscription stopAndStartPlayingMPlayer(String filepath) {
+        return mPlayer.stopAndPlay(filepath);
+    }
+
+
+    @Override
     public void onPause() {
         if (textToSpeech != null) {
             textToSpeech.stop();
         }
+        subscriptions.unsubscribe();
     }
 
     @Override
     public void onResume() {
-
+        subscriptions = new CompositeSubscription();
     }
 
-    @Override
-    public void bind(IChatView view) {
-
-    }
-
-    @Override
-    public void unbind() {
-
-    }
 }

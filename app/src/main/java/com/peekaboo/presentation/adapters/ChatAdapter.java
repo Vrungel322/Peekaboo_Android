@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -140,7 +141,7 @@ public class ChatAdapter extends BaseAdapter implements Action1<List<PMessageAbs
         @BindView(R.id.chat_bubble)
         FrameLayout chatBubble;
         @BindView(R.id.ibPlayRecord)
-        ImageView ibPlayRecord;
+        ImageButton ibPlayRecord;
 
         public ViewHolder(View view) {
             ButterKnife.bind(this, view);
