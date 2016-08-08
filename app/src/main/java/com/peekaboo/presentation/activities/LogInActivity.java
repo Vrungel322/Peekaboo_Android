@@ -6,6 +6,8 @@ import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.MotionEvent;
+import android.view.View;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -168,10 +170,21 @@ public class LogInActivity extends AppCompatActivity implements ICredentialsView
             public void onSwipeTop() {
                 navigator.startSignUpActivity(LogInActivity.this);
             }
+
+
         });
         tvSignUp.setOnTouchListener(new OnSwipeTouchListener(LogInActivity.this) {
             public void onSwipeTop() {
                 navigator.startSignUpActivity(LogInActivity.this);
+            }
+
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if(event.getAction() == MotionEvent.ACTION_DOWN){
+                    navigator.startSignUpActivity(LogInActivity.this);
+                    return true;
+                }
+                return false;
             }
         });
     }
