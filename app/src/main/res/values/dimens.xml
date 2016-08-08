@@ -29,6 +29,10 @@
     <dimen name="dialog_username_text_size">20sp</dimen>
     <dimen name="dialog_item_margin">6dp</dimen>
     <dimen name="circle_photo_border_width">2dp</dimen>
+    <dimen name="dialog_button_half_margin">6dp</dimen>
+    <dimen name="dialog_button_margin">12dp</dimen>
+    <dimen name="dialog_padding">20dp</dimen>
+    <dimen name="list_padding_half">8dp</dimen>
     <dimen name="nav_margin_top">24dp</dimen>
     <dimen name="nav_icon_width">24dp</dimen>
     <dimen name="nav_icon_height">24dp</dimen>

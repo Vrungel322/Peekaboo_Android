@@ -11,8 +11,9 @@ import android.widget.Toast;
 import com.klinker.android.sliding.SlidingActivity;
 import com.peekaboo.R;
 import com.peekaboo.presentation.PeekabooApplication;
-import com.peekaboo.presentation.fragments.ConfirmSignUpDialog;
-import com.peekaboo.presentation.fragments.ProgressDialogFragment;
+import com.peekaboo.presentation.dialogs.ConfirmSignUpDialog;
+import com.peekaboo.presentation.dialogs.ProgressDialogFragment;
+import com.peekaboo.presentation.views.ISignUpView;
 import com.peekaboo.presentation.presenters.SignUpPresenter;
 import com.peekaboo.presentation.views.ISignUpView;
 import com.peekaboo.utils.ActivityNavigator;
@@ -30,6 +31,7 @@ import butterknife.OnTouch;
 public class SignUpActivity extends SlidingActivity implements ISignUpView {
 
     public static final String PROGRESS_DIALOG = "progress_dialog";
+    public static final String CONFIRM_SIGN_UP_DIALOG = "confirmSignUpDialog";
     @BindView(R.id.etLogin)
     EditText etLogin;
     @BindView(R.id.etUsername)
@@ -98,7 +100,7 @@ public class SignUpActivity extends SlidingActivity implements ISignUpView {
     protected void onStart() {
         super.onStart();
         etUsername.setText("Vrungel");
-        etLogin.setText("nikita241296@gmail.com");
+        etLogin.setText("geronimoapachi@gmail.com");
         etPasswordConfirm.setText("asdasd");
         etPassword.setText("asdasd");
     }
@@ -112,7 +114,6 @@ public class SignUpActivity extends SlidingActivity implements ISignUpView {
     @Override
     public void navigateToProfile() {
         navigator.startProfileActivity(this);
-        finish();
     }
 
 
@@ -175,7 +176,7 @@ public class SignUpActivity extends SlidingActivity implements ISignUpView {
         ConfirmSignUpDialog confirmSignUpDialog = new ConfirmSignUpDialog();
         confirmSignUpDialog.setStyle(android.app.DialogFragment.STYLE_NO_TITLE, 0);
         confirmSignUpDialog.setStyle(android.app.DialogFragment.STYLE_NO_FRAME, 0);
-        confirmSignUpDialog.show(ft, "confirmSignUpDialog");
+        confirmSignUpDialog.show(ft, CONFIRM_SIGN_UP_DIALOG);
     }
 
     @OnClick(R.id.bSignIn)

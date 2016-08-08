@@ -5,6 +5,14 @@
     android:orientation="vertical"
     tools:context=".presentation.fragments.ServiceTestFragment">
 
+    <com.peekaboo.presentation.app.view.PasswordView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <Button
+        android:id="@+id/record_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Start record"/>
     <EditText
         android:id="@+id/receiver"
         android:layout_width="match_parent"
@@ -21,8 +29,21 @@
         android:layout_height="wrap_content"
         android:text="Send" />
 
+    <Button
+        android:id="@+id/reconnect_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Reconnect" />
+
+    <Button
+        android:id="@+id/disconnect_button"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Disconnect" />
+
     <TextView
         android:id="@+id/messages"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+
 </LinearLayout>

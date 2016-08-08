@@ -13,7 +13,8 @@ import android.widget.Toast;
 
 import com.peekaboo.R;
 import com.peekaboo.presentation.PeekabooApplication;
-import com.peekaboo.presentation.fragments.ProgressDialogFragment;
+import com.peekaboo.presentation.app.view.PasswordView;
+import com.peekaboo.presentation.dialogs.ProgressDialogFragment;
 import com.peekaboo.presentation.presenters.LoginPresenter;
 import com.peekaboo.presentation.views.ICredentialsView;
 import com.peekaboo.utils.ActivityNavigator;
@@ -34,14 +35,18 @@ import butterknife.OnTouch;
 public class LogInActivity extends AppCompatActivity implements ICredentialsView {
 
     public static final String PROGRESS_DIALOG = "progress_dialog";
+    @Inject
+    static Bus bus;
     @BindView(R.id.etLogin)
     EditText etLogin;
-    @BindView(R.id.etPassword)
-    EditText etPassword;
+//    @BindView(R.id.etPassword)
+//    EditText etPassword;
     @BindView(R.id.ilUsername)
     TextInputLayout ilUsername;
-    @BindView(R.id.ilPassword)
-    TextInputLayout ilPassword;
+//    @BindView(R.id.ilPassword)
+//    TextInputLayout ilPassword;
+    @BindView(R.id.pvPassword)
+    PasswordView passwordView;
     @BindView(R.id.lLogIn)
     RelativeLayout lLogin;
     @BindView(R.id.tvSignUp)
@@ -51,9 +56,6 @@ public class LogInActivity extends AppCompatActivity implements ICredentialsView
     LoginPresenter loginPresenter;
     @Inject
     ActivityNavigator navigator;
-    @Inject
-    static Bus bus;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +63,6 @@ public class LogInActivity extends AppCompatActivity implements ICredentialsView
         setContentView(R.layout.activity_log_in);
         ButterKnife.bind(this);
         Log.e("actionBar", String.valueOf(getSupportActionBar()));
-       // tvSignUp.setPaintFlags(tvSignUp.getPaintFlags() |   Paint.UNDERLINE_TEXT_FLAG);
         PeekabooApplication.getApp(this).getComponent().inject(this);
         loginPresenter.bind(this);
         loginPresenter.setCheckingInternet();
@@ -81,7 +82,6 @@ public class LogInActivity extends AppCompatActivity implements ICredentialsView
     @Override
     public void navigateToProfile() {
         navigator.startProfileActivity(this);
-        finish();
     }
 
     @Override
@@ -91,8 +91,9 @@ public class LogInActivity extends AppCompatActivity implements ICredentialsView
                 ilUsername.setError(getResources().getString(R.string.invalidUsername));
                 etLogin.setText("");
             case PASSWORD:
-                ilPassword.setError(getResources().getString(R.string.invalidPassword));
-                etPassword.setText("");
+
+                passwordView.setError("jkgftdrest");
+                passwordView.setText("");
                 break;
         }
     }
@@ -115,13 +116,12 @@ public class LogInActivity extends AppCompatActivity implements ICredentialsView
     @OnClick(R.id.tvSignUp)
     void onSignUpClick(){
         navigator.startSignUpActivity(this);
-
     }
 
     @OnClick(R.id.bSignIn)
     void onSignInButtonClick() {
         String login = etLogin.getText().toString();
-        String password = etPassword.getText().toString();
+        String password = passwordView.getPassword();
         loginPresenter.onSignInButtonClick(login, password);
     }
 
@@ -132,11 +132,10 @@ public class LogInActivity extends AppCompatActivity implements ICredentialsView
     }
 
 
-    @OnTouch(R.id.etPassword)
+    @OnTouch(R.id.pvPassword)
     boolean onPasswordEditText(){
-        ilPassword.setError(null);
+        passwordView.setError(null);
         return false;
-
     }
 
     @Override
