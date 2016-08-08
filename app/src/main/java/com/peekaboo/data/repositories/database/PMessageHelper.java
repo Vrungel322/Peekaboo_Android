@@ -29,7 +29,7 @@ public class PMessageHelper {
                 PMessageAbs.ID               + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
                 PMessageAbs.PACKAGE_ID       + " TEXT NOT NULL," +
                 PMessageAbs.IS_MINE          + " INTEGER NOT NULL," +
-                PMessageAbs.IS_MEDIA         + " INTEGER DEFAULT 0 NOT NULL," +
+                PMessageAbs.MEDIA_TYPE       + " INTEGER DEFAULT 0 NOT NULL," +
                 PMessageAbs.MESSAGE_BODY     + " TEXT NOT NULL," +
                 PMessageAbs.TIMESTAMP        + " INTEGER NOT NULL," +
                 PMessageAbs.STATUS_SENT      + " INTEGER DEFAULT 0 NOT NULL," +

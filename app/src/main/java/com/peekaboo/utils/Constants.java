@@ -29,4 +29,12 @@ public class Constants {
         int RECORDER_CHANNELS = AudioFormat.CHANNEL_IN_MONO;
         int RECORDER_AUDIO_ENCODING = AudioFormat.ENCODING_PCM_16BIT;
     }
+
+    public interface PMESSAGE_MEDIA_TYPE {
+        int TEXT_MESSAGE = 0;
+        int AUDIO_MESSAGE = 1;
+        int IMAGE_MESSAGE = 2;
+        int VIDEO_MESSAGE = 3;
+        int DOCUMENT_MESSAGE = 4;
+    }
 }
