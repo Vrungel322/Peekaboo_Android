@@ -20,6 +20,7 @@ import com.peekaboo.presentation.fragments.CallsFragment;
 import com.peekaboo.presentation.fragments.ContactsFragment;
 import com.peekaboo.presentation.fragments.DialogsFragment;
 import com.peekaboo.presentation.fragments.ProfileFragment;
+import com.peekaboo.presentation.fragments.ServiceTestFragment;
 import com.peekaboo.presentation.fragments.SettingsFragment;
 
 import butterknife.BindView;
@@ -82,7 +83,7 @@ public class MainActivity extends AppCompatActivity {
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
-//        changeFragment(new ServiceTestFragment(), null);
+        changeFragment(new ServiceTestFragment(), null);
     }
 
     @OnClick({R.id.llDialogs, R.id.llCalls, R.id.llContacts, R.id.llProfile, R.id.llSettings})

@@ -18,8 +18,11 @@ public interface IChatPresenter extends IPresenter<IChatView> {
     int deleteMessageByPackageId(String tableName, PMessageAbs message);
     void copyMessageText(PMessageAbs message);
     void convertTextToSpeech(PMessageAbs message);
-    Subscription startRecordingAudio(String folderName); // for testing
-    Subscription stopRecordingAudio(String tableName); // for testing
+    Subscription startRecordingAudio(String folderName, int samplerate); // for testing
+    Subscription stopRecordingAudio(String folderName); // for testing
+    Subscription startPlayingMPlayer(String filepath);
+    Subscription stopPlayingMPlayer();
+    Subscription stopAndStartPlayingMPlayer(String filepath);
     void onPause();
     void onResume();
 }

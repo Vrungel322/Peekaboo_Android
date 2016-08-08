@@ -22,6 +22,7 @@ import com.peekaboo.presentation.adapters.ChatAdapter;
 import com.peekaboo.presentation.fragments.AttachmentChatDialog;
 import com.peekaboo.presentation.fragments.ChatItemDialog;
 import com.peekaboo.presentation.presenters.ChatPresenter;
+import com.peekaboo.presentation.views.IChatView;
 import com.peekaboo.utils.Constants;
 import com.peekaboo.utils.Utility;
 
@@ -41,13 +42,12 @@ import rx.subscriptions.CompositeSubscription;
  * Created by Nataliia on 13.07.2016.
  */
 public class ChatActivity extends AppCompatActivity implements ChatItemDialog.IChatItemEventListener,
-                                AttachmentChatDialog.IAttachmentDialogEventListener{
+                                AttachmentChatDialog.IAttachmentDialogEventListener, IChatView{
 
     @BindView(R.id.etMessageBody)
     EditText etMessageBody;
     @BindView(R.id.lvMessages)
     ListView lvMessages;
-
     @Inject
     ChatPresenter chatPresenter;
 
@@ -56,8 +56,8 @@ public class ChatActivity extends AppCompatActivity implements ChatItemDialog.IC
     private ChatItemDialog chatItemDialog;
     private CompositeSubscription subscriptions;
     private String receiverName;
-    private boolean isRecording = false; // for test
 
+    boolean isRecording = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +65,7 @@ public class ChatActivity extends AppCompatActivity implements ChatItemDialog.IC
         setContentView(R.layout.chat_layout);
         ButterKnife.bind(this);
         PeekabooApplication.getApp(this).getComponent().inject(this);
+        chatPresenter.bind(this);
         receiverName = getIntent().getStringExtra(Constants.EXTRA_RECEIVER_NAME);
         receiverName = "test";
 
@@ -98,6 +99,7 @@ public class ChatActivity extends AppCompatActivity implements ChatItemDialog.IC
     @Override
     protected void onResume() {
         super.onResume();
+        chatPresenter.onResume();
         subscriptions = new CompositeSubscription();
         subscriptions.add(chatPresenter.getAllMessages(receiverName, chatAdapter));
         subscriptions.add(chatPresenter.getUnreadMessagesCount(receiverName));
@@ -106,8 +108,14 @@ public class ChatActivity extends AppCompatActivity implements ChatItemDialog.IC
     @Override
     protected void onPause() {
         super.onPause();
-        subscriptions.unsubscribe();
         chatPresenter.onPause();
+        subscriptions.unsubscribe();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        chatPresenter.unbind();
     }
 
     @Override
@@ -236,14 +244,28 @@ public class ChatActivity extends AppCompatActivity implements ChatItemDialog.IC
     }
 
     @Override
-    public void takeSpeech() {
+    public void recordAudio() {
         if(!isRecording){
-            subscriptions.add(chatPresenter.startRecordingAudio(receiverName));
+            chatPresenter.startRecordingAudio(receiverName, 16000);
             isRecording = true;
         } else {
-            subscriptions.add(chatPresenter.stopRecordingAudio(receiverName));
+            chatPresenter.stopRecordingAudio(receiverName);
             isRecording = false;
-            etMessageBody.setText("");
         }
+    }
+
+    @Override
+    public void showProgress() {
+
+    }
+
+    @Override
+    public void hideProgress() {
+
+    }
+
+    @Override
+    public void onError(String text) {
+
     }
 }

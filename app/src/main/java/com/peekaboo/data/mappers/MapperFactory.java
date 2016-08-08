@@ -24,6 +24,14 @@ public class MapperFactory implements AbstractMapperFactory {
     }
 
     @Override
+    public Mapper<byte[], Message> getByteToMessageMapper() {
+        return new ByteArrayToMessageMapper();
+    }
+
+    @Override
+    public Mapper<Message, byte[]> getMessageToByteMapper() {
+        return new MessageToByteArrayMapper();
+    }
     public Mapper<PMessage, ContentValues> getPMessageMapper() {
         return new PMessageMapper();
     }

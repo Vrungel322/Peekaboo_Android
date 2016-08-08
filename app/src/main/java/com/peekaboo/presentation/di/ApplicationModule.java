@@ -5,11 +5,10 @@ import android.content.SharedPreferences;
 
 import com.peekaboo.data.di.DataModule;
 import com.peekaboo.data.mappers.MapperFactory;
+import com.peekaboo.data.repositories.database.DbModule;
 import com.peekaboo.domain.User;
 import com.peekaboo.domain.schedulers.ObserveOn;
 import com.peekaboo.domain.schedulers.SubscribeOn;
-import com.peekaboo.presentation.PeekabooApplication;
-import com.peekaboo.data.repositories.database.DbModule;
 import com.peekaboo.presentation.services.INotifier;
 import com.peekaboo.presentation.services.WebSocketNotifier;
 import com.squareup.otto.Bus;
@@ -49,13 +48,13 @@ public class ApplicationModule {
 
     @Singleton
     @Provides
-    SharedPreferences provideSharedPreferences(Context mContext){
+    SharedPreferences provideSharedPreferences(Context mContext) {
         return mContext.getSharedPreferences("com.peekaboo.Peekaboo", mContext.MODE_PRIVATE);
     }
 
 
     @Provides
-    Bus provideEventBus(){
+    Bus provideEventBus() {
         return new Bus();
     }
 

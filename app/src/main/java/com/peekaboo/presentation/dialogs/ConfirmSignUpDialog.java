@@ -1,4 +1,4 @@
-package com.peekaboo.presentation.fragments;
+package com.peekaboo.presentation.dialogs;
 
 import android.app.DialogFragment;
 import android.os.Bundle;

@@ -6,12 +6,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.peekaboo.R;
 import com.peekaboo.data.repositories.database.PMessageAbs;
+import com.peekaboo.domain.MPlayer;
 import com.peekaboo.utils.Utility;
 
 import java.util.Collections;
@@ -28,6 +30,8 @@ public class ChatAdapter extends BaseAdapter implements Action1<List<PMessageAbs
 
     private final LayoutInflater inflater;
     private Context context;
+    private ViewHolder holder;
+    private MPlayer mPlayer;
 
     private List<PMessageAbs> messages = Collections.emptyList();
 
@@ -60,8 +64,8 @@ public class ChatAdapter extends BaseAdapter implements Action1<List<PMessageAbs
     @Override
     public View getView(int position, View view, ViewGroup parent) {
         PMessageAbs pMessageObj = getItem(position);
-        ViewHolder holder;
-        if (view != null){
+
+        if (view != null) {
             holder = (ViewHolder) view.getTag();
             setAlignment(holder, pMessageObj.isMine());
         } else {
@@ -72,18 +76,26 @@ public class ChatAdapter extends BaseAdapter implements Action1<List<PMessageAbs
             setAlignment(holder, pMessageObj.isMine());
         }
 
-        holder.tvChatMessage.setText(pMessageObj.messageBody());
         holder.tvChatTimestamp.setText(Utility.getFriendlyDayString(context, pMessageObj.timestamp()));
 
-        if(pMessageObj.isSent() && !pMessageObj.isDelivered()){
+        if (pMessageObj.isSent() && !pMessageObj.isDelivered()) {
             holder.ivChatImage.setVisibility(View.GONE);
         } else {
             holder.ivChatImage.setImageResource(getStatusImage(pMessageObj.isRead()));
         }
 
         // for testing media
-        if(pMessageObj.isMedia()){
+        if (pMessageObj.isMedia()) {
+            holder.tvChatMessage.setVisibility(View.GONE);
+            holder.ibPlayRecord.setVisibility(View.VISIBLE);
+            mPlayer = new MPlayer();
+            holder.ibPlayRecord.setOnClickListener(v -> {
+                mPlayer.stopAndPlay(pMessageObj.messageBody());
+            });
+        } else {
+            holder.tvChatMessage.setVisibility(View.VISIBLE);
             holder.tvChatMessage.setText(pMessageObj.messageBody());
+            holder.ibPlayRecord.setVisibility(View.GONE);
         }
 
         return view;
@@ -110,11 +122,11 @@ public class ChatAdapter extends BaseAdapter implements Action1<List<PMessageAbs
         }
     }
 
-    private int getStatusImage(boolean isRead){
+    private int getStatusImage(boolean isRead) {
         return isRead ? R.drawable.ic_check_all : R.drawable.ic_check;
     }
 
-    public void clearList(){
+    public void clearList() {
         this.messages = Collections.emptyList();
         notifyDataSetChanged();
     }
@@ -128,9 +140,12 @@ public class ChatAdapter extends BaseAdapter implements Action1<List<PMessageAbs
         ImageView ivChatImage;
         @BindView(R.id.chat_bubble)
         FrameLayout chatBubble;
+        @BindView(R.id.ibPlayRecord)
+        ImageButton ibPlayRecord;
 
         public ViewHolder(View view) {
             ButterKnife.bind(this, view);
         }
     }
+
 }

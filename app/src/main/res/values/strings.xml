@@ -44,7 +44,7 @@
         <item>Pic from gallery</item>
         <item>Audio</item>
         <item>Document</item>
-        <item>TEST: Voice</item>
+        <item>TEST: Voice record</item>
     </string-array>
 
     <string-array name="edit_chat_item">
@@ -59,6 +59,7 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="selectImage">Select Image</string>
     <string name="ok">OK</string>
+    <string name="confirmationCode">Conformation code</string>
 
     <string name="today">Today</string>
     <string name="tomorrow">Tomorrow</string>

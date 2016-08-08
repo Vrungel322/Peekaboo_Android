@@ -27,7 +27,7 @@ public class AttachmentChatDialog  extends DialogFragment {
         void takePhoto();
         void takeAudio();
         void takeDocument();
-        void takeSpeech();
+        void recordAudio();
     }
 
     IAttachmentDialogEventListener attachmentDialogEventListener;
@@ -70,7 +70,7 @@ public class AttachmentChatDialog  extends DialogFragment {
                     attachmentDialogEventListener.takeDocument();
                     break;
                 case 4:
-                    attachmentDialogEventListener.takeSpeech();
+                    attachmentDialogEventListener.recordAudio();
                     break;
             }
         });

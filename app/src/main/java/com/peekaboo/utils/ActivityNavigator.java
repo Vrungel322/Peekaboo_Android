@@ -27,6 +27,7 @@ public class ActivityNavigator {
 
     public void startProfileActivity(Context mActivityContext){
         Intent intent = new Intent(mActivityContext, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         mActivityContext.startActivity(intent);
     }
 

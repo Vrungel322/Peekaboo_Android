@@ -1,11 +1,12 @@
-package com.peekaboo.domain;
+package com.peekaboo.presentation.services;
 
 import android.media.AudioFormat;
 import android.media.AudioRecord;
 import android.media.MediaRecorder;
 import android.os.Environment;
 
-import com.peekaboo.utils.Constants;
+
+import com.peekaboo.data.Constants;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -26,17 +27,12 @@ public class Record {
     private String folderName;
     private String filename;
 
-    //test
-    private int SAMPLERATE = 0;
-
-    //todo убрать семплрейт
-    public Record(String folderName, int samplerate) {
+    public Record(String folderName) {
         this.folderName = folderName;
         bufferSize = AudioRecord.getMinBufferSize(44100,
                 AudioFormat.CHANNEL_IN_MONO,
                 AudioFormat.ENCODING_PCM_16BIT);
-        //test
-        SAMPLERATE = samplerate;
+
     }
 
     public String getFileName() {
@@ -67,8 +63,8 @@ public class Record {
 
         File tempFile = new File(file.getAbsolutePath(), Constants.SOUND_RECORDING.AUDIO_RECORDER_TEMP_FILE);
 
-        if (tempFile.exists()){
-           // tempFile.delete();
+        if (tempFile.exists()) {
+            // tempFile.delete();
         }
 
         return (file.getAbsolutePath() + "/" + Constants.SOUND_RECORDING.AUDIO_RECORDER_TEMP_FILE);
@@ -77,9 +73,9 @@ public class Record {
     /**
      * RUN ONLY IN SEPARATE THREAD!
      */
-    public void startRecording(){
+    public void startRecording() {
         recorder = new AudioRecord(MediaRecorder.AudioSource.MIC,
-                SAMPLERATE,
+                Constants.SOUND_RECORDING.RECORDER_SAMPLERATE,
                 Constants.SOUND_RECORDING.RECORDER_CHANNELS,
                 Constants.SOUND_RECORDING.RECORDER_AUDIO_ENCODING,
                 bufferSize);
@@ -149,10 +145,10 @@ public class Record {
         FileOutputStream out;
         long totalAudioLen;
         long totalDataLen;
-        long longSampleRate = SAMPLERATE;
+        long longSampleRate = Constants.SOUND_RECORDING.RECORDER_SAMPLERATE;
         int channels = 1;
         long byteRate = Constants.SOUND_RECORDING.RECORDER_BPP
-                * SAMPLERATE * channels / 8;
+                * Constants.SOUND_RECORDING.RECORDER_SAMPLERATE * channels / 8;
 
         byte[] data = new byte[bufferSize];
 

@@ -42,7 +42,7 @@
         <item>Изображение с галерии</item>
         <item>Аудио</item>
         <item>Документ</item>
-        <item>ТЕСТ: Запись голоса</item>
+        <item>ТЕСТ: Запись аудио</item>
     </string-array>
 
     <string-array name="edit_chat_item">
