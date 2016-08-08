@@ -65,6 +65,11 @@ public class PasswordView extends FrameLayout {
     }
 
     @Override
+    public void setOnTouchListener(OnTouchListener l) {
+        editText.setOnTouchListener(l);
+    }
+
+    @Override
     protected void onFinishInflate() {
         super.onFinishInflate();
         for (int i = 0; i < getChildCount(); i++) {
@@ -108,6 +113,7 @@ public class PasswordView extends FrameLayout {
     }
 
     public void setError(String error) {
+        inputLayout.setErrorEnabled(error != null);
         inputLayout.setError(error);
     }
 

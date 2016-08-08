@@ -1,8 +1,6 @@
 package com.peekaboo.presentation.adapters;
 
 import android.content.Context;
-import android.media.AudioManager;
-import android.media.MediaPlayer;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,11 +12,9 @@ import android.widget.TextView;
 
 import com.peekaboo.R;
 import com.peekaboo.data.repositories.database.PMessageAbs;
+import com.peekaboo.domain.MPlayer;
 import com.peekaboo.utils.Utility;
 
-import java.io.FileDescriptor;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
@@ -34,7 +30,7 @@ public class ChatAdapter extends BaseAdapter implements Action1<List<PMessageAbs
     private final LayoutInflater inflater;
     private Context context;
     private ViewHolder holder;
-    private MediaPlayer mediaPlayer;
+    private MPlayer mPlayer;
 
     private List<PMessageAbs> messages = Collections.emptyList();
 
@@ -79,7 +75,6 @@ public class ChatAdapter extends BaseAdapter implements Action1<List<PMessageAbs
             setAlignment(holder, pMessageObj.isMine());
         }
 
-        holder.tvChatMessage.setText(pMessageObj.messageBody());
         holder.tvChatTimestamp.setText(Utility.getFriendlyDayString(context, pMessageObj.timestamp()));
 
         if (pMessageObj.isSent() && !pMessageObj.isDelivered()) {
@@ -92,8 +87,13 @@ public class ChatAdapter extends BaseAdapter implements Action1<List<PMessageAbs
         if (pMessageObj.isMedia()) {
             holder.tvChatMessage.setVisibility(View.GONE);
             holder.ibPlayRecord.setVisibility(View.VISIBLE);
-            holder.ibPlayRecord.setOnClickListener(v -> playRecord(pMessageObj.messageBody()));
+            mPlayer = new MPlayer();
+            holder.ibPlayRecord.setOnClickListener(v -> {
+                mPlayer.stopAndPlay(pMessageObj.messageBody());
+            });
         } else {
+            holder.tvChatMessage.setVisibility(View.VISIBLE);
+            holder.tvChatMessage.setText(pMessageObj.messageBody());
             holder.ibPlayRecord.setVisibility(View.GONE);
         }
 
@@ -128,34 +128,6 @@ public class ChatAdapter extends BaseAdapter implements Action1<List<PMessageAbs
     public void clearList() {
         this.messages = Collections.emptyList();
         notifyDataSetChanged();
-    }
-
-    public void playRecord(String filepath) {
-        if (mediaPlayer == null && filepath != null) {
-            try {
-                FileInputStream fis = new FileInputStream(filepath);
-                FileDescriptor fd = fis.getFD();
-                if(fd != null){
-                    mediaPlayer = new MediaPlayer();
-                    mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-                    mediaPlayer.setDataSource(fd);
-                    mediaPlayer.prepareAsync();
-                    mediaPlayer.setOnPreparedListener(mp1 -> {
-                        mp1.start();
-                    });
-                    mediaPlayer.setOnCompletionListener(mp -> {
-                        mediaPlayer.release();
-                        mediaPlayer = null;
-                    });
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        } else if (mediaPlayer != null) {
-            mediaPlayer.stop();
-            mediaPlayer.release();
-            mediaPlayer = null;
-        }
     }
 
     static class ViewHolder {

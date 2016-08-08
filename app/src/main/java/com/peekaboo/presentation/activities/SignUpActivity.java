@@ -11,6 +11,7 @@ import android.widget.Toast;
 import com.klinker.android.sliding.SlidingActivity;
 import com.peekaboo.R;
 import com.peekaboo.presentation.PeekabooApplication;
+import com.peekaboo.presentation.app.view.PasswordView;
 import com.peekaboo.presentation.dialogs.ConfirmSignUpDialog;
 import com.peekaboo.presentation.dialogs.ProgressDialogFragment;
 import com.peekaboo.presentation.views.ISignUpView;
@@ -40,6 +41,10 @@ public class SignUpActivity extends SlidingActivity implements ISignUpView {
     EditText etPassword;
     @BindView(R.id.etPasswordConfirm)
     EditText etPasswordConfirm;
+//    @BindView(R.id.pvPassword)
+//    PasswordView pvPassword;
+//    @BindView(R.id.pvPasswordConfirm)
+//    PasswordView pvPasswordConfirm;
     @BindView(R.id.ilUsername)
     TextInputLayout ilUsername;
     @BindView(R.id.ilPassword)
@@ -101,8 +106,11 @@ public class SignUpActivity extends SlidingActivity implements ISignUpView {
         super.onStart();
         etUsername.setText("Vrungel");
         etLogin.setText("geronimoapachi@gmail.com");
+//        pvPasswordConfirm.setText("asdasd");
+//        pvPassword.setText("asdasd");
         etPasswordConfirm.setText("asdasd");
         etPassword.setText("asdasd");
+
     }
 
     @Override
@@ -121,20 +129,33 @@ public class SignUpActivity extends SlidingActivity implements ISignUpView {
     public void showInputError(InputFieldError error) {
         switch (error) {
             case USERNAME:
+                ilUsername.setErrorEnabled(true);
                 ilUsername.setError(getString(R.string.invalidUsername));
                 etUsername.setText("");
                 break;
             case PASSWORD:
+                ilPassword.setErrorEnabled(true);
                 ilPassword.setError(getString(R.string.invalidPassword));
                 etPassword.setText("");
+
+//                pvPassword.setError(getString(R.string.invalidPassword));
+//                pvPassword.setText("");
                 break;
             case PASSWORD_CONFIRM:
+                ilPassword.setErrorEnabled(true);
                 ilPassword.setError(getString(R.string.invalidPasswordConfirm));
+                ilPasswordCongirm.setErrorEnabled(true);
                 ilPasswordCongirm.setError(getString(R.string.invalidPasswordConfirm));
                 etPassword.setText("");
                 etPasswordConfirm.setText("");
+
+//                pvPassword.setError(getString(R.string.invalidPasswordConfirm));
+//                pvPasswordConfirm.setError(getString(R.string.invalidPasswordConfirm));
+//                pvPassword.setText("");
+//                pvPasswordConfirm.setText("");
                 break;
             case LOGIN:
+                ilLogin.setErrorEnabled(true);
                 ilLogin.setError(getString(R.string.invalidLogin));
                 etLogin.setText("");
         }
@@ -142,24 +163,40 @@ public class SignUpActivity extends SlidingActivity implements ISignUpView {
 
     @OnTouch(R.id.etUsername)
     boolean onUsernameEditText(){
-        ilUsername.setError(null);
+        ilUsername.setErrorEnabled(false);
+        ilUsername.setError("");
         return false;
     }
+
+//
+//    @OnTouch(R.id.pvPassword)
+//    boolean onPasswordEditText(){
+//        pvPassword.setError(null);
+//        return false;
+//    }
+//    @OnTouch(R.id.pvPasswordConfirm)
+//    boolean onPasswordConfirmEditText(){
+//        pvPasswordConfirm.setError(null);
+//        return false;
+//    }
 
 
     @OnTouch(R.id.etPassword)
     boolean onPasswordEditText(){
-        ilPassword.setError(null);
+        ilPassword.setErrorEnabled(false);
+        ilPassword.setError("");
         return false;
     }
     @OnTouch(R.id.etPasswordConfirm)
     boolean onPasswordConfirmEditText(){
-        ilPasswordCongirm.setError(null);
+        ilPasswordCongirm.setErrorEnabled(false);
+        ilPasswordCongirm.setError("");
         return false;
     }
     @OnTouch(R.id.etLogin)
     boolean onLoginEditText(){
-        ilLogin.setError(null);
+        ilLogin.setErrorEnabled(false);
+        ilLogin.setError("");
         return false;
     }
 
@@ -183,6 +220,8 @@ public class SignUpActivity extends SlidingActivity implements ISignUpView {
     void onSignInButtonClick() {
         String username = etUsername.getText().toString();
         String login = etLogin.getText().toString();
+//        String password = pvPassword.getPassword();
+//        String passwordConfirm = pvPasswordConfirm.getPassword();
         String password = etPassword.getText().toString();
         String passwordConfirm = etPasswordConfirm.getText().toString();
         signUpPresenter.onSignUpButtonClick(username, login, password, passwordConfirm);

@@ -27,7 +27,10 @@ public class AttachmentChatDialog  extends DialogFragment {
         void takePhoto();
         void takeAudio();
         void takeDocument();
-        void takeSpeech();
+        void takeSpeech_11025();
+        void takeSpeech_16000();
+        void takeSpeech_22050();
+        void takeSpeech_32000();
     }
 
     IAttachmentDialogEventListener attachmentDialogEventListener;
@@ -70,7 +73,16 @@ public class AttachmentChatDialog  extends DialogFragment {
                     attachmentDialogEventListener.takeDocument();
                     break;
                 case 4:
-                    attachmentDialogEventListener.takeSpeech();
+                    attachmentDialogEventListener.takeSpeech_11025();
+                    break;
+                case 5:
+                    attachmentDialogEventListener.takeSpeech_16000();
+                    break;
+                case 6:
+                    attachmentDialogEventListener.takeSpeech_22050();
+                    break;
+                case 7:
+                    attachmentDialogEventListener.takeSpeech_32000();
                     break;
             }
         });

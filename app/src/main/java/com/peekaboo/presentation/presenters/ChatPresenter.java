@@ -109,8 +109,8 @@ public class ChatPresenter implements IChatPresenter {
     }
 
     @Override
-    public Subscription startRecordingAudio(String folderName) {
-        recorder = new AudioRecorder(new Record(folderName));
+    public Subscription startRecordingAudio(String folderName, int samplerate) {
+        recorder = new AudioRecorder(new Record(folderName, samplerate));
         return recorder.startRecording().subscribe();
     }
 

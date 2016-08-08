@@ -18,8 +18,8 @@ import android.widget.Toast;
 import com.peekaboo.R;
 import com.peekaboo.data.repositories.database.PMessage;
 import com.peekaboo.presentation.PeekabooApplication;
-import com.peekaboo.presentation.dialogs.AttachmentChatDialog;
 import com.peekaboo.presentation.adapters.ChatAdapter;
+import com.peekaboo.presentation.fragments.AttachmentChatDialog;
 import com.peekaboo.presentation.fragments.ChatItemDialog;
 import com.peekaboo.presentation.presenters.ChatPresenter;
 import com.peekaboo.utils.Constants;
@@ -234,9 +234,28 @@ public class ChatActivity extends AppCompatActivity implements ChatItemDialog.IC
     }
 
     @Override
-    public void takeSpeech() {
+    public void takeSpeech_11025() {
+        takeSpeech(11025);
+    }
+
+    @Override
+    public void takeSpeech_16000() {
+        takeSpeech(16000);
+    }
+
+    @Override
+    public void takeSpeech_22050() {
+        takeSpeech(22050);
+    }
+
+    @Override
+    public void takeSpeech_32000() {
+        takeSpeech(32000);
+    }
+
+    public void takeSpeech(int samplerate){
         if(!isRecording){
-            subscriptions.add(chatPresenter.startRecordingAudio(receiverName));
+            subscriptions.add(chatPresenter.startRecordingAudio(receiverName, samplerate));
             isRecording = true;
         } else {
             subscriptions.add(chatPresenter.stopRecordingAudio(receiverName));
