@@ -104,19 +104,8 @@ public class ChatActivity extends AppCompatActivity implements ChatItemDialog.IC
             }
         }));
 
-
         chatPresenter.createTable(receiverName);
 
-//        OverScrollDecoratorHelper.setUpOverScroll(lvMessages);
-//        lvMessages.setOnItemLongClickListener((parent, view, position, id) -> {
-//            FragmentTransaction ft = getFragmentManager().beginTransaction();
-//            chatItemDialog = new ChatItemDialog();
-//            Bundle itemIndexBundle = new Bundle();
-//            itemIndexBundle.putInt(Constants.ARG_CHAT_MESSAGE_ITEM_INDEX, position);
-//            chatItemDialog.setArguments(itemIndexBundle);
-//            chatItemDialog.show(ft, Constants.FRAGMENT_TAGS.CHAT_ITEM_DIALOG_FRAGMENT_TAG);
-//            return true;
-//        });
     }
 
     @Override
@@ -237,10 +226,7 @@ public class ChatActivity extends AppCompatActivity implements ChatItemDialog.IC
 
     @Override
     public void takeGalleryImage() {
-        Intent intent = new Intent();
-        intent.setType("image/*"); // to open gallery
-        intent.setAction(Intent.ACTION_GET_CONTENT);
-        startActivityForResult(Intent.createChooser(intent, getString(R.string.selectImage)),
+        startActivityForResult(new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI),
                 Constants.REQUEST_CODES.REQUEST_CODE_GALERY);
     }
 
