@@ -8,19 +8,21 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
-import android.view.View;
-import android.view.inputmethod.EditorInfo;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import com.peekaboo.R;
+import com.peekaboo.presentation.utils.ResourcesUtils;
 
 /**
  * Created by sebastian on 01.08.16.
  */
 public class PasswordView extends FrameLayout {
-    private EditText editText;
+    private int TOP_MARGIN_ERROR_VISIBLE;
+    private int BOTTOM_MARGIN_ERROR_VISIBLE;
+    private int BOTTOM_MARGIN_ERROR_INVISIBLE;
+    private RobotoEditText editText;
     private ImageView showView;
     private String hint;
     private TextInputLayout inputLayout;
@@ -47,6 +49,9 @@ public class PasswordView extends FrameLayout {
         LayoutInflater inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         inflater.inflate(R.layout.password_view, this);
+        BOTTOM_MARGIN_ERROR_VISIBLE = ResourcesUtils.dpToPx(getContext(), 8);
+        TOP_MARGIN_ERROR_VISIBLE = ResourcesUtils.dpToPx(getContext(), 6);
+        BOTTOM_MARGIN_ERROR_INVISIBLE = -ResourcesUtils.dpToPx(getContext(), 2);
     }
 
     private void handleAttributes(Context context, AttributeSet attrs, int defStyleAttr) {
@@ -75,11 +80,16 @@ public class PasswordView extends FrameLayout {
         for (int i = 0; i < getChildCount(); i++) {
             if (getChildAt(i) instanceof TextInputLayout) {
                 inputLayout = (TextInputLayout) getChildAt(i);
-                editText = (EditText) inputLayout.getChildAt(0);
+                editText = (RobotoEditText) inputLayout.getChildAt(0);
+                int paddingTop = editText.getPaddingTop();
+                int paddingHorizontal = ResourcesUtils.dpToPx(getContext(), 40);
+                int paddingBottom = editText.getPaddingBottom();
+                editText.setPadding(paddingHorizontal, paddingTop, paddingHorizontal, paddingBottom);
             } else {
                 showView = (ImageView) getChildAt(i);
             }
         }
+
 //        setOnTouchListener((v, event) -> {
 //            Log.e("container", "onTouch " + event.getAction());
 //            return false;
@@ -93,10 +103,8 @@ public class PasswordView extends FrameLayout {
                     break;
                 case MotionEvent.ACTION_CANCEL:
                 case MotionEvent.ACTION_UP:
-
                     editText.setInputType(InputType.TYPE_CLASS_TEXT |
                             InputType.TYPE_TEXT_VARIATION_PASSWORD);
-
                     break;
             }
             return true;
@@ -113,7 +121,12 @@ public class PasswordView extends FrameLayout {
     }
 
     public void setError(String error) {
-        inputLayout.setErrorEnabled(error != null);
+        boolean shouldShowError = error != null;
+        inputLayout.setErrorEnabled(shouldShowError);
+        FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) showView.getLayoutParams();
+        layoutParams.setMargins(0, !shouldShowError ? TOP_MARGIN_ERROR_VISIBLE : 0, layoutParams.rightMargin,
+                shouldShowError ? BOTTOM_MARGIN_ERROR_VISIBLE : 0);
+//        layoutParams.setMarginEnd(layoutParams.rightMargin);
         inputLayout.setError(error);
     }
 
