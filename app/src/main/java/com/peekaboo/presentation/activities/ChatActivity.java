@@ -17,9 +17,9 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.peekaboo.R;
-import com.peekaboo.data.repositories.database.AudioPMessage;
-import com.peekaboo.data.repositories.database.ImagePMessage;
-import com.peekaboo.data.repositories.database.TextPMessage;
+import com.peekaboo.data.repositories.database.messages.AudioPMessage;
+import com.peekaboo.data.repositories.database.messages.ImagePMessage;
+import com.peekaboo.data.repositories.database.messages.TextPMessage;
 import com.peekaboo.presentation.PeekabooApplication;
 import com.peekaboo.presentation.adapters.ChatAdapter;
 import com.peekaboo.presentation.fragments.AttachmentChatDialog;

@@ -1,4 +1,4 @@
-package com.peekaboo.data.repositories.database;
+package com.peekaboo.data.repositories.database.utils_db;
 
 import android.database.Cursor;
 

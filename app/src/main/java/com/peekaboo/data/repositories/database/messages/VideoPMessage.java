@@ -1,4 +1,4 @@
-package com.peekaboo.data.repositories.database;
+package com.peekaboo.data.repositories.database.messages;
 
 import com.peekaboo.utils.Constants;
 

@@ -1,10 +1,10 @@
-package com.peekaboo.data.repositories.database;
+package com.peekaboo.data.repositories.database.messages;
 
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.support.v7.app.AlertDialog;
 
 import com.google.auto.value.AutoValue;
+import com.peekaboo.data.repositories.database.utils_db.Db;
 
 import rx.functions.Func1;
 

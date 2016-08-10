@@ -8,10 +8,10 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.peekaboo.data.mappers.AbstractMapperFactory;
-import com.peekaboo.data.repositories.database.AudioPMessage;
-import com.peekaboo.data.repositories.database.PMessage;
-import com.peekaboo.data.repositories.database.PMessageAbs;
-import com.peekaboo.data.repositories.database.PMessageHelper;
+import com.peekaboo.data.repositories.database.messages.AudioPMessage;
+import com.peekaboo.data.repositories.database.messages.PMessage;
+import com.peekaboo.data.repositories.database.messages.PMessageAbs;
+import com.peekaboo.data.repositories.database.messages.PMessageHelper;
 import com.peekaboo.domain.AudioRecorder;
 import com.peekaboo.domain.MPlayer;
 import com.peekaboo.domain.Record;

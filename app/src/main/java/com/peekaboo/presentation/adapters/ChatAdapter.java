@@ -13,7 +13,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.peekaboo.R;
-import com.peekaboo.data.repositories.database.PMessageAbs;
+import com.peekaboo.data.repositories.database.messages.PMessageAbs;
 import com.peekaboo.presentation.presenters.ChatPresenter;
 import com.peekaboo.utils.Constants;
 import com.peekaboo.utils.Utility;

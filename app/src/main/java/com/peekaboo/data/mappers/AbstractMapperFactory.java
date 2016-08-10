@@ -3,7 +3,7 @@ package com.peekaboo.data.mappers;
 
 import android.content.ContentValues;
 
-import com.peekaboo.data.repositories.database.PMessage;
+import com.peekaboo.data.repositories.database.messages.PMessage;
 import com.peekaboo.domain.User;
 import com.peekaboo.presentation.services.Message;
 

@@ -1,4 +1,4 @@
-package com.peekaboo.data.repositories.database;
+package com.peekaboo.data.repositories.database.messages;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;

@@ -1,4 +1,4 @@
-package com.peekaboo.data.repositories.database;
+package com.peekaboo.data.repositories.database.messages;
 
 /**
  * Created by st1ch on 23.07.2016.
