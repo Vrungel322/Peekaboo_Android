@@ -8,18 +8,18 @@ public class PMessage extends PMessageAbs {
     private long id;
     private String packageId;
     private boolean isMine;
-    private boolean isMedia;
     private String messageBody;
+    private int mediaType;
     private long timestamp;
     private boolean isSent;
     private boolean isDelivered;
     private boolean isRead;
 
-    public PMessage(String packageId, boolean isMine, boolean isMedia, String messageBody, long timestamp,
+    public PMessage(String packageId, boolean isMine, int mediaType, String messageBody, long timestamp,
                     boolean isSent, boolean isDelivered, boolean isRead) {
         this.packageId = packageId;
         this.isMine = isMine;
-        this.isMedia = isMedia;
+        this.mediaType = mediaType;
         this.messageBody = messageBody;
         this.timestamp = timestamp;
         this.isSent = isSent;
@@ -43,8 +43,8 @@ public class PMessage extends PMessageAbs {
     }
 
     @Override
-    public boolean isMedia() {
-        return isMedia;
+    public int mediaType() {
+        return mediaType;
     }
 
     @Override

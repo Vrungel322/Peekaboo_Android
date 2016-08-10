@@ -8,11 +8,12 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.peekaboo.data.mappers.AbstractMapperFactory;
+import com.peekaboo.data.repositories.database.AudioPMessage;
 import com.peekaboo.data.repositories.database.PMessage;
 import com.peekaboo.data.repositories.database.PMessageAbs;
 import com.peekaboo.data.repositories.database.PMessageHelper;
 import com.peekaboo.domain.AudioRecorder;
-import com.peekaboo.domain.MessageUtils;
+import com.peekaboo.domain.MPlayer;
 import com.peekaboo.domain.Record;
 import com.peekaboo.presentation.services.INotifier;
 import com.peekaboo.presentation.services.Message;
@@ -23,27 +24,28 @@ import javax.inject.Inject;
 
 import rx.Subscription;
 import rx.functions.Action1;
+import rx.subscriptions.CompositeSubscription;
 
 /**
  * Created by Nataliia on 13.07.2016.
  */
-public class ChatPresenter implements IChatPresenter {
+public class ChatPresenter extends BasePresenter<IChatView> implements IChatPresenter {
 
     private Context context;
+    CompositeSubscription subscriptions;
     PMessageHelper pMessageHelper;
     AbstractMapperFactory mapperFactory;
     TextToSpeech textToSpeech;
-    private INotifier notifier;
     AudioRecorder recorder;
+    MPlayer mPlayer;
 
     @Inject
     public ChatPresenter(Context context, PMessageHelper pMessageHelper,
-                         AbstractMapperFactory mapperFactory, TextToSpeech textToSpeech, INotifier notifier) {
+                         AbstractMapperFactory mapperFactory, TextToSpeech textToSpeech) {
         this.context = context;
         this.pMessageHelper = pMessageHelper;
         this.mapperFactory = mapperFactory;
         this.textToSpeech = textToSpeech;
-        this.notifier = notifier;
     }
 
     public void createTable(String tableName) {
@@ -51,12 +53,8 @@ public class ChatPresenter implements IChatPresenter {
     }
 
     @Override
-    public void sendMessage(String tableName, PMessage message) {
+    public void insertMessageToTable(String tableName, PMessage message) {
         pMessageHelper.insert(tableName, mapperFactory.getPMessageMapper().transform(message));
-//        if (notifier.isAvailable()) {
-//            Message textMessage = MessageUtils.createTextMessage(message.messageBody(), receiver);
-//            notifier.sendMessage(textMessage);
-//        }
     }
 
     @Override
@@ -118,32 +116,44 @@ public class ChatPresenter implements IChatPresenter {
     public Subscription stopRecordingAudio(String tableName) {
         if (recorder != null) {
             return recorder.stopRecording().subscribe(record -> {
-                sendMessage(tableName, new PMessage(Utility.getPackageId(), true, true, record.getFilename(),
-                        System.currentTimeMillis(), false, false, false));
+                insertMessageToTable(tableName, new AudioPMessage(Utility.getPackageId(), true,
+                        record.getFilename(), System.currentTimeMillis(), false, false, false));
             });
         }
         return null;
     }
 
     @Override
+    public Subscription startPlayingMPlayer(String filepath) {
+        mPlayer = new MPlayer();
+        return mPlayer.play(filepath);
+    }
+
+    @Override
+    public Subscription stopPlayingMPlayer() {
+        return mPlayer.stop();
+    }
+
+    @Override
+    public Subscription stopAndStartPlayingMPlayer(String filepath) {
+        if(mPlayer == null){
+            return startPlayingMPlayer(filepath);
+        }
+        return mPlayer.stopAndPlay(filepath);
+    }
+
+
+    @Override
     public void onPause() {
         if (textToSpeech != null) {
             textToSpeech.stop();
         }
+        subscriptions.unsubscribe();
     }
 
     @Override
     public void onResume() {
-
+        subscriptions = new CompositeSubscription();
     }
 
-    @Override
-    public void bind(IChatView view) {
-
-    }
-
-    @Override
-    public void unbind() {
-
-    }
 }
