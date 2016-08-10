@@ -8,6 +8,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.peekaboo.data.mappers.AbstractMapperFactory;
+import com.peekaboo.data.repositories.database.AudioPMessage;
 import com.peekaboo.data.repositories.database.PMessage;
 import com.peekaboo.data.repositories.database.PMessageAbs;
 import com.peekaboo.data.repositories.database.PMessageHelper;
@@ -114,8 +115,8 @@ public class ChatPresenter extends BasePresenter<IChatView> implements IChatPres
     public Subscription stopRecordingAudio(String tableName) {
         if (recorder != null) {
             return recorder.stopRecording().subscribe(record -> {
-                insertMessageToTable(tableName, new PMessage(Utility.getPackageId(), true, true, record.getFilename(),
-                        System.currentTimeMillis(), false, false, false));
+                insertMessageToTable(tableName, new AudioPMessage(Utility.getPackageId(), true,
+                        record.getFilename(), System.currentTimeMillis(), false, false, false));
             });
         }
         return null;
@@ -123,6 +124,7 @@ public class ChatPresenter extends BasePresenter<IChatView> implements IChatPres
 
     @Override
     public Subscription startPlayingMPlayer(String filepath) {
+        mPlayer = new MPlayer();
         return mPlayer.play(filepath);
     }
 
@@ -133,6 +135,9 @@ public class ChatPresenter extends BasePresenter<IChatView> implements IChatPres
 
     @Override
     public Subscription stopAndStartPlayingMPlayer(String filepath) {
+        if(mPlayer == null){
+            return startPlayingMPlayer(filepath);
+        }
         return mPlayer.stopAndPlay(filepath);
     }
 

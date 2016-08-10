@@ -14,7 +14,7 @@ public class PMessageMapper implements Mapper<PMessage, ContentValues> {
         return new PMessageAbs.Builder()
                 .packageId(obj.packageId())
                 .isMine(obj.isMine())
-                .isMedia(obj.isMedia())
+                .mediaType(obj.mediaType())
                 .messageBody(obj.messageBody())
                 .timestamp(obj.timestamp())
                 .isSent(obj.isSent())
