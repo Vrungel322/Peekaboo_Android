@@ -23,13 +23,13 @@
         <item name="colorButtonNormal">@color/colorAccent</item>
         <item name="android:textColorHint">@color/textColorHint</item>
         <item name="colorControlNormal">@color/colorControlNormal</item>
-
     </style>
 
     <style name="SignInTheme" parent="Theme.AppCompat.NoActionBar">
         <item name="colorAccent">@color/colorAccentCredentials</item>
         <item name="colorButtonNormal">@color/colorAccent</item>
         <item name="android:textColorHint">@color/textColorHint</item>
+        <item name="android:textColorPrimary">@color/textColorPrimaryCredentials</item>
         <item name="colorControlNormal">@color/colorControlNormal</item>
         <!--<item name="editTextStyle">@style/EditTextStyle</item>-->
         <!--<item name="android:editTextStyle">@style/EditTextStyle</item>-->

@@ -85,7 +85,7 @@ public class MainActivity extends AppCompatActivity {
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 //        changeFragment(new ServiceTestFragment(), null);
-        changeFragment(new RecordTestFragment(), null);
+//        changeFragment(new RecordTestFragment(), null);
     }
 
     @OnClick({R.id.llDialogs, R.id.llCalls, R.id.llContacts, R.id.llProfile, R.id.llSettings})

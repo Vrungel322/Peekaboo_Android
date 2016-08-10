@@ -1,9 +1,9 @@
 package com.peekaboo.presentation.activities;
 
-import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
+import android.support.v4.app.FragmentTransaction;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -70,6 +70,7 @@ public class SignUpActivity extends SlidingActivity implements ISignUpView {
         signUpPresenter.bind(this);
         enableFullscreen();
         disableHeader();
+        //showConfirmDialog();
         //onSwipe();
 
     }
@@ -170,11 +171,19 @@ public class SignUpActivity extends SlidingActivity implements ISignUpView {
 
     @Override
     public void showConfirmDialog() {
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
         ConfirmSignUpDialog confirmSignUpDialog = new ConfirmSignUpDialog();
-        confirmSignUpDialog.setStyle(android.app.DialogFragment.STYLE_NO_TITLE, 0);
-        confirmSignUpDialog.setStyle(android.app.DialogFragment.STYLE_NO_FRAME, 0);
+        confirmSignUpDialog.setStyle(DialogFragment.STYLE_NO_TITLE, 0);
+//        confirmSignUpDialog.setStyle(android.app.DialogFragment.STYLE_NO_FRAME, 0);
         confirmSignUpDialog.show(ft, CONFIRM_SIGN_UP_DIALOG);
+    }
+
+    @Override
+    public void dismissConfirmDialog() {
+        DialogFragment dialogFragment = (DialogFragment) getSupportFragmentManager().findFragmentByTag(CONFIRM_SIGN_UP_DIALOG);
+        if (dialogFragment != null) {
+            dialogFragment.dismiss();
+        }
     }
 
     @OnClick(R.id.bSignIn)

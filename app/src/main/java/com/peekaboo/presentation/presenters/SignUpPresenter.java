@@ -78,7 +78,6 @@ public class SignUpPresenter extends ProgressPresenter<ISignUpView> implements I
         if (isValid(username, login, password, passwordConfirm)) {
             signUpUseCase.setCredentials(username, login, password);
             signUpUseCase.execute(getSignUpSubscriber());
-
         }
     }
 
@@ -87,6 +86,10 @@ public class SignUpPresenter extends ProgressPresenter<ISignUpView> implements I
         if (isValid(key)) {
             confirmUseCase.setConfirmKey(key);
             confirmUseCase.execute(getConfirmSubscriber());
+            ISignUpView view = getView();
+            if (view != null) {
+                view.dismissConfirmDialog();
+            }
         }
     }
 

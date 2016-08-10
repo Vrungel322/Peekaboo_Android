@@ -97,6 +97,7 @@ public class SignUpPresenterTest extends BasePresenterTest {
         signUpPresenter.onCodeConfirmButtonClick("1234");
 
         verify(signUpView, timeout(WAIT).times(1)).navigateToProfile();
+        verify(signUpView, timeout(WAIT).times(1)).dismissConfirmDialog();
     }
 
 
@@ -110,6 +111,7 @@ public class SignUpPresenterTest extends BasePresenterTest {
 
         verify(signUpView, timeout(WAIT).times(1)).onError(any(String.class));
         verify(signUpView, timeout(WAIT).times(0)).navigateToProfile();
+        verify(signUpView, timeout(WAIT).times(0)).dismissConfirmDialog();
     }
 
     @Test
