@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:id="@+id/layoutSignUp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    >
+    android:id="@+id/layoutSignUp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
 
     <!--<ScrollView-->
     <!--android:layout_width="match_parent"-->
@@ -19,86 +18,90 @@
         android:paddingLeft="@dimen/padding_signup_side"
         android:paddingRight="@dimen/padding_signup_side">
 
-        <com.peekaboo.presentation.app.view.HelveticaTextInputLayout
+        <com.peekaboo.presentation.app.view.RobotoTextInputLayout
+            android:id="@+id/ilUsername"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="60dp"
-            android:id="@+id/ilUsername"
 
             app:errorTextAppearance="@style/Error.Design">
 
-            <com.peekaboo.presentation.app.view.HelveticaEditText
+            <com.peekaboo.presentation.app.view.RobotoEditText
                 android:id="@+id/etUsername"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
                 android:hint="@string/username"
+                android:maxLines="1"
 
                 />
-        </com.peekaboo.presentation.app.view.HelveticaTextInputLayout>
+        </com.peekaboo.presentation.app.view.RobotoTextInputLayout>
 
-        <com.peekaboo.presentation.app.view.HelveticaTextInputLayout
+        <com.peekaboo.presentation.app.view.RobotoTextInputLayout
             android:id="@+id/ilLogin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="@dimen/padding_top"
             app:errorTextAppearance="@style/Error.Design">
 
-            <com.peekaboo.presentation.app.view.HelveticaEditText
+            <com.peekaboo.presentation.app.view.RobotoEditText
                 android:id="@+id/etLogin"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
-                android:hint="@string/emailOrPhoneNum" />
+                android:hint="@string/emailOrPhoneNum"
+                android:maxLines="1" />
 
-        </com.peekaboo.presentation.app.view.HelveticaTextInputLayout>
+        </com.peekaboo.presentation.app.view.RobotoTextInputLayout>
 
 
-        <com.peekaboo.presentation.app.view.HelveticaTextInputLayout
+        <com.peekaboo.presentation.app.view.RobotoTextInputLayout
             android:id="@+id/ilPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="@dimen/padding_top"
             app:errorTextAppearance="@style/Error.Design">
 
-            <com.peekaboo.presentation.app.view.HelveticaEditText
+            <com.peekaboo.presentation.app.view.RobotoEditText
                 android:id="@+id/etPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
                 android:hint="@string/password"
-                android:inputType="textPassword" />
+                android:inputType="textPassword"
+                android:maxLines="1" />
 
-        </com.peekaboo.presentation.app.view.HelveticaTextInputLayout>
+        </com.peekaboo.presentation.app.view.RobotoTextInputLayout>
 
 
-        <com.peekaboo.presentation.app.view.HelveticaTextInputLayout
+        <com.peekaboo.presentation.app.view.RobotoTextInputLayout
             android:id="@+id/ilPasswordConfirm"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="@dimen/padding_top"
             app:errorTextAppearance="@style/Error.Design">
 
-            <com.peekaboo.presentation.app.view.HelveticaEditText
+            <com.peekaboo.presentation.app.view.RobotoEditText
                 android:id="@+id/etPasswordConfirm"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
                 android:hint="@string/confirmPassword"
-                android:inputType="textPassword" />
+                android:inputType="textPassword"
+                android:maxLines="1" />
 
-        </com.peekaboo.presentation.app.view.HelveticaTextInputLayout>
+        </com.peekaboo.presentation.app.view.RobotoTextInputLayout>
 
-        <com.peekaboo.presentation.app.view.HelveticaButton
+        <com.peekaboo.presentation.app.view.ComfortaaButton
             android:id="@+id/bSignIn"
             android:layout_width="match_parent"
             android:layout_height="@dimen/credentials_button_height"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="@dimen/padding_signup_side"
-            android:text="@string/createAccount"
             android:background="@drawable/button"
+            android:text="@string/createAccount"
             android:textAllCaps="false"
-            android:textSize="16sp"/>
+            android:textSize="16sp" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -107,14 +110,14 @@
             android:orientation="horizontal"
             android:padding="@dimen/padding_top">
 
-            <com.peekaboo.presentation.app.view.HelveticaTextView
+            <com.peekaboo.presentation.app.view.RobotoTextView
                 android:id="@+id/tvSignUp1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/text_padding"
                 android:text="@string/bySignUp1" />
 
-            <com.peekaboo.presentation.app.view.HelveticaTextView
+            <com.peekaboo.presentation.app.view.RobotoTextView
                 android:id="@+id/tvSingUp2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -123,14 +126,14 @@
                 android:text="@string/bySignUp2"
                 android:textColor="@color/textColor" />
 
-            <com.peekaboo.presentation.app.view.HelveticaTextView
+            <com.peekaboo.presentation.app.view.RobotoTextView
                 android:id="@+id/tvSingUp3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:padding="@dimen/text_padding"
                 android:text="@string/bySignUp3" />
 
-            <com.peekaboo.presentation.app.view.HelveticaTextView
+            <com.peekaboo.presentation.app.view.RobotoTextView
                 android:id="@+id/tvSignUp4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
