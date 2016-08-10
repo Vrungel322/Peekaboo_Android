@@ -93,9 +93,12 @@ public class LogInActivity extends AppCompatActivity implements ICredentialsView
 
     @Override
     public void showProgress() {
-        DialogFragment newFragment = ProgressDialogFragment.newInstance();
-        newFragment.setCancelable(false);
-        newFragment.show(getSupportFragmentManager(), PROGRESS_DIALOG);
+        DialogFragment fragment = (DialogFragment) getSupportFragmentManager().findFragmentByTag(PROGRESS_DIALOG);
+        if (fragment == null) {
+            DialogFragment newFragment = ProgressDialogFragment.newInstance();
+            newFragment.setCancelable(false);
+            newFragment.show(getSupportFragmentManager(), PROGRESS_DIALOG);
+        }
     }
 
     @Override

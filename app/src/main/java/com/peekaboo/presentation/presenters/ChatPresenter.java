@@ -4,6 +4,7 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.speech.tts.TextToSpeech;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -32,12 +33,12 @@ import rx.subscriptions.CompositeSubscription;
 public class ChatPresenter extends BasePresenter<IChatView> implements IChatPresenter {
 
     private Context context;
-    CompositeSubscription subscriptions;
-    PMessageHelper pMessageHelper;
-    AbstractMapperFactory mapperFactory;
-    TextToSpeech textToSpeech;
-    AudioRecorder recorder;
-    MPlayer mPlayer;
+    private CompositeSubscription subscriptions;
+    private PMessageHelper pMessageHelper;
+    private AbstractMapperFactory mapperFactory;
+    private TextToSpeech textToSpeech;
+    private AudioRecorder recorder;
+    private MPlayer mPlayer;
 
     @Inject
     public ChatPresenter(Context context, PMessageHelper pMessageHelper,
@@ -112,6 +113,7 @@ public class ChatPresenter extends BasePresenter<IChatView> implements IChatPres
         return recorder.startRecording().subscribe();
     }
 
+    @Nullable
     @Override
     public Subscription stopRecordingAudio(String tableName) {
         if (recorder != null) {
@@ -123,6 +125,7 @@ public class ChatPresenter extends BasePresenter<IChatView> implements IChatPres
         return null;
     }
 
+    @Nullable
     @Override
     public Subscription startPlayingMPlayer(String filepath) {
         mPlayer = new MPlayer();

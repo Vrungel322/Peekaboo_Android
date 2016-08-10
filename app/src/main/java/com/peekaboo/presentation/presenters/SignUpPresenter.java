@@ -122,12 +122,9 @@ public class SignUpPresenter extends ProgressPresenter<ISignUpView> implements I
 
     @Override
     public void unbind() {
+        signUpUseCase.unsubscribe();
+        confirmUseCase.unsubscribe();
         super.unbind();
-        if (signUpUseCase.isWorking()) {
-            signUpUseCase.unsubscribe();
-        } else if (confirmUseCase.isWorking()) {
-            confirmUseCase.unsubscribe();
-        }
     }
 
     @Override
@@ -135,7 +132,8 @@ public class SignUpPresenter extends ProgressPresenter<ISignUpView> implements I
         super.bind(view);
         if (signUpUseCase.isWorking()) {
             signUpUseCase.execute(getSignUpSubscriber());
-        } else if (confirmUseCase.isWorking()) {
+        }
+        if (confirmUseCase.isWorking()) {
             confirmUseCase.execute(getConfirmSubscriber());
         }
     }

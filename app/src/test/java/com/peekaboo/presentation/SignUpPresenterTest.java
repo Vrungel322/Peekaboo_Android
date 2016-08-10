@@ -39,6 +39,18 @@ public class SignUpPresenterTest extends BasePresenterTest {
     }
 
     @Test
+    public void whenSignUpSuccessThenShowConfirmDialogIsCalledAfterRebind() {
+        SignUpPresenter signUpPresenter = new SignUpPresenter(context, new SignUpUseCaseSuccess(), new ConfirmUseCaseSuccess(), errorHandler);
+        signUpPresenter.bind(signUpView);
+        signUpPresenter.onSignUpButtonClick("aValidUsername", "aValid@mail", "aValidPassword", "aValidPassword");
+        signUpPresenter.unbind();
+        sleep(WAIT);
+        signUpPresenter.bind(signUpView);
+
+        verify(signUpView, timeout(WAIT).times(1)).showConfirmDialog();
+    }
+
+    @Test
     public void whenSignUpExternalErrorThenShowConfirmDialogIsCalled() {
         SignUpPresenter signUpPresenter = new SignUpPresenter(context, new SignUpUseCaseFailure(), new ConfirmUseCaseSuccess(), errorHandler);
         signUpPresenter.bind(signUpView);
@@ -100,6 +112,20 @@ public class SignUpPresenterTest extends BasePresenterTest {
         verify(signUpView, timeout(WAIT).times(1)).dismissConfirmDialog();
     }
 
+    @Test
+    public void whenConfirmSuccessThenNavigateToProfileAfterRebind() {
+        ConfirmUseCaseSuccess confirmUseCase = new ConfirmUseCaseSuccess();
+        confirmUseCase.setUserId("id");
+        SignUpPresenter signUpPresenter = new SignUpPresenter(context, new SignUpUseCaseSuccess(), confirmUseCase, errorHandler);
+        signUpPresenter.bind(signUpView);
+        signUpPresenter.onCodeConfirmButtonClick("1234");
+        signUpPresenter.unbind();
+        sleep(WAIT);
+        signUpPresenter.bind(signUpView);
+
+        verify(signUpView, timeout(WAIT).times(1)).navigateToProfile();
+        verify(signUpView, timeout(WAIT).times(1)).dismissConfirmDialog();
+    }
 
     @Test
     public void whenInvalidCodeThenShowError() {

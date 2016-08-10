@@ -55,7 +55,6 @@ public class LoginPresenter extends ProgressPresenter<ICredentialsView> implemen
         };
     }
 
-
     private boolean isValid(String login, String password) {
 
         if (!(CredentialUtils.isUsernameValid(login)
@@ -76,6 +75,20 @@ public class LoginPresenter extends ProgressPresenter<ICredentialsView> implemen
                 VKScope.FRIENDS,
                 VKScope.WALL};
         VKSdk.login((Activity) getView(), scope);
+    }
+
+    @Override
+    public void unbind() {
+        useCase.unsubscribe();
+        super.unbind();
+    }
+
+    @Override
+    public void bind(ICredentialsView view) {
+        super.bind(view);
+        if (useCase.isWorking()) {
+            useCase.execute(getSignInSubscriber());
+        }
     }
 
     public void getFingerprint() {
