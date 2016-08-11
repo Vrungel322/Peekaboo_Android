@@ -8,13 +8,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:background="@drawable/bubble2">
+        android:background="@drawable/bubble2"
+        android:layout_margin="@dimen/activity_horizontal_margin">
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:maxWidth="@dimen/chat_message_bubble_max_width"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            android:padding="@dimen/text_padding">
 
             <TextView
                 android:id="@+id/tvChatMessage"
@@ -43,7 +45,7 @@
                     android:id="@+id/tvChatTimestamp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/colorPrimaryDark"
+                    android:textColor="@color/colorDarkAccent"
                     android:textSize="@dimen/chat_timestamp_text_size" />
             </LinearLayout>
 

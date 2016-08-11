@@ -41,7 +41,7 @@
                     android:id="@+id/tvChatTimestamp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/colorPrimaryDark"
+                    android:textColor="@color/colorDarkAccent"
                     android:textSize="@dimen/chat_timestamp_text_size" />
             </LinearLayout>
 

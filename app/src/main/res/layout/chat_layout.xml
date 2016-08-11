@@ -5,7 +5,7 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    style="@style/AppTheme">
+    style="@style/ChatActivityTheme">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -16,7 +16,8 @@
             android:id="@+id/toolbarChat"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:popupTheme="@style/AppTheme.PopupOverlay" />
+            android:background="@color/colorAccent"
+            android:titleTextColor="@color/textColor"/>
 
     </android.support.design.widget.AppBarLayout>
 
@@ -25,18 +26,20 @@
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:background="@null"
         android:divider="@null"
         android:scrollbars="none"
+        android:overScrollMode="ifContentScrolls"
         android:listSelector="@android:color/transparent"
         android:cacheColorHint="@android:color/transparent"
+        android:padding="@dimen/items_margin"
         />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:weightSum="9">
+        android:weightSum="9"
+        android:background="@color/editTextColor">
 
         <FrameLayout
             android:layout_width="0dp"
@@ -60,13 +63,16 @@
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"/>
 
-        <Button
+        <ImageButton
             android:id="@+id/bSendMessage"
             android:layout_width="0dp"
+            android:backgroundTint="@color/colorAccent"
+            android:background="@color/colorAccent"
+            android:src="@drawable/ic_send"
             android:layout_height="wrap_content"
             android:layout_weight="2"
             android:layout_gravity="bottom"
-            android:text="Send" />
+            />
     </LinearLayout>
 
 

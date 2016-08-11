@@ -11,6 +11,10 @@
         <item name="android:editTextColor">@color/colorPrimary</item>
     </style>
 
+    <style name="ChatActivityTheme" parent="AppTheme">
+        <item name="android:background">@color/textColor</item>
+    </style>
+
     <style name="Error.Design" parent="TextAppearance.AppCompat.Caption">
         <item name="android:textColor">@color/colorMistake</item>
         <item name="android:gravity">end</item>
@@ -46,7 +50,8 @@
 
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"></style>
 
-    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light"></style>
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light">
+    </style>
 
     <!--<style name="EditTextStyle" parent="Base.V7.Widget.AppCompat.EditText">-->
         <!--<item name="android:background">@drawable/edit_text_background</item>-->

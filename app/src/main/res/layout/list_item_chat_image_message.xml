@@ -8,20 +8,30 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:background="@drawable/bubble2">
+        android:background="@drawable/photo_bubble"
 
-        <LinearLayout
+        android:maxHeight="150dp"
+        android:layout_margin="@dimen/activity_horizontal_margin">
+
+        <ImageView
+            android:id="@+id/ivImageMessage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:maxWidth="@dimen/chat_message_bubble_max_width"
-            android:orientation="vertical">
+            android:maxHeight="150dp"
+            android:src="@drawable/ic_play_circle_outline"
+            android:scaleType="centerCrop"
+            android:background="@drawable/photo_bubble"
 
-            <ImageView
-                android:id="@+id/ivImageMessage"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_play_circle_outline"
-                />
+
+            />
+
+        <!--<LinearLayout-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:maxWidth="@dimen/chat_message_bubble_max_width"-->
+            <!--android:orientation="vertical">-->
+
+
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -41,10 +51,9 @@
                     android:id="@+id/tvChatTimestamp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textColor="@color/colorPrimaryDark"
+                    android:textColor="@color/colorDarkAccent"
                     android:textSize="@dimen/chat_timestamp_text_size" />
             </LinearLayout>
-
-        </LinearLayout>
+        <!--</LinearLayout>-->
     </FrameLayout>
 </RelativeLayout>

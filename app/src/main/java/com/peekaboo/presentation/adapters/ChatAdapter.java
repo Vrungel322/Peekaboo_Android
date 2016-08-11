@@ -121,7 +121,8 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> im
 
     private void setAlignment(ViewHolder holder, boolean isMine) {
         if (!isMine) {
-            holder.chatBubble.setBackgroundResource(R.drawable.bubble1);
+           // holder.chatBubble.setBackgroundResource(R.drawable.left);
+            holder.tvChatTimestamp.setTextColor(context.getResources().getColor(R.color.drawerDividerColor));
 
             RelativeLayout.LayoutParams layoutParams
                     = (RelativeLayout.LayoutParams) holder.chatBubble.getLayoutParams();
@@ -129,7 +130,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> im
             layoutParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
             holder.chatBubble.setLayoutParams(layoutParams);
         } else {
-            holder.chatBubble.setBackgroundResource(R.drawable.bubble2);
+            //holder.chatBubble.setBackgroundResource(R.drawable.right);
 
             RelativeLayout.LayoutParams layoutParams
                     = (RelativeLayout.LayoutParams) holder.chatBubble.getLayoutParams();
