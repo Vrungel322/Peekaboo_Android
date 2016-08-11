@@ -62,7 +62,7 @@
     <string name="confirmationCode">Conformation code</string>
 
     <string name="today">Today</string>
-    <string name="tomorrow">Tomorrow</string>
+    <string name="yesterday">Yesterday</string>
     <string name="dialogs">Dialogs</string>
     <string name="calls">Calls</string>
     <string name="contacts">Contacts</string>
@@ -74,5 +74,6 @@
     <string name="forgot_password"> password?</string>
 
     <string name="sign_up">Sign Up</string>
+    <string name="hintConfirmationCode">Confirmation code</string>
 
 </resources>

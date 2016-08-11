@@ -12,6 +12,9 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.peekaboo.R;
+import com.peekaboo.data.repositories.database.contacts.PContact;
+import com.peekaboo.presentation.PeekabooApplication;
+import com.peekaboo.presentation.presenters.ContactPresenter;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -23,10 +26,29 @@ import butterknife.ButterKnife;
  */
 @Singleton
 public class ContactsFragment extends Fragment {
+
     private View rootView;
+    @Inject
+    ContactPresenter contactPresenter;
 
     @Inject
     public ContactsFragment(){}
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        PeekabooApplication.getApp(getActivity()).getComponent().inject(this);
+        contactPresenter.createTable("contactsTable");
+        // Testing DB
+        contactPresenter.insertContactToTable("contactsTable",
+                new PContact("Name0", "Surname0", "Nickname0", true, "uri0"));
+        contactPresenter.insertContactToTable("contactsTable",
+                new PContact("Name1", "Surname1", "Nickname1", true, "uri1"));
+        contactPresenter.insertContactToTable("contactsTable",
+                new PContact("Name2", "Surname2", "Nickname2", true, "uri2"));
+        contactPresenter.getAllTableAsString("contactsTable");
+    }
 
     @Nullable
     @Override

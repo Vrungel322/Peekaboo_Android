@@ -41,12 +41,8 @@ public class LogInActivity extends AppCompatActivity implements ICredentialsView
     static Bus bus;
     @BindView(R.id.etLogin)
     EditText etLogin;
-//    @BindView(R.id.etPassword)
-//    EditText etPassword;
     @BindView(R.id.ilUsername)
     TextInputLayout ilUsername;
-//    @BindView(R.id.ilPassword)
-//    TextInputLayout ilPassword;
     @BindView(R.id.pvPassword)
     PasswordView passwordView;
     @BindView(R.id.lLogIn)
@@ -64,15 +60,12 @@ public class LogInActivity extends AppCompatActivity implements ICredentialsView
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log_in);
         ButterKnife.bind(this);
-        Log.e("actionBar", String.valueOf(getSupportActionBar()));
         PeekabooApplication.getApp(this).getComponent().inject(this);
         loginPresenter.bind(this);
         loginPresenter.setCheckingInternet();
         bus.register(this);
         onSwipe();
     }
-
-
 
     @Override
     protected void onDestroy() {
@@ -90,11 +83,11 @@ public class LogInActivity extends AppCompatActivity implements ICredentialsView
     public void showInputError(InputFieldError error) {
         switch (error) {
             case LOGIN:
+                ilUsername.setErrorEnabled(true);
                 ilUsername.setError(getResources().getString(R.string.invalidUsername));
                 etLogin.setText("");
             case PASSWORD:
-
-                passwordView.setError("jkgftdrest");
+                passwordView.setError(getString(R.string.invalidPassword));
                 passwordView.setText("");
                 break;
         }
@@ -102,9 +95,12 @@ public class LogInActivity extends AppCompatActivity implements ICredentialsView
 
     @Override
     public void showProgress() {
-        DialogFragment newFragment = ProgressDialogFragment.newInstance();
-        newFragment.setCancelable(false);
-        newFragment.show(getSupportFragmentManager(), PROGRESS_DIALOG);
+        DialogFragment fragment = (DialogFragment) getSupportFragmentManager().findFragmentByTag(PROGRESS_DIALOG);
+        if (fragment == null) {
+            DialogFragment newFragment = ProgressDialogFragment.newInstance();
+            newFragment.setCancelable(false);
+            newFragment.show(getSupportFragmentManager(), PROGRESS_DIALOG);
+        }
     }
 
     @Override
@@ -129,6 +125,7 @@ public class LogInActivity extends AppCompatActivity implements ICredentialsView
 
     @OnTouch(R.id.etLogin)
     boolean onUsernameEditText(){
+        ilUsername.setErrorEnabled(false);
         ilUsername.setError(null);
         return false;
     }

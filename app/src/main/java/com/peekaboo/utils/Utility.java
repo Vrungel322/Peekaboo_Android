@@ -33,10 +33,10 @@ public class Utility {
 
     /**
      * Method for convert timestamp into:
-     * For today: "Today, July 21"
-     * For tomorrow:  "Tomorrow"
-     * For the next 5 days: "Wednesday" (just the day name)
-     * For all days after that: "July 27"
+     * For today: current time ex. 10:45
+     * For yesterday:  "Yesterday"
+     * For the last 5 days: "Wednesday" (just the day name)
+     * For all days before that: "July 27"
      * @param context
      * @param dateInMillis
      * @return
@@ -50,19 +50,18 @@ public class Utility {
 
         if (julianDay == currentJulianDay) {
             return new SimpleDateFormat("HH:mm").format(dateInMillis);
-        } else if ( julianDay < currentJulianDay + 7 ) {
-            // If the input date is less than a week in the future, just return the day name.
+        } else if ( julianDay > currentJulianDay - 5) {
+            // If the input date is more than a week in the past, just return the day name.
             return getDayName(context, dateInMillis);
         } else {
             // Otherwise, use the form "July 27"
-            SimpleDateFormat shortenedDateFormat = new SimpleDateFormat("MMM dd");
-            return shortenedDateFormat.format(dateInMillis);
+            return new SimpleDateFormat("MMM dd").format(dateInMillis);
         }
     }
 
     /**
      * Given a day, returns just the name to use for that day.
-     * E.g "today", "tomorrow", "wednesday".
+     * E.g "today", "yesterday", "Wednesday"
      *
      * @param context Context to use for resource localization
      * @param dateInMillis The date in milliseconds
@@ -73,10 +72,8 @@ public class Utility {
         t.setToNow();
         int julianDay = Time.getJulianDay(dateInMillis, t.gmtoff);
         int currentJulianDay = Time.getJulianDay(System.currentTimeMillis(), t.gmtoff);
-        if (julianDay == currentJulianDay) {
-            return context.getString(R.string.today);
-        } else if ( julianDay == currentJulianDay +1 ) {
-            return context.getString(R.string.tomorrow);
+        if (julianDay == currentJulianDay - 1) {
+            return context.getString(R.string.yesterday);
         } else {
             Time time = new Time();
             time.setToNow();

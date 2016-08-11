@@ -2,8 +2,9 @@ package com.peekaboo.data.mappers;
 
 import android.content.ContentValues;
 
+import com.peekaboo.data.repositories.database.contacts.PContact;
 import com.peekaboo.domain.User;
-import com.peekaboo.data.repositories.database.PMessage;
+import com.peekaboo.data.repositories.database.messages.PMessage;
 import com.peekaboo.presentation.services.Message;
 
 /**
@@ -32,8 +33,13 @@ public class MapperFactory implements AbstractMapperFactory {
     public Mapper<Message, byte[]> getMessageToByteMapper() {
         return new MessageToByteArrayMapper();
     }
+
     public Mapper<PMessage, ContentValues> getPMessageMapper() {
         return new PMessageMapper();
+    }
+
+    public Mapper<PContact, ContentValues> getPContactMapper() {
+        return new PContactMapper();
     }
 
 }

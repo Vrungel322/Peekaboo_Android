@@ -7,6 +7,7 @@ import com.peekaboo.presentation.activities.MainActivity;
 import com.peekaboo.presentation.activities.SignUpActivity;
 import com.peekaboo.presentation.activities.SplashActivity;
 import com.peekaboo.presentation.dialogs.ConfirmSignUpDialog;
+import com.peekaboo.presentation.fragments.ContactsFragment;
 import com.peekaboo.presentation.fragments.ServiceTestFragment;
 import com.peekaboo.presentation.services.NotificationService;
 
@@ -28,6 +29,7 @@ public interface ApplicationComponent {
 
 //    Inject of Fragments
     void inject(ServiceTestFragment serviceTestFragment);
+    void inject(ContactsFragment contactsFragment);
     void inject(ConfirmSignUpDialog confirmSignUpDialog);
 
 //    Inject of Services

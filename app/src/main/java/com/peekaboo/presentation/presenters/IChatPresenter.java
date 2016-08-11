@@ -1,7 +1,7 @@
 package com.peekaboo.presentation.presenters;
 
-import com.peekaboo.data.repositories.database.PMessage;
-import com.peekaboo.data.repositories.database.PMessageAbs;
+import com.peekaboo.data.repositories.database.messages.PMessage;
+import com.peekaboo.data.repositories.database.messages.PMessageAbs;
 import com.peekaboo.presentation.views.IChatView;
 
 import rx.Subscription;

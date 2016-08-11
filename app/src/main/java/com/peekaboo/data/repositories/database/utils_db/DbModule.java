@@ -1,8 +1,9 @@
-package com.peekaboo.data.repositories.database;
+package com.peekaboo.data.repositories.database.utils_db;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import com.peekaboo.data.repositories.database.messages.PMessageDBHelper;
 import com.squareup.sqlbrite.BriteDatabase;
 import com.squareup.sqlbrite.SqlBrite;
 

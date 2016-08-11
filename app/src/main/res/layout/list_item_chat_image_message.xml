@@ -35,6 +35,13 @@
             android:layout_gravity="end|right"
             android:orientation="horizontal">
 
+            <ProgressBar
+                android:id="@+id/pbLoadingImage"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="gone"
+                />
+
             <ImageView
                 android:id="@+id/ivChatMessageStatus"
                 android:layout_width="@dimen/chat_message_status_size"

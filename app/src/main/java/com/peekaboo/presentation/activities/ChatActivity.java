@@ -1,8 +1,12 @@
 package com.peekaboo.presentation.activities;
 
 import android.app.FragmentTransaction;
+import android.content.ContentValues;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.speech.RecognizerIntent;
 import android.support.v7.app.AppCompatActivity;
@@ -17,9 +21,9 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.peekaboo.R;
-import com.peekaboo.data.repositories.database.AudioPMessage;
-import com.peekaboo.data.repositories.database.ImagePMessage;
-import com.peekaboo.data.repositories.database.TextPMessage;
+import com.peekaboo.data.repositories.database.messages.AudioPMessage;
+import com.peekaboo.data.repositories.database.messages.ImagePMessage;
+import com.peekaboo.data.repositories.database.messages.TextPMessage;
 import com.peekaboo.presentation.PeekabooApplication;
 import com.peekaboo.presentation.adapters.ChatAdapter;
 import com.peekaboo.presentation.fragments.AttachmentChatDialog;
@@ -31,7 +35,11 @@ import com.peekaboo.presentation.views.IChatView;
 import com.peekaboo.utils.Constants;
 import com.peekaboo.utils.Utility;
 
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Random;
 
 import javax.inject.Inject;
@@ -61,6 +69,7 @@ public class ChatActivity extends AppCompatActivity implements ChatItemDialog.IC
     private String receiverName;
 
     boolean isRecording = false;
+    private Uri imageUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -183,17 +192,20 @@ public class ChatActivity extends AppCompatActivity implements ChatItemDialog.IC
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == Constants.REQUEST_CODES.REQUEST_CODE_CAMERA) {
-            Toast.makeText(getApplicationContext(), "" + resultCode, Toast.LENGTH_SHORT).show();
-//            Bitmap thumbnailBitmap = (Bitmap) data.getExtras().get("data");
-//            sendPhoto(data.getExtras().get("data"));
+            Toast.makeText(getApplicationContext(), "CAMERA: " + resultCode, Toast.LENGTH_SHORT).show();
+            if (resultCode == RESULT_OK) {
+                sendPhoto(imageUri);
+                galleryAddPic(imageUri);
+            }
         }
         if (requestCode == Constants.REQUEST_CODES.REQUEST_CODE_GALERY) {
             Toast.makeText(getApplicationContext(), "GALLERY: " + resultCode, Toast.LENGTH_SHORT).show();
-            sendPhoto(data.getData().toString());
+            if (resultCode == RESULT_OK) {
+                sendPhoto(data.getData());
+            }
         }
         if (requestCode == Constants.REQUEST_CODES.REQUEST_CODE_SPEECH_INPUT) {
             if (resultCode == RESULT_OK && null != data) {
-
                 ArrayList<String> result = data
                         .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
                 String pckgId = Utility.getPackageId();
@@ -204,9 +216,9 @@ public class ChatActivity extends AppCompatActivity implements ChatItemDialog.IC
         }
     }
 
-    private void sendPhoto(String uri) {
+    private void sendPhoto(Uri uri) {
         chatPresenter.insertMessageToTable(receiverName, new ImagePMessage(Utility.getPackageId(), true,
-                uri, System.currentTimeMillis(), false, false, false));
+                uri.toString(), System.currentTimeMillis(), false, false, false));
     }
 
     @Override
@@ -232,8 +244,62 @@ public class ChatActivity extends AppCompatActivity implements ChatItemDialog.IC
 
     @Override
     public void takePhoto() {
-        Intent cameraIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(cameraIntent, Constants.REQUEST_CODES.REQUEST_CODE_CAMERA);
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            File photoFile = null;
+            try {
+                photoFile = createImageFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            if (photoFile != null) {
+                imageUri = getImageContentUri(photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+                startActivityForResult(takePictureIntent, Constants.REQUEST_CODES.REQUEST_CODE_CAMERA);
+            }
+        }
+    }
+
+    public Uri getImageContentUri(File imageFile) {
+        String filePath = imageFile.getAbsolutePath();
+        Cursor cursor = getContentResolver().query(
+                MediaStore.Images.Media.EXTERNAL_CONTENT_URI,
+                new String[] { MediaStore.Images.Media._ID },
+                MediaStore.Images.Media.DATA + "=? ",
+                new String[] { filePath }, null);
+        if (cursor != null && cursor.moveToFirst()) {
+            int id = cursor.getInt(cursor.getColumnIndex(MediaStore.MediaColumns._ID));
+            return Uri.withAppendedPath(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "" + id);
+        } else {
+            if (imageFile.exists()) {
+                ContentValues values = new ContentValues();
+                values.put(MediaStore.Images.Media.DATA, filePath);
+                return getContentResolver().insert(
+                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI, values);
+            } else {
+                return null;
+            }
+        }
+    }
+
+    private File createImageFile() throws IOException {
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp;
+        File storageDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES);
+
+        File image = File.createTempFile(
+                imageFileName,
+                ".jpg",
+                storageDir
+        );
+
+        return image;
+    }
+
+    private void galleryAddPic(Uri imageUri) {
+        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+        mediaScanIntent.setData(imageUri);
+        sendBroadcast(mediaScanIntent);
     }
 
     @Override
@@ -258,17 +324,7 @@ public class ChatActivity extends AppCompatActivity implements ChatItemDialog.IC
     }
 
     @Override
-    public void showProgress() {
-
-    }
-
-    @Override
-    public void hideProgress() {
-
-    }
-
-    @Override
     public void onError(String text) {
-
+        Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
     }
 }

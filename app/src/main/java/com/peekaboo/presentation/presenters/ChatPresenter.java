@@ -4,17 +4,20 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.speech.tts.TextToSpeech;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.widget.Toast;
 
 import com.peekaboo.data.mappers.AbstractMapperFactory;
-import com.peekaboo.data.repositories.database.AudioPMessage;
-import com.peekaboo.data.repositories.database.PMessage;
-import com.peekaboo.data.repositories.database.PMessageAbs;
-import com.peekaboo.data.repositories.database.PMessageHelper;
+import com.peekaboo.data.repositories.database.messages.AudioPMessage;
+import com.peekaboo.data.repositories.database.messages.PMessage;
+import com.peekaboo.data.repositories.database.messages.PMessageAbs;
+import com.peekaboo.data.repositories.database.messages.PMessageHelper;
 import com.peekaboo.domain.AudioRecorder;
 import com.peekaboo.domain.MPlayer;
 import com.peekaboo.domain.Record;
+import com.peekaboo.presentation.services.INotifier;
+import com.peekaboo.presentation.services.Message;
 import com.peekaboo.presentation.views.IChatView;
 import com.peekaboo.utils.Utility;
 
@@ -30,12 +33,12 @@ import rx.subscriptions.CompositeSubscription;
 public class ChatPresenter extends BasePresenter<IChatView> implements IChatPresenter {
 
     private Context context;
-    CompositeSubscription subscriptions;
-    PMessageHelper pMessageHelper;
-    AbstractMapperFactory mapperFactory;
-    TextToSpeech textToSpeech;
-    AudioRecorder recorder;
-    MPlayer mPlayer;
+    private CompositeSubscription subscriptions;
+    private PMessageHelper pMessageHelper;
+    private AbstractMapperFactory mapperFactory;
+    private TextToSpeech textToSpeech;
+    private AudioRecorder recorder;
+    private MPlayer mPlayer;
 
     @Inject
     public ChatPresenter(Context context, PMessageHelper pMessageHelper,
@@ -53,7 +56,6 @@ public class ChatPresenter extends BasePresenter<IChatView> implements IChatPres
     @Override
     public void insertMessageToTable(String tableName, PMessage message) {
         pMessageHelper.insert(tableName, mapperFactory.getPMessageMapper().transform(message));
-
     }
 
     @Override
@@ -111,6 +113,7 @@ public class ChatPresenter extends BasePresenter<IChatView> implements IChatPres
         return recorder.startRecording().subscribe();
     }
 
+    @Nullable
     @Override
     public Subscription stopRecordingAudio(String tableName) {
         if (recorder != null) {
@@ -122,6 +125,7 @@ public class ChatPresenter extends BasePresenter<IChatView> implements IChatPres
         return null;
     }
 
+    @Nullable
     @Override
     public Subscription startPlayingMPlayer(String filepath) {
         mPlayer = new MPlayer();

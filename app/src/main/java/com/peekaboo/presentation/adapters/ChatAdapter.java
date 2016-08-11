@@ -1,7 +1,6 @@
 package com.peekaboo.presentation.adapters;
 
 import android.content.Context;
-import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,14 +8,17 @@ import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.peekaboo.R;
-import com.peekaboo.data.repositories.database.PMessageAbs;
+import com.peekaboo.data.repositories.database.messages.PMessageAbs;
 import com.peekaboo.presentation.presenters.ChatPresenter;
 import com.peekaboo.utils.Constants;
 import com.peekaboo.utils.Utility;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
 
 import java.util.Collections;
 import java.util.List;
@@ -33,6 +35,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> im
     private final LayoutInflater inflater;
     private Context context;
     private ChatPresenter chatPresenter;
+    private Picasso mPicasso;
 
     private List<PMessageAbs> messages = Collections.emptyList();
 
@@ -40,6 +43,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> im
         this.context = context;
         this.inflater = LayoutInflater.from(context);
         this.chatPresenter = chatPresenter;
+        this.mPicasso = Picasso.with(context);
     }
 
     @Override
@@ -91,7 +95,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> im
                         .setOnClickListener(v -> chatPresenter.stopAndStartPlayingMPlayer(pMessageAbs.messageBody()));
                 break;
             case Constants.PMESSAGE_MEDIA_TYPE.IMAGE_MESSAGE:
-                ((ViewHolderImage) holder).ivImageMessage.setImageURI(Uri.parse(pMessageAbs.messageBody()));
+                setImageMessage((ViewHolderImage) holder, pMessageAbs.messageBody());
                 break;
             case Constants.PMESSAGE_MEDIA_TYPE.VIDEO_MESSAGE:
                 break;
@@ -140,7 +144,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> im
         }
     }
 
-    private void setMessageStatus(ViewHolder holder, PMessageAbs message){
+    private void setMessageStatus(ViewHolder holder, PMessageAbs message) {
         if (message.isSent() && !message.isDelivered()) {
             holder.ivChatMessageStatus.setVisibility(View.GONE);
         } else {
@@ -150,6 +154,19 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> im
 
     private int getStatusImage(boolean isRead) {
         return isRead ? R.drawable.ic_check_all : R.drawable.ic_check;
+    }
+
+    private void setImageMessage(ChatAdapter.ViewHolderImage holder, String imageUri) {
+        holder.pbLoadingImage.setVisibility(View.VISIBLE);
+        mPicasso.load(imageUri).resizeDimen(R.dimen.chat_image_width, R.dimen.chat_image_height)
+                .error(R.drawable.ic_alert_circle_outline)
+                .centerInside()
+                .into(holder.ivImageMessage, new Callback.EmptyCallback(){
+                    @Override
+                    public void onSuccess() {
+                        holder.pbLoadingImage.setVisibility(View.GONE);
+                    }
+                });
     }
 
     public void clearList() {
@@ -194,6 +211,8 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> im
     static class ViewHolderImage extends ViewHolder {
         @BindView(R.id.ivImageMessage)
         ImageView ivImageMessage;
+        @BindView(R.id.pbLoadingImage)
+        ProgressBar pbLoadingImage;
 
         public ViewHolderImage(View view) {
             super(view);

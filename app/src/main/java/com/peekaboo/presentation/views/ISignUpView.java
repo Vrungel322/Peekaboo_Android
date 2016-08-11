@@ -7,4 +7,6 @@ import com.peekaboo.presentation.views.ICredentialsView;
  */
 public interface ISignUpView extends ICredentialsView {
     void showConfirmDialog();
+
+    void dismissConfirmDialog();
 }

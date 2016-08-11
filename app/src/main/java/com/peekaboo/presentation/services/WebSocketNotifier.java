@@ -112,7 +112,7 @@ public class WebSocketNotifier implements INotifier {
     @Override
     public void sendFile(Message message, String file) {
 //        int maxPayloadSize = ws.getMaxPayloadSize();
-        List<Message> fileMessage = MessageUtils.createFileMessage(message, file, 6000);
+        List<Message> fileMessage = MessageUtils.createFileMessage(message, file, 4096);
         for (Message m : fileMessage) {
             Log.e("message", m.getCommand() + " " + m.getParams());
             sendBinaryMessage(mtb.transform(m));

@@ -5,7 +5,7 @@ import android.content.SharedPreferences;
 
 import com.peekaboo.data.di.DataModule;
 import com.peekaboo.data.mappers.MapperFactory;
-import com.peekaboo.data.repositories.database.DbModule;
+import com.peekaboo.data.repositories.database.utils_db.DbModule;
 import com.peekaboo.domain.User;
 import com.peekaboo.domain.schedulers.ObserveOn;
 import com.peekaboo.domain.schedulers.SubscribeOn;
