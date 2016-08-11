@@ -78,7 +78,6 @@ public class SignUpPresenter extends ProgressPresenter<ISignUpView> implements I
         if (isValid(username, login, password, passwordConfirm)) {
             signUpUseCase.setCredentials(username, login, password);
             signUpUseCase.execute(getSignUpSubscriber());
-
         }
     }
 
@@ -87,6 +86,10 @@ public class SignUpPresenter extends ProgressPresenter<ISignUpView> implements I
         if (isValid(key)) {
             confirmUseCase.setConfirmKey(key);
             confirmUseCase.execute(getConfirmSubscriber());
+            ISignUpView view = getView();
+            if (view != null) {
+                view.dismissConfirmDialog();
+            }
         }
     }
 
@@ -119,12 +122,9 @@ public class SignUpPresenter extends ProgressPresenter<ISignUpView> implements I
 
     @Override
     public void unbind() {
+        signUpUseCase.unsubscribe();
+        confirmUseCase.unsubscribe();
         super.unbind();
-        if (signUpUseCase.isWorking()) {
-            signUpUseCase.unsubscribe();
-        } else if (confirmUseCase.isWorking()) {
-            confirmUseCase.unsubscribe();
-        }
     }
 
     @Override
@@ -132,7 +132,8 @@ public class SignUpPresenter extends ProgressPresenter<ISignUpView> implements I
         super.bind(view);
         if (signUpUseCase.isWorking()) {
             signUpUseCase.execute(getSignUpSubscriber());
-        } else if (confirmUseCase.isWorking()) {
+        }
+        if (confirmUseCase.isWorking()) {
             confirmUseCase.execute(getConfirmSubscriber());
         }
     }

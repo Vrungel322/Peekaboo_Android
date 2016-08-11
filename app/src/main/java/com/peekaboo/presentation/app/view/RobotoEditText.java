@@ -5,6 +5,8 @@ import android.graphics.PorterDuff;
 import android.os.Build;
 import android.support.design.widget.TextInputEditText;
 import android.util.AttributeSet;
+import android.util.Log;
+import android.view.View;
 
 import com.peekaboo.R;
 import com.peekaboo.presentation.utils.ResourcesUtils;
@@ -40,12 +42,19 @@ public class RobotoEditText extends TextInputEditText {
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             getBackground().setColorFilter(controlNormal, PorterDuff.Mode.SRC_ATOP);
             setOnFocusChangeListener((v, hasFocus) -> {
-                if (hasFocus) {
-                    getBackground().setColorFilter(controlActivated, PorterDuff.Mode.SRC_ATOP);
-                } else {
-                    getBackground().setColorFilter(controlNormal, PorterDuff.Mode.SRC_ATOP);
-                }
+                onFocusChanged(hasFocus);
             });
+        }
+    }
+
+    public void onFocusChanged(boolean hasFocus) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
+
+            if (hasFocus) {
+                getBackground().setColorFilter(controlActivated, PorterDuff.Mode.SRC_ATOP);
+            } else {
+                getBackground().setColorFilter(controlNormal, PorterDuff.Mode.SRC_ATOP);
+            }
         }
     }
 

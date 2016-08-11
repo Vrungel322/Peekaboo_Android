@@ -1,31 +1,30 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:layout_margin="16dp"
-    android:background="#fdfdfd">
+    android:layout_height="match_parent">
 
     <com.github.glomadrian.codeinputlib.CodeInput
         android:id="@+id/ciConformation"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_margin="16dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginBottom="16dp"
         app:codes="4"
-        app:hint_color="#c3edf4f2"
-        app:hint_text="Conformation code"
-        app:text_color="#50c9a9"
-        app:underline_color="#777777"
-        app:underline_selected_color="#50c9a9" />
+        app:hint_color="?android:attr/textColorHint"
+        app:hint_text="@string/hintConfirmationCode"
+        app:text_color="@color/textColorPrimaryCredentials"
+        app:underline_color="?attr/colorControlNormal"
+        app:underline_selected_color="?attr/colorControlActivated" />
 
     <Button
         android:id="@+id/bOk"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBottom="@+id/ciConformation"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_gravity="right"
+        android:layout_gravity="right|center_vertical"
+        style="@style/Base.Widget.AppCompat.Button.ButtonBar.AlertDialog"
         android:text="@string/ok" />
 
-</RelativeLayout>
+</FrameLayout>

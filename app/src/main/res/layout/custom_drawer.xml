@@ -100,7 +100,8 @@
                             android:layout_width="@dimen/nav_icon_width"
                             android:layout_height="@dimen/nav_icon_height"
                             android:layout_marginLeft="@dimen/nav_content_margin_left"
-                            android:src="@drawable/chats_grey" />
+                            android:src="@drawable/chats_grey"
+                            android:tint="@color/drawer_item_text_color" />
 
                         <com.peekaboo.presentation.app.view.RobotoTextView
                             android:id="@+id/tvTextChat"
@@ -109,7 +110,8 @@
                             android:layout_gravity="center_vertical"
                             android:layout_marginLeft="@dimen/nav_matgin_left_text"
                             android:text="@string/dialogs"
-                            android:textAppearance="?android:attr/textAppearanceMedium" />
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:textColor="@color/drawer_item_text_color" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -126,7 +128,8 @@
                             android:layout_width="@dimen/nav_icon_width"
                             android:layout_height="@dimen/nav_icon_height"
                             android:layout_marginLeft="@dimen/nav_content_margin_left"
-                            android:src="@drawable/calls_grey" />
+                            android:src="@drawable/calls_grey"
+                            android:tint="@color/drawer_item_text_color" />
 
                         <com.peekaboo.presentation.app.view.RobotoTextView
                             android:id="@+id/tvTextCalls"
@@ -135,7 +138,9 @@
                             android:layout_gravity="center_vertical"
                             android:layout_marginLeft="@dimen/nav_matgin_left_text"
                             android:text="@string/calls"
-                            android:textAppearance="?android:attr/textAppearanceMedium" />
+
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:textColor="@color/drawer_item_text_color" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -154,7 +159,8 @@
                             android:layout_marginLeft="@dimen/nav_content_margin_left"
                             android:paddingBottom="3dp"
                             android:paddingTop="3dp"
-                            android:src="@drawable/contacts_grey" />
+                            android:src="@drawable/contacts_grey"
+                            android:tint="@color/drawer_item_text_color" />
 
                         <com.peekaboo.presentation.app.view.RobotoTextView
                             android:id="@+id/tvTextContacts"
@@ -162,8 +168,10 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:layout_marginLeft="@dimen/nav_matgin_left_text"
+
                             android:text="@string/contacts"
-                            android:textAppearance="?android:attr/textAppearanceMedium" />
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:textColor="@color/drawer_item_text_color" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -182,7 +190,8 @@
                             android:layout_height="@dimen/nav_icon_height"
                             android:layout_marginLeft="@dimen/nav_content_margin_left"
                             android:padding="3dp"
-                            android:src="@drawable/profile_grey" />
+                            android:src="@drawable/profile_grey"
+                            android:tint="@color/drawer_item_text_color" />
 
                         <com.peekaboo.presentation.app.view.RobotoTextView
                             android:id="@+id/tvTextProfile"
@@ -190,8 +199,10 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:layout_marginLeft="@dimen/nav_matgin_left_text"
+
                             android:text="@string/profile"
-                            android:textAppearance="?android:attr/textAppearanceMedium" />
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:textColor="@color/drawer_item_text_color" />
                     </LinearLayout>
 
 
@@ -221,7 +232,8 @@
                             android:layout_width="@dimen/nav_icon_width"
                             android:layout_height="@dimen/nav_icon_height"
                             android:layout_marginLeft="@dimen/nav_content_margin_left"
-                            android:src="@drawable/settings_grey" />
+                            android:src="@drawable/settings_grey"
+                            android:tint="@color/drawer_item_text_color" />
 
                         <com.peekaboo.presentation.app.view.RobotoTextView
                             android:id="@+id/tvTextSettings"
@@ -230,7 +242,8 @@
                             android:layout_gravity="center_vertical"
                             android:layout_marginLeft="@dimen/nav_matgin_left_text"
                             android:text="@string/settings"
-                            android:textAppearance="?android:attr/textAppearanceMedium" />
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:textColor="@color/drawer_item_text_color" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -247,7 +260,8 @@
                             android:layout_width="@dimen/nav_icon_width"
                             android:layout_height="@dimen/nav_icon_height"
                             android:layout_marginLeft="@dimen/nav_content_margin_left"
-                            android:src="@drawable/exit_grey" />
+                            android:src="@drawable/exit_grey"
+                            android:tint="@color/drawer_item_text_color" />
 
                         <com.peekaboo.presentation.app.view.RobotoTextView
                             android:id="@+id/tvTextExit"
@@ -256,7 +270,8 @@
                             android:layout_gravity="center_vertical"
                             android:layout_marginLeft="@dimen/nav_matgin_left_text"
                             android:text="@string/exit"
-                            android:textAppearance="?android:attr/textAppearanceMedium" />
+                            android:textAppearance="?android:attr/textAppearanceMedium"
+                            android:textColor="@color/drawer_item_text_color" />
                     </LinearLayout>
                 </LinearLayout>
 

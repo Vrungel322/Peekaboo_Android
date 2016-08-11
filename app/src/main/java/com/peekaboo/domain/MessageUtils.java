@@ -26,14 +26,13 @@ public class MessageUtils {
         File file = new File(filename);
         FileInputStream stream = null;
         int fileLength = (int) file.length();
-        int filesCount = fileLength / partSize + 1;
-        int shift = 0;
 
         try {
             stream = new FileInputStream(file);
-            for (int i = 0; i < filesCount; i++) {
-                int bytesLeft = fileLength - shift;
-                byte[] bytes = new byte[Math.min(bytesLeft, partSize)];
+            while(stream.available() > 0) {
+                byte[] bytes = new byte[Math.min(stream.available(), partSize)];
+//                stream.read()
+                Log.e("available", String.valueOf(stream.available()));
                 stream.read(bytes);
                 result.add(copyMessage(message).setBody(bytes));
             }
