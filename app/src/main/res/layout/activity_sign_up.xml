@@ -62,8 +62,8 @@
             android:paddingTop="@dimen/padding_top"
             app:errorTextAppearance="@style/Error.Design">
 
-            <com.peekaboo.presentation.app.view.RobotoEditText
-                android:id="@+id/etPassword"
+            <com.peekaboo.presentation.app.view.PasswordView
+                android:id="@+id/pvPassword"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
