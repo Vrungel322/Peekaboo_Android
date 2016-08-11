@@ -12,9 +12,8 @@ public class PContact extends PContactAbs {
     private boolean isOnline;
     private String contactImgUri;
 
-    public PContact(long id, String contactName, String contactSurname, String contactNickname,
+    public PContact(String contactName, String contactSurname, String contactNickname,
                     boolean isOnline, String contactImgUri) {
-        this.id = id;
         this.contactName = contactName;
         this.contactSurname = contactSurname;
         this.contactNickname = contactNickname;
