@@ -58,7 +58,7 @@
     <string name="ok">OK</string>
 
     <string name="today">Сегодня</string>
-    <string name="tomorrow">Завтра</string>
+    <string name="yesterday">Вчера</string>
     <string name="dialogs">Диалоги</string>
     <string name="calls">Звонки</string>
     <string name="contacts">Контакты</string>
