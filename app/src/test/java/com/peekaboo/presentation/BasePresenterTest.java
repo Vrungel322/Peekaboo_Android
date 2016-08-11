@@ -27,4 +27,12 @@ public class BasePresenterTest {
         when(observeOn.getScheduler()).thenReturn(Schedulers.newThread());
         when(subscribeOn.getScheduler()).thenReturn(Schedulers.newThread());
     }
+
+    protected void sleep(int millis) {
+        try {
+            Thread.sleep(millis);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+    }
 }

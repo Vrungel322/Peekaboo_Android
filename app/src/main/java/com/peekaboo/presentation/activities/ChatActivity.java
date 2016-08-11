@@ -324,17 +324,7 @@ public class ChatActivity extends AppCompatActivity implements ChatItemDialog.IC
     }
 
     @Override
-    public void showProgress() {
-
-    }
-
-    @Override
-    public void hideProgress() {
-
-    }
-
-    @Override
     public void onError(String text) {
-
+        Toast.makeText(this, text, Toast.LENGTH_SHORT).show();
     }
 }

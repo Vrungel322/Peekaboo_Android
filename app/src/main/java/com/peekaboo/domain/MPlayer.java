@@ -2,6 +2,7 @@ package com.peekaboo.domain;
 
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.support.annotation.Nullable;
 import android.text.TextUtils;
 
 import java.io.FileDescriptor;
@@ -25,6 +26,7 @@ public class MPlayer {
                 .subscribeOn(Schedulers.computation());
     }
 
+    @Nullable
     public Subscription play(String filepath) {
         if (TextUtils.isEmpty(filepath)) return null;
         return getMPlayer().subscribe(mediaPlayer1 -> {
@@ -61,8 +63,8 @@ public class MPlayer {
         });
     }
 
-    public Subscription stopAndPlay(String filepath){
-        if(isPlaying) return stop();
+    public Subscription stopAndPlay(String filepath) {
+        if (isPlaying) return stop();
         return play(filepath);
     }
 

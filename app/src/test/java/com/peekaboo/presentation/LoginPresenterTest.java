@@ -12,11 +12,8 @@ import com.peekaboo.presentation.views.ICredentialsView;
 import org.junit.Test;
 import org.mockito.Mock;
 
-import java.util.concurrent.TimeUnit;
-
 import rx.Observable;
 import rx.Subscriber;
-import rx.functions.Func0;
 
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.mock;
@@ -27,17 +24,29 @@ import static org.mockito.Mockito.verify;
  * Created by sebastian on 16.07.16.
  */
 public class LoginPresenterTest extends BasePresenterTest {
+    MockContext context = new MockContext();
     @Mock
     private ICredentialsView loginView;
     @Mock
     private ErrorHandler errorHandler;
-    MockContext context = new MockContext();
 
     @Test
     public void whenLoginSuccessThenNavigateToProfileIsCalled() {
         LoginPresenter loginPresenter = new LoginPresenter(context, new LoginUseCaseSuccess(), errorHandler);
         loginPresenter.bind(loginView);
         loginPresenter.onSignInButtonClick("aValidUsername", "aValidPassword");
+
+        verify(loginView, timeout(WAIT).times(1)).navigateToProfile();
+    }
+
+    @Test
+    public void whenLoginSuccessThenNavigateToProfileIsCalledAfterRebind() {
+        LoginPresenter loginPresenter = new LoginPresenter(context, new LoginUseCaseSuccess(), errorHandler);
+        loginPresenter.bind(loginView);
+        loginPresenter.onSignInButtonClick("aValidUsername", "aValidPassword");
+        loginPresenter.unbind();
+        sleep(WAIT);
+        loginPresenter.bind(loginView);
 
         verify(loginView, timeout(WAIT).times(1)).navigateToProfile();
     }
