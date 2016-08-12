@@ -26,6 +26,6 @@ public class RobotoTextView extends TextView {
     }
 
     void setTypeface(Context context) {
-        setTypeface(Typeface.getRoboto(context));
+//        setTypeface(Typeface.getRoboto(context));
     }
 }

@@ -35,7 +35,7 @@ public class RobotoEditText extends TextInputEditText {
     }
     void configure(Context context) {
         roboto = Typeface.getRoboto(context);
-        setTypeface(roboto);
+//        setTypeface(roboto);
         controlNormal = ResourcesUtils.getColorFromAttr(context, R.attr.colorControlNormal);
         controlActivated = ResourcesUtils.getColorFromAttr(context, R.attr.colorControlActivated);
         setBackgroundDrawable(ResourcesUtils.getDrawable(context, R.drawable.edit_text_background));
@@ -62,7 +62,7 @@ public class RobotoEditText extends TextInputEditText {
     public void setInputType(int type) {
         int selectionStart = getSelectionStart();
         super.setInputType(type);
-        setTypeface(roboto);
+//        setTypeface(roboto);
         setSelection(selectionStart);
     }
 }

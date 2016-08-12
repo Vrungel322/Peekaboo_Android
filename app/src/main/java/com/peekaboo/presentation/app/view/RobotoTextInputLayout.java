@@ -27,7 +27,7 @@ public class RobotoTextInputLayout extends TextInputLayout {
     }
 
     void setTypeface(Context context) {
-        setTypeface(Typeface.getRoboto(context));
+//        setTypeface(Typeface.getRoboto(context));
     }
 
     @Override

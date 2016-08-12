@@ -8,6 +8,7 @@ import com.peekaboo.presentation.activities.SignUpActivity;
 import com.peekaboo.presentation.activities.SplashActivity;
 import com.peekaboo.presentation.dialogs.ConfirmSignUpDialog;
 import com.peekaboo.presentation.fragments.ServiceTestFragment;
+import com.peekaboo.presentation.fragments.SocketTestFragment;
 import com.peekaboo.presentation.services.NotificationService;
 
 import javax.inject.Singleton;
@@ -34,4 +35,6 @@ public interface ApplicationComponent {
     void inject(NotificationService notificationService);
 
     PeekabooApi api();
+
+    void inject(SocketTestFragment socketTestFragment);
 }

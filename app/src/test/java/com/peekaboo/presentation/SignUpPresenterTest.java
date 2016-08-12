@@ -2,9 +2,9 @@ package com.peekaboo.presentation;
 
 import android.test.mock.MockContext;
 
+import com.peekaboo.domain.AccountUser;
 import com.peekaboo.domain.ErrorHandler;
 import com.peekaboo.domain.SessionRepository;
-import com.peekaboo.domain.User;
 import com.peekaboo.domain.usecase.ConfirmUseCase;
 import com.peekaboo.domain.usecase.SignUpUseCase;
 import com.peekaboo.presentation.presenters.SignUpPresenter;
@@ -160,8 +160,8 @@ public class SignUpPresenterTest extends BasePresenterTest {
         }
 
         @Override
-        protected Observable<User> getUseCaseObservable() {
-            return Observable.just(new User("asd"));
+        protected Observable<AccountUser> getUseCaseObservable() {
+            return Observable.just(new AccountUser("asd"));
         }
     }
 
@@ -172,10 +172,10 @@ public class SignUpPresenterTest extends BasePresenterTest {
         }
 
         @Override
-        protected Observable<User> getUseCaseObservable() {
-            return Observable.create(new Observable.OnSubscribe<User>() {
+        protected Observable<AccountUser> getUseCaseObservable() {
+            return Observable.create(new Observable.OnSubscribe<AccountUser>() {
                 @Override
-                public void call(Subscriber<? super User> subscriber) {
+                public void call(Subscriber<? super AccountUser> subscriber) {
                     subscriber.onError(new RuntimeException("Not great"));
                 }
             });
@@ -189,8 +189,8 @@ public class SignUpPresenterTest extends BasePresenterTest {
         }
 
         @Override
-        protected Observable<User> getUseCaseObservable() {
-            return Observable.just(mock(User.class));
+        protected Observable<AccountUser> getUseCaseObservable() {
+            return Observable.just(mock(AccountUser.class));
         }
     }
 
@@ -201,10 +201,10 @@ public class SignUpPresenterTest extends BasePresenterTest {
         }
 
         @Override
-        protected Observable<User> getUseCaseObservable() {
-            return Observable.create(new Observable.OnSubscribe<User>() {
+        protected Observable<AccountUser> getUseCaseObservable() {
+            return Observable.create(new Observable.OnSubscribe<AccountUser>() {
                 @Override
-                public void call(Subscriber<? super User> subscriber) {
+                public void call(Subscriber<? super AccountUser> subscriber) {
                     subscriber.onError(new RuntimeException("Not great"));
                 }
             });

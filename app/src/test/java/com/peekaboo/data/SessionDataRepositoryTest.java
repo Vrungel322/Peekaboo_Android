@@ -7,7 +7,7 @@ import com.peekaboo.data.rest.RestApi;
 import com.peekaboo.data.rest.entity.Credentials;
 import com.peekaboo.data.rest.entity.CredentialsSignUp;
 import com.peekaboo.data.rest.entity.TokenEntity;
-import com.peekaboo.domain.User;
+import com.peekaboo.domain.AccountUser;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -30,7 +30,7 @@ public class SessionDataRepositoryTest {
     @Mock
     private RestApi restApi;
     @Mock
-    private User user;
+    private AccountUser user;
     @Mock
     private AbstractMapperFactory mapper;
 
@@ -45,7 +45,7 @@ public class SessionDataRepositoryTest {
     @Test
     public void whenLoginSuccessThenReturnUser() {
         when(restApi.login(any(Credentials.class))).thenReturn(Observable.just(new TokenEntity(TOKEN, ID)));
-        TestSubscriber<User> subscriber = new TestSubscriber<>();
+        TestSubscriber<AccountUser> subscriber = new TestSubscriber<>();
         sessionDataRepository.login("username", "password").subscribe(subscriber);
         subscriber.awaitTerminalEvent();
 
@@ -60,7 +60,7 @@ public class SessionDataRepositoryTest {
                 subscriber -> {
                     subscriber.onError(new RuntimeException("Not Great"));
                 }));
-        TestSubscriber<User> subscriber = new TestSubscriber<>();
+        TestSubscriber<AccountUser> subscriber = new TestSubscriber<>();
         sessionDataRepository.login("username", "password").subscribe(subscriber);
         subscriber.awaitTerminalEvent();
 
@@ -72,7 +72,7 @@ public class SessionDataRepositoryTest {
     @Test
     public void whenSignUpSuccessThenReturnUser() {
         when(restApi.signUp(any(CredentialsSignUp.class))).thenReturn(Observable.just(new TokenEntity(null, ID)));
-        TestSubscriber<User> subscriber = new TestSubscriber<>();
+        TestSubscriber<AccountUser> subscriber = new TestSubscriber<>();
         sessionDataRepository.signUp("username", "login", "password").subscribe(subscriber);
         subscriber.awaitTerminalEvent();
 
@@ -87,7 +87,7 @@ public class SessionDataRepositoryTest {
                 subscriber -> {
                     subscriber.onError(new RuntimeException("Not Great"));
                 }));
-        TestSubscriber<User> subscriber = new TestSubscriber<>();
+        TestSubscriber<AccountUser> subscriber = new TestSubscriber<>();
         sessionDataRepository.signUp("username", "login", "password").subscribe(subscriber);
         subscriber.awaitTerminalEvent();
 
@@ -99,7 +99,7 @@ public class SessionDataRepositoryTest {
     @Test
     public void whenConfirmSuccessThenReturnUser() {
         when(restApi.confirm(any(ConfirmKey.class))).thenReturn(Observable.just(new TokenEntity(TOKEN, ID)));
-        TestSubscriber<User> subscriber = new TestSubscriber<>();
+        TestSubscriber<AccountUser> subscriber = new TestSubscriber<>();
         sessionDataRepository.confirm("id", "key").subscribe(subscriber);
         subscriber.awaitTerminalEvent();
 
@@ -114,7 +114,7 @@ public class SessionDataRepositoryTest {
                 subscriber -> {
                     subscriber.onError(new RuntimeException("Not Great"));
                 }));
-        TestSubscriber<User> subscriber = new TestSubscriber<>();
+        TestSubscriber<AccountUser> subscriber = new TestSubscriber<>();
         sessionDataRepository.confirm("id", "key").subscribe(subscriber);
         subscriber.awaitTerminalEvent();
 

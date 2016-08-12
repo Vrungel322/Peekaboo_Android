@@ -11,8 +11,8 @@ import com.neovisionaries.ws.client.WebSocketFrame;
 import com.peekaboo.data.Constants;
 import com.peekaboo.data.mappers.AbstractMapperFactory;
 import com.peekaboo.data.mappers.Mapper;
+import com.peekaboo.domain.AccountUser;
 import com.peekaboo.domain.MessageUtils;
-import com.peekaboo.domain.User;
 
 import java.io.IOException;
 import java.util.HashSet;
@@ -26,14 +26,14 @@ public class WebSocketNotifier implements INotifier {
     public static final String AUTHORIZATION = "Authorization";
     private final String TAG = "socket";
 
-    private final User user;
+    private final AccountUser user;
     private final Mapper<Message, byte[]> mtb;
     private final Mapper<byte[], Message> btm;
     @Nullable
     private WebSocket ws;
     private Set<NotificationListener> listeners = new HashSet<>();
 
-    public WebSocketNotifier(User user, AbstractMapperFactory abstractMapperFactory) {
+    public WebSocketNotifier(AccountUser user, AbstractMapperFactory abstractMapperFactory) {
         this.user = user;
         mtb = abstractMapperFactory.getMessageToByteMapper();
         btm = abstractMapperFactory.getByteToMessageMapper();

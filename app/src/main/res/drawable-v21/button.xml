@@ -3,5 +3,5 @@
     android:color="@color/colorDarkAccent"
     >
 
-    <item android:drawable="@drawable/rounded_button_unpressed" />
+    <item android:drawable="@drawable/rounded_button_unpressed_35" />
 </ripple>

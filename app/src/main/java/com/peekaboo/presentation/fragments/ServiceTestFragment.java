@@ -147,30 +147,27 @@ public class ServiceTestFragment extends Fragment implements INotifier.Notificat
             Log.e("available", String.valueOf(notifier.isAvailable()));
             notifier.tryConnect();
         });
-
-        getActivity().findViewById(R.id.send_button).setOnClickListener(v -> {
-            Log.e("available", String.valueOf(notifier.isAvailable()));
-            if (notifier.isAvailable()) {
-                String receiver = this.receiver.getText().toString();
-                api.getFriend(receiver).enqueue(new retrofit2.Callback<UserEntity>() {
-                    @Override
-                    public void onResponse(retrofit2.Call<UserEntity> call, retrofit2.Response<UserEntity> response) {
-//                        Message message = MessageUtils.createTextMessage(textMessage, response.body().getId());
-//                        Log.e("message", message.toString());
-//                        notifier.sendMessage(message);
-                        String fileName = Environment.getExternalStorageDirectory().toString() + File.separator + "eric.wav";
-
-                        Message audioMessage = MessageUtils.createTypeMessage(response.body().getId(), Message.Type.AUDIO);
-                        notifier.sendFile(audioMessage, fileName);
-                    }
-
-                    @Override
-                    public void onFailure(retrofit2.Call<UserEntity> call, Throwable t) {
-                        Log.e("failure", String.valueOf(t));
-                    }
-                });
-            }
-        });
+//
+//        getActivity().findViewById(R.id.send_button).setOnClickListener(v -> {
+//            Log.e("available", String.valueOf(notifier.isAvailable()));
+//            if (notifier.isAvailable()) {
+//                String receiver = this.receiver.getText().toString();
+//                api.getFriend(receiver).enqueue(new retrofit2.Callback<UserEntity>() {
+//                    @Override
+//                    public void onResponse(retrofit2.Call<UserEntity> call, retrofit2.Response<UserEntity> response) {
+//                        String fileName = Environment.getExternalStorageDirectory().toString() + File.separator + "eric.wav";
+//
+//                        Message audioMessage = MessageUtils.createTypeMessage(response.body().getId(), Message.Type.AUDIO);
+//                        notifier.sendFile(audioMessage, fileName);
+//                    }
+//
+//                    @Override
+//                    public void onFailure(retrofit2.Call<UserEntity> call, Throwable t) {
+//                        Log.e("failure", String.valueOf(t));
+//                    }
+//                });
+//            }
+//        });
 
         getActivity().findViewById(R.id.disconnect_button).setOnClickListener(v -> notifier.disconnect());
     }

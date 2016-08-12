@@ -12,9 +12,9 @@ import com.peekaboo.data.mappers.MapperFactory;
 import com.peekaboo.data.repositories.SessionDataRepository;
 import com.peekaboo.data.rest.PeekabooApi;
 import com.peekaboo.data.rest.RestApi;
+import com.peekaboo.domain.AccountUser;
 import com.peekaboo.domain.ErrorHandler;
 import com.peekaboo.domain.SessionRepository;
-import com.peekaboo.domain.User;
 
 import java.io.InputStream;
 import java.security.KeyStore;
@@ -104,7 +104,7 @@ public class DataModule {
 
     @Provides
     @Singleton
-    public SessionRepository provideRepository(User user, RestApi restApi) {
+    public SessionRepository provideRepository(AccountUser user, RestApi restApi) {
         return new SessionDataRepository(restApi, new MapperFactory(), user);
     }
 
