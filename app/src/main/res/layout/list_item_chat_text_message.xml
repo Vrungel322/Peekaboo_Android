@@ -9,7 +9,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:background="@drawable/bubble2"
-        android:layout_margin="6dp">
+        >
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -23,7 +23,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_margin="@dimen/chat_message_text_margin"
                 android:textColor="@color/underline_selected_color"
                 android:textSize="@dimen/chat_message_text_size" />
 
