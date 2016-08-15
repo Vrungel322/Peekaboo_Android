@@ -85,8 +85,13 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> im
     @Override
     public void onBindViewHolder(ChatAdapter.ViewHolder holder, int position) {
         PMessageAbs pMessageAbs = getItem(position);
-        PMessageAbs pPreviousMessageAbs = getItem(position-1);
-        setAlignment(holder, pMessageAbs.isMine(), pPreviousMessageAbs.isMine());
+        if(position == 0){
+            setAlignment(holder, pMessageAbs.isMine(), true);
+        }else{
+            PMessageAbs pPreviousMessageAbs = getItem(position-1);
+            setAlignment(holder, pMessageAbs.isMine(), pPreviousMessageAbs.isMine());
+
+        }
 
         int mediaType = pMessageAbs.mediaType();
         switch (mediaType) {
