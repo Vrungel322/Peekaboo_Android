@@ -13,13 +13,19 @@
         android:maxHeight="150dp"
         >
 
-        <com.peekaboo.presentation.app.view.RoundedImageView
+        <ProgressBar
+            android:id="@+id/pbLoadingImage"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            />
+
+        <ImageView
             android:id="@+id/ivImageMessage"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:scaleType="centerCrop"
             android:adjustViewBounds="true"
-
             />
 
         <!--<LinearLayout-->
@@ -34,13 +40,6 @@
             android:layout_height="wrap_content"
             android:layout_gravity="end|right"
             android:orientation="horizontal">
-
-            <ProgressBar
-                android:id="@+id/pbLoadingImage"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:visibility="gone"
-                />
 
             <ImageView
                 android:id="@+id/ivChatMessageStatus"

@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.peekaboo.R;
 import com.peekaboo.data.repositories.database.messages.PMessageAbs;
+import com.peekaboo.presentation.app.view.RoundedTransformation;
 import com.peekaboo.presentation.presenters.ChatPresenter;
 import com.peekaboo.utils.Constants;
 import com.peekaboo.utils.Utility;
@@ -26,6 +27,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import rx.functions.Action1;
+import timber.log.Timber;
 
 /**
  * Created by st1ch on 23.07.2016.
@@ -83,7 +85,8 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> im
     @Override
     public void onBindViewHolder(ChatAdapter.ViewHolder holder, int position) {
         PMessageAbs pMessageAbs = getItem(position);
-        setAlignment(holder, pMessageAbs.isMine());
+        PMessageAbs pPreviousMessageAbs = getItem(position-1);
+        setAlignment(holder, pMessageAbs.isMine(), pPreviousMessageAbs.isMine());
 
         int mediaType = pMessageAbs.mediaType();
         switch (mediaType) {
@@ -95,7 +98,9 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> im
                         .setOnClickListener(v -> chatPresenter.stopAndStartPlayingMPlayer(pMessageAbs.messageBody()));
                 break;
             case Constants.PMESSAGE_MEDIA_TYPE.IMAGE_MESSAGE:
-                setImageMessage((ViewHolderImage) holder, pMessageAbs.messageBody());
+                String image = pMessageAbs.messageBody();
+                Timber.tag("IMAGE").wtf("image uri: " + image);
+                setImageMessage((ViewHolderImage) holder, image);
                 break;
             case Constants.PMESSAGE_MEDIA_TYPE.VIDEO_MESSAGE:
                 break;
@@ -123,25 +128,40 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> im
         return messages.size();
     }
 
-    private void setAlignment(ViewHolder holder, boolean isMine) {
+    private void setAlignment(ViewHolder holder, boolean isMine, boolean wasPreviousMine) {
+
         if (!isMine) {
-           // holder.chatBubble.setBackgroundResource(R.drawable.left);
+            if(!wasPreviousMine){
+                holder.chatBubble.setBackgroundResource(R.drawable.left_bubble);
+            }else{
+                holder.chatBubble.setBackgroundResource(R.drawable.left);
+            }
             holder.tvChatTimestamp.setTextColor(context.getResources().getColor(R.color.drawerDividerColor));
 
             RelativeLayout.LayoutParams layoutParams
                     = (RelativeLayout.LayoutParams) holder.chatBubble.getLayoutParams();
             layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, 0);
             layoutParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+            layoutParams.setMargins(Constants.DESIGN_CONSTANTS.SIDE_MARGIN, Constants.DESIGN_CONSTANTS.TOP_OR_BOTTOM_MARGIN,
+                    Constants.DESIGN_CONSTANTS.BIG_SIDE_MARGIN, Constants.DESIGN_CONSTANTS.TOP_OR_BOTTOM_MARGIN);
+
             holder.chatBubble.setLayoutParams(layoutParams);
         } else {
-            //holder.chatBubble.setBackgroundResource(R.drawable.right);
+            if(!wasPreviousMine){
+                holder.chatBubble.setBackgroundResource(R.drawable.right_bubble);
+            }else{
+                holder.chatBubble.setBackgroundResource(R.drawable.right);
+            }
 
             RelativeLayout.LayoutParams layoutParams
                     = (RelativeLayout.LayoutParams) holder.chatBubble.getLayoutParams();
             layoutParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT, 0);
             layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+            layoutParams.setMargins(Constants.DESIGN_CONSTANTS.BIG_SIDE_MARGIN,Constants.DESIGN_CONSTANTS.TOP_OR_BOTTOM_MARGIN,
+                    Constants.DESIGN_CONSTANTS.SIDE_MARGIN, Constants.DESIGN_CONSTANTS.TOP_OR_BOTTOM_MARGIN);
             holder.chatBubble.setLayoutParams(layoutParams);
         }
+
     }
 
     private void setMessageStatus(ViewHolder holder, PMessageAbs message) {
@@ -161,13 +181,21 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> im
         mPicasso.load(imageUri).resizeDimen(R.dimen.chat_image_width, R.dimen.chat_image_height)
                 .error(R.drawable.ic_alert_circle_outline)
                 .centerInside()
+                .transform(new RoundedTransformation(25,0))
                 .into(holder.ivImageMessage, new Callback.EmptyCallback(){
                     @Override
-                    public void onSuccess() {
+                    public void onSuccess(){
                         holder.pbLoadingImage.setVisibility(View.GONE);
                     }
+
+                    @Override
+                    public void onError() {
+                        holder.pbLoadingImage.setVisibility(View.GONE);
+                    }
+
                 });
     }
+
 
     public void clearList() {
         this.messages = Collections.emptyList();
