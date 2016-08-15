@@ -94,7 +94,6 @@ public class ChatPresenter extends BasePresenter<IChatView> implements IChatPres
     public int deleteMessageByPackageId(String tableName, PMessageAbs message) {
         return pMessageHelper.deleteMessageByPackageId(tableName, message.packageId());
     }
-
     @Override
     public void copyMessageText(PMessageAbs message) {
         ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);

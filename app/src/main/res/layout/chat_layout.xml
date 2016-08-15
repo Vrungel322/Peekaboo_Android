@@ -38,6 +38,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
+        android:layout_gravity="center_vertical"
+
         android:weightSum="9"
         android:background="@color/editTextColor">
 
@@ -45,33 +47,35 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="7"
+            android:layout_gravity="center_vertical"
             android:focusable="true"
             android:focusableInTouchMode="true">
 
             <EditText
+                android:maxLines="4"
                 android:id="@+id/etMessageBody"
                 android:ellipsize="end"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/colorAccent"/>
+                android:textColor="@color/colorAccent"
+                android:textColorHighlight="@color/textColor"/>
         </FrameLayout>
 
         <Button
+
             android:id="@+id/attach_btn"
             android:layout_width="48dp"
             android:text="A"
             android:layout_height="wrap_content"
-            android:layout_gravity="bottom"/>
+            android:layout_gravity="bottom|center_vertical"/>
 
         <ImageButton
             android:id="@+id/bSendMessage"
             android:layout_width="0dp"
-            android:backgroundTint="@color/colorAccent"
-            android:background="@color/colorAccent"
             android:src="@drawable/ic_send"
             android:layout_height="wrap_content"
             android:layout_weight="2"
-            android:layout_gravity="bottom"
+            android:layout_gravity="bottom|center_vertical"
             />
     </LinearLayout>
 

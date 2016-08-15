@@ -29,6 +29,12 @@ public class Constants {
         int RECORDER_CHANNELS = AudioFormat.CHANNEL_IN_MONO;
         int RECORDER_AUDIO_ENCODING = AudioFormat.ENCODING_PCM_16BIT;
     }
+    public interface DESIGN_CONSTANTS{
+        int BIG_SIDE_MARGIN = 45;
+        int TOP_OR_BOTTOM_MARGIN = 6;
+        int SIDE_MARGIN = 0;
+        int BIG_TOP_OR_BOTTOM_MARGIN = 8;
+    }
 
     public interface PMESSAGE_MEDIA_TYPE {
         int TEXT_MESSAGE = 0;
