@@ -38,7 +38,7 @@
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close snavigation drawer</string>
-
+    <string name="errorCheckNetwork">Please, check network connection</string>
     <string-array name="attacment_list">
         <item>Photo</item>
         <item>Pic from gallery</item>

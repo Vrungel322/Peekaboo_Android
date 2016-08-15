@@ -51,6 +51,7 @@
             android:id="@+id/pvPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:imeOptions="actionDone"
             android:paddingTop="@dimen/padding_top"
             custom:textHint="@string/password" />
 

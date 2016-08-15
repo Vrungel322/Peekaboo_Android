@@ -81,10 +81,10 @@ public class PasswordView extends FrameLayout {
             if (getChildAt(i) instanceof TextInputLayout) {
                 inputLayout = (TextInputLayout) getChildAt(i);
                 editText = (RobotoEditText) inputLayout.getChildAt(0);
-                int paddingTop = editText.getPaddingTop();
-                int paddingHorizontal = ResourcesUtils.dpToPx(getContext(), 40);
-                int paddingBottom = editText.getPaddingBottom();
-                editText.setPadding(paddingHorizontal, paddingTop, paddingHorizontal, paddingBottom);
+//                int paddingTop = editText.getPaddingTop();
+//                int paddingHorizontal = ResourcesUtils.dpToPx(getContext(), 40);
+//                int paddingBottom = editText.getPaddingBottom();
+//                editText.setPadding(paddingHorizontal, paddingTop, paddingHorizontal, paddingBottom);
             } else {
                 showView = (ImageView) getChildAt(i);
             }
@@ -95,11 +95,14 @@ public class PasswordView extends FrameLayout {
 //            return false;
 //        });
         setHint(hint);
+        editText.setInputType(InputType.TYPE_CLASS_TEXT |
+                InputType.TYPE_TEXT_VARIATION_PASSWORD);
         showView.setOnTouchListener((v, event) -> {
             Log.e("action", String.valueOf(event.getAction()));
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
-                    editText.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+                    editText.setInputType(InputType.TYPE_CLASS_TEXT |
+                            InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
                     break;
                 case MotionEvent.ACTION_CANCEL:
                 case MotionEvent.ACTION_UP:
@@ -126,7 +129,6 @@ public class PasswordView extends FrameLayout {
         FrameLayout.LayoutParams layoutParams = (FrameLayout.LayoutParams) showView.getLayoutParams();
         layoutParams.setMargins(0, !shouldShowError ? TOP_MARGIN_ERROR_VISIBLE : 0, layoutParams.rightMargin,
                 shouldShowError ? BOTTOM_MARGIN_ERROR_VISIBLE : 0);
-//        layoutParams.setMarginEnd(layoutParams.rightMargin);
         inputLayout.setError(error);
     }
 

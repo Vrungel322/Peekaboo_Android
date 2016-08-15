@@ -14,12 +14,15 @@ import android.widget.TextView;
 
 import com.peekaboo.R;
 import com.peekaboo.data.FileEntity;
+import com.peekaboo.domain.MessageUtils;
 import com.peekaboo.domain.User;
 import com.peekaboo.domain.subscribers.BaseUseCaseSubscriber;
 import com.peekaboo.domain.usecase.DownloadFileUseCase;
 import com.peekaboo.domain.usecase.FindFriendUseCase;
 import com.peekaboo.domain.usecase.UploadFileUseCase;
 import com.peekaboo.presentation.PeekabooApplication;
+import com.peekaboo.presentation.services.INotifier;
+import com.peekaboo.presentation.services.Message;
 
 import java.io.File;
 
@@ -32,7 +35,7 @@ import butterknife.OnClick;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class SocketTestFragment extends Fragment {
+public class SocketTestFragment extends Fragment implements INotifier.NotificationListener {
     @BindView(R.id.etUsername)
     EditText etUsername;
     @BindView(R.id.tvResult)
@@ -43,7 +46,8 @@ public class SocketTestFragment extends Fragment {
     UploadFileUseCase uploadFileUseCase;
     @Inject
     DownloadFileUseCase downloadFileUseCase;
-
+    @Inject
+    INotifier notifier;
 
     public SocketTestFragment() {
         // Required empty public constructor
@@ -60,12 +64,14 @@ public class SocketTestFragment extends Fragment {
                              Bundle savedInstanceState) {
         View inflate = inflater.inflate(R.layout.fragment_socket_test, container, false);
         ButterKnife.bind(this, inflate);
+        notifier.addListener(this);
         return inflate;
     }
 
     @OnClick(R.id.bSend)
     public void send() {
-        findFriendUseCase.setFriendName(etUsername.getText().toString());
+        String friendName = etUsername.getText().toString();
+        findFriendUseCase.setFriendName(friendName);
         findFriendUseCase.execute(new BaseUseCaseSubscriber<User>() {
             @Override
             public void onNext(User user) {
@@ -75,15 +81,8 @@ public class SocketTestFragment extends Fragment {
                     @Override
                     public void onNext(FileEntity fileEntity) {
                         super.onNext(fileEntity);
-                        String fileName2 = Environment.getExternalStorageDirectory().toString() + File.separator + "eric2.wav";
-                        downloadFileUseCase.setInfo(fileName2, fileEntity.getName());
-                        downloadFileUseCase.execute(new BaseUseCaseSubscriber<File>() {
-                            @Override
-                            public void onNext(File file) {
-                                super.onNext(file);
-                                Log.e("file", String.valueOf(file));
-                            }
-                        });
+                        Message typeMessage = MessageUtils.createTypeMessage(user.getId(), Message.Type.AUDIO, fileEntity.getName());
+                        notifier.sendMessage(typeMessage);
                     }
                 });
             }
@@ -92,11 +91,29 @@ public class SocketTestFragment extends Fragment {
 
     @OnClick(R.id.bReconnect)
     public void reconnect() {
-
+        if (!notifier.isAvailable()) {
+            notifier.tryConnect();
+        }
     }
 
     @OnClick(R.id.bDisconnect)
     public void disconnect() {
+        notifier.disconnect();
+    }
 
+    @Override
+    public void onMessageObtained(Message message) {
+        Log.e("message", message.toString());
+        String remoteFileName = new String(message.getBody());
+        String fileName = Environment.getExternalStorageDirectory().toString() + File.separator + "eric10.wav";
+
+        downloadFileUseCase.setInfo(fileName, remoteFileName);
+        downloadFileUseCase.execute(new BaseUseCaseSubscriber<File>() {
+            @Override
+            public void onNext(File file) {
+                super.onNext(file);
+                Log.e("file", file.toString());
+            }
+        });
     }
 }

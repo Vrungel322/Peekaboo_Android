@@ -95,13 +95,12 @@
                         android:orientation="horizontal"
                         android:padding="@dimen/padding_each_item">
 
-                        <ImageView
+                        <com.peekaboo.presentation.app.view.SelectableImageView
                             android:id="@+id/ivIconChat"
                             android:layout_width="@dimen/nav_icon_width"
                             android:layout_height="@dimen/nav_icon_height"
                             android:layout_marginLeft="@dimen/nav_content_margin_left"
-                            android:src="@drawable/chats_grey"
-                            android:tint="@color/drawer_item_text_color" />
+                            android:src="@drawable/chats_grey" />
 
                         <com.peekaboo.presentation.app.view.RobotoTextView
                             android:id="@+id/tvTextChat"
@@ -123,13 +122,12 @@
                         android:orientation="horizontal"
                         android:padding="@dimen/padding_each_item">
 
-                        <ImageView
+                        <com.peekaboo.presentation.app.view.SelectableImageView
                             android:id="@+id/ivIconCalls"
                             android:layout_width="@dimen/nav_icon_width"
                             android:layout_height="@dimen/nav_icon_height"
                             android:layout_marginLeft="@dimen/nav_content_margin_left"
-                            android:src="@drawable/calls_grey"
-                            android:tint="@color/drawer_item_text_color" />
+                            android:src="@drawable/calls_grey" />
 
                         <com.peekaboo.presentation.app.view.RobotoTextView
                             android:id="@+id/tvTextCalls"
@@ -152,15 +150,14 @@
                         android:orientation="horizontal"
                         android:padding="@dimen/padding_each_item">
 
-                        <ImageView
+                        <com.peekaboo.presentation.app.view.SelectableImageView
                             android:id="@+id/ivIconContacts"
                             android:layout_width="@dimen/nav_icon_width"
                             android:layout_height="@dimen/nav_icon_height"
                             android:layout_marginLeft="@dimen/nav_content_margin_left"
                             android:paddingBottom="3dp"
                             android:paddingTop="3dp"
-                            android:src="@drawable/contacts_grey"
-                            android:tint="@color/drawer_item_text_color" />
+                            android:src="@drawable/contacts_grey" />
 
                         <com.peekaboo.presentation.app.view.RobotoTextView
                             android:id="@+id/tvTextContacts"
@@ -184,14 +181,13 @@
                         android:orientation="horizontal"
                         android:padding="@dimen/padding_each_item">
 
-                        <ImageView
+                        <com.peekaboo.presentation.app.view.SelectableImageView
                             android:id="@+id/ivIconProfile"
                             android:layout_width="@dimen/nav_icon_width"
                             android:layout_height="@dimen/nav_icon_height"
                             android:layout_marginLeft="@dimen/nav_content_margin_left"
                             android:padding="3dp"
-                            android:src="@drawable/profile_grey"
-                            android:tint="@color/drawer_item_text_color" />
+                            android:src="@drawable/profile_grey" />
 
                         <com.peekaboo.presentation.app.view.RobotoTextView
                             android:id="@+id/tvTextProfile"
@@ -227,13 +223,12 @@
                         android:orientation="horizontal"
                         android:padding="@dimen/padding_each_item">
 
-                        <ImageView
+                        <com.peekaboo.presentation.app.view.SelectableImageView
                             android:id="@+id/ivIconSettings"
                             android:layout_width="@dimen/nav_icon_width"
                             android:layout_height="@dimen/nav_icon_height"
                             android:layout_marginLeft="@dimen/nav_content_margin_left"
-                            android:src="@drawable/settings_grey"
-                            android:tint="@color/drawer_item_text_color" />
+                            android:src="@drawable/settings_grey" />
 
                         <com.peekaboo.presentation.app.view.RobotoTextView
                             android:id="@+id/tvTextSettings"
@@ -255,13 +250,12 @@
                         android:orientation="horizontal"
                         android:padding="@dimen/padding_each_item">
 
-                        <ImageView
+                        <com.peekaboo.presentation.app.view.SelectableImageView
                             android:id="@+id/ivIconExit"
                             android:layout_width="@dimen/nav_icon_width"
                             android:layout_height="@dimen/nav_icon_height"
                             android:layout_marginLeft="@dimen/nav_content_margin_left"
-                            android:src="@drawable/exit_grey"
-                            android:tint="@color/drawer_item_text_color" />
+                            android:src="@drawable/exit_grey" />
 
                         <com.peekaboo.presentation.app.view.RobotoTextView
                             android:id="@+id/tvTextExit"

@@ -33,6 +33,7 @@ public class RobotoEditText extends TextInputEditText {
         super(context, attrs, defStyleAttr);
         configure(context);
     }
+
     void configure(Context context) {
         roboto = Typeface.getRoboto(context);
 //        setTypeface(roboto);
