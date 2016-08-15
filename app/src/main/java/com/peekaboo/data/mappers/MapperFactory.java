@@ -4,6 +4,7 @@ import android.content.ContentValues;
 
 import com.peekaboo.data.repositories.database.contacts.PContact;
 import com.peekaboo.domain.User;
+import com.peekaboo.data.rest.entity.UserEntity;
 import com.peekaboo.data.repositories.database.messages.PMessage;
 import com.peekaboo.presentation.services.Message;
 
@@ -12,7 +13,7 @@ import com.peekaboo.presentation.services.Message;
  */
 public class MapperFactory implements AbstractMapperFactory {
     @Override
-    public Mapper<String, User> getUserMapper() {
+    public Mapper<UserEntity, User> getUserMapper() {
         return new UserMapper();
     }
 

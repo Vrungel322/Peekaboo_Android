@@ -1,7 +1,7 @@
 package com.peekaboo.domain.usecase;
 
 import com.peekaboo.domain.SessionRepository;
-import com.peekaboo.domain.User;
+import com.peekaboo.domain.AccountUser;
 
 import org.junit.Test;
 import org.mockito.Mock;
@@ -31,7 +31,7 @@ public class SignInUseCaseTest extends BaseUseCaseTest {
         super.setUp();
         signUpUseCase = new SignUpUseCase(sessionRepository, subscribeOn, observeOn);
 
-        when(sessionRepository.signUp(A_VALID_USERNAME, A_VALID_LOGIN, A_VALID_PASSWORD)).thenReturn(Observable.just(new User("")));
+        when(sessionRepository.signUp(A_VALID_USERNAME, A_VALID_LOGIN, A_VALID_PASSWORD)).thenReturn(Observable.just(new AccountUser("")));
         when(sessionRepository.signUp(AN_INVALID_USERNAME, AN_INVALID_LOGIN, AN_INVALID_PASSWORD)).thenReturn(Observable.create(
                 subscriber -> {
                     subscriber.onError(new RuntimeException("Not Great"));
@@ -52,7 +52,7 @@ public class SignInUseCaseTest extends BaseUseCaseTest {
     }
 
     private void execute(int expectedErrors, int expectedEvents) {
-        TestSubscriber<User> subscriber = new TestSubscriber<>();
+        TestSubscriber<AccountUser> subscriber = new TestSubscriber<>();
         signUpUseCase.execute(subscriber);
         subscriber.awaitTerminalEvent();
 

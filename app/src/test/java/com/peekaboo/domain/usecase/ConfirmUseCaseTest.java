@@ -1,7 +1,7 @@
 package com.peekaboo.domain.usecase;
 
 import com.peekaboo.domain.SessionRepository;
-import com.peekaboo.domain.User;
+import com.peekaboo.domain.AccountUser;
 
 import org.junit.Test;
 import org.mockito.Mock;
@@ -27,7 +27,7 @@ public class ConfirmUseCaseTest extends BaseUseCaseTest {
         super.setUp();
         confirmUseCase = new ConfirmUseCase(sessionRepository, subscribeOn, observeOn);
 
-        when(sessionRepository.confirm(A_VALID_ID, A_VALID_KEY)).thenReturn(Observable.just(new User("")));
+        when(sessionRepository.confirm(A_VALID_ID, A_VALID_KEY)).thenReturn(Observable.just(new AccountUser("")));
         when(sessionRepository.confirm(AN_INVALID_ID, AN_INVALID_KEY)).thenReturn(Observable.create(
                 subscriber -> {
                     subscriber.onError(new RuntimeException("Not Great"));
@@ -50,7 +50,7 @@ public class ConfirmUseCaseTest extends BaseUseCaseTest {
     }
 
     private void execute(int expectedErrors, int expectedEvents) {
-        TestSubscriber<User> subscriber = new TestSubscriber<>();
+        TestSubscriber<AccountUser> subscriber = new TestSubscriber<>();
         confirmUseCase.execute(subscriber);
         subscriber.awaitTerminalEvent();
 

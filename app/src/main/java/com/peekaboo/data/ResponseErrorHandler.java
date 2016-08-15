@@ -5,8 +5,11 @@ import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
+import com.peekaboo.R;
 import com.peekaboo.domain.Error;
 import com.peekaboo.domain.ErrorHandler;
+
+import java.net.SocketTimeoutException;
 
 import okhttp3.ResponseBody;
 import retrofit2.adapter.rxjava.HttpException;
@@ -24,7 +27,7 @@ public class ResponseErrorHandler implements ErrorHandler {
 
     @Override
     public String handleError(Throwable t) {
-
+        String message = t.getMessage();
         if (t instanceof HttpException) {
             ResponseBody body = ((HttpException) t).response().errorBody();
             TypeAdapter<Error> adapter = gson.getAdapter(Error.class);
@@ -33,6 +36,13 @@ public class ResponseErrorHandler implements ErrorHandler {
                 return error.getMessage();
             } catch (Exception e) {}
         }
-        return t.getMessage();
+        if (t instanceof SocketTimeoutException) {
+            return context.getString(R.string.errorCheckNetwork);
+        } else if (message != null) {
+            if (message.startsWith("Unable to resolve host") || message.startsWith("Failed to connect")) {
+                return context.getString(R.string.errorCheckNetwork);
+            }
+        }
+        return message;
     }
 }

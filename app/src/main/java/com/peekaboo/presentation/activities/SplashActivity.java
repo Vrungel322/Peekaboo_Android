@@ -4,7 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import com.peekaboo.R;
-import com.peekaboo.domain.User;
+import com.peekaboo.domain.AccountUser;
 import com.peekaboo.presentation.PeekabooApplication;
 import com.peekaboo.presentation.di.ApplicationComponent;
 import com.peekaboo.presentation.presenters.SplashActivityPresenter;
@@ -19,7 +19,7 @@ public class SplashActivity extends AppCompatActivity {
     @Inject
     SplashActivityPresenter splashActivityPresenter;
     @Inject
-    User user;
+    AccountUser user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

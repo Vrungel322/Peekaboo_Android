@@ -1,7 +1,7 @@
 package com.peekaboo.domain.usecase;
 
+import com.peekaboo.domain.AccountUser;
 import com.peekaboo.domain.SessionRepository;
-import com.peekaboo.domain.User;
 import com.peekaboo.domain.schedulers.ObserveOn;
 import com.peekaboo.domain.schedulers.SubscribeOn;
 
@@ -12,7 +12,7 @@ import rx.Observable;
 /**
  * Created by sebastian on 28.06.16.
  */
-public class ConfirmUseCase extends UseCase<User> {
+public class ConfirmUseCase extends UseCase<AccountUser> {
     private SessionRepository sessionRepository;
     private String id;
     private String key;
@@ -28,7 +28,7 @@ public class ConfirmUseCase extends UseCase<User> {
     }
 
     @Override
-    protected Observable<User> getUseCaseObservable() {
+    protected Observable<AccountUser> getUseCaseObservable() {
         return sessionRepository.confirm(id, key);
     }
 

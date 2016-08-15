@@ -1,21 +1,6 @@
 package com.peekaboo.socket;
 
-import com.peekaboo.data.Constants;
-import com.peekaboo.data.mappers.MapperFactory;
-import com.peekaboo.domain.User;
-import com.peekaboo.presentation.services.INotifier;
-import com.peekaboo.presentation.services.Message;
-import com.peekaboo.presentation.services.WebSocketNotifier;
-
-import org.junit.Test;
-import org.mockito.Mock;
-
-import okhttp3.HttpUrl;
-import okhttp3.mockwebserver.MockResponse;
-import okhttp3.mockwebserver.MockWebServer;
-
 import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.timeout;
 import static org.mockito.Mockito.verify;
 
 public class NotifierTest {
@@ -31,7 +16,7 @@ public class NotifierTest {
 //        server.start();
 //
 //        HttpUrl baseUrl = server.url(Constants.BASE_URL_SOCKET);
-//        WebSocketNotifier webSocketNotifier = new WebSocketNotifier(new User("id"), new MapperFactory());
+//        WebSocketNotifier webSocketNotifier = new WebSocketNotifier(new AccountUser("id"), new MapperFactory());
 //        webSocketNotifier.addListener(listener);
 //        webSocketNotifier.tryConnect();
 //        sleep(500);
