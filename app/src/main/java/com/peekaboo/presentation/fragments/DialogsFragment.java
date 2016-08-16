@@ -16,6 +16,7 @@ import android.view.MotionEvent;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -42,21 +43,16 @@ public class DialogsFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
         rootView = inflater.inflate(R.layout.fragment_dialogs, container, false);
         ButterKnife.bind(this, rootView);
         setHasOptionsMenu(true);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Dialogs");
-        super.onCreate(savedInstanceState);
 
-//        FragmentActivity faActivity = (FragmentActivity) super.getActivity();
-        ListView llLayout = (ListView)  inflater.inflate(R.layout.listview, container, false);
-//        ListView listView = (ListView) inflater.inflate(R.id.listview,container,false);
-//        ButterKnife.bind(this, llLayout);
-        getActivity().setContentView(R.layout.listview);
+        mListView = (ListView) rootView.findViewById(R.id.lvDialogs);
 
-        mListView = (ListView) getActivity().findViewById(R.id.listview);
-
-        mAdapter = new ListViewAdapter(super.getActivity());
+        mAdapter = new ListViewAdapter(getActivity());
         mListView.setAdapter(mAdapter);
         mAdapter.setMode(Attributes.Mode.Single);
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -101,9 +97,19 @@ public class DialogsFragment extends Fragment {
                 Log.e("ListView", "onNothingSelected:");
             }
         });
+////        onDestroyView();
+        return rootView;
+    }
 
-        return llLayout; // We must return the loaded Layout
-//        return rootView;
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (rootView != null) {
+            ViewGroup parentViewGroup = (ViewGroup) rootView.getParent();
+            if (parentViewGroup != null) {
+                parentViewGroup.removeAllViews();
+            }
+        }
     }
 
     @Override
