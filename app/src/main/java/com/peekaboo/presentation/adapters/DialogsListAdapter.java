@@ -35,7 +35,7 @@ public class DialogsListAdapter extends BaseSwipeAdapter {
     @Nullable
     @Override
     public View generateView(int position, ViewGroup parent) {
-        View v = LayoutInflater.from(mContext).inflate(R.layout.listview_item, null);
+        View v = LayoutInflater.from(mContext).inflate(R.layout.dialog_list_item, null);
         SwipeLayout swipeLayout = (SwipeLayout)v.findViewById(getSwipeLayoutResourceId(position));
         swipeLayout.setShowMode(SwipeLayout.ShowMode.PullOut);
         swipeLayout.addSwipeListener(new SimpleSwipeListener() {
