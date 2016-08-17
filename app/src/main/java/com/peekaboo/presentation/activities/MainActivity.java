@@ -8,9 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.peekaboo.R;
@@ -21,7 +19,6 @@ import com.peekaboo.presentation.fragments.DialogsFragment;
 import com.peekaboo.presentation.fragments.ProfileFragment;
 import com.peekaboo.presentation.fragments.SettingsFragment;
 import com.peekaboo.presentation.fragments.SocketTestFragment;
-import com.peekaboo.presentation.utils.ResourcesUtils;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -66,9 +63,9 @@ public class MainActivity extends AppCompatActivity {
     @OnClick({R.id.llDialogs, R.id.llCalls, R.id.llContacts, R.id.llProfile, R.id.llSettings})
     public void onDraverItemClick(View v) {
         selectionMode(v.getId());
-        switch (v.getId()) {
+        switch (v.getId()){
             case R.id.llDialogs:
-                changeFragment(new DialogsFragment(), "dialogsFragment");
+                changeFragment(new DialogsFragment(), "dialogsFragment");//new dialogsfragment
                 break;
             case R.id.llCalls:
                 changeFragment(new CallsFragment(), "callsFragment");
@@ -82,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
             case R.id.llSettings:
                 changeFragment(new SettingsFragment(), "settingsFragment");
                 break;
+
         }
 
     }
