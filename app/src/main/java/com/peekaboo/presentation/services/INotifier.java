@@ -6,9 +6,9 @@ package com.peekaboo.presentation.services;
 public interface INotifier {
     void sendMessage(Message message);
     boolean isAvailable();
-    void tryConnect();
 
-    void sendFile(Message message, String file);
+    void tryConnect(String authorization);
+
     void addListener(NotificationListener listener);
 
     void removeListener(NotificationListener listener);
