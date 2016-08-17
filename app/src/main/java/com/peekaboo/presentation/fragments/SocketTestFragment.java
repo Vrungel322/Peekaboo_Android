@@ -71,6 +71,12 @@ public class SocketTestFragment extends Fragment implements INotifier.Notificati
         return inflate;
     }
 
+    @Override
+    public void onDestroyView() {
+        notifier.removeListener(this);
+        super.onDestroyView();
+    }
+
     @OnClick(R.id.bSend)
     public void send() {
         String friendName = etUsername.getText().toString();
