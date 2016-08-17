@@ -33,7 +33,6 @@ public class RoundedTransformation implements Transformation{
         Bitmap output = Bitmap.createBitmap(source.getWidth(), source.getHeight(), Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(output);
         canvas.drawRoundRect(new RectF(margin, margin, source.getWidth() - margin, source.getHeight() - margin), radius, radius, paint);
-
         if (source != output) {
             source.recycle();
         }
