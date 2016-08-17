@@ -1,15 +1,20 @@
 package com.peekaboo.data.rest;
 
+import com.peekaboo.data.FileEntity;
 import com.peekaboo.data.rest.entity.Credentials;
 import com.peekaboo.data.rest.entity.CredentialsSignUp;
 import com.peekaboo.data.rest.entity.TokenEntity;
 import com.peekaboo.data.rest.entity.UserEntity;
 
-import retrofit2.Call;
+import okhttp3.MultipartBody;
+import okhttp3.ResponseBody;
 import retrofit2.http.Body;
-import retrofit2.http.FormUrlEncoded;
 import retrofit2.http.GET;
+import retrofit2.http.Header;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 import rx.Observable;
 
@@ -38,9 +43,24 @@ public interface PeekabooApi {
             @Body ConfirmKey confirmKey
     );
 
+
     @GET("friend/find")
-    Call<UserEntity> getFriend(
+    Observable<UserEntity> getFriend(
             @Query("username") String username
     );
 
+
+    @Multipart
+    @POST("upload/audio/{id}")
+    Observable<FileEntity> uploadFile(
+            @Path("id") String receiverId,
+            @Part MultipartBody.Part body,
+            @Header("authorization") String bearer
+    );
+
+    @GET("download/audio/{fileName}")
+    Observable<ResponseBody> download(
+            @Path("fileName") String fileName,
+            @Header("authorization") String bearer
+    );
 }

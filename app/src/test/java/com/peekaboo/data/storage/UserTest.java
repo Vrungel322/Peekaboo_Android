@@ -2,7 +2,7 @@ package com.peekaboo.data.storage;
 
 import android.content.SharedPreferences;
 
-import com.peekaboo.domain.User;
+import com.peekaboo.domain.AccountUser;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -31,49 +31,49 @@ public class UserTest {
 
     @Test
     public void whenUserHasTokenAndIdThenIsAuthorizedReturnTrue() {
-        User user = new User(preferences);
+        AccountUser user = new AccountUser(preferences);
         user.saveId("id");
         user.saveToken("token");
 
         assertEquals(user.isAuthorized(), true);
-        verify(editor, times(1)).putString(User.ID, "id");
-        verify(editor, times(1)).putString(User.TOKEN, "token");
+        verify(editor, times(1)).putString(AccountUser.ID, "id");
+        verify(editor, times(1)).putString(AccountUser.TOKEN, "token");
         verify(editor, times(2)).commit();
     }
 
     @Test
     public void whenUserHasNoTokenAndIdThenIsAuthorizedReturnFalse() {
-        User user = new User(preferences);
+        AccountUser user = new AccountUser(preferences);
 
         assertEquals(user.isAuthorized(), false);
     }
 
     @Test
     public void whenUserHasTokenThenIsAuthorizedReturnFalse() {
-        User user = new User(preferences);
+        AccountUser user = new AccountUser(preferences);
         user.saveToken("token");
 
         assertEquals(user.isAuthorized(), false);
-        verify(editor, times(1)).putString(User.TOKEN, "token");
+        verify(editor, times(1)).putString(AccountUser.TOKEN, "token");
         verify(editor, times(1)).commit();
     }
 
     @Test
     public void whenUserHasIdThenIsAuthorizedReturnFalse() {
-        User user = new User(preferences);
+        AccountUser user = new AccountUser(preferences);
         user.saveId("id");
 
         assertEquals(user.isAuthorized(), false);
-        verify(editor, times(1)).putString(User.ID, "id");
+        verify(editor, times(1)).putString(AccountUser.ID, "id");
         verify(editor, times(1)).commit();
     }
 
     @Test
     public void whenUserCreatedWithStoredDataThenRestoreDataAndAuthorizedReturnTrue() {
-        when(preferences.getString(User.ID, null)).thenReturn("id");
-        when(preferences.getString(User.TOKEN, null)).thenReturn("token");
+        when(preferences.getString(AccountUser.ID, null)).thenReturn("id");
+        when(preferences.getString(AccountUser.TOKEN, null)).thenReturn("token");
 
-        User user = new User(preferences);
+        AccountUser user = new AccountUser(preferences);
 
         assertEquals(user.getId(), "id");
         assertEquals(user.getToken(), "token");

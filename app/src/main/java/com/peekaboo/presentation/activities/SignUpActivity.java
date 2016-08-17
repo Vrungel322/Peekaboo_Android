@@ -70,7 +70,7 @@ public class SignUpActivity extends SlidingActivity implements ISignUpView {
         signUpPresenter.bind(this);
         enableFullscreen();
         disableHeader();
-        //showConfirmDialog();
+//        showConfirmDialog();
         //onSwipe();
 
     }

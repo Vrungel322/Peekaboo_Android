@@ -24,7 +24,7 @@ public class MessageUtils {
     public static List<Message> createFileMessage(Message message, String filename, int partSize) {
         List<Message> result = new ArrayList<>();
         File file = new File(filename);
-        FileInputStream stream = null;
+        FileInputStream stream;
         int fileLength = (int) file.length();
 
         try {
@@ -52,9 +52,10 @@ public class MessageUtils {
                 .setBody(message.getBody());
     }
 
-    public static Message createTypeMessage(String receiver, String type) {
+    public static Message createTypeMessage(String receiver, String type, String body) {
         return new Message(Message.Command.SEND)
                 .addParam(Message.Params.DESTINATION, receiver)
-                .addParam(Message.Params.TYPE, type);
+                .addParam(Message.Params.TYPE, type)
+                .setBody(body.getBytes());
     }
 }

@@ -38,7 +38,7 @@
 
     <string name="navigation_drawer_open">Open navigation drawer</string>
     <string name="navigation_drawer_close">Close snavigation drawer</string>
-
+    <string name="errorCheckNetwork">Please, check network connection</string>
     <string-array name="attacment_list">
         <item>Photo</item>
         <item>Pic from gallery</item>
@@ -59,7 +59,6 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="selectImage">Select Image</string>
     <string name="ok">OK</string>
-    <string name="confirmationCode">Conformation code</string>
 
     <string name="today">Today</string>
     <string name="yesterday">Yesterday</string>

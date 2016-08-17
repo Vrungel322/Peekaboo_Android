@@ -3,8 +3,8 @@ package com.peekaboo.presentation.presenters;
 import android.content.Context;
 
 import com.peekaboo.R;
+import com.peekaboo.domain.AccountUser;
 import com.peekaboo.domain.ErrorHandler;
-import com.peekaboo.domain.User;
 import com.peekaboo.domain.subscribers.BaseProgressSubscriber;
 import com.peekaboo.domain.usecase.ConfirmUseCase;
 import com.peekaboo.domain.usecase.SignUpUseCase;
@@ -33,10 +33,10 @@ public class SignUpPresenter extends ProgressPresenter<ISignUpView> implements I
         this.confirmUseCase = confirmUseCase;
     }
 
-    public BaseProgressSubscriber<User> getSignUpSubscriber() {
-        return new BaseProgressSubscriber<User>(this) {
+    public BaseProgressSubscriber<AccountUser> getSignUpSubscriber() {
+        return new BaseProgressSubscriber<AccountUser>(this) {
             @Override
-            public void onNext(User response) {
+            public void onNext(AccountUser response) {
                 super.onNext(response);
                 confirmUseCase.setUserId(response.getId());
             }
@@ -50,8 +50,8 @@ public class SignUpPresenter extends ProgressPresenter<ISignUpView> implements I
         };
     }
 
-    public BaseProgressSubscriber<User> getConfirmSubscriber() {
-        return new BaseProgressSubscriber<User>(this) {
+    public BaseProgressSubscriber<AccountUser> getConfirmSubscriber() {
+        return new BaseProgressSubscriber<AccountUser>(this) {
             @Override
             public void onCompleted() {
                 super.onCompleted();

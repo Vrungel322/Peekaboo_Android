@@ -1,6 +1,7 @@
 package com.peekaboo.presentation.utils;
 
 import android.content.Context;
+import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
@@ -35,4 +36,13 @@ public class ResourcesUtils {
     public static int dpToPx(Context c, int dp) {
         return (int) (c.getResources().getDisplayMetrics().density * dp);
     }
+
+    public static ColorStateList getColorSateList(Context context, int resId) {
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.M) {
+            return context.getResources().getColorStateList(resId);
+        } else {
+            return context.getResources().getColorStateList(resId, context.getTheme());
+        }
+    }
+
 }

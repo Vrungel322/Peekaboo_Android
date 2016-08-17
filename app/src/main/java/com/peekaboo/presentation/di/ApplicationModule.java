@@ -6,7 +6,7 @@ import android.content.SharedPreferences;
 import com.peekaboo.data.di.DataModule;
 import com.peekaboo.data.mappers.MapperFactory;
 import com.peekaboo.data.repositories.database.utils_db.DbModule;
-import com.peekaboo.domain.User;
+import com.peekaboo.domain.AccountUser;
 import com.peekaboo.domain.schedulers.ObserveOn;
 import com.peekaboo.domain.schedulers.SubscribeOn;
 import com.peekaboo.presentation.services.INotifier;
@@ -61,13 +61,13 @@ public class ApplicationModule {
 
     @Provides
     @Singleton
-    public User provideUser(SharedPreferences prefs) {
-        return new User(prefs);
+    public AccountUser provideUser(SharedPreferences prefs) {
+        return new AccountUser(prefs);
     }
 
     @Singleton
     @Provides
-    public INotifier provideNotifier(User user) {
+    public INotifier provideNotifier(AccountUser user) {
         return new WebSocketNotifier(user, new MapperFactory());
     }
 

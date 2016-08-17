@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:custom="http://schemas.android.com/apk/res-auto"
     android:id="@+id/lLogIn"
     android:layout_width="match_parent"
@@ -42,9 +42,7 @@
                 android:hint="@string/usernameOrLogin"
                 android:imeOptions="actionNext"
                 android:inputType="text"
-                android:maxLines="1"
                 android:textSize="@dimen/text_size" />
-
 
         </com.peekaboo.presentation.app.view.RobotoTextInputLayout>
 
@@ -52,39 +50,9 @@
             android:id="@+id/pvPassword"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="@dimen/padding_top"
+            android:layout_marginTop="@dimen/padding_top"
+            android:imeOptions="actionDone"
             custom:textHint="@string/password" />
-        <!--<<<<<<< HEAD-->
-        <!--app:errorTextAppearance="@style/Error.Design">-->
-
-        <!--<com.peekaboo.presentation.app.view.RobotoEditText-->
-        <!--android:id="@+id/etPassword"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:gravity="center_horizontal"-->
-        <!--android:hint="@string/password"-->
-        <!--android:inputType="textPassword"-->
-        <!--android:textSize="@dimen/text_size" />-->
-
-        <!--</com.peekaboo.presentation.app.view.RobotoTextInputLayout>-->
-        <!--=======-->
-        <!--<com.peekaboo.presentation.app.view.RobotoTextInputLayout-->
-        <!--android:id="@+id/ilPassword"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:paddingTop="@dimen/padding_top">-->
-
-        <!--<com.peekaboo.presentation.app.view.RobotoEditText-->
-        <!--android:id="@+id/etPassword"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:gravity="center_horizontal"-->
-        <!--android:hint="@string/password"-->
-        <!--android:inputType="textPassword"-->
-        <!--android:textSize="@dimen/text_size" />-->
-
-        <!--</com.peekaboo.presentation.app.view.RobotoTextInputLayout>-->
-        <!--&gt;>>>>>> arkadii-->
 
         <com.peekaboo.presentation.app.view.ComfortaaButton
             android:id="@+id/bSignIn"
