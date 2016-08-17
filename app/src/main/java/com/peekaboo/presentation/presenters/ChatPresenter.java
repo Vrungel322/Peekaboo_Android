@@ -2,28 +2,33 @@ package com.peekaboo.presentation.presenters;
 
 import android.content.ClipData;
 import android.content.ClipboardManager;
-import android.content.Context;
+import android.content.ContentValues;
+import android.content.Intent;
+import android.net.Uri;
+import android.speech.RecognizerIntent;
 import android.speech.tts.TextToSpeech;
-import android.support.annotation.Nullable;
-import android.util.Log;
-import android.widget.Toast;
+import android.text.TextUtils;
 
 import com.peekaboo.data.mappers.AbstractMapperFactory;
 import com.peekaboo.data.repositories.database.messages.AudioPMessage;
+import com.peekaboo.data.repositories.database.messages.ImagePMessage;
 import com.peekaboo.data.repositories.database.messages.PMessage;
 import com.peekaboo.data.repositories.database.messages.PMessageAbs;
 import com.peekaboo.data.repositories.database.messages.PMessageHelper;
+import com.peekaboo.data.repositories.database.messages.TextPMessage;
 import com.peekaboo.domain.AudioRecorder;
 import com.peekaboo.domain.MPlayer;
 import com.peekaboo.domain.Record;
-import com.peekaboo.presentation.services.INotifier;
-import com.peekaboo.presentation.services.Message;
+import com.peekaboo.presentation.adapters.ChatAdapter;
 import com.peekaboo.presentation.views.IChatView;
 import com.peekaboo.utils.Utility;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Random;
+
 import javax.inject.Inject;
 
-import rx.Subscription;
 import rx.functions.Action1;
 import rx.subscriptions.CompositeSubscription;
 
@@ -32,124 +37,98 @@ import rx.subscriptions.CompositeSubscription;
  */
 public class ChatPresenter extends BasePresenter<IChatView> implements IChatPresenter {
 
-    private Context context;
     private CompositeSubscription subscriptions;
     private PMessageHelper pMessageHelper;
     private AbstractMapperFactory mapperFactory;
-    private TextToSpeech textToSpeech;
     private AudioRecorder recorder;
+    private TextToSpeech textToSpeech;
     private MPlayer mPlayer;
 
+    private String receiver;
+
     @Inject
-    public ChatPresenter(Context context, PMessageHelper pMessageHelper,
+    public ChatPresenter(PMessageHelper pMessageHelper,
                          AbstractMapperFactory mapperFactory, TextToSpeech textToSpeech) {
-        this.context = context;
         this.pMessageHelper = pMessageHelper;
         this.mapperFactory = mapperFactory;
         this.textToSpeech = textToSpeech;
     }
 
-    public void createTable(String tableName) {
-        pMessageHelper.createTable(tableName);
+    @Override
+    public void onChatHistoryLoading(Action1 adapter) {
+        pMessageHelper.createTable(receiver);
+        subscriptions.add(pMessageHelper.getAllMessages(receiver).subscribe(adapter));
+
+        subscriptions.add(pMessageHelper.getUnreadMessagesCount(receiver).subscribe(pMessageAbses -> {
+            if (getView() != null) {
+                getView().showToastMessage("Unread messages = " + pMessageAbses.size());
+            }
+        }));
     }
 
     @Override
-    public void insertMessageToTable(String tableName, PMessage message) {
-        pMessageHelper.insert(tableName, mapperFactory.getPMessageMapper().transform(message));
+    public void onDeleteChatHistoryButtonPress(ChatAdapter adapter) {
+        pMessageHelper.dropTableAndCreate(receiver);
+        adapter.clearList();
+    }
+
+
+    @Override
+    public void onStartRecordingAudioClick() {
+        recorder = new AudioRecorder(new Record(receiver));
+        subscriptions.add(recorder.startRecording().subscribe());
     }
 
     @Override
-    public void dropTableAndCreate(String tableName) {
-        pMessageHelper.dropTableAndCreate(tableName);
-    }
-
-    @Override
-    public Subscription getAllMessages(String tableName, Action1 adapter) {
-        return pMessageHelper.getAllMessages(tableName).subscribe(adapter);
-    }
-
-    public Subscription getTableAsString(String tableName) {
-        return pMessageHelper.getAllMessages(tableName)
-                .subscribe(pMessageAbses -> {
-                    for (PMessageAbs message : pMessageAbses) {
-                        Log.wtf("DB_LOG", "ID: " + message.id()
-                                + "; PACKAGE_ID: " + message.packageId()
-                                + "; BODY: " + message.messageBody()
-                                + "; TIMESTAMP: " + message.timestamp()
-                                + "; IS_MINE: " + message.isMine()
-                                + "; IS_SENT: " + message.isSent()
-                                + "; IS_DELIVERED: " + message.isDelivered()
-                                + "; IS_READ: " + message.isRead());
-                    }
-                });
-    }
-
-    public Subscription getUnreadMessagesCount(String tableName) {
-        return pMessageHelper.getUnreadMessagesCount(tableName)
-                .subscribe(pMessageAbses ->
-                        Toast.makeText(context, "Unread messages = " + pMessageAbses.size(), Toast.LENGTH_SHORT).show());
-    }
-
-    @Override
-    public int deleteMessageByPackageId(String tableName, PMessageAbs message) {
-        return pMessageHelper.deleteMessageByPackageId(tableName, message.packageId());
-    }
-    @Override
-    public void copyMessageText(PMessageAbs message) {
-        ClipboardManager clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
-        ClipData clip = ClipData.newPlainText("", message.messageBody());
-        clipboard.setPrimaryClip(clip);
-    }
-
-    @Override
-    public void convertTextToSpeech(PMessageAbs message) {
-        textToSpeech.speak(message.messageBody(), TextToSpeech.QUEUE_FLUSH, null);
-    }
-
-    @Override
-    public Subscription startRecordingAudio(String folderName, int samplerate) {
-        recorder = new AudioRecorder(new Record(folderName, samplerate));
-        return recorder.startRecording().subscribe();
-    }
-
-    @Nullable
-    @Override
-    public Subscription stopRecordingAudio(String tableName) {
+    public void onStopRecordingAudioClick() {
         if (recorder != null) {
-            return recorder.stopRecording().subscribe(record -> {
-                insertMessageToTable(tableName, new AudioPMessage(Utility.getPackageId(), true,
-                        record.getFilename(), System.currentTimeMillis(), false, false, false));
+            recorder.stopRecording().subscribe(record -> {
+                pMessageHelper.insert(receiver, convertPMessage(new AudioPMessage(Utility.getPackageId(),
+                        true, record.getFilename(),
+                        System.currentTimeMillis(),
+                        false, false, false)));
             });
         }
-        return null;
-    }
-
-    @Nullable
-    @Override
-    public Subscription startPlayingMPlayer(String filepath) {
-        mPlayer = new MPlayer();
-        return mPlayer.play(filepath);
     }
 
     @Override
-    public Subscription stopPlayingMPlayer() {
-        return mPlayer.stop();
-    }
+    public void onSendTextButtonPress() {
+        if (getView() != null) {
+            String msgBody = getView().getMessageText();
+            if (!TextUtils.isEmpty(msgBody)) {
+                // for test
+                Random random = new Random();
+                boolean isMine = random.nextBoolean();
+                //
+                pMessageHelper.insert(receiver, convertPMessage(new TextPMessage(Utility.getPackageId(),
+                        isMine, msgBody, System.currentTimeMillis(),
+                        false, false, false)));
 
-    @Override
-    public Subscription stopAndStartPlayingMPlayer(String filepath) {
-        if(mPlayer == null){
-            return startPlayingMPlayer(filepath);
+                //TODO: actually sending
+            }
+            getView().clearTextField();
         }
-        return mPlayer.stopAndPlay(filepath);
+    }
+
+    @Override
+    public void onSendImageButtonPress(Uri uri) {
+        pMessageHelper.insert(receiver, convertPMessage(new ImagePMessage(Utility.getPackageId(),
+                true, uri.toString(), System.currentTimeMillis(),
+                false, false, false)));
+    }
+
+    @Override
+    public void onSendAudioButtonPress(Intent data) {
+        ArrayList<String> result = data
+                .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+        pMessageHelper.insert(receiver, convertPMessage(new AudioPMessage(Utility.getPackageId(),
+                true, result.get(0), System.currentTimeMillis(),
+                false, false, false)));
     }
 
 
     @Override
     public void onPause() {
-        if (textToSpeech != null) {
-            textToSpeech.stop();
-        }
         subscriptions.unsubscribe();
     }
 
@@ -158,4 +137,63 @@ public class ChatPresenter extends BasePresenter<IChatView> implements IChatPres
         subscriptions = new CompositeSubscription();
     }
 
+    @Override
+    public void bind(IChatView view, String receiver) {
+        super.bind(view);
+        this.receiver = receiver;
+    }
+
+    @Override
+    public void onDeleteMessageClick(PMessageAbs message) {
+        pMessageHelper.deleteMessageByPackageId(receiver, message.packageId());
+    }
+
+    @Override
+    public void onCopyMessageTextClick(ClipboardManager clipboard, PMessageAbs message) {
+        ClipData clip = ClipData.newPlainText("", message.messageBody());
+        clipboard.setPrimaryClip(clip);
+    }
+
+    @Override
+    public void onConvertTextToSpeechClick(PMessageAbs message) {
+        textToSpeech.speak(message.messageBody(), TextToSpeech.QUEUE_FLUSH, null);
+    }
+
+    @Override
+    public void onStartPlayingAudioClick(String filepath) {
+        mPlayer = new MPlayer();
+        try {
+            mPlayer.play(filepath);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onStopPlayingAudioClick() {
+        mPlayer.stop();
+    }
+
+    @Override
+    public void onStopAndPlayAudioClick(String filepath) {
+        if (mPlayer == null) {
+            onStartPlayingAudioClick(filepath);
+        }
+        try {
+            mPlayer.stopAndPlay(filepath);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onDetachedFromRecyclerView() {
+        if (textToSpeech != null) {
+            textToSpeech.stop();
+        }
+    }
+
+    private ContentValues convertPMessage(PMessage pMessage) {
+        return mapperFactory.getPMessageMapper().transform(pMessage);
+    }
 }

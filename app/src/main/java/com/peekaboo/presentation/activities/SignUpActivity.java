@@ -168,7 +168,7 @@ public class SignUpActivity extends SlidingActivity implements ISignUpView {
     }
 
     @Override
-    public void onError(String text) {
+    public void showToastMessage(String text) {
         Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG).show();
     }
 

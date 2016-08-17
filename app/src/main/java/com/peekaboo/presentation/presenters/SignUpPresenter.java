@@ -95,7 +95,7 @@ public class SignUpPresenter extends ProgressPresenter<ISignUpView> implements I
 
     private boolean isValid(String key) {
         if (key.contains(" ") || key.length() != 4) {
-            if (getView() != null) getView().onError(getContext().getString(R.string.invalidKey));
+            if (getView() != null) getView().showToastMessage(getContext().getString(R.string.invalidKey));
         } else {
             return true;
         }

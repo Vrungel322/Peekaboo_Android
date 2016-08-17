@@ -4,17 +4,10 @@ import android.content.Context;
 import android.content.IntentFilter;
 import android.net.ConnectivityManager;
 
-import com.google.gson.Gson;
-import com.google.gson.TypeAdapter;
 import com.peekaboo.domain.ErrorHandler;
 import com.peekaboo.domain.subscribers.BaseProgressSubscriber;
 import com.peekaboo.presentation.views.IProgressView;
 import com.peekaboo.utils.InternetBroadcastReceiver;
-
-import java.io.IOException;
-
-import okhttp3.ResponseBody;
-import retrofit2.adapter.rxjava.HttpException;
 
 /**
  * Created by sebastian on 28.06.16.
@@ -36,7 +29,7 @@ public abstract class ProgressPresenter<V extends IProgressView> extends BasePre
     public void onError(Throwable t) {
         if (getView() != null) {
             getView().hideProgress();
-            getView().onError(errorHandler.handleError(t));
+            getView().showToastMessage(errorHandler.handleError(t));
         }
     }
 

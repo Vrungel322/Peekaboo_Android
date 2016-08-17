@@ -1,5 +1,6 @@
 package com.peekaboo.presentation.adapters;
 
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,11 +12,14 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.peekaboo.R;
 import com.peekaboo.data.repositories.database.messages.PMessageAbs;
 import com.peekaboo.presentation.app.view.RoundedTransformation;
+import com.peekaboo.presentation.fragments.ChatItemDialog;
 import com.peekaboo.presentation.presenters.ChatPresenter;
+import com.peekaboo.presentation.views.IView;
 import com.peekaboo.utils.Constants;
 import com.peekaboo.utils.Utility;
 import com.squareup.picasso.Callback;
@@ -32,19 +36,20 @@ import timber.log.Timber;
 /**
  * Created by st1ch on 23.07.2016.
  */
-public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> implements Action1<List<PMessageAbs>> {
+public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>
+        implements ChatItemDialog.IChatItemEventListener, Action1<List<PMessageAbs>>, IView {
 
     private final LayoutInflater inflater;
     private Context context;
-    private ChatPresenter chatPresenter;
+    private ChatPresenter presenter;
     private Picasso mPicasso;
 
     private List<PMessageAbs> messages = Collections.emptyList();
 
-    public ChatAdapter(Context context, ChatPresenter chatPresenter) {
+    public ChatAdapter(Context context, ChatPresenter presenter) {
         this.context = context;
         this.inflater = LayoutInflater.from(context);
-        this.chatPresenter = chatPresenter;
+        this.presenter = presenter;
         this.mPicasso = Picasso.with(context);
     }
 
@@ -100,7 +105,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> im
                 break;
             case Constants.PMESSAGE_MEDIA_TYPE.AUDIO_MESSAGE:
                 ((ViewHolderAudio) holder).ibPlayRecord
-                        .setOnClickListener(v -> chatPresenter.stopAndStartPlayingMPlayer(pMessageAbs.messageBody()));
+                        .setOnClickListener(v -> presenter.onStopAndPlayAudioClick(pMessageAbs.messageBody()));
                 break;
             case Constants.PMESSAGE_MEDIA_TYPE.IMAGE_MESSAGE:
                 String image = pMessageAbs.messageBody();
@@ -201,10 +206,36 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> im
                 });
     }
 
-
     public void clearList() {
         this.messages = Collections.emptyList();
         notifyDataSetChanged();
+    }
+
+    @Override
+    public void onDetachedFromRecyclerView(RecyclerView recyclerView) {
+        super.onDetachedFromRecyclerView(recyclerView);
+        presenter.onDetachedFromRecyclerView();
+    }
+
+    @Override
+    public void showToastMessage(String text) {
+        Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void copyText(int index) {
+        presenter.onCopyMessageTextClick((ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE),
+                getItem(index));
+    }
+
+    @Override
+    public void deleteMess(int index) {
+        presenter.onDeleteMessageClick(getItem(index));
+    }
+
+    @Override
+    public void textToSpeech(int index) {
+        presenter.onConvertTextToSpeechClick(getItem(index));
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
@@ -252,5 +283,4 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> im
             ButterKnife.bind(this, view);
         }
     }
-
 }

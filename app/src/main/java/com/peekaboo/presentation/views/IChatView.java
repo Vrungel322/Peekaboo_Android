@@ -5,4 +5,7 @@ package com.peekaboo.presentation.views;
  */
 public interface IChatView extends IView {
 
+    void clearTextField();
+    String getMessageText();
+
 }
