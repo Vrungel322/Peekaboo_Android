@@ -20,8 +20,10 @@ import android.widget.Toast;
 import com.daimajia.swipe.SwipeLayout;
 import com.daimajia.swipe.util.Attributes;
 import com.peekaboo.R;
-import com.peekaboo.presentation.adapters.ListViewAdapter;
+import com.peekaboo.presentation.PeekabooApplication;
+import com.peekaboo.presentation.adapters.DialogsListAdapter;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -29,9 +31,9 @@ import butterknife.ButterKnife;
  */
 public class DialogsFragment extends Fragment {
     private View rootView;
-    private ListView mListView;
-    private ListViewAdapter mAdapter;
-    private DialogsFragment mContext;
+    @BindView(R.id.lvDialogs)
+     ListView mListView;
+    private DialogsListAdapter mAdapter;
 
     public DialogsFragment() {
     }
@@ -40,15 +42,14 @@ public class DialogsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        PeekabooApplication.getApp(getActivity()).getComponent().inject(this);
         rootView = inflater.inflate(R.layout.fragment_dialogs, container, false);
         ButterKnife.bind(this, rootView);
         setHasOptionsMenu(true);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Dialogs");
 
-        mListView = (ListView) rootView.findViewById(R.id.lvDialogs);
 
-        mAdapter = new ListViewAdapter(getActivity());
+        mAdapter = new DialogsListAdapter(getActivity());
         mListView.setAdapter(mAdapter);
         mAdapter.setMode(Attributes.Mode.Single);
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -74,12 +75,10 @@ public class DialogsFragment extends Fragment {
         mListView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
-                Log.e("ListView", "onScrollStateChanged");
             }
 
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-
             }
         });
         mListView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -93,7 +92,6 @@ public class DialogsFragment extends Fragment {
                 Log.e("ListView", "onNothingSelected:");
             }
         });
-////        onDestroyView();
         return rootView;
     }
 

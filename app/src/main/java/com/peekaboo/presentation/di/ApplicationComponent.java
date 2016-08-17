@@ -8,6 +8,7 @@ import com.peekaboo.presentation.activities.SignUpActivity;
 import com.peekaboo.presentation.activities.SplashActivity;
 import com.peekaboo.presentation.dialogs.ConfirmSignUpDialog;
 import com.peekaboo.presentation.fragments.ContactsFragment;
+import com.peekaboo.presentation.fragments.DialogsFragment;
 import com.peekaboo.presentation.fragments.ServiceTestFragment;
 import com.peekaboo.presentation.fragments.SocketTestFragment;
 import com.peekaboo.presentation.services.NotificationService;
@@ -32,6 +33,7 @@ public interface ApplicationComponent {
     void inject(ServiceTestFragment serviceTestFragment);
     void inject(ContactsFragment contactsFragment);
     void inject(ConfirmSignUpDialog confirmSignUpDialog);
+    void inject(DialogsFragment dialogsFragment);
 
 //    Inject of Services
     void inject(NotificationService notificationService);

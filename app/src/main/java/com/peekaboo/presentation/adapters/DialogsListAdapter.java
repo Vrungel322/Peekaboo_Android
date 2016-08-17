@@ -3,6 +3,7 @@ package com.peekaboo.presentation.adapters;
 /**
  * Created by patri_000 on 29.07.2016.
  */
+
 import android.content.Context;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -18,11 +19,11 @@ import com.daimajia.swipe.SwipeLayout;
 import com.daimajia.swipe.adapters.BaseSwipeAdapter;
 import com.peekaboo.R;
 
-public class ListViewAdapter extends BaseSwipeAdapter {
+public class DialogsListAdapter extends BaseSwipeAdapter {
 
     private Context mContext;
 
-    public ListViewAdapter(Context mContext) {
+    public DialogsListAdapter(Context mContext) {
         this.mContext = mContext;
     }
 
@@ -30,21 +31,23 @@ public class ListViewAdapter extends BaseSwipeAdapter {
     public int getSwipeLayoutResourceId(int position) {
         return R.id.swipe;
     }
-@Nullable
+
+    @Nullable
     @Override
     public View generateView(int position, ViewGroup parent) {
         View v = LayoutInflater.from(mContext).inflate(R.layout.listview_item, null);
         SwipeLayout swipeLayout = (SwipeLayout)v.findViewById(getSwipeLayoutResourceId(position));
+        swipeLayout.setShowMode(SwipeLayout.ShowMode.PullOut);
         swipeLayout.addSwipeListener(new SimpleSwipeListener() {
             @Override
             public void onOpen(SwipeLayout layout) {
                 YoYo.with(Techniques.Tada).duration(500).delay(100).playOn(layout.findViewById(R.id.trash));
             }
         });
-        swipeLayout.setOnDoubleClickListener(new SwipeLayout.DoubleClickListener() {
+        swipeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onDoubleClick(SwipeLayout layout, boolean surface) {
-                Toast.makeText(mContext, "DoubleClick", Toast.LENGTH_SHORT).show();
+            public void onClick(View v) {
+                Toast.makeText(mContext, "just click", Toast.LENGTH_SHORT).show();
             }
         });
         v.findViewById(R.id.delete).setOnClickListener(new View.OnClickListener() {
@@ -64,7 +67,7 @@ public class ListViewAdapter extends BaseSwipeAdapter {
 
     @Override
     public int getCount() {
-        return 5;
+        return 15;
     }
 
     @Override
