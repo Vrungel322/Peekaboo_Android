@@ -38,10 +38,6 @@ repositories {
     maven { url "http://repository.codehaus.org/org/codehaus" }
     maven { url "http://dl.bintray.com/glomadrian/maven" }
     maven { url "http://repo1.maven.org/maven2" }
-
-}
-
-repositories {
     mavenCentral()
 }
 

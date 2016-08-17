@@ -1,5 +1,7 @@
 package com.peekaboo.data.repositories;
 
+import android.util.Log;
+
 import com.peekaboo.data.FileEntity;
 import com.peekaboo.data.mappers.AbstractMapperFactory;
 import com.peekaboo.data.rest.ConfirmKey;
@@ -53,7 +55,6 @@ public class SessionDataRepository implements SessionRepository {
         return restApi.confirm(new ConfirmKey(id, key))
                 .map(token -> {
                     user.saveToken(token.getToken());
-                    user.saveId(token.getId());
                     return user;
                 });
     }

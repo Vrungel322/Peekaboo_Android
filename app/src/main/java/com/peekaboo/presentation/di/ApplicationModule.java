@@ -3,6 +3,7 @@ package com.peekaboo.presentation.di;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.peekaboo.data.Constants;
 import com.peekaboo.data.di.DataModule;
 import com.peekaboo.data.mappers.MapperFactory;
 import com.peekaboo.data.repositories.database.utils_db.DbModule;
@@ -67,8 +68,8 @@ public class ApplicationModule {
 
     @Singleton
     @Provides
-    public INotifier provideNotifier(AccountUser user) {
-        return new WebSocketNotifier(user, new MapperFactory());
+    public INotifier provideNotifier() {
+        return new WebSocketNotifier(Constants.BASE_URL_SOCKET, 5000, new MapperFactory());
     }
 
 //    @Singleton

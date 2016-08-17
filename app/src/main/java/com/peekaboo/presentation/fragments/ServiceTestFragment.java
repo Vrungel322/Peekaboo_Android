@@ -18,6 +18,7 @@ import android.widget.TextView;
 import com.peekaboo.R;
 import com.peekaboo.data.rest.PeekabooApi;
 import com.peekaboo.data.rest.entity.UserEntity;
+import com.peekaboo.domain.AccountUser;
 import com.peekaboo.domain.MessageUtils;
 import com.peekaboo.presentation.PeekabooApplication;
 import com.peekaboo.presentation.services.AudioRecorder;
@@ -49,6 +50,8 @@ public class ServiceTestFragment extends Fragment implements INotifier.Notificat
     @Inject
     INotifier notifier;
     @Inject
+    AccountUser user;
+    @Inject
     PeekabooApi api;
     private EditText message;
     private TextView messages;
@@ -71,7 +74,7 @@ public class ServiceTestFragment extends Fragment implements INotifier.Notificat
         client = new OkHttpClient.Builder()
                 .readTimeout(15, TimeUnit.SECONDS)
                 .addInterceptor(interceptor).build();
-        notifier.tryConnect();
+        notifier.tryConnect(user.getBearer());
     }
 
     private void sendFile(String fileName) {
@@ -145,7 +148,7 @@ public class ServiceTestFragment extends Fragment implements INotifier.Notificat
         });
         getActivity().findViewById(R.id.reconnect_button).setOnClickListener(v -> {
             Log.e("available", String.valueOf(notifier.isAvailable()));
-            notifier.tryConnect();
+            notifier.tryConnect(user.getBearer());
         });
 //
 //        getActivity().findViewById(R.id.send_button).setOnClickListener(v -> {
