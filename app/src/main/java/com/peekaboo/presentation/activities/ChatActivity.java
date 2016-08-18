@@ -1,6 +1,8 @@
 package com.peekaboo.presentation.activities;
 
 import android.app.FragmentTransaction;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -19,6 +21,7 @@ import com.peekaboo.R;
 import com.peekaboo.presentation.PeekabooApplication;
 import com.peekaboo.presentation.adapters.ChatAdapter;
 import com.peekaboo.presentation.fragments.AttachmentChatDialog;
+import com.peekaboo.presentation.fragments.ChatItemDialog;
 import com.peekaboo.presentation.listeners.ChatOnClickListener;
 import com.peekaboo.presentation.listeners.ChatRecyclerTouchListener;
 import com.peekaboo.presentation.presenters.ChatPresenter;
@@ -39,7 +42,8 @@ import butterknife.OnClick;
  * Created by Nataliia on 13.07.2016.
  */
 public class ChatActivity extends AppCompatActivity
-        implements AttachmentChatDialog.IAttachmentDialogEventListener, IChatView {
+                        implements ChatItemDialog.IChatItemEventListener,
+                                   AttachmentChatDialog.IAttachmentDialogEventListener, IChatView {
 
     @BindView(R.id.etMessageBody)
     EditText etMessageBody;
@@ -219,5 +223,21 @@ public class ChatActivity extends AppCompatActivity
     @Override
     public String getMessageText() {
         return etMessageBody.getText().toString().trim().replaceAll("[\\s&&[^\r?\n]]+", " ");
+    }
+
+    @Override
+    public void copyText(int index) {
+        chatPresenter.onCopyMessageTextClick((ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE),
+                chatAdapter.getItem(index));
+    }
+
+    @Override
+    public void deleteMess(int index) {
+        chatPresenter.onDeleteMessageClick(chatAdapter.getItem(index));
+    }
+
+    @Override
+    public void textToSpeech(int index) {
+        chatPresenter.onConvertTextToSpeechClick(chatAdapter.getItem(index));
     }
 }
