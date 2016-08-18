@@ -8,11 +8,8 @@ import com.neovisionaries.ws.client.WebSocketAdapter;
 import com.neovisionaries.ws.client.WebSocketException;
 import com.neovisionaries.ws.client.WebSocketFactory;
 import com.neovisionaries.ws.client.WebSocketFrame;
-import com.peekaboo.data.Constants;
 import com.peekaboo.data.mappers.AbstractMapperFactory;
 import com.peekaboo.data.mappers.Mapper;
-import com.peekaboo.domain.AccountUser;
-import com.peekaboo.domain.MessageUtils;
 
 import java.io.IOException;
 import java.util.HashSet;
@@ -21,39 +18,40 @@ import java.util.Map;
 import java.util.Set;
 
 public class WebSocketNotifier implements INotifier {
-    public static final String BASE_URL_SOCKET = Constants.BASE_URL_SOCKET;
-    public static final int TIMEOUT = 5000;
-    public static final String AUTHORIZATION = "Authorization";
-    private final String TAG = "socket";
+    private static final String AUTHORIZATION = "Authorization";
+    private static final String TAG = "socket";
 
-    private final AccountUser user;
+    private final String BASE_URL;
+    private final int TIMEOUT;
     private final Mapper<Message, byte[]> mtb;
     private final Mapper<byte[], Message> btm;
+    private final Set<NotificationListener> listeners = new HashSet<>();
+
     @Nullable
     private WebSocket ws;
-    private Set<NotificationListener> listeners = new HashSet<>();
 
-    public WebSocketNotifier(AccountUser user, AbstractMapperFactory abstractMapperFactory) {
-        this.user = user;
+    public WebSocketNotifier(String baseUrl, int timeout, AbstractMapperFactory abstractMapperFactory) {
+        this.BASE_URL = baseUrl;
+        this.TIMEOUT = timeout;
         mtb = abstractMapperFactory.getMessageToByteMapper();
         btm = abstractMapperFactory.getByteToMessageMapper();
     }
 
-    private void connectSocket() {
-        if (user.isAuthorized()) {
-            if (ws == null) {
+    private void connectSocket(String authorization) {
+        if (ws == null) {
                 try {
                     ws = new WebSocketFactory()
-                            .createSocket(BASE_URL_SOCKET, TIMEOUT)
+                            .createSocket(BASE_URL, TIMEOUT)
                             .addListener(new WebSocketAdapter() {
                                 @Override
                                 public void onConnected(WebSocket websocket, Map<String, List<String>> headers) throws Exception {
-                                    Log.e(TAG, "Status: Connected to " + BASE_URL_SOCKET);
+                                    Log.e(TAG, "Status: Connected to " + BASE_URL);
                                 }
 
                                 @Override
                                 public void onError(WebSocket websocket, WebSocketException cause) throws Exception {
                                     Log.e(TAG, "Status: Error " + cause);
+                                    ws = null;
                                 }
 
                                 @Override
@@ -61,7 +59,6 @@ public class WebSocketNotifier implements INotifier {
                                                            WebSocketFrame clientCloseFrame, boolean closedByServer) throws Exception {
                                     Log.e(TAG, "Status: Disconnected ");
                                     ws = null;
-//                                    reconnect();
                                 }
 
                                 @Override
@@ -80,43 +77,19 @@ public class WebSocketNotifier implements INotifier {
                                     Log.e(TAG, "Status: Pong received " + frame);
                                 }
                             })
-                            .addHeader(AUTHORIZATION, user.getBearer())
+                            .addHeader(AUTHORIZATION, authorization)
                             .connectAsynchronously();
                 } catch (IOException e) {
+                    ws = null;
                     Log.e(TAG, "exception " + e);
                 }
             }
-//            else if (!ws.isOpen()) {
-//                Log.e(TAG, "reconnect socket");
-//                reconnect();
-//            }
-        }
     }
 
-//    private void reconnect() {
-//        try {
-//            connectSocket();
-//            if (ws != null) {
-//                ws.recreate().connectAsynchronously();
-//            }
-//        } catch (IOException e) {
-//            Log.e(TAG, "exception recreate " + e);
-//        }
-//    }
 
     @Override
-    public void tryConnect() {
-        connectSocket();
-    }
-
-    @Override
-    public void sendFile(Message message, String file) {
-//        int maxPayloadSize = ws.getMaxPayloadSize();
-        List<Message> fileMessage = MessageUtils.createFileMessage(message, file, 4096);
-        for (Message m : fileMessage) {
-            Log.e("message", m.getCommand() + " " + m.getParams());
-            sendBinaryMessage(mtb.transform(m));
-        }
+    public void tryConnect(String authorization) {
+        connectSocket(authorization);
     }
 
     @Override
@@ -132,15 +105,15 @@ public class WebSocketNotifier implements INotifier {
         }
     }
 
-
-
     @Override
     public void sendMessage(Message message) {
         sendBinaryMessage(mtb.transform(message));
     }
 
     public void sendBinaryMessage(byte[] message) {
-        ws.sendBinary(message);
+        if (ws != null) {
+            ws.sendBinary(message);
+        }
     }
 
     @Override

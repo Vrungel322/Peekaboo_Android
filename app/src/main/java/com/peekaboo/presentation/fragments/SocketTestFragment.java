@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.peekaboo.R;
 import com.peekaboo.data.FileEntity;
+import com.peekaboo.domain.AccountUser;
 import com.peekaboo.domain.MessageUtils;
 import com.peekaboo.domain.User;
 import com.peekaboo.domain.subscribers.BaseUseCaseSubscriber;
@@ -48,6 +49,8 @@ public class SocketTestFragment extends Fragment implements INotifier.Notificati
     DownloadFileUseCase downloadFileUseCase;
     @Inject
     INotifier notifier;
+    @Inject
+    AccountUser user;
 
     public SocketTestFragment() {
         // Required empty public constructor
@@ -66,6 +69,12 @@ public class SocketTestFragment extends Fragment implements INotifier.Notificati
         ButterKnife.bind(this, inflate);
         notifier.addListener(this);
         return inflate;
+    }
+
+    @Override
+    public void onDestroyView() {
+        notifier.removeListener(this);
+        super.onDestroyView();
     }
 
     @OnClick(R.id.bSend)
@@ -92,7 +101,7 @@ public class SocketTestFragment extends Fragment implements INotifier.Notificati
     @OnClick(R.id.bReconnect)
     public void reconnect() {
         if (!notifier.isAvailable()) {
-            notifier.tryConnect();
+            notifier.tryConnect(user.getBearer());
         }
     }
 

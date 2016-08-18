@@ -104,7 +104,7 @@ public class SessionDataRepositoryTest {
         subscriber.awaitTerminalEvent();
 
         assertThat(subscriber.getOnNextEvents().size(), is(1));
-        verify(user, times(1)).saveId(ID);
+        verify(user, times(0)).saveId(ID);
         verify(user, times(1)).saveToken(TOKEN);
     }
 

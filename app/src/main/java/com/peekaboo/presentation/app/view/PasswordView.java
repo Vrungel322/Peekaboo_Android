@@ -81,10 +81,7 @@ public class PasswordView extends FrameLayout {
             if (getChildAt(i) instanceof TextInputLayout) {
                 inputLayout = (TextInputLayout) getChildAt(i);
                 editText = (RobotoEditText) inputLayout.getChildAt(0);
-//                int paddingTop = editText.getPaddingTop();
-//                int paddingHorizontal = ResourcesUtils.dpToPx(getContext(), 40);
-//                int paddingBottom = editText.getPaddingBottom();
-//                editText.setPadding(paddingHorizontal, paddingTop, paddingHorizontal, paddingBottom);
+                updateEditTextPadding();
             } else {
                 showView = (ImageView) getChildAt(i);
             }
@@ -114,6 +111,13 @@ public class PasswordView extends FrameLayout {
         });
     }
 
+    private void updateEditTextPadding() {
+        int paddingTop = editText.getPaddingTop();
+        int paddingHorizontal = ResourcesUtils.dpToPx(getContext(), 40);
+        int paddingBottom = editText.getPaddingBottom();
+        editText.setPadding(paddingHorizontal, paddingTop, paddingHorizontal, paddingBottom);
+    }
+
     public void setHint(String hint) {
         this.hint = hint;
         inputLayout.setHint(hint);
@@ -130,6 +134,7 @@ public class PasswordView extends FrameLayout {
         layoutParams.setMargins(0, !shouldShowError ? TOP_MARGIN_ERROR_VISIBLE : 0, layoutParams.rightMargin,
                 shouldShowError ? BOTTOM_MARGIN_ERROR_VISIBLE : 0);
         inputLayout.setError(error);
+        updateEditTextPadding();
     }
 
     public String getPassword() {

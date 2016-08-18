@@ -44,7 +44,7 @@ public class PeekabooApplication extends Application {
     public void onCreate() {
         super.onCreate();
         buildAppComponent();
-        NotificationService.launch(this, null);
+        NotificationService.launch(this, NotificationService.ACTION.TRY_CONNECT);
         vkAccessTokenTracker.startTracking();
         VKSdk.initialize(this);
         Timber.plant(new Timber.DebugTree());
