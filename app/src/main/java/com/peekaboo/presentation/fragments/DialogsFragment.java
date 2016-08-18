@@ -50,7 +50,6 @@ public class DialogsFragment extends Fragment {
         mListView.setAdapter(mAdapter);
         mListView.setDivider(null);
         mAdapter.setMode(Attributes.Mode.Single);
-
         mListView.setOnScrollListener(new AbsListView.OnScrollListener() {
             @Override
             public void onScrollStateChanged(AbsListView view, int scrollState) {
@@ -60,7 +59,6 @@ public class DialogsFragment extends Fragment {
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
             }
         });
-
         mListView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {

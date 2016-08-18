@@ -5,93 +5,64 @@
     android:layout_height="wrap_content"
     android:padding="@dimen/dialog_item_padding">
 
+    <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/dialog_contact_image_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/dialog_item_margin"
+        android:src="@mipmap/ic_launcher"
+        app:border_color="@color/colorAccent"
+        app:border_width="@dimen/circle_photo_border_width" />
+
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_margin="@dimen/dialog_item_margin"
+        android:layout_toRightOf="@id/dialog_contact_image_view"
+        android:orientation="vertical">
 
-        <LinearLayout
-            android:orientation="horizontal"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/dialog_item_margin">
 
-            <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-                android:id="@+id/ivDialog_contact"
+            <TextView
+                android:id="@+id/dialog_name_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/dialog_item_margin"
-                android:src="@mipmap/ic_launcher"
-                app:border_color="@color/colorAccent"
-                app:border_width="@dimen/circle_photo_border_width" />
+                android:layout_alignParentLeft="true"
+                android:text="Name Surname"
+                android:textSize="@dimen/dialog_username_text_size"
+                android:textStyle="bold" />
 
-            <LinearLayout
-                android:orientation="vertical"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+            <TextView
+                android:id="@+id/dialog_time_date_text_view"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:text="16:15"
+                android:textSize="@dimen/dialog_timestamp_text_size" />
+        </RelativeLayout>
+        <RelativeLayout
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content">
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_alignParentRight="true"
-                    android:layout_toRightOf="@id/ivDialog_contact"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="@dimen/dialog_item_margin">
+              <TextView
+                 android:id="@+id/dialog_preview_text_view"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:singleLine="true"
+                 android:text="Some payload for example" />
 
-                    <LinearLayout
-                        android:orientation="vertical"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content">
-
-                        <TextView
-                            android:id="@+id/tvDialog_name"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentLeft="true"
-                            android:text="Name Surname"
-                            android:textSize="@dimen/dialog_username_text_size" />
-
-                        <TextView
-                            android:id="@+id/tvDialog_preview"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:singleLine="true"
-                            android:text="Some payload for example" />
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:orientation="vertical"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="right">
-
-                        <TextView
-                            android:id="@+id/tvDialog_time_date"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentRight="true"
-                            android:text="16:15"
-                            android:textSize="@dimen/dialog_timestamp_text_size" />
-
-                        <ImageView
-                            android:id="@+id/ivDialog_status"
-                            android:layout_width="@dimen/dialog_status_size"
-                            android:layout_height="@dimen/dialog_status_size"
-                            android:layout_marginRight="@dimen/dialog_item_margin"
-                            android:layout_toLeftOf="@+id/tvDialog_time_date"
-                            android:src="@drawable/ic_check" />
-
-                    </LinearLayout>
-                </LinearLayout>
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="10dp"
-                    android:background="@color/colorPrimary"/>
-
-            </LinearLayout>
-
-        </LinearLayout>
+              <ImageView
+                 android:id="@+id/dialog_status_image_view1"
+                 android:layout_width="@dimen/dialog_status_size"
+                 android:layout_alignParentRight="true"
+                 android:layout_height="@dimen/dialog_status_size"
+                 android:layout_marginRight="@dimen/dialog_item_margin"
+                 android:src="@drawable/ic_check" />
+        </RelativeLayout>
 
     </LinearLayout>
 
