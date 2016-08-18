@@ -29,7 +29,7 @@ import butterknife.ButterKnife;
 public class DialogsFragment extends Fragment {
     private View rootView;
     @BindView(R.id.lvDialogs)
-     ListView mListView;
+    ListView mListView;
     private DialogsListAdapter mAdapter;
 
     public DialogsFragment() {
@@ -48,6 +48,7 @@ public class DialogsFragment extends Fragment {
 
         mAdapter = new DialogsListAdapter(getActivity());
         mListView.setAdapter(mAdapter);
+        mListView.setDivider(null);
         mAdapter.setMode(Attributes.Mode.Single);
 
         mListView.setOnScrollListener(new AbsListView.OnScrollListener() {
