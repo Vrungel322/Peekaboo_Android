@@ -1,5 +1,8 @@
 package com.peekaboo.presentation.services;
 
+import android.support.annotation.Nullable;
+
+import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -12,6 +15,7 @@ public class Message {
     public static final Charset UTF_8 = Charset.forName("UTF-8");
     private Command command;
     private Map<Params, String> params = new HashMap<>();
+    @Nullable
     private byte[] body;
 
 
@@ -24,10 +28,23 @@ public class Message {
         return this;
     }
 
+    @Nullable
     public byte[] getBody() {
         return body;
     }
 
+    @Nullable
+    public String getTextBody() {
+        if (body != null) {
+            try {
+                return new String(body, "UTF-8");
+            } catch (UnsupportedEncodingException e) {
+                return new String(body);
+            }
+        } else {
+            return null;
+        }
+    }
     public Message setBody(byte[] body) {
         this.body = body;
         return this;

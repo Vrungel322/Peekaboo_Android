@@ -79,23 +79,32 @@ public class SocketTestFragment extends Fragment implements INotifier.Notificati
 
     @OnClick(R.id.bSend)
     public void send() {
+        Message message = MessageUtils.createTextMessage("hello", "afsaghs");
+        if (notifier.isAvailable()) {
+            notifier.sendMessage(message);
+        }
+        /*
         String friendName = etUsername.getText().toString();
         findFriendUseCase.setFriendName(friendName);
         findFriendUseCase.execute(new BaseUseCaseSubscriber<User>() {
             @Override
             public void onNext(User user) {
-                String fileName = Environment.getExternalStorageDirectory().toString() + File.separator + "eric.wav";
-                uploadFileUseCase.setInfo(fileName, user.getId());
-                uploadFileUseCase.execute(new BaseUseCaseSubscriber<FileEntity>() {
-                    @Override
-                    public void onNext(FileEntity fileEntity) {
-                        super.onNext(fileEntity);
-                        Message typeMessage = MessageUtils.createTypeMessage(user.getId(), Message.Type.AUDIO, fileEntity.getName());
-                        notifier.sendMessage(typeMessage);
-                    }
-                });
+                Message message = MessageUtils.createTextMessage("hello", user.getId());
+                if (notifier.isAvailable()) {
+                    notifier.sendMessage(message);
+                }
+//                String fileName = Environment.getExternalStorageDirectory().toString() + File.separator + "eric.wav";
+//                uploadFileUseCase.setInfo(fileName, user.getId());
+//                uploadFileUseCase.execute(new BaseUseCaseSubscriber<FileEntity>() {
+//                    @Override
+//                    public void onNext(FileEntity fileEntity) {
+//                        super.onNext(fileEntity);
+//                        Message typeMessage = MessageUtils.createTypeMessage(user.getId(), Message.Type.AUDIO, fileEntity.getName());
+//                        notifier.sendMessage(typeMessage);
+//                    }
+//                });
             }
-        });
+        });*/
     }
 
     @OnClick(R.id.bReconnect)
@@ -113,16 +122,21 @@ public class SocketTestFragment extends Fragment implements INotifier.Notificati
     @Override
     public void onMessageObtained(Message message) {
         Log.e("message", message.toString());
-        String remoteFileName = new String(message.getBody());
-        String fileName = Environment.getExternalStorageDirectory().toString() + File.separator + "eric10.wav";
+        String messageType = message.getParams().get(Message.Params.TYPE);
+        if (Message.Type.AUDIO.equals(messageType)) {
+            String remoteFileName = new String(message.getBody());
+            String fileName = Environment.getExternalStorageDirectory().toString() + File.separator + "eric10.wav";
 
-        downloadFileUseCase.setInfo(fileName, remoteFileName);
-        downloadFileUseCase.execute(new BaseUseCaseSubscriber<File>() {
-            @Override
-            public void onNext(File file) {
-                super.onNext(file);
-                Log.e("file", file.toString());
-            }
-        });
+            downloadFileUseCase.setInfo(fileName, remoteFileName);
+            downloadFileUseCase.execute(new BaseUseCaseSubscriber<File>() {
+                @Override
+                public void onNext(File file) {
+                    super.onNext(file);
+                    Log.e("file", file.toString());
+                }
+            });
+        } else if (Message.Type.TEXT.equals(messageType)) {
+            tvResult.setText(message.getTextBody());
+        }
     }
 }

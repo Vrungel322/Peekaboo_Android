@@ -107,6 +107,7 @@ public class WebSocketNotifier implements INotifier {
 
     @Override
     public void sendMessage(Message message) {
+        Log.e("notifier", "send message " + message.getCommand());
         sendBinaryMessage(mtb.transform(message));
     }
 
