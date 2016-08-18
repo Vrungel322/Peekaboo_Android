@@ -63,7 +63,7 @@ public class DialogsListAdapter extends BaseSwipeAdapter {
 
     @Override
     public void fillValues(int position, View convertView) {
-        TextView t = (TextView)convertView.findViewById(R.id.dialog_preview_text_view);
+        TextView t = (TextView)convertView.findViewById(R.id.tvDialog_preview);
         t.setText("text preview " + (position + 1) + ".");
     }
 
