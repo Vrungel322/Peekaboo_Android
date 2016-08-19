@@ -3,7 +3,7 @@ package com.peekaboo.presentation;
 import android.test.mock.MockContext;
 
 import com.peekaboo.domain.AccountUser;
-import com.peekaboo.domain.ErrorHandler;
+import com.peekaboo.domain.UserMessageMapper;
 import com.peekaboo.domain.SessionRepository;
 import com.peekaboo.domain.usecase.LoginUseCase;
 import com.peekaboo.presentation.presenters.LoginPresenter;
@@ -28,11 +28,11 @@ public class LoginPresenterTest extends BasePresenterTest {
     @Mock
     private ICredentialsView loginView;
     @Mock
-    private ErrorHandler errorHandler;
+    private UserMessageMapper errorHandler;
 
     @Test
     public void whenLoginSuccessThenNavigateToProfileIsCalled() {
-        LoginPresenter loginPresenter = new LoginPresenter(context, new LoginUseCaseSuccess(), errorHandler);
+        LoginPresenter loginPresenter = new LoginPresenter(new LoginUseCaseSuccess(), errorHandler);
         loginPresenter.bind(loginView);
         loginPresenter.onSignInButtonClick("aValidUsername", "aValidPassword");
 
@@ -41,7 +41,7 @@ public class LoginPresenterTest extends BasePresenterTest {
 
     @Test
     public void whenLoginSuccessThenNavigateToProfileIsCalledAfterRebind() {
-        LoginPresenter loginPresenter = new LoginPresenter(context, new LoginUseCaseSuccess(), errorHandler);
+        LoginPresenter loginPresenter = new LoginPresenter(new LoginUseCaseSuccess(), errorHandler);
         loginPresenter.bind(loginView);
         loginPresenter.onSignInButtonClick("aValidUsername", "aValidPassword");
         loginPresenter.unbind();
@@ -53,7 +53,7 @@ public class LoginPresenterTest extends BasePresenterTest {
 
     @Test
     public void whenInvalidLoginThenShowInputErrorIsCalled() {
-        LoginPresenter loginPresenter = new LoginPresenter(context, new LoginUseCaseSuccess(), errorHandler);
+        LoginPresenter loginPresenter = new LoginPresenter(new LoginUseCaseSuccess(), errorHandler);
         loginPresenter.bind(loginView);
         loginPresenter.onSignInButtonClick("short", "aValidPassword");
 
@@ -64,7 +64,7 @@ public class LoginPresenterTest extends BasePresenterTest {
 
     @Test
     public void whenInvalidPasswordThenShowInputErrorIsCalled() {
-        LoginPresenter loginPresenter = new LoginPresenter(context, new LoginUseCaseSuccess(), errorHandler);
+        LoginPresenter loginPresenter = new LoginPresenter(new LoginUseCaseSuccess(), errorHandler);
         loginPresenter.bind(loginView);
         loginPresenter.onSignInButtonClick("aValidLogin", "short");
 
@@ -74,12 +74,12 @@ public class LoginPresenterTest extends BasePresenterTest {
 
     @Test
     public void whenExternalErrorThenShowLoginErrorIsCalled() {
-        LoginPresenter loginPresenter = new LoginPresenter(context, new LoginUseCaseFailure(), errorHandler);
+        LoginPresenter loginPresenter = new LoginPresenter(new LoginUseCaseFailure(), errorHandler);
         loginPresenter.bind(loginView);
         loginPresenter.onSignInButtonClick("aValidLogin", "aValidPassword");
 
         verify(loginView, timeout(WAIT).times(0)).navigateToProfile();
-        verify(loginView, timeout(WAIT).times(1)).onError(any(String.class));
+        verify(loginView, timeout(WAIT).times(1)).showToastMessage(any(String.class));
     }
 
     private class LoginUseCaseSuccess extends LoginUseCase {

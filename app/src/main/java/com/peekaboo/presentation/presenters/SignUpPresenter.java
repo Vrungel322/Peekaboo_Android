@@ -4,7 +4,7 @@ import android.content.Context;
 
 import com.peekaboo.R;
 import com.peekaboo.domain.AccountUser;
-import com.peekaboo.domain.ErrorHandler;
+import com.peekaboo.domain.UserMessageMapper;
 import com.peekaboo.domain.subscribers.BaseProgressSubscriber;
 import com.peekaboo.domain.usecase.ConfirmUseCase;
 import com.peekaboo.domain.usecase.SignUpUseCase;
@@ -25,10 +25,9 @@ public class SignUpPresenter extends ProgressPresenter<ISignUpView> implements I
     private ConfirmUseCase confirmUseCase;
 
     @Inject
-    public SignUpPresenter(Context context,
-                           SignUpUseCase signUpUseCase, ConfirmUseCase confirmUseCase,
-                           ErrorHandler errorHandler) {
-        super(context, errorHandler);
+    public SignUpPresenter(SignUpUseCase signUpUseCase, ConfirmUseCase confirmUseCase,
+                           UserMessageMapper errorHandler) {
+        super(errorHandler);
         this.signUpUseCase = signUpUseCase;
         this.confirmUseCase = confirmUseCase;
     }
@@ -95,7 +94,7 @@ public class SignUpPresenter extends ProgressPresenter<ISignUpView> implements I
 
     private boolean isValid(String key) {
         if (key.contains(" ") || key.length() != 4) {
-            if (getView() != null) getView().onError(getContext().getString(R.string.invalidKey));
+            showMessage(R.string.invalidKey);
         } else {
             return true;
         }
@@ -103,17 +102,18 @@ public class SignUpPresenter extends ProgressPresenter<ISignUpView> implements I
     }
 
     private boolean isValid(String username, String login, String password, String passwordConfirm) {
+        ISignUpView view = getView();
         if (!(CredentialUtils.isEmailValid(login) || CredentialUtils.isPhoneNumberValid(login))) {
-            if (getView() != null) getView().showInputError(ICredentialsView.InputFieldError.LOGIN);
+            if (view != null) view.showInputError(ICredentialsView.InputFieldError.LOGIN);
         } else if (!CredentialUtils.isPasswordValid(password)) {
-            if (getView() != null)
-                getView().showInputError(ICredentialsView.InputFieldError.PASSWORD);
+            if (view != null)
+                view.showInputError(ICredentialsView.InputFieldError.PASSWORD);
         } else if (!CredentialUtils.isPasswordConfirmed(password, passwordConfirm)) {
-            if (getView() != null)
-                getView().showInputError(ICredentialsView.InputFieldError.PASSWORD_CONFIRM);
+            if (view != null)
+                view.showInputError(ICredentialsView.InputFieldError.PASSWORD_CONFIRM);
         } else if (!CredentialUtils.isUsernameValid(username)) {
-            if (getView() != null)
-                getView().showInputError(ICredentialsView.InputFieldError.USERNAME);
+            if (view != null)
+                view.showInputError(ICredentialsView.InputFieldError.USERNAME);
         } else {
             return true;
         }

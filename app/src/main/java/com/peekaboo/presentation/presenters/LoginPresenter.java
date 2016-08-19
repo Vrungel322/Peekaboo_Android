@@ -6,7 +6,7 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.peekaboo.domain.AccountUser;
-import com.peekaboo.domain.ErrorHandler;
+import com.peekaboo.domain.UserMessageMapper;
 import com.peekaboo.domain.subscribers.BaseProgressSubscriber;
 import com.peekaboo.domain.usecase.LoginUseCase;
 import com.peekaboo.presentation.utils.CredentialUtils;
@@ -28,8 +28,8 @@ public class LoginPresenter extends ProgressPresenter<ICredentialsView> implemen
     private LoginUseCase useCase;
 
     @Inject
-    public LoginPresenter(Context context, LoginUseCase useCase, ErrorHandler errorHandler) {
-        super(context, errorHandler);
+    public LoginPresenter(LoginUseCase useCase, UserMessageMapper errorHandler) {
+        super(errorHandler);
         this.useCase = useCase;
     }
 
@@ -90,11 +90,11 @@ public class LoginPresenter extends ProgressPresenter<ICredentialsView> implemen
             useCase.execute(getSignInSubscriber());
         }
     }
-
-    public void getFingerprint() {
-        String[] fingerprints = VKUtil.getCertificateFingerprint(getContext(), getContext().getPackageName());
-        for (int i = 0; i < fingerprints.length; i++){
-            Log.wtf("fingerprint", fingerprints[i]);
-        }
-    }
+//
+//    public void getFingerprint() {
+//        String[] fingerprints = VKUtil.getCertificateFingerprint(getContext(), getContext().getPackageName());
+//        for (int i = 0; i < fingerprints.length; i++){
+//            Log.wtf("fingerprint", fingerprints[i]);
+//        }
+//    }
 }

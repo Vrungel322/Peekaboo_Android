@@ -11,6 +11,7 @@ public class Constants {
 
     public interface FRAGMENT_TAGS {
         String CHAT_ITEM_DIALOG_FRAGMENT_TAG = "chatItemDialog";
+        String ATTACHMENT_DIALOG_FRAGMENT_TAG = "attachmentDialog";
     }
 
     public interface REQUEST_CODES {

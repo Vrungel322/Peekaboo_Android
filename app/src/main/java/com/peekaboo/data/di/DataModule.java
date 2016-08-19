@@ -13,7 +13,7 @@ import com.peekaboo.data.repositories.SessionDataRepository;
 import com.peekaboo.data.rest.PeekabooApi;
 import com.peekaboo.data.rest.RestApi;
 import com.peekaboo.domain.AccountUser;
-import com.peekaboo.domain.ErrorHandler;
+import com.peekaboo.domain.UserMessageMapper;
 import com.peekaboo.domain.SessionRepository;
 
 import java.io.InputStream;
@@ -129,7 +129,7 @@ public class DataModule {
 
     @Provides
     @Singleton
-    public ErrorHandler provideErrorHandler(Context context) {
+    public UserMessageMapper provideErrorHandler(Context context) {
         return new ResponseErrorHandler(context);
     }
 }

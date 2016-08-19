@@ -2,7 +2,7 @@ package com.peekaboo.presentation.presenters;
 
 import android.content.Context;
 
-import com.peekaboo.domain.ErrorHandler;
+import com.peekaboo.domain.UserMessageMapper;
 import com.peekaboo.domain.subscribers.BaseProgressSubscriber;
 import com.peekaboo.presentation.views.IProgressView;
 
@@ -12,42 +12,45 @@ import com.peekaboo.presentation.views.IProgressView;
 public abstract class ProgressPresenter<V extends IProgressView> extends BasePresenter<V> implements
         BaseProgressSubscriber.ProgressSubscriberListener {
 
-    private Context mContext;
-    private ErrorHandler errorHandler;
+    private UserMessageMapper errorHandler;
 
-    public ProgressPresenter(Context context, ErrorHandler errorHandler) {
-        mContext = context;
+    public ProgressPresenter(UserMessageMapper errorHandler) {
         this.errorHandler = errorHandler;
     }
 
     @Override
     public void onError(Throwable t) {
-        if (getView() != null) {
-            getView().hideProgress();
-            getView().onError(errorHandler.handleError(t));
+        V view = getView();
+        if (view != null) {
+            view.hideProgress();
+            view.showToastMessage(errorHandler.handleError(t));
         }
     }
 
     @Override
     public void onCompleted() {
-        if (getView() != null) {
-            getView().hideProgress();
+        V view = getView();
+        if (view != null) {
+            view.hideProgress();
         }
     }
 
     @Override
     public void onStartLoading() {
-        if (getView() != null) {
-            getView().showProgress();
+        V view = getView();
+        if (view != null) {
+            view.showProgress();
         }
     }
 
-    public void setCheckingInternet() {
-
+    public void showMessage(int stringId) {
+        V view = getView();
+        if (view != null) {
+            view.showToastMessage(errorHandler.getMessageFromResource(stringId));
+        }
     }
 
-    protected Context getContext() {
-        return mContext;
+    public UserMessageMapper getErrorHandler() {
+        return errorHandler;
     }
-
 }

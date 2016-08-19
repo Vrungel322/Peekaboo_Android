@@ -1,13 +1,12 @@
 package com.peekaboo.data;
 
 import android.content.Context;
-import android.util.Log;
 
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
 import com.peekaboo.R;
 import com.peekaboo.domain.Error;
-import com.peekaboo.domain.ErrorHandler;
+import com.peekaboo.domain.UserMessageMapper;
 
 import java.net.SocketTimeoutException;
 
@@ -17,7 +16,7 @@ import retrofit2.adapter.rxjava.HttpException;
 /**
  * Created by sebastian on 05.07.16.
  */
-public class ResponseErrorHandler implements ErrorHandler {
+public class ResponseErrorHandler implements UserMessageMapper {
     private Gson gson = new Gson();
     private Context context;
 
@@ -44,5 +43,10 @@ public class ResponseErrorHandler implements ErrorHandler {
             }
         }
         return message;
+    }
+
+    @Override
+    public String getMessageFromResource(int stringId) {
+        return context.getString(stringId);
     }
 }

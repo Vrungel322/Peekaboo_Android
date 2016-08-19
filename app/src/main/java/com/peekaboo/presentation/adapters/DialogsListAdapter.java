@@ -43,7 +43,9 @@ public class DialogsListAdapter extends BaseSwipeAdapter {
         swipeLayout.addSwipeListener(new SimpleSwipeListener() {
             @Override
             public void onOpen(SwipeLayout layout) {
-                YoYo.with(Techniques.Tada).duration(500).delay(100).playOn(layout.findViewById(R.id.bDelete));
+                YoYo.with(Techniques.Shake).duration(500).delay(100).playOn(layout.findViewById(R.id.iv_swipebtnblock));
+                YoYo.with(Techniques.Shake).duration(500).delay(100).playOn(layout.findViewById(R.id.iv_swipebtnfav));
+                YoYo.with(Techniques.Wave).duration(500).delay(100).playOn(layout.findViewById(R.id.iv_swipebtndel));
             }
         });
         swipeLayout.setOnClickListener(new View.OnClickListener() {
@@ -52,13 +54,26 @@ public class DialogsListAdapter extends BaseSwipeAdapter {
                 Toast.makeText(mContext, "just click", Toast.LENGTH_SHORT).show();
             }
         });
-        v.findViewById(R.id.bDelete).setOnClickListener(new View.OnClickListener() {
+        v.findViewById(R.id.iv_swipebtnblock).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(mContext, "click delete", Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, "Blocked", Toast.LENGTH_SHORT).show();
+            }
+        });
+        v.findViewById(R.id.iv_swipebtnfav).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(mContext, "Favorite", Toast.LENGTH_SHORT).show();
+            }
+        });
+        v.findViewById(R.id.iv_swipebtndel).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(mContext, "Delete", Toast.LENGTH_SHORT).show();
             }
         });
         return v;
+
     }
 
     @Override

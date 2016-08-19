@@ -36,14 +36,6 @@
                 android:textSize="@dimen/dialog_username_text_size"
                 android:textStyle="bold" />
 
-            <ImageView
-                android:id="@+id/dialog_status_image_view"
-                android:layout_width="@dimen/dialog_status_size"
-                android:layout_height="@dimen/dialog_status_size"
-                android:layout_marginRight="@dimen/dialog_item_margin"
-                android:layout_toLeftOf="@+id/dialog_time_date_text_view"
-                android:src="@drawable/ic_check" />
-
             <TextView
                 android:id="@+id/dialog_time_date_text_view"
                 android:layout_width="wrap_content"
@@ -52,13 +44,26 @@
                 android:text="16:15"
                 android:textSize="@dimen/dialog_timestamp_text_size" />
         </RelativeLayout>
+        <RelativeLayout
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/dialog_preview_text_view"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:singleLine="true"
-            android:text="Some payload for example" />
+              <TextView
+                 android:id="@+id/dialog_preview_text_view"
+                 android:layout_width="wrap_content"
+                 android:layout_height="wrap_content"
+                 android:singleLine="true"
+                 android:text="Some payload for example" />
+
+              <ImageView
+                 android:id="@+id/dialog_status_image_view1"
+                 android:layout_width="@dimen/dialog_status_size"
+                 android:layout_alignParentRight="true"
+                 android:layout_height="@dimen/dialog_status_size"
+                 android:layout_marginRight="@dimen/dialog_item_margin"
+                 android:src="@drawable/ic_check" />
+        </RelativeLayout>
+
     </LinearLayout>
 
 </RelativeLayout>
