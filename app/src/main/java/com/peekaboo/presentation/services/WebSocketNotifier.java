@@ -1,7 +1,9 @@
 package com.peekaboo.presentation.services;
 
+import android.content.Context;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.neovisionaries.ws.client.WebSocket;
 import com.neovisionaries.ws.client.WebSocketAdapter;
@@ -45,25 +47,30 @@ public class WebSocketNotifier implements INotifier {
                             .addListener(new WebSocketAdapter() {
                                 @Override
                                 public void onConnected(WebSocket websocket, Map<String, List<String>> headers) throws Exception {
-                                    Log.e(TAG, "Status: Connected to " + BASE_URL);
+                                    String msg = "Status: Connected to " + BASE_URL;
+                                    Log.e(TAG, msg);
                                 }
 
                                 @Override
                                 public void onError(WebSocket websocket, WebSocketException cause) throws Exception {
-                                    Log.e(TAG, "Status: Error " + cause);
+                                    String msg = "Status: Error " + cause;
+                                    Log.e(TAG, msg);
                                     ws = null;
                                 }
 
                                 @Override
                                 public void onDisconnected(WebSocket websocket, WebSocketFrame serverCloseFrame,
                                                            WebSocketFrame clientCloseFrame, boolean closedByServer) throws Exception {
-                                    Log.e(TAG, "Status: Disconnected ");
+                                    String msg = "Status: Disconnected ";
+                                    Log.e(TAG, msg);
                                     ws = null;
                                 }
 
                                 @Override
                                 public void onBinaryMessage(WebSocket websocket, byte[] binary) throws Exception {
-                                    Log.e(TAG, "Status: Binary Message received");
+                                    String msg = "Status: Binary Message received";
+                                    Log.e(TAG, msg);
+
                                     Message obtainedMessage = btm.transform(binary);
                                     for (NotificationListener listener : listeners) {
                                         listener.onMessageObtained(obtainedMessage);
@@ -74,7 +81,8 @@ public class WebSocketNotifier implements INotifier {
 
                                 @Override
                                 public void onPongFrame(WebSocket websocket, WebSocketFrame frame) throws Exception {
-                                    Log.e(TAG, "Status: Pong received " + frame);
+                                    String msg = "Status: Pong received " + frame;
+                                    Log.e(TAG, msg);
                                 }
                             })
                             .addHeader(AUTHORIZATION, authorization)

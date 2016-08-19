@@ -4,6 +4,7 @@
     <dimen name="icon_drawer_margin">16dp</dimen>
     <dimen name="text_drawer_margin">16dp</dimen>
     <dimen name="padding_dialog">20dp</dimen>
+    <!--<dimen name="login_form_padding_top">32dp</dimen>-->
     <dimen name="padding_signup_side">32dp</dimen>
     <dimen name="padding_top">8dp</dimen>
     <dimen name="nav_padding_top">8dp</dimen>
@@ -44,7 +45,6 @@
     <dimen name="nav_padding_list">16dp</dimen>
     <dimen name="padding_each_item">18dp</dimen>
 
-    <dimen name="padding_from_logo">84dp</dimen>
 
     <dimen name="text_size">18sp</dimen>
     <dimen name="hint_text_size">14sp</dimen>

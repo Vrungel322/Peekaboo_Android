@@ -14,10 +14,11 @@ import java.util.Map;
 import rx.Observable;
 
 public class MessageUtils {
-    public static Message createTextMessage(String message, String receiver) {
+    public static Message createTextMessage(String message, String receiver, String from) {
         return new Message(Message.Command.SEND)
                 .setTextBody(message)
                 .addParam(Message.Params.DESTINATION, receiver)
+                .addParam(Message.Params.FROM, from)
                 .addParam(Message.Params.TYPE, Message.Type.TEXT);
     }
 
@@ -52,10 +53,11 @@ public class MessageUtils {
                 .setBody(message.getBody());
     }
 
-    public static Message createTypeMessage(String receiver, String type, String body) {
+    public static Message createTypeMessage(String receiver, String type, String body, String from) {
         return new Message(Message.Command.SEND)
                 .addParam(Message.Params.DESTINATION, receiver)
                 .addParam(Message.Params.TYPE, type)
+                .addParam(Message.Params.FROM, from)
                 .setBody(body.getBytes());
     }
 }

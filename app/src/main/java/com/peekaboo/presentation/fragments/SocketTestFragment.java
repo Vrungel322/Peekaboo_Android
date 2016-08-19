@@ -79,32 +79,38 @@ public class SocketTestFragment extends Fragment implements INotifier.Notificati
 
     @OnClick(R.id.bSend)
     public void send() {
-        Message message = MessageUtils.createTextMessage("hello", "afsaghs");
-        if (notifier.isAvailable()) {
-            notifier.sendMessage(message);
-        }
-        /*
+//        Message message = MessageUtils.createTextMessage("hello", "afsaghs");
+//        if (notifier.isAvailable()) {
+//            notifier.sendMessage(message);
+//        }
         String friendName = etUsername.getText().toString();
-        findFriendUseCase.setFriendName(friendName);
-        findFriendUseCase.execute(new BaseUseCaseSubscriber<User>() {
-            @Override
-            public void onNext(User user) {
-                Message message = MessageUtils.createTextMessage("hello", user.getId());
-                if (notifier.isAvailable()) {
-                    notifier.sendMessage(message);
-                }
-//                String fileName = Environment.getExternalStorageDirectory().toString() + File.separator + "eric.wav";
-//                uploadFileUseCase.setInfo(fileName, user.getId());
-//                uploadFileUseCase.execute(new BaseUseCaseSubscriber<FileEntity>() {
-//                    @Override
-//                    public void onNext(FileEntity fileEntity) {
-//                        super.onNext(fileEntity);
-//                        Message typeMessage = MessageUtils.createTypeMessage(user.getId(), Message.Type.AUDIO, fileEntity.getName());
-//                        notifier.sendMessage(typeMessage);
+        if (!friendName.isEmpty()) {
+            findFriendUseCase.setFriendName(friendName);
+            findFriendUseCase.execute(new BaseUseCaseSubscriber<User>() {
+                @Override
+                public void onNext(User user) {
+//                    Message message = MessageUtils.createTextMessage("hello", user.getId(), SocketTestFragment.this.user.getId());
+//                    if (notifier.isAvailable()) {
+//                        notifier.sendMessage(message);
 //                    }
-//                });
-            }
-        });*/
+                String fileName = Environment.getExternalStorageDirectory().toString() + File.separator + "eric.wav";
+                uploadFileUseCase.setInfo(fileName, user.getId());
+                uploadFileUseCase.execute(new BaseUseCaseSubscriber<FileEntity>() {
+                    @Override
+                    public void onNext(FileEntity fileEntity) {
+                        super.onNext(fileEntity);
+                        Message typeMessage = MessageUtils.createTypeMessage(user.getId(), Message.Type.AUDIO, fileEntity.getName(), SocketTestFragment.this.user.getId());
+                        notifier.sendMessage(typeMessage);
+                    }
+                });
+                }
+            });
+        } else {
+//            Message message = MessageUtils.createTextMessage("hello", "aasdaffs", SocketTestFragment.this.user.getId());
+//            if (notifier.isAvailable()) {
+//                notifier.sendMessage(message);
+//            }
+        }
     }
 
     @OnClick(R.id.bReconnect)

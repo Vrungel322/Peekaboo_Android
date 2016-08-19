@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="login_form_padding_top">32dp</dimen>
+    <dimen name="padding_from_logo">84dp</dimen>
+</resources>
