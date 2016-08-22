@@ -52,4 +52,5 @@
 
     <dimen name="chat_image_width">350dp</dimen>
     <dimen name="chat_image_height">230dp</dimen>
+    <dimen name="margin_drawer_divider">16dp</dimen>
 </resources>
