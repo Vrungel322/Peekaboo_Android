@@ -1,5 +1,6 @@
 package com.peekaboo.presentation.activities;
 
+import android.animation.Animator;
 import android.app.FragmentTransaction;
 import android.content.ContentValues;
 import android.content.Intent;
@@ -17,7 +18,10 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.peekaboo.R;
@@ -47,7 +51,10 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.codetail.animation.ViewAnimationUtils;
+import io.codetail.widget.RevealFrameLayout;
 import rx.subscriptions.CompositeSubscription;
+import timber.log.Timber;
 
 /**
  * Created by Nataliia on 13.07.2016.
@@ -59,6 +66,10 @@ public class ChatActivity extends AppCompatActivity implements ChatItemDialog.IC
     EditText etMessageBody;
     @BindView(R.id.rvMessages)
     RecyclerView rvMessages;
+    @BindView(R.id.flMessageBody)
+    RevealFrameLayout flMessageBody;
+    @BindView(R.id.bMesageOpen)
+    Button bMessageOpen;
     @Inject
     ChatPresenter chatPresenter;
 
@@ -94,6 +105,7 @@ public class ChatActivity extends AppCompatActivity implements ChatItemDialog.IC
 //        layoutManager.setReverseLayout(true);
         layoutManager.setStackFromEnd(true);
         rvMessages.setLayoutManager(layoutManager);
+
         rvMessages.setItemAnimator(new DefaultItemAnimator());
         rvMessages.setAdapter(chatAdapter);
         rvMessages.addOnItemTouchListener(new ChatRecyclerTouchListener(this, rvMessages, new ChatClickListener() {
@@ -114,7 +126,6 @@ public class ChatActivity extends AppCompatActivity implements ChatItemDialog.IC
         }));
 
         chatPresenter.createTable(receiverName);
-
     }
 
     @Override
@@ -169,6 +180,29 @@ public class ChatActivity extends AppCompatActivity implements ChatItemDialog.IC
         attachmentChatDialog.show(ft, "attachmentDialog");
     }
 
+    @OnClick(R.id.bMesageOpen)
+    void onbMessageOpenClick(){
+        flMessageBody.setVisibility(View.VISIBLE);
+        etMessageBody.post(() -> {
+            float cx, cy;
+            cx = (bMessageOpen.getX() + bMessageOpen.getWidth())/2;
+            cy = (bMessageOpen.getY() + bMessageOpen.getHeight())/2;
+
+            float dx = Math.max(cx, flMessageBody.getWidth() - cx);
+            float dy = Math.max(cy, flMessageBody.getHeight() - cy);
+            float finalRadius = (float) Math.hypot(dx, dy);
+
+            Animator animator =
+                    ViewAnimationUtils.createCircularReveal(etMessageBody, (int)cx, (int)cy, 0, finalRadius);
+            animator.setInterpolator(new AccelerateDecelerateInterpolator());
+            animator.setDuration(300);
+            animator.start();
+        });
+
+        bMessageOpen.setVisibility(View.GONE);
+
+    }
+
     private boolean sendChatMessage() {
         String msgBody = etMessageBody.getText().toString().trim().replaceAll("[\\s&&[^\r?\n]]+", " ");
         if (null == msgBody || msgBody.equals("")) {
@@ -184,6 +218,9 @@ public class ChatActivity extends AppCompatActivity implements ChatItemDialog.IC
         etMessageBody.setText("");
         //TODO: actually sending
 
+        rvMessages.scrollToPosition(rvMessages.getAdapter().getItemCount());
+
+
         //DB testing
 //        chatPresenter.getTableAsString(receiverName);
         return true;
@@ -194,6 +231,7 @@ public class ChatActivity extends AppCompatActivity implements ChatItemDialog.IC
         if (requestCode == Constants.REQUEST_CODES.REQUEST_CODE_CAMERA) {
             Toast.makeText(getApplicationContext(), "CAMERA: " + resultCode, Toast.LENGTH_SHORT).show();
             if (resultCode == RESULT_OK) {
+                Timber.tag("IMAGE_URI").wtf("URI: " + imageUri);
                 sendPhoto(imageUri);
                 galleryAddPic(imageUri);
             }

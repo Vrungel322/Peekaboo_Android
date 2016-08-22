@@ -96,10 +96,21 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> im
             setAlignment(holder, pMessageAbs.isMine(), pPreviousMessageAbs.isMine(), mediaType);
 
         }
-
         switch (mediaType) {
             case Constants.PMESSAGE_MEDIA_TYPE.TEXT_MESSAGE:
                 ((ViewHolderText) holder).tvChatMessage.setText(pMessageAbs.messageBody());
+//                ((ViewHolderText) holder).tvChatMessage.post(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        int lines = ((ViewHolderText) holder).tvChatMessage.getLineCount();
+//                        Toast.makeText(context, Integer.toString(lines), Toast.LENGTH_SHORT).show();
+//
+//                        if(lines == 1){
+//                            ((ViewHolderText) holder).chatBubble.setBackgroundResource(R.drawable.round_left_bubble);
+//                        }
+//                    }
+//                });
+
                 Log.i("TEXT", Integer.toString(mediaType));
                 break;
             case Constants.PMESSAGE_MEDIA_TYPE.AUDIO_MESSAGE:
@@ -145,11 +156,8 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> im
         if (!isMine) {
             if(wasPreviousMine == isMine || mediaType == Constants.PMESSAGE_MEDIA_TYPE.IMAGE_MESSAGE){
                 holder.chatBubble.setBackgroundResource(R.drawable.left_bubble);
-                Toast.makeText(context, "TEXT", Toast.LENGTH_SHORT).show();
-
             }else{
-                Toast.makeText(context, "OTHER_TEXT", Toast.LENGTH_SHORT).show();
-                 holder.chatBubble.setBackgroundResource(R.drawable.left);
+                holder.chatBubble.setBackgroundResource(R.drawable.left);
             }
             holder.tvChatTimestamp.setTextColor(context.getResources().getColor(R.color.drawerDividerColor));
 
@@ -163,10 +171,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder> im
         } else {
             if(wasPreviousMine != isMine || mediaType == Constants.PMESSAGE_MEDIA_TYPE.IMAGE_MESSAGE){
                 holder.chatBubble.setBackgroundResource(R.drawable.right_bubble);
-                Toast.makeText(context, "TEXT", Toast.LENGTH_SHORT).show();
-
             }else{
-                Toast.makeText(context, "OTHER_TEXT", Toast.LENGTH_SHORT).show();
                 holder.chatBubble.setBackgroundResource(R.drawable.right);
             }
 
