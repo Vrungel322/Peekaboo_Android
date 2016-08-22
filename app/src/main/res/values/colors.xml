@@ -11,7 +11,7 @@
     <color name="colorPrimaryLight">#ffffff</color>
     <color name="textColor">#ffffff</color>
     <color name="textColorHint">#b6b6b6</color>
-    <color name="drawerDividerColor">#5b5b5b</color>
+    <color name="drawerDividerColor">#c6c6c6</color>
     <color name="colorControlNormal">#969696</color>
     <color name="editTextColor">#f2f2f2</color>
     <color name="colorMistake">#ef5350</color>
