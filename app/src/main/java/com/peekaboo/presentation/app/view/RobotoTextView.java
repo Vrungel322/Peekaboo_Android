@@ -12,20 +12,27 @@ public class RobotoTextView extends TextView {
     public RobotoTextView(Context context) {
         super(context);
         setTypeface(context);
+        setTextSize();
     }
 
     public RobotoTextView(Context context, AttributeSet attrs) {
         super(context, attrs);
         setTypeface(context);
+        setTextSize();
     }
 
 
     public RobotoTextView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         setTypeface(context);
+        setTextSize();
     }
 
     void setTypeface(Context context) {
 //        setTypeface(Typeface.getRoboto(context));
+    }
+
+    void setTextSize(){
+        setTextSize(14f);
     }
 }

@@ -92,13 +92,14 @@
                         android:layout_height="match_parent"
                         android:clickable="true"
                         android:orientation="horizontal"
-                        android:padding="@dimen/padding_each_item">
+                        android:paddingBottom="@dimen/padding_each_item_bot_top"
+                        android:paddingLeft="@dimen/padding_each_item_left_right"
+                        android:paddingTop="@dimen/padding_each_item_bot_top">
 
                         <com.peekaboo.presentation.app.view.SelectableImageView
                             android:id="@+id/ivIconChat"
                             android:layout_width="@dimen/nav_icon_width"
                             android:layout_height="@dimen/nav_icon_height"
-                            android:layout_marginLeft="@dimen/nav_content_margin_left"
                             android:src="@drawable/chats_grey" />
 
                         <com.peekaboo.presentation.app.view.RobotoTextView
@@ -109,7 +110,8 @@
                             android:layout_marginLeft="@dimen/nav_matgin_left_text"
                             android:text="@string/dialogs"
                             android:textAppearance="?android:attr/textAppearanceMedium"
-                            android:textColor="@color/drawer_item_text_color" />
+                            android:textColor="@color/drawer_item_text_color"
+                            android:textStyle="bold" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -117,13 +119,14 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="horizontal"
-                        android:padding="@dimen/padding_each_item">
+                        android:paddingBottom="@dimen/padding_each_item_bot_top"
+                        android:paddingLeft="@dimen/padding_each_item_left_right"
+                        android:paddingTop="@dimen/padding_each_item_bot_top">
 
                         <com.peekaboo.presentation.app.view.SelectableImageView
                             android:id="@+id/ivIconCalls"
                             android:layout_width="@dimen/nav_icon_width"
                             android:layout_height="@dimen/nav_icon_height"
-                            android:layout_marginLeft="@dimen/nav_content_margin_left"
                             android:src="@drawable/calls_grey" />
 
                         <com.peekaboo.presentation.app.view.RobotoTextView
@@ -133,9 +136,10 @@
                             android:layout_gravity="center_vertical"
                             android:layout_marginLeft="@dimen/nav_matgin_left_text"
                             android:text="@string/calls"
-
                             android:textAppearance="?android:attr/textAppearanceMedium"
-                            android:textColor="@color/drawer_item_text_color" />
+
+                            android:textColor="@color/drawer_item_text_color"
+                            android:textStyle="bold" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -143,13 +147,14 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="horizontal"
-                        android:padding="@dimen/padding_each_item">
+                        android:paddingBottom="@dimen/padding_each_item_bot_top"
+                        android:paddingLeft="@dimen/padding_each_item_left_right"
+                        android:paddingTop="@dimen/padding_each_item_bot_top">
 
                         <com.peekaboo.presentation.app.view.SelectableImageView
                             android:id="@+id/ivIconContacts"
                             android:layout_width="@dimen/nav_icon_width"
                             android:layout_height="@dimen/nav_icon_height"
-                            android:layout_marginLeft="@dimen/nav_content_margin_left"
                             android:paddingBottom="3dp"
                             android:paddingTop="3dp"
                             android:src="@drawable/contacts_grey" />
@@ -160,10 +165,11 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:layout_marginLeft="@dimen/nav_matgin_left_text"
-
                             android:text="@string/contacts"
+
                             android:textAppearance="?android:attr/textAppearanceMedium"
-                            android:textColor="@color/drawer_item_text_color" />
+                            android:textColor="@color/drawer_item_text_color"
+                            android:textStyle="bold" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -172,13 +178,14 @@
                         android:layout_height="match_parent"
                         android:layout_marginBottom="@dimen/nav_padding_top"
                         android:orientation="horizontal"
-                        android:padding="@dimen/padding_each_item">
+                        android:paddingBottom="@dimen/padding_each_item_bot_top"
+                        android:paddingLeft="@dimen/padding_each_item_left_right"
+                        android:paddingTop="@dimen/padding_each_item_bot_top">
 
                         <com.peekaboo.presentation.app.view.SelectableImageView
                             android:id="@+id/ivIconProfile"
                             android:layout_width="@dimen/nav_icon_width"
                             android:layout_height="@dimen/nav_icon_height"
-                            android:layout_marginLeft="@dimen/nav_content_margin_left"
                             android:padding="3dp"
                             android:src="@drawable/profile_grey" />
 
@@ -188,10 +195,11 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:layout_marginLeft="@dimen/nav_matgin_left_text"
-
                             android:text="@string/profile"
+
                             android:textAppearance="?android:attr/textAppearanceMedium"
-                            android:textColor="@color/drawer_item_text_color" />
+                            android:textColor="@color/drawer_item_text_color"
+                            android:textStyle="bold" />
                     </LinearLayout>
 
 
@@ -215,13 +223,14 @@
                         android:layout_height="match_parent"
                         android:layout_marginTop="@dimen/nav_padding_top"
                         android:orientation="horizontal"
-                        android:padding="@dimen/padding_each_item">
+                        android:paddingBottom="@dimen/padding_each_item_bot_top"
+                        android:paddingLeft="@dimen/padding_each_item_left_right"
+                        android:paddingTop="@dimen/padding_each_item_bot_top">
 
                         <com.peekaboo.presentation.app.view.SelectableImageView
                             android:id="@+id/ivIconSettings"
                             android:layout_width="@dimen/nav_icon_width"
                             android:layout_height="@dimen/nav_icon_height"
-                            android:layout_marginLeft="@dimen/nav_content_margin_left"
                             android:src="@drawable/settings_grey" />
 
                         <com.peekaboo.presentation.app.view.RobotoTextView
@@ -232,7 +241,8 @@
                             android:layout_marginLeft="@dimen/nav_matgin_left_text"
                             android:text="@string/settings"
                             android:textAppearance="?android:attr/textAppearanceMedium"
-                            android:textColor="@color/drawer_item_text_color" />
+                            android:textColor="@color/drawer_item_text_color"
+                            android:textStyle="bold" />
                     </LinearLayout>
 
                     <LinearLayout
@@ -240,13 +250,14 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="horizontal"
-                        android:padding="@dimen/padding_each_item">
+                        android:paddingBottom="@dimen/padding_each_item_bot_top"
+                        android:paddingLeft="@dimen/padding_each_item_left_right"
+                        android:paddingTop="@dimen/padding_each_item_bot_top">
 
                         <com.peekaboo.presentation.app.view.SelectableImageView
                             android:id="@+id/ivIconExit"
                             android:layout_width="@dimen/nav_icon_width"
                             android:layout_height="@dimen/nav_icon_height"
-                            android:layout_marginLeft="@dimen/nav_content_margin_left"
                             android:src="@drawable/exit_grey" />
 
                         <com.peekaboo.presentation.app.view.RobotoTextView
@@ -257,7 +268,8 @@
                             android:layout_marginLeft="@dimen/nav_matgin_left_text"
                             android:text="@string/exit"
                             android:textAppearance="?android:attr/textAppearanceMedium"
-                            android:textColor="@color/drawer_item_text_color" />
+                            android:textColor="@color/drawer_item_text_color"
+                            android:textStyle="bold" />
                     </LinearLayout>
                 </LinearLayout>
 
