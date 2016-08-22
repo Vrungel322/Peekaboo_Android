@@ -116,7 +116,6 @@
                         android:id="@+id/llCalls"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_marginTop="@dimen/nav_padding_top"
                         android:orientation="horizontal"
                         android:padding="@dimen/padding_each_item">
 
@@ -143,7 +142,6 @@
                         android:id="@+id/llContacts"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_marginTop="@dimen/nav_padding_top"
                         android:orientation="horizontal"
                         android:padding="@dimen/padding_each_item">
 
@@ -173,7 +171,6 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:layout_marginBottom="@dimen/nav_padding_top"
-                        android:layout_marginTop="@dimen/nav_padding_top"
                         android:orientation="horizontal"
                         android:padding="@dimen/padding_each_item">
 
@@ -242,7 +239,6 @@
                         android:id="@+id/llExit"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_marginTop="@dimen/nav_padding_top"
                         android:orientation="horizontal"
                         android:padding="@dimen/padding_each_item">
 
