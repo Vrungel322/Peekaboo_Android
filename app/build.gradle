@@ -112,4 +112,7 @@ dependencies {
     }
     apt "com.google.auto.value:auto-value:1.2"
 
+    //slider lib
+    compile 'com.github.lawloretienne:discreteslider:0.0.6'
+
 }

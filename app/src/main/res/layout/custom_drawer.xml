@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <LinearLayout
@@ -78,6 +79,42 @@
                     </LinearLayout>
 
                 </FrameLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <RelativeLayout
+                        android:id="@+id/rlSliderLabel"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="12dp" />
+
+                    <com.etiennelawlor.discreteslider.library.ui.DiscreteSlider
+                        android:id="@+id/discrete_slider"
+                        android:layout_width="match_parent"
+                        android:layout_marginLeft="15dp"
+                        android:layout_marginRight="15dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_height="20dp"
+                        app:backdropFillColor="#e2c69e"
+                        app:backdropStrokeColor="#4996d9"
+                        app:backdropStrokeWidth="1dp"
+                        app:horizontalBarThickness="2dp"
+                        app:progressDrawable="@drawable/transparent_progress_drawable"
+                        app:thumb="@drawable/thumb"
+                        app:tickMarkCount="4"
+                        app:tickMarkRadius="2dp" />
+                </LinearLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginTop="@dimen/padding_each_item_bot_top"
+                    android:layout_marginLeft="@dimen/margin_drawer_divider"
+                    android:layout_marginRight="@dimen/margin_drawer_divider"
+                    android:background="@color/drawerDividerColor" />
 
 
                 <LinearLayout
