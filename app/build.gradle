@@ -38,6 +38,11 @@ repositories {
     maven { url "http://repository.codehaus.org/org/codehaus" }
     maven { url "http://dl.bintray.com/glomadrian/maven" }
     maven { url "http://repo1.maven.org/maven2" }
+    maven { url "https://jitpack.io" }
+
+}
+
+repositories {
     mavenCentral()
 }
 
@@ -96,14 +101,15 @@ dependencies {
     compile 'com.jakewharton.timber:timber:4.1.2'
 
     compile 'com.squareup.picasso:picasso:2.5.2'
-    compile 'com.makeramen:roundedimageview:2.2.1'
 
     compile "com.daimajia.swipelayout:library:1.2.0@aar"
     compile 'com.daimajia.androidanimations:library:1.1.2@aar'
     compile 'com.nineoldandroids:library:2.4.0'
 
-
     compile "com.google.auto.value:auto-value:1.2"
+    compile('com.github.ozodrukh:CircularReveal:2.0.1@aar') {
+        transitive = true;
+    }
     apt "com.google.auto.value:auto-value:1.2"
 
 }
