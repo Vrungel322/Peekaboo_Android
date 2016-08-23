@@ -37,7 +37,7 @@
         android:orientation="horizontal">
 
         <io.codetail.widget.RevealFrameLayout
-            android:id="@+id/flMessageBody"
+            android:id="@+id/rflMessageBody"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="6"
@@ -47,15 +47,29 @@
             android:layout_margin="2dp"
             android:padding="2dp"
             >
-
-            <EditText
-                android:padding="10dp"
-                android:background="@drawable/round_left_bubble"
-                android:id="@+id/etMessageBody"
+            <FrameLayout
+                android:id="@+id/flMessageBody"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:maxLines="4"/>
+                android:layout_height="wrap_content">
+                <EditText
+                    android:padding="10dp"
+                    android:background="@drawable/round_left_bubble"
+                    android:id="@+id/etMessageBody"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:ellipsize="end"
+                    android:maxLines="4"/>
+
+                <Button
+                    android:id="@+id/bSendMessage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|center_vertical"
+                    android:text="S"
+
+                    />
+            </FrameLayout>
+
         </io.codetail.widget.RevealFrameLayout>
 
         <HorizontalScrollView
@@ -76,21 +90,46 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
                     android:text="Aa" />
-                
-                <Button
-                    android:id="@+id/attach_btn"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="2"
-                    android:text="A" />
 
-                <ImageButton
-                    android:id="@+id/bSendMessage"
+                <Button
+                    android:id="@+id/smile_btn"
                     android:layout_width="0dp"
-                    android:layout_weight="2"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="bottom|center_vertical"
-                    android:src="@drawable/ic_send" />
+                    android:layout_weight="2"
+                    android:text="S" />
+                <Button
+                    android:id="@+id/micro_btn"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:text="M" />
+
+                <Button
+                    android:id="@+id/photo_btn"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:text="Ph" />
+                <Button
+                    android:id="@+id/camera_btn"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:text="C" />
+                <Button
+                    android:id="@+id/gallery_btn"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:text="G" />
+                <Button
+                    android:id="@+id/navigation_btn"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:text="N" />
+
+
             </LinearLayout>
 
         </HorizontalScrollView>

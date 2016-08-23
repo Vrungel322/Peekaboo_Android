@@ -19,6 +19,7 @@ import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.Toast;
 
 import com.peekaboo.R;
@@ -59,7 +60,10 @@ public class ChatActivity extends AppCompatActivity
     @BindView(R.id.rvMessages)
     RecyclerView rvMessages;
     @BindView(R.id.flMessageBody)
-    RevealFrameLayout flMessageBody;
+    FrameLayout flMessageBody;
+    @BindView(R.id.rflMessageBody)
+    RevealFrameLayout rflMessageBody;
+
     @BindView(R.id.bMesageOpen)
     Button bMessageOpen;
     @Inject
@@ -156,16 +160,25 @@ public class ChatActivity extends AppCompatActivity
         chatPresenter.onSendTextButtonPress();
     }
 
-    @OnClick(R.id.attach_btn)
-    void onButtonAttachClick() {
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        AttachmentChatDialog attachmentChatDialog = new AttachmentChatDialog();
-        attachmentChatDialog.show(ft, Constants.FRAGMENT_TAGS.ATTACHMENT_DIALOG_FRAGMENT_TAG);
+    @OnClick(R.id.photo_btn)
+    void onCameraButtonCLick(){
+        takePhoto();
     }
+
+    @OnClick(R.id.gallery_btn)
+    void onGalleryButtonClick(){
+        takeGalleryImage();
+    }
+
+    @OnClick(R.id.micro_btn)
+    void onRecordButtonClick(){
+        takeAudio();
+    }
+
 
     @OnClick(R.id.bMesageOpen)
     void onbMessageOpenClick(){
-        flMessageBody.setVisibility(View.VISIBLE);
+        rflMessageBody.setVisibility(View.VISIBLE);
         etMessageBody.post(() -> {
             float cx, cy;
             cx = (bMessageOpen.getX() + bMessageOpen.getWidth())/2;
@@ -176,7 +189,7 @@ public class ChatActivity extends AppCompatActivity
             float finalRadius = (float) Math.hypot(dx, dy);
 
             Animator animator =
-                    ViewAnimationUtils.createCircularReveal(etMessageBody, (int)cx, (int)cy, 0, finalRadius);
+                    ViewAnimationUtils.createCircularReveal(flMessageBody, (int)cx, (int)cy, 0, finalRadius);
             animator.setInterpolator(new AccelerateDecelerateInterpolator());
             animator.setDuration(300);
             animator.start();
