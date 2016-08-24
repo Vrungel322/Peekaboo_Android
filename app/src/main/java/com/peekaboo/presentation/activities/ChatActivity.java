@@ -1,5 +1,6 @@
 package com.peekaboo.presentation.activities;
 
+import android.animation.Animator;
 import android.app.FragmentTransaction;
 import android.content.ClipboardManager;
 import android.content.Context;
@@ -14,15 +15,19 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.animation.AccelerateDecelerateInterpolator;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.peekaboo.R;
+import com.peekaboo.data.repositories.database.messages.TextPMessage;
 import com.peekaboo.presentation.PeekabooApplication;
 import com.peekaboo.presentation.adapters.ChatAdapter;
 import com.peekaboo.presentation.fragments.AttachmentChatDialog;
 import com.peekaboo.presentation.fragments.ChatItemDialog;
-import com.peekaboo.presentation.listeners.ChatOnClickListener;
+import com.peekaboo.presentation.listeners.ChatClickListener;
 import com.peekaboo.presentation.listeners.ChatRecyclerTouchListener;
 import com.peekaboo.presentation.presenters.ChatPresenter;
 import com.peekaboo.presentation.views.IChatView;
@@ -31,12 +36,16 @@ import com.peekaboo.utils.Utility;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Random;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import io.codetail.animation.ViewAnimationUtils;
+import io.codetail.widget.RevealFrameLayout;
+import timber.log.Timber;
 
 /**
  * Created by Nataliia on 13.07.2016.
@@ -49,10 +58,15 @@ public class ChatActivity extends AppCompatActivity
     EditText etMessageBody;
     @BindView(R.id.rvMessages)
     RecyclerView rvMessages;
+    @BindView(R.id.flMessageBody)
+    RevealFrameLayout flMessageBody;
+    @BindView(R.id.bMesageOpen)
+    Button bMessageOpen;
     @Inject
     ChatPresenter chatPresenter;
 
     private ChatAdapter chatAdapter;
+    private ChatItemDialog chatItemDialog;
 
     boolean isRecording = false;
     private Uri imageUri;
@@ -80,11 +94,25 @@ public class ChatActivity extends AppCompatActivity
 //        layoutManager.setReverseLayout(true);
         layoutManager.setStackFromEnd(true);
         rvMessages.setLayoutManager(layoutManager);
+
         rvMessages.setItemAnimator(new DefaultItemAnimator());
         rvMessages.setAdapter(chatAdapter);
-        rvMessages.addOnItemTouchListener(new ChatRecyclerTouchListener(this, rvMessages,
-                                                                        new ChatOnClickListener(ChatActivity.this)));
+        rvMessages.addOnItemTouchListener(new ChatRecyclerTouchListener(this, rvMessages, new ChatClickListener() {
+            @Override
+            public void onClick(View view, int position) {
 
+            }
+
+            @Override
+            public void onLongClick(View view, int position) {
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                chatItemDialog = new ChatItemDialog();
+                Bundle itemIndexBundle = new Bundle();
+                itemIndexBundle.putInt(Constants.ARG_CHAT_MESSAGE_ITEM_INDEX, position);
+                chatItemDialog.setArguments(itemIndexBundle);
+                chatItemDialog.show(ft, Constants.FRAGMENT_TAGS.CHAT_ITEM_DIALOG_FRAGMENT_TAG);
+            }
+        }));
     }
 
     @Override
@@ -135,12 +163,37 @@ public class ChatActivity extends AppCompatActivity
         attachmentChatDialog.show(ft, Constants.FRAGMENT_TAGS.ATTACHMENT_DIALOG_FRAGMENT_TAG);
     }
 
+    @OnClick(R.id.bMesageOpen)
+    void onbMessageOpenClick(){
+        flMessageBody.setVisibility(View.VISIBLE);
+        etMessageBody.post(() -> {
+            float cx, cy;
+            cx = (bMessageOpen.getX() + bMessageOpen.getWidth())/2;
+            cy = (bMessageOpen.getY() + bMessageOpen.getHeight())/2;
+
+            float dx = Math.max(cx, flMessageBody.getWidth() - cx);
+            float dy = Math.max(cy, flMessageBody.getHeight() - cy);
+            float finalRadius = (float) Math.hypot(dx, dy);
+
+            Animator animator =
+                    ViewAnimationUtils.createCircularReveal(etMessageBody, (int)cx, (int)cy, 0, finalRadius);
+            animator.setInterpolator(new AccelerateDecelerateInterpolator());
+            animator.setDuration(300);
+            animator.start();
+        });
+
+        bMessageOpen.setVisibility(View.GONE);
+
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == Constants.REQUEST_CODES.REQUEST_CODE_CAMERA) {
             Toast.makeText(getApplicationContext(), "CAMERA: " + resultCode, Toast.LENGTH_SHORT).show();
             if (resultCode == RESULT_OK) {
                 sendImage(imageUri);
+                Timber.tag("IMAGE_URI").wtf("URI: " + imageUri);
+                galleryAddPic(imageUri);
             }
         }
         if (requestCode == Constants.REQUEST_CODES.REQUEST_CODE_GALERY) {
@@ -155,6 +208,13 @@ public class ChatActivity extends AppCompatActivity
             }
         }
     }
+
+    private void galleryAddPic(Uri imageUri) {
+        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+        mediaScanIntent.setData(imageUri);
+        sendBroadcast(mediaScanIntent);
+    }
+
 
     @Override
     public void takeGalleryImage() {

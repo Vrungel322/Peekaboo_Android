@@ -52,7 +52,7 @@ public class TestMessageAdapter extends BaseAdapter {
         PMessageAbs item = getItem(position);
 
         TextView view = (TextView)inflater.inflate(R.layout.test_list_item, parent, false);
-        view.setText(item.messageBody());
+        view.setText(item.status() + " " + item.messageBody());
         view.setGravity(item.isMine() ? Gravity.RIGHT : Gravity.LEFT);
 
         return view;
