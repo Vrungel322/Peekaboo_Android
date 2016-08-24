@@ -7,8 +7,8 @@ import com.peekaboo.utils.Constants;
  */
 public class DocumentPMessage extends PMessage {
     public DocumentPMessage(String packageId, boolean isMine, String messageBody, long timestamp,
-                            boolean isSent, boolean isDelivered, boolean isRead) {
-        super(packageId, isMine, Constants.PMESSAGE_MEDIA_TYPE.DOCUMENT_MESSAGE, messageBody, timestamp,
-                isSent, isDelivered, isRead);
+                            int status, String receiverId, String senderId) {
+        super(packageId, isMine, PMessageAbs.PMESSAGE_MEDIA_TYPE.DOCUMENT_MESSAGE, messageBody, timestamp,
+                status, receiverId, senderId);
     }
 }

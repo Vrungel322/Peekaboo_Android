@@ -16,10 +16,13 @@ import com.peekaboo.data.repositories.database.messages.PMessage;
 import com.peekaboo.data.repositories.database.messages.PMessageAbs;
 import com.peekaboo.data.repositories.database.messages.PMessageHelper;
 import com.peekaboo.data.repositories.database.messages.TextPMessage;
+import com.peekaboo.domain.AccountUser;
 import com.peekaboo.domain.AudioRecorder;
 import com.peekaboo.domain.MPlayer;
 import com.peekaboo.domain.Record;
+import com.peekaboo.domain.usecase.Messanger;
 import com.peekaboo.presentation.adapters.ChatAdapter;
+import com.peekaboo.presentation.services.INotifier;
 import com.peekaboo.presentation.views.IChatView;
 import com.peekaboo.utils.Utility;
 
@@ -43,15 +46,18 @@ public class ChatPresenter extends BasePresenter<IChatView> implements IChatPres
     private AudioRecorder recorder;
     private TextToSpeech textToSpeech;
     private MPlayer mPlayer;
-
     private String receiver;
+    private Messanger messanger;
+    private AccountUser user;
 
     @Inject
     public ChatPresenter(PMessageHelper pMessageHelper,
-                         AbstractMapperFactory mapperFactory, TextToSpeech textToSpeech) {
+                         AbstractMapperFactory mapperFactory, TextToSpeech textToSpeech, Messanger messanger, AccountUser user) {
         this.pMessageHelper = pMessageHelper;
         this.mapperFactory = mapperFactory;
         this.textToSpeech = textToSpeech;
+        this.messanger = messanger;
+        this.user = user;
     }
 
     @Override
@@ -86,27 +92,29 @@ public class ChatPresenter extends BasePresenter<IChatView> implements IChatPres
                 pMessageHelper.insert(receiver, convertPMessage(new AudioPMessage(Utility.getPackageId(),
                         true, record.getFilename(),
                         System.currentTimeMillis(),
-                        false, false, false)));
+                        PMessageAbs.PMESSAGE_STATUS.STATUS_SENT, receiver, user.getId())));
             });
         }
     }
 
     @Override
     public void onSendTextButtonPress() {
-        if (getView() != null) {
-            String msgBody = getView().getMessageText();
+        IChatView view = getView();
+        if (view != null) {
+            String msgBody = view.getMessageText();
             if (!TextUtils.isEmpty(msgBody)) {
                 // for test
                 Random random = new Random();
                 boolean isMine = random.nextBoolean();
                 //
-                pMessageHelper.insert(receiver, convertPMessage(new TextPMessage(Utility.getPackageId(),
+                TextPMessage pMessage = new TextPMessage(Utility.getPackageId(),
                         isMine, msgBody, System.currentTimeMillis(),
-                        false, false, false)));
+                        PMessageAbs.PMESSAGE_STATUS.STATUS_SENT, receiver, user.getId());
+                pMessageHelper.insert(receiver, convertPMessage(pMessage));
 
                 //TODO: actually sending
             }
-            getView().clearTextField();
+            view.clearTextField();
         }
     }
 
@@ -114,7 +122,7 @@ public class ChatPresenter extends BasePresenter<IChatView> implements IChatPres
     public void onSendImageButtonPress(Uri uri) {
         pMessageHelper.insert(receiver, convertPMessage(new ImagePMessage(Utility.getPackageId(),
                 true, uri.toString(), System.currentTimeMillis(),
-                false, false, false)));
+                PMessageAbs.PMESSAGE_STATUS.STATUS_SENT, receiver, user.getId())));
     }
 
     @Override
@@ -123,7 +131,7 @@ public class ChatPresenter extends BasePresenter<IChatView> implements IChatPres
                 .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
         pMessageHelper.insert(receiver, convertPMessage(new AudioPMessage(Utility.getPackageId(),
                 true, result.get(0), System.currentTimeMillis(),
-                false, false, false)));
+                PMessageAbs.PMESSAGE_STATUS.STATUS_SENT, receiver, user.getId())));
     }
 
 

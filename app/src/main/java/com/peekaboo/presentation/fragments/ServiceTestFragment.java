@@ -45,10 +45,10 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import rx.Subscription;
 import rx.subscriptions.Subscriptions;
 
-public class ServiceTestFragment extends Fragment implements INotifier.NotificationListener {
+public class ServiceTestFragment extends Fragment implements INotifier.NotificationListener<Message> {
 
     @Inject
-    INotifier notifier;
+    INotifier<Message> notifier;
     @Inject
     AccountUser user;
     @Inject
@@ -182,12 +182,18 @@ public class ServiceTestFragment extends Fragment implements INotifier.Notificat
     }
 
     @Override
-    public void onMessageObtained(Message message) {
+    public boolean onMessageObtained(Message message) {
         Log.e("thread", String.valueOf(Thread.currentThread()));
         try {
             messages.append(String.format("%s", new String(message.getBody(), "UTF-8")));
         } catch (UnsupportedEncodingException e) {
             Log.e("exception", String.valueOf(e));
         }
+        return true;
+    }
+
+    @Override
+    public void onMessageSent(Message message) {
+
     }
 }

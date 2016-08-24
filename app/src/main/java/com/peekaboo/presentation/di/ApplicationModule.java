@@ -11,6 +11,7 @@ import com.peekaboo.domain.AccountUser;
 import com.peekaboo.domain.schedulers.ObserveOn;
 import com.peekaboo.domain.schedulers.SubscribeOn;
 import com.peekaboo.presentation.services.INotifier;
+import com.peekaboo.presentation.services.Message;
 import com.peekaboo.presentation.services.WebSocketNotifier;
 import com.squareup.otto.Bus;
 
@@ -68,7 +69,7 @@ public class ApplicationModule {
 
     @Singleton
     @Provides
-    public INotifier provideNotifier() {
+    public INotifier<Message> provideNotifier() {
         return new WebSocketNotifier(Constants.BASE_URL_SOCKET, 5000, new MapperFactory());
     }
 

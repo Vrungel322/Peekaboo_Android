@@ -2,7 +2,11 @@ package com.peekaboo.domain;
 
 import android.util.Log;
 
+import com.peekaboo.data.repositories.database.messages.PMessage;
+import com.peekaboo.data.repositories.database.messages.PMessageAbs;
 import com.peekaboo.presentation.services.Message;
+import com.peekaboo.utils.Constants;
+import com.peekaboo.utils.Utility;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -16,10 +20,10 @@ import rx.Observable;
 public class MessageUtils {
     public static Message createTextMessage(String message, String receiver, String from) {
         return new Message(Message.Command.SEND)
-                .setTextBody(message)
                 .addParam(Message.Params.DESTINATION, receiver)
                 .addParam(Message.Params.FROM, from)
-                .addParam(Message.Params.TYPE, Message.Type.TEXT);
+                .addParam(Message.Params.TYPE, Message.Type.TEXT)
+                .setTextBody(message);
     }
 
     public static List<Message> createFileMessage(Message message, String filename, int partSize) {
@@ -59,5 +63,52 @@ public class MessageUtils {
                 .addParam(Message.Params.TYPE, type)
                 .addParam(Message.Params.FROM, from)
                 .setBody(body.getBytes());
+    }
+
+    public static Message convert(PMessageAbs message) {
+        Message result;
+
+        result = new Message(Message.Command.SEND);
+
+        String type = message.mediaType() == PMessageAbs.PMESSAGE_MEDIA_TYPE.TEXT_MESSAGE ?
+                Message.Type.TEXT : Message.Type.AUDIO;
+        result.addParam(Message.Params.TYPE, type);
+        result.addParam(Message.Params.DESTINATION, message.receiverId());
+        result.addParam(Message.Params.ID, message.packageId());
+        result.setBody(message.messageBody().getBytes(Message.UTF_8));
+
+        return result;
+    }
+
+
+    public static PMessage convert(String receiverId, Message message) {
+
+
+        String packageId = message.getParams().get(Message.Params.ID);
+        int mediaType = 0;
+        String messageMediaType = message.getParams().get(Message.Params.TYPE);
+        if (messageMediaType != null) {
+            mediaType = messageMediaType.equals(Message.Type.TEXT) ?
+                    PMessageAbs.PMESSAGE_MEDIA_TYPE.TEXT_MESSAGE
+                    : PMessageAbs.PMESSAGE_MEDIA_TYPE.AUDIO_MESSAGE;
+        }
+        byte[] bodyBytes = message.getBody();
+        String body = "";
+
+        if (bodyBytes != null && messageMediaType != null) {
+            body = messageMediaType.equals(Message.Type.TEXT) ? message.getTextBody() : new String(bodyBytes);
+        }
+        String senderId = message.getParams().get(Message.Params.FROM);
+
+        return new PMessage(
+                packageId,
+                false,
+                mediaType,
+                body,
+                System.currentTimeMillis(),
+                PMessageAbs.PMESSAGE_STATUS.STATUS_DELIVERED,
+                receiverId,
+                senderId
+        );
     }
 }

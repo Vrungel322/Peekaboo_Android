@@ -18,9 +18,10 @@ public abstract class PMessageAbs {
     public static final String PACKAGE_ID = "package_id";
     public static final String MESSAGE_BODY = "MESSAGE_BODY";
     public static final String TIMESTAMP = "TIMESTAMP";
-    public static final String STATUS_SENT = "IS_SENT";
-    public static final String STATUS_DELIVERED = "IS_DELIVERED";
-    public static final String STATUS_READ = "IS_READ";
+    public static final String RECEIVER_ID = "RECEIVER_ID";
+    public static final String SENDER_ID = "SENDER_ID";
+
+    public static final String STATUS = "STATUS";
     public static String IS_MINE = "IS_MINE";
     public static String MEDIA_TYPE = "MEDIA_TYPE";
 
@@ -30,9 +31,11 @@ public abstract class PMessageAbs {
     public abstract int mediaType();
     public abstract String messageBody();
     public abstract long timestamp();
-    public abstract boolean isSent();
-    public abstract boolean isDelivered();
-    public abstract boolean isRead();
+    public abstract int status();
+//    public abstract boolean isDelivered();
+//    public abstract boolean isRead();
+    public abstract String receiverId();
+    public abstract String senderId();
 
     public static final Func1<Cursor, PMessageAbs> MAPPER = new Func1<Cursor, PMessageAbs>() {
         @Override
@@ -43,11 +46,13 @@ public abstract class PMessageAbs {
             int mediaType = Db.getInt(cursor, MEDIA_TYPE);
             String messageBody = Db.getString(cursor, MESSAGE_BODY);
             long timestamp = Db.getLong(cursor, TIMESTAMP);
-            boolean isSent = Db.getBoolean(cursor, STATUS_SENT);
-            boolean isDelivered = Db.getBoolean(cursor, STATUS_DELIVERED);
-            boolean isRead = Db.getBoolean(cursor, STATUS_READ);
+            int status = Db.getInt(cursor, STATUS);
+            String receiverId = Db.getString(cursor, RECEIVER_ID);
+            String senderId = Db.getString(cursor, SENDER_ID);
+//            boolean isDelivered = Db.getBoolean(cursor, STATUS_DELIVERED);
+//            boolean isRead = Db.getBoolean(cursor, STATUS_READ);
             return new AutoValue_PMessageAbs(id, packageId, isMine, mediaType, messageBody, timestamp,
-                                          isSent, isDelivered, isRead);
+                                          status, receiverId, senderId);
         }
     };
 
@@ -84,23 +89,38 @@ public abstract class PMessageAbs {
             return this;
         }
 
-        public Builder isSent(boolean isSent){
-            cv.put(STATUS_SENT, isSent);
+        public Builder status(int status){
+            cv.put(STATUS, status);
             return this;
         }
 
-        public Builder isDelivered(boolean isDelivered){
-            cv.put(STATUS_DELIVERED, isDelivered);
+        public Builder receiverId(String receiverId){
+            cv.put(RECEIVER_ID, receiverId);
             return this;
         }
 
-        public Builder isRead(boolean isRead){
-            cv.put(STATUS_READ, isRead);
+        public Builder senderId(String senderId){
+            cv.put(SENDER_ID, senderId);
             return this;
         }
 
         public ContentValues build(){
             return cv;
         }
+    }
+
+
+    public interface PMESSAGE_STATUS {
+        int STATUS_SENT = 0;
+        int STATUS_DELIVERED = 1;
+        int STATUS_READ = 2;
+    }
+
+    public interface PMESSAGE_MEDIA_TYPE {
+        int TEXT_MESSAGE = 0;
+        int AUDIO_MESSAGE = 1;
+        int IMAGE_MESSAGE = 2;
+        int VIDEO_MESSAGE = 3;
+        int DOCUMENT_MESSAGE = 4;
     }
 }

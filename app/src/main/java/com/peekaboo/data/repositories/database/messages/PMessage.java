@@ -1,5 +1,7 @@
 package com.peekaboo.data.repositories.database.messages;
 
+import android.support.annotation.Nullable;
+
 /**
  * Created by st1ch on 23.07.2016.
  */
@@ -11,20 +13,20 @@ public class PMessage extends PMessageAbs {
     private String messageBody;
     private int mediaType;
     private long timestamp;
-    private boolean isSent;
-    private boolean isDelivered;
-    private boolean isRead;
+    private int status;
+    private String receiverId;
+    private String senderId;
 
     public PMessage(String packageId, boolean isMine, int mediaType, String messageBody, long timestamp,
-                    boolean isSent, boolean isDelivered, boolean isRead) {
+                    int status, String receiverId, String senderId) {
         this.packageId = packageId;
         this.isMine = isMine;
         this.mediaType = mediaType;
         this.messageBody = messageBody;
         this.timestamp = timestamp;
-        this.isSent = isSent;
-        this.isDelivered = isDelivered;
-        this.isRead = isRead;
+        this.status = status;
+        this.receiverId = receiverId;
+        this.senderId = senderId;
     }
 
     @Override
@@ -58,30 +60,34 @@ public class PMessage extends PMessageAbs {
     }
 
     @Override
-    public boolean isSent() {
-        return isSent;
+    public int status() {
+        return status;
     }
 
     @Override
-    public boolean isDelivered() {
-        return isDelivered;
+    public String receiverId() {
+        return receiverId;
     }
 
     @Override
-    public boolean isRead() {
-        return isRead;
+    public String senderId() {
+        return senderId;
     }
 
-    public void setSent(boolean sent) {
-        isSent = sent;
+    public void setReceiverId(String receiverId) {
+        this.receiverId = receiverId;
     }
 
-    public void setDelivered(boolean delivered) {
-        isDelivered = delivered;
+    public void setMine(boolean mine) {
+        isMine = mine;
     }
 
-    public void setRead(boolean read) {
-        isRead = read;
+    public void setSenderId(String senderId) {
+        this.senderId = senderId;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 
     public void setId(long id) {

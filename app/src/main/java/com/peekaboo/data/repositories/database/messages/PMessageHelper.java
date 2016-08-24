@@ -2,6 +2,7 @@ package com.peekaboo.data.repositories.database.messages;
 
 import android.content.ContentValues;
 
+import com.peekaboo.utils.Constants;
 import com.squareup.sqlbrite.BriteDatabase;
 
 import java.util.List;
@@ -32,14 +33,15 @@ public class PMessageHelper {
                 PMessageAbs.MEDIA_TYPE       + " INTEGER DEFAULT 0 NOT NULL," +
                 PMessageAbs.MESSAGE_BODY     + " TEXT NOT NULL," +
                 PMessageAbs.TIMESTAMP        + " INTEGER NOT NULL," +
-                PMessageAbs.STATUS_SENT      + " INTEGER DEFAULT 0 NOT NULL," +
-                PMessageAbs.STATUS_DELIVERED + " INTEGER DEFAULT 0 NOT NULL," +
-                PMessageAbs.STATUS_READ      + " INTEGER DEFAULT 0 NOT NULL" +
+                PMessageAbs.STATUS           + " INTEGER DEFAULT 0 NOT NULL," +
+                PMessageAbs.RECEIVER_ID      + " TEXT NOT NULL," +
+                PMessageAbs.SENDER_ID        + " TEXT NOT NULL" +
                 ");";
         db.execute(CREATE_TABLE);
     }
 
     public long insert(String tableName, ContentValues cv){
+        createTable(tableName);
         return db.insert(tableName, cv);
     }
 
@@ -55,6 +57,13 @@ public class PMessageHelper {
         return db.update(tableName, cv, WHERE, packageId);
     }
 
+    public int updateStatusByPackageId(String tableName, int status, String packageId){
+        String WHERE = PMessageAbs.PACKAGE_ID + " = ?";
+        ContentValues cvStatus = new ContentValues();
+        cvStatus.put(PMessageAbs.STATUS, status);
+        return db.update(tableName, cvStatus, WHERE, packageId);
+    }
+
     public int deleteMessageByPackageId(String tableName, String packageId){
         String WHERE = PMessageAbs.PACKAGE_ID + " = ?";
         return db.delete(tableName, WHERE, packageId);
@@ -67,7 +76,7 @@ public class PMessageHelper {
     }
 
     public Observable<List<PMessageAbs>> getUnreadMessagesCount(String tableName) {
-        String selectUnread = "SELECT * FROM " + tableName + " WHERE " + PMessageAbs.STATUS_READ + " = 0";
+        String selectUnread = "SELECT * FROM " + tableName + " WHERE " + PMessageAbs.STATUS + " = " + PMessageAbs.PMESSAGE_STATUS.STATUS_DELIVERED;
         return db.createQuery(tableName, selectUnread)
                 .mapToList(PMessageAbs.MAPPER)
                 .observeOn(AndroidSchedulers.mainThread());

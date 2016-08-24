@@ -114,7 +114,7 @@ public class Message {
 
     public enum Command {ACCEPT, CALL, REJECT, SEND, MESSAGE}
 
-    public enum Params {DESTINATION, FROM, TYPE, REASON, DATE}
+    public enum Params {DESTINATION, FROM, TYPE, REASON, DATE, ID}
 
     public interface Type {
         String TEXT = "text";

@@ -14,6 +14,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.peekaboo.R;
+import com.peekaboo.data.repositories.database.messages.PMessage;
 import com.peekaboo.data.repositories.database.messages.PMessageAbs;
 import com.peekaboo.presentation.app.view.RoundedTransformation;
 import com.peekaboo.presentation.presenters.ChatPresenter;
@@ -67,18 +68,18 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>
 
         View v;
         switch (viewType) {
-            case Constants.PMESSAGE_MEDIA_TYPE.TEXT_MESSAGE:
+            case PMessageAbs.PMESSAGE_MEDIA_TYPE.TEXT_MESSAGE:
                 v = LayoutInflater.from(context).inflate(R.layout.list_item_chat_text_message, parent, false);
                 return new ViewHolderText(v);
-            case Constants.PMESSAGE_MEDIA_TYPE.AUDIO_MESSAGE:
+            case PMessageAbs.PMESSAGE_MEDIA_TYPE.AUDIO_MESSAGE:
                 v = LayoutInflater.from(context).inflate(R.layout.list_item_chat_audio_message, parent, false);
                 return new ViewHolderAudio(v);
-            case Constants.PMESSAGE_MEDIA_TYPE.IMAGE_MESSAGE:
+            case PMessageAbs.PMESSAGE_MEDIA_TYPE.IMAGE_MESSAGE:
                 v = LayoutInflater.from(context).inflate(R.layout.list_item_chat_image_message, parent, false);
                 return new ViewHolderImage(v);
-            case Constants.PMESSAGE_MEDIA_TYPE.VIDEO_MESSAGE:
+            case PMessageAbs.PMESSAGE_MEDIA_TYPE.VIDEO_MESSAGE:
                 return null;
-            case Constants.PMESSAGE_MEDIA_TYPE.DOCUMENT_MESSAGE:
+            case PMessageAbs.PMESSAGE_MEDIA_TYPE.DOCUMENT_MESSAGE:
                 return null;
         }
 
@@ -98,21 +99,21 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>
 
         int mediaType = pMessageAbs.mediaType();
         switch (mediaType) {
-            case Constants.PMESSAGE_MEDIA_TYPE.TEXT_MESSAGE:
+            case PMessageAbs.PMESSAGE_MEDIA_TYPE.TEXT_MESSAGE:
                 ((ViewHolderText) holder).tvChatMessage.setText(pMessageAbs.messageBody());
                 break;
-            case Constants.PMESSAGE_MEDIA_TYPE.AUDIO_MESSAGE:
+            case PMessageAbs.PMESSAGE_MEDIA_TYPE.AUDIO_MESSAGE:
                 ((ViewHolderAudio) holder).ibPlayRecord
                         .setOnClickListener(v -> presenter.onStopAndPlayAudioClick(pMessageAbs.messageBody()));
                 break;
-            case Constants.PMESSAGE_MEDIA_TYPE.IMAGE_MESSAGE:
+            case PMessageAbs.PMESSAGE_MEDIA_TYPE.IMAGE_MESSAGE:
                 String image = pMessageAbs.messageBody();
                 Timber.tag("IMAGE").wtf("image uri: " + image);
                 setImageMessage((ViewHolderImage) holder, image);
                 break;
-            case Constants.PMESSAGE_MEDIA_TYPE.VIDEO_MESSAGE:
+            case PMessageAbs.PMESSAGE_MEDIA_TYPE.VIDEO_MESSAGE:
                 break;
-            case Constants.PMESSAGE_MEDIA_TYPE.DOCUMENT_MESSAGE:
+            case PMessageAbs.PMESSAGE_MEDIA_TYPE.DOCUMENT_MESSAGE:
                 break;
         }
 
@@ -173,11 +174,11 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>
     }
 
     private void setMessageStatus(ViewHolder holder, PMessageAbs message) {
-        if (message.isSent() && !message.isDelivered()) {
-            holder.ivChatMessageStatus.setVisibility(View.GONE);
-        } else {
-            holder.ivChatMessageStatus.setImageResource(getStatusImage(message.isRead()));
-        }
+//        if (message.isSent() && !message.isDelivered()) {
+//            holder.ivChatMessageStatus.setVisibility(View.GONE);
+//        } else {
+//            holder.ivChatMessageStatus.setImageResource(getStatusImage(message.isRead()));
+//        }
     }
 
     private int getStatusImage(boolean isRead) {

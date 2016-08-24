@@ -1,9 +1,7 @@
 package com.peekaboo.presentation.services;
 
-import android.content.Context;
 import android.support.annotation.Nullable;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.neovisionaries.ws.client.WebSocket;
 import com.neovisionaries.ws.client.WebSocketAdapter;
@@ -19,7 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public class WebSocketNotifier implements INotifier {
+public class WebSocketNotifier implements INotifier<Message> {
     private static final String AUTHORIZATION = "Authorization";
     private static final String TAG = "socket";
 
@@ -27,7 +25,7 @@ public class WebSocketNotifier implements INotifier {
     private final int TIMEOUT;
     private final Mapper<Message, byte[]> mtb;
     private final Mapper<byte[], Message> btm;
-    private final Set<NotificationListener> listeners = new HashSet<>();
+    private final Set<NotificationListener<Message>> listeners = new HashSet<>();
 
     @Nullable
     private WebSocket ws;
@@ -72,7 +70,7 @@ public class WebSocketNotifier implements INotifier {
                                     Log.e(TAG, msg);
 
                                     Message obtainedMessage = btm.transform(binary);
-                                    for (NotificationListener listener : listeners) {
+                                    for (NotificationListener<Message> listener : listeners) {
                                         listener.onMessageObtained(obtainedMessage);
                                     }
                                     Log.e(TAG, "Status: Text Message received" + obtainedMessage);
@@ -97,6 +95,7 @@ public class WebSocketNotifier implements INotifier {
 
     @Override
     public void tryConnect(String authorization) {
+        Log.e("socket", "try connect " + ws);
         connectSocket(authorization);
     }
 
@@ -117,6 +116,9 @@ public class WebSocketNotifier implements INotifier {
     public void sendMessage(Message message) {
         Log.e("notifier", "send message " + message.getCommand());
         sendBinaryMessage(mtb.transform(message));
+        for (NotificationListener<Message> listener : listeners) {
+            listener.onMessageSent(message);
+        }
     }
 
     public void sendBinaryMessage(byte[] message) {
@@ -126,12 +128,12 @@ public class WebSocketNotifier implements INotifier {
     }
 
     @Override
-    public void addListener(NotificationListener listener) {
+    public void addListener(NotificationListener<Message> listener) {
         listeners.add(listener);
     }
 
     @Override
-    public void removeListener(NotificationListener listener) {
+    public void removeListener(NotificationListener<Message> listener) {
         listeners.remove(listener);
     }
 }

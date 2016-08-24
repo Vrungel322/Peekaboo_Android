@@ -16,6 +16,7 @@ import com.peekaboo.presentation.PeekabooApplication;
 import com.peekaboo.presentation.fragments.CallsFragment;
 import com.peekaboo.presentation.fragments.ContactsFragment;
 import com.peekaboo.presentation.fragments.DialogsFragment;
+import com.peekaboo.presentation.fragments.MessangerTestFragment;
 import com.peekaboo.presentation.fragments.ProfileFragment;
 import com.peekaboo.presentation.fragments.SettingsFragment;
 import com.peekaboo.presentation.fragments.SocketTestFragment;
@@ -55,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
-        changeFragment(new SocketTestFragment(), null);
+        changeFragment(new MessangerTestFragment(), null);
 //        changeFragment(new ServiceTestFragment(), null);
 //        changeFragment(new RecordTestFragment(), null);
     }

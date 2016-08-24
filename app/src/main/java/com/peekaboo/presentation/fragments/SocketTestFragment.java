@@ -36,7 +36,7 @@ import butterknife.OnClick;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class SocketTestFragment extends Fragment implements INotifier.NotificationListener {
+public class SocketTestFragment extends Fragment implements INotifier.NotificationListener<Message> {
     @BindView(R.id.etUsername)
     EditText etUsername;
     @BindView(R.id.tvResult)
@@ -48,7 +48,7 @@ public class SocketTestFragment extends Fragment implements INotifier.Notificati
     @Inject
     DownloadFileUseCase downloadFileUseCase;
     @Inject
-    INotifier notifier;
+    INotifier<Message> notifier;
     @Inject
     AccountUser user;
 
@@ -126,7 +126,7 @@ public class SocketTestFragment extends Fragment implements INotifier.Notificati
     }
 
     @Override
-    public void onMessageObtained(Message message) {
+    public boolean onMessageObtained(Message message) {
         Log.e("message", message.toString());
         String messageType = message.getParams().get(Message.Params.TYPE);
         if (Message.Type.AUDIO.equals(messageType)) {
@@ -144,5 +144,11 @@ public class SocketTestFragment extends Fragment implements INotifier.Notificati
         } else if (Message.Type.TEXT.equals(messageType)) {
             tvResult.setText(message.getTextBody());
         }
+        return true;
+    }
+
+    @Override
+    public void onMessageSent(Message message) {
+
     }
 }

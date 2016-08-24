@@ -8,6 +8,7 @@ import android.net.ConnectivityManager;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.widget.AdapterView;
 import android.widget.Toast;
 
 import com.peekaboo.domain.AccountUser;
@@ -20,7 +21,7 @@ public class NotificationService extends Service {
 
     private InternetBroadcastReceiver ibrInternetCheck;
     @Inject
-    INotifier notifier;
+    INotifier<Message> notifier;
     @Inject
     AccountUser user;
 
