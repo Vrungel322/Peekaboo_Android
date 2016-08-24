@@ -20,6 +20,10 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
+import android.widget.HorizontalScrollView;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.peekaboo.R;
@@ -44,6 +48,9 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnFocusChange;
+import butterknife.OnItemSelected;
+import butterknife.OnTouch;
 import io.codetail.animation.ViewAnimationUtils;
 import io.codetail.widget.RevealFrameLayout;
 import timber.log.Timber;
@@ -53,7 +60,7 @@ import timber.log.Timber;
  */
 public class ChatActivity extends AppCompatActivity
                         implements ChatItemDialog.IChatItemEventListener,
-                                   AttachmentChatDialog.IAttachmentDialogEventListener, IChatView {
+                                  ChatAdapter.IChatAdapterListener, IChatView {
 
     @BindView(R.id.etMessageBody)
     EditText etMessageBody;
@@ -65,15 +72,22 @@ public class ChatActivity extends AppCompatActivity
     RevealFrameLayout rflMessageBody;
 
     @BindView(R.id.bMesageOpen)
-    Button bMessageOpen;
+    ImageButton bMessageOpen;
+    @BindView(R.id.bSendMessage)
+    ImageButton bSendMessage;
+    @BindView(R.id.svItems)
+    HorizontalScrollView svItems;
     @Inject
     ChatPresenter chatPresenter;
 
     private ChatAdapter chatAdapter;
     private ChatItemDialog chatItemDialog;
+    private  LinearLayout.LayoutParams layoutParams;
 
     boolean isRecording = false;
     private Uri imageUri;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -85,13 +99,14 @@ public class ChatActivity extends AppCompatActivity
         receiverName = "test";
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarChat);
+        layoutParams = (LinearLayout.LayoutParams) rflMessageBody.getLayoutParams();
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         if (null != receiverName) {
             getSupportActionBar().setTitle(receiverName);
         }
 
-        chatAdapter = new ChatAdapter(getApplicationContext(), chatPresenter);
+        chatAdapter = new ChatAdapter(getApplicationContext(), chatPresenter, this);
         chatPresenter.bind(this, receiverName);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
@@ -118,6 +133,7 @@ public class ChatActivity extends AppCompatActivity
             }
         }));
     }
+
 
     @Override
     protected void onResume() {
@@ -179,6 +195,12 @@ public class ChatActivity extends AppCompatActivity
     @OnClick(R.id.bMesageOpen)
     void onbMessageOpenClick(){
         rflMessageBody.setVisibility(View.VISIBLE);
+        layoutParams.weight = 6;
+        layoutParams.width = 0;
+        rflMessageBody.setLayoutParams(layoutParams);
+        layoutParams.weight = 3;
+        layoutParams.width = 0;
+        svItems.setLayoutParams(layoutParams);
         etMessageBody.post(() -> {
             float cx, cy;
             cx = (bMessageOpen.getX() + bMessageOpen.getWidth())/2;
@@ -196,6 +218,7 @@ public class ChatActivity extends AppCompatActivity
         });
 
         bMessageOpen.setVisibility(View.GONE);
+
 
     }
 
@@ -229,13 +252,11 @@ public class ChatActivity extends AppCompatActivity
     }
 
 
-    @Override
     public void takeGalleryImage() {
         startActivityForResult(new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI),
                 Constants.REQUEST_CODES.REQUEST_CODE_GALERY);
     }
 
-    @Override
     public void takePhoto() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
@@ -253,17 +274,14 @@ public class ChatActivity extends AppCompatActivity
         }
     }
 
-    @Override
     public void takeAudio() {
         Toast.makeText(this, "2", Toast.LENGTH_SHORT).show();
     }
 
-    @Override
     public void takeDocument() {
         Toast.makeText(this, "3", Toast.LENGTH_SHORT).show();
     }
 
-    @Override
     public void recordAudio() {
         if (!isRecording) {
             chatPresenter.onStartRecordingAudioClick();
@@ -313,4 +331,24 @@ public class ChatActivity extends AppCompatActivity
     public void textToSpeech(int index) {
         chatPresenter.onConvertTextToSpeechClick(chatAdapter.getItem(index));
     }
+
+    @Override
+    public void toLastMessage(){
+        Timber.tag("MESSAGE").wtf("count: " + chatAdapter.getItemCount());
+        rvMessages.scrollToPosition(chatAdapter.getItemCount() - 1);
+    }
+
+    @OnFocusChange(R.id.etMessageBody)
+    public void onEditTextTouched(){
+
+        if(etMessageBody.hasFocus()){
+            bSendMessage.setBackgroundResource(R.drawable.paper_plane2);
+            layoutParams.weight=10;
+        }else {
+            bSendMessage.setBackgroundResource(R.drawable.paper_plane);
+            layoutParams.weight=4;
+        }
+        rflMessageBody.setLayoutParams(layoutParams);
+    }
+
 }

@@ -1,5 +1,6 @@
 package com.peekaboo.presentation.adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -44,19 +45,28 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>
     private ChatPresenter presenter;
     private Picasso mPicasso;
 
+
     private List<PMessageAbs> messages = Collections.emptyList();
 
-    public ChatAdapter(Context context, ChatPresenter presenter) {
+    public interface IChatAdapterListener {
+        void toLastMessage();
+    }
+
+    public  IChatAdapterListener chatAdapterListener;
+
+    public ChatAdapter(Context context, ChatPresenter presenter, Activity activity) {
         this.context = context;
         this.inflater = LayoutInflater.from(context);
         this.presenter = presenter;
         this.mPicasso = Picasso.with(context);
+        this.chatAdapterListener = (IChatAdapterListener) activity;
     }
 
     @Override
     public void call(List<PMessageAbs> messages) {
         this.messages = messages;
-        notifyDataSetChanged();
+        notifyItemInserted(messages.size() - 1);
+        chatAdapterListener.toLastMessage();
     }
 
     @Override
@@ -134,6 +144,8 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>
         holder.tvChatTimestamp.setText(Utility.getFriendlyDayString(context, pMessageAbs.timestamp()));
 
         setMessageStatus(holder, pMessageAbs);
+
+
 
     }
 
@@ -282,4 +294,6 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>
             ButterKnife.bind(this, view);
         }
     }
+
+
 }
