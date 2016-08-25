@@ -9,7 +9,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import com.peekaboo.R;
 import com.peekaboo.presentation.PeekabooApplication;
@@ -38,6 +37,8 @@ public class MainActivity extends AppCompatActivity {
     LinearLayout llProfile;
     @BindView(R.id.llSettings)
     LinearLayout llSettings;
+    @BindView(R.id.llExit)
+    LinearLayout llExit;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,8 +61,8 @@ public class MainActivity extends AppCompatActivity {
 //        changeFragment(new RecordTestFragment(), null);
     }
 
-    @OnClick({R.id.llDialogs, R.id.llCalls, R.id.llContacts, R.id.llProfile, R.id.llSettings})
-    public void onDraverItemClick(View v) {
+    @OnClick({R.id.llDialogs, R.id.llCalls, R.id.llContacts, R.id.llProfile, R.id.llSettings, R.id.llExit})
+    public void onDrawerItemClick(View v) {
         selectionMode(v.getId());
         switch (v.getId()){
             case R.id.llDialogs:
@@ -83,11 +84,11 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
-
-    @OnClick(R.id.llExit)
-    public void lvExitClick() {
-        Toast.makeText(getApplicationContext(), "Log out", Toast.LENGTH_LONG).show();
-    }
+//
+//    @OnClick(R.id.llExit)
+//    public void lvExitClick() {
+//        Toast.makeText(getApplicationContext(), "Log out", Toast.LENGTH_LONG).show();
+//    }
 
     private void selectionMode(int id) {
         llDialogs.setSelected(false);
@@ -95,6 +96,7 @@ public class MainActivity extends AppCompatActivity {
         llContacts.setSelected(false);
         llProfile.setSelected(false);
         llSettings.setSelected(false);
+        llExit.setSelected(false);
         switch (id) {
             case R.id.llDialogs:
                 llDialogs.setSelected(true);
@@ -111,6 +113,9 @@ public class MainActivity extends AppCompatActivity {
             case R.id.llSettings:
                 llSettings.setSelected(true);
                 break;
+            case R.id.llExit:
+                llExit.setSelected(true);
+                break;
         }
     }
 
@@ -120,5 +125,4 @@ public class MainActivity extends AppCompatActivity {
                 .commit();
         drawer.closeDrawer(Gravity.LEFT);
     }
-
 }

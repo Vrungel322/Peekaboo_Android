@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android.support.v7.recyclerview="http://schemas.android.com/tools"
-    android:orientation="vertical"
+    style="@style/ChatActivityTheme"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    style="@style/ChatActivityTheme">
+    android:orientation="vertical">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -17,7 +16,12 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="@color/colorAccent"
-            android:titleTextColor="@color/textColor"/>
+            android:titleTextColor="@color/textColor"
+            app:contentInsetStart="-20dp">
+
+            <include layout="@layout/toolbar_layout" />
+
+            </android.support.v7.widget.Toolbar>
 
     </android.support.design.widget.AppBarLayout>
 
@@ -26,58 +30,190 @@
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:divider="@null"
-        android:scrollbars="none"
-        android:overScrollMode="ifContentScrolls"
-        android:listSelector="@android:color/transparent"
         android:cacheColorHint="@android:color/transparent"
+        android:divider="@null"
+        android:listSelector="@android:color/transparent"
+        android:overScrollMode="ifContentScrolls"
         android:padding="@dimen/items_margin"
-        />
+        android:scrollbars="none" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:layout_gravity="center_vertical"
 
-        android:weightSum="9"
-        android:background="@color/editTextColor">
+        >
 
-        <FrameLayout
+        <io.codetail.widget.RevealFrameLayout
+            android:id="@+id/rflMessageBody"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="7"
-            android:layout_gravity="center_vertical"
+            android:layout_weight="8"
+            android:layout_margin="2dp"
             android:focusable="true"
-            android:focusableInTouchMode="true">
+            android:focusableInTouchMode="true"
+            android:padding="2dp"
+            android:visibility="gone"
+            >
 
-            <EditText
-                android:maxLines="4"
-                android:id="@+id/etMessageBody"
-                android:ellipsize="end"
+            <FrameLayout
+                android:id="@+id/flMessageBody"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/etMessageBody"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/round_left_bubble"
+                    android:ellipsize="end"
+                    android:maxLines="4"
+                    android:padding="10dp" />
+
+                <ImageButton
+                    android:background="@drawable/paper_plane"
+                    android:id="@+id/bSendMessage"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|center_vertical"
+                    android:foregroundGravity="center_vertical"
+                    android:layout_margin="4dp"
+                    />
+            </FrameLayout>
+
+        </io.codetail.widget.RevealFrameLayout>
+
+        <HorizontalScrollView
+            android:id="@+id/svItems"
+            android:layout_width="0dp"
+            android:layout_weight="4"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:scrollbars="none"
+            >
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@color/colorAccent"
-                android:textColorHighlight="@color/textColor"/>
-        </FrameLayout>
+                android:layout_gravity="center_vertical"
+                android:gravity="center"
+                android:orientation="horizontal">
 
-        <Button
+                <ImageButton
+                    android:id="@+id/bMesageOpen"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="2dp"
+                    android:layout_marginRight="2dp"
+                    android:layout_weight="2"
+                    android:background="@drawable/text" />
 
-            android:id="@+id/attach_btn"
-            android:layout_width="48dp"
-            android:text="A"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom|center_vertical"/>
+                <ImageButton
+                    android:id="@+id/smile_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="2dp"
+                    android:layout_marginRight="2dp"
+                    android:layout_weight="2"
+                    android:background="@drawable/smile" />
 
-        <ImageButton
-            android:id="@+id/bSendMessage"
-            android:layout_width="0dp"
-            android:src="@drawable/ic_send"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:layout_gravity="bottom|center_vertical"
-            />
+                <ImageButton
+                    android:id="@+id/micro_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="2dp"
+                    android:layout_marginRight="2dp"
+                    android:layout_weight="2"
+                    android:background="@drawable/voice" />
+
+                <ImageButton
+                    android:id="@+id/photo_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="2dp"
+                    android:layout_marginRight="2dp"
+                    android:layout_weight="2"
+                    android:background="@drawable/photo" />
+
+                <ImageButton
+                    android:id="@+id/camera_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="2dp"
+                    android:layout_marginRight="2dp"
+                    android:layout_weight="2"
+                    android:background="@drawable/video" />
+
+                <ImageButton
+                    android:id="@+id/gallery_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="2dp"
+                    android:layout_marginRight="2dp"
+                    android:layout_weight="2"
+                    android:background="@drawable/image" />
+
+                <ImageButton
+                    android:id="@+id/navigation_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="2dp"
+                    android:layout_marginRight="2dp"
+                    android:layout_weight="2"
+                    android:background="@drawable/point" />
+
+            </LinearLayout>
+
+        </HorizontalScrollView>
     </LinearLayout>
 
+
+    <!--<HorizontalScrollView-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content">-->
+
+    <!--<LinearLayout-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_gravity="center_vertical"-->
+    <!--android:background="@color/editTextColor"-->
+    <!--android:orientation="horizontal"-->
+    <!--android:weightSum="9">-->
+
+    <!--<FrameLayout-->
+    <!--android:layout_width="0dp"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_gravity="center_vertical"-->
+    <!--android:layout_weight="7"-->
+    <!--android:focusable="true"-->
+    <!--android:focusableInTouchMode="true">-->
+
+    <!--<EditText-->
+    <!--android:id="@+id/etMessageBody"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:ellipsize="end"-->
+    <!--android:maxLines="4"-->
+    <!--android:textColor="@color/colorAccent"-->
+    <!--android:textColorHighlight="@color/textColor" />-->
+    <!--</FrameLayout>-->
+
+    <!--<Button-->
+    <!--android:id="@+id/attach_btn"-->
+    <!--android:layout_width="48dp"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_gravity="bottom|center_vertical"-->
+    <!--android:text="A" />-->
+
+    <!--<ImageButton-->
+    <!--android:id="@+id/bSendMessage"-->
+    <!--android:layout_width="0dp"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_gravity="bottom|center_vertical"-->
+    <!--android:layout_weight="2"-->
+    <!--android:src="@drawable/ic_send" />-->
+    <!--</LinearLayout>-->
+
+    <!--</HorizontalScrollView>-->
 
 </LinearLayout>

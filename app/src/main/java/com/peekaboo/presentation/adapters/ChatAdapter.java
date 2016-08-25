@@ -1,7 +1,9 @@
 package com.peekaboo.presentation.adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +17,7 @@ import android.widget.Toast;
 
 import com.peekaboo.R;
 import com.peekaboo.data.repositories.database.messages.PMessageAbs;
+import com.peekaboo.presentation.activities.ChatActivity;
 import com.peekaboo.presentation.app.view.RoundedTransformation;
 import com.peekaboo.presentation.presenters.ChatPresenter;
 import com.peekaboo.presentation.views.IView;
@@ -42,19 +45,28 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>
     private ChatPresenter presenter;
     private Picasso mPicasso;
 
+
     private List<PMessageAbs> messages = Collections.emptyList();
 
-    public ChatAdapter(Context context, ChatPresenter presenter) {
+    public interface IChatAdapterListener {
+        void toLastMessage();
+    }
+
+    public  IChatAdapterListener chatAdapterListener;
+
+    public ChatAdapter(Context context, ChatPresenter presenter, Activity activity) {
         this.context = context;
         this.inflater = LayoutInflater.from(context);
         this.presenter = presenter;
         this.mPicasso = Picasso.with(context);
+        this.chatAdapterListener = (IChatAdapterListener) activity;
     }
 
     @Override
     public void call(List<PMessageAbs> messages) {
         this.messages = messages;
-        notifyDataSetChanged();
+        notifyItemInserted(messages.size() - 1);
+        chatAdapterListener.toLastMessage();
     }
 
     @Override
@@ -88,18 +100,30 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>
     @Override
     public void onBindViewHolder(ChatAdapter.ViewHolder holder, int position) {
         PMessageAbs pMessageAbs = getItem(position);
+        int mediaType = pMessageAbs.mediaType();
         if(position == 0){
-            setAlignment(holder, pMessageAbs.isMine(), true);
+            setAlignment(holder, pMessageAbs.isMine(), true, mediaType);
         }else{
             PMessageAbs pPreviousMessageAbs = getItem(position-1);
-            setAlignment(holder, pMessageAbs.isMine(), pPreviousMessageAbs.isMine());
+            setAlignment(holder, pMessageAbs.isMine(), pPreviousMessageAbs.isMine(), mediaType);
 
         }
-
-        int mediaType = pMessageAbs.mediaType();
         switch (mediaType) {
             case Constants.PMESSAGE_MEDIA_TYPE.TEXT_MESSAGE:
                 ((ViewHolderText) holder).tvChatMessage.setText(pMessageAbs.messageBody());
+//                ((ViewHolderText) holder).tvChatMessage.post(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        int lines = ((ViewHolderText) holder).tvChatMessage.getLineCount();
+//                        Toast.makeText(context, Integer.toString(lines), Toast.LENGTH_SHORT).show();
+//
+//                        if(lines == 1){
+//                            ((ViewHolderText) holder).chatBubble.setBackgroundResource(R.drawable.round_left_bubble);
+//                        }
+//                    }
+//                });
+
+                Log.i("TEXT", Integer.toString(mediaType));
                 break;
             case Constants.PMESSAGE_MEDIA_TYPE.AUDIO_MESSAGE:
                 ((ViewHolderAudio) holder).ibPlayRecord
@@ -109,6 +133,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>
                 String image = pMessageAbs.messageBody();
                 Timber.tag("IMAGE").wtf("image uri: " + image);
                 setImageMessage((ViewHolderImage) holder, image);
+                Log.i("IMAGE", Integer.toString(mediaType));
                 break;
             case Constants.PMESSAGE_MEDIA_TYPE.VIDEO_MESSAGE:
                 break;
@@ -119,6 +144,8 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>
         holder.tvChatTimestamp.setText(Utility.getFriendlyDayString(context, pMessageAbs.timestamp()));
 
         setMessageStatus(holder, pMessageAbs);
+
+
 
     }
 
@@ -136,10 +163,12 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>
         return messages.size();
     }
 
-    private void setAlignment(ViewHolder holder, boolean isMine, boolean wasPreviousMine) {
+    private void setAlignment(ViewHolder holder, boolean isMine, boolean wasPreviousMine, int mediaType) {
+        Log.i("ALIGMENT", Integer.toString(mediaType));
+
 
         if (!isMine) {
-            if(!wasPreviousMine){
+            if(wasPreviousMine == isMine || mediaType == Constants.PMESSAGE_MEDIA_TYPE.IMAGE_MESSAGE){
                 holder.chatBubble.setBackgroundResource(R.drawable.left_bubble);
             }else{
                 holder.chatBubble.setBackgroundResource(R.drawable.left);
@@ -152,10 +181,9 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>
             layoutParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
             layoutParams.setMargins(Constants.DESIGN_CONSTANTS.SIDE_MARGIN, Constants.DESIGN_CONSTANTS.TOP_OR_BOTTOM_MARGIN,
                     Constants.DESIGN_CONSTANTS.BIG_SIDE_MARGIN, Constants.DESIGN_CONSTANTS.TOP_OR_BOTTOM_MARGIN);
-
             holder.chatBubble.setLayoutParams(layoutParams);
         } else {
-            if(!wasPreviousMine){
+            if(wasPreviousMine != isMine || mediaType == Constants.PMESSAGE_MEDIA_TYPE.IMAGE_MESSAGE){
                 holder.chatBubble.setBackgroundResource(R.drawable.right_bubble);
             }else{
                 holder.chatBubble.setBackgroundResource(R.drawable.right);
@@ -199,6 +227,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>
                     @Override
                     public void onError() {
                         holder.pbLoadingImage.setVisibility(View.GONE);
+
                     }
 
                 });
@@ -265,4 +294,6 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>
             ButterKnife.bind(this, view);
         }
     }
+
+
 }
