@@ -158,6 +158,10 @@ public class ChatActivity extends AppCompatActivity
                 chatPresenter.onDeleteChatHistoryButtonPress(chatAdapter);
                 break;
             }
+            case android.R.id.home: {
+                Toast.makeText(getApplicationContext(), "home b clicked", Toast.LENGTH_SHORT).show();
+                break;
+            }
         }
         return super.onOptionsItemSelected(item);
     }

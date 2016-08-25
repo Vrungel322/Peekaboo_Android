@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="horizontal">
@@ -10,27 +11,30 @@
         android:layout_height="40dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="false"
-        android:src="@drawable/enot" />
+        android:src="@drawable/enot"
+        app:border_color="#00000000" />
 
     <LinearLayout
-        android:orientation="vertical"
         android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
-        android:layout_height="wrap_content">
+        android:orientation="vertical">
 
         <TextView
+            android:id="@+id/textView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Raccoon Nigga"
-            android:textSize="20sp"
-            android:id="@+id/textView2" />
+            android:textColor="@color/textColor"
+            android:textSize="18sp" />
 
         <TextView
+            android:id="@+id/textView3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="10sp"
+            android:textColor="#affffeff"
             android:text="online"
-            android:id="@+id/textView3" />
+            android:textSize="14sp" />
     </LinearLayout>
 
 
