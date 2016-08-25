@@ -35,7 +35,7 @@ public class DialogsListAdapter extends BaseSwipeAdapter {
     @Nullable
     @Override
     public View generateView(int position, ViewGroup parent) {
-        View v = LayoutInflater.from(mContext).inflate(R.layout.dialog_list_item, null);
+        View v = LayoutInflater.from(mContext).inflate(R.layout.list_item_dialog, null);//dialog_list_item
 
         SwipeLayout swipeLayout = (SwipeLayout)v.findViewById(getSwipeLayoutResourceId(position));
         swipeLayout.setShowMode(SwipeLayout.ShowMode.PullOut);
@@ -52,16 +52,16 @@ public class DialogsListAdapter extends BaseSwipeAdapter {
                 Toast.makeText(mContext, "just click", Toast.LENGTH_SHORT).show();
             }
         });
-        v.findViewById(R.id.iv_swipedel).setOnClickListener(new View.OnClickListener() {
+        v.findViewById(R.id.iv_swipetrash).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Toast.makeText(mContext, "click delete", Toast.LENGTH_SHORT).show();
             }
         });
-        v.findViewById(R.id.iv_swipeblock).setOnClickListener(new View.OnClickListener() {
+        v.findViewById(R.id.iv_swipenosound).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(mContext, "click block", Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, "click mute", Toast.LENGTH_SHORT).show();
             }
         });
         v.findViewById(R.id.iv_swipestar).setOnClickListener(new View.OnClickListener() {
