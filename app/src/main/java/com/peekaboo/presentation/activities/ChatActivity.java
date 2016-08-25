@@ -15,6 +15,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.Button;
@@ -35,6 +36,7 @@ import com.peekaboo.presentation.fragments.ChatItemDialog;
 import com.peekaboo.presentation.listeners.ChatClickListener;
 import com.peekaboo.presentation.listeners.ChatRecyclerTouchListener;
 import com.peekaboo.presentation.presenters.ChatPresenter;
+import com.peekaboo.presentation.services.NotificationService;
 import com.peekaboo.presentation.views.IChatView;
 import com.peekaboo.utils.Constants;
 import com.peekaboo.utils.Utility;
@@ -195,12 +197,12 @@ public class ChatActivity extends AppCompatActivity
     @OnClick(R.id.bMesageOpen)
     void onbMessageOpenClick(){
         rflMessageBody.setVisibility(View.VISIBLE);
-        layoutParams.weight = 6;
-        layoutParams.width = 0;
-        rflMessageBody.setLayoutParams(layoutParams);
-        layoutParams.weight = 3;
-        layoutParams.width = 0;
-        svItems.setLayoutParams(layoutParams);
+//        layoutParams.weight = 8;
+//        layoutParams.width = 0;
+//        rflMessageBody.setLayoutParams(layoutParams);
+//        layoutParams.weight = 3;
+//        layoutParams.width = 0;
+//        svItems.setLayoutParams(layoutParams);
         etMessageBody.post(() -> {
             float cx, cy;
             cx = (bMessageOpen.getX() + bMessageOpen.getWidth())/2;
@@ -343,12 +345,21 @@ public class ChatActivity extends AppCompatActivity
 
         if(etMessageBody.hasFocus()){
             bSendMessage.setBackgroundResource(R.drawable.paper_plane2);
-            layoutParams.weight=10;
+            layoutParams.weight=12;
         }else {
             bSendMessage.setBackgroundResource(R.drawable.paper_plane);
             layoutParams.weight=4;
         }
         rflMessageBody.setLayoutParams(layoutParams);
     }
+//
+//    @OnTouch(R.id.svItems)
+//    public boolean onScrollViewTouch(View v, MotionEvent ev){
+//        if(ev.getAction() == MotionEvent.ACTION_DOWN){
+//            etMessageBody.clearFocus();
+//
+//        }
+//        return true;
+//    }
 
 }
