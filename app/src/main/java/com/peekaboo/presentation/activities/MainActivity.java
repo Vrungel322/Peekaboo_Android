@@ -8,14 +8,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.etiennelawlor.discreteslider.library.ui.DiscreteSlider;
-import com.etiennelawlor.discreteslider.library.utilities.DisplayUtility;
 import com.peekaboo.R;
 import com.peekaboo.presentation.PeekabooApplication;
 import com.peekaboo.presentation.fragments.CallsFragment;
@@ -65,31 +59,6 @@ public class MainActivity extends AppCompatActivity {
         changeFragment(new SocketTestFragment(), null);
 //        changeFragment(new ServiceTestFragment(), null);
 //        changeFragment(new RecordTestFragment(), null);
-
-
-        discreteSlider.setOnDiscreteSliderChangeListener(new DiscreteSlider.OnDiscreteSliderChangeListener() {
-            @Override
-            public void onPositionChanged(int position) {
-                Toast.makeText(getApplicationContext(), "pos : " + position, Toast.LENGTH_SHORT).show();
-                int childCount = rlSliderLabel.getChildCount();
-                for(int i= 0; i<childCount; i++){
-                    TextView tv = (TextView) rlSliderLabel.getChildAt(i);
-                    if(i == position)
-                        tv.setTextColor(getResources().getColor(R.color.colorPrimary));
-                    else
-                        tv.setTextColor(getResources().getColor(R.color.colorAccent));
-                }
-            }
-        });
-
-        rlSliderLabel.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                rlSliderLabel.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-
-                addTickMarkTextLabels();
-            }
-        });
     }
 
     @OnClick({R.id.llDialogs, R.id.llCalls, R.id.llContacts, R.id.llProfile, R.id.llSettings, R.id.llExit})
@@ -156,48 +125,4 @@ public class MainActivity extends AppCompatActivity {
                 .commit();
         drawer.closeDrawer(Gravity.LEFT);
     }
-
-    private void addTickMarkTextLabels(){
-        int tickMarkCount = discreteSlider.getTickMarkCount();
-        float tickMarkRadius = discreteSlider.getTickMarkRadius();
-        int width = rlSliderLabel.getMeasuredWidth();
-
-        int discreteSliderBackdropLeftMargin = DisplayUtility.dp2px(this, 10);
-        int discreteSliderBackdropRightMargin = DisplayUtility.dp2px(this, 10);
-        float firstTickMarkRadius = tickMarkRadius;
-        float lastTickMarkRadius = tickMarkRadius;
-        int interval = (width - (discreteSliderBackdropLeftMargin +
-                discreteSliderBackdropRightMargin) -
-                ((int)(firstTickMarkRadius+lastTickMarkRadius)) ) / (tickMarkCount);
-
-        String[] tickMarkLabels = {"All", "Text", "Audio", "Video"};
-        int tickMarkLabelWidth = DisplayUtility.dp2px(this, 40);
-
-        for(int i=0; i<tickMarkCount; i++) {
-            TextView tv = new TextView(this);
-
-            RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
-                    tickMarkLabelWidth, RelativeLayout.LayoutParams.WRAP_CONTENT);
-
-            tv.setText(tickMarkLabels[i]);
-            tv.setGravity(Gravity.CENTER);
-            if(i==0)
-                tv.setTextColor(getResources().getColor(R.color.colorPrimary));
-            else
-                tv.setTextColor(getResources().getColor(R.color.colorAccent));
-
-//                    tv.setBackgroundColor(getResources().getColor(android.R.color.holo_blue_dark));
-
-            int left = discreteSliderBackdropLeftMargin + (int)firstTickMarkRadius * 6 + (i * interval);
-
-            layoutParams.setMargins(left,
-                    0,
-                    0,
-                    0);
-            tv.setLayoutParams(layoutParams);
-
-            rlSliderLabel.addView(tv);
-        }
-    }
-
 }
