@@ -46,11 +46,6 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.llExit)
     LinearLayout llExit;
 
-    @BindView(R.id.discrete_slider)
-    DiscreteSlider discreteSlider;
-    @BindView(R.id.rlSliderLabel)
-    RelativeLayout rlSliderLabel;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

@@ -2,7 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <LinearLayout
@@ -83,37 +82,60 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical">
+                    android:layout_marginTop="12dp"
+                    android:orientation="horizontal">
 
-                    <RelativeLayout
-                        android:id="@+id/rlSliderLabel"
+                    <RadioGroup
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:paddingTop="12dp" />
+                        android:layout_height="match_parent"
+                        android:orientation="horizontal">
 
-                    <com.etiennelawlor.discreteslider.library.ui.DiscreteSlider
-                        android:id="@+id/discrete_slider"
-                        android:layout_width="match_parent"
-                        android:layout_marginLeft="15dp"
-                        android:layout_marginRight="15dp"
-                        android:layout_marginTop="8dp"
-                        android:layout_height="20dp"
-                        app:backdropFillColor="#e2c69e"
-                        app:backdropStrokeColor="#4996d9"
-                        app:backdropStrokeWidth="1dp"
-                        app:horizontalBarThickness="2dp"
-                        app:progressDrawable="@drawable/transparent_progress_drawable"
-                        app:thumb="@drawable/thumb"
-                        app:tickMarkCount="4"
-                        app:tickMarkRadius="2dp" />
+                        <RadioButton
+                            android:id="@+id/rbAll"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="46dp"
+                            android:button="@null"
+                            android:drawableBottom="@drawable/thumb"
+                            android:text="All" />
+
+                        <RadioButton
+                            android:id="@+id/rbText"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:button="@null"
+                            android:layout_marginLeft="26dp"
+                            android:drawableBottom="@drawable/thumb"
+                            android:text="Text" />
+
+                        <RadioButton
+                            android:id="@+id/rbAudio"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:button="@null"
+                            android:layout_marginLeft="26dp"
+                            android:drawableBottom="@drawable/thumb"
+                            android:text="Audio" />
+
+                        <RadioButton
+                            android:id="@+id/rbVideo"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:button="@null"
+                            android:layout_marginLeft="26dp"
+                            android:drawableBottom="@drawable/thumb"
+                            android:text="Video" />
+                    </RadioGroup>
+
+
                 </LinearLayout>
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:layout_marginTop="@dimen/padding_each_item_bot_top"
                     android:layout_marginLeft="@dimen/margin_drawer_divider"
                     android:layout_marginRight="@dimen/margin_drawer_divider"
+                    android:layout_marginTop="@dimen/padding_each_item_bot_top"
                     android:background="@color/drawerDividerColor" />
 
 

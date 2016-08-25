@@ -3,8 +3,9 @@
     android:shape="oval">
 
     <size android:height="20dp" android:width="20dp"/>
-    <stroke android:width="8dp" android:color="#eeeeee"/>
-    <solid android:color="@color/colorPrimaryDark" />
-    <corners android:radius="1dp" />
+    <stroke android:width="16dp" android:color="#aa22aa"/>
+    <solid android:color="@color/colorPrimary" />
+
+    <corners android:radius="2dp" />
 
 </shape>
