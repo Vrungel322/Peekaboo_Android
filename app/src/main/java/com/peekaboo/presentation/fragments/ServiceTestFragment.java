@@ -196,4 +196,9 @@ public class ServiceTestFragment extends Fragment implements INotifier.Notificat
     public void onMessageSent(Message message) {
 
     }
+
+    @Override
+    public void onMessageRead(Message message) {
+
+    }
 }

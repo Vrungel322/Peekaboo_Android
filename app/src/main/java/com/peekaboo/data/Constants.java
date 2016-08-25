@@ -7,7 +7,7 @@ import android.media.AudioFormat;
  */
 public interface Constants {
 //    String BASE_URL = "http://10.0.1.34:8080/";
-    String DOMEN = "192.168.0.85";
+    String DOMEN = "192.168.43.203";
 //    String DOMEN = "10.0.1.34";
     String BASE_URL = "http://" + DOMEN + ":8080/";
     String BASE_URL_SOCKET = "ws://" + DOMEN + ":8080/socket/send";

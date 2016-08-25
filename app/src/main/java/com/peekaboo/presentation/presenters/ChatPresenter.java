@@ -22,7 +22,6 @@ import com.peekaboo.domain.MPlayer;
 import com.peekaboo.domain.Record;
 import com.peekaboo.domain.usecase.Messanger;
 import com.peekaboo.presentation.adapters.ChatAdapter;
-import com.peekaboo.presentation.services.INotifier;
 import com.peekaboo.presentation.views.IChatView;
 import com.peekaboo.utils.Utility;
 
@@ -65,7 +64,7 @@ public class ChatPresenter extends BasePresenter<IChatView> implements IChatPres
         pMessageHelper.createTable(receiver);
         subscriptions.add(pMessageHelper.getAllMessages(receiver).subscribe(adapter));
 
-        subscriptions.add(pMessageHelper.getUnreadMessagesCount(receiver).subscribe(pMessageAbses -> {
+        subscriptions.add(pMessageHelper.getUnreadMessages(receiver).subscribe(pMessageAbses -> {
             if (getView() != null) {
                 getView().showToastMessage("Unread messages = " + pMessageAbses.size());
             }

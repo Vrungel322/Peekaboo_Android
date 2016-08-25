@@ -12,6 +12,7 @@ import android.widget.AdapterView;
 import android.widget.Toast;
 
 import com.peekaboo.domain.AccountUser;
+import com.peekaboo.domain.usecase.Messanger;
 import com.peekaboo.presentation.PeekabooApplication;
 import com.peekaboo.utils.InternetBroadcastReceiver;
 
@@ -21,7 +22,7 @@ public class NotificationService extends Service {
 
     private InternetBroadcastReceiver ibrInternetCheck;
     @Inject
-    INotifier<Message> notifier;
+    Messanger notifier;
     @Inject
     AccountUser user;
 

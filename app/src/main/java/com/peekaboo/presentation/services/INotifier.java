@@ -27,5 +27,7 @@ public interface INotifier<T> {
         boolean onMessageObtained(T message);
 
         void onMessageSent(T message);
+
+        void onMessageRead(T message);
     }
 }

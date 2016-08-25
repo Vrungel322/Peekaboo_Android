@@ -5,7 +5,6 @@ import android.util.Log;
 
 import com.peekaboo.data.mappers.AbstractMapperFactory;
 import com.peekaboo.data.mappers.Mapper;
-import com.peekaboo.data.mappers.MapperFactory;
 import com.peekaboo.data.repositories.database.messages.PMessage;
 import com.peekaboo.data.repositories.database.messages.PMessageAbs;
 import com.peekaboo.data.repositories.database.messages.PMessageHelper;
@@ -15,10 +14,13 @@ import com.peekaboo.presentation.services.INotifier;
 import com.peekaboo.presentation.services.Message;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
+
+import rx.Observable;
 
 /**
  * Created by sebastian on 22.08.16.
@@ -43,6 +45,26 @@ public class Messanger implements INotifier<PMessage>,
         notifier.addListener(this);
     }
 
+    public void readMessage(PMessage message) {
+        Log.e("messanger", "read " + message);
+        int statusRead = PMessageAbs.PMESSAGE_STATUS.STATUS_READ;
+        helper.updateStatusByPackageId(message.senderId(), statusRead,
+                message.packageId());
+        message.setStatus(statusRead);
+
+        for (NotificationListener<PMessage> listener : listeners) {
+            listener.onMessageRead(message);
+        }
+    }
+
+    public Observable<List<PMessageAbs>> getAllMessages(String tableName){
+        return helper.getAllMessages(tableName);
+    }
+
+    public Observable<List<PMessageAbs>> getUnreadMessages(String tableName){
+        return helper.getUnreadMessages(tableName);
+    }
+
     @Override
     public boolean onMessageObtained(Message message) {
         Log.e("messanger", "obtained");
@@ -58,9 +80,14 @@ public class Messanger implements INotifier<PMessage>,
             }
         }
         if (isRead) {
-            helper.updateStatusByPackageId(tableName, PMessageAbs.PMESSAGE_STATUS.STATUS_READ,
+            int statusRead = PMessageAbs.PMESSAGE_STATUS.STATUS_READ;
+            helper.updateStatusByPackageId(tableName, statusRead,
                     pMessage.packageId());
-            //TODO update view
+            pMessage.setStatus(statusRead);
+
+            for (NotificationListener<PMessage> listener : listeners) {
+                listener.onMessageRead(pMessage);
+            }
         }
         return true;
     }
@@ -74,10 +101,19 @@ public class Messanger implements INotifier<PMessage>,
                 packageId);
         PMessage convert = MessageUtils.convert(tableName, message);
         convert.setMine(true);
-        //TODO update view
         for (NotificationListener<PMessage> listener : listeners) {
             listener.onMessageSent(convert);
         }
+    }
+
+    /**
+     * this method is useless and never called. leave it empty
+     *
+     * @param message
+     */
+    @Override
+    public void onMessageRead(Message message) {
+
     }
 
     @Override

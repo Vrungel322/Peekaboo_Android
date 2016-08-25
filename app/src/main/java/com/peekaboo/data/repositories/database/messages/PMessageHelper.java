@@ -46,6 +46,7 @@ public class PMessageHelper {
     }
 
     public Observable<List<PMessageAbs>> getAllMessages(String tableName){
+        createTable(tableName);
         String selectAll = "SELECT * FROM " + tableName;
         return db.createQuery(tableName, selectAll)
                 .mapToList(PMessageAbs.MAPPER)
@@ -75,8 +76,11 @@ public class PMessageHelper {
         createTable(tableName);
     }
 
-    public Observable<List<PMessageAbs>> getUnreadMessagesCount(String tableName) {
-        String selectUnread = "SELECT * FROM " + tableName + " WHERE " + PMessageAbs.STATUS + " = " + PMessageAbs.PMESSAGE_STATUS.STATUS_DELIVERED;
+    public Observable<List<PMessageAbs>> getUnreadMessages(String tableName) {
+        createTable(tableName);
+        String selectUnread = "SELECT * FROM " + tableName + " WHERE "
+                + PMessageAbs.STATUS + " = " + PMessageAbs.PMESSAGE_STATUS.STATUS_DELIVERED
+                + " AND " + PMessage.IS_MINE + " = 0";
         return db.createQuery(tableName, selectUnread)
                 .mapToList(PMessageAbs.MAPPER)
                 .observeOn(AndroidSchedulers.mainThread());

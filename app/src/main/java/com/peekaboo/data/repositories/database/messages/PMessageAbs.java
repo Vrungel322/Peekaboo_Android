@@ -109,6 +109,10 @@ public abstract class PMessageAbs {
         }
     }
 
+    @Override
+    public String toString() {
+        return packageId();
+    }
 
     public interface PMESSAGE_STATUS {
         int STATUS_SENT = 0;

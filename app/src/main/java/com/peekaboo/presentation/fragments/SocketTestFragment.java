@@ -151,4 +151,9 @@ public class SocketTestFragment extends Fragment implements INotifier.Notificati
     public void onMessageSent(Message message) {
 
     }
+
+    @Override
+    public void onMessageRead(Message message) {
+
+    }
 }
