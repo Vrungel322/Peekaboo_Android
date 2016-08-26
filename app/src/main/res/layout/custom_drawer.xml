@@ -87,6 +87,7 @@
                     android:paddingBottom="12dp">
 
                     <RadioGroup
+                        android:id="@+id/rgStateChanger"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="horizontal">
@@ -122,7 +123,7 @@
                             android:button="@null"
                             android:drawableBottom="@drawable/thumb_audio"
                             android:text="Audio"
-                            android:textColor="@drawable/rb_colors_audio"/>
+                            android:textColor="@drawable/rb_colors_audio" />
 
                         <RadioButton
                             android:id="@+id/rbVideo"
@@ -133,7 +134,7 @@
                             android:button="@null"
                             android:drawableBottom="@drawable/thumb_video"
                             android:text="Video"
-                            android:textColor="@drawable/rb_colors_video"/>
+                            android:textColor="@drawable/rb_colors_video" />
                     </RadioGroup>
 
 

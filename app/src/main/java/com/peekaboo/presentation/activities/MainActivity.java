@@ -9,6 +9,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.RadioGroup;
+import android.widget.Toast;
 
 import com.peekaboo.R;
 import com.peekaboo.presentation.PeekabooApplication;
@@ -26,7 +28,8 @@ import butterknife.OnClick;
 public class MainActivity extends AppCompatActivity {
     @BindView(R.id.drawer_layout)
     DrawerLayout drawer;
-
+    @BindView(R.id.rgStateChanger)
+    RadioGroup rgStateChanger;
     @BindView(R.id.llDialogs)
     LinearLayout llDialogs;
     @BindView(R.id.llCalls)
@@ -83,6 +86,25 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
+    }
+
+    @OnClick({R.id.rbAll, R.id.rbText, R.id.rbAudio, R.id.rbVideo})
+    public void onRadioButtonClicked(View v){
+        switch (v.getId()){
+            case R.id.rbAll:
+                Toast.makeText(getApplicationContext(), "All", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.rbText:
+                Toast.makeText(getApplicationContext(), "Text", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.rbAudio:
+                Toast.makeText(getApplicationContext(), "Audio", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.rbVideo:
+                Toast.makeText(getApplicationContext(), "Video", Toast.LENGTH_SHORT).show();
+                break;
+
+        }
     }
 //
 //    @OnClick(R.id.llExit)
