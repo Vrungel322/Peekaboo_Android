@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     style="@style/ChatActivityTheme"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -15,7 +16,12 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="@color/colorAccent"
-            android:titleTextColor="@color/textColor" />
+            android:titleTextColor="@color/textColor"
+            app:contentInsetStart="-20dp">
+
+            <include layout="@layout/toolbar_layout" />
+
+            </android.support.v7.widget.Toolbar>
 
     </android.support.design.widget.AppBarLayout>
 

@@ -17,35 +17,28 @@ import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.peekaboo.R;
-import com.peekaboo.data.repositories.database.messages.TextPMessage;
 import com.peekaboo.presentation.PeekabooApplication;
 import com.peekaboo.presentation.adapters.ChatAdapter;
-import com.peekaboo.presentation.fragments.AttachmentChatDialog;
 import com.peekaboo.presentation.fragments.ChatItemDialog;
 import com.peekaboo.presentation.listeners.ChatClickListener;
 import com.peekaboo.presentation.listeners.ChatRecyclerTouchListener;
 import com.peekaboo.presentation.presenters.ChatPresenter;
-import com.peekaboo.presentation.services.NotificationService;
 import com.peekaboo.presentation.views.IChatView;
 import com.peekaboo.utils.Constants;
 import com.peekaboo.utils.Utility;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Random;
 
 import javax.inject.Inject;
 
@@ -53,8 +46,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnFocusChange;
-import butterknife.OnItemSelected;
-import butterknife.OnTouch;
 import io.codetail.animation.ViewAnimationUtils;
 import io.codetail.widget.RevealFrameLayout;
 import timber.log.Timber;
@@ -108,9 +99,7 @@ public class ChatActivity extends AppCompatActivity
         layoutParams = (LinearLayout.LayoutParams) rflMessageBody.getLayoutParams();
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        if (null != receiverName) {
-            getSupportActionBar().setTitle(receiverName);
-        }
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         chatAdapter = new ChatAdapter(getApplicationContext(), chatPresenter, this);
         chatPresenter.bind(this, receiverName);
@@ -171,6 +160,10 @@ public class ChatActivity extends AppCompatActivity
         switch (item.getItemId()) {
             case R.id.dialogsDrop: {
                 chatPresenter.onDeleteChatHistoryButtonPress(chatAdapter);
+                break;
+            }
+            case android.R.id.home: {
+                Toast.makeText(getApplicationContext(), "home b clicked", Toast.LENGTH_SHORT).show();
                 break;
             }
         }
