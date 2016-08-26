@@ -144,9 +144,6 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>
         holder.tvChatTimestamp.setText(Utility.getFriendlyDayString(context, pMessageAbs.timestamp()));
 
         setMessageStatus(holder, pMessageAbs);
-
-
-
     }
 
     public PMessageAbs getItem(int position) {

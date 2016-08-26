@@ -8,11 +8,13 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.v4.view.GravityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -79,6 +81,8 @@ public class ChatActivity extends AppCompatActivity
     ImageButton bSendMessage;
     @BindView(R.id.svItems)
     HorizontalScrollView svItems;
+    @BindView(R.id.llItems)
+    LinearLayout llItems;
     @Inject
     ChatPresenter chatPresenter;
 
@@ -317,6 +321,10 @@ public class ChatActivity extends AppCompatActivity
     public String getMessageText() {
         return etMessageBody.getText().toString().trim().replaceAll("[\\s&&[^\r?\n]]+", " ");
     }
+    @OnClick(R.id.smile_btn)
+    public  void smileButtonClick(){
+        Toast.makeText(this, "SMILE", Toast.LENGTH_SHORT).show();
+    }
 
     @Override
     public void copyText(int index) {
@@ -352,6 +360,7 @@ public class ChatActivity extends AppCompatActivity
         }
         rflMessageBody.setLayoutParams(layoutParams);
     }
+
 //
 //    @OnTouch(R.id.svItems)
 //    public boolean onScrollViewTouch(View v, MotionEvent ev){
