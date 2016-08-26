@@ -83,8 +83,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="12dp"
-                    android:paddingBottom="12dp"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:paddingBottom="12dp">
 
                     <RadioGroup
                         android:layout_width="match_parent"
@@ -96,40 +96,44 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="46dp"
+                            android:background="@color/transparent"
                             android:button="@null"
-                            android:textColor="@drawable/rb_colors"
-                            android:drawableBottom="@drawable/thumb"
-                            android:text="All" />
+                            android:drawableBottom="@drawable/thumb_all"
+                            android:text="All"
+                            android:textColor="@drawable/rb_colors_all" />
 
                         <RadioButton
                             android:id="@+id/rbText"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:button="@null"
                             android:layout_marginLeft="26dp"
-                            android:textColor="@drawable/rb_colors"
-                            android:drawableBottom="@drawable/thumb"
-                            android:text="Text" />
+                            android:background="@color/transparent"
+                            android:button="@null"
+                            android:drawableBottom="@drawable/thumb_text"
+                            android:text="Text"
+                            android:textColor="@drawable/rb_colors_text" />
 
                         <RadioButton
                             android:id="@+id/rbAudio"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:button="@null"
                             android:layout_marginLeft="26dp"
-                            android:textColor="@drawable/rb_colors"
-                            android:drawableBottom="@drawable/thumb"
-                            android:text="Audio" />
+                            android:background="@color/transparent"
+                            android:button="@null"
+                            android:drawableBottom="@drawable/thumb_audio"
+                            android:text="Audio"
+                            android:textColor="@drawable/rb_colors_audio"/>
 
                         <RadioButton
                             android:id="@+id/rbVideo"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:button="@null"
                             android:layout_marginLeft="26dp"
-                            android:textColor="@drawable/rb_colors"
-                            android:drawableBottom="@drawable/thumb"
-                            android:text="Video" />
+                            android:background="@color/transparent"
+                            android:button="@null"
+                            android:drawableBottom="@drawable/thumb_video"
+                            android:text="Video"
+                            android:textColor="@drawable/rb_colors_video"/>
                     </RadioGroup>
 
 
