@@ -21,7 +21,7 @@
     <dimen name="nav_header_width">285dp</dimen>
     <dimen name="chat_message_text_size">16sp</dimen>
     <dimen name="chat_message_text_margin">6dp</dimen>
-    <dimen name="chat_timestamp_text_size">12sp</dimen>
+    <dimen name="chat_timestamp_text_size">10sp</dimen>
     <dimen name="chat_message_status_size">16dp</dimen>
     <dimen name="chat_message_bubble_max_width">240dp</dimen>
     <dimen name="dialog_item_padding">8dp</dimen>
@@ -54,4 +54,6 @@
     <dimen name="chat_image_width">350dp</dimen>
     <dimen name="chat_image_height">230dp</dimen>
     <dimen name="margin_drawer_divider">16dp</dimen>
+    <dimen name="chat_buttons_margin">8dp</dimen>
+
 </resources>
