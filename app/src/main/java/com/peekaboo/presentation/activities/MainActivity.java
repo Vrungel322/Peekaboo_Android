@@ -20,6 +20,7 @@ import com.peekaboo.presentation.fragments.DialogsFragment;
 import com.peekaboo.presentation.fragments.ProfileFragment;
 import com.peekaboo.presentation.fragments.SettingsFragment;
 import com.peekaboo.presentation.fragments.SocketTestFragment;
+import com.peekaboo.utils.Constants;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -69,19 +70,19 @@ public class MainActivity extends AppCompatActivity {
         selectionMode(v.getId());
         switch (v.getId()){
             case R.id.llDialogs:
-                changeFragment(new DialogsFragment(), "dialogsFragment");//new dialogsfragment
+                changeFragment(new DialogsFragment(), Constants.FRAGMENT_TAGS.DIALOGS_FRAGMENT);
                 break;
             case R.id.llCalls:
-                changeFragment(new CallsFragment(), "callsFragment");
+                changeFragment(new CallsFragment(), Constants.FRAGMENT_TAGS.CALLS_FRAGMENT);
                 break;
             case R.id.llContacts:
-                changeFragment(new ContactsFragment(), "contactsFragment");
+                changeFragment(new ContactsFragment(), Constants.FRAGMENT_TAGS.CONTACTS_FRAGMENT);
                 break;
             case R.id.llProfile:
-                changeFragment(new ProfileFragment(), "profileFragment");
+                changeFragment(new ProfileFragment(), Constants.FRAGMENT_TAGS.PROFILE_FRAGMENT);
                 break;
             case R.id.llSettings:
-                changeFragment(new SettingsFragment(), "settingsFragment");
+                changeFragment(new SettingsFragment(), Constants.FRAGMENT_TAGS.SETTINGS_FRAGMENT);
                 break;
 
         }
