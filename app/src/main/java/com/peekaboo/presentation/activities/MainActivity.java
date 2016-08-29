@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.Toast;
@@ -29,6 +30,8 @@ import butterknife.OnClick;
 public class MainActivity extends AppCompatActivity {
     @BindView(R.id.drawer_layout)
     DrawerLayout drawer;
+    @BindView(R.id.test)
+    FrameLayout test;
     @BindView(R.id.rgStateChanger)
     RadioGroup rgStateChanger;
     @BindView(R.id.llDialogs)
@@ -60,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
+
         changeFragment(new SocketTestFragment(), null);
 //        changeFragment(new ServiceTestFragment(), null);
 //        changeFragment(new RecordTestFragment(), null);
