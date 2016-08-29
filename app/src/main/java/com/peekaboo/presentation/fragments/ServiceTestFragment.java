@@ -2,11 +2,9 @@ package com.peekaboo.presentation.fragments;
 
 
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.Html;
-import android.text.SpannedString;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,9 +15,7 @@ import android.widget.TextView;
 
 import com.peekaboo.R;
 import com.peekaboo.data.rest.PeekabooApi;
-import com.peekaboo.data.rest.entity.UserEntity;
 import com.peekaboo.domain.AccountUser;
-import com.peekaboo.domain.MessageUtils;
 import com.peekaboo.presentation.PeekabooApplication;
 import com.peekaboo.presentation.services.AudioRecorder;
 import com.peekaboo.presentation.services.INotifier;
@@ -182,14 +178,18 @@ public class ServiceTestFragment extends Fragment implements INotifier.Notificat
     }
 
     @Override
-    public boolean onMessageObtained(Message message) {
+    public void onMessageObtained(Message message) {
         Log.e("thread", String.valueOf(Thread.currentThread()));
         try {
             messages.append(String.format("%s", new String(message.getBody(), "UTF-8")));
         } catch (UnsupportedEncodingException e) {
             Log.e("exception", String.valueOf(e));
         }
-        return true;
+    }
+
+    @Override
+    public boolean willHandleMessage(Message message) {
+        return false;
     }
 
     @Override

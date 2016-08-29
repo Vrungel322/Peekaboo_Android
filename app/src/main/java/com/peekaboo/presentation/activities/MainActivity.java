@@ -26,6 +26,11 @@ import com.peekaboo.presentation.fragments.MessangerTestFragment;
 import com.peekaboo.presentation.fragments.ProfileFragment;
 import com.peekaboo.presentation.fragments.SettingsFragment;
 import com.peekaboo.presentation.fragments.SocketTestFragment;
+import com.peekaboo.presentation.services.INotifier;
+import com.peekaboo.presentation.services.Message;
+import com.peekaboo.presentation.services.MessageUtils;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -53,6 +58,9 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.rlSliderLabel)
     RelativeLayout rlSliderLabel;
 
+    @Inject
+    INotifier<Message> notifier;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,9 +77,10 @@ public class MainActivity extends AppCompatActivity {
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
-        if (getSupportFragmentManager().findFragmentById(R.id.fragmentContainer) == null) {
-            changeFragment(new FriendTestFragment(), null);
-        }
+//        if (getSupportFragmentManager().findFragmentById(R.id.fragmentContainer) == null) {
+//            changeFragment(new FriendTestFragment(), null);
+//        }
+        changeFragment(new SocketTestFragment(), null);
 //        changeFragment(new ServiceTestFragment(), null);
 //        changeFragment(new RecordTestFragment(), null);
 
@@ -80,6 +89,11 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onPositionChanged(int position) {
                 Toast.makeText(getApplicationContext(), "pos : " + position, Toast.LENGTH_SHORT).show();
+                Message switchModeMessage = MessageUtils.createSwitchModeMessage((byte) position);
+                if (notifier.isAvailable()) {
+                    notifier.sendMessage(switchModeMessage);
+                }
+
                 int childCount = rlSliderLabel.getChildCount();
                 for(int i= 0; i<childCount; i++){
                     TextView tv = (TextView) rlSliderLabel.getChildAt(i);
@@ -88,6 +102,7 @@ public class MainActivity extends AppCompatActivity {
                     else
                         tv.setTextColor(getResources().getColor(R.color.colorAccent));
                 }
+
             }
         });
 

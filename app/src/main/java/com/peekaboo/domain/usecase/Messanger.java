@@ -9,7 +9,7 @@ import com.peekaboo.data.repositories.database.messages.PMessage;
 import com.peekaboo.data.repositories.database.messages.PMessageAbs;
 import com.peekaboo.data.repositories.database.messages.PMessageHelper;
 import com.peekaboo.domain.AccountUser;
-import com.peekaboo.domain.MessageUtils;
+import com.peekaboo.presentation.services.MessageUtils;
 import com.peekaboo.presentation.services.INotifier;
 import com.peekaboo.presentation.services.Message;
 
@@ -42,7 +42,7 @@ public class Messanger implements INotifier<PMessage>,
         this.helper = helper;
         this.user = user;
         pMessageMapper = abstractMapperFactory.getPMessageMapper();
-        notifier.addListener(this);
+//        notifier.addListener(this);
     }
 
     public void readMessage(PMessage message) {
@@ -57,38 +57,45 @@ public class Messanger implements INotifier<PMessage>,
         }
     }
 
-    public Observable<List<PMessageAbs>> getAllMessages(String tableName){
+    public Observable<List<PMessageAbs>> getAllMessages(String tableName) {
         return helper.getAllMessages(tableName);
     }
 
-    public Observable<List<PMessageAbs>> getUnreadMessages(String tableName){
+    public Observable<List<PMessageAbs>> getUnreadMessages(String tableName) {
         return helper.getUnreadMessages(tableName);
     }
 
     @Override
-    public boolean onMessageObtained(Message message) {
+    public void onMessageObtained(Message message) {
         Log.e("messanger", "obtained");
         PMessage pMessage = MessageUtils.convert(user.getId(), message);
         pMessage.setStatus(PMessage.PMESSAGE_STATUS.STATUS_DELIVERED);
         String tableName = message.getParams().get(Message.Params.FROM);
         helper.insert(tableName, pMessageMapper.transform(pMessage));
+
         boolean isRead = false;
         for (NotificationListener<PMessage> listener : listeners) {
-            boolean isMessageSeen = listener.onMessageObtained(pMessage);
+            boolean isMessageSeen = listener.willHandleMessage(pMessage);
             if (isMessageSeen) {
                 isRead = true;
+                break;
             }
         }
-        if (isRead) {
-            int statusRead = PMessageAbs.PMESSAGE_STATUS.STATUS_READ;
-            helper.updateStatusByPackageId(tableName, statusRead,
-                    pMessage.packageId());
-            pMessage.setStatus(statusRead);
 
-            for (NotificationListener<PMessage> listener : listeners) {
-                listener.onMessageRead(pMessage);
-            }
+        if (isRead) {
+            int statusRead = PMessage.PMESSAGE_STATUS.STATUS_READ;
+            pMessage.setStatus(statusRead);
+            helper.updateStatusByPackageId(pMessage.senderId(), statusRead,
+                    pMessage.packageId());
         }
+
+        for (NotificationListener<PMessage> listener : listeners) {
+            listener.onMessageObtained(pMessage);
+        }
+    }
+
+    @Override
+    public boolean willHandleMessage(Message message) {
         return true;
     }
 
@@ -125,9 +132,7 @@ public class Messanger implements INotifier<PMessage>,
         if (isAvailable()) {
             Log.e("message", "send");
             notifier.sendMessage(MessageUtils.convert(message));
-
         }
-        //TODO update view
     }
 
     @Override

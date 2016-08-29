@@ -109,7 +109,9 @@ public class MessangerTestFragment extends Fragment implements IChatView2 {
         Log.e("fragment", "append " + messages);
         getActivity().runOnUiThread(() -> {
             adapter.addMessages(messages);
-            listView.smoothScrollToPosition(adapter.getCount()-1);
+            int position = adapter.getCount() - 1;
+            listView.smoothScrollToPosition(position);
+            listView.setSelection(position);
         });
     }
 
@@ -117,6 +119,11 @@ public class MessangerTestFragment extends Fragment implements IChatView2 {
     public void updateMessage(PMessageAbs message) {
         Log.e("fragment", "update " + message);
         getActivity().runOnUiThread(() -> adapter.updateMessage(message));
+    }
+
+    @Override
+    public String getCompanionId() {
+        return receiverId;
     }
 
     @Override

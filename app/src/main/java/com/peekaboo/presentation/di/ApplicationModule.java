@@ -2,6 +2,7 @@ package com.peekaboo.presentation.di;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.os.Environment;
 
 import com.peekaboo.data.Constants;
 import com.peekaboo.data.di.DataModule;
@@ -15,6 +16,16 @@ import com.peekaboo.presentation.services.Message;
 import com.peekaboo.presentation.services.WebSocketNotifier;
 import com.squareup.otto.Bus;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.inject.Named;
 import javax.inject.Singleton;
 
 import dagger.Module;
@@ -69,9 +80,12 @@ public class ApplicationModule {
 
     @Singleton
     @Provides
-    public INotifier<Message> provideNotifier() {
-        return new WebSocketNotifier(Constants.BASE_URL_SOCKET, 5000, new MapperFactory());
+    public INotifier<Message> provideNotifier(@Named("domens") List<String> domens) {
+//        new
+//        return new WebSocketNotifier(Constants.BASE_URL_SOCKET, 5000, new MapperFactory());
+        return new WebSocketNotifier(domens.get(1), 5000, new MapperFactory());
     }
+
 
 //    @Singleton
 //    @Provides

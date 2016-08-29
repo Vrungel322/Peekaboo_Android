@@ -33,6 +33,12 @@ public class Message {
         return body;
     }
 
+    public Message setBody(byte[] body) {
+        this.body = body;
+        return this;
+
+    }
+
     @Nullable
     public String getTextBody() {
         if (body != null) {
@@ -44,11 +50,6 @@ public class Message {
         } else {
             return null;
         }
-    }
-    public Message setBody(byte[] body) {
-        this.body = body;
-        return this;
-
     }
 
     public Message setTextBody(String body) {
@@ -78,11 +79,11 @@ public class Message {
 
     @Override
     public String toString() {
-        String bodyString = body == null
-                ? "null" :
-                (Type.TEXT.equals(params.get(Params.TYPE))
-                        ? new String(body) :
-                        Arrays.toString(body));
+        String bodyString = body == null ?
+                "null"
+                : (Type.TEXT.equals(params.get(Params.TYPE)) ?
+                getTextBody() :
+                Arrays.toString(body));
 
         return "Message{" +
                 "command=" + command +
@@ -112,7 +113,7 @@ public class Message {
         return result;
     }
 
-    public enum Command {ACCEPT, CALL, REJECT, SEND, MESSAGE}
+    public enum Command {ACCEPT, CALL, REJECT, SEND, MESSAGE, SWITCHMODE}
 
     public enum Params {DESTINATION, FROM, TYPE, REASON, DATE, ID}
 

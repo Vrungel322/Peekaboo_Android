@@ -11,11 +11,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.peekaboo.R;
 import com.peekaboo.data.FileEntity;
 import com.peekaboo.domain.AccountUser;
-import com.peekaboo.domain.MessageUtils;
+import com.peekaboo.presentation.services.MessageUtils;
 import com.peekaboo.domain.User;
 import com.peekaboo.domain.subscribers.BaseUseCaseSubscriber;
 import com.peekaboo.domain.usecase.DownloadFileUseCase;
@@ -39,8 +40,11 @@ import butterknife.OnClick;
 public class SocketTestFragment extends Fragment implements INotifier.NotificationListener<Message> {
     @BindView(R.id.etUsername)
     EditText etUsername;
+    @BindView(R.id.etMessage)
+    EditText etMessage;
     @BindView(R.id.tvResult)
     TextView tvResult;
+
     @Inject
     FindFriendUseCase findFriendUseCase;
     @Inject
@@ -88,33 +92,34 @@ public class SocketTestFragment extends Fragment implements INotifier.Notificati
             findFriendUseCase.setFriendName(friendName);
             findFriendUseCase.execute(new BaseUseCaseSubscriber<User>() {
                 @Override
-                public void onNext(User user) {
-//                    Message message = MessageUtils.createTextMessage("hello", user.getId(), SocketTestFragment.this.user.getId());
-//                    if (notifier.isAvailable()) {
-//                        notifier.sendMessage(message);
-//                    }
-                String fileName = Environment.getExternalStorageDirectory().toString() + File.separator + "eric.wav";
-                uploadFileUseCase.setInfo(fileName, user.getId());
-                uploadFileUseCase.execute(new BaseUseCaseSubscriber<FileEntity>() {
-                    @Override
-                    public void onNext(FileEntity fileEntity) {
-                        super.onNext(fileEntity);
-                        Message typeMessage = MessageUtils.createTypeMessage(user.getId(), Message.Type.AUDIO, fileEntity.getName(), SocketTestFragment.this.user.getId());
-                        notifier.sendMessage(typeMessage);
+                public void onNext(final User user) {
+                    String message = etMessage.getText().toString();
+                    if (message.isEmpty()) {
+                        String fileName = Environment.getExternalStorageDirectory().toString() + File.separator + "eric.wav";
+                        uploadFileUseCase.setInfo(fileName, user.getId());
+                        uploadFileUseCase.execute(new BaseUseCaseSubscriber<FileEntity>() {
+                            @Override
+                            public void onNext(FileEntity fileEntity) {
+                                super.onNext(fileEntity);
+                                Message typeMessage = MessageUtils.createTypeMessage(user.getId(), Message.Type.AUDIO, fileEntity.getName(), SocketTestFragment.this.user.getId());
+                                notifier.sendMessage(typeMessage);
+                            }
+                        });
+                    } else {
+                        Message message1 = MessageUtils.createTextMessage(message, user.getId(), SocketTestFragment.this.user.getId());
+                        if (notifier.isAvailable()) {
+                            notifier.sendMessage(message1);
+                        }
                     }
-                });
+
                 }
             });
-        } else {
-//            Message message = MessageUtils.createTextMessage("hello", "aasdaffs", SocketTestFragment.this.user.getId());
-//            if (notifier.isAvailable()) {
-//                notifier.sendMessage(message);
-//            }
         }
     }
 
     @OnClick(R.id.bReconnect)
     public void reconnect() {
+        Toast.makeText(getActivity(), user.getBearer(), Toast.LENGTH_LONG).show();
         if (!notifier.isAvailable()) {
             notifier.tryConnect(user.getBearer());
         }
@@ -126,7 +131,7 @@ public class SocketTestFragment extends Fragment implements INotifier.Notificati
     }
 
     @Override
-    public boolean onMessageObtained(Message message) {
+    public void onMessageObtained(Message message) {
         Log.e("message", message.toString());
         String messageType = message.getParams().get(Message.Params.TYPE);
         if (Message.Type.AUDIO.equals(messageType)) {
@@ -138,13 +143,24 @@ public class SocketTestFragment extends Fragment implements INotifier.Notificati
                 @Override
                 public void onNext(File file) {
                     super.onNext(file);
+                    Toast.makeText(getActivity(), "file has come", Toast.LENGTH_LONG).show();
                     Log.e("file", file.toString());
+                }
+
+                @Override
+                public void onError(Throwable e) {
+                    super.onError(e);
+                    Toast.makeText(getActivity(), e.toString(), Toast.LENGTH_LONG).show();
                 }
             });
         } else if (Message.Type.TEXT.equals(messageType)) {
             tvResult.setText(message.getTextBody());
         }
-        return true;
+    }
+
+    @Override
+    public boolean willHandleMessage(Message message) {
+        return false;
     }
 
     @Override

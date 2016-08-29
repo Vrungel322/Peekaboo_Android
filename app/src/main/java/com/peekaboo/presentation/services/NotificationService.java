@@ -22,7 +22,7 @@ public class NotificationService extends Service {
 
     private InternetBroadcastReceiver ibrInternetCheck;
     @Inject
-    Messanger notifier;
+    INotifier<Message> notifier;
     @Inject
     AccountUser user;
 

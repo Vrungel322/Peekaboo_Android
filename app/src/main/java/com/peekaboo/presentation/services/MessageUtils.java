@@ -1,21 +1,15 @@
-package com.peekaboo.domain;
+package com.peekaboo.presentation.services;
 
 import android.util.Log;
 
 import com.peekaboo.data.repositories.database.messages.PMessage;
 import com.peekaboo.data.repositories.database.messages.PMessageAbs;
-import com.peekaboo.presentation.services.Message;
-import com.peekaboo.utils.Constants;
-import com.peekaboo.utils.Utility;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-
-import rx.Observable;
 
 public class MessageUtils {
     public static Message createTextMessage(String message, String receiver, String from) {
@@ -26,6 +20,11 @@ public class MessageUtils {
                 .setTextBody(message);
     }
 
+    public static Message createSwitchModeMessage(byte mode) {
+        return new Message(Message.Command.SWITCHMODE)
+                .setBody(new byte[]{mode});
+    }
+
     public static List<Message> createFileMessage(Message message, String filename, int partSize) {
         List<Message> result = new ArrayList<>();
         File file = new File(filename);
@@ -34,7 +33,7 @@ public class MessageUtils {
 
         try {
             stream = new FileInputStream(file);
-            while(stream.available() > 0) {
+            while (stream.available() > 0) {
                 byte[] bytes = new byte[Math.min(stream.available(), partSize)];
 //                stream.read()
                 Log.e("available", String.valueOf(stream.available()));

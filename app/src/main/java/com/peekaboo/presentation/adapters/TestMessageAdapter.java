@@ -75,7 +75,6 @@ public class TestMessageAdapter extends BaseAdapter {
                     item.mediaType(), item.messageBody(),
                     item.timestamp(), item.status(),
                     item.receiverId(), item.senderId());
-            presenter.onUserMessageRead(pMessage);
             handler.postDelayed(() -> presenter.onUserMessageRead(pMessage), 500);
         }
 

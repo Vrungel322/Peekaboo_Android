@@ -1,6 +1,7 @@
 package com.peekaboo.data.di;
 
 import android.content.Context;
+import android.os.Environment;
 import android.speech.tts.TextToSpeech;
 import android.widget.Toast;
 
@@ -16,11 +17,20 @@ import com.peekaboo.domain.AccountUser;
 import com.peekaboo.domain.UserMessageMapper;
 import com.peekaboo.domain.SessionRepository;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.InputStream;
 import java.security.KeyStore;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
+import javax.inject.Named;
 import javax.inject.Singleton;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSocketFactory;
@@ -38,6 +48,43 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class DataModule {
 
     TextToSpeech textToSpeech;
+
+
+    @Singleton
+    @Provides
+    @Named("domens")
+    public List<String> getStringFromFile() {
+        BufferedReader br = null;
+        List<String> domens = new ArrayList<>();
+
+        try {
+
+            String sCurrentLine;
+            String filename = Environment.getExternalStorageDirectory() + File.separator + "domens.txt";
+            File file = new File(filename);
+            if (!file.exists()) {
+                file.createNewFile();
+                BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(file));
+                String domen = Constants.BASE_URL + "\n" + Constants.BASE_URL_SOCKET;
+                bufferedWriter.write(domen, 0, domen.length());
+                bufferedWriter.close();
+            }
+            br = new BufferedReader(new FileReader(filename));
+            while ((sCurrentLine = br.readLine()) != null) {
+                domens.add(sCurrentLine);
+            }
+        } catch (IOException e) {
+            domens.add(Constants.BASE_URL);
+            domens.add(Constants.BASE_URL_SOCKET);
+        } finally {
+            try {
+                if (br != null) br.close();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
+        return domens;
+    }
 
     private SSLSocketFactory newSslSocketFactory(Context context) {
         try {
@@ -81,9 +128,10 @@ public class DataModule {
 
     @Provides
     @Singleton
-    public Retrofit provideRetrofit(OkHttpClient okClient) {
+    public Retrofit provideRetrofit(OkHttpClient okClient, @Named("domens") List<String> domens) {
         return new Retrofit.Builder()
-                .baseUrl(Constants.BASE_URL)
+//                .baseUrl(Constants.BASE_URL)
+                .baseUrl(domens.get(0))
                 .client(okClient)
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())

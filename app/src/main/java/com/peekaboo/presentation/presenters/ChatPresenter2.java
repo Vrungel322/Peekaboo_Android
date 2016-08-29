@@ -30,7 +30,7 @@ public class ChatPresenter2 extends BasePresenter<IChatView2> implements IChatPr
     private CompositeSubscription subscriptions;
 
     @Inject
-    public ChatPresenter2(Messanger messanger, FindFriendUseCase findFriendUseCase, AccountUser accountUser) {
+    public ChatPresenter2(Messanger messanger, AccountUser accountUser) {
         this.messanger = messanger;
         this.accountUser = accountUser;
     }
@@ -99,18 +99,21 @@ public class ChatPresenter2 extends BasePresenter<IChatView2> implements IChatPr
     }
 
     @Override
-    public boolean onMessageObtained(PMessage message) {
-        //TODO mestBeShown depends on active dialog
-        boolean mustBeShown = true;
-        boolean isHandled = false;
-        if (mustBeShown) {
-            IChatView2 view = getView();
-            if (view != null) {
-                view.appendMessages(messageToList(message));
-            }
-            isHandled = true;
+    public void onMessageObtained(PMessage message) {
+        IChatView2 view = getView();
+        if (view != null) {
+            view.appendMessages(messageToList(message));
         }
-        return isHandled;
+    }
+
+    @Override
+    public boolean willHandleMessage(PMessage message) {
+        IChatView2 view = getView();
+        boolean mustBeShow = false;
+        if (view != null) {
+            mustBeShow = message.senderId().equals(view.getCompanionId());
+        }
+        return mustBeShow;
     }
 
     @Override
