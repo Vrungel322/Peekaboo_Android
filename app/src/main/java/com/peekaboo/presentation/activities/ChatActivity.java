@@ -194,12 +194,6 @@ public class ChatActivity extends AppCompatActivity
     @OnClick(R.id.bMesageOpen)
     void onbMessageOpenClick(){
         rflMessageBody.setVisibility(View.VISIBLE);
-//        layoutParams.weight = 8;
-//        layoutParams.width = 0;
-//        rflMessageBody.setLayoutParams(layoutParams);
-//        layoutParams.weight = 3;
-//        layoutParams.width = 0;
-//        svItems.setLayoutParams(layoutParams);
         etMessageBody.post(() -> {
             float cx, cy;
             cx = (bMessageOpen.getX() + bMessageOpen.getWidth())/2;
@@ -217,7 +211,11 @@ public class ChatActivity extends AppCompatActivity
         });
 
         bMessageOpen.setVisibility(View.GONE);
+        LinearLayout.LayoutParams layoutParamsLlItems = (LinearLayout.LayoutParams) llItems.getLayoutParams();
 
+        layoutParamsLlItems.leftMargin = 0;
+
+        llItems.setLayoutParams(layoutParamsLlItems);
 
     }
 

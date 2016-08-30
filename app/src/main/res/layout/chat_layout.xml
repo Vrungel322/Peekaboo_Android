@@ -21,7 +21,7 @@
 
             <include layout="@layout/toolbar_layout" />
 
-            </android.support.v7.widget.Toolbar>
+        </android.support.v7.widget.Toolbar>
 
     </android.support.design.widget.AppBarLayout>
 
@@ -41,8 +41,8 @@
         android:id="@+id/svItems"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center_vertical"
-        android:background="@drawable/white_background"
+        android:layout_gravity="center"
+        android:foregroundGravity="center"
         android:scrollbars="none">
 
         <LinearLayout
@@ -59,7 +59,8 @@
                 android:layout_weight="8"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
-                android:padding="2dp">
+                android:padding="2dp"
+                android:visibility="gone">
 
                 <FrameLayout
                     android:id="@+id/flMessageBody"
@@ -71,11 +72,13 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="@drawable/round_left_bubble"
-                        android:maxLines="3"
+                        android:ellipsize="end"
                         android:focusable="true"
                         android:focusableInTouchMode="true"
-                        android:ellipsize="end"
-                        android:padding="10dp" />
+                        android:maxLines="3"
+                        android:minWidth="300dp"
+                        android:padding="10dp"
+                        android:textColor="#000" />
 
                     <ImageButton
                         android:id="@+id/bSendMessage"
@@ -83,7 +86,7 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="right|center_vertical"
                         android:layout_margin="4dp"
-                        android:background="@drawable/paper_plane"
+                        android:background="@drawable/plane"
                         android:foregroundGravity="center_vertical" />
                 </FrameLayout>
 
@@ -94,7 +97,10 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:layout_marginLeft="25dp"
                 android:layout_weight="2"
+                android:foregroundGravity="center"
+                android:gravity="center"
                 android:orientation="horizontal">
 
                 <ImageButton
@@ -110,10 +116,12 @@
                     android:id="@+id/smile_btn"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
                     android:layout_marginLeft="@dimen/chat_buttons_margin"
                     android:layout_marginRight="@dimen/chat_buttons_margin"
                     android:layout_weight="2"
-                    android:background="@drawable/smile" />
+                    android:background="@drawable/smile"
+                    android:foregroundGravity="center_vertical" />
 
                 <ImageButton
                     android:id="@+id/micro_btn"
@@ -122,7 +130,7 @@
                     android:layout_marginLeft="@dimen/chat_buttons_margin"
                     android:layout_marginRight="@dimen/chat_buttons_margin"
                     android:layout_weight="2"
-                    android:background="@drawable/voice" />
+                    android:background="@drawable/audio" />
 
                 <ImageButton
                     android:id="@+id/photo_btn"
