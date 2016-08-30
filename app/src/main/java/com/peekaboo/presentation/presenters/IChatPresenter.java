@@ -34,9 +34,16 @@ public interface IChatPresenter extends IPresenter<IChatView> {
     void onCopyMessageTextClick(ClipboardManager clipboard, PMessageAbs message);
     void onConvertTextToSpeechClick(PMessageAbs message);
 
-    void onStartPlayingAudioClick(String filepath);
-    void onStopPlayingAudioClick();
-    void onStopAndPlayAudioClick(String filepath);
+//    void onStartPlayingAudioClick(String filepath);
+
+    void onStartPlayingAudioClick(String filepath, int position);
+
+//    void onStopPlayingAudioClick();
+//    void onStopAndPlayAudioClick(String filepath);
+
+    void onStopPlayingAudioClick(int position);
+
+    void onStopAndPlayAudioClick(String filepath, int position);
 
     void onDetachedFromRecyclerView();
 }

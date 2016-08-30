@@ -8,13 +8,11 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.v4.view.GravityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -48,7 +46,6 @@ import butterknife.OnClick;
 import butterknife.OnFocusChange;
 import io.codetail.animation.ViewAnimationUtils;
 import io.codetail.widget.RevealFrameLayout;
-import timber.log.Timber;
 
 /**
  * Created by Nataliia on 13.07.2016.
@@ -176,7 +173,7 @@ public class ChatActivity extends AppCompatActivity
     }
 
     @OnClick(R.id.photo_btn)
-    void onCameraButtonCLick(){
+    void onCameraButtonClick(){
         takePhoto();
     }
 
@@ -187,7 +184,7 @@ public class ChatActivity extends AppCompatActivity
 
     @OnClick(R.id.micro_btn)
     void onRecordButtonClick(){
-        takeAudio();
+        recordAudio();
     }
 
 
@@ -227,8 +224,6 @@ public class ChatActivity extends AppCompatActivity
             Toast.makeText(getApplicationContext(), "CAMERA: " + resultCode, Toast.LENGTH_SHORT).show();
             if (resultCode == RESULT_OK) {
                 sendImage(imageUri);
-                Timber.tag("IMAGE_URI").wtf("URI: " + imageUri);
-                galleryAddPic(imageUri);
             }
         }
         if (requestCode == Constants.REQUEST_CODES.REQUEST_CODE_GALERY) {
@@ -243,13 +238,6 @@ public class ChatActivity extends AppCompatActivity
             }
         }
     }
-
-    private void galleryAddPic(Uri imageUri) {
-        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-        mediaScanIntent.setData(imageUri);
-        sendBroadcast(mediaScanIntent);
-    }
-
 
     public void takeGalleryImage() {
         startActivityForResult(new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI),
@@ -271,10 +259,6 @@ public class ChatActivity extends AppCompatActivity
                 startActivityForResult(takePictureIntent, Constants.REQUEST_CODES.REQUEST_CODE_CAMERA);
             }
         }
-    }
-
-    public void takeAudio() {
-        Toast.makeText(this, "2", Toast.LENGTH_SHORT).show();
     }
 
     public void takeDocument() {
@@ -314,6 +298,20 @@ public class ChatActivity extends AppCompatActivity
     public String getMessageText() {
         return etMessageBody.getText().toString().trim().replaceAll("[\\s&&[^\r?\n]]+", " ");
     }
+
+    @Override
+    public void updateAudioProgress(int position, long totalDuration, long currentDuration, int progress) {
+        runOnUiThread(()
+                -> chatAdapter.updateAudioProgress(rvMessages.findViewHolderForAdapterPosition(position),
+                                                    totalDuration, currentDuration, progress));
+    }
+
+    @Override
+    public void switchPlayButtonImage(int position, boolean toPlay) {
+        runOnUiThread(()
+                -> chatAdapter.swithPlayButtonImage(rvMessages.findViewHolderForAdapterPosition(position), toPlay));
+    }
+
     @OnClick(R.id.smile_btn)
     public  void smileButtonClick(){
         Toast.makeText(this, "SMILE", Toast.LENGTH_SHORT).show();
@@ -337,7 +335,6 @@ public class ChatActivity extends AppCompatActivity
 
     @Override
     public void toLastMessage(){
-        Timber.tag("MESSAGE").wtf("count: " + chatAdapter.getItemCount());
         rvMessages.scrollToPosition(chatAdapter.getItemCount() - 1);
     }
 

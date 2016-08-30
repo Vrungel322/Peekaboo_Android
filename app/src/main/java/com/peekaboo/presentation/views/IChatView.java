@@ -7,5 +7,7 @@ public interface IChatView extends IView {
 
     void clearTextField();
     String getMessageText();
+    void updateAudioProgress(int position, long totalDuration, long currentDuration, int progress);
+    void switchPlayButtonImage(int position, boolean toPlay);
 
 }

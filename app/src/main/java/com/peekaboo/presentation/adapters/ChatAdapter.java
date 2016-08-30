@@ -12,15 +12,13 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
+import android.widget.SeekBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.peekaboo.R;
 import com.peekaboo.data.repositories.database.messages.PMessageAbs;
-import com.peekaboo.presentation.activities.ChatActivity;
 import com.peekaboo.presentation.app.view.RoundedTransformation;
 import com.peekaboo.presentation.presenters.ChatPresenter;
-import com.peekaboo.presentation.views.IView;
 import com.peekaboo.utils.Constants;
 import com.peekaboo.utils.Utility;
 import com.squareup.picasso.Callback;
@@ -38,7 +36,7 @@ import timber.log.Timber;
  * Created by st1ch on 23.07.2016.
  */
 public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>
-                        implements Action1<List<PMessageAbs>>, IView {
+        implements Action1<List<PMessageAbs>> {
 
     private final LayoutInflater inflater;
     private Context context;
@@ -52,7 +50,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>
         void toLastMessage();
     }
 
-    public  IChatAdapterListener chatAdapterListener;
+    public IChatAdapterListener chatAdapterListener;
 
     public ChatAdapter(Context context, ChatPresenter presenter, Activity activity) {
         this.context = context;
@@ -76,17 +74,16 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>
 
     @Override
     public ChatAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-
         View v;
         switch (viewType) {
             case Constants.PMESSAGE_MEDIA_TYPE.TEXT_MESSAGE:
-                v = LayoutInflater.from(context).inflate(R.layout.list_item_chat_text_message, parent, false);
+                v = inflater.inflate(R.layout.list_item_chat_text_message, parent, false);
                 return new ViewHolderText(v);
             case Constants.PMESSAGE_MEDIA_TYPE.AUDIO_MESSAGE:
-                v = LayoutInflater.from(context).inflate(R.layout.list_item_chat_audio_message, parent, false);
+                v = inflater.inflate(R.layout.list_item_chat_audio_message, parent, false);
                 return new ViewHolderAudio(v);
             case Constants.PMESSAGE_MEDIA_TYPE.IMAGE_MESSAGE:
-                v = LayoutInflater.from(context).inflate(R.layout.list_item_chat_image_message, parent, false);
+                v = inflater.inflate(R.layout.list_item_chat_image_message, parent, false);
                 return new ViewHolderImage(v);
             case Constants.PMESSAGE_MEDIA_TYPE.VIDEO_MESSAGE:
                 return null;
@@ -101,10 +98,10 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>
     public void onBindViewHolder(ChatAdapter.ViewHolder holder, int position) {
         PMessageAbs pMessageAbs = getItem(position);
         int mediaType = pMessageAbs.mediaType();
-        if(position == 0){
+        if (position == 0) {
             setAlignment(holder, pMessageAbs.isMine(), true, mediaType);
-        }else{
-            PMessageAbs pPreviousMessageAbs = getItem(position-1);
+        } else {
+            PMessageAbs pPreviousMessageAbs = getItem(position - 1);
             setAlignment(holder, pMessageAbs.isMine(), pPreviousMessageAbs.isMine(), mediaType);
 
         }
@@ -126,8 +123,13 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>
                 Log.i("TEXT", Integer.toString(mediaType));
                 break;
             case Constants.PMESSAGE_MEDIA_TYPE.AUDIO_MESSAGE:
+                boolean isPlaying = false;
                 ((ViewHolderAudio) holder).ibPlayRecord
-                        .setOnClickListener(v -> presenter.onStopAndPlayAudioClick(pMessageAbs.messageBody()));
+                        .setOnClickListener(v
+                                -> {
+                                presenter.onStopAndPlayAudioClick(pMessageAbs.messageBody(), position);
+                        });
+                ((ViewHolderAudio) holder).sbPlayProgress.setOnTouchListener((v, event) -> true);
                 break;
             case Constants.PMESSAGE_MEDIA_TYPE.IMAGE_MESSAGE:
                 String image = pMessageAbs.messageBody();
@@ -163,11 +165,10 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>
     private void setAlignment(ViewHolder holder, boolean isMine, boolean wasPreviousMine, int mediaType) {
         Log.i("ALIGMENT", Integer.toString(mediaType));
 
-
         if (!isMine) {
-            if(wasPreviousMine == isMine || mediaType == Constants.PMESSAGE_MEDIA_TYPE.IMAGE_MESSAGE){
+            if (wasPreviousMine == isMine || mediaType == Constants.PMESSAGE_MEDIA_TYPE.IMAGE_MESSAGE) {
                 holder.chatBubble.setBackgroundResource(R.drawable.left_bubble);
-            }else{
+            } else {
                 holder.chatBubble.setBackgroundResource(R.drawable.left);
             }
             holder.tvChatTimestamp.setTextColor(context.getResources().getColor(R.color.drawerDividerColor));
@@ -180,9 +181,9 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>
                     Constants.DESIGN_CONSTANTS.BIG_SIDE_MARGIN, Constants.DESIGN_CONSTANTS.TOP_OR_BOTTOM_MARGIN);
             holder.chatBubble.setLayoutParams(layoutParams);
         } else {
-            if(wasPreviousMine != isMine || mediaType == Constants.PMESSAGE_MEDIA_TYPE.IMAGE_MESSAGE){
+            if (wasPreviousMine != isMine || mediaType == Constants.PMESSAGE_MEDIA_TYPE.IMAGE_MESSAGE) {
                 holder.chatBubble.setBackgroundResource(R.drawable.right_bubble);
-            }else{
+            } else {
                 holder.chatBubble.setBackgroundResource(R.drawable.right);
             }
 
@@ -190,7 +191,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>
                     = (RelativeLayout.LayoutParams) holder.chatBubble.getLayoutParams();
             layoutParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT, 0);
             layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-            layoutParams.setMargins(Constants.DESIGN_CONSTANTS.BIG_SIDE_MARGIN,Constants.DESIGN_CONSTANTS.TOP_OR_BOTTOM_MARGIN,
+            layoutParams.setMargins(Constants.DESIGN_CONSTANTS.BIG_SIDE_MARGIN, Constants.DESIGN_CONSTANTS.TOP_OR_BOTTOM_MARGIN,
                     Constants.DESIGN_CONSTANTS.SIDE_MARGIN, Constants.DESIGN_CONSTANTS.TOP_OR_BOTTOM_MARGIN);
             holder.chatBubble.setLayoutParams(layoutParams);
         }
@@ -214,17 +215,16 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>
         mPicasso.load(imageUri).resizeDimen(R.dimen.chat_image_width, R.dimen.chat_image_height)
                 .error(R.drawable.ic_alert_circle_outline)
                 .centerInside()
-                .transform(new RoundedTransformation(25,0))
-                .into(holder.ivImageMessage, new Callback.EmptyCallback(){
+                .transform(new RoundedTransformation(25, 0))
+                .into(holder.ivImageMessage, new Callback.EmptyCallback() {
                     @Override
-                    public void onSuccess(){
+                    public void onSuccess() {
                         holder.pbLoadingImage.setVisibility(View.GONE);
                     }
 
                     @Override
                     public void onError() {
                         holder.pbLoadingImage.setVisibility(View.GONE);
-
                     }
 
                 });
@@ -235,15 +235,24 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>
         notifyDataSetChanged();
     }
 
+    public void updateAudioProgress(RecyclerView.ViewHolder holder, long totalDuration, long currentDuration, int progress) {
+//        ((ViewHolderAudio) holder).tvTotalDuration.setText(String.valueOf(Utility.milliSecondsToTimer(totalDuration)));
+        ((ViewHolderAudio) holder).tvCurrentDuration.setText(String.valueOf(Utility.milliSecondsToTimer(currentDuration)));
+        ((ViewHolderAudio) holder).sbPlayProgress.setProgress(progress);
+    }
+
+    public void swithPlayButtonImage(RecyclerView.ViewHolder holder, boolean toPlay){
+        if(toPlay){
+            ((ViewHolderAudio) holder).ibPlayRecord.setBackgroundResource(R.drawable.play_green);
+        } else {
+            ((ViewHolderAudio) holder).ibPlayRecord.setBackgroundResource(R.drawable.pause_green);
+        }
+    }
+
     @Override
     public void onDetachedFromRecyclerView(RecyclerView recyclerView) {
         super.onDetachedFromRecyclerView(recyclerView);
         presenter.onDetachedFromRecyclerView();
-    }
-
-    @Override
-    public void showToastMessage(String text) {
-        Toast.makeText(context, text, Toast.LENGTH_SHORT).show();
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
@@ -273,6 +282,12 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>
     static class ViewHolderAudio extends ViewHolder {
         @BindView(R.id.ibPlayRecord)
         ImageButton ibPlayRecord;
+        @BindView(R.id.seekBarPlayProgress)
+        SeekBar sbPlayProgress;
+        @BindView(R.id.tvCurrentDuration)
+        TextView tvCurrentDuration;
+//        @BindView(R.id.tvTotalDuration)
+//        TextView tvTotalDuration;
 
         public ViewHolderAudio(View view) {
             super(view);

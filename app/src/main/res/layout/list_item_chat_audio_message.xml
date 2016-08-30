@@ -16,12 +16,40 @@
             android:maxWidth="@dimen/chat_message_bubble_max_width"
             android:orientation="vertical">
 
-            <ImageButton
-                android:id="@+id/ibPlayRecord"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_play_circle_outline"
-                />
+                <LinearLayout
+                    android:id="@+id/progressDisplay"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_gravity="center"
+                    >
+
+                    <ImageButton
+                        android:id="@+id/ibPlayRecord"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:background="@drawable/play_green"
+                        />
+
+                    <TextView
+                        android:id="@+id/tvCurrentDuration"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0:00"
+                        android:textStyle="bold"
+                        android:layout_gravity="center"
+                        />
+
+                    <SeekBar
+                        android:id="@+id/seekBarPlayProgress"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:thumb="@drawable/slider_green"
+                        android:progressDrawable="@drawable/seekbar_progress"
+                        android:max="100"
+                        android:layout_gravity="center"
+                        />
+                </LinearLayout>
 
             <LinearLayout
                 android:layout_width="wrap_content"
