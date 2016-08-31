@@ -11,6 +11,6 @@
         android:layout_gravity="center_horizontal"
         android:choiceMode="singleChoice"
         android:divider="@color/transparent"
-        android:listSelector="@android:color/darker_gray"
+        android:listSelector="@color/drawerHeaderColor"
         android:scrollbars="none" />
 </LinearLayout>

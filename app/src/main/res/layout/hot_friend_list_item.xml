@@ -10,7 +10,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="right"
-        android:layout_margin="4dp">
+        android:layout_marginLeft="7dp"
+        android:layout_marginRight="7dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/civHotFriendIcon"
@@ -26,7 +29,8 @@
             android:layout_width="15dp"
             android:layout_height="15dp"
             android:layout_gravity="right|top"
-            app:border_color="@android:color/transparent" />
+            app:border_width="1dp"
+            app:border_color="@android:color/white" />
 
     </FrameLayout>
 </LinearLayout>

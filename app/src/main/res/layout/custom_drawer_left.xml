@@ -30,7 +30,7 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="@dimen/nav_header_height"
-                        android:background="#d4e7e7"
+                        android:background="@color/drawerHeaderColor"
                         android:orientation="vertical">
 
                         <RelativeLayout
@@ -83,7 +83,7 @@
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="135dp"
+                        android:layout_marginTop="138dp"
                         android:layout_gravity="center_horizontal"
                         android:background="@drawable/rounded_rectangle"
                         android:orientation="horizontal"
