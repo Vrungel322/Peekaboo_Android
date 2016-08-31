@@ -17,7 +17,7 @@
             android:layout_width="55dp"
             android:layout_height="55dp"
             android:layout_gravity="center"
-            android:src="@drawable/enot"
+            android:src="@drawable/raccoon"
             app:border_color="@android:color/transparent" />
 
 

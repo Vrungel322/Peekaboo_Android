@@ -82,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
         //Hardcode list in right drawer
         alHotFriendPOJO = new ArrayList<HotFriendPOJO>();
         for (int i = 0; i < 20; i++){
-            alHotFriendPOJO.add(new HotFriendPOJO(R.drawable.enot, Math.random() < 0.5));
+            alHotFriendPOJO.add(new HotFriendPOJO(R.drawable.raccoon, Math.random() < 0.5));
         }
         hotFriendsAdapter = new HotFriendsAdapter(getApplicationContext(), alHotFriendPOJO);
         OverScrollDecoratorHelper.setUpOverScroll(lvHotFriends);
