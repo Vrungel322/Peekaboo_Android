@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <LinearLayout
@@ -44,7 +45,8 @@
                                 android:layout_height="80dp"
                                 android:layout_alignParentEnd="true"
                                 android:layout_alignParentRight="false"
-                                android:src="@drawable/raccoon" />
+                                android:src="@drawable/raccoon"
+                                app:border_color="@color/transparent"/>
 
                         </RelativeLayout>
 
@@ -61,7 +63,7 @@
                                 android:layout_height="wrap_content"
                                 android:text="Raccoon Nigga"
                                 android:textAppearance="?android:attr/textAppearanceMedium"
-                                android:textColor="@color/textColor"
+                                android:textColor="@color/colorText"
                                 android:textSize="18sp" />
 
                             <TextView
@@ -125,14 +127,6 @@
                     android:layout_height="wrap_content"
                     android:gravity="left"
                     android:orientation="vertical">
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginLeft="@dimen/margin_drawer_divider"
-                        android:layout_marginRight="@dimen/margin_drawer_divider"
-                        android:layout_marginTop="@dimen/padding_each_item_bot_top"
-                        android:background="@color/drawerDividerColor" />
 
                     <LinearLayout
                         android:layout_width="match_parent"
