@@ -1,6 +1,17 @@
 <resources>
-    <dimen name="activity_horizontal_margin">16dp</dimen>
-    <dimen name="activity_vertical_margin">16dp</dimen>
+    <dimen name="activity_horizontal_margin">1dp</dimen>
+    <dimen name="activity_vertical_margin">3dp</dimen>
+    <dimen name="dialog_item_margin_top">5dp</dimen>
+    <dimen name="dialog_item_width">72dp</dimen>
+    <dimen name="dialog_item_size">68dp</dimen>
+    <dimen name="dialog_item_photo_size">58dp</dimen>
+    <dimen name="dialog_photo_margin">15dp</dimen>
+    <dimen name="dialog_number_dot">22dp</dimen>
+    <dimen name="dialog_name_width">164dp</dimen>
+    <dimen name="dialog_swipe_item_width">37dp</dimen>
+    <dimen name="dialog_item_underline">310dp</dimen>
+    <dimen name="dialog_item_underline_margin_top">73dp</dimen>
+    <dimen name="dialog_item_underline_margin_left">70</dimen>
     <dimen name="icon_drawer_margin">16dp</dimen>
     <dimen name="text_drawer_margin">16dp</dimen>
     <dimen name="padding_dialog">20dp</dimen>
@@ -29,7 +40,7 @@
     <dimen name="dialog_timestamp_text_size">12sp</dimen>
     <dimen name="dialog_username_text_size">16sp</dimen>
     <dimen name="dialog_preview_text_size">12sp</dimen>
-    <dimen name="dialog_item_margin">6dp</dimen>
+    <dimen name="dialog_item_margin">1dp</dimen>
     <dimen name="circle_photo_border_width">2dp</dimen>
     <dimen name="dialog_button_half_margin">6dp</dimen>
     <dimen name="dialog_button_margin">12dp</dimen>
