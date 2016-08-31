@@ -1,0 +1,360 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="@dimen/nav_header_width"
+        android:layout_height="match_parent"
+        android:background="@color/colorPrimaryLight"
+        android:orientation="vertical">
+
+        <ScrollView
+            android:id="@+id/scrollView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="none">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="left|center_horizontal"
+                android:orientation="vertical">
+
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/nav_header_height"
+                        android:background="@drawable/nav_header_gradient"
+                        android:orientation="vertical">
+
+                        <RelativeLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/nav_margin_top"
+                            android:gravity="center_horizontal">
+
+                            <de.hdodenhof.circleimageview.CircleImageView
+                                android:id="@+id/civUserIcon"
+                                android:layout_width="80dp"
+                                android:layout_height="80dp"
+                                android:layout_alignParentEnd="true"
+                                android:layout_alignParentRight="false"
+                                android:src="@drawable/enot" />
+
+                        </RelativeLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="center_horizontal"
+                            android:gravity="center_horizontal"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/tvNameSurname"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="Raccoon Nigga"
+                                android:textAppearance="?android:attr/textAppearanceMedium"
+                                android:textColor="@color/textColor"
+                                android:textSize="18sp" />
+
+                            <TextView
+                                android:id="@+id/tvUsername"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="online"
+                                android:textAppearance="?android:attr/textAppearanceLarge"
+                                android:textColor="@color/textColorHint"
+                                android:textSize="15sp" />
+
+                        </LinearLayout>
+
+                    </LinearLayout>
+
+                </FrameLayout>
+
+                <LinearLayout
+                    android:orientation="vertical"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/llContent"
+                    android:gravity="left">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="12dp"
+                        android:orientation="horizontal"
+                        android:paddingBottom="12dp">
+
+                        <RadioGroup
+                            android:id="@+id/rgStateChanger"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal">
+
+                            <RadioButton
+                                android:id="@+id/rbAll"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="46dp"
+                                android:background="@color/transparent"
+                                android:button="@null"
+                                android:drawableBottom="@drawable/thumb_all"
+                                android:text="All"
+                                android:textColor="@drawable/rb_colors_all" />
+
+                            <RadioButton
+                                android:id="@+id/rbText"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="26dp"
+                                android:background="@color/transparent"
+                                android:button="@null"
+                                android:drawableBottom="@drawable/thumb_text"
+                                android:text="Text"
+                                android:textColor="@drawable/rb_colors_text" />
+
+                            <RadioButton
+                                android:id="@+id/rbAudio"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="26dp"
+                                android:background="@color/transparent"
+                                android:button="@null"
+                                android:drawableBottom="@drawable/thumb_audio"
+                                android:text="Audio"
+                                android:textColor="@drawable/rb_colors_audio" />
+
+                            <RadioButton
+                                android:id="@+id/rbVideo"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="26dp"
+                                android:background="@color/transparent"
+                                android:button="@null"
+                                android:drawableBottom="@drawable/thumb_video"
+                                android:text="Video"
+                                android:textColor="@drawable/rb_colors_video" />
+                        </RadioGroup>
+
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginLeft="@dimen/margin_drawer_divider"
+                        android:layout_marginRight="@dimen/margin_drawer_divider"
+                        android:layout_marginTop="@dimen/padding_each_item_bot_top"
+                        android:background="@color/drawerDividerColor" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="@dimen/nav_padding_list"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:id="@+id/llDialogs"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:clickable="true"
+                            android:orientation="horizontal"
+                            android:paddingBottom="@dimen/padding_each_item_bot_top"
+                            android:paddingLeft="@dimen/padding_each_item_left_right"
+                            android:paddingTop="@dimen/padding_each_item_bot_top">
+
+                            <com.peekaboo.presentation.app.view.SelectableImageView
+                                android:id="@+id/ivIconChat"
+                                android:layout_width="@dimen/nav_icon_width"
+                                android:layout_height="@dimen/nav_icon_height"
+                                android:src="@drawable/chats_grey" />
+
+                            <com.peekaboo.presentation.app.view.RobotoTextView
+                                android:id="@+id/tvTextChat"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginLeft="@dimen/nav_matgin_left_text"
+                                android:text="@string/dialogs"
+                                android:textAppearance="?android:attr/textAppearanceMedium"
+                                android:textColor="@color/drawer_item_text_color"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/llCalls"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal"
+                            android:paddingBottom="@dimen/padding_each_item_bot_top"
+                            android:paddingLeft="@dimen/padding_each_item_left_right"
+                            android:paddingTop="@dimen/padding_each_item_bot_top">
+
+                            <com.peekaboo.presentation.app.view.SelectableImageView
+                                android:id="@+id/ivIconCalls"
+                                android:layout_width="@dimen/nav_icon_width"
+                                android:layout_height="@dimen/nav_icon_height"
+                                android:src="@drawable/calls_grey" />
+
+                            <com.peekaboo.presentation.app.view.RobotoTextView
+                                android:id="@+id/tvTextCalls"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginLeft="@dimen/nav_matgin_left_text"
+                                android:text="@string/calls"
+                                android:textAppearance="?android:attr/textAppearanceMedium"
+
+                                android:textColor="@color/drawer_item_text_color"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/llContacts"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal"
+                            android:paddingBottom="@dimen/padding_each_item_bot_top"
+                            android:paddingLeft="@dimen/padding_each_item_left_right"
+                            android:paddingTop="@dimen/padding_each_item_bot_top">
+
+                            <com.peekaboo.presentation.app.view.SelectableImageView
+                                android:id="@+id/ivIconContacts"
+                                android:layout_width="@dimen/nav_icon_width"
+                                android:layout_height="@dimen/nav_icon_height"
+                                android:paddingBottom="3dp"
+                                android:paddingTop="3dp"
+                                android:src="@drawable/contacts_grey" />
+
+                            <com.peekaboo.presentation.app.view.RobotoTextView
+                                android:id="@+id/tvTextContacts"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginLeft="@dimen/nav_matgin_left_text"
+                                android:text="@string/contacts"
+
+                                android:textAppearance="?android:attr/textAppearanceMedium"
+                                android:textColor="@color/drawer_item_text_color"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/llProfile"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginBottom="@dimen/nav_padding_top"
+                            android:orientation="horizontal"
+                            android:paddingBottom="@dimen/padding_each_item_bot_top"
+                            android:paddingLeft="@dimen/padding_each_item_left_right"
+                            android:paddingTop="@dimen/padding_each_item_bot_top">
+
+                            <com.peekaboo.presentation.app.view.SelectableImageView
+                                android:id="@+id/ivIconProfile"
+                                android:layout_width="@dimen/nav_icon_width"
+                                android:layout_height="@dimen/nav_icon_height"
+                                android:padding="3dp"
+                                android:src="@drawable/profile_grey" />
+
+                            <com.peekaboo.presentation.app.view.RobotoTextView
+                                android:id="@+id/tvTextProfile"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginLeft="@dimen/nav_matgin_left_text"
+                                android:text="@string/profile"
+
+                                android:textAppearance="?android:attr/textAppearanceMedium"
+                                android:textColor="@color/drawer_item_text_color"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_marginLeft="@dimen/margin_drawer_divider"
+                        android:layout_marginRight="@dimen/margin_drawer_divider"
+                        android:background="@color/drawerDividerColor" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical">
+
+                        <LinearLayout
+                            android:id="@+id/llSettings"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_marginTop="@dimen/nav_padding_top"
+                            android:orientation="horizontal"
+                            android:paddingBottom="@dimen/padding_each_item_bot_top"
+                            android:paddingLeft="@dimen/padding_each_item_left_right"
+                            android:paddingTop="@dimen/padding_each_item_bot_top">
+
+                            <com.peekaboo.presentation.app.view.SelectableImageView
+                                android:id="@+id/ivIconSettings"
+                                android:layout_width="@dimen/nav_icon_width"
+                                android:layout_height="@dimen/nav_icon_height"
+                                android:src="@drawable/settings_grey" />
+
+                            <com.peekaboo.presentation.app.view.RobotoTextView
+                                android:id="@+id/tvTextSettings"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginLeft="@dimen/nav_matgin_left_text"
+                                android:text="@string/settings"
+                                android:textAppearance="?android:attr/textAppearanceMedium"
+                                android:textColor="@color/drawer_item_text_color"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/llExit"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="horizontal"
+                            android:paddingBottom="@dimen/padding_each_item_bot_top"
+                            android:paddingLeft="@dimen/padding_each_item_left_right"
+                            android:paddingTop="@dimen/padding_each_item_bot_top">
+
+                            <com.peekaboo.presentation.app.view.SelectableImageView
+                                android:id="@+id/ivIconExit"
+                                android:layout_width="@dimen/nav_icon_width"
+                                android:layout_height="@dimen/nav_icon_height"
+                                android:src="@drawable/exit_grey" />
+
+                            <com.peekaboo.presentation.app.view.RobotoTextView
+                                android:id="@+id/tvTextExit"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_marginLeft="@dimen/nav_matgin_left_text"
+                                android:text="@string/exit"
+                                android:textAppearance="?android:attr/textAppearanceMedium"
+                                android:textColor="@color/drawer_item_text_color"
+                                android:textStyle="bold" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+        </ScrollView>
+
+
+    </LinearLayout>
+
+</LinearLayout>

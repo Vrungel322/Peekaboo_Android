@@ -8,30 +8,36 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.FrameLayout;
+import android.widget.AdapterView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.peekaboo.R;
 import com.peekaboo.presentation.PeekabooApplication;
+import com.peekaboo.presentation.adapters.HotFriendsAdapter;
 import com.peekaboo.presentation.fragments.CallsFragment;
 import com.peekaboo.presentation.fragments.ContactsFragment;
 import com.peekaboo.presentation.fragments.DialogsFragment;
 import com.peekaboo.presentation.fragments.ProfileFragment;
 import com.peekaboo.presentation.fragments.SettingsFragment;
 import com.peekaboo.presentation.fragments.SocketTestFragment;
+import com.peekaboo.presentation.pojo.HotFriendPOJO;
 import com.peekaboo.utils.Constants;
+
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
 
 public class MainActivity extends AppCompatActivity {
     @BindView(R.id.drawer_layout)
     DrawerLayout drawer;
-    @BindView(R.id.test)
-    FrameLayout test;
+    @BindView(R.id.lvHotFriends)
+    ListView lvHotFriends;
     @BindView(R.id.rgStateChanger)
     RadioGroup rgStateChanger;
     @BindView(R.id.llDialogs)
@@ -46,6 +52,11 @@ public class MainActivity extends AppCompatActivity {
     LinearLayout llSettings;
     @BindView(R.id.llExit)
     LinearLayout llExit;
+
+    private HotFriendsAdapter hotFriendsAdapter;
+    private ArrayList<HotFriendPOJO> alHotFriendPOJO;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +74,22 @@ public class MainActivity extends AppCompatActivity {
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
+
+        //Hardcode list in right drawer
+        alHotFriendPOJO = new ArrayList<HotFriendPOJO>();
+        for (int i = 0; i < 20; i++){
+            alHotFriendPOJO.add(new HotFriendPOJO(R.drawable.enot, Math.random() < 0.5));
+        }
+        hotFriendsAdapter = new HotFriendsAdapter(getApplicationContext(), alHotFriendPOJO);
+        OverScrollDecoratorHelper.setUpOverScroll(lvHotFriends);
+        lvHotFriends.setAdapter(hotFriendsAdapter);
+        lvHotFriends.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Toast.makeText(getApplicationContext(), "clicked raccoon #" + position, Toast.LENGTH_SHORT).show();
+                drawer.closeDrawer(Gravity.RIGHT, true);
+            }
+        });
 
         changeFragment(new SocketTestFragment(), null);
 //        changeFragment(new ServiceTestFragment(), null);
