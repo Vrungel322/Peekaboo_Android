@@ -80,70 +80,48 @@
                 </FrameLayout>
 
                 <LinearLayout
-                    android:orientation="vertical"
+                    android:id="@+id/llContent"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/llContent"
-                    android:gravity="left">
+                    android:gravity="left"
+                    android:orientation="vertical">
 
                     <LinearLayout
-                        android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center"
                         android:layout_marginTop="12dp"
+                        android:background="@drawable/rounded_rectangle"
                         android:orientation="horizontal"
-                        android:paddingBottom="12dp">
+                        android:paddingBottom="12dp"
+                        android:weightSum="3">
 
-                        <RadioGroup
-                            android:id="@+id/rgStateChanger"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:orientation="horizontal">
+                        <Button
+                            android:id="@+id/bText"
+                            android:layout_width="@dimen/switcher_item_size"
+                            android:layout_height="@dimen/switcher_item_size"
+                            android:layout_marginLeft="12dp"
+                            android:layout_marginRight="12dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/thumb_text" />
 
-                            <RadioButton
-                                android:id="@+id/rbAll"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="46dp"
-                                android:background="@color/transparent"
-                                android:button="@null"
-                                android:drawableBottom="@drawable/thumb_all"
-                                android:text="All"
-                                android:textColor="@drawable/rb_colors_all" />
+                        <Button
+                            android:id="@+id/bAudio"
+                            android:layout_width="@dimen/switcher_item_size"
+                            android:layout_height="@dimen/switcher_item_size"
+                            android:layout_marginLeft="12dp"
+                            android:layout_marginRight="12dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/thumb_audio" />
 
-                            <RadioButton
-                                android:id="@+id/rbText"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="26dp"
-                                android:background="@color/transparent"
-                                android:button="@null"
-                                android:drawableBottom="@drawable/thumb_text"
-                                android:text="Text"
-                                android:textColor="@drawable/rb_colors_text" />
-
-                            <RadioButton
-                                android:id="@+id/rbAudio"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="26dp"
-                                android:background="@color/transparent"
-                                android:button="@null"
-                                android:drawableBottom="@drawable/thumb_audio"
-                                android:text="Audio"
-                                android:textColor="@drawable/rb_colors_audio" />
-
-                            <RadioButton
-                                android:id="@+id/rbVideo"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="26dp"
-                                android:background="@color/transparent"
-                                android:button="@null"
-                                android:drawableBottom="@drawable/thumb_video"
-                                android:text="Video"
-                                android:textColor="@drawable/rb_colors_video" />
-                        </RadioGroup>
-
+                        <Button
+                            android:id="@+id/bVideo"
+                            android:layout_width="@dimen/switcher_item_size"
+                            android:layout_height="@dimen/switcher_item_size"
+                            android:layout_marginLeft="12dp"
+                            android:layout_marginRight="12dp"
+                            android:layout_weight="1"
+                            android:background="@drawable/thumb_video" />
 
                     </LinearLayout>
 

@@ -55,5 +55,6 @@
     <dimen name="chat_image_height">230dp</dimen>
     <dimen name="margin_drawer_divider">16dp</dimen>
     <dimen name="chat_buttons_margin">8dp</dimen>
+    <dimen name="switcher_item_size">24dp</dimen>
 
 </resources>

@@ -9,9 +9,9 @@ import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
-import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.peekaboo.R;
@@ -36,10 +36,14 @@ import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
 public class MainActivity extends AppCompatActivity {
     @BindView(R.id.drawer_layout)
     DrawerLayout drawer;
+    @BindView(R.id.bText)
+    Button bText;
+    @BindView(R.id.bAudio)
+    Button bAudio;
+    @BindView(R.id.bVideo)
+    Button bVideo;
     @BindView(R.id.lvHotFriends)
     ListView lvHotFriends;
-    @BindView(R.id.rgStateChanger)
-    RadioGroup rgStateChanger;
     @BindView(R.id.llDialogs)
     LinearLayout llDialogs;
     @BindView(R.id.llCalls)
@@ -120,19 +124,25 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    @OnClick({R.id.rbAll, R.id.rbText, R.id.rbAudio, R.id.rbVideo})
+    @OnClick({R.id.bText, R.id.bAudio, R.id.bVideo})
     public void onRadioButtonClicked(View v){
         switch (v.getId()){
-            case R.id.rbAll:
-                Toast.makeText(getApplicationContext(), "All", Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.rbText:
+            case R.id.bText:
+                if (!bText.isSelected()){
+                    bText.setSelected(true);
+                } else {bText.setSelected(false);}
                 Toast.makeText(getApplicationContext(), "Text", Toast.LENGTH_SHORT).show();
                 break;
-            case R.id.rbAudio:
+            case R.id.bAudio:
+                if (!bAudio.isSelected()){
+                    bAudio.setSelected(true);
+                } else {bAudio.setSelected(false);}
                 Toast.makeText(getApplicationContext(), "Audio", Toast.LENGTH_SHORT).show();
                 break;
-            case R.id.rbVideo:
+            case R.id.bVideo:
+                if (!bVideo.isSelected()){
+                    bVideo.setSelected(true);
+                } else {bVideo.setSelected(false);}
                 Toast.makeText(getApplicationContext(), "Video", Toast.LENGTH_SHORT).show();
                 break;
 
