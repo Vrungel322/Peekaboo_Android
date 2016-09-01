@@ -12,6 +12,9 @@
     <dimen name="text_padding">6dp</dimen>
     <dimen name="padding_button">6dp</dimen>
     <dimen name="et_margin">8dp</dimen>
+    <dimen name="little_margin">2dp</dimen>
+
+
     <dimen name="sign_up_button_padding">8dp</dimen>
     <dimen name="credentials_button_height">52dp</dimen>
     <dimen name="social_network_button_size">68dp</dimen>
@@ -54,6 +57,6 @@
     <dimen name="chat_image_width">350dp</dimen>
     <dimen name="chat_image_height">230dp</dimen>
     <dimen name="margin_drawer_divider">16dp</dimen>
-    <dimen name="chat_buttons_margin">8dp</dimen>
+    <dimen name="chat_buttons_margin">10dp</dimen>
 
 </resources>

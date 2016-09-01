@@ -47,6 +47,7 @@ public class ChatItemDialog extends DialogFragment {
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
+        setStyle(STYLE_NO_TITLE,0);
         try {
             chatItemEventListener = (IChatItemEventListener) activity;
         } catch (ClassCastException e) {
@@ -62,6 +63,7 @@ public class ChatItemDialog extends DialogFragment {
 //        itemIndex = getArguments().getInt("index");
 //        tableName = getArguments().getString("tableName");
         View view = inflater.inflate(R.layout.chat_item_dialog, container, false);
+
         ButterKnife.bind(this, view);
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(view.getContext(), R.layout.attach_dialog_item, editChatItem);
