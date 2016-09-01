@@ -64,7 +64,7 @@ public class MessageUtils {
                 .setBody(body.getBytes());
     }
 
-    public static Message convert(PMessageAbs message) {
+    public static Message convert(PMessage message) {
         Message result;
 
         result = new Message(Message.Command.SEND);
@@ -109,5 +109,12 @@ public class MessageUtils {
                 receiverId,
                 senderId
         );
+    }
+
+
+    public static Message createReadMessage(String senderId, String from) {
+        return new Message(Message.Command.READ)
+                .addParam(Message.Params.DESTINATION, senderId)
+                .addParam(Message.Params.FROM, from);
     }
 }

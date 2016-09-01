@@ -13,7 +13,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.peekaboo.R;
-import com.peekaboo.data.repositories.database.messages.PMessageAbs;
+import com.peekaboo.data.repositories.database.messages.PMessage;
 import com.peekaboo.presentation.PeekabooApplication;
 import com.peekaboo.presentation.adapters.TestMessageAdapter;
 import com.peekaboo.presentation.presenters.ChatPresenter2;
@@ -95,17 +95,16 @@ public class MessangerTestFragment extends Fragment implements IChatView2 {
     public void onPause() {
         presenter.onPause();
         super.onPause();
-
     }
 
     @Override
-    public void showMessages(List<PMessageAbs> messages) {
+    public void showMessages(List<PMessage> messages) {
         Log.e("fragment", "show " + messages);
         getActivity().runOnUiThread(() -> adapter.setMessages(messages));
     }
 
     @Override
-    public void appendMessages(List<PMessageAbs> messages) {
+    public void appendMessages(List<PMessage> messages) {
         Log.e("fragment", "append " + messages);
         getActivity().runOnUiThread(() -> {
             adapter.addMessages(messages);
@@ -116,7 +115,7 @@ public class MessangerTestFragment extends Fragment implements IChatView2 {
     }
 
     @Override
-    public void updateMessage(PMessageAbs message) {
+    public void updateMessage(PMessage message) {
         Log.e("fragment", "update " + message);
         getActivity().runOnUiThread(() -> adapter.updateMessage(message));
     }
@@ -130,22 +129,4 @@ public class MessangerTestFragment extends Fragment implements IChatView2 {
     public void showToastMessage(String text) {
         Toast.makeText(getActivity(), text, Toast.LENGTH_SHORT).show();
     }
-
-    //
-//    @Override
-//    public boolean onMessageObtained(PMessage message) {
-//        Log.e("fragment", "obtained");
-//        getActivity().runOnUiThread(() -> {
-//            adapter.addItem(message);
-//            listView.smoothScrollToPosition(adapter.getCount() - 1);
-//        });
-//        return true;
-//    }
-//
-//    @Override
-//    public void onMessageSent(PMessage message) {
-//        Log.e("fragment", "onMessageSent");
-//        messageView.setText("");
-//        adapter.addItem(message);
-//    }
 }

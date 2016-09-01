@@ -18,7 +18,7 @@ import rx.functions.Action1;
 public class ContactPresenter implements IContactPresenter {
 
     private Context context;
-    AbstractMapperFactory mapperFactory;
+    private AbstractMapperFactory mapperFactory;
     private PContactHelper pContactHelper;
 
     @Inject
@@ -30,12 +30,12 @@ public class ContactPresenter implements IContactPresenter {
 
     @Override
     public void createTable(String tableName) {
-        pContactHelper.createTable(tableName);
+//        pContactHelper.createTable(tableName);
     }
 
     @Override
     public void insertContactToTable(String tableName, PContact contact) {
-        pContactHelper.insert(tableName, mapperFactory.getPContactMapper().transform(contact));
+        pContactHelper.insert(mapperFactory.getPContactMapper().transform(contact));
     }
 
     @Override
@@ -45,12 +45,12 @@ public class ContactPresenter implements IContactPresenter {
 
     @Override
     public void dropTableAndCreate(String tableName) {
-        pContactHelper.dropTableAndCreate(tableName);
+        pContactHelper.dropTableAndCreate();
     }
 
     @Override
     public void getAllTableAsString(String tableName) {
-        pContactHelper.getAllContacts(tableName)
+        pContactHelper.getAllContacts()
                 .subscribe(pContactAbses -> {
                     for (PContactAbs pContact : pContactAbses){
                         Log.wtf("DB_LOG", "ID: " + pContact.contactId()

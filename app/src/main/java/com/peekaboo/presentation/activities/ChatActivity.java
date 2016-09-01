@@ -22,7 +22,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.peekaboo.R;
-import com.peekaboo.data.repositories.database.messages.TextPMessage;
 import com.peekaboo.presentation.PeekabooApplication;
 import com.peekaboo.presentation.adapters.ChatAdapter;
 import com.peekaboo.presentation.fragments.AttachmentChatDialog;
@@ -36,7 +35,6 @@ import com.peekaboo.utils.Utility;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Random;
 
 import javax.inject.Inject;
 

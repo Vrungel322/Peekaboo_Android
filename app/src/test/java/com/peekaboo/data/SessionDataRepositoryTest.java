@@ -14,7 +14,14 @@ import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import rx.Observable;
+import rx.functions.Action1;
+import rx.functions.Func1;
+import rx.functions.Func2;
+import rx.functions.Functions;
 import rx.observers.TestSubscriber;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -41,6 +48,46 @@ public class SessionDataRepositoryTest {
         MockitoAnnotations.initMocks(this);
         sessionDataRepository = new SessionDataRepository(restApi, mapper, user);
     }
+
+    @Test
+    public void rxText() {
+        List<String> contacts = new ArrayList<>();
+        contacts.add("c1");
+        contacts.add("c2");
+        contacts.add("c3");
+
+        List<Integer> list1 = new ArrayList<>();
+        list1.add(1);
+        list1.add(2);
+        list1.add(3);
+
+        List<Integer> list2 = new ArrayList<>();
+        list2.add(4);
+        list2.add(5);
+        list2.add(6);
+
+        List<Integer> list3 = new ArrayList<>();
+        list3.add(7);
+        list3.add(8);
+        list3.add(9);
+
+        Observable.just(contacts)
+                .flatMapIterable(l -> l)
+//                .switchMap(Observable::from)
+                .concatMap(s -> {
+                    if (s.contains("1"))
+                        return Observable.just(list1);
+                    if (s.contains("2"))
+                        return Observable.just(list2);
+                    if (s.contains("3"))
+                        return Observable.just(list3);
+                    return Observable.just(new ArrayList<Integer>());
+                }).reduce(new ArrayList<>(), (integers, integers2) -> {
+                    integers.addAll(integers2);
+                    return integers;
+                })
+                .subscribe(System.out::println);
+}
 
     @Test
     public void whenLoginSuccessThenReturnUser() {

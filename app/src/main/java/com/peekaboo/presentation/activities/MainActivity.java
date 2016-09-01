@@ -22,15 +22,8 @@ import com.peekaboo.presentation.fragments.CallsFragment;
 import com.peekaboo.presentation.fragments.ContactsFragment;
 import com.peekaboo.presentation.fragments.DialogsFragment;
 import com.peekaboo.presentation.fragments.FriendTestFragment;
-import com.peekaboo.presentation.fragments.MessangerTestFragment;
 import com.peekaboo.presentation.fragments.ProfileFragment;
 import com.peekaboo.presentation.fragments.SettingsFragment;
-import com.peekaboo.presentation.fragments.SocketTestFragment;
-import com.peekaboo.presentation.services.INotifier;
-import com.peekaboo.presentation.services.Message;
-import com.peekaboo.presentation.services.MessageUtils;
-
-import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -58,9 +51,6 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.rlSliderLabel)
     RelativeLayout rlSliderLabel;
 
-    @Inject
-    INotifier<Message> notifier;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -77,10 +67,11 @@ public class MainActivity extends AppCompatActivity {
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
-//        if (getSupportFragmentManager().findFragmentById(R.id.fragmentContainer) == null) {
-//            changeFragment(new FriendTestFragment(), null);
-//        }
-        changeFragment(new SocketTestFragment(), null);
+        if (getSupportFragmentManager().findFragmentById(R.id.fragmentContainer) == null) {
+            changeFragment(new FriendTestFragment(), null);
+        }
+
+//        changeFragment(new SocketTestFragment(), null);
 //        changeFragment(new ServiceTestFragment(), null);
 //        changeFragment(new RecordTestFragment(), null);
 
@@ -89,20 +80,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onPositionChanged(int position) {
                 Toast.makeText(getApplicationContext(), "pos : " + position, Toast.LENGTH_SHORT).show();
-                Message switchModeMessage = MessageUtils.createSwitchModeMessage((byte) position);
-                if (notifier.isAvailable()) {
-                    notifier.sendMessage(switchModeMessage);
-                }
-
                 int childCount = rlSliderLabel.getChildCount();
-                for(int i= 0; i<childCount; i++){
+                for (int i = 0; i < childCount; i++) {
                     TextView tv = (TextView) rlSliderLabel.getChildAt(i);
-                    if(i == position)
+                    if (i == position)
                         tv.setTextColor(getResources().getColor(R.color.colorPrimary));
                     else
                         tv.setTextColor(getResources().getColor(R.color.colorAccent));
                 }
-
             }
         });
 
@@ -119,7 +104,7 @@ public class MainActivity extends AppCompatActivity {
     @OnClick({R.id.llDialogs, R.id.llCalls, R.id.llContacts, R.id.llProfile, R.id.llSettings, R.id.llExit})
     public void onDrawerItemClick(View v) {
         selectionMode(v.getId());
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.llDialogs:
                 changeFragment(new DialogsFragment(), "dialogsFragment");//new dialogsfragment
                 break;
@@ -181,7 +166,7 @@ public class MainActivity extends AppCompatActivity {
         drawer.closeDrawer(Gravity.LEFT);
     }
 
-    private void addTickMarkTextLabels(){
+    private void addTickMarkTextLabels() {
         int tickMarkCount = discreteSlider.getTickMarkCount();
         float tickMarkRadius = discreteSlider.getTickMarkRadius();
         int width = rlSliderLabel.getMeasuredWidth();
@@ -192,12 +177,12 @@ public class MainActivity extends AppCompatActivity {
         float lastTickMarkRadius = tickMarkRadius;
         int interval = (width - (discreteSliderBackdropLeftMargin +
                 discreteSliderBackdropRightMargin) -
-                ((int)(firstTickMarkRadius+lastTickMarkRadius)) ) / (tickMarkCount);
+                ((int) (firstTickMarkRadius + lastTickMarkRadius))) / (tickMarkCount);
 
         String[] tickMarkLabels = {"All", "Text", "Audio", "Video"};
         int tickMarkLabelWidth = DisplayUtility.dp2px(this, 40);
 
-        for(int i=0; i<tickMarkCount; i++) {
+        for (int i = 0; i < tickMarkCount; i++) {
             TextView tv = new TextView(this);
 
             RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
@@ -205,14 +190,14 @@ public class MainActivity extends AppCompatActivity {
 
             tv.setText(tickMarkLabels[i]);
             tv.setGravity(Gravity.CENTER);
-            if(i==0)
+            if (i == 0)
                 tv.setTextColor(getResources().getColor(R.color.colorPrimary));
             else
                 tv.setTextColor(getResources().getColor(R.color.colorAccent));
 
 //                    tv.setBackgroundColor(getResources().getColor(android.R.color.holo_blue_dark));
 
-            int left = discreteSliderBackdropLeftMargin + (int)firstTickMarkRadius * 6 + (i * interval);
+            int left = discreteSliderBackdropLeftMargin + (int) firstTickMarkRadius * 6 + (i * interval);
 
             layoutParams.setMargins(left,
                     0,

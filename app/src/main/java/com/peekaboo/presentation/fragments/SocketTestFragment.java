@@ -1,9 +1,13 @@
 package com.peekaboo.presentation.fragments;
 
 
+import android.Manifest;
+import android.app.Activity;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -57,13 +61,14 @@ public class SocketTestFragment extends Fragment implements INotifier.Notificati
     AccountUser user;
 
     public SocketTestFragment() {
-        // Required empty public constructor
+
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         PeekabooApplication.getApp(getActivity()).getComponent().inject(this);
+        verifyStoragePermissions(getActivity());
     }
 
     @Override
@@ -83,6 +88,7 @@ public class SocketTestFragment extends Fragment implements INotifier.Notificati
 
     @OnClick(R.id.bSend)
     public void send() {
+
 //        Message message = MessageUtils.createTextMessage("hello", "afsaghs");
 //        if (notifier.isAvailable()) {
 //            notifier.sendMessage(message);
@@ -95,7 +101,7 @@ public class SocketTestFragment extends Fragment implements INotifier.Notificati
                 public void onNext(final User user) {
                     String message = etMessage.getText().toString();
                     if (message.isEmpty()) {
-                        String fileName = Environment.getExternalStorageDirectory().toString() + File.separator + "eric.wav";
+                        String fileName = "/sdcard/eric.wav";
                         uploadFileUseCase.setInfo(fileName, user.getId());
                         uploadFileUseCase.execute(new BaseUseCaseSubscriber<FileEntity>() {
                             @Override
@@ -136,7 +142,7 @@ public class SocketTestFragment extends Fragment implements INotifier.Notificati
         String messageType = message.getParams().get(Message.Params.TYPE);
         if (Message.Type.AUDIO.equals(messageType)) {
             String remoteFileName = new String(message.getBody());
-            String fileName = Environment.getExternalStorageDirectory().toString() + File.separator + "eric10.wav";
+            String fileName = "/sdcard/eric10.wav";
 
             downloadFileUseCase.setInfo(fileName, remoteFileName);
             downloadFileUseCase.execute(new BaseUseCaseSubscriber<File>() {
@@ -158,18 +164,34 @@ public class SocketTestFragment extends Fragment implements INotifier.Notificati
         }
     }
 
+    public static void verifyStoragePermissions(Activity activity) {
+        // Check if we have read or write permission
+        int writePermission = ActivityCompat.checkSelfPermission(activity, PERMISSIONS_STORAGE[1]);
+        int readPermission = ActivityCompat.checkSelfPermission(activity, PERMISSIONS_STORAGE[0]);
+
+        if (writePermission != PackageManager.PERMISSION_GRANTED || readPermission != PackageManager.PERMISSION_GRANTED) {
+            // We don't have permission so prompt the user
+            ActivityCompat.requestPermissions(
+                    activity,
+                    PERMISSIONS_STORAGE,
+                    REQUEST_EXTERNAL_STORAGE
+            );
+        }
+    }
+
+    private static final int REQUEST_EXTERNAL_STORAGE = 1;
+    private static String[] PERMISSIONS_STORAGE = {
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+    };
+
     @Override
-    public boolean willHandleMessage(Message message) {
-        return false;
+    public void onConnected() {
+
     }
 
     @Override
-    public void onMessageSent(Message message) {
-
-    }
-
-    @Override
-    public void onMessageRead(Message message) {
+    public void onDisconnected() {
 
     }
 }

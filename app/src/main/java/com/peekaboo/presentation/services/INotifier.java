@@ -20,16 +20,9 @@ public interface INotifier<T> {
     interface NotificationListener<T> {
 
         void onMessageObtained(T message);
-        /**
-         * called when new message is received
-         *
-         * @param message - Received message
-         * @return true if message is handled
-         */
-        boolean willHandleMessage(T message);
 
-        void onMessageSent(T message);
+        void onConnected();
 
-        void onMessageRead(T message);
+        void onDisconnected();
     }
 }

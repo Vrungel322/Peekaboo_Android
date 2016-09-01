@@ -8,11 +8,9 @@ import android.net.ConnectivityManager;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
-import android.widget.AdapterView;
 import android.widget.Toast;
 
 import com.peekaboo.domain.AccountUser;
-import com.peekaboo.domain.usecase.Messanger;
 import com.peekaboo.presentation.PeekabooApplication;
 import com.peekaboo.utils.InternetBroadcastReceiver;
 
@@ -20,11 +18,12 @@ import javax.inject.Inject;
 
 public class NotificationService extends Service {
 
-    private InternetBroadcastReceiver ibrInternetCheck;
     @Inject
-    INotifier<Message> notifier;
+//    INotifier<Message> notifier;
+            IMessenger notifier;
     @Inject
     AccountUser user;
+    private InternetBroadcastReceiver ibrInternetCheck;
 
     public static void launch(Context context, @Nullable String action) {
         Intent intent = new Intent(context, NotificationService.class);

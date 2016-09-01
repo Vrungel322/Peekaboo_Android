@@ -17,6 +17,7 @@ public class PContactMapper implements Mapper<PContact, ContentValues> {
                 .contactNickname(obj.contactNickname())
                 .isOnline(obj.isOnline())
                 .contactImgUri(obj.contactImgUri())
+                .contactId(obj.contactId())
                 .build();
     }
 }

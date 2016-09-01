@@ -46,6 +46,9 @@ public class WebSocketNotifier implements INotifier<Message> {
                                 @Override
                                 public void onConnected(WebSocket websocket, Map<String, List<String>> headers) throws Exception {
                                     String msg = "Status: Connected to " + BASE_URL;
+                                    for (NotificationListener<Message> listener : listeners) {
+                                        listener.onConnected();
+                                    }
                                     Log.e(TAG, msg);
                                 }
 
@@ -62,6 +65,10 @@ public class WebSocketNotifier implements INotifier<Message> {
                                     String msg = "Status: Disconnected ";
                                     Log.e(TAG, msg);
                                     ws = null;
+
+                                    for (NotificationListener<Message> listener : listeners) {
+                                        listener.onDisconnected();
+                                    }
                                 }
 
                                 @Override
@@ -70,10 +77,11 @@ public class WebSocketNotifier implements INotifier<Message> {
                                     Log.e(TAG, msg);
 
                                     Message obtainedMessage = btm.transform(binary);
+                                    Log.e(TAG, "Status: Text Message received" + obtainedMessage);
+
                                     for (NotificationListener<Message> listener : listeners) {
                                         listener.onMessageObtained(obtainedMessage);
                                     }
-                                    Log.e(TAG, "Status: Text Message received" + obtainedMessage);
 
                                 }
 
@@ -116,9 +124,6 @@ public class WebSocketNotifier implements INotifier<Message> {
     public void sendMessage(Message message) {
         Log.e("notifier", "send message " + message.getCommand());
         sendBinaryMessage(mtb.transform(message));
-        for (NotificationListener<Message> listener : listeners) {
-            listener.onMessageSent(message);
-        }
     }
 
     public void sendBinaryMessage(byte[] message) {

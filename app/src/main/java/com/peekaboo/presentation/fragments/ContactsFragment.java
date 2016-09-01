@@ -42,11 +42,11 @@ public class ContactsFragment extends Fragment {
         contactPresenter.createTable("contactsTable");
         // Testing DB
         contactPresenter.insertContactToTable("contactsTable",
-                new PContact("Name0", "Surname0", "Nickname0", true, "uri0"));
+                new PContact("Name0", "Surname0", "Nickname0", true, "uri0", "a"));
         contactPresenter.insertContactToTable("contactsTable",
-                new PContact("Name1", "Surname1", "Nickname1", true, "uri1"));
+                new PContact("Name1", "Surname1", "Nickname1", true, "uri1", "b"));
         contactPresenter.insertContactToTable("contactsTable",
-                new PContact("Name2", "Surname2", "Nickname2", true, "uri2"));
+                new PContact("Name2", "Surname2", "Nickname2", true, "uri2", "c"));
         contactPresenter.getAllTableAsString("contactsTable");
     }
 

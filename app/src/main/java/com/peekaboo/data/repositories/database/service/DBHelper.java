@@ -1,4 +1,4 @@
-package com.peekaboo.data.repositories.database.messages;
+package com.peekaboo.data.repositories.database.service;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
@@ -7,12 +7,12 @@ import android.database.sqlite.SQLiteOpenHelper;
 /**
  * Created by Nikita on 18.07.2016.
  */
-public class PMessageDBHelper extends SQLiteOpenHelper {
+public class DBHelper extends SQLiteOpenHelper {
 
-    private static String DB_NAME = "privateMessages";
+    private static String DB_NAME = "TemporaryDb";
     private static int DB_VERSION = 1;
 
-    public PMessageDBHelper(Context context) {
+    public DBHelper(Context context) {
         super(context, DB_NAME, null, DB_VERSION);
     }
 

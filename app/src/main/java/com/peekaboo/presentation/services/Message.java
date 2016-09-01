@@ -113,7 +113,7 @@ public class Message {
         return result;
     }
 
-    public enum Command {ACCEPT, CALL, REJECT, SEND, MESSAGE, SWITCHMODE}
+    public enum Command {ACCEPT, CALL, REJECT, SEND, MESSAGE, SWITCHMODE, READ}
 
     public enum Params {DESTINATION, FROM, TYPE, REASON, DATE, ID}
 

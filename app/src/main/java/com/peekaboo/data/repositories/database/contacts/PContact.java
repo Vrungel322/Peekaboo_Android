@@ -11,19 +11,30 @@ public class PContact extends PContactAbs {
     private String contactNickname;
     private boolean isOnline;
     private String contactImgUri;
+    private String contactId;
 
     public PContact(String contactName, String contactSurname, String contactNickname,
-                    boolean isOnline, String contactImgUri) {
+                    boolean isOnline, String contactImgUri, String contactId) {
         this.contactName = contactName;
         this.contactSurname = contactSurname;
         this.contactNickname = contactNickname;
         this.isOnline = isOnline;
         this.contactImgUri = contactImgUri;
+        this.contactId = contactId;
     }
 
     @Override
-    public long contactId() {
+    public long id() {
         return id;
+    }
+
+    @Override
+    public String contactId() {
+        return contactId;
+    }
+
+    public void setContactId(String contactId) {
+        this.contactId = contactId;
     }
 
     @Override
