@@ -41,8 +41,8 @@
 
                             <de.hdodenhof.circleimageview.CircleImageView
                                 android:id="@+id/civUserIcon"
-                                android:layout_width="80dp"
-                                android:layout_height="80dp"
+                                android:layout_width="@dimen/widthOfIconInDrawer"
+                                android:layout_height="@dimen/heightOfIconInDrawer"
                                 android:layout_alignParentEnd="true"
                                 android:layout_alignParentRight="false"
                                 android:src="@drawable/raccoon"
@@ -64,7 +64,7 @@
                                 android:text="Raccoon Nigga"
                                 android:textAppearance="?android:attr/textAppearanceMedium"
                                 android:textColor="@color/colorText"
-                                android:textSize="18sp" />
+                                android:textSize="@dimen/name_surnameSizeInDrawer" />
 
                             <TextView
                                 android:id="@+id/tvUsername"
@@ -83,7 +83,7 @@
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="138dp"
+                        android:layout_marginTop="@dimen/marginTopForSwitcher"
                         android:layout_gravity="center_horizontal"
                         android:background="@drawable/rounded_rectangle"
                         android:orientation="horizontal"
@@ -94,8 +94,8 @@
                             android:id="@+id/bText"
                             android:layout_width="@dimen/switcher_item_size"
                             android:layout_height="@dimen/switcher_item_size"
-                            android:layout_marginLeft="12dp"
-                            android:layout_marginRight="12dp"
+                            android:layout_marginLeft="@dimen/marginForEachItemInSwitcher"
+                            android:layout_marginRight="@dimen/marginForEachItemInSwitcher"
                             android:layout_weight="1"
                             android:background="@drawable/thumb_text" />
 
@@ -103,8 +103,8 @@
                             android:id="@+id/bAudio"
                             android:layout_width="@dimen/switcher_item_size"
                             android:layout_height="@dimen/switcher_item_size"
-                            android:layout_marginLeft="12dp"
-                            android:layout_marginRight="12dp"
+                            android:layout_marginLeft="@dimen/marginForEachItemInSwitcher"
+                            android:layout_marginRight="@dimen/marginForEachItemInSwitcher"
                             android:layout_weight="1"
                             android:background="@drawable/thumb_audio" />
 
@@ -112,8 +112,8 @@
                             android:id="@+id/bVideo"
                             android:layout_width="@dimen/switcher_item_size"
                             android:layout_height="@dimen/switcher_item_size"
-                            android:layout_marginLeft="12dp"
-                            android:layout_marginRight="12dp"
+                            android:layout_marginLeft="@dimen/marginForEachItemInSwitcher"
+                            android:layout_marginRight="@dimen/marginForEachItemInSwitcher"
                             android:layout_weight="1"
                             android:background="@drawable/thumb_video" />
 
