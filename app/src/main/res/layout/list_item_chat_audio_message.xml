@@ -8,55 +8,48 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
-        android:background="@drawable/bubble2"
-        android:paddingLeft="6dp"
-        android:paddingRight="6dp">
+        android:background="@drawable/bubble2">
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:maxWidth="@dimen/chat_message_bubble_max_width"
-            android:orientation="vertical"
+            android:orientation="vertical">
 
-            android:padding="@dimen/text_padding">
-
-            <LinearLayout
-                android:id="@+id/progressDisplay"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:orientation="horizontal"
-
-                >
-
-                <ImageButton
-                    android:id="@+id/ibPlayRecord"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="@drawable/play_blue"
-                    android:layout_margin="4dp"/>
-
-                <TextView
-                    android:id="@+id/tvCurrentDuration"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="1"
-                    android:text="0:00"
-
-                    android:textColor="@color/colorControlNormal"
-
-                    android:textStyle="bold" />
-
-                <SeekBar
-                    android:id="@+id/seekBarPlayProgress"
+                <LinearLayout
+                    android:id="@+id/progressDisplay"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:orientation="horizontal"
                     android:layout_gravity="center"
-                    android:max="100"
-                    style="@style/SeekBar" />
-            </LinearLayout>
+                    >
+
+                    <ImageButton
+                        android:id="@+id/ibPlayRecord"
+                        android:layout_width="25dp"
+                        android:layout_height="25dp"
+                        android:background="@drawable/play_green"
+                        />
+
+                    <TextView
+                        android:id="@+id/tvCurrentDuration"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="0:00"
+                        android:textStyle="bold"
+                        android:layout_gravity="center"
+                        />
+
+                    <SeekBar
+                        android:id="@+id/seekBarPlayProgress"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:thumb="@drawable/slider_green"
+                        android:progressDrawable="@drawable/seekbar_progress"
+                        android:max="100"
+                        android:layout_gravity="center"
+                        />
+                </LinearLayout>
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -68,20 +61,17 @@
                     android:id="@+id/ivChatMessageStatus"
                     android:layout_width="@dimen/chat_message_status_size"
                     android:layout_height="@dimen/chat_message_status_size"
-                    android:layout_gravity="end"
-                    android:src="@drawable/ic_check" />
+                    android:layout_marginRight="6dp"
+                    android:src="@drawable/ic_check"
+                    android:visibility="gone"/>
 
                 <TextView
                     android:id="@+id/tvChatTimestamp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="yesterday"
                     android:textColor="@color/colorDarkAccent"
-                    android:layout_gravity="end"
                     android:textSize="@dimen/chat_timestamp_text_size" />
-
             </LinearLayout>
-
 
         </LinearLayout>
     </FrameLayout>
