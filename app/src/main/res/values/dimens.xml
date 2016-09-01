@@ -72,5 +72,9 @@
     <dimen name="name_surnameSizeInDrawer">18sp</dimen>
     <dimen name="marginTopForSwitcher">138dp</dimen>
     <dimen name="marginForEachItemInSwitcher">12dp</dimen>
+    <dimen name="left_rightMarginHotFriendLayout">7dp</dimen>
+    <dimen name="top_botMarginHotFriendLayout">10dp</dimen>
+    <dimen name="hotFriendIconSize">55dp</dimen>
+    <dimen name="hotFriendStatusIconSize">15dp</dimen>
 
 </resources>
