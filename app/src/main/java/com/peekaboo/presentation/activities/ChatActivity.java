@@ -8,13 +8,11 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.v4.view.GravityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -163,6 +161,7 @@ public class ChatActivity extends AppCompatActivity
                 break;
             }
             case android.R.id.home: {
+                onBackPressed();
                 Toast.makeText(getApplicationContext(), "home b clicked", Toast.LENGTH_SHORT).show();
                 break;
             }
