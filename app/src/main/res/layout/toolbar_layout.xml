@@ -11,7 +11,7 @@
         android:layout_height="40dp"
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="false"
-        android:src="@drawable/raccoon"
+        android:src="@drawable/enot"
         app:border_color="#00000000" />
 
     <LinearLayout

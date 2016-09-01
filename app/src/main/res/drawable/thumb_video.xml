@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:state_selected="true" android:drawable="@drawable/thumb_video_blue"/>
-    <item android:state_selected="false" android:drawable="@drawable/thumb_video_gray"/>
-    <item android:drawable="@drawable/thumb_video_gray"/>
+    <item android:state_checked="true" android:drawable="@drawable/checked_thumb_video">
+    </item>
+    <item android:drawable="@drawable/default_thumb"/>
 
 </selector>

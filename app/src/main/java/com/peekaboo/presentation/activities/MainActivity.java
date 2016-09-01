@@ -1,6 +1,5 @@
 package com.peekaboo.presentation.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
@@ -9,42 +8,28 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.ListView;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.peekaboo.R;
 import com.peekaboo.presentation.PeekabooApplication;
-import com.peekaboo.presentation.adapters.HotFriendsAdapter;
 import com.peekaboo.presentation.fragments.CallsFragment;
 import com.peekaboo.presentation.fragments.ContactsFragment;
 import com.peekaboo.presentation.fragments.DialogsFragment;
 import com.peekaboo.presentation.fragments.ProfileFragment;
 import com.peekaboo.presentation.fragments.SettingsFragment;
 import com.peekaboo.presentation.fragments.SocketTestFragment;
-import com.peekaboo.presentation.pojo.HotFriendPOJO;
-import com.peekaboo.utils.Constants;
-
-import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
 
 public class MainActivity extends AppCompatActivity {
     @BindView(R.id.drawer_layout)
     DrawerLayout drawer;
-    @BindView(R.id.bText)
-    Button bText;
-    @BindView(R.id.bAudio)
-    Button bAudio;
-    @BindView(R.id.bVideo)
-    Button bVideo;
-    @BindView(R.id.lvHotFriends)
-    ListView lvHotFriends;
+    @BindView(R.id.rgStateChanger)
+    RadioGroup rgStateChanger;
     @BindView(R.id.llDialogs)
     LinearLayout llDialogs;
     @BindView(R.id.llCalls)
@@ -58,11 +43,6 @@ public class MainActivity extends AppCompatActivity {
     @BindView(R.id.llExit)
     LinearLayout llExit;
 
-    private HotFriendsAdapter hotFriendsAdapter;
-    private ArrayList<HotFriendPOJO> alHotFriendPOJO;
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,31 +53,12 @@ public class MainActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
-
-        //Hardcode list in right drawer
-        alHotFriendPOJO = new ArrayList<HotFriendPOJO>();
-        for (int i = 0; i < 20; i++){
-            alHotFriendPOJO.add(new HotFriendPOJO(R.drawable.raccoon, Math.random() < 0.5));
-        }
-        hotFriendsAdapter = new HotFriendsAdapter(getApplicationContext(), alHotFriendPOJO);
-        OverScrollDecoratorHelper.setUpOverScroll(lvHotFriends);
-        lvHotFriends.setAdapter(hotFriendsAdapter);
-        lvHotFriends.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(getApplicationContext(), "clicked raccoon #" + position, Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(MainActivity.this, ChatActivity.class));
-                drawer.closeDrawer(Gravity.RIGHT, true);
-            }
-        });
-
         changeFragment(new SocketTestFragment(), null);
 //        changeFragment(new ServiceTestFragment(), null);
 //        changeFragment(new RecordTestFragment(), null);
@@ -108,44 +69,38 @@ public class MainActivity extends AppCompatActivity {
         selectionMode(v.getId());
         switch (v.getId()){
             case R.id.llDialogs:
-                changeFragment(new DialogsFragment(), Constants.FRAGMENT_TAGS.DIALOGS_FRAGMENT);
+                changeFragment(new DialogsFragment(), "dialogsFragment");//new dialogsfragment
                 break;
             case R.id.llCalls:
-                changeFragment(new CallsFragment(), Constants.FRAGMENT_TAGS.CALLS_FRAGMENT);
+                changeFragment(new CallsFragment(), "callsFragment");
                 break;
             case R.id.llContacts:
-                changeFragment(new ContactsFragment(), Constants.FRAGMENT_TAGS.CONTACTS_FRAGMENT);
+                changeFragment(new ContactsFragment(), "contactsFragment");
                 break;
             case R.id.llProfile:
-                changeFragment(new ProfileFragment(), Constants.FRAGMENT_TAGS.PROFILE_FRAGMENT);
+                changeFragment(new ProfileFragment(), "profileFragment");
                 break;
             case R.id.llSettings:
-                changeFragment(new SettingsFragment(), Constants.FRAGMENT_TAGS.SETTINGS_FRAGMENT);
+                changeFragment(new SettingsFragment(), "settingsFragment");
                 break;
 
         }
 
     }
 
-    @OnClick({R.id.bText, R.id.bAudio, R.id.bVideo})
+    @OnClick({R.id.rbAll, R.id.rbText, R.id.rbAudio, R.id.rbVideo})
     public void onRadioButtonClicked(View v){
         switch (v.getId()){
-            case R.id.bText:
-                if (!bText.isSelected()){
-                    bText.setSelected(true);
-                } else {bText.setSelected(false);}
+            case R.id.rbAll:
+                Toast.makeText(getApplicationContext(), "All", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.rbText:
                 Toast.makeText(getApplicationContext(), "Text", Toast.LENGTH_SHORT).show();
                 break;
-            case R.id.bAudio:
-                if (!bAudio.isSelected()){
-                    bAudio.setSelected(true);
-                } else {bAudio.setSelected(false);}
+            case R.id.rbAudio:
                 Toast.makeText(getApplicationContext(), "Audio", Toast.LENGTH_SHORT).show();
                 break;
-            case R.id.bVideo:
-                if (!bVideo.isSelected()){
-                    bVideo.setSelected(true);
-                } else {bVideo.setSelected(false);}
+            case R.id.rbVideo:
                 Toast.makeText(getApplicationContext(), "Video", Toast.LENGTH_SHORT).show();
                 break;
 
