@@ -161,6 +161,7 @@ public class ChatActivity extends AppCompatActivity
                 break;
             }
             case android.R.id.home: {
+                onBackPressed();
                 Toast.makeText(getApplicationContext(), "home b clicked", Toast.LENGTH_SHORT).show();
                 break;
             }
