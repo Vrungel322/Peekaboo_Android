@@ -11,5 +11,6 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:text="Profile"
+        android:id="@+id/tvProfile"
         android:layout_gravity="center" />
 </FrameLayout>
