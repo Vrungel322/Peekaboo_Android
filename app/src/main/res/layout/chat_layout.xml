@@ -4,8 +4,6 @@
     style="@style/ChatActivityTheme"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="@dimen/items_margin"
-
     android:orientation="vertical">
 
     <android.support.design.widget.AppBarLayout
@@ -29,6 +27,8 @@
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvMessages"
+        android:padding="@dimen/items_margin"
+
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_weight="1"

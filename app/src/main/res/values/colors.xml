@@ -25,4 +25,7 @@
     <color name="rb_color_audio">#954bf1</color>
     <color name="rb_color_video">#7305fa</color>
     <color name="rightItemSelection">#248f8f</color>
+
+    <color name="drawerHeaderColor">#22dd22</color>
+    <color name="colorText">#eeeeee</color>
 </resources>
