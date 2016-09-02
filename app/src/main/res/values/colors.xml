@@ -3,10 +3,10 @@
     <color name="colorPrimary">#8b8b8b</color>
 
     <color name="colorPrimaryDark">#c8555555</color>
-    <color name="colorAccent">#33CC99</color>
+    <color name="colorAccent">#33CCCC</color>
 
     <color name="rb_color_text">#33a9d1</color>
-    <color name="colorDarkAccent">#007965</color>
+    <color name="colorDarkAccent">#1A8080</color>
     <color name="colorRightBubble">#d8f7f2</color>
     <color name="colorLeftBubble">#e5e5e5</color>
     <color name="colorAccentCredentials">#ffffff</color>
@@ -26,6 +26,7 @@
     <color name="rb_color_video">#7305fa</color>
 
     <color name="rightItemSelection">#248f8f</color>
+
     <color name="drawerHeaderColor">#22dd22</color>
     <color name="colorText">#eeeeee</color>
 </resources>
