@@ -16,7 +16,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -112,6 +111,7 @@ public class ChatActivity extends AppCompatActivity
         rvMessages.addOnItemTouchListener(new ChatRecyclerTouchListener(this, rvMessages, new ChatClickListener() {
             @Override
             public void onClick(View view, int position) {
+
             }
 
             @Override
@@ -121,7 +121,6 @@ public class ChatActivity extends AppCompatActivity
                 Bundle itemIndexBundle = new Bundle();
                 itemIndexBundle.putInt(Constants.ARG_CHAT_MESSAGE_ITEM_INDEX, position);
                 chatItemDialog.setArguments(itemIndexBundle);
-
                 chatItemDialog.show(ft, Constants.FRAGMENT_TAGS.CHAT_ITEM_DIALOG_FRAGMENT_TAG);
             }
         }));
@@ -342,10 +341,10 @@ public class ChatActivity extends AppCompatActivity
     public void onEditTextTouched(){
 
         if(etMessageBody.hasFocus()){
-            bSendMessage.setBackgroundResource(R.drawable.plane_blue);
+            bSendMessage.setBackgroundResource(R.drawable.paper_plane2);
             layoutParams.weight=12;
         }else {
-            bSendMessage.setBackgroundResource(R.drawable.plane);
+            bSendMessage.setBackgroundResource(R.drawable.paper_plane);
             layoutParams.weight=4;
         }
         rflMessageBody.setLayoutParams(layoutParams);

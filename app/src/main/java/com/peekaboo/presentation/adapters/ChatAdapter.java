@@ -243,9 +243,9 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.ViewHolder>
 
     public void swithPlayButtonImage(RecyclerView.ViewHolder holder, boolean toPlay){
         if(toPlay){
-            ((ViewHolderAudio) holder).ibPlayRecord.setBackgroundResource(R.drawable.play_blue);
+            ((ViewHolderAudio) holder).ibPlayRecord.setBackgroundResource(R.drawable.play_green);
         } else {
-            ((ViewHolderAudio) holder).ibPlayRecord.setBackgroundResource(R.drawable.pause_blue);
+            ((ViewHolderAudio) holder).ibPlayRecord.setBackgroundResource(R.drawable.pause_green);
         }
     }
 

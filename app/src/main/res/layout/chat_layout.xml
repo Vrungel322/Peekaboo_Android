@@ -27,8 +27,6 @@
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvMessages"
-        android:padding="@dimen/items_margin"
-
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_weight="1"
@@ -36,6 +34,7 @@
         android:divider="@null"
         android:listSelector="@android:color/transparent"
         android:overScrollMode="ifContentScrolls"
+        android:padding="@dimen/items_margin"
         android:scrollbars="none" />
 
     <HorizontalScrollView
@@ -98,6 +97,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
+                android:layout_marginLeft="25dp"
                 android:layout_weight="2"
                 android:foregroundGravity="center"
                 android:gravity="center"
@@ -130,7 +130,7 @@
                     android:layout_marginLeft="@dimen/chat_buttons_margin"
                     android:layout_marginRight="@dimen/chat_buttons_margin"
                     android:layout_weight="2"
-                    android:background="@drawable/voice" />
+                    android:background="@drawable/audio" />
 
                 <ImageButton
                     android:id="@+id/photo_btn"
@@ -142,6 +142,7 @@
                     android:background="@drawable/photo" />
 
                 <ImageButton
+                    android:id="@+id/camera_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/chat_buttons_margin"
@@ -159,6 +160,7 @@
                     android:background="@drawable/image" />
 
                 <ImageButton
+                    android:id="@+id/navigation_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/chat_buttons_margin"
