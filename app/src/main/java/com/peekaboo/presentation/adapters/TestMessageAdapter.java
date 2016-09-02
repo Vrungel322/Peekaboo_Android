@@ -96,13 +96,20 @@ public class TestMessageAdapter extends BaseAdapter {
 
     public void updateMessage(PMessage message) {
         int size = messages.size();
+        boolean found = false;
         for (int i = 0; i < size; i++) {
             PMessageAbs pMessageAbs = messages.get(i);
             if (pMessageAbs.packageId().equals(message.packageId())) {
                 messages.set(i, message);
                 notifyDataSetChanged();
+                found = true;
                 break;
             }
+        }
+        if (!found) {
+            ArrayList<PMessage> messages = new ArrayList<>();
+            messages.add(message);
+            addMessages(messages);
         }
     }
 }

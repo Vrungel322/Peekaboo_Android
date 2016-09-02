@@ -1,6 +1,7 @@
 package com.peekaboo.presentation.presenters;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.peekaboo.data.repositories.database.messages.PMessage;
 import com.peekaboo.data.repositories.database.messages.PMessageAbs;
@@ -42,20 +43,20 @@ public class ChatPresenter2 extends BasePresenter<IChatView2> implements IChatPr
         if (isFirstLaunch) {
             subscriptions.add(messanger.getAllMessages(receiver)
                     .subscribe(pMessageAbses -> {
+                        subscriptions.unsubscribe();
                         IChatView2 view = getView();
                         if (view != null) {
                             view.showMessages(pMessageAbses);
                         }
-                        subscriptions.unsubscribe();
                     }));
         } else {
             subscriptions.add(messanger.getUnreadMessages(receiver)
                     .subscribe(pMessageAbses -> {
+                        subscriptions.unsubscribe();
                         IChatView2 view = getView();
                         if (view != null) {
                             view.appendMessages(pMessageAbses);
                         }
-                        subscriptions.unsubscribe();
                     }));
         }
 
@@ -83,12 +84,25 @@ public class ChatPresenter2 extends BasePresenter<IChatView2> implements IChatPr
 
     @Override
     public void onMessageRead(PMessage message) {
-        if (isMustBeShown(message)) {
-            IChatView2 view = getView();
-            if (view != null) {
+        boolean mustBeShown = isMustBeShown(message);
+        Log.e("read notification", "must show " + mustBeShown);
+        IChatView2 view = getView();
+        if (view != null) {
+            if (message.receiverId().equals(view.getCompanionId())
+                    || message.senderId().equals(view.getCompanionId())) {
                 view.updateMessage(message);
             }
         }
+    }
+
+    private boolean isMustBeShown(PMessage message) {
+        IChatView2 view = getView();
+        boolean mustBeShown = false;
+        if (view != null) {
+            Log.e("message", message.senderId() + " " + view.getCompanionId() + " " + accountUser.getId());
+            mustBeShown = message.senderId().equals(view.getCompanionId());
+        }
+        return mustBeShown;
     }
 
     @Override
@@ -104,15 +118,6 @@ public class ChatPresenter2 extends BasePresenter<IChatView2> implements IChatPr
     @Override
     public int willChangeStatus(PMessage message) {
         return isMustBeShown(message) ? PMessageAbs.PMESSAGE_STATUS.STATUS_READ : message.status();
-    }
-
-    private boolean isMustBeShown(PMessage message) {
-        IChatView2 view = getView();
-        boolean mustBeShown = false;
-        if (view != null) {
-            mustBeShown = message.senderId().equals(view.getCompanionId());
-        }
-        return mustBeShown;
     }
 
     @Override

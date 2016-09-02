@@ -2,6 +2,7 @@ package com.peekaboo.data.repositories.database.messages;
 
 import android.content.ContentValues;
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.peekaboo.data.repositories.database.contacts.PContactHelper;
 import com.squareup.sqlbrite.BriteDatabase;
@@ -22,6 +23,7 @@ public class PMessageHelper {
 
     BriteDatabase db;
     private PContactHelper contactHelper;
+    private static final String PREFIX = "c";
 
     @Inject
     public PMessageHelper(BriteDatabase db, PContactHelper contactHelper) {
@@ -30,7 +32,8 @@ public class PMessageHelper {
     }
 
     public void createTable(String tableName) {
-        String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS \"" + tableName + "\" " +
+        tableName = PREFIX + tableName;
+        String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS " + tableName + " " +
                 "(" +
                 PMessageAbs.ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
                 PMessageAbs.PACKAGE_ID + " TEXT NOT NULL," +
@@ -46,11 +49,14 @@ public class PMessageHelper {
     }
 
     public long insert(String tableName, ContentValues cv) {
+        tableName = PREFIX + tableName;
         return db.insert(tableName, cv);
     }
 
     public Observable<List<PMessage>> getAllMessages(String tableName) {
-        String selectAll = "SELECT * FROM \"" + tableName + "\"";
+        Log.e("helper", "get all messages");
+        tableName = PREFIX + tableName;
+        String selectAll = "SELECT * FROM " + tableName;
         return db.createQuery(tableName, selectAll)
                 .mapToList(PMessageAbs.MAPPER)
                 .observeOn(AndroidSchedulers.mainThread())
@@ -58,11 +64,13 @@ public class PMessageHelper {
     }
 
     public int updateMessageByPackageId(String tableName, ContentValues cv, String packageId) {
+        tableName = PREFIX + tableName;
         String WHERE = PMessageAbs.PACKAGE_ID + " = ?";
         return db.update(tableName, cv, WHERE, packageId);
     }
 
     public int updateStatusByPackageId(String tableName, int status, String packageId) {
+        tableName = PREFIX + tableName;
         String WHERE = PMessageAbs.PACKAGE_ID + " = ?";
         ContentValues cvStatus = new ContentValues();
         cvStatus.put(PMessageAbs.STATUS, status);
@@ -70,18 +78,22 @@ public class PMessageHelper {
     }
 
     public int deleteMessageByPackageId(String tableName, String packageId) {
+        tableName = PREFIX + tableName;
         String WHERE = PMessageAbs.PACKAGE_ID + " = ?";
         return db.delete(tableName, WHERE, packageId);
     }
 
     public void dropTableAndCreate(String tableName) {
-        String dropTable = "DROP TABLE IF EXISTS " + " \"" + tableName + "\"";
+        tableName = PREFIX + tableName;
+        String dropTable = "DROP TABLE IF EXISTS " + tableName;
         db.execute(dropTable);
         createTable(tableName);
     }
 
     public Observable<List<PMessage>> getUnreadMessages(String tableName, boolean isMine) {
-        String selectUnread = "SELECT * FROM \"" + tableName + "\" WHERE "
+        Log.e("helper", "get unread messages");
+        tableName = PREFIX + tableName;
+        String selectUnread = "SELECT * FROM " + tableName + " WHERE "
                 + PMessageAbs.STATUS + " = " + PMessageAbs.PMESSAGE_STATUS.STATUS_DELIVERED
                 + " AND " + PMessage.IS_MINE + " = " + (isMine ? 1 : 0);
 
@@ -92,11 +104,13 @@ public class PMessageHelper {
     }
 
     public Observable<List<PMessage>> getUndeliveredMessages() {
+        Log.e("helper", "get undelivered messages");
         return contactHelper.getAllContacts()
                 .flatMapIterable(l -> l)
                 .concatMap(pContactAbs -> {
                     String tableName = pContactAbs.contactId();
-                    String selectUnread = String.format("SELECT * FROM \"%s\" WHERE %s = %d AND %s = 1",
+                    tableName = PREFIX + tableName;
+                    String selectUnread = String.format("SELECT * FROM %s WHERE %s = %d AND %s = 1",
                             tableName,
                             PMessageAbs.STATUS,
                             PMessageAbs.PMESSAGE_STATUS.STATUS_SENT,
@@ -106,6 +120,7 @@ public class PMessageHelper {
                 })
                 .reduce(new ArrayList<PMessageAbs>(), (result, messages) -> {
                     result.addAll(messages);
+                    Log.e("reduce", messages.toString());
                     return result;
                 })
                 .observeOn(AndroidSchedulers.mainThread())

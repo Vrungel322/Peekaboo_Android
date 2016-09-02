@@ -113,7 +113,7 @@ public class MessageUtils {
 
 
     public static Message createReadMessage(String senderId, String from) {
-        return new Message(Message.Command.READ)
+        return new Message(Message.Command.READ_NOTIFICATION)
                 .addParam(Message.Params.DESTINATION, senderId)
                 .addParam(Message.Params.FROM, from);
     }

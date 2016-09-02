@@ -59,13 +59,13 @@ public class ChatPresenter extends BasePresenter<IChatView> implements IChatPres
     @Override
     public void onChatHistoryLoading(Action1 adapter) {
         pMessageHelper.createTable(receiver);
-        subscriptions.add(pMessageHelper.getAllMessages(receiver).subscribe(adapter));
+//        subscriptions.add(pMessageHelper.getAllMessages(receiver).subscribe(adapter));
 
-        subscriptions.add(pMessageHelper.getUnreadMessages(receiver, false).subscribe(pMessageAbses -> {
-            if (getView() != null) {
-                getView().showToastMessage("Unread messages = " + pMessageAbses.size());
-            }
-        }));
+//        subscriptions.add(pMessageHelper.getUnreadMessages(receiver, false).subscribe(pMessageAbses -> {
+//            if (getView() != null) {
+//                getView().showToastMessage("Unread messages = " + pMessageAbses.size());
+//            }
+//        }));
     }
 
     @Override

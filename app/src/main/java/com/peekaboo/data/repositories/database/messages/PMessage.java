@@ -17,6 +17,11 @@ public class PMessage extends PMessageAbs {
     private String receiverId;
     private String senderId;
 
+    @Override
+    public String toString() {
+        return senderId + " " + receiverId;
+    }
+
     public PMessage(String packageId, boolean isMine, int mediaType, String messageBody, long timestamp,
                     int status, String receiverId, String senderId) {
         this.packageId = packageId;

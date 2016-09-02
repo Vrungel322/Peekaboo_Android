@@ -24,6 +24,12 @@ import com.peekaboo.presentation.fragments.DialogsFragment;
 import com.peekaboo.presentation.fragments.FriendTestFragment;
 import com.peekaboo.presentation.fragments.ProfileFragment;
 import com.peekaboo.presentation.fragments.SettingsFragment;
+import com.peekaboo.presentation.fragments.SocketTestFragment;
+import com.peekaboo.presentation.services.INotifier;
+import com.peekaboo.presentation.services.Message;
+import com.peekaboo.presentation.services.MessageUtils;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -50,6 +56,9 @@ public class MainActivity extends AppCompatActivity {
     DiscreteSlider discreteSlider;
     @BindView(R.id.rlSliderLabel)
     RelativeLayout rlSliderLabel;
+    @Inject
+    INotifier<Message> messanger;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,6 +90,9 @@ public class MainActivity extends AppCompatActivity {
             public void onPositionChanged(int position) {
                 Toast.makeText(getApplicationContext(), "pos : " + position, Toast.LENGTH_SHORT).show();
                 int childCount = rlSliderLabel.getChildCount();
+                if (messanger.isAvailable()) {
+                    messanger.sendMessage(MessageUtils.createSwitchModeMessage((byte) position));
+                }
                 for (int i = 0; i < childCount; i++) {
                     TextView tv = (TextView) rlSliderLabel.getChildAt(i);
                     if (i == position)
