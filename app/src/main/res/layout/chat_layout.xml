@@ -142,7 +142,6 @@
                     android:background="@drawable/photo" />
 
                 <ImageButton
-                    android:id="@+id/camera_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/chat_buttons_margin"
@@ -160,7 +159,6 @@
                     android:background="@drawable/image" />
 
                 <ImageButton
-                    android:id="@+id/navigation_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/chat_buttons_margin"

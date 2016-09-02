@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/list_item_dialog_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginTop="@dimen/dialog_item_margin_top"
@@ -68,7 +67,6 @@
                         android:orientation="vertical">
 
                         <TextView
-                            android:id="@+id/tvDialog_name"
                             android:layout_width="@dimen/dialog_name_width"
                             android:layout_height="wrap_content"
                             android:layout_alignParentLeft="true"
@@ -93,7 +91,6 @@
                         swipe:rightEdgeSwipeOffset="0dp">
 
                         <LinearLayout
-                            android:id="@+id/bottom_wrapper_2"
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:orientation="vertical"
@@ -146,7 +143,6 @@
                                 android:textSize="@dimen/dialog_timestamp_text_size" />
 
                             <ImageView
-                                android:id="@+id/ivDialog_status"
                                 android:layout_width="@dimen/dialog_status_size"
                                 android:layout_height="@dimen/dialog_status_size"
                                 android:layout_marginRight="@dimen/dialog_item_margin"

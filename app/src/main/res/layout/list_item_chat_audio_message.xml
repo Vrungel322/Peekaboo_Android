@@ -21,7 +21,6 @@
             android:padding="@dimen/text_padding">
 
             <LinearLayout
-                android:id="@+id/progressDisplay"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
