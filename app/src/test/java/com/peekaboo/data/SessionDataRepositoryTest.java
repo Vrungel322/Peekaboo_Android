@@ -18,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import rx.Observable;
+import rx.Subscriber;
 import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.functions.Func2;
@@ -76,11 +77,29 @@ public class SessionDataRepositoryTest {
 //                .switchMap(Observable::from)
                 .concatMap(s -> {
                     if (s.contains("1"))
-                        return Observable.just(list1);
+                        return Observable.create(new Observable.OnSubscribe<List<Integer>>() {
+                            @Override
+                            public void call(Subscriber<? super List<Integer>> subscriber) {
+                                subscriber.onNext(list1);
+                                subscriber.onCompleted();
+                            }
+                        });
                     if (s.contains("2"))
-                        return Observable.just(list2);
+                        return Observable.create(new Observable.OnSubscribe<List<Integer>>() {
+                            @Override
+                            public void call(Subscriber<? super List<Integer>> subscriber) {
+                                subscriber.onNext(list2);
+                                subscriber.onCompleted();
+                            }
+                        });
                     if (s.contains("3"))
-                        return Observable.just(list3);
+                        return Observable.create(new Observable.OnSubscribe<List<Integer>>() {
+                            @Override
+                            public void call(Subscriber<? super List<Integer>> subscriber) {
+                                subscriber.onNext(list3);
+                                subscriber.onCompleted();
+                            }
+                        });
                     return Observable.just(new ArrayList<Integer>());
                 }).reduce(new ArrayList<>(), (integers, integers2) -> {
                     integers.addAll(integers2);

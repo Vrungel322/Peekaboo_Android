@@ -8,8 +8,8 @@ import com.peekaboo.data.mappers.Mapper;
 import com.peekaboo.data.repositories.database.messages.PMessage;
 import com.peekaboo.data.repositories.database.messages.PMessageAbs;
 import com.peekaboo.data.repositories.database.messages.PMessageHelper;
+import com.peekaboo.data.repositories.database.service.ReadMessagesHelper;
 import com.peekaboo.data.repositories.database.service.ServiceMessageAbs;
-import com.peekaboo.data.repositories.database.service.ServiceMessagesHelper;
 import com.peekaboo.domain.AccountUser;
 
 import java.util.HashSet;
@@ -17,9 +17,7 @@ import java.util.List;
 import java.util.Set;
 
 import rx.Observable;
-import rx.Subscriber;
 import rx.Subscription;
-import rx.functions.Action1;
 import rx.subscriptions.Subscriptions;
 
 /**
@@ -29,7 +27,7 @@ public class Messenger implements IMessenger,
         INotifier.NotificationListener<Message> {
     private final INotifier<Message> notifier;
     private final PMessageHelper helper;
-    private final ServiceMessagesHelper serviceMessagesHelper;
+    private final ReadMessagesHelper readMessagesHelper;
     private final Mapper<PMessageAbs, ContentValues> pMessageMapper;
     Subscription unreadMessages = Subscriptions.empty();
     Subscription undeliveredMessages = Subscriptions.empty();
@@ -37,11 +35,11 @@ public class Messenger implements IMessenger,
     private AccountUser user;
     private Set<MessengerListener> listeners = new HashSet<>();
 
-    public Messenger(INotifier<Message> notifier, PMessageHelper helper, ServiceMessagesHelper serviceMessagesHelper, AccountUser user,
+    public Messenger(INotifier<Message> notifier, PMessageHelper helper, ReadMessagesHelper readMessagesHelper, AccountUser user,
                      AbstractMapperFactory abstractMapperFactory) {
         this.notifier = notifier;
         this.helper = helper;
-        this.serviceMessagesHelper = serviceMessagesHelper;
+        this.readMessagesHelper = readMessagesHelper;
         this.user = user;
         pMessageMapper = abstractMapperFactory.getPMessageMapper();
         notifier.addListener(this);
@@ -69,13 +67,15 @@ public class Messenger implements IMessenger,
 
     @Override
     public void onMessageObtained(Message message) {
-        Log.e("messanger", "obtained");
+        Log.e("messanger", "obtained " + message);
         switch (message.getCommand()) {
             case MESSAGE:
                 handleIncomingMessage(message);
                 break;
-            case READ_NOTIFICATION:
-                handleIncomingReadNotification(message);
+            case SYSTEMMESSAGE:
+                if (Message.Reason.READ.equals(message.getParams().get(Message.Params.REASON))) {
+                    handleIncomingReadNotification(message);
+                }
                 break;
         }
     }
@@ -109,7 +109,7 @@ public class Messenger implements IMessenger,
         PMessage pMessage = MessageUtils.convert(user.getId(), message);
         pMessage.setStatus(PMessage.PMESSAGE_STATUS.STATUS_DELIVERED);
         String tableName = pMessage.senderId();
-        helper.insert(tableName, pMessageMapper.transform(pMessage));
+        helper.insert(tableName, pMessage);
 
         boolean isRead = false;
         for (MessengerListener listener : listeners) {
@@ -120,7 +120,6 @@ public class Messenger implements IMessenger,
             }
         }
 
-        Log.e("isRead", String.valueOf(isRead));
         if (isRead) {
             readMessage(pMessage);
         } else {
@@ -141,7 +140,6 @@ public class Messenger implements IMessenger,
     @Override
     public void readMessage(PMessage message) {
         if (!message.isMine()) {
-            Log.e("messanger", "read " + message);
             String senderId = message.senderId();
 
             updateMessageRead(message, senderId);
@@ -149,7 +147,7 @@ public class Messenger implements IMessenger,
             if (isAvailable()) {
                 deliverReadServiceMessage(senderId);
             } else {
-                serviceMessagesHelper.insert(message.packageId(), senderId);
+                readMessagesHelper.insert(senderId);
             }
 
         }
@@ -162,9 +160,7 @@ public class Messenger implements IMessenger,
      * @param tableName
      */
     private void updateMessageRead(PMessage message, String tableName) {
-        int statusRead = PMessageAbs.PMESSAGE_STATUS.STATUS_READ;
-        message.setStatus(statusRead);
-        helper.updateStatusByPackageId(tableName, statusRead, message.packageId());
+        helper.updateStatus(tableName, PMessageAbs.PMESSAGE_STATUS.STATUS_READ, message);
 
         for (MessengerListener listener : listeners) {
             listener.onMessageRead(message);
@@ -180,7 +176,7 @@ public class Messenger implements IMessenger,
     @Override
     public void sendMessage(PMessage message) {
         message.setStatus(PMessageAbs.PMESSAGE_STATUS.STATUS_SENT);
-        helper.insert(message.receiverId(), pMessageMapper.transform(message));
+        helper.insert(message.receiverId(), message);
         for (MessengerListener listener : listeners) {
             listener.onMessageSent(message);
         }
@@ -196,11 +192,8 @@ public class Messenger implements IMessenger,
      * @param message
      */
     private void deliverMessage(PMessage message) {
-        Log.e("deliver", message.messageBody());
         notifier.sendMessage(MessageUtils.convert(message));
-        int statusDelivered = PMessageAbs.PMESSAGE_STATUS.STATUS_DELIVERED;
-        message.setStatus(statusDelivered);
-        helper.updateStatusByPackageId(message.receiverId(), statusDelivered, message.packageId());
+        helper.updateStatus(message.receiverId(), PMessageAbs.PMESSAGE_STATUS.STATUS_DELIVERED, message);
         for (MessengerListener listener : listeners) {
             listener.onMessageDelivered(message);
         }
@@ -240,13 +233,14 @@ public class Messenger implements IMessenger,
      * which were read while socket was not available.
      */
     private void deliverReadServiceMessages() {
-        serviceMessages = serviceMessagesHelper.getUnreadMessages()
-                .subscribe(messages -> {
+        serviceMessages = readMessagesHelper.getUnreadMessages()
+                .subscribe(senders -> {
                     serviceMessages.unsubscribe();
-                    for (ServiceMessageAbs message : messages) {
+                    Log.e("senders", senders.toString());
+                    for (String sender : senders) {
                         if (isAvailable()) {
-                            deliverReadServiceMessage(message.senderId());
-                            serviceMessagesHelper.deleteById(message.id());
+                            deliverReadServiceMessage(sender);
+                            readMessagesHelper.delete(sender);
                         }
                     }
                 });
@@ -257,11 +251,11 @@ public class Messenger implements IMessenger,
      * {@link #deliverMessage(PMessage)} will be called for each undelivered message
      */
     private void deliverSentMessages() {
-        Log.e("messenger", "deliver sent messages");
+        Log.e("BUG1", "deliver");
         undeliveredMessages = helper.getUndeliveredMessages()
                 .subscribe(pMessageAbses -> {
+                    Log.e("BUG1", "unsubscribe");
                     undeliveredMessages.unsubscribe();
-                    Log.e("mesenger", "sent " + pMessageAbses.toString());
                     for (PMessage message : pMessageAbses) {
                         if (isAvailable()) {
                             deliverMessage(message);

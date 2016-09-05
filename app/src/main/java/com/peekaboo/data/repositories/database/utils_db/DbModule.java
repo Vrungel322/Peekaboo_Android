@@ -21,21 +21,21 @@ import timber.log.Timber;
 public class DbModule {
     @Provides
     @Singleton
-    SQLiteOpenHelper provideOpenHelper(Context application) {
+    DBHelper provideOpenHelper(Context application) {
         return new DBHelper(application);
     }
 
-    @Provides
-    @Singleton
-    SqlBrite provideSqlBrite() {
-        return SqlBrite.create(message -> Timber.tag("Database").v(message));
-    }
-
-    @Provides
-    @Singleton
-    BriteDatabase provideDatabase(SqlBrite sqlBrite, SQLiteOpenHelper helper) {
-        BriteDatabase db = sqlBrite.wrapDatabaseHelper(helper, Schedulers.io());
-        db.setLoggingEnabled(true);
-        return db;
-    }
+//    @Provides
+//    @Singleton
+//    SqlBrite provideSqlBrite() {
+//        return SqlBrite.create(message -> Timber.tag("Database").v(message));
+//    }
+//
+//    @Provides
+//    @Singleton
+//    BriteDatabase provideDatabase(SqlBrite sqlBrite, SQLiteOpenHelper helper) {
+//        BriteDatabase db = sqlBrite.wrapDatabaseHelper(helper, Schedulers.io());
+//        db.setLoggingEnabled(true);
+//        return db;
+//    }
 }

@@ -85,21 +85,18 @@ public class MainActivity extends AppCompatActivity {
 //        changeFragment(new RecordTestFragment(), null);
 
 
-        discreteSlider.setOnDiscreteSliderChangeListener(new DiscreteSlider.OnDiscreteSliderChangeListener() {
-            @Override
-            public void onPositionChanged(int position) {
-                Toast.makeText(getApplicationContext(), "pos : " + position, Toast.LENGTH_SHORT).show();
-                int childCount = rlSliderLabel.getChildCount();
-                if (messanger.isAvailable()) {
-                    messanger.sendMessage(MessageUtils.createSwitchModeMessage((byte) position));
-                }
-                for (int i = 0; i < childCount; i++) {
-                    TextView tv = (TextView) rlSliderLabel.getChildAt(i);
-                    if (i == position)
-                        tv.setTextColor(getResources().getColor(R.color.colorPrimary));
-                    else
-                        tv.setTextColor(getResources().getColor(R.color.colorAccent));
-                }
+        discreteSlider.setOnDiscreteSliderChangeListener(position -> {
+            Toast.makeText(getApplicationContext(), "pos : " + position, Toast.LENGTH_SHORT).show();
+            int childCount = rlSliderLabel.getChildCount();
+            if (messanger.isAvailable()) {
+                messanger.sendMessage(MessageUtils.createSwitchModeMessage((byte) position));
+            }
+            for (int i = 0; i < childCount; i++) {
+                TextView tv = (TextView) rlSliderLabel.getChildAt(i);
+                if (i == position)
+                    tv.setTextColor(getResources().getColor(R.color.colorPrimary));
+                else
+                    tv.setTextColor(getResources().getColor(R.color.colorAccent));
             }
         });
 

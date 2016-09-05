@@ -46,10 +46,10 @@ public class WebSocketNotifier implements INotifier<Message> {
                                 @Override
                                 public void onConnected(WebSocket websocket, Map<String, List<String>> headers) throws Exception {
                                     String msg = "Status: Connected to " + BASE_URL;
+                                    Log.e(TAG, msg);
                                     for (NotificationListener<Message> listener : listeners) {
                                         listener.onConnected();
                                     }
-                                    Log.e(TAG, msg);
                                 }
 
                                 @Override
@@ -122,7 +122,7 @@ public class WebSocketNotifier implements INotifier<Message> {
 
     @Override
     public void sendMessage(Message message) {
-        Log.e("notifier", "send message " + message.getCommand());
+        Log.e("notifier", "send message " + message);
         sendBinaryMessage(mtb.transform(message));
     }
 

@@ -12,7 +12,6 @@ public class PMessageMapper implements Mapper<PMessageAbs, ContentValues> {
     @Override
     public ContentValues transform(PMessageAbs obj) throws RuntimeException {
         return new PMessageAbs.Builder()
-                .packageId(obj.packageId())
                 .isMine(obj.isMine())
                 .mediaType(obj.mediaType())
                 .messageBody(obj.messageBody())
@@ -20,9 +19,6 @@ public class PMessageMapper implements Mapper<PMessageAbs, ContentValues> {
                 .status(obj.status())
                 .senderId(obj.senderId())
                 .receiverId(obj.receiverId())
-//                .isSent(obj.isSent())
-//                .isDelivered(obj.isDelivered())
-//                .isRead(obj.isRead())
                 .build();
     }
 }

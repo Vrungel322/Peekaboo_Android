@@ -8,7 +8,6 @@ import com.peekaboo.data.repositories.database.messages.PMessageAbs;
 import com.peekaboo.domain.AccountUser;
 import com.peekaboo.presentation.services.IMessenger;
 import com.peekaboo.presentation.views.IChatView2;
-import com.peekaboo.utils.Utility;
 
 import java.util.ArrayList;
 
@@ -23,25 +22,25 @@ import rx.subscriptions.CompositeSubscription;
 @Singleton
 public class ChatPresenter2 extends BasePresenter<IChatView2> implements IChatPresenter2<IChatView2>,
         IMessenger.MessengerListener {
-    private IMessenger messanger;
+    private IMessenger messenger;
     private AccountUser accountUser;
     private CompositeSubscription subscriptions;
 
     @Inject
-    public ChatPresenter2(IMessenger messanger, AccountUser accountUser) {
-        this.messanger = messanger;
+    public ChatPresenter2(IMessenger messenger, AccountUser accountUser) {
+        this.messenger = messenger;
         this.accountUser = accountUser;
     }
 
     @Override
     public void onResume(boolean isFirstLaunch, String receiver) {
-        messanger.tryConnect(accountUser.getBearer());
-        messanger.addMessageListener(this);
+        messenger.tryConnect(accountUser.getBearer());
+        messenger.addMessageListener(this);
 
         subscriptions = new CompositeSubscription();
 
         if (isFirstLaunch) {
-            subscriptions.add(messanger.getAllMessages(receiver)
+            subscriptions.add(messenger.getAllMessages(receiver)
                     .subscribe(pMessageAbses -> {
                         subscriptions.unsubscribe();
                         IChatView2 view = getView();
@@ -50,8 +49,10 @@ public class ChatPresenter2 extends BasePresenter<IChatView2> implements IChatPr
                         }
                     }));
         } else {
-            subscriptions.add(messanger.getUnreadMessages(receiver)
+            Log.e("BUG", "onResume");
+            subscriptions.add(messenger.getUnreadMessages(receiver)
                     .subscribe(pMessageAbses -> {
+                        Log.e("BUG", "unsubscribe");
                         subscriptions.unsubscribe();
                         IChatView2 view = getView();
                         if (view != null) {
@@ -64,66 +65,58 @@ public class ChatPresenter2 extends BasePresenter<IChatView2> implements IChatPr
 
     @Override
     public void onPause() {
-        messanger.removeMessageListener(this);
+        messenger.removeMessageListener(this);
         subscriptions.unsubscribe();
     }
 
     @Override
     public void onSendTextButtonPress(String receiver, String text) {
-        PMessage pMessage = new PMessage(Utility.getPackageId(),
+        PMessage pMessage = new PMessage(
                 true, PMessageAbs.PMESSAGE_MEDIA_TYPE.TEXT_MESSAGE, text, System.currentTimeMillis(),
                 PMessageAbs.PMESSAGE_STATUS.STATUS_SENT,
                 receiver, accountUser.getId());
-        messanger.sendMessage(pMessage);
+        messenger.sendMessage(pMessage);
     }
 
     @Override
     public void onUserMessageRead(PMessage message) {
-        messanger.readMessage(message);
+        messenger.readMessage(message);
     }
 
     @Override
     public void onMessageRead(PMessage message) {
-        boolean mustBeShown = isMustBeShown(message);
-        Log.e("read notification", "must show " + mustBeShown);
         IChatView2 view = getView();
-        if (view != null) {
-            if (message.receiverId().equals(view.getCompanionId())
-                    || message.senderId().equals(view.getCompanionId())) {
-                view.updateMessage(message);
-            }
+        if (view != null && isFromCurrentChat(message, view)) {
+            view.updateMessage(message);
         }
     }
 
-    private boolean isMustBeShown(PMessage message) {
-        IChatView2 view = getView();
-        boolean mustBeShown = false;
-        if (view != null) {
-            Log.e("message", message.senderId() + " " + view.getCompanionId() + " " + accountUser.getId());
-            mustBeShown = message.senderId().equals(view.getCompanionId());
-        }
-        return mustBeShown;
+
+    private boolean isFromCurrentChat(@NonNull PMessage message, @NonNull IChatView2 view) {
+        return (message.senderId().equals(view.getCompanionId()) && !message.isMine())
+                || (message.receiverId().equals(view.getCompanionId()) && message.isMine());
     }
 
     @Override
     public void onMessageDelivered(PMessage message) {
-        if (isMustBeShown(message)) {
-            IChatView2 view = getView();
-            if (view != null) {
-                view.updateMessage(message);
-            }
+        IChatView2 view = getView();
+        if (view != null && isFromCurrentChat(message, view)) {
+            view.updateMessage(message);
         }
     }
 
     @Override
     public int willChangeStatus(PMessage message) {
-        return isMustBeShown(message) ? PMessageAbs.PMESSAGE_STATUS.STATUS_READ : message.status();
+        IChatView2 view = getView();
+        return view != null && isFromCurrentChat(message, view) ?
+                PMessageAbs.PMESSAGE_STATUS.STATUS_READ
+                : message.status();
     }
 
     @Override
     public void onMessageSent(PMessage message) {
         IChatView2 view = getView();
-        if (view != null) {
+        if (view != null && isFromCurrentChat(message, view)) {
             view.appendMessages(messageToList(message));
         }
     }
@@ -134,5 +127,4 @@ public class ChatPresenter2 extends BasePresenter<IChatView2> implements IChatPr
         messageList.add(message);
         return messageList;
     }
-
 }

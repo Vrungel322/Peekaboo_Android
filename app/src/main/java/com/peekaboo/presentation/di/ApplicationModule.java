@@ -7,7 +7,7 @@ import com.peekaboo.data.Constants;
 import com.peekaboo.data.di.DataModule;
 import com.peekaboo.data.mappers.MapperFactory;
 import com.peekaboo.data.repositories.database.messages.PMessageHelper;
-import com.peekaboo.data.repositories.database.service.ServiceMessagesHelper;
+import com.peekaboo.data.repositories.database.service.ReadMessagesHelper;
 import com.peekaboo.data.repositories.database.utils_db.DbModule;
 import com.peekaboo.domain.AccountUser;
 import com.peekaboo.domain.schedulers.ObserveOn;
@@ -58,12 +58,10 @@ public class ApplicationModule {
         return mContext.getSharedPreferences("com.peekaboo.Peekaboo", Context.MODE_PRIVATE);
     }
 
-
     @Provides
     Bus provideEventBus() {
         return new Bus();
     }
-
 
     @Provides
     @Singleton
@@ -73,23 +71,14 @@ public class ApplicationModule {
 
     @Singleton
     @Provides
-//    public INotifier<Message> provideNotifier(@Named("domens") List<String> domens) {
     public INotifier<Message> provideNotifier() {
-//        new
         return new WebSocketNotifier(Constants.BASE_URL_SOCKET, 5000, new MapperFactory());
-//        return new WebSocketNotifier(domens.get(1), 5000, new MapperFactory());
     }
 
     @Singleton
     @Provides
-    public IMessenger provideMessanger(INotifier<Message> notifier, PMessageHelper helper, ServiceMessagesHelper serviceMessagesHelper, AccountUser user) {
-        return new Messenger(notifier, helper, serviceMessagesHelper, user, new MapperFactory());
+    public IMessenger provideMessanger(INotifier<Message> notifier, PMessageHelper helper, ReadMessagesHelper readMessagesHelper, AccountUser user) {
+        return new Messenger(notifier, helper, readMessagesHelper, user, new MapperFactory());
     }
 
-
-//    @Singleton
-//    @Provides
-//    Errors provideErrors() {
-//        return new Errors(application);
-//    }
 }

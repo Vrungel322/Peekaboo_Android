@@ -8,7 +8,6 @@ import android.support.annotation.Nullable;
 public class PMessage extends PMessageAbs {
 
     private long id;
-    private String packageId;
     private boolean isMine;
     private String messageBody;
     private int mediaType;
@@ -19,12 +18,11 @@ public class PMessage extends PMessageAbs {
 
     @Override
     public String toString() {
-        return senderId + " " + receiverId;
+        return "{ id=" + id + ", body=" + messageBody + ", isMine=" + isMine + " }";
     }
 
-    public PMessage(String packageId, boolean isMine, int mediaType, String messageBody, long timestamp,
+    public PMessage(boolean isMine, int mediaType, String messageBody, long timestamp,
                     int status, String receiverId, String senderId) {
-        this.packageId = packageId;
         this.isMine = isMine;
         this.mediaType = mediaType;
         this.messageBody = messageBody;
@@ -37,11 +35,6 @@ public class PMessage extends PMessageAbs {
     @Override
     public long id() {
         return id;
-    }
-
-    @Override
-    public String packageId() {
-        return packageId;
     }
 
     @Override

@@ -15,7 +15,6 @@ import rx.functions.Func1;
 public abstract class PMessageAbs {
 
     public static final String ID = "_id";
-    public static final String PACKAGE_ID = "package_id";
     public static final String MESSAGE_BODY = "MESSAGE_BODY";
     public static final String TIMESTAMP = "TIMESTAMP";
     public static final String RECEIVER_ID = "RECEIVER_ID";
@@ -26,14 +25,11 @@ public abstract class PMessageAbs {
     public static String MEDIA_TYPE = "MEDIA_TYPE";
 
     public abstract long id();
-    public abstract String packageId();
     public abstract boolean isMine();
     public abstract int mediaType();
     public abstract String messageBody();
     public abstract long timestamp();
     public abstract int status();
-//    public abstract boolean isDelivered();
-//    public abstract boolean isRead();
     public abstract String receiverId();
     public abstract String senderId();
 
@@ -41,7 +37,7 @@ public abstract class PMessageAbs {
         @Override
         public PMessageAbs call(Cursor cursor) {
             long id = Db.getLong(cursor, ID);
-            String packageId = Db.getString(cursor, PACKAGE_ID);
+//            String packageId = Db.getString(cursor, PACKAGE_ID);
             boolean isMine = Db.getBoolean(cursor, IS_MINE);
             int mediaType = Db.getInt(cursor, MEDIA_TYPE);
             String messageBody = Db.getString(cursor, MESSAGE_BODY);
@@ -51,7 +47,7 @@ public abstract class PMessageAbs {
             String senderId = Db.getString(cursor, SENDER_ID);
 //            boolean isDelivered = Db.getBoolean(cursor, STATUS_DELIVERED);
 //            boolean isRead = Db.getBoolean(cursor, STATUS_READ);
-            return new AutoValue_PMessageAbs(id, packageId, isMine, mediaType, messageBody, timestamp,
+            return new AutoValue_PMessageAbs(id, isMine, mediaType, messageBody, timestamp,
                                           status, receiverId, senderId);
         }
     };
@@ -61,11 +57,6 @@ public abstract class PMessageAbs {
 
         public Builder id(long id){
             cv.put(ID, id);
-            return this;
-        }
-
-        public Builder packageId(String packageId){
-            cv.put(PACKAGE_ID, packageId);
             return this;
         }
 
@@ -111,7 +102,7 @@ public abstract class PMessageAbs {
 
     @Override
     public String toString() {
-        return packageId();
+        return messageBody();
     }
 
     public interface PMESSAGE_STATUS {

@@ -85,10 +85,10 @@ public class ChatPresenter extends BasePresenter<IChatView> implements IChatPres
     public void onStopRecordingAudioClick() {
         if (recorder != null) {
             recorder.stopRecording().subscribe(record -> {
-                pMessageHelper.insert(receiver, convertPMessage(new PMessage(Utility.getPackageId(),
+                pMessageHelper.insert(receiver, new PMessage(
                         true, PMessageAbs.PMESSAGE_MEDIA_TYPE.AUDIO_MESSAGE, record.getFilename(),
                         System.currentTimeMillis(),
-                        PMessageAbs.PMESSAGE_STATUS.STATUS_SENT, receiver, user.getId())));
+                        PMessageAbs.PMESSAGE_STATUS.STATUS_SENT, receiver, user.getId()));
             });
         }
     }
@@ -116,20 +116,20 @@ public class ChatPresenter extends BasePresenter<IChatView> implements IChatPres
 
     @Override
     public void onSendImageButtonPress(Uri uri) {
-        pMessageHelper.insert(receiver, convertPMessage(new PMessage(Utility.getPackageId(),
+        pMessageHelper.insert(receiver, new PMessage(
                 true, PMessageAbs.PMESSAGE_MEDIA_TYPE.IMAGE_MESSAGE,
                 uri.toString(), System.currentTimeMillis(),
-                PMessageAbs.PMESSAGE_STATUS.STATUS_SENT, receiver, user.getId())));
+                PMessageAbs.PMESSAGE_STATUS.STATUS_SENT, receiver, user.getId()));
     }
 
     @Override
     public void onSendAudioButtonPress(Intent data) {
         ArrayList<String> result = data
                 .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-        pMessageHelper.insert(receiver, convertPMessage(new PMessage(Utility.getPackageId(),
+        pMessageHelper.insert(receiver, new PMessage(
                 true, PMessageAbs.PMESSAGE_MEDIA_TYPE.AUDIO_MESSAGE,
                 result.get(0), System.currentTimeMillis(),
-                PMessageAbs.PMESSAGE_STATUS.STATUS_SENT, receiver, user.getId())));
+                PMessageAbs.PMESSAGE_STATUS.STATUS_SENT, receiver, user.getId()));
     }
 
 
@@ -151,7 +151,7 @@ public class ChatPresenter extends BasePresenter<IChatView> implements IChatPres
 
     @Override
     public void onDeleteMessageClick(PMessageAbs message) {
-        pMessageHelper.deleteMessageByPackageId(receiver, message.packageId());
+        pMessageHelper.deleteMessageByPackageId(receiver, message);
     }
 
     @Override
@@ -197,9 +197,5 @@ public class ChatPresenter extends BasePresenter<IChatView> implements IChatPres
         if (textToSpeech != null) {
             textToSpeech.stop();
         }
-    }
-
-    private ContentValues convertPMessage(PMessage pMessage) {
-        return mapperFactory.getPMessageMapper().transform(pMessage);
     }
 }

@@ -99,7 +99,7 @@ public class TestMessageAdapter extends BaseAdapter {
         boolean found = false;
         for (int i = 0; i < size; i++) {
             PMessageAbs pMessageAbs = messages.get(i);
-            if (pMessageAbs.packageId().equals(message.packageId())) {
+            if (pMessageAbs.id() == message.id()) {
                 messages.set(i, message);
                 notifyDataSetChanged();
                 found = true;

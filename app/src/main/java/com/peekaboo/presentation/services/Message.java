@@ -113,7 +113,7 @@ public class Message {
         return result;
     }
 
-    public enum Command {ACCEPT, CALL, REJECT, SEND, MESSAGE, SWITCHMODE, READ_NOTIFICATION}
+    public enum Command {MESSAGE, SYSTEMMESSAGE}
 
     public enum Params {DESTINATION, FROM, TYPE, REASON, DATE, ID}
 
@@ -124,5 +124,7 @@ public class Message {
 
     public interface Reason {
         String END = "end";
+        String MODE = "mode";
+        String READ = "read";
     }
 }
