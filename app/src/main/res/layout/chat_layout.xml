@@ -27,8 +27,8 @@
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvMessages"
-        android:padding="@dimen/items_margin"
-
+        android:paddingLeft="@dimen/items_margin"
+        android:paddingRight="@dimen/items_margin"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_weight="1"
@@ -44,7 +44,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:foregroundGravity="center"
-        android:scrollbars="none">
+        android:scrollbars="none"
+        android:paddingBottom="@dimen/little_margin"
+        android:paddingTop="@dimen/little_margin">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -56,11 +58,9 @@
                 android:id="@+id/rflMessageBody"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/little_margin"
                 android:layout_weight="8"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
-                android:padding="@dimen/little_margin"
                 android:visibility="gone">
 
                 <FrameLayout

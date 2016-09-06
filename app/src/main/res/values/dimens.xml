@@ -23,7 +23,7 @@
     <dimen name="text_padding">6dp</dimen>
     <dimen name="padding_button">6dp</dimen>
     <dimen name="et_margin">8dp</dimen>
-    <dimen name="little_margin">2dp</dimen>
+    <dimen name="little_margin">4dp</dimen>
 
 
     <dimen name="sign_up_button_padding">8dp</dimen>
@@ -55,7 +55,7 @@
     <dimen name="nav_content_margin_left">1dp</dimen>
     <dimen name="nav_matgin_left_text">26dp</dimen>
     <dimen name="divider_margin">16dp</dimen>
-    <dimen name="items_margin">16dp</dimen>
+    <dimen name="items_margin">8dp</dimen>
     <dimen name="nav_padding_list">16dp</dimen>
     <dimen name="padding_each_item_bot_top">13dp</dimen>
     <dimen name="padding_each_item_left_right">16dp</dimen>
