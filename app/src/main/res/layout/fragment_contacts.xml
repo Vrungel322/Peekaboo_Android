@@ -1,16 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context=".presentation.fragments.ContactsFragment">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Contacts"
-        android:id="@+id/tvContacts"
-        android:layout_gravity="center" />
-</FrameLayout>
+    <com.peekaboo.presentation.widget.IndexableListView
+        android:id="@+id/listViewIndexable"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:cacheColorHint="#FFFFFF"
+        android:divider="#88ffffff"
+        android:dividerHeight="1dp"
+        />
+
+    <!--<Button-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentBottom="true"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:layout_marginBottom="35dp"-->
+        <!--android:layout_marginRight="35dp"-->
+        <!--android:text="Button" />-->
+
+    <at.markushi.ui.CircleButton
+        android:layout_width="80dip"
+        android:layout_height="80dip"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginBottom="35dp"
+        android:layout_marginRight="35dp"
+        android:src="@android:drawable/ic_input_add"
+        app:cb_color="#f1e77070"
+        app:cb_pressedRingWidth="8dip" />
+
+</RelativeLayout>

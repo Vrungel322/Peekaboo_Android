@@ -10,15 +10,21 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.ListView;
 
 import com.peekaboo.R;
 import com.peekaboo.data.repositories.database.contacts.PContact;
 import com.peekaboo.presentation.PeekabooApplication;
+import com.peekaboo.presentation.adapters.ContactsListAdapter;
 import com.peekaboo.presentation.presenters.ContactPresenter;
+
+import java.util.ArrayList;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
@@ -28,8 +34,15 @@ import butterknife.ButterKnife;
 public class ContactsFragment extends Fragment {
 
     private View rootView;
+
     @Inject
     ContactPresenter contactPresenter;
+
+    @BindView(R.id.listViewIndexable)
+    ListView listViewIndexable;
+    private ArrayList<String> list;
+    //    private IndexableListView listViewIndexable;
+    private ContactsListAdapter contactsListAdapter;
 
     @Inject
     public ContactsFragment(){}
@@ -48,7 +61,14 @@ public class ContactsFragment extends Fragment {
         contactPresenter.insertContactToTable("contactsTable",
                 new PContact("Name2", "Surname2", "Nickname2", true, "uri2"));
         contactPresenter.getAllTableAsString("contactsTable");
+
+
+        //////////////
+
     }
+
+
+
 
     @Nullable
     @Override
@@ -58,9 +78,34 @@ public class ContactsFragment extends Fragment {
         setHasOptionsMenu(true);
         ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Contacts");
 
+
+        initList();
+
+        contactsListAdapter = new ContactsListAdapter(list,getActivity());
+        listViewIndexable.setAdapter(contactsListAdapter);
+        listViewIndexable.setFastScrollEnabled(true);
+        listViewIndexable.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+            @Override
+            public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
+                                    long arg3) {
+                contactsListAdapter.onItemSelected(arg2);
+            }
+        });
+
         return rootView;
     }
+    private void initList() {
 
+        if (list == null)
+            list = new ArrayList<String>();
+
+        String[] countries = getResources().getStringArray(R.array.countries_array);
+        for (String country : countries) {
+            list.add(country);
+        }
+
+    }
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.contacts_menu, menu);
