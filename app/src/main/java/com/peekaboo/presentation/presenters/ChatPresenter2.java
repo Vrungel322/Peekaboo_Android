@@ -83,22 +83,13 @@ public class ChatPresenter2 extends BasePresenter<IChatView2> implements IChatPr
         messenger.readMessage(message);
     }
 
-    @Override
-    public void onMessageRead(PMessage message) {
-        IChatView2 view = getView();
-        if (view != null && isFromCurrentChat(message, view)) {
-            view.updateMessage(message);
-        }
-    }
-
-
     private boolean isFromCurrentChat(@NonNull PMessage message, @NonNull IChatView2 view) {
         return (message.senderId().equals(view.getCompanionId()) && !message.isMine())
                 || (message.receiverId().equals(view.getCompanionId()) && message.isMine());
     }
 
     @Override
-    public void onMessageDelivered(PMessage message) {
+    public void onMessageUpdated(PMessage message) {
         IChatView2 view = getView();
         if (view != null && isFromCurrentChat(message, view)) {
             view.updateMessage(message);
@@ -111,20 +102,5 @@ public class ChatPresenter2 extends BasePresenter<IChatView2> implements IChatPr
         return view != null && isFromCurrentChat(message, view) ?
                 PMessageAbs.PMESSAGE_STATUS.STATUS_READ
                 : message.status();
-    }
-
-    @Override
-    public void onMessageSent(PMessage message) {
-        IChatView2 view = getView();
-        if (view != null && isFromCurrentChat(message, view)) {
-            view.appendMessages(messageToList(message));
-        }
-    }
-
-    @NonNull
-    private ArrayList<PMessage> messageToList(PMessage message) {
-        ArrayList<PMessage> messageList = new ArrayList<>();
-        messageList.add(message);
-        return messageList;
     }
 }

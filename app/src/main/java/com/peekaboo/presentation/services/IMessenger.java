@@ -22,13 +22,9 @@ public interface IMessenger extends INotifier<PMessage> {
     void removeMessageListener(MessengerListener messengerListener);
 
     interface MessengerListener {
+        void onMessageUpdated(PMessage message);
+
         int willChangeStatus(PMessage message);
-
-        void onMessageSent(PMessage message);
-
-        void onMessageRead(PMessage message);
-
-        void onMessageDelivered(PMessage message);
 
     }
 

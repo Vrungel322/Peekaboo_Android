@@ -124,7 +124,7 @@ public class Messenger implements IMessenger,
             readMessage(pMessage);
         } else {
             for (MessengerListener listener : listeners) {
-                listener.onMessageDelivered(pMessage);
+                listener.onMessageUpdated(pMessage);
             }
         }
     }
@@ -163,7 +163,7 @@ public class Messenger implements IMessenger,
         helper.updateStatus(tableName, PMessageAbs.PMESSAGE_STATUS.STATUS_READ, message);
 
         for (MessengerListener listener : listeners) {
-            listener.onMessageRead(message);
+            listener.onMessageUpdated(message);
         }
     }
 
@@ -178,7 +178,7 @@ public class Messenger implements IMessenger,
         message.setStatus(PMessageAbs.PMESSAGE_STATUS.STATUS_SENT);
         helper.insert(message.receiverId(), message);
         for (MessengerListener listener : listeners) {
-            listener.onMessageSent(message);
+            listener.onMessageUpdated(message);
         }
         if (isAvailable()) {
             deliverMessage(message);
@@ -195,7 +195,7 @@ public class Messenger implements IMessenger,
         notifier.sendMessage(MessageUtils.convert(message));
         helper.updateStatus(message.receiverId(), PMessageAbs.PMESSAGE_STATUS.STATUS_DELIVERED, message);
         for (MessengerListener listener : listeners) {
-            listener.onMessageDelivered(message);
+            listener.onMessageUpdated(message);
         }
     }
 
@@ -251,10 +251,13 @@ public class Messenger implements IMessenger,
      * {@link #deliverMessage(PMessage)} will be called for each undelivered message
      */
     private void deliverSentMessages() {
-        Log.e("BUG1", "deliver");
+        Log.e("BUG1", "deliver " + (undeliveredMessages != null) + " " + (undeliveredMessages != null && !undeliveredMessages.isUnsubscribed()));
+        if (undeliveredMessages != null && !undeliveredMessages.isUnsubscribed()) {
+            undeliveredMessages.unsubscribe();
+        }
         undeliveredMessages = helper.getUndeliveredMessages()
                 .subscribe(pMessageAbses -> {
-                    Log.e("BUG1", "unsubscribe");
+                    Log.e("BUG1", "unsubscribe " + pMessageAbses);
                     undeliveredMessages.unsubscribe();
                     for (PMessage message : pMessageAbses) {
                         if (isAvailable()) {

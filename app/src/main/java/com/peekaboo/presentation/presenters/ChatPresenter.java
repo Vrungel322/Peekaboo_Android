@@ -43,7 +43,6 @@ public class ChatPresenter extends BasePresenter<IChatView> implements IChatPres
     private TextToSpeech textToSpeech;
     private MPlayer mPlayer;
     private String receiver;
-    private IMessenger messanger;
     private AccountUser user;
 
     @Inject
@@ -52,7 +51,6 @@ public class ChatPresenter extends BasePresenter<IChatView> implements IChatPres
         this.pMessageHelper = pMessageHelper;
         this.mapperFactory = mapperFactory;
         this.textToSpeech = textToSpeech;
-        this.messanger = messanger;
         this.user = user;
     }
 

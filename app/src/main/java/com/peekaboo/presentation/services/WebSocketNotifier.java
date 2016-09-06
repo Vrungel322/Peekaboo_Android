@@ -47,16 +47,16 @@ public class WebSocketNotifier implements INotifier<Message> {
                                 public void onConnected(WebSocket websocket, Map<String, List<String>> headers) throws Exception {
                                     String msg = "Status: Connected to " + BASE_URL;
                                     Log.e(TAG, msg);
-                                    for (NotificationListener<Message> listener : listeners) {
-                                        listener.onConnected();
-                                    }
+//                                    for (NotificationListener<Message> listener : listeners) {
+//                                        listener.onConnected();
+//                                    }
                                 }
 
                                 @Override
                                 public void onError(WebSocket websocket, WebSocketException cause) throws Exception {
                                     String msg = "Status: Error " + cause;
                                     Log.e(TAG, msg);
-                                    ws = null;
+                                    disconnect();
                                 }
 
                                 @Override
@@ -64,7 +64,7 @@ public class WebSocketNotifier implements INotifier<Message> {
                                                            WebSocketFrame clientCloseFrame, boolean closedByServer) throws Exception {
                                     String msg = "Status: Disconnected ";
                                     Log.e(TAG, msg);
-                                    ws = null;
+                                    disconnect();
 
                                     for (NotificationListener<Message> listener : listeners) {
                                         listener.onDisconnected();
@@ -89,17 +89,19 @@ public class WebSocketNotifier implements INotifier<Message> {
                                 public void onPongFrame(WebSocket websocket, WebSocketFrame frame) throws Exception {
                                     String msg = "Status: Pong received " + frame;
                                     Log.e(TAG, msg);
+                                    for (NotificationListener<Message> listener : listeners) {
+                                        listener.onConnected();
+                                    }
                                 }
                             })
                             .addHeader(AUTHORIZATION, authorization)
                             .connectAsynchronously();
                 } catch (IOException e) {
-                    ws = null;
+                    disconnect();
                     Log.e(TAG, "exception " + e);
                 }
             }
     }
-
 
     @Override
     public void tryConnect(String authorization) {
