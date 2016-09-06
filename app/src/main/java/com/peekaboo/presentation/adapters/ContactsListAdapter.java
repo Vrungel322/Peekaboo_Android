@@ -1,7 +1,6 @@
 package com.peekaboo.presentation.adapters;
 
 import android.content.Context;
-import android.support.v4.app.FragmentActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,9 +9,9 @@ import android.widget.SectionIndexer;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
 import com.peekaboo.R;
-import com.peekaboo.presentation.fragments.ContactsFragment;
+
+import java.util.ArrayList;
 
 public class ContactsListAdapter extends BaseAdapter implements SectionIndexer {
 
@@ -26,38 +25,18 @@ public class ContactsListAdapter extends BaseAdapter implements SectionIndexer {
         this.mContext = mContext;
     }
 
-
-
-    @Override
-    public int getCount() {
-        if (mCurrentList != null)
-            return mCurrentList.size();
-        else
-            return 0;
-    }
-
-    @Override
-    public String getItem(int position) {
-        if (mCurrentList != null)
-            return mCurrentList.get(position);
-        else
-            return null;
-    }
-
     @Override
     public long getItemId(int position) {
         return position;
     }
 
     public void onItemSelected(int position) {
-        Toast.makeText(mContext,"suka",Toast.LENGTH_SHORT);
+        Toast.makeText(mContext, "ska", Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-
         final int p = position;
-
         LayoutInflater inflater = (LayoutInflater) mContext
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         convertView = inflater.inflate(R.layout.img_row_layout, null);
@@ -65,8 +44,7 @@ public class ContactsListAdapter extends BaseAdapter implements SectionIndexer {
         try {
             TextView textRow = (TextView) convertView.findViewById(R.id.name);
             textRow.setText(getItem(position));
-        } catch (Exception e) {
-        }
+        } catch (Exception e) {}
 
         return convertView;
     }
@@ -110,10 +88,26 @@ public class ContactsListAdapter extends BaseAdapter implements SectionIndexer {
 
     @Override
     public Object[] getSections() {
+        // return content in side view
         String[] sections = new String[mSections.length()];
         for (int i = 0; i < mSections.length(); i++)
             sections[i] = String.valueOf(mSections.charAt(i));
         return sections;
     }
 
+    @Override
+    public int getCount() {
+        if (mCurrentList != null)
+            return mCurrentList.size();
+        else
+            return 0;
+    }
+
+    @Override
+    public String getItem(int position) {
+        if (mCurrentList != null)
+            return mCurrentList.get(position);
+        else
+            return null;
+    }
 }

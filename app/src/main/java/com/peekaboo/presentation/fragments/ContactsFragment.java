@@ -61,14 +61,7 @@ public class ContactsFragment extends Fragment {
         contactPresenter.insertContactToTable("contactsTable",
                 new PContact("Name2", "Surname2", "Nickname2", true, "uri2"));
         contactPresenter.getAllTableAsString("contactsTable");
-
-
-        //////////////
-
     }
-
-
-
 
     @Nullable
     @Override
@@ -78,14 +71,13 @@ public class ContactsFragment extends Fragment {
         setHasOptionsMenu(true);
         ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Contacts");
 
-
+        //hardcode list
         initList();
 
         contactsListAdapter = new ContactsListAdapter(list,getActivity());
         listViewIndexable.setAdapter(contactsListAdapter);
         listViewIndexable.setFastScrollEnabled(true);
         listViewIndexable.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-
             @Override
             public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
                                     long arg3) {
@@ -95,6 +87,7 @@ public class ContactsFragment extends Fragment {
 
         return rootView;
     }
+
     private void initList() {
 
         if (list == null)
@@ -104,8 +97,8 @@ public class ContactsFragment extends Fragment {
         for (String country : countries) {
             list.add(country);
         }
-
     }
+
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
         inflater.inflate(R.menu.contacts_menu, menu);
