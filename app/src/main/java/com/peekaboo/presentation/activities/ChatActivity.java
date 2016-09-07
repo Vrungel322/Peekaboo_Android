@@ -47,6 +47,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnFocusChange;
+import butterknife.OnTouch;
 import io.codetail.animation.ViewAnimationUtils;
 import io.codetail.widget.RevealFrameLayout;
 
@@ -191,6 +192,7 @@ public class ChatActivity extends AppCompatActivity
     void onRecordButtonClick(){
         recordAudio();
     }
+
 
 
     @OnClick(R.id.bMesageOpen)
