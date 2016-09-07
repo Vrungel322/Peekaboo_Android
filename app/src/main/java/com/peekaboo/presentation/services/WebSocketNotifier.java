@@ -10,6 +10,7 @@ import com.neovisionaries.ws.client.WebSocketFactory;
 import com.neovisionaries.ws.client.WebSocketFrame;
 import com.peekaboo.data.mappers.AbstractMapperFactory;
 import com.peekaboo.data.mappers.Mapper;
+import com.peekaboo.utils.MainThread;
 
 import java.io.IOException;
 import java.util.HashSet;
@@ -26,86 +27,91 @@ public class WebSocketNotifier implements INotifier<Message> {
     private final Mapper<Message, byte[]> mtb;
     private final Mapper<byte[], Message> btm;
     private final Set<NotificationListener<Message>> listeners = new HashSet<>();
-
+    private MainThread mainThread;
     @Nullable
     private WebSocket ws;
 
-    public WebSocketNotifier(String baseUrl, int timeout, AbstractMapperFactory abstractMapperFactory) {
+    public WebSocketNotifier(String baseUrl, int timeout, AbstractMapperFactory abstractMapperFactory, MainThread mainThread) {
         this.BASE_URL = baseUrl;
         this.TIMEOUT = timeout;
+        this.mainThread = mainThread;
         mtb = abstractMapperFactory.getMessageToByteMapper();
         btm = abstractMapperFactory.getByteToMessageMapper();
     }
 
     private void connectSocket(String authorization) {
         if (ws == null) {
-                try {
-                    ws = new WebSocketFactory()
-                            .createSocket(BASE_URL, TIMEOUT)
-                            .addListener(new WebSocketAdapter() {
-                                @Override
-                                public void onConnected(WebSocket websocket, Map<String, List<String>> headers) throws Exception {
-                                    String msg = "Status: Connected to " + BASE_URL;
-                                    Log.e(TAG, msg);
+            try {
+                ws = new WebSocketFactory()
+                        .createSocket(BASE_URL, TIMEOUT)
+                        .addListener(new WebSocketAdapter() {
+                            @Override
+                            public void onConnected(WebSocket websocket, Map<String, List<String>> headers) throws Exception {
+                                Log.e(TAG, "Status: Connected to " + BASE_URL);
 //                                    for (NotificationListener<Message> listener : listeners) {
 //                                        listener.onConnected();
 //                                    }
-                                }
+                            }
 
-                                @Override
-                                public void onError(WebSocket websocket, WebSocketException cause) throws Exception {
-                                    String msg = "Status: Error " + cause;
-                                    Log.e(TAG, msg);
-                                    disconnect();
-                                }
+                            @Override
+                            public void onError(WebSocket websocket, WebSocketException cause) throws Exception {
+                                Log.e(TAG, "Status: Error " + cause);
+                                mainThread.run(() -> disconnect());
+                            }
 
-                                @Override
-                                public void onDisconnected(WebSocket websocket, WebSocketFrame serverCloseFrame,
-                                                           WebSocketFrame clientCloseFrame, boolean closedByServer) throws Exception {
-                                    String msg = "Status: Disconnected ";
-                                    Log.e(TAG, msg);
+                            @Override
+                            public void onDisconnected(WebSocket websocket, WebSocketFrame serverCloseFrame,
+                                                       WebSocketFrame clientCloseFrame, boolean closedByServer) throws Exception {
+                                Log.e(TAG, "Status: Disconnected ");
+
+                                mainThread.run(() -> {
                                     disconnect();
 
                                     for (NotificationListener<Message> listener : listeners) {
                                         listener.onDisconnected();
                                     }
-                                }
+                                });
+                            }
 
-                                @Override
-                                public void onBinaryMessage(WebSocket websocket, byte[] binary) throws Exception {
-                                    String msg = "Status: Binary Message received";
-                                    Log.e(TAG, msg);
+                            @Override
+                            public void onBinaryMessage(WebSocket websocket, byte[] binary) throws Exception {
+                                Log.e(TAG, "Status: Binary Message received");
+
+                                mainThread.run(() -> {
 
                                     Message obtainedMessage = btm.transform(binary);
-                                    Log.e(TAG, "Status: Text Message received" + obtainedMessage);
+                                    Log.e(TAG, "Status: transformed to " + obtainedMessage);
 
                                     for (NotificationListener<Message> listener : listeners) {
                                         listener.onMessageObtained(obtainedMessage);
                                     }
 
-                                }
+                                });
 
-                                @Override
-                                public void onPongFrame(WebSocket websocket, WebSocketFrame frame) throws Exception {
-                                    String msg = "Status: Pong received " + frame;
-                                    Log.e(TAG, msg);
+                            }
+
+                            @Override
+                            public void onPongFrame(WebSocket websocket, WebSocketFrame frame) throws Exception {
+                                Log.e(TAG, "Status: Pong received " + frame);
+                                mainThread.run(() -> {
                                     for (NotificationListener<Message> listener : listeners) {
                                         listener.onConnected();
                                     }
-                                }
-                            })
-                            .addHeader(AUTHORIZATION, authorization)
-                            .connectAsynchronously();
-                } catch (IOException e) {
-                    disconnect();
-                    Log.e(TAG, "exception " + e);
-                }
+                                });
+                            }
+                        })
+                        .addHeader(AUTHORIZATION, authorization)
+                        .connectAsynchronously();
+            } catch (IOException e) {
+                disconnect();
+                Log.e(TAG, "exception " + e);
             }
+        }
     }
 
     @Override
     public void tryConnect(String authorization) {
-        Log.e("socket", "try connect " + ws);
+        Log.e(TAG, "try connect " + ws);
         connectSocket(authorization);
     }
 
@@ -124,7 +130,7 @@ public class WebSocketNotifier implements INotifier<Message> {
 
     @Override
     public void sendMessage(Message message) {
-        Log.e("notifier", "send message " + message);
+        Log.e(TAG, "send message " + message);
         sendBinaryMessage(mtb.transform(message));
     }
 

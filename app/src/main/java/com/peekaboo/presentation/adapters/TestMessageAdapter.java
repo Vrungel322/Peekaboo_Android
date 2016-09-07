@@ -64,23 +64,40 @@ public class TestMessageAdapter extends BaseAdapter {
                 : status == PMessageAbs.PMESSAGE_STATUS.STATUS_DELIVERED ?
                 "delivered"
                 : "read";
-        view.setText(statusStr + " " + item.messageBody());
-        view.setGravity(item.isMine() ? Gravity.RIGHT : Gravity.LEFT);
+        switch (item.mediaType()) {
+            case PMessageAbs.PMESSAGE_MEDIA_TYPE.TEXT_MESSAGE:
+                showTextMessage(item, view, statusStr);
+                break;
+            case PMessageAbs.PMESSAGE_MEDIA_TYPE.AUDIO_MESSAGE:
+                showAudioMessage(item, view, statusStr);
+                break;
+        }
+
 
         boolean isDelivered = status == PMessageAbs.PMESSAGE_STATUS.STATUS_DELIVERED && !item.isMine();
 
         view.setBackgroundColor(isDelivered ? Color.GRAY : Color.WHITE);
 
         if (isDelivered) {
-
-//            PMessage pMessage = new PMessage(item.packageId(), item.isMine(),
-//                    item.mediaType(), item.messageBody(),
-//                    item.timestamp(), item.status(),
-//                    item.receiverId(), item.senderId());
             handler.postDelayed(() -> presenter.onUserMessageRead(item), 500);
         }
 
         return view;
+    }
+
+    private void showAudioMessage(PMessage item, TextView view, String statusStr) {
+        view.setText(statusStr + " " + item.messageBody());
+        view.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
+    }
+
+    private void showTextMessage(PMessage item, TextView view, String statusStr) {
+        view.setText(statusStr + " " + item.messageBody());
+        view.setGravity(item.isMine() ? Gravity.RIGHT : Gravity.LEFT);
     }
 
     public void setMessages(List<PMessage> messages) {
@@ -96,20 +113,19 @@ public class TestMessageAdapter extends BaseAdapter {
 
     public void updateMessage(PMessage message) {
         int size = messages.size();
-        boolean found = false;
-        for (int i = 0; i < size; i++) {
-            PMessageAbs pMessageAbs = messages.get(i);
-            if (pMessageAbs.id() == message.id()) {
-                messages.set(i, message);
-                notifyDataSetChanged();
-                found = true;
-                break;
-            }
-        }
-        if (!found) {
+        if (size == 0 || messages.get(size - 1).id() < message.id()) {
             ArrayList<PMessage> messages = new ArrayList<>();
             messages.add(message);
             addMessages(messages);
+        } else {
+            for (int i = size - 1; i >= 0; i--) {
+                PMessage pMessage = messages.get(i);
+                if (pMessage.equals(message)) {
+                    messages.set(i, message);
+                    notifyDataSetChanged();
+                    break;
+                }
+            }
         }
     }
 }

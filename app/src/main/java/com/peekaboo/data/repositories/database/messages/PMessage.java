@@ -92,6 +92,17 @@ public class PMessage extends PMessageAbs {
         this.id = id;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (o instanceof PMessage) {
+            PMessage message = (PMessage) o;
+            return message.id() == id() &&
+                    message.senderId().equals(senderId) &&
+                    message.receiverId().equals(receiverId());
+        }
+        return false;
+    }
+
     public void setTimestamp(long timestamp) {
         this.timestamp = timestamp;
     }

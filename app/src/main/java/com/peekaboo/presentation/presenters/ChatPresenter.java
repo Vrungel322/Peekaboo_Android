@@ -4,6 +4,8 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.ContentValues;
 import android.content.Intent;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.speech.RecognizerIntent;
 import android.speech.tts.TextToSpeech;
@@ -13,18 +15,17 @@ import com.peekaboo.data.mappers.AbstractMapperFactory;
 import com.peekaboo.data.repositories.database.messages.PMessage;
 import com.peekaboo.data.repositories.database.messages.PMessageAbs;
 import com.peekaboo.data.repositories.database.messages.PMessageHelper;
-import com.peekaboo.domain.AccountUser;
 import com.peekaboo.domain.AudioRecorder;
-import com.peekaboo.domain.MPlayer;
 import com.peekaboo.domain.Record;
 import com.peekaboo.presentation.adapters.ChatAdapter;
-import com.peekaboo.presentation.services.IMessenger;
 import com.peekaboo.presentation.views.IChatView;
 import com.peekaboo.utils.Utility;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.inject.Inject;
 
@@ -41,29 +42,30 @@ public class ChatPresenter extends BasePresenter<IChatView> implements IChatPres
     private AbstractMapperFactory mapperFactory;
     private AudioRecorder recorder;
     private TextToSpeech textToSpeech;
-    private MPlayer mPlayer;
+    private MediaPlayer mPlayer;
+
     private String receiver;
-    private AccountUser user;
+    private Timer mTimer;
+
 
     @Inject
     public ChatPresenter(PMessageHelper pMessageHelper,
-                         AbstractMapperFactory mapperFactory, TextToSpeech textToSpeech, IMessenger messanger, AccountUser user) {
+                         AbstractMapperFactory mapperFactory, TextToSpeech textToSpeech) {
         this.pMessageHelper = pMessageHelper;
         this.mapperFactory = mapperFactory;
         this.textToSpeech = textToSpeech;
-        this.user = user;
     }
 
     @Override
     public void onChatHistoryLoading(Action1 adapter) {
         pMessageHelper.createTable(receiver);
-//        subscriptions.add(pMessageHelper.getAllMessages(receiver).subscribe(adapter));
+        subscriptions.add(pMessageHelper.getAllMessages(receiver).subscribe(adapter));
 
-//        subscriptions.add(pMessageHelper.getUnreadMessages(receiver, false).subscribe(pMessageAbses -> {
-//            if (getView() != null) {
-//                getView().showToastMessage("Unread messages = " + pMessageAbses.size());
-//            }
-//        }));
+        subscriptions.add(pMessageHelper.getUnreadMessages(receiver, false).subscribe(pMessageAbses -> {
+            if (getView() != null) {
+                getView().showToastMessage("Unread messages = " + pMessageAbses.size());
+            }
+        }));
     }
 
     @Override
@@ -83,51 +85,50 @@ public class ChatPresenter extends BasePresenter<IChatView> implements IChatPres
     public void onStopRecordingAudioClick() {
         if (recorder != null) {
             recorder.stopRecording().subscribe(record -> {
-                pMessageHelper.insert(receiver, new PMessage(
-                        true, PMessageAbs.PMESSAGE_MEDIA_TYPE.AUDIO_MESSAGE, record.getFilename(),
-                        System.currentTimeMillis(),
-                        PMessageAbs.PMESSAGE_STATUS.STATUS_SENT, receiver, user.getId()));
+                //TODO send audio message
+
+//                pMessageHelper.insert(receiver, new PMessage(
+//                        true, PMessageAbs.PMESSAGE_MEDIA_TYPE.AUDIO_MESSAGE, record.getFilename(),
+//                        System.currentTimeMillis()));
             });
         }
     }
 
     @Override
     public void onSendTextButtonPress() {
-        IChatView view = getView();
-        if (view != null) {
-            String msgBody = view.getMessageText();
+        if (getView() != null) {
+            String msgBody = getView().getMessageText();
             if (!TextUtils.isEmpty(msgBody)) {
                 // for test
                 Random random = new Random();
                 boolean isMine = random.nextBoolean();
                 //
-//                PMessage pMessage = new PMessage(Utility.getPackageId(),
+//                pMessageHelper.insert(receiver, convertPMessage(new TextPMessage(Utility.getPackageId(),
 //                        isMine, msgBody, System.currentTimeMillis(),
-//                        PMessageAbs.PMESSAGE_STATUS.STATUS_SENT, receiver, user.getId());
-//                pMessageHelper.insert(receiver, convertPMessage(pMessage));
+//                        false, false, false)));
 
-                //TODO: actually sending
+                //TODO: send text message
             }
-            view.clearTextField();
+            getView().clearTextField();
         }
     }
 
     @Override
     public void onSendImageButtonPress(Uri uri) {
-        pMessageHelper.insert(receiver, new PMessage(
-                true, PMessageAbs.PMESSAGE_MEDIA_TYPE.IMAGE_MESSAGE,
-                uri.toString(), System.currentTimeMillis(),
-                PMessageAbs.PMESSAGE_STATUS.STATUS_SENT, receiver, user.getId()));
+        //TODO send image message
+//        pMessageHelper.insert(receiver, convertPMessage(new PMessage(Utility.getPackageId(),
+//                true, uri.toString(), System.currentTimeMillis(),
+//                false, false, false)));
     }
 
     @Override
     public void onSendAudioButtonPress(Intent data) {
         ArrayList<String> result = data
                 .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
-        pMessageHelper.insert(receiver, new PMessage(
-                true, PMessageAbs.PMESSAGE_MEDIA_TYPE.AUDIO_MESSAGE,
-                result.get(0), System.currentTimeMillis(),
-                PMessageAbs.PMESSAGE_STATUS.STATUS_SENT, receiver, user.getId()));
+        //TODO send audio file
+//        pMessageHelper.insert(receiver, convertPMessage(new AudioPMessage(Utility.getPackageId(),
+//                true, result.get(0), System.currentTimeMillis(),
+//                false, false, false)));
     }
 
 
@@ -164,29 +165,80 @@ public class ChatPresenter extends BasePresenter<IChatView> implements IChatPres
     }
 
     @Override
-    public void onStartPlayingAudioClick(String filepath) {
-        mPlayer = new MPlayer();
-        try {
-            mPlayer.play(filepath);
-        } catch (IOException e) {
-            e.printStackTrace();
+    public void onStartPlayingAudioClick(String filepath, int position) {
+        if (!TextUtils.isEmpty(filepath)) {
+            mPlayer = new MediaPlayer();
+            mPlayer.reset();
+            mPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+            mPlayer.setScreenOnWhilePlaying(true);
+            try {
+                mPlayer.setDataSource(filepath);
+                mPlayer.prepare();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+
+            mTimer = new Timer();
+
+            mPlayer.setOnPreparedListener(mp1 -> {
+                mPlayer.start();
+
+                IChatView view = getView();
+                if (view != null) {
+                    view.switchPlayButtonImage(position, false);
+                }
+
+                long totalDuration = mPlayer.getDuration();
+                int updateTime = (int) totalDuration/100;
+
+                mTimer.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                        long currentDuration = mPlayer.getCurrentPosition();
+                        int progress = Utility.getProgressPercentage(currentDuration, totalDuration);
+
+                        IChatView view = getView();
+                        if (view != null) {
+                            view.updateAudioProgress(position, totalDuration, currentDuration, progress);
+                        }
+                    }
+                }, updateTime, updateTime);
+            });
+            mPlayer.setOnCompletionListener(mp -> {
+                onStopPlayingAudioClick(position);
+            });
         }
+
     }
 
     @Override
-    public void onStopPlayingAudioClick() {
+    public void onStopPlayingAudioClick(int position) {
+        if(mTimer != null){
+            mTimer.cancel();
+            mTimer.purge();
+            mTimer = null;
+        }
         mPlayer.stop();
+        mPlayer.release();
+        mPlayer = null;
+
+        IChatView view = getView();
+        if (view != null) {
+            view.updateAudioProgress(position, 0, 0, 0);
+            view.switchPlayButtonImage(position, true);
+        }
     }
 
     @Override
-    public void onStopAndPlayAudioClick(String filepath) {
+    public void onStopAndPlayAudioClick(String filepath, int position) {
         if (mPlayer == null) {
-            onStartPlayingAudioClick(filepath);
+            onStartPlayingAudioClick(filepath, position);
         }
-        try {
-            mPlayer.stopAndPlay(filepath);
-        } catch (IOException e) {
-            e.printStackTrace();
+
+        if (mPlayer.isPlaying()) {
+            onStopPlayingAudioClick(position);
+        } else {
+            onStartPlayingAudioClick(filepath, position);
         }
     }
 

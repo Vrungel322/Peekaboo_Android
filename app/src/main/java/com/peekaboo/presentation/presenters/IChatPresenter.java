@@ -15,28 +15,36 @@ import rx.functions.Action1;
  */
 public interface IChatPresenter extends IPresenter<IChatView> {
     void onChatHistoryLoading(Action1 adapter);
+
     void onDeleteChatHistoryButtonPress(ChatAdapter adapter);
 
     void onStartRecordingAudioClick();
+
     void onStopRecordingAudioClick();
 
     void onSendTextButtonPress();
+
     void onSendImageButtonPress(Uri uri);
+
     void onSendAudioButtonPress(Intent data);
 
     void onPause();
+
     void onResume();
 
     void bind(IChatView view, String receiver);
 
-
     void onDeleteMessageClick(PMessageAbs message);
+
     void onCopyMessageTextClick(ClipboardManager clipboard, PMessageAbs message);
+
     void onConvertTextToSpeechClick(PMessageAbs message);
 
-    void onStartPlayingAudioClick(String filepath);
-    void onStopPlayingAudioClick();
-    void onStopAndPlayAudioClick(String filepath);
+    void onStartPlayingAudioClick(String filepath, int position);
+
+    void onStopPlayingAudioClick(int position);
+
+    void onStopAndPlayAudioClick(String filepath, int position);
 
     void onDetachedFromRecyclerView();
 }

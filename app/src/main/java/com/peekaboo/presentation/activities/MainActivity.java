@@ -1,5 +1,6 @@
 package com.peekaboo.presentation.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
@@ -8,37 +9,46 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.View;
-import android.view.ViewTreeObserver;
+import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
+import android.widget.ListView;
 import android.widget.Toast;
 
-import com.etiennelawlor.discreteslider.library.ui.DiscreteSlider;
-import com.etiennelawlor.discreteslider.library.utilities.DisplayUtility;
 import com.peekaboo.R;
 import com.peekaboo.presentation.PeekabooApplication;
+import com.peekaboo.presentation.adapters.HotFriendsAdapter;
 import com.peekaboo.presentation.fragments.CallsFragment;
 import com.peekaboo.presentation.fragments.ContactsFragment;
 import com.peekaboo.presentation.fragments.DialogsFragment;
-import com.peekaboo.presentation.fragments.FriendTestFragment;
 import com.peekaboo.presentation.fragments.ProfileFragment;
 import com.peekaboo.presentation.fragments.SettingsFragment;
 import com.peekaboo.presentation.fragments.SocketTestFragment;
+import com.peekaboo.presentation.pojo.HotFriendPOJO;
 import com.peekaboo.presentation.services.INotifier;
 import com.peekaboo.presentation.services.Message;
 import com.peekaboo.presentation.services.MessageUtils;
+import com.peekaboo.utils.Constants;
+
+import java.util.ArrayList;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
 
 public class MainActivity extends AppCompatActivity {
     @BindView(R.id.drawer_layout)
     DrawerLayout drawer;
-
+    @BindView(R.id.bText)
+    Button bText;
+    @BindView(R.id.bAudio)
+    Button bAudio;
+    @BindView(R.id.bVideo)
+    Button bVideo;
+    @BindView(R.id.lvHotFriends)
+    ListView lvHotFriends;
     @BindView(R.id.llDialogs)
     LinearLayout llDialogs;
     @BindView(R.id.llCalls)
@@ -51,14 +61,10 @@ public class MainActivity extends AppCompatActivity {
     LinearLayout llSettings;
     @BindView(R.id.llExit)
     LinearLayout llExit;
-
-    @BindView(R.id.discrete_slider)
-    DiscreteSlider discreteSlider;
-    @BindView(R.id.rlSliderLabel)
-    RelativeLayout rlSliderLabel;
     @Inject
-    INotifier<Message> messanger;
-
+    INotifier<Message> notifier;
+    private HotFriendsAdapter hotFriendsAdapter;
+    private ArrayList<HotFriendPOJO> alHotFriendPOJO;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,43 +76,33 @@ public class MainActivity extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setHomeButtonEnabled(true);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
-        if (getSupportFragmentManager().findFragmentById(R.id.fragmentContainer) == null) {
-            changeFragment(new FriendTestFragment(), null);
-        }
+//        if (getSupportFragmentManager().findFragmentById(R.id.fragmentContainer) == null) {
+//            changeFragment(new FriendTestFragment(), null);
+//        }
 
-//        changeFragment(new SocketTestFragment(), null);
+        changeFragment(new SocketTestFragment(), null);
 //        changeFragment(new ServiceTestFragment(), null);
 //        changeFragment(new RecordTestFragment(), null);
 
-
-        discreteSlider.setOnDiscreteSliderChangeListener(position -> {
-            Toast.makeText(getApplicationContext(), "pos : " + position, Toast.LENGTH_SHORT).show();
-            int childCount = rlSliderLabel.getChildCount();
-            if (messanger.isAvailable()) {
-                messanger.sendMessage(MessageUtils.createSwitchModeMessage((byte) position));
-            }
-            for (int i = 0; i < childCount; i++) {
-                TextView tv = (TextView) rlSliderLabel.getChildAt(i);
-                if (i == position)
-                    tv.setTextColor(getResources().getColor(R.color.colorPrimary));
-                else
-                    tv.setTextColor(getResources().getColor(R.color.colorAccent));
-            }
-        });
-
-        rlSliderLabel.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                rlSliderLabel.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-
-                addTickMarkTextLabels();
-            }
+        //Hardcode list in right drawer
+        alHotFriendPOJO = new ArrayList<>();
+        for (int i = 0; i < 20; i++) {
+            alHotFriendPOJO.add(new HotFriendPOJO(R.drawable.raccoon, Math.random() < 0.5));
+        }
+        hotFriendsAdapter = new HotFriendsAdapter(getApplicationContext(), alHotFriendPOJO);
+        OverScrollDecoratorHelper.setUpOverScroll(lvHotFriends);
+        lvHotFriends.setAdapter(hotFriendsAdapter);
+        lvHotFriends.setOnItemClickListener((parent, view, position, id) -> {
+            Toast.makeText(getApplicationContext(), "clicked raccoon #" + position, Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(MainActivity.this, ChatActivity.class));
+            drawer.closeDrawer(Gravity.RIGHT, true);
         });
     }
 
@@ -115,23 +111,34 @@ public class MainActivity extends AppCompatActivity {
         selectionMode(v.getId());
         switch (v.getId()) {
             case R.id.llDialogs:
-                changeFragment(new DialogsFragment(), "dialogsFragment");//new dialogsfragment
+                changeFragment(new DialogsFragment(), Constants.FRAGMENT_TAGS.DIALOGS_FRAGMENT);
                 break;
             case R.id.llCalls:
-                changeFragment(new CallsFragment(), "callsFragment");
+                changeFragment(new CallsFragment(), Constants.FRAGMENT_TAGS.CALLS_FRAGMENT);
                 break;
             case R.id.llContacts:
-                changeFragment(new ContactsFragment(), "contactsFragment");
+                changeFragment(new ContactsFragment(), Constants.FRAGMENT_TAGS.CONTACTS_FRAGMENT);
                 break;
             case R.id.llProfile:
-                changeFragment(new ProfileFragment(), "profileFragment");
+                changeFragment(new ProfileFragment(), Constants.FRAGMENT_TAGS.PROFILE_FRAGMENT);
                 break;
             case R.id.llSettings:
-                changeFragment(new SettingsFragment(), "settingsFragment");
+                changeFragment(new SettingsFragment(), Constants.FRAGMENT_TAGS.SETTINGS_FRAGMENT);
                 break;
 
         }
 
+    }
+
+    @OnClick({R.id.bText, R.id.bAudio, R.id.bVideo})
+    public void onRadioButtonClicked(View v) {
+        bText.setSelected(v.getId() == R.id.bText);
+        bAudio.setSelected(v.getId() == R.id.bAudio);
+        bVideo.setSelected(v.getId() == R.id.bVideo);
+        byte mode = (byte) (v.getId() == R.id.bText ? 1 : v.getId() == R.id.bAudio ? 2 : 0);
+        if (notifier.isAvailable()) {
+            notifier.sendMessage(MessageUtils.createSwitchModeMessage(mode));
+        }
     }
 //
 //    @OnClick(R.id.llExit)
@@ -174,48 +181,4 @@ public class MainActivity extends AppCompatActivity {
                 .commit();
         drawer.closeDrawer(Gravity.LEFT);
     }
-
-    private void addTickMarkTextLabels() {
-        int tickMarkCount = discreteSlider.getTickMarkCount();
-        float tickMarkRadius = discreteSlider.getTickMarkRadius();
-        int width = rlSliderLabel.getMeasuredWidth();
-
-        int discreteSliderBackdropLeftMargin = DisplayUtility.dp2px(this, 10);
-        int discreteSliderBackdropRightMargin = DisplayUtility.dp2px(this, 10);
-        float firstTickMarkRadius = tickMarkRadius;
-        float lastTickMarkRadius = tickMarkRadius;
-        int interval = (width - (discreteSliderBackdropLeftMargin +
-                discreteSliderBackdropRightMargin) -
-                ((int) (firstTickMarkRadius + lastTickMarkRadius))) / (tickMarkCount);
-
-        String[] tickMarkLabels = {"All", "Text", "Audio", "Video"};
-        int tickMarkLabelWidth = DisplayUtility.dp2px(this, 40);
-
-        for (int i = 0; i < tickMarkCount; i++) {
-            TextView tv = new TextView(this);
-
-            RelativeLayout.LayoutParams layoutParams = new RelativeLayout.LayoutParams(
-                    tickMarkLabelWidth, RelativeLayout.LayoutParams.WRAP_CONTENT);
-
-            tv.setText(tickMarkLabels[i]);
-            tv.setGravity(Gravity.CENTER);
-            if (i == 0)
-                tv.setTextColor(getResources().getColor(R.color.colorPrimary));
-            else
-                tv.setTextColor(getResources().getColor(R.color.colorAccent));
-
-//                    tv.setBackgroundColor(getResources().getColor(android.R.color.holo_blue_dark));
-
-            int left = discreteSliderBackdropLeftMargin + (int) firstTickMarkRadius * 6 + (i * interval);
-
-            layoutParams.setMargins(left,
-                    0,
-                    0,
-                    0);
-            tv.setLayoutParams(layoutParams);
-
-            rlSliderLabel.addView(tv);
-        }
-    }
-
 }

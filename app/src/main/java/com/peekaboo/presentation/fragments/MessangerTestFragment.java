@@ -99,25 +99,22 @@ public class MessangerTestFragment extends Fragment implements IChatView2 {
 
     @Override
     public void showMessages(List<PMessage> messages) {
-        Log.e("fragment", "show " + messages);
-        getActivity().runOnUiThread(() -> adapter.setMessages(messages));
+        adapter.setMessages(messages);
     }
 
     @Override
     public void appendMessages(List<PMessage> messages) {
         Log.e("fragment", "append " + messages);
-        getActivity().runOnUiThread(() -> {
-            adapter.addMessages(messages);
-            int position = adapter.getCount() - 1;
-            listView.smoothScrollToPosition(position);
-            listView.setSelection(position);
-        });
+        adapter.addMessages(messages);
+        int position = adapter.getCount() - 1;
+        listView.smoothScrollToPosition(position);
+        listView.setSelection(position);
     }
 
     @Override
     public void updateMessage(PMessage message) {
         Log.e("fragment", "update " + message);
-        getActivity().runOnUiThread(() -> adapter.updateMessage(message));
+        adapter.updateMessage(message);
     }
 
     @Override

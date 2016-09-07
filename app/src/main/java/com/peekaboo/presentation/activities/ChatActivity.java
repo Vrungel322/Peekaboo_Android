@@ -13,18 +13,21 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.HorizontalScrollView;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.peekaboo.R;
 import com.peekaboo.presentation.PeekabooApplication;
 import com.peekaboo.presentation.adapters.ChatAdapter;
-import com.peekaboo.presentation.fragments.AttachmentChatDialog;
 import com.peekaboo.presentation.fragments.ChatItemDialog;
 import com.peekaboo.presentation.listeners.ChatClickListener;
 import com.peekaboo.presentation.listeners.ChatRecyclerTouchListener;
@@ -41,33 +44,45 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnFocusChange;
 import io.codetail.animation.ViewAnimationUtils;
 import io.codetail.widget.RevealFrameLayout;
-import timber.log.Timber;
 
 /**
  * Created by Nataliia on 13.07.2016.
  */
 public class ChatActivity extends AppCompatActivity
                         implements ChatItemDialog.IChatItemEventListener,
-                                   AttachmentChatDialog.IAttachmentDialogEventListener, IChatView {
+                                  ChatAdapter.IChatAdapterListener, IChatView {
 
     @BindView(R.id.etMessageBody)
     EditText etMessageBody;
     @BindView(R.id.rvMessages)
     RecyclerView rvMessages;
     @BindView(R.id.flMessageBody)
-    RevealFrameLayout flMessageBody;
+    FrameLayout flMessageBody;
+    @BindView(R.id.rflMessageBody)
+    RevealFrameLayout rflMessageBody;
+
     @BindView(R.id.bMesageOpen)
-    Button bMessageOpen;
+    ImageButton bMessageOpen;
+    @BindView(R.id.bSendMessage)
+    ImageButton bSendMessage;
+    @BindView(R.id.svItems)
+    HorizontalScrollView svItems;
+    @BindView(R.id.llItems)
+    LinearLayout llItems;
     @Inject
     ChatPresenter chatPresenter;
 
     private ChatAdapter chatAdapter;
     private ChatItemDialog chatItemDialog;
+    private  LinearLayout.LayoutParams layoutParams;
 
     boolean isRecording = false;
     private Uri imageUri;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,13 +94,12 @@ public class ChatActivity extends AppCompatActivity
         receiverName = "test";
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarChat);
+        layoutParams = (LinearLayout.LayoutParams) rflMessageBody.getLayoutParams();
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        if (null != receiverName) {
-            getSupportActionBar().setTitle(receiverName);
-        }
+            getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-        chatAdapter = new ChatAdapter(getApplicationContext(), chatPresenter);
+        chatAdapter = new ChatAdapter(getApplicationContext(), chatPresenter, this);
         chatPresenter.bind(this, receiverName);
 
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
@@ -112,6 +126,7 @@ public class ChatActivity extends AppCompatActivity
             }
         }));
     }
+
 
     @Override
     protected void onResume() {
@@ -145,6 +160,11 @@ public class ChatActivity extends AppCompatActivity
                 chatPresenter.onDeleteChatHistoryButtonPress(chatAdapter);
                 break;
             }
+            case android.R.id.home: {
+                onBackPressed();
+                Toast.makeText(getApplicationContext(), "home b clicked", Toast.LENGTH_SHORT).show();
+                break;
+            }
         }
         return super.onOptionsItemSelected(item);
     }
@@ -154,16 +174,25 @@ public class ChatActivity extends AppCompatActivity
         chatPresenter.onSendTextButtonPress();
     }
 
-    @OnClick(R.id.attach_btn)
-    void onButtonAttachClick() {
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        AttachmentChatDialog attachmentChatDialog = new AttachmentChatDialog();
-        attachmentChatDialog.show(ft, Constants.FRAGMENT_TAGS.ATTACHMENT_DIALOG_FRAGMENT_TAG);
+    @OnClick(R.id.photo_btn)
+    void onCameraButtonClick(){
+        takePhoto();
     }
+
+    @OnClick(R.id.gallery_btn)
+    void onGalleryButtonClick(){
+        takeGalleryImage();
+    }
+
+    @OnClick(R.id.micro_btn)
+    void onRecordButtonClick(){
+        recordAudio();
+    }
+
 
     @OnClick(R.id.bMesageOpen)
     void onbMessageOpenClick(){
-        flMessageBody.setVisibility(View.VISIBLE);
+        rflMessageBody.setVisibility(View.VISIBLE);
         etMessageBody.post(() -> {
             float cx, cy;
             cx = (bMessageOpen.getX() + bMessageOpen.getWidth())/2;
@@ -174,13 +203,18 @@ public class ChatActivity extends AppCompatActivity
             float finalRadius = (float) Math.hypot(dx, dy);
 
             Animator animator =
-                    ViewAnimationUtils.createCircularReveal(etMessageBody, (int)cx, (int)cy, 0, finalRadius);
+                    ViewAnimationUtils.createCircularReveal(flMessageBody, (int)cx, (int)cy, 0, finalRadius);
             animator.setInterpolator(new AccelerateDecelerateInterpolator());
             animator.setDuration(300);
             animator.start();
         });
 
         bMessageOpen.setVisibility(View.GONE);
+        LinearLayout.LayoutParams layoutParamsLlItems = (LinearLayout.LayoutParams) llItems.getLayoutParams();
+
+        layoutParamsLlItems.leftMargin = 0;
+
+        llItems.setLayoutParams(layoutParamsLlItems);
 
     }
 
@@ -190,8 +224,6 @@ public class ChatActivity extends AppCompatActivity
             Toast.makeText(getApplicationContext(), "CAMERA: " + resultCode, Toast.LENGTH_SHORT).show();
             if (resultCode == RESULT_OK) {
                 sendImage(imageUri);
-                Timber.tag("IMAGE_URI").wtf("URI: " + imageUri);
-                galleryAddPic(imageUri);
             }
         }
         if (requestCode == Constants.REQUEST_CODES.REQUEST_CODE_GALERY) {
@@ -207,20 +239,11 @@ public class ChatActivity extends AppCompatActivity
         }
     }
 
-    private void galleryAddPic(Uri imageUri) {
-        Intent mediaScanIntent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
-        mediaScanIntent.setData(imageUri);
-        sendBroadcast(mediaScanIntent);
-    }
-
-
-    @Override
     public void takeGalleryImage() {
         startActivityForResult(new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI),
                 Constants.REQUEST_CODES.REQUEST_CODE_GALERY);
     }
 
-    @Override
     public void takePhoto() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
@@ -238,18 +261,12 @@ public class ChatActivity extends AppCompatActivity
         }
     }
 
-    @Override
-    public void takeAudio() {
-        Toast.makeText(this, "2", Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
     public void takeDocument() {
         Toast.makeText(this, "3", Toast.LENGTH_SHORT).show();
     }
 
-    @Override
     public void recordAudio() {
+        Log.e("activity", "record audio " + isRecording);
         if (!isRecording) {
             chatPresenter.onStartRecordingAudioClick();
             isRecording = true;
@@ -284,6 +301,24 @@ public class ChatActivity extends AppCompatActivity
     }
 
     @Override
+    public void updateAudioProgress(int position, long totalDuration, long currentDuration, int progress) {
+        runOnUiThread(()
+                -> chatAdapter.updateAudioProgress(rvMessages.findViewHolderForAdapterPosition(position),
+                                                    totalDuration, currentDuration, progress));
+    }
+
+    @Override
+    public void switchPlayButtonImage(int position, boolean toPlay) {
+        runOnUiThread(()
+                -> chatAdapter.swithPlayButtonImage(rvMessages.findViewHolderForAdapterPosition(position), toPlay));
+    }
+
+    @OnClick(R.id.smile_btn)
+    public  void smileButtonClick(){
+        Toast.makeText(this, "SMILE", Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
     public void copyText(int index) {
         chatPresenter.onCopyMessageTextClick((ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE),
                 chatAdapter.getItem(index));
@@ -298,4 +333,33 @@ public class ChatActivity extends AppCompatActivity
     public void textToSpeech(int index) {
         chatPresenter.onConvertTextToSpeechClick(chatAdapter.getItem(index));
     }
+
+    @Override
+    public void toLastMessage(){
+        rvMessages.scrollToPosition(chatAdapter.getItemCount() - 1);
+    }
+
+    @OnFocusChange(R.id.etMessageBody)
+    public void onEditTextTouched(){
+
+        if(etMessageBody.hasFocus()){
+            bSendMessage.setBackgroundResource(R.drawable.paper_plane2);
+            layoutParams.weight=12;
+        }else {
+            bSendMessage.setBackgroundResource(R.drawable.paper_plane);
+            layoutParams.weight=4;
+        }
+        rflMessageBody.setLayoutParams(layoutParams);
+    }
+
+//
+//    @OnTouch(R.id.svItems)
+//    public boolean onScrollViewTouch(View v, MotionEvent ev){
+//        if(ev.getAction() == MotionEvent.ACTION_DOWN){
+//            etMessageBody.clearFocus();
+//
+//        }
+//        return true;
+//    }
+
 }

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <FrameLayout
+        android:id="@+id/flEachHotFriend"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:layout_marginLeft="@dimen/left_rightMarginHotFriendLayout"
+        android:layout_marginRight="@dimen/left_rightMarginHotFriendLayout"
+        android:layout_marginTop="@dimen/top_botMarginHotFriendLayout"
+        android:layout_marginBottom="@dimen/top_botMarginHotFriendLayout">
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/civHotFriendIcon"
+            android:layout_width="@dimen/hotFriendIconSize"
+            android:layout_height="@dimen/hotFriendIconSize"
+            android:layout_gravity="center"
+            android:src="@drawable/raccoon"
+            app:border_color="@android:color/transparent" />
+
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/civHotFriendStatus"
+            android:layout_width="@dimen/hotFriendStatusIconSize"
+            android:layout_height="@dimen/hotFriendStatusIconSize"
+            android:layout_gravity="right|top"
+            app:border_width="1dp"
+            app:border_color="@android:color/white" />
+
+    </FrameLayout>
+</LinearLayout>

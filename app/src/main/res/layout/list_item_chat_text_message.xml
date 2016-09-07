@@ -9,7 +9,8 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:background="@drawable/bubble2"
-        >
+        android:paddingLeft="6dp"
+        android:paddingRight="6dp">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -36,16 +37,19 @@
                     android:id="@+id/ivChatMessageStatus"
                     android:layout_width="@dimen/chat_message_status_size"
                     android:layout_height="@dimen/chat_message_status_size"
-                    android:layout_marginRight="6dp"
-                    android:src="@drawable/ic_check"
-                    android:visibility="gone"/>
+                    android:layout_gravity="end"
+                    android:src="@drawable/ic_check" />
 
                 <TextView
                     android:id="@+id/tvChatTimestamp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:text="yesterday"
                     android:textColor="@color/colorDarkAccent"
+                    android:layout_gravity="end"
                     android:textSize="@dimen/chat_timestamp_text_size" />
+
+
             </LinearLayout>
 
         </LinearLayout>

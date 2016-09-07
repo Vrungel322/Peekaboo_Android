@@ -12,11 +12,13 @@ import com.peekaboo.data.repositories.database.utils_db.DbModule;
 import com.peekaboo.domain.AccountUser;
 import com.peekaboo.domain.schedulers.ObserveOn;
 import com.peekaboo.domain.schedulers.SubscribeOn;
+import com.peekaboo.presentation.PeekabooApplication;
 import com.peekaboo.presentation.services.IMessenger;
 import com.peekaboo.presentation.services.INotifier;
 import com.peekaboo.presentation.services.Message;
 import com.peekaboo.presentation.services.Messenger;
 import com.peekaboo.presentation.services.WebSocketNotifier;
+import com.peekaboo.utils.MainThread;
 import com.squareup.otto.Bus;
 
 import javax.inject.Singleton;
@@ -28,9 +30,9 @@ import rx.schedulers.Schedulers;
 
 @Module(includes = {DataModule.class, DbModule.class})
 public class ApplicationModule {
-    private final Context application;
+    private final PeekabooApplication application;
 
-    public ApplicationModule(Context application) {
+    public ApplicationModule(PeekabooApplication application) {
         this.application = application;
     }
 
@@ -38,6 +40,12 @@ public class ApplicationModule {
     @Singleton
     Context provideApplicationContext() {
         return application;
+    }
+
+    @Provides
+    @Singleton
+    MainThread provideMainThread() {
+        return new MainThread(application.getHandler());
     }
 
     @Provides
@@ -71,8 +79,8 @@ public class ApplicationModule {
 
     @Singleton
     @Provides
-    public INotifier<Message> provideNotifier() {
-        return new WebSocketNotifier(Constants.BASE_URL_SOCKET, 5000, new MapperFactory());
+    public INotifier<Message> provideNotifier(MainThread mainThread) {
+        return new WebSocketNotifier(Constants.BASE_URL_SOCKET, 5000, new MapperFactory(), mainThread);
     }
 
     @Singleton

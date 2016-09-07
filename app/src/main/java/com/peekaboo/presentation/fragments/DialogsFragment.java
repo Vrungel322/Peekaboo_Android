@@ -1,23 +1,23 @@
 package com.peekaboo.presentation.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
 
 import com.daimajia.swipe.util.Attributes;
 import com.peekaboo.R;
 import com.peekaboo.presentation.PeekabooApplication;
+import com.peekaboo.presentation.activities.ChatActivity;
 import com.peekaboo.presentation.adapters.DialogsListAdapter;
 
 import butterknife.BindView;
@@ -50,25 +50,9 @@ public class DialogsFragment extends Fragment {
         mListView.setAdapter(mAdapter);
         mListView.setDivider(null);
         mAdapter.setMode(Attributes.Mode.Single);
-        mListView.setOnScrollListener(new AbsListView.OnScrollListener() {
-            @Override
-            public void onScrollStateChanged(AbsListView view, int scrollState) {
-            }
 
-            @Override
-            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
-            }
-        });
-        mListView.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Log.e("ListView", "onItemSelected:" + position);
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                Log.e("ListView", "onNothingSelected:");
-            }
+        mListView.setOnItemClickListener((parent, view, position, id) -> {
+            startActivity(new Intent(getActivity(), ChatActivity.class));
         });
 
         return rootView;
