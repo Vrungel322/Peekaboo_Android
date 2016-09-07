@@ -15,7 +15,7 @@ import java.util.ArrayList;
 
 public class ContactsListAdapter extends BaseAdapter implements SectionIndexer {
 
-    private String mSections = "#ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    private String mSections = "*ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     private ArrayList<String> mCurrentList;
     private Context mContext;
 
