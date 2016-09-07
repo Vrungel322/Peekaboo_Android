@@ -1,20 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingBottom="30dp"
-    android:paddingTop="30dp"
-    >
+    android:paddingBottom="8dp"
+    android:paddingTop="8dp"
+    android:paddingLeft="6dp">
 
+    <FrameLayout
+        android:layout_width="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_height="wrap_content"
+        android:paddingRight="5dp">
+
+        <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/ivDialog_contact"
+            android:layout_width="62dp"
+            android:layout_height="62dp"
+            android:layout_margin="@dimen/dialog_item_margin"
+            android:layout_marginBottom="@dimen/dialog_photo_margin"
+            android:src="@mipmap/ic_launcher"
+            app:border_color="@color/colorAccent" />
+        <!---->
+        <!--app:border_width="@dimen/circle_photo_border_width" -->
+
+
+        <TextView
+            android:layout_width="@dimen/dialog_number_dot"
+            android:layout_height="@dimen/dialog_number_dot"
+            android:layout_gravity="right|top"
+            android:background="@drawable/circle"
+            android:gravity="center"
+            android:text="8"
+            android:textColor="@android:color/black"
+            android:textSize="10sp" />
+    </FrameLayout>
     <TextView
         android:id="@+id/name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
+        android:layout_marginLeft="0dp"
+        android:layout_marginRight="35dp"
+        android:layout_gravity="center_vertical"
         android:textColor="#000000"
         android:textStyle="bold"
+        android:singleLine="true"
         android:textSize="16dp"
-        android:text="lol"
+        android:text="loooooooooooooooooooooooooooooooool"
         />
-
-</RelativeLayout>
+</LinearLayout>

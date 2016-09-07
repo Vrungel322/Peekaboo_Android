@@ -16,7 +16,7 @@ import com.peekaboo.presentation.fragments.ContactsFragment;
 
 public class ContactsListAdapter extends BaseAdapter implements SectionIndexer {
 
-    private String mSections = "#ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    private String mSections = "*ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     private ArrayList<String> mCurrentList;
     private Context mContext;
 
