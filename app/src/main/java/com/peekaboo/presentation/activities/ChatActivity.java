@@ -13,9 +13,11 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -25,6 +27,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.peekaboo.R;
+import com.peekaboo.data.repositories.database.messages.PMessageAbs;
 import com.peekaboo.presentation.PeekabooApplication;
 import com.peekaboo.presentation.adapters.ChatAdapter;
 import com.peekaboo.presentation.fragments.ChatItemDialog;
@@ -111,7 +114,6 @@ public class ChatActivity extends AppCompatActivity
         rvMessages.addOnItemTouchListener(new ChatRecyclerTouchListener(this, rvMessages, new ChatClickListener() {
             @Override
             public void onClick(View view, int position) {
-
             }
 
             @Override
@@ -121,6 +123,7 @@ public class ChatActivity extends AppCompatActivity
                 Bundle itemIndexBundle = new Bundle();
                 itemIndexBundle.putInt(Constants.ARG_CHAT_MESSAGE_ITEM_INDEX, position);
                 chatItemDialog.setArguments(itemIndexBundle);
+
                 chatItemDialog.show(ft, Constants.FRAGMENT_TAGS.CHAT_ITEM_DIALOG_FRAGMENT_TAG);
             }
         }));
@@ -132,6 +135,7 @@ public class ChatActivity extends AppCompatActivity
         super.onResume();
         chatPresenter.onResume();
         chatPresenter.onChatHistoryLoading(chatAdapter);
+
     }
 
     @Override
@@ -319,17 +323,17 @@ public class ChatActivity extends AppCompatActivity
     @Override
     public void copyText(int index) {
         chatPresenter.onCopyMessageTextClick((ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE),
-                chatAdapter.getItem(index));
+                (PMessageAbs) chatAdapter.getItem(index));
     }
 
     @Override
     public void deleteMess(int index) {
-        chatPresenter.onDeleteMessageClick(chatAdapter.getItem(index));
+        chatPresenter.onDeleteMessageClick((PMessageAbs)chatAdapter.getItem(index));
     }
 
     @Override
     public void textToSpeech(int index) {
-        chatPresenter.onConvertTextToSpeechClick(chatAdapter.getItem(index));
+        chatPresenter.onConvertTextToSpeechClick((PMessageAbs)chatAdapter.getItem(index));
     }
 
     @Override
@@ -341,14 +345,28 @@ public class ChatActivity extends AppCompatActivity
     public void onEditTextTouched(){
 
         if(etMessageBody.hasFocus()){
-            bSendMessage.setBackgroundResource(R.drawable.paper_plane2);
+            bSendMessage.setBackgroundResource(R.drawable.plane_blue);
             layoutParams.weight=12;
         }else {
-            bSendMessage.setBackgroundResource(R.drawable.paper_plane);
+            bSendMessage.setBackgroundResource(R.drawable.plane);
             layoutParams.weight=4;
         }
         rflMessageBody.setLayoutParams(layoutParams);
     }
+
+    @Override
+    public void onBackPressed() {
+        if(bMessageOpen.getVisibility() == View.VISIBLE){
+            super.onBackPressed();
+        }else{
+            bMessageOpen.setVisibility(View.VISIBLE);
+
+            rflMessageBody.setVisibility(View.GONE);
+
+        }
+
+    }
+
 
 //
 //    @OnTouch(R.id.svItems)
