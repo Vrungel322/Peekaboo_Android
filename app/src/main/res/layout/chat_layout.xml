@@ -44,7 +44,8 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:foregroundGravity="center"
-        android:scrollbars="none">
+        android:scrollbars="none"
+        android:layout_marginBottom="@dimen/marginBotForBar">
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -60,7 +61,6 @@
                 android:layout_weight="8"
                 android:focusable="true"
                 android:focusableInTouchMode="true"
-                android:padding="@dimen/little_margin"
                 android:visibility="gone">
 
                 <FrameLayout
@@ -76,9 +76,13 @@
                         android:ellipsize="end"
                         android:focusable="true"
                         android:focusableInTouchMode="true"
-                        android:maxLines="3"
+                        android:maxLines="2"
                         android:minWidth="300dp"
-                        android:padding="10dp"
+                        android:paddingLeft="20dp"
+                        android:paddingRight="20dp"
+                        android:paddingTop="10dp"
+                        android:paddingBottom="10dp"
+                        android:textCursorDrawable="@drawable/color_cursor"
                         android:textColor="#000" />
 
                     <ImageButton
@@ -97,14 +101,14 @@
                 android:id="@+id/llItems"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
+                android:layout_gravity="bottom"
                 android:layout_weight="2"
                 android:foregroundGravity="center"
-                android:gravity="center"
+                android:gravity="bottom"
                 android:orientation="horizontal">
 
                 <ImageButton
-                    android:id="@+id/bMesageOpen"
+                    android:id="@+id/bMessageOpen"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/chat_buttons_margin"
@@ -116,12 +120,12 @@
                     android:id="@+id/smile_btn"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
+                    android:layout_gravity="bottom"
                     android:layout_marginLeft="@dimen/chat_buttons_margin"
                     android:layout_marginRight="@dimen/chat_buttons_margin"
                     android:layout_weight="2"
                     android:background="@drawable/smile"
-                    android:foregroundGravity="center_vertical" />
+                    android:foregroundGravity="bottom" />
 
                 <ImageButton
                     android:id="@+id/micro_btn"

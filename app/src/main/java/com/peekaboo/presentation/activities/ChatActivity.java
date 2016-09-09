@@ -13,11 +13,11 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.EditText;
 import android.widget.FrameLayout;
@@ -66,7 +66,7 @@ public class ChatActivity extends AppCompatActivity
     @BindView(R.id.rflMessageBody)
     RevealFrameLayout rflMessageBody;
 
-    @BindView(R.id.bMesageOpen)
+    @BindView(R.id.bMessageOpen)
     ImageButton bMessageOpen;
     @BindView(R.id.bSendMessage)
     ImageButton bSendMessage;
@@ -127,6 +127,27 @@ public class ChatActivity extends AppCompatActivity
                 chatItemDialog.show(ft, Constants.FRAGMENT_TAGS.CHAT_ITEM_DIALOG_FRAGMENT_TAG);
             }
         }));
+
+        etMessageBody.addTextChangedListener(new TextWatcher() {
+            int len=0;
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
+                String str = etMessageBody.getText().toString();
+                len = str.length();
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String str = etMessageBody.getText().toString();
+                if(str.length() % 24 == 0 && len <str.length()){//len check for backspace
+                    etMessageBody.append("\n");
+                }
+            }
+        });
     }
 
 
@@ -193,7 +214,7 @@ public class ChatActivity extends AppCompatActivity
     }
 
 
-    @OnClick(R.id.bMesageOpen)
+    @OnClick(R.id.bMessageOpen)
     void onbMessageOpenClick(){
         rflMessageBody.setVisibility(View.VISIBLE);
         etMessageBody.post(() -> {
