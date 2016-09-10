@@ -1,6 +1,7 @@
 package com.peekaboo.presentation.presenters;
 
 import com.peekaboo.data.repositories.database.messages.PMessage;
+import com.peekaboo.presentation.utils.AudioPlayer;
 import com.peekaboo.presentation.views.IView;
 
 /**
@@ -12,7 +13,11 @@ public interface IChatPresenter2<V extends IView> extends IPresenter<V>{
 
     void onPause();
 
-    void onSendTextButtonPress(String receiver, String text);
+    void onSendTextButtonPress(String text);
 
     void onUserMessageRead(PMessage message);
+
+    void onPlayButtonClick(PMessage message, AudioPlayer.AudioPlayerListener listener);
+
+    void onPauseButtonClick();
 }

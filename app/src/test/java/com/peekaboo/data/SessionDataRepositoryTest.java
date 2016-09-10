@@ -19,10 +19,6 @@ import java.util.List;
 
 import rx.Observable;
 import rx.Subscriber;
-import rx.functions.Action1;
-import rx.functions.Func1;
-import rx.functions.Func2;
-import rx.functions.Functions;
 import rx.observers.TestSubscriber;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -50,8 +46,18 @@ public class SessionDataRepositoryTest {
         sessionDataRepository = new SessionDataRepository(restApi, mapper, user);
     }
 
+
+    private Object get() {
+        Object o = null;
+        return o;
+    }
+
     @Test
     public void rxText() {
+        String s1 = (String) get();
+        System.out.println(s1);
+//        int l1 = 125;
+//        System.out.println(String.format("%02d:%02d", l1 / 60, l1 % 60));
         List<String> contacts = new ArrayList<>();
         contacts.add("c1");
         contacts.add("c2");
@@ -102,11 +108,11 @@ public class SessionDataRepositoryTest {
                         });
                     return Observable.just(new ArrayList<Integer>());
                 }).reduce(new ArrayList<>(), (integers, integers2) -> {
-                    integers.addAll(integers2);
-                    return integers;
-                })
+            integers.addAll(integers2);
+            return integers;
+        })
                 .subscribe(System.out::println);
-}
+    }
 
     @Test
     public void whenLoginSuccessThenReturnUser() {

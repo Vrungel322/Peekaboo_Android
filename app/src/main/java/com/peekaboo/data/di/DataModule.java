@@ -128,11 +128,11 @@ public class DataModule {
 
     @Provides
     @Singleton
-//    public Retrofit provideRetrofit(OkHttpClient okClient, @Named("domens") List<String> domens) {
-    public Retrofit provideRetrofit(OkHttpClient okClient) {
+    public Retrofit provideRetrofit(OkHttpClient okClient, @Named("domens") List<String> domens) {
+//    public Retrofit provideRetrofit(OkHttpClient okClient) {
         return new Retrofit.Builder()
-                .baseUrl(Constants.BASE_URL)
-//                .baseUrl(domens.get(0))
+//                .baseUrl(Constants.BASE_URL)
+                .baseUrl(domens.get(0))
                 .client(okClient)
                 .addCallAdapterFactory(RxJavaCallAdapterFactory.create())
                 .addConverterFactory(GsonConverterFactory.create())

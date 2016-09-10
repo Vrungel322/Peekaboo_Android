@@ -7,11 +7,15 @@ import com.peekaboo.data.repositories.database.messages.PMessage;
 import com.peekaboo.data.repositories.database.messages.PMessageAbs;
 import com.peekaboo.domain.AccountUser;
 import com.peekaboo.presentation.services.IMessenger;
+import com.peekaboo.presentation.utils.AsyncAudioPlayer;
+import com.peekaboo.presentation.utils.AudioPlayer;
 import com.peekaboo.presentation.views.IChatView2;
 
-import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 import javax.inject.Singleton;
 
 import rx.subscriptions.CompositeSubscription;
@@ -25,11 +29,23 @@ public class ChatPresenter2 extends BasePresenter<IChatView2> implements IChatPr
     private IMessenger messenger;
     private AccountUser accountUser;
     private CompositeSubscription subscriptions;
+    private AsyncAudioPlayer player;
+    private List<String> domens;
 
     @Inject
-    public ChatPresenter2(IMessenger messenger, AccountUser accountUser) {
+    public ChatPresenter2(IMessenger messenger, AccountUser accountUser, AsyncAudioPlayer player, @Named("domens") List<String> domens) {
         this.messenger = messenger;
         this.accountUser = accountUser;
+        this.player = player;
+        this.domens = domens;
+    }
+
+    @Override
+    public void bind(IChatView2 view) {
+        super.bind(view);
+        if (!player.isInitialized()) {
+            player.preparePlayer();
+        }
     }
 
     @Override
@@ -64,18 +80,51 @@ public class ChatPresenter2 extends BasePresenter<IChatView2> implements IChatPr
     }
 
     @Override
+    public void onPlayButtonClick(PMessage pMessage, AudioPlayer.AudioPlayerListener listener) {
+
+        if (player.getAudioId() != pMessage.id() || player.state() == AudioPlayer.STATE_RESET) {
+            player.reset();
+            HashMap<String, String> headers = new HashMap<>();
+            headers.put("authorization", accountUser.getBearer());
+            String url = domens.get(0) + "download/audio/" + pMessage.messageBody();
+            player.prepare(pMessage.id(), url, headers, listener);
+        } else if (player.state() == AudioPlayer.STATE_PREPARED) {
+            Log.e("presenter", "start " + pMessage.id());
+            player.start();
+        } else if (player.state() == AudioPlayer.STATE_PLAYING) {
+            player.pause();
+        }
+    }
+
+    @Override
+    public void onPauseButtonClick() {
+        player.pause();
+    }
+
+    @Override
     public void onPause() {
         messenger.removeMessageListener(this);
         subscriptions.unsubscribe();
     }
 
     @Override
-    public void onSendTextButtonPress(String receiver, String text) {
-        PMessage pMessage = new PMessage(
-                true, PMessageAbs.PMESSAGE_MEDIA_TYPE.TEXT_MESSAGE, text, System.currentTimeMillis(),
-                PMessageAbs.PMESSAGE_STATUS.STATUS_SENT,
-                receiver, accountUser.getId());
-        messenger.sendMessage(pMessage);
+    public void unbind() {
+        player.setListener(null);
+        super.unbind();
+    }
+
+    @Override
+    public void onSendTextButtonPress(String text) {
+        IChatView2 view = getView();
+        if (!text.isEmpty() && view != null) {
+            String receiver = view.getCompanionId();
+            PMessage pMessage = new PMessage(
+                    true, PMessageAbs.PMESSAGE_MEDIA_TYPE.TEXT_MESSAGE, text, System.currentTimeMillis(),
+                    PMessageAbs.PMESSAGE_STATUS.STATUS_SENT,
+                    receiver, accountUser.getId());
+            messenger.sendMessage(pMessage);
+            view.clearTextField();
+        }
     }
 
     @Override
@@ -102,5 +151,9 @@ public class ChatPresenter2 extends BasePresenter<IChatView2> implements IChatPr
         return view != null && isFromCurrentChat(message, view) ?
                 PMessageAbs.PMESSAGE_STATUS.STATUS_READ
                 : message.status();
+    }
+
+    public void setPlayerListener(AudioPlayer.AudioPlayerListener playerListener) {
+        player.setListener(playerListener);
     }
 }

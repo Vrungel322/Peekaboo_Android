@@ -77,7 +77,7 @@ public class ChatActivity extends AppCompatActivity
 
     private ChatAdapter chatAdapter;
     private ChatItemDialog chatItemDialog;
-    private  LinearLayout.LayoutParams layoutParams;
+    private LinearLayout.LayoutParams layoutParams;
 
     boolean isRecording = false;
     private Uri imageUri;
@@ -351,15 +351,4 @@ public class ChatActivity extends AppCompatActivity
         }
         rflMessageBody.setLayoutParams(layoutParams);
     }
-
-//
-//    @OnTouch(R.id.svItems)
-//    public boolean onScrollViewTouch(View v, MotionEvent ev){
-//        if(ev.getAction() == MotionEvent.ACTION_DOWN){
-//            etMessageBody.clearFocus();
-//
-//        }
-//        return true;
-//    }
-
 }

@@ -18,6 +18,7 @@ import com.peekaboo.domain.User;
 import com.peekaboo.domain.subscribers.BaseUseCaseSubscriber;
 import com.peekaboo.domain.usecase.FindFriendUseCase;
 import com.peekaboo.presentation.PeekabooApplication;
+import com.peekaboo.utils.ActivityNavigator;
 
 import java.util.List;
 
@@ -32,6 +33,8 @@ public class FriendTestFragment extends Fragment {
 
     @Inject
     FindFriendUseCase findFriendUseCase;
+    @Inject
+    ActivityNavigator navigator;
     @Inject
     PMessageHelper messageHelper;
     @Inject
@@ -74,23 +77,17 @@ public class FriendTestFragment extends Fragment {
                                     super.onNext(user);
 
                                     PContactMapper pContactMapper = new PContactMapper();
+                                    String contactId = user.getId();
                                     ContentValues values = pContactMapper.transform(
-                                            new PContact(friendName, "surname", "nickname", false, "", user.getId())
+                                            new PContact(friendName, "surname", "nickname", false, "", contactId)
                                     );
                                     contactHelper.insert(values);
-                                    messageHelper.createTable(user.getId());
-
-                                    Fragment newFragment = MessangerTestFragment.newInstance(user.getId());
-                                    getFragmentManager().beginTransaction()
-                                            .replace(R.id.fragmentContainer, newFragment)
-                                            .commit();
+                                    messageHelper.createTable(contactId);
+                                    navigator.startChatActivity(getActivity(), contactId);
                                 }
                             });
                         } else {
-                            Fragment newFragment = MessangerTestFragment.newInstance(contactId);
-                            getFragmentManager().beginTransaction()
-                                    .replace(R.id.fragmentContainer, newFragment)
-                                    .commit();
+                            navigator.startChatActivity(getActivity(), contactId);
                         }
                     }
                 });

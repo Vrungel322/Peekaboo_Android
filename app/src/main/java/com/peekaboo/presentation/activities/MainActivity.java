@@ -20,6 +20,7 @@ import com.peekaboo.presentation.adapters.HotFriendsAdapter;
 import com.peekaboo.presentation.fragments.CallsFragment;
 import com.peekaboo.presentation.fragments.ContactsFragment;
 import com.peekaboo.presentation.fragments.DialogsFragment;
+import com.peekaboo.presentation.fragments.FriendTestFragment;
 import com.peekaboo.presentation.fragments.ProfileFragment;
 import com.peekaboo.presentation.fragments.SettingsFragment;
 import com.peekaboo.presentation.fragments.SocketTestFragment;
@@ -137,7 +138,10 @@ public class MainActivity extends AppCompatActivity {
         bVideo.setSelected(v.getId() == R.id.bVideo);
         byte mode = (byte) (v.getId() == R.id.bText ? 1 : v.getId() == R.id.bAudio ? 2 : 0);
         if (notifier.isAvailable()) {
-            notifier.sendMessage(MessageUtils.createSwitchModeMessage(mode));
+
+            Message switchModeMessage = MessageUtils.createSwitchModeMessage(mode);
+            Toast.makeText(this, switchModeMessage.toString(), Toast.LENGTH_LONG).show();
+            notifier.sendMessage(switchModeMessage);
         }
     }
 //

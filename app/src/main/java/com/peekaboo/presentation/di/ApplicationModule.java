@@ -21,6 +21,9 @@ import com.peekaboo.presentation.services.WebSocketNotifier;
 import com.peekaboo.utils.MainThread;
 import com.squareup.otto.Bus;
 
+import java.util.List;
+
+import javax.inject.Named;
 import javax.inject.Singleton;
 
 import dagger.Module;
@@ -32,8 +35,8 @@ import rx.schedulers.Schedulers;
 public class ApplicationModule {
     private final PeekabooApplication application;
 
-    public ApplicationModule(PeekabooApplication application) {
-        this.application = application;
+    public ApplicationModule(Context application) {
+        this.application = (PeekabooApplication) application;
     }
 
     @Provides
@@ -79,8 +82,8 @@ public class ApplicationModule {
 
     @Singleton
     @Provides
-    public INotifier<Message> provideNotifier(MainThread mainThread) {
-        return new WebSocketNotifier(Constants.BASE_URL_SOCKET, 5000, new MapperFactory(), mainThread);
+    public INotifier<Message> provideNotifier(MainThread mainThread, @Named("domens") List<String> domens) {
+        return new WebSocketNotifier(domens.get(1), 5000, new MapperFactory(), mainThread);
     }
 
     @Singleton

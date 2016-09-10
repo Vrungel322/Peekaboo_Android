@@ -20,7 +20,7 @@ public class NotificationService extends Service {
 
     @Inject
     INotifier<Message> notifier;
-//            IMessenger notifier;
+
     @Inject
     AccountUser user;
     private InternetBroadcastReceiver ibrInternetCheck;
@@ -30,7 +30,7 @@ public class NotificationService extends Service {
         if (action != null) {
             intent.setAction(action);
         }
-//        context.startService(intent);
+        context.startService(intent);
     }
 
     @Override

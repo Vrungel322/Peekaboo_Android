@@ -71,7 +71,7 @@ public class MessangerTestFragment extends Fragment implements IChatView2 {
         sendButton.setOnClickListener(v -> {
             String message = messageView.getText().toString();
             if (!message.isEmpty()) {
-                presenter.onSendTextButtonPress(receiverId, message);
+                presenter.onSendTextButtonPress(message);
             }
         });
         presenter.bind(this);
@@ -95,6 +95,16 @@ public class MessangerTestFragment extends Fragment implements IChatView2 {
     public void onPause() {
         presenter.onPause();
         super.onPause();
+    }
+
+    @Override
+    public void clearTextField() {
+        messageView.setText("");
+    }
+
+    @Override
+    public String getMessageText() {
+        return messageView.getText().toString();
     }
 
     @Override

@@ -62,7 +62,7 @@ dependencies {
 //    androidTestCompile 'com.android.support.test.espresso:espresso-intents:2.2.1'
 //    androidTestCompile 'com.android.support.test.espresso:espresso-web:2.2.1'
 
-
+//    compile 'com.github.wseemann:FFmpegMediaPlayer:1.0.8'
     apt 'com.jakewharton:butterknife-compiler:8.1.0'
 
     apt 'com.google.dagger:dagger-compiler:2.0.2'

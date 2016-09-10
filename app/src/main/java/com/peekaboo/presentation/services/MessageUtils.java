@@ -1,5 +1,6 @@
 package com.peekaboo.presentation.services;
 
+import android.net.Uri;
 import android.util.Log;
 
 import com.peekaboo.data.repositories.database.messages.PMessage;
@@ -109,7 +110,6 @@ public class MessageUtils {
                 senderId
         );
     }
-
 
     public static Message createReadMessage(String senderId, String from) {
         return new Message(Message.Command.SYSTEMMESSAGE)

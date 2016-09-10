@@ -14,6 +14,7 @@ import com.peekaboo.R;
 import com.peekaboo.data.repositories.database.messages.PMessage;
 import com.peekaboo.data.repositories.database.messages.PMessageAbs;
 import com.peekaboo.presentation.presenters.ChatPresenter2;
+import com.peekaboo.presentation.utils.AudioPlayer;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -74,8 +75,8 @@ public class TestMessageAdapter extends BaseAdapter {
         }
 
 
-        boolean isDelivered = status == PMessageAbs.PMESSAGE_STATUS.STATUS_DELIVERED && !item.isMine();
 
+        boolean isDelivered = status == PMessageAbs.PMESSAGE_STATUS.STATUS_DELIVERED && !item.isMine();
         view.setBackgroundColor(isDelivered ? Color.GRAY : Color.WHITE);
 
         if (isDelivered) {
@@ -90,7 +91,23 @@ public class TestMessageAdapter extends BaseAdapter {
         view.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+//
+//                presenter.onPlayButtonClick(item, new AudioPlayer.AudioPlayerListener() {
+//                    @Override
+//                    public void onStartPlaying() {
+//                        view.setText("playing");
+//                    }
+//
+//                    @Override
+//                    public void onStopPlaying() {
+//                        view.setText("pausing");
+//                    }
+//
+//                    @Override
+//                    public void onProgressChanged(long position, long duration) {
+//
+//                    }
+//                });
             }
         });
     }

@@ -13,6 +13,16 @@ public class MainThread {
     }
 
     public void run(Runnable runnable) {
+        remove(runnable);
         handler.post(runnable);
+    }
+
+    public void runDelayed(Runnable runnable, int millis) {
+        remove(runnable);
+        handler.postDelayed(runnable, millis);
+    }
+
+    public void remove(Runnable runnable) {
+        handler.removeCallbacks(runnable);
     }
 }

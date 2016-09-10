@@ -4,8 +4,9 @@ package com.peekaboo.presentation.fragments;
 import android.Manifest;
 import android.app.Activity;
 import android.content.pm.PackageManager;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
@@ -20,7 +21,6 @@ import android.widget.Toast;
 import com.peekaboo.R;
 import com.peekaboo.data.FileEntity;
 import com.peekaboo.domain.AccountUser;
-import com.peekaboo.presentation.services.MessageUtils;
 import com.peekaboo.domain.User;
 import com.peekaboo.domain.subscribers.BaseUseCaseSubscriber;
 import com.peekaboo.domain.usecase.DownloadFileUseCase;
@@ -29,8 +29,10 @@ import com.peekaboo.domain.usecase.UploadFileUseCase;
 import com.peekaboo.presentation.PeekabooApplication;
 import com.peekaboo.presentation.services.INotifier;
 import com.peekaboo.presentation.services.Message;
+import com.peekaboo.presentation.services.MessageUtils;
 
 import java.io.File;
+import java.io.IOException;
 
 import javax.inject.Inject;
 
@@ -42,13 +44,17 @@ import butterknife.OnClick;
  * A simple {@link Fragment} subclass.
  */
 public class SocketTestFragment extends Fragment implements INotifier.NotificationListener<Message> {
+    private static final int REQUEST_EXTERNAL_STORAGE = 1;
+    private static String[] PERMISSIONS_STORAGE = {
+            Manifest.permission.READ_EXTERNAL_STORAGE,
+            Manifest.permission.WRITE_EXTERNAL_STORAGE
+    };
     @BindView(R.id.etUsername)
     EditText etUsername;
     @BindView(R.id.etMessage)
     EditText etMessage;
     @BindView(R.id.tvResult)
     TextView tvResult;
-
     @Inject
     FindFriendUseCase findFriendUseCase;
     @Inject
@@ -62,6 +68,21 @@ public class SocketTestFragment extends Fragment implements INotifier.Notificati
 
     public SocketTestFragment() {
 
+    }
+
+    public static void verifyStoragePermissions(Activity activity) {
+        // Check if we have read or write permission
+        int writePermission = ActivityCompat.checkSelfPermission(activity, PERMISSIONS_STORAGE[1]);
+        int readPermission = ActivityCompat.checkSelfPermission(activity, PERMISSIONS_STORAGE[0]);
+
+        if (writePermission != PackageManager.PERMISSION_GRANTED || readPermission != PackageManager.PERMISSION_GRANTED) {
+            // We don't have permission so prompt the user
+            ActivityCompat.requestPermissions(
+                    activity,
+                    PERMISSIONS_STORAGE,
+                    REQUEST_EXTERNAL_STORAGE
+            );
+        }
     }
 
     @Override
@@ -108,12 +129,16 @@ public class SocketTestFragment extends Fragment implements INotifier.Notificati
                             public void onNext(FileEntity fileEntity) {
                                 super.onNext(fileEntity);
                                 Message typeMessage = MessageUtils.createTypeMessage(user.getId(), Message.Type.AUDIO, fileEntity.getName(), SocketTestFragment.this.user.getId());
-                                notifier.sendMessage(typeMessage);
+                                if (notifier.isAvailable()) {
+                                    Toast.makeText(getActivity(), typeMessage.toString(), Toast.LENGTH_LONG).show();
+                                    notifier.sendMessage(typeMessage);
+                                }
                             }
                         });
                     } else {
                         Message message1 = MessageUtils.createTextMessage(message, user.getId(), SocketTestFragment.this.user.getId());
                         if (notifier.isAvailable()) {
+                            Toast.makeText(getActivity(), message1.toString(), Toast.LENGTH_LONG).show();
                             notifier.sendMessage(message1);
                         }
                     }
@@ -122,17 +147,35 @@ public class SocketTestFragment extends Fragment implements INotifier.Notificati
             });
         }
     }
+//    MediaPlayer mPlayer = new MediaPlayer();
 
     @OnClick(R.id.bReconnect)
     public void reconnect() {
-        Toast.makeText(getActivity(), user.getBearer(), Toast.LENGTH_LONG).show();
+//        mPlayer.reset();
+//        mPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
+//        mPlayer.setScreenOnWhilePlaying(true);
+//        mPlayer.setOnPreparedListener(mp1 -> {
+//            mPlayer.start();
+//        });
+//        try {
+//            String path = "/sdcard/eric10.wav";
+//            Log.e("player", "play " + path);
+//            mPlayer.setDataSource(path);
+//            mPlayer.prepareAsync();
+//        } catch (IOException e) {
+//            Log.e("player", String.valueOf(e));
+//        }
+
+
         if (!notifier.isAvailable()) {
             notifier.tryConnect(user.getBearer());
+            Toast.makeText(getActivity(), user.getBearer(), Toast.LENGTH_LONG).show();
         }
     }
 
     @OnClick(R.id.bDisconnect)
     public void disconnect() {
+//        mPlayer.stop();
         notifier.disconnect();
     }
 
@@ -149,6 +192,7 @@ public class SocketTestFragment extends Fragment implements INotifier.Notificati
                 @Override
                 public void onNext(File file) {
                     super.onNext(file);
+
                     Toast.makeText(getActivity(), "file has come", Toast.LENGTH_LONG).show();
                     Log.e("file", file.toString());
                 }
@@ -163,27 +207,6 @@ public class SocketTestFragment extends Fragment implements INotifier.Notificati
             tvResult.setText(message.getTextBody());
         }
     }
-
-    public static void verifyStoragePermissions(Activity activity) {
-        // Check if we have read or write permission
-        int writePermission = ActivityCompat.checkSelfPermission(activity, PERMISSIONS_STORAGE[1]);
-        int readPermission = ActivityCompat.checkSelfPermission(activity, PERMISSIONS_STORAGE[0]);
-
-        if (writePermission != PackageManager.PERMISSION_GRANTED || readPermission != PackageManager.PERMISSION_GRANTED) {
-            // We don't have permission so prompt the user
-            ActivityCompat.requestPermissions(
-                    activity,
-                    PERMISSIONS_STORAGE,
-                    REQUEST_EXTERNAL_STORAGE
-            );
-        }
-    }
-
-    private static final int REQUEST_EXTERNAL_STORAGE = 1;
-    private static String[] PERMISSIONS_STORAGE = {
-            Manifest.permission.READ_EXTERNAL_STORAGE,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
-    };
 
     @Override
     public void onConnected() {
