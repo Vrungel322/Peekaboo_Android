@@ -64,11 +64,11 @@ public class ChatPresenter extends BasePresenter<IChatView> implements IChatPres
         pMessageHelper.createTable(receiver);
         subscriptions.add(pMessageHelper.getAllMessages(receiver).subscribe(adapter));
 
-//        subscriptions.add(pMessageHelper.getUnreadMessagesCount(receiver).subscribe(pMessageAbses -> {
-//            if (getView() != null) {
-//                getView().showToastMessage("Unread messages = " + pMessageAbses.size());
-//            }
-//        }));
+        subscriptions.add(pMessageHelper.getUnreadMessagesCount(receiver).subscribe(pMessageAbses -> {
+            if (getView() != null) {
+                getView().showToastMessage("Unread messages = " + pMessageAbses.size());
+            }
+        }));
     }
 
     @Override
