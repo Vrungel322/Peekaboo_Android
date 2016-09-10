@@ -51,9 +51,10 @@
                             <de.hdodenhof.circleimageview.CircleImageView
                                 android:layout_width="@dimen/hotFriendStatusIconSize"
                                 android:layout_height="@dimen/hotFriendStatusIconSize"
+                                android:layout_marginRight="2dp"
                                 android:layout_gravity="right|top"
                                 android:src="@drawable/round_status_icon_drawer"
-                                app:border_color="@android:color/white"
+                                app:border_color="@color/borderCircle_status_color"
                                 app:border_width="1dp" />
 
                         </FrameLayout>
