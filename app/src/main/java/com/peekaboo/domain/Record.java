@@ -20,8 +20,8 @@ import timber.log.Timber;
  */
 public class Record {
 
-    public boolean isRecording = false;
-    private AudioRecord recorder = null;
+    private boolean isRecording;
+    private AudioRecord recorder;
     private int bufferSize = 0;
     private String folderName;
     private String filename;
@@ -31,6 +31,10 @@ public class Record {
         bufferSize = AudioRecord.getMinBufferSize(44100,
                 AudioFormat.CHANNEL_IN_MONO,
                 AudioFormat.ENCODING_PCM_16BIT);
+    }
+
+    public boolean isRecording() {
+        return isRecording;
     }
 
     public String getFileName() {

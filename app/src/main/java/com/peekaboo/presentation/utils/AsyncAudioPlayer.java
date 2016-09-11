@@ -51,6 +51,7 @@ public class AsyncAudioPlayer implements AudioPlayer, MediaPlayer.OnPreparedList
         public void run() {
             Log.e("player", "prepare " + state());
             reset();
+            setAudioId(getAudioId());
             try {
                 player.setDataSource(context, Uri.parse(getUrl()), getHeaders());
                 player.prepareAsync();
@@ -87,18 +88,22 @@ public class AsyncAudioPlayer implements AudioPlayer, MediaPlayer.OnPreparedList
     }
 
     private void notifyListener(@Nullable final AudioPlayerListener listener) {
+        final long audioId = getAudioId();
+        final int state = state();
         mainThread.run(() -> {
-            if (listener != null)
-                switch (state()) {
+            Log.e("notify", audioId + " " + state);
+            if (listener != null) {
+                switch (state) {
                     case STATE_PLAYING:
-                        Log.e("player", "notify start " + getAudioId());
-                        listener.onStartPlaying(getAudioId());
+                        Log.e("player", "notify start " + audioId);
+                        listener.onStartPlaying(audioId);
                         break;
                     case STATE_RESET:
                     case STATE_PREPARED:
-                        listener.onStopPlaying(getAudioId());
+                        listener.onStopPlaying(audioId);
                         break;
                 }
+            }
         });
     }
 
@@ -126,6 +131,7 @@ public class AsyncAudioPlayer implements AudioPlayer, MediaPlayer.OnPreparedList
     public void prepare(long audioId, String url, HashMap<String, String> headers, AudioPlayerListener listener) {
         this.listener = listener;
         setAudioId(audioId);
+        prepareRunnable.setAudioId(audioId);
         prepareRunnable.setUrl(url);
         prepareRunnable.setHeaders(headers);
         executor.post(ACTION_ID, prepareRunnable);
@@ -193,6 +199,7 @@ public class AsyncAudioPlayer implements AudioPlayer, MediaPlayer.OnPreparedList
     private static abstract class StringRunnable implements Runnable {
         private String url;
         private HashMap<String, String> headers;
+        private long audioId;
 
         public String getUrl() {
             return url;
@@ -208,6 +215,10 @@ public class AsyncAudioPlayer implements AudioPlayer, MediaPlayer.OnPreparedList
 
         public Map<String,String> getHeaders() {
             return headers;
+        }
+
+        public void setAudioId(long audioId) {
+            this.audioId = audioId;
         }
     }
 }

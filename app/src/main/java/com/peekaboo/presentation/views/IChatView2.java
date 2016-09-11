@@ -17,4 +17,8 @@ public interface IChatView2 extends IView {
     void appendMessages(List<PMessage> messages);
     void updateMessage(PMessage message);
     String getCompanionId();
+
+    void showRecordStart();
+
+    void showRecordStop();
 }

@@ -49,13 +49,11 @@ public class ChatAdapter2 extends RecyclerView.Adapter<ChatAdapter2.ViewHolder> 
 
         @Override
         public void onStartPlaying(long id) {
-            int location = messages.size() - 1;
-            PMessage message = messages.get(location);
             RecyclerView.ViewHolder viewHolder = recyclerView.findViewHolderForItemId(id);
 //            Log.e("adapter", "start player (id=" + id + ") (last message id=" + getItemId(location) + ") (last message id2=" + message.id() + ") " + viewHolder);
             if (viewHolder != null && viewHolder instanceof ViewHolderAudio) {
                 ViewHolderAudio viewHolderAudio = (ViewHolderAudio) viewHolder;
-                viewHolderAudio.ibPlayRecord.setImageResource(R.drawable.pause_green);
+                viewHolderAudio.ibPlayRecord.setImageResource(R.drawable.pause_blue);
             }
         }
 
@@ -65,7 +63,7 @@ public class ChatAdapter2 extends RecyclerView.Adapter<ChatAdapter2.ViewHolder> 
 //            Log.e("adapter", "stop " + id + " " + viewHolder);
             if (viewHolder != null && viewHolder instanceof ViewHolderAudio) {
                 ViewHolderAudio viewHolderAudio = (ViewHolderAudio) viewHolder;
-                viewHolderAudio.ibPlayRecord.setImageResource(R.drawable.play_green);
+                viewHolderAudio.ibPlayRecord.setImageResource(R.drawable.play_blue);
             }
         }
 
@@ -142,7 +140,6 @@ public class ChatAdapter2 extends RecyclerView.Adapter<ChatAdapter2.ViewHolder> 
                 }
                 break;
             case PMessageAbs.PMESSAGE_MEDIA_TYPE.AUDIO_MESSAGE:
-//                boolean isPlaying = false;
                 if (holder instanceof ViewHolderAudio) {
                     ViewHolderAudio holderAudio = (ViewHolderAudio) holder;
                     presenter.setPlayerListener(playerListener);
@@ -206,7 +203,6 @@ public class ChatAdapter2 extends RecyclerView.Adapter<ChatAdapter2.ViewHolder> 
                 holder.chatBubble.setBackgroundResource(R.drawable.right);
             }
 
-
             RelativeLayout.LayoutParams layoutParams
                     = (RelativeLayout.LayoutParams) holder.chatBubble.getLayoutParams();
             layoutParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT, 0);
@@ -216,6 +212,18 @@ public class ChatAdapter2 extends RecyclerView.Adapter<ChatAdapter2.ViewHolder> 
             holder.chatBubble.setLayoutParams(layoutParams);
         }
 
+    }
+
+    private void setMessageStatus(ViewHolder holder, PMessage message) {
+        if (message.status() == PMessageAbs.PMESSAGE_STATUS.STATUS_SENT) {
+            holder.ivChatMessageStatus.setVisibility(View.GONE);
+        } else {
+            holder.ivChatMessageStatus.setImageResource(getStatusImage(message.status()));
+        }
+    }
+
+    private int getStatusImage(int status) {
+        return status == PMessage.PMESSAGE_STATUS.STATUS_READ ? R.drawable.ic_check_all : R.drawable.ic_check;
     }
 
     private void setImageMessage(ChatAdapter2.ViewHolderImage holder, String imageUri) {
@@ -238,17 +246,7 @@ public class ChatAdapter2 extends RecyclerView.Adapter<ChatAdapter2.ViewHolder> 
                 });
     }
 
-    private void setMessageStatus(ViewHolder holder, PMessage message) {
-        if (message.status() == PMessageAbs.PMESSAGE_STATUS.STATUS_SENT) {
-            holder.ivChatMessageStatus.setVisibility(View.GONE);
-        } else {
-            holder.ivChatMessageStatus.setImageResource(getStatusImage(message.status()));
-        }
-    }
 
-    private int getStatusImage(int status) {
-        return status == PMessage.PMESSAGE_STATUS.STATUS_READ ? R.drawable.ic_check_all : R.drawable.ic_check;
-    }
 
     @Override
     public int getItemCount() {
@@ -335,24 +333,6 @@ public class ChatAdapter2 extends RecyclerView.Adapter<ChatAdapter2.ViewHolder> 
             super(view);
             ButterKnife.bind(this, view);
         }
-//
-//        @Override
-//        public void onStartPlaying() {
-//            ibPlayRecord.setImageResource(R.drawable.pause_green);
-//        }
-//
-//        @Override
-//        public void onStopPlaying() {
-//            ibPlayRecord.setImageResource(R.drawable.play_green);
-//        }
-//
-//        @Override
-//        public void onProgressChanged(long position, long duration) {
-//            int max = (int) (duration / 1000);
-//            sbPlayProgress.setMax(max);
-//            sbPlayProgress.setProgress((int) (position / 1000));
-//            tvCurrentDuration.setText(String.format("%02d:%02d", max / 60, max % 60));
-//        }
     }
 
     static class ViewHolderImage extends ViewHolder {

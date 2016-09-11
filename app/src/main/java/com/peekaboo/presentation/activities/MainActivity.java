@@ -84,11 +84,11 @@ public class MainActivity extends AppCompatActivity {
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
-//        if (getSupportFragmentManager().findFragmentById(R.id.fragmentContainer) == null) {
-//            changeFragment(new FriendTestFragment(), null);
-//        }
+        if (getSupportFragmentManager().findFragmentById(R.id.fragmentContainer) == null) {
+            changeFragment(new FriendTestFragment(), null);
+        }
 
-        changeFragment(new SocketTestFragment(), null);
+//        changeFragment(new SocketTestFragment(), null);
 //        changeFragment(new ServiceTestFragment(), null);
 //        changeFragment(new RecordTestFragment(), null);
 

@@ -205,4 +205,10 @@ public class Utility {
         // return timer string
         return finalTimerString;
     }
+
+    public static int getDay(long dateInMillis){
+        Time time = new Time();
+        time.setToNow();
+        return Time.getJulianDay(dateInMillis, time.gmtoff);
+    }
 }

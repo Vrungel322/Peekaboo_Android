@@ -6,6 +6,8 @@ import android.util.Log;
 import com.peekaboo.data.repositories.database.messages.PMessage;
 import com.peekaboo.data.repositories.database.messages.PMessageAbs;
 import com.peekaboo.domain.AccountUser;
+import com.peekaboo.domain.AudioRecorder;
+import com.peekaboo.domain.Record;
 import com.peekaboo.presentation.services.IMessenger;
 import com.peekaboo.presentation.utils.AsyncAudioPlayer;
 import com.peekaboo.presentation.utils.AudioPlayer;
@@ -18,6 +20,8 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
+import rx.Subscription;
+import rx.functions.Action1;
 import rx.subscriptions.CompositeSubscription;
 
 /**
@@ -31,6 +35,7 @@ public class ChatPresenter2 extends BasePresenter<IChatView2> implements IChatPr
     private CompositeSubscription subscriptions;
     private AsyncAudioPlayer player;
     private List<String> domens;
+    private final AudioRecorder recorder = new AudioRecorder();
 
     @Inject
     public ChatPresenter2(IMessenger messenger, AccountUser accountUser, AsyncAudioPlayer player, @Named("domens") List<String> domens) {
@@ -97,8 +102,35 @@ public class ChatPresenter2 extends BasePresenter<IChatView2> implements IChatPr
     }
 
     @Override
-    public void onPauseButtonClick() {
-        player.pause();
+    public void onRecordButtonClick() {
+        IChatView2 view = getView();
+        if (view != null) {
+            if (recorder.isRecording()) {
+                Log.e("presenter", "record stop");
+                recorder.stopRecording().subscribe(record -> {
+                    Log.e("presenter", "record stopped");
+                    IChatView2 view1 = getView();
+                    if (view1 != null) {
+                        view1.showRecordStop();
+                    }
+                });
+            } else {
+                Log.e("presenter", "record start");
+                recorder.setRecord(new Record(view.getCompanionId()));
+                recorder.startRecording().subscribe(record -> {
+                    Log.e("presenter", "record started");
+                    IChatView2 view1 = getView();
+                    if (view1 != null) {
+                        view1.showRecordStart();
+                    }
+                });
+            }
+        }
+    }
+
+    @Override
+    public void onRecordSend() {
+
     }
 
     @Override

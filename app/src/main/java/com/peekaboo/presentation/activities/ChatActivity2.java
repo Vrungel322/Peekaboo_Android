@@ -4,11 +4,14 @@ import android.animation.Animator;
 import android.app.DialogFragment;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.EditText;
@@ -26,6 +29,7 @@ import com.peekaboo.domain.subscribers.BaseUseCaseSubscriber;
 import com.peekaboo.domain.usecase.UploadFileUseCase;
 import com.peekaboo.presentation.PeekabooApplication;
 import com.peekaboo.presentation.adapters.ChatAdapter2;
+import com.peekaboo.presentation.dialogs.RecordDialogFragment;
 import com.peekaboo.presentation.fragments.ChatItemDialog;
 import com.peekaboo.presentation.listeners.ChatClickListener;
 import com.peekaboo.presentation.listeners.ChatRecyclerTouchListener;
@@ -43,6 +47,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnFocusChange;
 import io.codetail.animation.ViewAnimationUtils;
 import io.codetail.widget.RevealFrameLayout;
 
@@ -59,7 +64,7 @@ public class ChatActivity2 extends AppCompatActivity implements IChatView2 {
     FrameLayout flMessageBody;
     @BindView(R.id.rflMessageBody)
     RevealFrameLayout rflMessageBody;
-    @BindView(R.id.bMesageOpen)
+    @BindView(R.id.bMessageOpen)
     ImageButton bMessageOpen;
     @BindView(R.id.bSendMessage)
     ImageButton bSendMessage;
@@ -76,6 +81,7 @@ public class ChatActivity2 extends AppCompatActivity implements IChatView2 {
     @Inject
     INotifier<Message> notifier;
     private ChatAdapter2 adapter;
+    private LinearLayout.LayoutParams layoutParams;
     private boolean isFirstResumeAfterCreate = true;
     private String companionId;
 
@@ -86,6 +92,7 @@ public class ChatActivity2 extends AppCompatActivity implements IChatView2 {
         companionId = getIntent().getStringExtra(COMPANION_ID);
         ButterKnife.bind(this);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarChat);
+        layoutParams = (LinearLayout.LayoutParams) rflMessageBody.getLayoutParams();
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setDisplayShowTitleEnabled(false);
@@ -102,44 +109,61 @@ public class ChatActivity2 extends AppCompatActivity implements IChatView2 {
         rvMessages.addOnItemTouchListener(new ChatRecyclerTouchListener(this, rvMessages, new ChatClickListener() {
             @Override
             public void onClick(View view, int position) {
-
             }
 
             @Override
             public void onLongClick(View view, int position) {
-                showItemMenu(position);
+//                FragmentTransaction ft = getFragmentManager().beginTransaction();
+//                chatItemDialog = new ChatItemDialog();
+//                Bundle itemIndexBundle = new Bundle();
+//                itemIndexBundle.putInt(Constants.ARG_CHAT_MESSAGE_ITEM_INDEX, position);
+//                chatItemDialog.setArguments(itemIndexBundle);
+//
+//                chatItemDialog.show(ft, Constants.FRAGMENT_TAGS.CHAT_ITEM_DIALOG_FRAGMENT_TAG);
             }
         }));
 
+        etMessageBody.addTextChangedListener(new TextWatcher() {
+            int len=0;
+            @Override
+            public void afterTextChanged(Editable s) {
+            }
+
+            @Override
+            public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
+                String str = etMessageBody.getText().toString();
+                len = str.length();
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                String str = etMessageBody.getText().toString();
+                if(str.length() % 24 == 0 && len <str.length()){//len check for backspace
+                    etMessageBody.append("\n");
+                }
+            }
+        });
         presenter.bind(this);
     }
 
-    private void showItemMenu(int position) {
-        FragmentTransaction ft = getFragmentManager().beginTransaction();
-        DialogFragment chatItemDialog = new ChatItemDialog();
-        Bundle itemIndexBundle = new Bundle();
-        itemIndexBundle.putInt(Constants.ARG_CHAT_MESSAGE_ITEM_INDEX, position);
-        chatItemDialog.setArguments(itemIndexBundle);
-        chatItemDialog.show(ft, Constants.FRAGMENT_TAGS.CHAT_ITEM_DIALOG_FRAGMENT_TAG);
-    }
 
     @OnClick(R.id.bSendMessage)
     void onButtonSendCLick() {
-        if (getMessageText().isEmpty()) {
-            String fileName = "/sdcard/eric.wav";
-            uploadFileUseCase.setInfo(fileName, getCompanionId());
-            uploadFileUseCase.execute(new BaseUseCaseSubscriber<FileEntity>() {
-                @Override
-                public void onNext(FileEntity fileEntity) {
-                    super.onNext(fileEntity);
-                    Message typeMessage = MessageUtils.createTypeMessage(getCompanionId(), Message.Type.AUDIO, fileEntity.getName(), accountUser.getId());
-                    notifier.sendMessage(typeMessage);
-                }
-            });
-        } else {
-            presenter.onSendTextButtonPress(getMessageText());
-        }
-//        presenter.onSendTextButtonPress(getMessageText());
+//        if (getMessageText().isEmpty()) {
+//            String fileName = "/sdcard/eric.wav";
+//            uploadFileUseCase.setInfo(fileName, getCompanionId());
+//            uploadFileUseCase.execute(new BaseUseCaseSubscriber<FileEntity>() {
+//                @Override
+//                public void onNext(FileEntity fileEntity) {
+//                    super.onNext(fileEntity);
+//                    Message typeMessage = MessageUtils.createTypeMessage(getCompanionId(), Message.Type.AUDIO, fileEntity.getName(), accountUser.getId());
+//                    notifier.sendMessage(typeMessage);
+//                }
+//            });
+//        } else {
+//            presenter.onSendTextButtonPress(getMessageText());
+//        }
+        presenter.onSendTextButtonPress(getMessageText());
     }
 
     @Override
@@ -152,8 +176,17 @@ public class ChatActivity2 extends AppCompatActivity implements IChatView2 {
         return etMessageBody.getText().toString().trim().replaceAll("[\\s&&[^\r?\n]]+", " ");
     }
 
+    @OnClick(R.id.micro_btn)
+    public void onRecordButtonClick() {
+        showRecordDialog();
+    }
 
-    @OnClick(R.id.bMesageOpen)
+    private void showRecordDialog() {
+        android.support.v4.app.DialogFragment recordFragment = RecordDialogFragment.newInstance();
+        recordFragment.show(getSupportFragmentManager(), RecordDialogFragment.TAG);
+    }
+
+    @OnClick(R.id.bMessageOpen)
     void onbMessageOpenClick() {
         rflMessageBody.setVisibility(View.VISIBLE);
         etMessageBody.post(() -> {
@@ -221,7 +254,48 @@ public class ChatActivity2 extends AppCompatActivity implements IChatView2 {
     }
 
     @Override
+    public void showRecordStart() {
+        RecordDialogFragment fragment = (RecordDialogFragment) getSupportFragmentManager()
+                .findFragmentByTag(RecordDialogFragment.TAG);
+        if (fragment != null) {
+            fragment.showRecordStart();
+        }
+    }
+
+    @Override
+    public void showRecordStop() {
+        RecordDialogFragment fragment = (RecordDialogFragment) getSupportFragmentManager()
+                .findFragmentByTag(RecordDialogFragment.TAG);
+        if (fragment != null) {
+            fragment.showRecordStop();
+        }
+    }
+
+    @Override
     public void showToastMessage(String text) {
         Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG).show();
+    }
+
+    @OnFocusChange(R.id.etMessageBody)
+    public void onEditTextTouched(){
+
+        if(etMessageBody.hasFocus()){
+            bSendMessage.setBackgroundResource(R.drawable.plane_blue);
+            layoutParams.weight=12;
+        }else {
+            bSendMessage.setBackgroundResource(R.drawable.plane);
+            layoutParams.weight=4;
+        }
+        rflMessageBody.setLayoutParams(layoutParams);
+    }
+
+    @Override
+    public void onBackPressed() {
+        if(bMessageOpen.getVisibility() == View.VISIBLE){
+            super.onBackPressed();
+        }else{
+            bMessageOpen.setVisibility(View.VISIBLE);
+            rflMessageBody.setVisibility(View.GONE);
+        }
     }
 }

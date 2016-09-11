@@ -133,6 +133,16 @@ public class MessangerTestFragment extends Fragment implements IChatView2 {
     }
 
     @Override
+    public void showRecordStart() {
+
+    }
+
+    @Override
+    public void showRecordStop() {
+
+    }
+
+    @Override
     public void showToastMessage(String text) {
         Toast.makeText(getActivity(), text, Toast.LENGTH_SHORT).show();
     }

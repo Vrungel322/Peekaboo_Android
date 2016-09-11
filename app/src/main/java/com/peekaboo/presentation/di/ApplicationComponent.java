@@ -8,6 +8,7 @@ import com.peekaboo.presentation.activities.MainActivity;
 import com.peekaboo.presentation.activities.SignUpActivity;
 import com.peekaboo.presentation.activities.SplashActivity;
 import com.peekaboo.presentation.dialogs.ConfirmSignUpDialog;
+import com.peekaboo.presentation.dialogs.RecordDialogFragment;
 import com.peekaboo.presentation.fragments.ContactsFragment;
 import com.peekaboo.presentation.fragments.DialogsFragment;
 import com.peekaboo.presentation.fragments.FriendTestFragment;
@@ -48,4 +49,6 @@ public interface ApplicationComponent {
     void inject(FriendTestFragment friendTestFragment);
 
     void inject(ChatActivity2 chatActivity2);
+
+    void inject(RecordDialogFragment recordDialogFragment);
 }

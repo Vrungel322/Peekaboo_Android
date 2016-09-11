@@ -77,7 +77,7 @@ public class ChatPresenter extends BasePresenter<IChatView> implements IChatPres
 
     @Override
     public void onStartRecordingAudioClick() {
-        recorder = new AudioRecorder(new Record(receiver));
+//        recorder = new AudioRecorder(new Record(receiver));
         subscriptions.add(recorder.startRecording().subscribe());
     }
 

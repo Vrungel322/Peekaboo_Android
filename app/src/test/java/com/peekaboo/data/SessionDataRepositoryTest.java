@@ -19,6 +19,7 @@ import java.util.List;
 
 import rx.Observable;
 import rx.Subscriber;
+import rx.functions.Action1;
 import rx.observers.TestSubscriber;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -50,6 +51,14 @@ public class SessionDataRepositoryTest {
     private Object get() {
         Object o = null;
         return o;
+    }
+
+    @Test
+    public void subscribeTest() {
+        Observable.just(new Object())
+                .map(o -> o)
+                .doOnCompleted(() -> System.out.println("complete"))
+                .doOnUnsubscribe(() -> System.out.println("unsubscribe")).subscribe(o1 -> System.out.println("next"));
     }
 
     @Test
