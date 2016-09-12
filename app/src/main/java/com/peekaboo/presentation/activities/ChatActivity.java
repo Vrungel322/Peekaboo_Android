@@ -13,15 +13,11 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.Window;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -48,7 +44,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnFocusChange;
-import butterknife.OnTouch;
 import io.codetail.animation.ViewAnimationUtils;
 import io.codetail.widget.RevealFrameLayout;
 
@@ -56,8 +51,8 @@ import io.codetail.widget.RevealFrameLayout;
  * Created by Nataliia on 13.07.2016.
  */
 public class ChatActivity extends AppCompatActivity
-                        implements ChatItemDialog.IChatItemEventListener,
-                                  ChatAdapter.IChatAdapterListener, IChatView {
+        implements ChatItemDialog.IChatItemEventListener,
+        ChatAdapter.IChatAdapterListener, IChatView {
 
     @BindView(R.id.etMessageBody)
     EditText etMessageBody;
@@ -81,11 +76,10 @@ public class ChatActivity extends AppCompatActivity
 
     private ChatAdapter chatAdapter;
     private ChatItemDialog chatItemDialog;
-    private  LinearLayout.LayoutParams layoutParams;
+    private LinearLayout.LayoutParams layoutParams;
 
     boolean isRecording = false;
     private Uri imageUri;
-
 
 
     @Override
@@ -129,27 +123,6 @@ public class ChatActivity extends AppCompatActivity
                 chatItemDialog.show(ft, Constants.FRAGMENT_TAGS.CHAT_ITEM_DIALOG_FRAGMENT_TAG);
             }
         }));
-
-//        etMessageBody.addTextChangedListener(new TextWatcher() {
-//            int len=0;
-//            @Override
-//            public void afterTextChanged(Editable s) {
-//            }
-//
-//            @Override
-//            public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
-//                String str = etMessageBody.getText().toString();
-//                len = str.length();
-//            }
-//
-//            @Override
-//            public void onTextChanged(CharSequence s, int start, int before, int count) {
-//                String str = etMessageBody.getText().toString();
-//                if(str.length() % 23 == 0 && len <str.length()){//len check for backspace
-//                    etMessageBody.append("\n");
-//                }
-//            }
-//        });
     }
 
 
@@ -201,35 +174,35 @@ public class ChatActivity extends AppCompatActivity
     }
 
     @OnClick(R.id.photo_btn)
-    void onCameraButtonClick(){
+    void onCameraButtonClick() {
         takePhoto();
     }
 
     @OnClick(R.id.gallery_btn)
-    void onGalleryButtonClick(){
+    void onGalleryButtonClick() {
         takeGalleryImage();
     }
 
     @OnClick(R.id.micro_btn)
-    void onRecordButtonClick(){
+    void onRecordButtonClick() {
         recordAudio();
     }
 
 
     @OnClick(R.id.bMessageOpen)
-    void onbMessageOpenClick(){
+    void onbMessageOpenClick() {
         rflMessageBody.setVisibility(View.VISIBLE);
         etMessageBody.post(() -> {
             float cx, cy;
-            cx = (bMessageOpen.getX() + bMessageOpen.getWidth())/2;
-            cy = (bMessageOpen.getY() + bMessageOpen.getHeight())/2;
+            cx = (bMessageOpen.getX() + bMessageOpen.getWidth()) / 2;
+            cy = (bMessageOpen.getY() + bMessageOpen.getHeight()) / 2;
 
             float dx = Math.max(cx, llMessageBody.getWidth() - cx);
             float dy = Math.max(cy, llMessageBody.getHeight() - cy);
             float finalRadius = (float) Math.hypot(dx, dy);
 
             Animator animator =
-                    ViewAnimationUtils.createCircularReveal(llMessageBody, (int)cx, (int)cy, 0, finalRadius);
+                    ViewAnimationUtils.createCircularReveal(llMessageBody, (int) cx, (int) cy, 0, finalRadius);
             animator.setInterpolator(new AccelerateDecelerateInterpolator());
             animator.setDuration(300);
             animator.start();
@@ -303,7 +276,7 @@ public class ChatActivity extends AppCompatActivity
     }
 
     public boolean sendImage(Uri uri) {
-        if(uri == null){
+        if (uri == null) {
             return false;
         }
         chatPresenter.onSendImageButtonPress(uri);
@@ -330,7 +303,7 @@ public class ChatActivity extends AppCompatActivity
     public void updateAudioProgress(int position, long totalDuration, long currentDuration, int progress) {
         runOnUiThread(()
                 -> chatAdapter.updateAudioProgress(rvMessages.findViewHolderForAdapterPosition(position),
-                                                    totalDuration, currentDuration, progress));
+                totalDuration, currentDuration, progress));
     }
 
     @Override
@@ -340,7 +313,7 @@ public class ChatActivity extends AppCompatActivity
     }
 
     @OnClick(R.id.smile_btn)
-    public  void smileButtonClick(){
+    public void smileButtonClick() {
         Toast.makeText(this, "SMILE", Toast.LENGTH_SHORT).show();
     }
 
@@ -352,39 +325,39 @@ public class ChatActivity extends AppCompatActivity
 
     @Override
     public void deleteMess(int index) {
-        chatPresenter.onDeleteMessageClick((PMessageAbs)chatAdapter.getItem(index));
+        chatPresenter.onDeleteMessageClick((PMessageAbs) chatAdapter.getItem(index));
     }
 
     @Override
     public void textToSpeech(int index) {
-        chatPresenter.onConvertTextToSpeechClick((PMessageAbs)chatAdapter.getItem(index));
+        chatPresenter.onConvertTextToSpeechClick((PMessageAbs) chatAdapter.getItem(index));
     }
 
     @Override
-    public void toLastMessage(){
+    public void toLastMessage() {
         rvMessages.scrollToPosition(chatAdapter.getItemCount() - 1);
     }
 
     @OnFocusChange(R.id.etMessageBody)
-    public void onEditTextTouched(){
+    public void onEditTextTouched() {
 
-        if(etMessageBody.hasFocus()){
+        if (etMessageBody.hasFocus()) {
             bSendMessage.setBackgroundResource(R.drawable.plane_blue);
-            layoutParams.weight=12;
-        }else {
+            layoutParams.weight = 12;
+        } else {
             bSendMessage.setBackgroundResource(R.drawable.plane);
-            layoutParams.weight=4;
+            layoutParams.weight = 4;
         }
         rflMessageBody.setLayoutParams(layoutParams);
     }
 
     @Override
     public void onBackPressed() {
-        if(bMessageOpen.getVisibility() == View.VISIBLE){
+        if (bMessageOpen.getVisibility() == View.VISIBLE) {
             super.onBackPressed();
-        }else{
+        } else {
             bMessageOpen.setVisibility(View.VISIBLE);
-
+            bSendMessage.setVisibility(View.GONE);
             rflMessageBody.setVisibility(View.GONE);
 
         }
