@@ -11,7 +11,18 @@
         <item name="android:editTextColor">@color/colorPrimary</item>
     </style>
 
-    <style name="ChatActivityTheme" parent="AppTheme">
+    <style name="ChatActivityTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="windowActionBarOverlay">false</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+        <item name="android:textColor">@color/textColorHint</item>
+        <item name="android:textColorHint">@color/textColorHint</item>
+        <item name="android:editTextColor">@color/colorPrimary</item>
+    </style>
+
+    <style name="ChatActivityBackgroundTheme" parent="Theme.AppCompat.Light.NoActionBar">
         <item name="android:background">@color/textColor</item>
     </style>
 

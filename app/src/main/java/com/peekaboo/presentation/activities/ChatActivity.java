@@ -99,7 +99,7 @@ public class ChatActivity extends AppCompatActivity
         layoutParams = (LinearLayout.LayoutParams) rflMessageBody.getLayoutParams();
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-            getSupportActionBar().setDisplayShowTitleEnabled(false);
+        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         chatAdapter = new ChatAdapter(getApplicationContext(), chatPresenter, this);
         chatPresenter.bind(this, receiverName);
@@ -114,6 +114,7 @@ public class ChatActivity extends AppCompatActivity
         rvMessages.addOnItemTouchListener(new ChatRecyclerTouchListener(this, rvMessages, new ChatClickListener() {
             @Override
             public void onClick(View view, int position) {
+
             }
 
             @Override
@@ -123,7 +124,6 @@ public class ChatActivity extends AppCompatActivity
                 Bundle itemIndexBundle = new Bundle();
                 itemIndexBundle.putInt(Constants.ARG_CHAT_MESSAGE_ITEM_INDEX, position);
                 chatItemDialog.setArguments(itemIndexBundle);
-
                 chatItemDialog.show(ft, Constants.FRAGMENT_TAGS.CHAT_ITEM_DIALOG_FRAGMENT_TAG);
             }
         }));
@@ -143,7 +143,7 @@ public class ChatActivity extends AppCompatActivity
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 String str = etMessageBody.getText().toString();
-                if(str.length() % 24 == 0 && len <str.length()){//len check for backspace
+                if(str.length() % 23 == 0 && len <str.length()){//len check for backspace
                     etMessageBody.append("\n");
                 }
             }
@@ -156,7 +156,6 @@ public class ChatActivity extends AppCompatActivity
         super.onResume();
         chatPresenter.onResume();
         chatPresenter.onChatHistoryLoading(chatAdapter);
-
     }
 
     @Override
