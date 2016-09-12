@@ -35,7 +35,6 @@
         android:divider="@null"
         android:listSelector="@android:color/transparent"
         android:overScrollMode="ifContentScrolls"
-        android:padding="@dimen/items_margin"
         android:scrollbars="none" />
 
     <HorizontalScrollView
