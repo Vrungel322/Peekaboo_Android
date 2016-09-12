@@ -63,21 +63,25 @@
                 android:focusableInTouchMode="true"
                 android:visibility="gone">
 
-                <FrameLayout
-                    android:id="@+id/flMessageBody"
+                <LinearLayout
+                    android:id="@+id/llMessageBody"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/round_left_bubble"
+                    android:orientation="horizontal"
+                    >
 
                     <EditText
                         android:id="@+id/etMessageBody"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:background="@drawable/round_left_bubble"
+                        android:background="@null"
                         android:ellipsize="end"
                         android:focusable="true"
                         android:focusableInTouchMode="true"
                         android:maxLines="2"
                         android:minWidth="300dp"
+                        android:maxWidth="300dp"
                         android:paddingLeft="20dp"
                         android:paddingRight="20dp"
                         android:paddingTop="10dp"
@@ -85,15 +89,8 @@
                         android:textCursorDrawable="@drawable/color_cursor"
                         android:textColor="#000" />
 
-                    <ImageButton
-                        android:id="@+id/bSendMessage"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="right|center_vertical"
-                        android:layout_margin="4dp"
-                        android:background="@drawable/plane"
-                        android:foregroundGravity="center_vertical" />
-                </FrameLayout>
+
+                </LinearLayout>
 
             </io.codetail.widget.RevealFrameLayout>
 
@@ -106,6 +103,16 @@
                 android:foregroundGravity="center"
                 android:gravity="bottom"
                 android:orientation="horizontal">
+
+                <ImageButton
+                    android:id="@+id/bSendMessage"
+                    android:visibility="gone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/chat_buttons_margin"
+                    android:layout_marginRight="@dimen/chat_buttons_margin"
+                    android:background="@drawable/plane"
+                    android:foregroundGravity="center_vertical" />
 
                 <ImageButton
                     android:id="@+id/bMessageOpen"
