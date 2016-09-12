@@ -81,7 +81,6 @@
     <dimen name="hotFriendStatusIconSize">18dp</dimen>
 
     <dimen name="marginForEachItemInSwitcher">10dp</dimen>
-    <dimen name="marginBotForBar">10dp</dimen>
-    <dimen name="fab_size">16dp</dimen>
+    <dimen name="marginBotForBar">8dp</dimen>
 
 </resources>

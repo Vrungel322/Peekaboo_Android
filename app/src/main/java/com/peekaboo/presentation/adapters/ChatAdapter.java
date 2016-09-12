@@ -64,23 +64,25 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     @Override
     public int getItemViewType(int position) {
         Object item = getItem(position);
-        if (position != 0) {
-            Object previousItem = getItem(position - 1);
-            if (previousItem instanceof PMessageAbs && item instanceof PMessageAbs) {
-                if (needSeparator((PMessageAbs) previousItem, (PMessageAbs) item)) {
-                    this.messages.add(position, new DateSeparator("April 13"));
 
-                }
-            }
-        }
-        if (item instanceof PMessageAbs) {
-            return ((PMessageAbs) item).mediaType();
-        }
-
-        if (item instanceof DateSeparator) {
-            return ((DateSeparator) item).getMediaType();
-        }
-        return -1;
+//        if(position != 0){
+//            Object previousItem = getItem(position -1);
+//            if (previousItem instanceof PMessageAbs && item instanceof PMessageAbs) {
+//                if(needSeparator((PMessageAbs) previousItem, (PMessageAbs) item)){
+//                    this.messages.add(position, new DateSeparator("April 13"));
+//
+//                }
+//            }
+//        }
+//        if(item instanceof  PMessageAbs){
+//            return ((PMessageAbs) item).mediaType();
+//        }
+//
+//        if(item instanceof DateSeparator){
+//            return ((DateSeparator) item).getMediaType();
+//        }
+//        return -1;
+        return ((PMessageAbs) item).mediaType();
     }
 
     @Override
