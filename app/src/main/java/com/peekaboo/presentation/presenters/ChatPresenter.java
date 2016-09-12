@@ -26,7 +26,6 @@ import com.peekaboo.utils.Utility;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -49,6 +48,8 @@ public class ChatPresenter extends BasePresenter<IChatView> implements IChatPres
 
     private String receiver;
     private Timer mTimer;
+    private boolean isMine;
+    private int isMineChanger;
 
 
     @Inject
@@ -57,6 +58,7 @@ public class ChatPresenter extends BasePresenter<IChatView> implements IChatPres
         this.pMessageHelper = pMessageHelper;
         this.mapperFactory = mapperFactory;
         this.textToSpeech = textToSpeech;
+        isMineChanger = 0;
     }
 
     @Override
@@ -102,9 +104,13 @@ public class ChatPresenter extends BasePresenter<IChatView> implements IChatPres
             String msgBody = getView().getMessageText();
             if (!TextUtils.isEmpty(msgBody)) {
                 // for test
-                Random random = new Random();
-                boolean isMine = random.nextBoolean();
-                //
+                isMineChanger++;
+                if (isMineChanger % 2 == 0){
+                    isMine = true;
+                }
+                else {
+                    isMine = false;
+                }
                 pMessageHelper.insert(receiver, convertPMessage(new TextPMessage(Utility.getPackageId(),
                         isMine, msgBody, System.currentTimeMillis(),
                         false, false, false)));
