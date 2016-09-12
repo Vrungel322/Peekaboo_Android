@@ -10,4 +10,8 @@
         android:layout_gravity="center"
         android:background="@drawable/dates_separator_bg"
         android:textColor="@android:color/white" />
+<<<<<<< Updated upstream
 </FrameLayout>
+=======
+</FrameLayout>
+>>>>>>> Stashed changes
