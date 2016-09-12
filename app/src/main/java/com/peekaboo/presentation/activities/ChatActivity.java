@@ -357,7 +357,7 @@ public class ChatActivity extends AppCompatActivity
             super.onBackPressed();
         } else {
             bMessageOpen.setVisibility(View.VISIBLE);
-
+            bSendMessage.setVisibility(View.GONE);
             rflMessageBody.setVisibility(View.GONE);
 
         }
