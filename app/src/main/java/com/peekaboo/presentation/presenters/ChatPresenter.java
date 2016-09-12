@@ -107,10 +107,9 @@ public class ChatPresenter extends BasePresenter<IChatView> implements IChatPres
                 // for test
                 // odd mes - income, even mes - outgoing
                 isMineChanger++;
-                if (isMineChanger % 2 == 0){
+                if (isMineChanger % 2 == 0) {
                     isMine = true;
-                }
-                else {
+                } else {
                     isMine = false;
                 }
                 pMessageHelper.insert(receiver, convertPMessage(new TextPMessage(Utility.getPackageId(),
@@ -197,7 +196,7 @@ public class ChatPresenter extends BasePresenter<IChatView> implements IChatPres
                 }
 
                 long totalDuration = mPlayer.getDuration();
-                int updateTime = (int) totalDuration/100;
+                int updateTime = (int) totalDuration / 100;
 
                 mTimer.schedule(new TimerTask() {
                     @Override
@@ -221,7 +220,7 @@ public class ChatPresenter extends BasePresenter<IChatView> implements IChatPres
 
     @Override
     public void onStopPlayingAudioClick(int position) {
-        if(mTimer != null){
+        if (mTimer != null) {
             mTimer.cancel();
             mTimer.purge();
             mTimer = null;
