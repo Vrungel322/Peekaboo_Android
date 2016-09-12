@@ -76,7 +76,7 @@ public class ChatPresenter2 extends BasePresenter<IChatView2> implements IChatPr
                         Log.e("BUG", "unsubscribe");
                         subscriptions.unsubscribe();
                         IChatView2 view = getView();
-                        if (view != null) {
+                        if (view != null && !pMessageAbses.isEmpty()) {
                             view.appendMessages(pMessageAbses);
                         }
                     }));

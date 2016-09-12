@@ -127,12 +127,18 @@ public class ChatAdapter2 extends RecyclerView.Adapter<ChatAdapter2.ViewHolder> 
         position = holder.getAdapterPosition();
         PMessage pMessageAbs = getItem(position);
         int mediaType = pMessageAbs.mediaType();
-        if (position == 0) {
-            setAlignment(holder, pMessageAbs.isMine(), true, mediaType);
-        } else {
-            PMessageAbs pPreviousMessageAbs = getItem(position - 1);
-            setAlignment(holder, pMessageAbs.isMine(), pPreviousMessageAbs.isMine(), mediaType);
+        boolean nextMine = false;
+        boolean prevMine = false;
+        if (getItemCount() > 1) {
+            if (position < getItemCount() - 1) {
+                nextMine = getItem(position + 1).isMine();
+            }
+            if (position > 0) {
+                prevMine = getItem(position - 1).isMine();
+            }
         }
+        setAlignment(holder, pMessageAbs.isMine(), prevMine, nextMine, mediaType);
+
         switch (mediaType) {
             case PMessageAbs.PMESSAGE_MEDIA_TYPE.TEXT_MESSAGE:
                 if (holder instanceof ViewHolderText) {
@@ -144,7 +150,6 @@ public class ChatAdapter2 extends RecyclerView.Adapter<ChatAdapter2.ViewHolder> 
                     ViewHolderAudio holderAudio = (ViewHolderAudio) holder;
                     presenter.setPlayerListener(playerListener);
                     holderAudio.ibPlayRecord.setOnClickListener(v -> {
-                        //TODO play audio
                         presenter.onPlayButtonClick(pMessageAbs, playerListener);
                     });
                 }
@@ -175,43 +180,37 @@ public class ChatAdapter2 extends RecyclerView.Adapter<ChatAdapter2.ViewHolder> 
     @Override
     public void onViewRecycled(ViewHolder holder) {
         super.onViewRecycled(holder);
-
     }
 
-    private void setAlignment(ViewHolder holder, boolean isMine, boolean wasPreviousMine, int mediaType) {
+    private void setAlignment(ViewHolder holder, boolean isMine, boolean wasPreviousMine, boolean isNextMine, int mediaType) {
         Log.i("ALIGMENT", Integer.toString(mediaType));
 
-        if (!isMine) {
-            if (!wasPreviousMine || mediaType == PMessageAbs.PMESSAGE_MEDIA_TYPE.IMAGE_MESSAGE) {
-                holder.chatBubble.setBackgroundResource(R.drawable.left_bubble);
-            } else {
-                holder.chatBubble.setBackgroundResource(R.drawable.left);
-            }
-            holder.tvChatTimestamp.setTextColor(ResourcesUtils.getColor(context, R.color.drawerDividerColor));
+        holder.tvChatTimestamp.setTextColor(ResourcesUtils.getColor(context, isMine ? R.color.colorDarkAccent : R.color.drawerDividerColor));
 
-            RelativeLayout.LayoutParams layoutParams
-                    = (RelativeLayout.LayoutParams) holder.chatBubble.getLayoutParams();
-            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, 0);
-            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-            layoutParams.setMargins(Constants.DESIGN_CONSTANTS.SIDE_MARGIN, Constants.DESIGN_CONSTANTS.TOP_OR_BOTTOM_MARGIN,
-                    Constants.DESIGN_CONSTANTS.BIG_SIDE_MARGIN, Constants.DESIGN_CONSTANTS.TOP_OR_BOTTOM_MARGIN);
-            holder.chatBubble.setLayoutParams(layoutParams);
+        RelativeLayout.LayoutParams layoutParams
+                = (RelativeLayout.LayoutParams) holder.chatBubble.getLayoutParams();
+        layoutParams.addRule(isMine ? RelativeLayout.ALIGN_PARENT_LEFT : RelativeLayout.ALIGN_PARENT_RIGHT, 0);
+        layoutParams.addRule(isMine ? RelativeLayout.ALIGN_PARENT_RIGHT : RelativeLayout.ALIGN_PARENT_LEFT);
+        layoutParams.setMargins(
+                isMine ? Constants.DESIGN_CONSTANTS.BIG_SIDE_MARGIN : Constants.DESIGN_CONSTANTS.SIDE_MARGIN,
+                Constants.DESIGN_CONSTANTS.TOP_OR_BOTTOM_MARGIN,
+                isMine ? Constants.DESIGN_CONSTANTS.SIDE_MARGIN : Constants.DESIGN_CONSTANTS.BIG_SIDE_MARGIN,
+                Constants.DESIGN_CONSTANTS.TOP_OR_BOTTOM_MARGIN
+        );
+        holder.chatBubble.setLayoutParams(layoutParams);
+        if (isMine) {
+            if (!isNextMine) {
+                holder.chatBubble.setBackgroundResource(R.drawable.circle_blue_corner);
+            } else {
+                holder.chatBubble.setBackgroundResource(R.drawable.circle_blue);
+            }
         } else {
-            if (wasPreviousMine || mediaType == PMessageAbs.PMESSAGE_MEDIA_TYPE.IMAGE_MESSAGE) {
-                holder.chatBubble.setBackgroundResource(R.drawable.right_bubble);
+            if (wasPreviousMine) {
+                holder.chatBubble.setBackgroundResource(R.drawable.circle_gray_corner);
             } else {
-                holder.chatBubble.setBackgroundResource(R.drawable.right);
+                holder.chatBubble.setBackgroundResource(R.drawable.circle_gray);
             }
-
-            RelativeLayout.LayoutParams layoutParams
-                    = (RelativeLayout.LayoutParams) holder.chatBubble.getLayoutParams();
-            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT, 0);
-            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-            layoutParams.setMargins(Constants.DESIGN_CONSTANTS.BIG_SIDE_MARGIN, Constants.DESIGN_CONSTANTS.TOP_OR_BOTTOM_MARGIN,
-                    Constants.DESIGN_CONSTANTS.SIDE_MARGIN, Constants.DESIGN_CONSTANTS.TOP_OR_BOTTOM_MARGIN);
-            holder.chatBubble.setLayoutParams(layoutParams);
         }
-
     }
 
     private void setMessageStatus(ViewHolder holder, PMessage message) {
@@ -219,6 +218,7 @@ public class ChatAdapter2 extends RecyclerView.Adapter<ChatAdapter2.ViewHolder> 
             holder.ivChatMessageStatus.setVisibility(View.GONE);
         } else {
             holder.ivChatMessageStatus.setImageResource(getStatusImage(message.status()));
+            holder.ivChatMessageStatus.setVisibility(View.VISIBLE);
         }
     }
 
@@ -247,7 +247,6 @@ public class ChatAdapter2 extends RecyclerView.Adapter<ChatAdapter2.ViewHolder> 
     }
 
 
-
     @Override
     public int getItemCount() {
         return messages.size();
@@ -273,22 +272,23 @@ public class ChatAdapter2 extends RecyclerView.Adapter<ChatAdapter2.ViewHolder> 
         int size = this.messages.size();
         this.messages.addAll(messages);
         notifyItemRangeInserted(size, messages.size());
+        notifyItemChanged(size - 1);
         scrollToLastMessage();
     }
 
     public void updateMessage(PMessage message) {
-        Log.e("adapter", "update " + message);
         int size = messages.size();
         if (size == 0 || message.id() > messages.get(size - 1).id()) {
-            Log.e("adapter", "append");
+            Log.e("adapter", "append " + size + " " + message);
             messages.add(message);
             notifyItemInserted(size);
+            notifyItemChanged(size - 1);
             scrollToLastMessage();
         } else {
             for (int i = messages.size() - 1; i >= 0; i--) {
                 PMessage mes = messages.get(i);
                 if (mes.id() == message.id()) {
-                    Log.e("adapter", "update");
+                    Log.e("adapter", "update " + i + " " + message);
                     messages.set(i, message);
                     notifyItemChanged(i);
                     break;

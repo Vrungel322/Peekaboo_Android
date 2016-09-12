@@ -18,7 +18,7 @@ public class PMessage extends PMessageAbs {
 
     @Override
     public String toString() {
-        return "{ id=" + id + ", body=" + messageBody + ", isMine=" + isMine + " }";
+        return "{ id=" + id + ", body=" + messageBody + ", isMine=" + isMine + ", status=" + status() + " }";
     }
 
     public PMessage(boolean isMine, int mediaType, String messageBody, long timestamp,
