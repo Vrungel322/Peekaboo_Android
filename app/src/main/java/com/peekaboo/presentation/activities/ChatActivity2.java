@@ -1,44 +1,35 @@
 package com.peekaboo.presentation.activities;
 
 import android.animation.Animator;
-import android.app.DialogFragment;
-import android.app.FragmentTransaction;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.text.Editable;
-import android.text.TextWatcher;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.EditText;
-import android.widget.FrameLayout;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.peekaboo.R;
-import com.peekaboo.data.FileEntity;
 import com.peekaboo.data.repositories.database.messages.PMessage;
 import com.peekaboo.domain.AccountUser;
-import com.peekaboo.domain.subscribers.BaseUseCaseSubscriber;
 import com.peekaboo.domain.usecase.UploadFileUseCase;
 import com.peekaboo.presentation.PeekabooApplication;
 import com.peekaboo.presentation.adapters.ChatAdapter2;
 import com.peekaboo.presentation.dialogs.RecordDialogFragment;
-import com.peekaboo.presentation.fragments.ChatItemDialog;
 import com.peekaboo.presentation.listeners.ChatClickListener;
 import com.peekaboo.presentation.listeners.ChatRecyclerTouchListener;
 import com.peekaboo.presentation.presenters.ChatPresenter2;
 import com.peekaboo.presentation.services.INotifier;
 import com.peekaboo.presentation.services.Message;
-import com.peekaboo.presentation.services.MessageUtils;
 import com.peekaboo.presentation.views.IChatView2;
-import com.peekaboo.utils.Constants;
 
 import java.util.List;
 
@@ -60,8 +51,8 @@ public class ChatActivity2 extends AppCompatActivity implements IChatView2 {
     EditText etMessageBody;
     @BindView(R.id.rvMessages)
     RecyclerView rvMessages;
-    @BindView(R.id.flMessageBody)
-    FrameLayout flMessageBody;
+    @BindView(R.id.llMessageBody)
+    LinearLayout llMessageBody;
     @BindView(R.id.rflMessageBody)
     RevealFrameLayout rflMessageBody;
     @BindView(R.id.bMessageOpen)
@@ -122,47 +113,28 @@ public class ChatActivity2 extends AppCompatActivity implements IChatView2 {
 //                chatItemDialog.show(ft, Constants.FRAGMENT_TAGS.CHAT_ITEM_DIALOG_FRAGMENT_TAG);
             }
         }));
-
-        etMessageBody.addTextChangedListener(new TextWatcher() {
-            int len=0;
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
-                String str = etMessageBody.getText().toString();
-                len = str.length();
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                String str = etMessageBody.getText().toString();
-                if(str.length() % 24 == 0 && len <str.length()){//len check for backspace
-                    etMessageBody.append("\n");
-                }
-            }
-        });
         presenter.bind(this);
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.dialogs_menu, menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home: {
+                onBackPressed();
+                break;
+            }
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     @OnClick(R.id.bSendMessage)
     void onButtonSendCLick() {
-//        if (getMessageText().isEmpty()) {
-//            String fileName = "/sdcard/eric.wav";
-//            uploadFileUseCase.setInfo(fileName, getCompanionId());
-//            uploadFileUseCase.execute(new BaseUseCaseSubscriber<FileEntity>() {
-//                @Override
-//                public void onNext(FileEntity fileEntity) {
-//                    super.onNext(fileEntity);
-//                    Message typeMessage = MessageUtils.createTypeMessage(getCompanionId(), Message.Type.AUDIO, fileEntity.getName(), accountUser.getId());
-//                    notifier.sendMessage(typeMessage);
-//                }
-//            });
-//        } else {
-//            presenter.onSendTextButtonPress(getMessageText());
-//        }
         presenter.onSendTextButtonPress(getMessageText());
     }
 
@@ -194,18 +166,19 @@ public class ChatActivity2 extends AppCompatActivity implements IChatView2 {
             cx = (bMessageOpen.getX() + bMessageOpen.getWidth()) / 2;
             cy = (bMessageOpen.getY() + bMessageOpen.getHeight()) / 2;
 
-            float dx = Math.max(cx, flMessageBody.getWidth() - cx);
-            float dy = Math.max(cy, flMessageBody.getHeight() - cy);
+            float dx = Math.max(cx, llMessageBody.getWidth() - cx);
+            float dy = Math.max(cy, llMessageBody.getHeight() - cy);
             float finalRadius = (float) Math.hypot(dx, dy);
 
             Animator animator =
-                    ViewAnimationUtils.createCircularReveal(flMessageBody, (int) cx, (int) cy, 0, finalRadius);
+                    ViewAnimationUtils.createCircularReveal(llMessageBody, (int) cx, (int) cy, 0, finalRadius);
             animator.setInterpolator(new AccelerateDecelerateInterpolator());
             animator.setDuration(300);
             animator.start();
         });
 
         bMessageOpen.setVisibility(View.GONE);
+        bSendMessage.setVisibility(View.VISIBLE);
         LinearLayout.LayoutParams layoutParamsLlItems = (LinearLayout.LayoutParams) llItems.getLayoutParams();
 
         layoutParamsLlItems.leftMargin = 0;
@@ -277,24 +250,25 @@ public class ChatActivity2 extends AppCompatActivity implements IChatView2 {
     }
 
     @OnFocusChange(R.id.etMessageBody)
-    public void onEditTextTouched(){
+    public void onEditTextTouched() {
 
-        if(etMessageBody.hasFocus()){
+        if (etMessageBody.hasFocus()) {
             bSendMessage.setBackgroundResource(R.drawable.plane_blue);
-            layoutParams.weight=12;
-        }else {
+            layoutParams.weight = 12;
+        } else {
             bSendMessage.setBackgroundResource(R.drawable.plane);
-            layoutParams.weight=4;
+            layoutParams.weight = 4;
         }
         rflMessageBody.setLayoutParams(layoutParams);
     }
 
     @Override
     public void onBackPressed() {
-        if(bMessageOpen.getVisibility() == View.VISIBLE){
+        if (bMessageOpen.getVisibility() == View.VISIBLE) {
             super.onBackPressed();
-        }else{
+        } else {
             bMessageOpen.setVisibility(View.VISIBLE);
+            bSendMessage.setVisibility(View.GONE);
             rflMessageBody.setVisibility(View.GONE);
         }
     }

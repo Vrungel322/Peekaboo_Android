@@ -16,14 +16,12 @@ import com.peekaboo.data.repositories.database.messages.PMessage;
 import com.peekaboo.data.repositories.database.messages.PMessageAbs;
 import com.peekaboo.data.repositories.database.messages.PMessageHelper;
 import com.peekaboo.domain.AudioRecorder;
-import com.peekaboo.domain.Record;
 import com.peekaboo.presentation.adapters.ChatAdapter;
 import com.peekaboo.presentation.views.IChatView;
 import com.peekaboo.utils.Utility;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -46,6 +44,8 @@ public class ChatPresenter extends BasePresenter<IChatView> implements IChatPres
 
     private String receiver;
     private Timer mTimer;
+    private boolean isMine;
+    private int isMineChanger;
 
 
     @Inject
@@ -54,6 +54,7 @@ public class ChatPresenter extends BasePresenter<IChatView> implements IChatPres
         this.pMessageHelper = pMessageHelper;
         this.mapperFactory = mapperFactory;
         this.textToSpeech = textToSpeech;
+        isMineChanger = 0;
     }
 
     @Override
@@ -70,6 +71,7 @@ public class ChatPresenter extends BasePresenter<IChatView> implements IChatPres
 
     @Override
     public void onDeleteChatHistoryButtonPress(ChatAdapter adapter) {
+        isMineChanger = 0;
         pMessageHelper.dropTableAndCreate(receiver);
         adapter.clearList();
     }
@@ -100,9 +102,13 @@ public class ChatPresenter extends BasePresenter<IChatView> implements IChatPres
             String msgBody = getView().getMessageText();
             if (!TextUtils.isEmpty(msgBody)) {
                 // for test
-                Random random = new Random();
-                boolean isMine = random.nextBoolean();
-                //
+                // odd mes - income, even mes - outgoing
+                isMineChanger++;
+                if (isMineChanger % 2 == 0) {
+                    isMine = true;
+                } else {
+                    isMine = false;
+                }
 //                pMessageHelper.insert(receiver, convertPMessage(new TextPMessage(Utility.getPackageId(),
 //                        isMine, msgBody, System.currentTimeMillis(),
 //                        false, false, false)));
@@ -189,7 +195,7 @@ public class ChatPresenter extends BasePresenter<IChatView> implements IChatPres
                 }
 
                 long totalDuration = mPlayer.getDuration();
-                int updateTime = (int) totalDuration/100;
+                int updateTime = (int) totalDuration / 100;
 
                 mTimer.schedule(new TimerTask() {
                     @Override
@@ -213,7 +219,7 @@ public class ChatPresenter extends BasePresenter<IChatView> implements IChatPres
 
     @Override
     public void onStopPlayingAudioClick(int position) {
-        if(mTimer != null){
+        if (mTimer != null) {
             mTimer.cancel();
             mTimer.purge();
             mTimer = null;
@@ -247,5 +253,9 @@ public class ChatPresenter extends BasePresenter<IChatView> implements IChatPres
         if (textToSpeech != null) {
             textToSpeech.stop();
         }
+    }
+
+    private ContentValues convertPMessage(PMessage pMessage) {
+        return mapperFactory.getPMessageMapper().transform(pMessage);
     }
 }
