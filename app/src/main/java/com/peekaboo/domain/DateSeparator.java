@@ -14,23 +14,12 @@ public class DateSeparator {
     private int mediaType;
     public static final int MEDIA_TYPE = 99;
 
-<<<<<<< Updated upstream
     public DateSeparator(String date){
         this.date = date;
         this.mediaType = MEDIA_TYPE;
     }
 
     public String getDate(){ return  date;}
-=======
-    public DateSeparator(String date) {
-        this.date = date;
-        mediaType = MEDIA_TYPE;
-    }
-
-    public String getDate() {
-        return date;
-    }
->>>>>>> Stashed changes
 
     public int getMediaType(){return mediaType; }
 
