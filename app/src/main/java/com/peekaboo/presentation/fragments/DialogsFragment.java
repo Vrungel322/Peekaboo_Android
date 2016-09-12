@@ -19,6 +19,7 @@ import android.widget.ListView;
 import com.daimajia.swipe.util.Attributes;
 import com.peekaboo.R;
 import com.peekaboo.presentation.PeekabooApplication;
+import com.peekaboo.presentation.activities.ChatActivity;
 import com.peekaboo.presentation.adapters.DialogsListAdapter;
 
 import butterknife.BindView;

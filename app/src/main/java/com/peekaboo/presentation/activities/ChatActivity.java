@@ -63,8 +63,8 @@ public class ChatActivity extends AppCompatActivity
     EditText etMessageBody;
     @BindView(R.id.rvMessages)
     RecyclerView rvMessages;
-    @BindView(R.id.flMessageBody)
-    FrameLayout flMessageBody;
+    @BindView(R.id.llMessageBody)
+    LinearLayout llMessageBody;
     @BindView(R.id.rflMessageBody)
     RevealFrameLayout rflMessageBody;
 
@@ -130,26 +130,26 @@ public class ChatActivity extends AppCompatActivity
             }
         }));
 
-        etMessageBody.addTextChangedListener(new TextWatcher() {
-            int len=0;
-            @Override
-            public void afterTextChanged(Editable s) {
-            }
-
-            @Override
-            public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
-                String str = etMessageBody.getText().toString();
-                len = str.length();
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-                String str = etMessageBody.getText().toString();
-                if(str.length() % 23 == 0 && len <str.length()){//len check for backspace
-                    etMessageBody.append("\n");
-                }
-            }
-        });
+//        etMessageBody.addTextChangedListener(new TextWatcher() {
+//            int len=0;
+//            @Override
+//            public void afterTextChanged(Editable s) {
+//            }
+//
+//            @Override
+//            public void beforeTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
+//                String str = etMessageBody.getText().toString();
+//                len = str.length();
+//            }
+//
+//            @Override
+//            public void onTextChanged(CharSequence s, int start, int before, int count) {
+//                String str = etMessageBody.getText().toString();
+//                if(str.length() % 23 == 0 && len <str.length()){//len check for backspace
+//                    etMessageBody.append("\n");
+//                }
+//            }
+//        });
     }
 
 
@@ -224,18 +224,19 @@ public class ChatActivity extends AppCompatActivity
             cx = (bMessageOpen.getX() + bMessageOpen.getWidth())/2;
             cy = (bMessageOpen.getY() + bMessageOpen.getHeight())/2;
 
-            float dx = Math.max(cx, flMessageBody.getWidth() - cx);
-            float dy = Math.max(cy, flMessageBody.getHeight() - cy);
+            float dx = Math.max(cx, llMessageBody.getWidth() - cx);
+            float dy = Math.max(cy, llMessageBody.getHeight() - cy);
             float finalRadius = (float) Math.hypot(dx, dy);
 
             Animator animator =
-                    ViewAnimationUtils.createCircularReveal(flMessageBody, (int)cx, (int)cy, 0, finalRadius);
+                    ViewAnimationUtils.createCircularReveal(llMessageBody, (int)cx, (int)cy, 0, finalRadius);
             animator.setInterpolator(new AccelerateDecelerateInterpolator());
             animator.setDuration(300);
             animator.start();
         });
 
         bMessageOpen.setVisibility(View.GONE);
+        bSendMessage.setVisibility(View.VISIBLE);
         LinearLayout.LayoutParams layoutParamsLlItems = (LinearLayout.LayoutParams) llItems.getLayoutParams();
 
         layoutParamsLlItems.leftMargin = 0;
