@@ -3,7 +3,7 @@ package com.peekaboo.domain;
 import android.util.Log;
 
 import rx.Observable;
-import rx.functions.Action0;
+import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 /**
@@ -12,37 +12,33 @@ import rx.schedulers.Schedulers;
 public class AudioRecorder implements IAudioRecorder {
 
     private Record record;
-    private boolean isRecording;
-    public void setRecord(Record record) {
+
+    public AudioRecorder(Record record) {
         this.record = record;
     }
 
     @Override
     public Observable<Record> startRecording() {
-        isRecording = true;
         return Observable.just(record)
                 .subscribeOn(Schedulers.computation())
                 .map(record -> {
-                    Log.e("recorder", "map start");
+                    Log.e("record", "start map");
                     record.startRecording();
                     return record;
-                });
+                })
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
     @Override
     public Observable<Record> stopRecording() {
-        isRecording = false;
         return Observable.just(record)
                 .subscribeOn(Schedulers.computation())
                 .map(record -> {
-                    Log.e("recorder", "map stop");
+                    Log.e("record", "stop map");
                     record.stopRecording();
                     return record;
-                });
+                })
+                .observeOn(AndroidSchedulers.mainThread());
     }
 
-    @Override
-    public boolean isRecording() {
-        return isRecording;
-    }
 }

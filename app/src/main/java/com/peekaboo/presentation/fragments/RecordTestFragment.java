@@ -8,16 +8,14 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.peekaboo.R;
-import com.peekaboo.presentation.PeekabooApplication;
-import com.peekaboo.presentation.services.AudioRecorder;
-import com.peekaboo.presentation.services.Record;
+import com.peekaboo.domain.AudioRecorder;
+import com.peekaboo.domain.Record;
 
 import java.io.File;
 import java.io.IOException;
@@ -76,7 +74,7 @@ public class RecordTestFragment extends Fragment {
         button.setOnClickListener(v -> {
             if (!isRecording) {
                 Integer sampleRate = Integer.valueOf((String) sampleRateSpinner.getSelectedItem());
-                record.setSampleRate(sampleRate);
+//                record.setSampleRate(sampleRate);
                 audioRecorder.startRecording().subscribe();
                 button.setText("Stop Record");
                 messages.setText("");

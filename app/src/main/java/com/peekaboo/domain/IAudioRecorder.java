@@ -8,6 +8,4 @@ import rx.Observable;
 public interface IAudioRecorder {
     Observable<Record> startRecording();
     Observable<Record> stopRecording();
-
-    boolean isRecording();
 }

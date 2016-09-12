@@ -35,7 +35,7 @@ public class ChatPresenter2 extends BasePresenter<IChatView2> implements IChatPr
     private CompositeSubscription subscriptions;
     private AsyncAudioPlayer player;
     private List<String> domens;
-    private final AudioRecorder recorder = new AudioRecorder();
+    private AudioRecorder recorder;
 
     @Inject
     public ChatPresenter2(IMessenger messenger, AccountUser accountUser, AsyncAudioPlayer player, @Named("domens") List<String> domens) {
@@ -101,12 +101,14 @@ public class ChatPresenter2 extends BasePresenter<IChatView2> implements IChatPr
         }
     }
 
+    boolean isRecording;
     @Override
     public void onRecordButtonClick() {
         IChatView2 view = getView();
         if (view != null) {
-            if (recorder.isRecording()) {
+            if (isRecording) {
                 Log.e("presenter", "record stop");
+                isRecording = false;
                 recorder.stopRecording().subscribe(record -> {
                     Log.e("presenter", "record stopped");
                     IChatView2 view1 = getView();
@@ -116,7 +118,8 @@ public class ChatPresenter2 extends BasePresenter<IChatView2> implements IChatPr
                 });
             } else {
                 Log.e("presenter", "record start");
-                recorder.setRecord(new Record(view.getCompanionId()));
+                recorder = new AudioRecorder(new Record(view.getCompanionId()));
+                isRecording = true;
                 recorder.startRecording().subscribe(record -> {
                     Log.e("presenter", "record started");
                     IChatView2 view1 = getView();
