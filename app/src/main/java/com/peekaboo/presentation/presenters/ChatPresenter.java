@@ -75,6 +75,7 @@ public class ChatPresenter extends BasePresenter<IChatView> implements IChatPres
 
     @Override
     public void onDeleteChatHistoryButtonPress(ChatAdapter adapter) {
+        isMineChanger = 0;
         pMessageHelper.dropTableAndCreate(receiver);
         adapter.clearList();
     }
@@ -104,6 +105,7 @@ public class ChatPresenter extends BasePresenter<IChatView> implements IChatPres
             String msgBody = getView().getMessageText();
             if (!TextUtils.isEmpty(msgBody)) {
                 // for test
+                // odd mes - income, even mes - outgoing
                 isMineChanger++;
                 if (isMineChanger % 2 == 0){
                     isMine = true;
