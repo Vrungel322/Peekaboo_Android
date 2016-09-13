@@ -1,6 +1,6 @@
 package com.peekaboo.domain.usecase;
 
-import com.peekaboo.domain.ContactsPOJO;
+import com.peekaboo.data.rest.entity.ContactsEntity;
 import com.peekaboo.domain.SessionRepository;
 import com.peekaboo.domain.schedulers.ObserveOn;
 import com.peekaboo.domain.schedulers.SubscribeOn;
@@ -12,7 +12,7 @@ import rx.Observable;
 /**
  * Created by Nikita on 13.09.2016.
  */
-public class GetContactsUseCase extends UseCase<ContactsPOJO> {
+public class GetContactsUseCase extends UseCase<ContactsEntity> {
     private SessionRepository sessionRepository;
 
     @Inject
@@ -22,7 +22,7 @@ public class GetContactsUseCase extends UseCase<ContactsPOJO> {
     }
 
     @Override
-    protected Observable<ContactsPOJO> getUseCaseObservable() {
+    protected Observable<ContactsEntity> getUseCaseObservable() {
         return sessionRepository.loadAllContacts();
     }
 }

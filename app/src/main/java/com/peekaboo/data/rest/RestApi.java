@@ -6,7 +6,7 @@ import com.peekaboo.data.rest.entity.CredentialsSignUp;
 import com.peekaboo.data.rest.entity.TokenEntity;
 import com.peekaboo.data.rest.entity.UserEntity;
 import com.peekaboo.data.utils.FileUtils;
-import com.peekaboo.domain.ContactsPOJO;
+import com.peekaboo.data.rest.entity.ContactsEntity;
 
 import java.io.File;
 
@@ -59,7 +59,7 @@ public class RestApi {
         });
     }
 
-    public Observable<ContactsPOJO> loadAllContacts() {
+    public Observable<ContactsEntity> loadAllContacts() {
         return api.loadAllContacts();
     }
 }

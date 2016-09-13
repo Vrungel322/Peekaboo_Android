@@ -35,23 +35,4 @@ public class ContactHelper {
                 .mapToList(ContactAbs.MAPPER)
                 .observeOn(AndroidSchedulers.mainThread());
     }
-
-    public void createTable(String tableName) {
-        String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS " + tableName + " " +
-                "(" +
-                ContactAbs.ID                + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
-                ContactAbs.CONTACT_NAME      + " TEXT NOT NULL," +
-                ContactAbs.CONTACT_SURNAME   + " TEXT NOT NULL," +
-                ContactAbs.CONTACT_NICKNAME  + " TEXT NOT NULL," +
-                ContactAbs.CONTACT_IS_ONLINE + " INTEGER NOT NULL," +
-                ContactAbs.CONTACT_IMG_URI   + " TEXT NOT NULL" +
-                ");";
-        db.execute(CREATE_TABLE);
-    }
-
-    public void dropTableAndCreate(String tableName) {
-        String dropTable = "DROP TABLE IF EXISTS " + " " + tableName;
-        db.execute(dropTable);
-        createTable(tableName);
-    }
 }

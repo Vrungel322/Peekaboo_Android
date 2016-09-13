@@ -5,7 +5,7 @@ import com.peekaboo.data.rest.entity.Credentials;
 import com.peekaboo.data.rest.entity.CredentialsSignUp;
 import com.peekaboo.data.rest.entity.TokenEntity;
 import com.peekaboo.data.rest.entity.UserEntity;
-import com.peekaboo.domain.ContactsPOJO;
+import com.peekaboo.data.rest.entity.ContactsEntity;
 
 import okhttp3.MultipartBody;
 import okhttp3.ResponseBody;
@@ -66,5 +66,5 @@ public interface PeekabooApi {
     );
 
     //TODO: speak with backend to define details
-    Observable<ContactsPOJO> loadAllContacts();
+    Observable<ContactsEntity> loadAllContacts();
 }

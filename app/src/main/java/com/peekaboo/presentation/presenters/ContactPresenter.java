@@ -8,7 +8,7 @@ import com.peekaboo.data.mappers.AbstractMapperFactory;
 import com.peekaboo.data.repositories.database.contacts.Contact;
 import com.peekaboo.data.repositories.database.contacts.ContactAbs;
 import com.peekaboo.data.repositories.database.contacts.ContactHelper;
-import com.peekaboo.domain.ContactsPOJO;
+import com.peekaboo.data.rest.entity.ContactsEntity;
 import com.peekaboo.domain.ErrorHandler;
 import com.peekaboo.domain.subscribers.BaseProgressSubscriber;
 import com.peekaboo.domain.usecase.GetContactsUseCase;
@@ -44,14 +44,15 @@ public class ContactPresenter extends ProgressPresenter<IContactsView> implement
     }
 
     @NonNull
-    private BaseProgressSubscriber<ContactsPOJO> getContactsSubscriber() {
-        return new BaseProgressSubscriber<ContactsPOJO>(this) {
+    private BaseProgressSubscriber<ContactsEntity> getContactsSubscriber() {
+        return new BaseProgressSubscriber<ContactsEntity>(this) {
             @Override
-            public void onNext(ContactsPOJO response) {
+            public void onNext(ContactsEntity response) {
                 super.onNext(response);
                 Log.e("onNext", String.valueOf(response));
-                if (getView() != null) {
-                    getView().makeMeNotice();
+                IContactsView view = getView();
+                if (view != null) {
+                    view.makeMeNotice();
                 }
             }
         };
@@ -71,10 +72,10 @@ public class ContactPresenter extends ProgressPresenter<IContactsView> implement
         }
     }
 
-    @Override
-    public void createTable(String tableName) {
-        contactHelper.createTable(tableName);
-    }
+//    @Override
+//    public void createTable(String tableName) {
+//        contactHelper.createTable(tableName);
+//    }
 
     @Override
     public void insertContactToTable(Contact contact) {
@@ -86,10 +87,10 @@ public class ContactPresenter extends ProgressPresenter<IContactsView> implement
         //TODO: get all contacts
     }
 
-    @Override
-    public void dropTableAndCreate(String tableName) {
-        contactHelper.dropTableAndCreate(tableName);
-    }
+//    @Override
+//    public void dropTableAndCreate(String tableName) {
+//        contactHelper.dropTableAndCreate(tableName);
+//    }
 
     @Override
     public void getAllTableAsString(String tableName) {

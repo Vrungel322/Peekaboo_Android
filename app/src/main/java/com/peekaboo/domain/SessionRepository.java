@@ -2,6 +2,7 @@ package com.peekaboo.domain;
 
 
 import com.peekaboo.data.FileEntity;
+import com.peekaboo.data.rest.entity.ContactsEntity;
 
 import java.io.File;
 
@@ -20,5 +21,5 @@ public interface SessionRepository {
 
     Observable<File> downloadFile(String fileName, String remoteFileName);
 
-    Observable<ContactsPOJO> loadAllContacts();
+    Observable<ContactsEntity> loadAllContacts();
 }

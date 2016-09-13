@@ -7,7 +7,7 @@ import com.peekaboo.data.rest.RestApi;
 import com.peekaboo.data.rest.entity.Credentials;
 import com.peekaboo.data.rest.entity.CredentialsSignUp;
 import com.peekaboo.domain.AccountUser;
-import com.peekaboo.domain.ContactsPOJO;
+import com.peekaboo.data.rest.entity.ContactsEntity;
 import com.peekaboo.domain.SessionRepository;
 import com.peekaboo.domain.User;
 
@@ -75,7 +75,7 @@ public class SessionDataRepository implements SessionRepository {
     }
 
     @Override
-    public Observable<ContactsPOJO> loadAllContacts() {
+    public Observable<ContactsEntity> loadAllContacts() {
         return restApi.loadAllContacts();
     }
 }
