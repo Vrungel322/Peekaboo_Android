@@ -75,9 +75,15 @@ public class ContactsFragment extends Fragment implements IContactsView {
                 "uri2"));
 
         contactPresenter.getAllTableAsString("ContactsDb");
+
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
         //Make Query to get all real contacts from server
         //after that need to redo ContactListAdapter to match ContactsPOJO and json
-        //contactPresenter.makeContactsQuery();
+        //contactPresenter.loadContactsList();
     }
 
     @Nullable
@@ -115,7 +121,7 @@ public class ContactsFragment extends Fragment implements IContactsView {
     }
 
     @Override
-    public void makeMeNotice() {
+    public void loadContactsList() {
         listViewIndexable.setBackgroundColor(Color.CYAN);
         showToastMessage("MAKE NOTICE");
     }

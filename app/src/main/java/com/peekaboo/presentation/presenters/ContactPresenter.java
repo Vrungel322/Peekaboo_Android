@@ -39,7 +39,7 @@ public class ContactPresenter extends ProgressPresenter<IContactsView> implement
     }
 
     @Override
-    public void makeContactsQuery() {
+    public void loadContactsList() {
         useCase.execute(getContactsSubscriber());
     }
 
@@ -52,30 +52,11 @@ public class ContactPresenter extends ProgressPresenter<IContactsView> implement
                 Log.e("onNext", String.valueOf(response));
                 IContactsView view = getView();
                 if (view != null) {
-                    view.makeMeNotice();
+                    view.loadContactsList();
                 }
             }
         };
     }
-
-    @Override
-    public void unbind() {
-        useCase.unsubscribe();
-        super.unbind();
-    }
-
-    @Override
-    public void bind(IContactsView view) {
-        super.bind(view);
-        if (useCase.isWorking()) {
-            useCase.execute(getContactsSubscriber());
-        }
-    }
-
-//    @Override
-//    public void createTable(String tableName) {
-//        contactHelper.createTable(tableName);
-//    }
 
     @Override
     public void insertContactToTable(Contact contact) {
@@ -86,11 +67,6 @@ public class ContactPresenter extends ProgressPresenter<IContactsView> implement
     public void getAllContacts(String tableName, Action1 adapter) {
         //TODO: get all contacts
     }
-
-//    @Override
-//    public void dropTableAndCreate(String tableName) {
-//        contactHelper.dropTableAndCreate(tableName);
-//    }
 
     @Override
     public void getAllTableAsString(String tableName) {

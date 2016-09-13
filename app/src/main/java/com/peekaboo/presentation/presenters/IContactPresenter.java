@@ -13,5 +13,5 @@ public interface IContactPresenter {
     void getAllContacts(String tableName, Action1 adapter);
 //    void dropTableAndCreate(String tableName);
     void getAllTableAsString(String tableName);
-    void makeContactsQuery();
+    void loadContactsList();
 }
