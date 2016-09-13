@@ -1,5 +1,6 @@
 package com.peekaboo.presentation.fragments;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -12,12 +13,14 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.peekaboo.R;
 import com.peekaboo.data.repositories.database.contacts.PContact;
 import com.peekaboo.presentation.PeekabooApplication;
 import com.peekaboo.presentation.adapters.ContactsListAdapter;
 import com.peekaboo.presentation.presenters.ContactPresenter;
+import com.peekaboo.presentation.views.IContactsView;
 
 import java.util.ArrayList;
 
@@ -31,7 +34,7 @@ import butterknife.ButterKnife;
  * Created by Nikita on 13.07.2016.
  */
 @Singleton
-public class ContactsFragment extends Fragment {
+public class ContactsFragment extends Fragment implements IContactsView {
 
     private View rootView;
 
@@ -61,6 +64,9 @@ public class ContactsFragment extends Fragment {
         contactPresenter.insertContactToTable("contactsTable",
                 new PContact("Name2", "Surname2", "Nickname2", true, "uri2"));
         contactPresenter.getAllTableAsString("contactsTable");
+
+        contactPresenter.bind(this);
+        contactPresenter.makeContactsQuery();
     }
 
     @Nullable
@@ -86,6 +92,26 @@ public class ContactsFragment extends Fragment {
         });
 
         return rootView;
+    }
+
+    @Override
+    public void showProgress() {
+        showToastMessage("progress Started");
+    }
+
+    @Override
+    public void hideProgress() {
+        showToastMessage("progress Hide");
+    }
+
+    @Override
+    public void showToastMessage(String text) {
+        Toast.makeText(getContext(), text, Toast.LENGTH_SHORT).show();
+    }
+
+    @Override
+    public void makeMeNotice() {
+        listViewIndexable.setBackgroundColor(Color.CYAN);
     }
 
     private void initList() {
