@@ -76,4 +76,7 @@
     <string name="hintConfirmationCode">Confirmation code</string>
     <string name="raccoon_doe">Raccoon Doe</string>
 
+    <!-- ContactsFragment strings -->
+    <string name="title_contacts">Contacts</string>
+
 </resources>

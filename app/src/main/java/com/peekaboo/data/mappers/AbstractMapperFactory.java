@@ -3,10 +3,9 @@ package com.peekaboo.data.mappers;
 
 import android.content.ContentValues;
 
-import com.peekaboo.data.repositories.database.contacts.PContact;
+import com.peekaboo.data.repositories.database.contacts.Contact;
 import com.peekaboo.data.repositories.database.messages.PMessage;
 import com.peekaboo.data.rest.entity.UserEntity;
-import com.peekaboo.domain.AccountUser;
 import com.peekaboo.domain.User;
 import com.peekaboo.presentation.services.Message;
 
@@ -26,5 +25,5 @@ public interface AbstractMapperFactory {
 
     Mapper<PMessage, ContentValues> getPMessageMapper();
 
-    Mapper<PContact, ContentValues> getPContactMapper();
+    Mapper<Contact, ContentValues> getPContactMapper();
 }
