@@ -6,7 +6,7 @@ import com.peekaboo.data.rest.entity.CredentialsSignUp;
 import com.peekaboo.data.rest.entity.TokenEntity;
 import com.peekaboo.data.rest.entity.UserEntity;
 import com.peekaboo.data.utils.FileUtils;
-import com.peekaboo.domain.User;
+import com.peekaboo.domain.ContactsPOJO;
 
 import java.io.File;
 
@@ -57,5 +57,9 @@ public class RestApi {
             if (file == null) throw new RuntimeException();
             return file;
         });
+    }
+
+    public Observable<ContactsPOJO> loadAllContacts() {
+        return api.loadAllContacts();
     }
 }

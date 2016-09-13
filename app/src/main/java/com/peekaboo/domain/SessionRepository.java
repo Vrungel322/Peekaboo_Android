@@ -19,4 +19,6 @@ public interface SessionRepository {
     Observable<FileEntity> uploadFile(String fileName, String receiverId);
 
     Observable<File> downloadFile(String fileName, String remoteFileName);
+
+    Observable<ContactsPOJO> loadAllContacts();
 }

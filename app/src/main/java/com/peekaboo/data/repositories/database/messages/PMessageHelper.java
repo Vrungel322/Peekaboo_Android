@@ -7,6 +7,7 @@ import com.squareup.sqlbrite.BriteDatabase;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Named;
 
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
@@ -19,7 +20,7 @@ public class PMessageHelper {
     BriteDatabase db;
 
     @Inject
-    public PMessageHelper(BriteDatabase db) {
+    public PMessageHelper(@Named("MessagesDb") BriteDatabase db) {
         this.db = db;
     }
 

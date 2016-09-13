@@ -1,6 +1,9 @@
 package com.peekaboo.presentation.presenters;
 
-import com.peekaboo.data.repositories.database.contacts.PContact;
+import android.content.ContentValues;
+
+import com.peekaboo.data.repositories.database.contacts.Contact;
+import com.peekaboo.presentation.views.IContactsView;
 
 import rx.functions.Action1;
 
@@ -9,7 +12,7 @@ import rx.functions.Action1;
  */
 public interface IContactPresenter {
     void createTable(String tableName);
-    void insertContactToTable(String tableName, PContact contact);
+    void insertContactToTable(Contact contact);
     void getAllContacts(String tableName, Action1 adapter);
     void dropTableAndCreate(String tableName);
     void getAllTableAsString(String tableName);

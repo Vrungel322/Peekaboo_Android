@@ -11,12 +11,11 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.peekaboo.R;
-import com.peekaboo.data.repositories.database.contacts.PContact;
+import com.peekaboo.data.repositories.database.contacts.Contact;
 import com.peekaboo.presentation.PeekabooApplication;
 import com.peekaboo.presentation.adapters.ContactsListAdapter;
 import com.peekaboo.presentation.presenters.ContactPresenter;
@@ -48,25 +47,37 @@ public class ContactsFragment extends Fragment implements IContactsView {
     private ContactsListAdapter contactsListAdapter;
 
     @Inject
-    public ContactsFragment(){}
+    public ContactsFragment() {
+    }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         PeekabooApplication.getApp(getActivity()).getComponent().inject(this);
-        contactPresenter.createTable("contactsTable");
         // Testing DB
-        contactPresenter.insertContactToTable("contactsTable",
-                new PContact("Name0", "Surname0", "Nickname0", true, "uri0"));
-        contactPresenter.insertContactToTable("contactsTable",
-                new PContact("Name1", "Surname1", "Nickname1", true, "uri1"));
-        contactPresenter.insertContactToTable("contactsTable",
-                new PContact("Name2", "Surname2", "Nickname2", true, "uri2"));
-        contactPresenter.getAllTableAsString("contactsTable");
 
         contactPresenter.bind(this);
-        contactPresenter.makeContactsQuery();
+        contactPresenter.insertContactToTable(new Contact("Name0",
+                "Surname0",
+                "Nickname0",
+                true,
+                "uri0"));
+        contactPresenter.insertContactToTable(new Contact("Name1",
+                "Surname1",
+                "Nickname1",
+                true,
+                "uri1"));
+        contactPresenter.insertContactToTable(new Contact("Name2",
+                "Surname2",
+                "Nickname2",
+                true,
+                "uri2"));
+
+        contactPresenter.getAllTableAsString("ContactsDb");
+        //Make Query to get all real contacts from server
+        //after that need to redo ContactListAdapter to match ContactsPOJO and json
+        //contactPresenter.makeContactsQuery();
     }
 
     @Nullable
@@ -75,21 +86,15 @@ public class ContactsFragment extends Fragment implements IContactsView {
         rootView = inflater.inflate(R.layout.fragment_contacts, container, false);
         ButterKnife.bind(this, rootView);
         setHasOptionsMenu(true);
-        ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Contacts");
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(getString(R.string.title_contacts));
 
         //hardcode list
         initList();
 
-        contactsListAdapter = new ContactsListAdapter(list,getActivity());
+        contactsListAdapter = new ContactsListAdapter(list, getActivity());
         listViewIndexable.setAdapter(contactsListAdapter);
         listViewIndexable.setFastScrollEnabled(true);
-        listViewIndexable.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> arg0, View arg1, int arg2,
-                                    long arg3) {
-                contactsListAdapter.onItemSelected(arg2);
-            }
-        });
+        listViewIndexable.setOnItemClickListener((arg0, arg1, arg2, arg3) -> contactsListAdapter.onItemSelected(arg2));
 
         return rootView;
     }
@@ -112,12 +117,13 @@ public class ContactsFragment extends Fragment implements IContactsView {
     @Override
     public void makeMeNotice() {
         listViewIndexable.setBackgroundColor(Color.CYAN);
+        showToastMessage("MAKE NOTICE");
     }
 
     private void initList() {
 
         if (list == null)
-            list = new ArrayList<String>();
+            list = new ArrayList<>();
 
         String[] countries = getResources().getStringArray(R.array.countries_array);
         for (String country : countries) {
