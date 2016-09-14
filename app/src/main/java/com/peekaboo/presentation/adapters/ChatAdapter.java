@@ -208,7 +208,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             if (wasPreviousMine == isMine || mediaType == Constants.PMESSAGE_MEDIA_TYPE.IMAGE_MESSAGE) {
                 holder.chatBubble.setBackgroundResource(R.drawable.left_bubble);
             } else {
-                holder.chatBubble.setBackgroundResource(R.drawable.left);
+                holder.chatBubble.setBackgroundResource(R.drawable.circle_gray_corner);
             }
             holder.tvChatTimestamp.setTextColor(context.getResources().getColor(R.color.drawerDividerColor));
 
@@ -223,7 +223,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             if (wasPreviousMine != isMine || mediaType == Constants.PMESSAGE_MEDIA_TYPE.IMAGE_MESSAGE) {
                 holder.chatBubble.setBackgroundResource(R.drawable.right_bubble);
             } else {
-                holder.chatBubble.setBackgroundResource(R.drawable.right);
+                holder.chatBubble.setBackgroundResource(R.drawable.circle_blue_corner);
             }
 
             RelativeLayout.LayoutParams layoutParams
