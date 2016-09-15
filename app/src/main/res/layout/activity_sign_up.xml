@@ -69,6 +69,7 @@
             android:id="@+id/bSignIn"
             android:layout_width="match_parent"
             android:layout_height="@dimen/credentials_button_height"
+            android:textColor="@color/textColor"
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="@dimen/padding_signup_side"
             android:background="@drawable/button"

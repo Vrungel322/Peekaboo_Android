@@ -52,7 +52,8 @@
         <item name="android:layout_alignParentRight">true</item>
     </style>
 
-    <style name="SignUpTheme" parent="Theme.Sliding">
+    <style name="SignUpTheme" parent="AppTheme">
+        <item name="android:background">@color/nav_background</item>
         <item name="colorAccent">@color/colorAccentCredentials</item>
         <item name="colorButtonNormal">@color/colorAccent</item>
         <item name="android:textColorHint">@color/textColorHint</item>
