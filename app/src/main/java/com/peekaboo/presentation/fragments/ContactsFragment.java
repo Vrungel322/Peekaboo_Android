@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -33,17 +34,21 @@ import butterknife.ButterKnife;
  * Created by Nikita on 13.07.2016.
  */
 @Singleton
-public class ContactsFragment extends Fragment implements IContactsView {
+public class ContactsFragment extends Fragment implements IContactsView, Adapter.ItemsClickListener {
 
     private View rootView;
 
     @Inject
     ContactPresenter contactPresenter;
 
-    @BindView(R.id.listViewIndexable)
+//    @BindView(R.id.listViewIndexable)
+@BindView(R.id.recycler_view)
+
+
     ListView listViewIndexable;
+    RecyclerView mRecyclerView;
+
     private ArrayList<String> list;
-    //    private IndexableListView listViewIndexable;
     private ContactsListAdapter contactsListAdapter;
 
     @Inject
@@ -102,6 +107,7 @@ public class ContactsFragment extends Fragment implements IContactsView {
         listViewIndexable.setFastScrollEnabled(true);
         listViewIndexable.setOnItemClickListener((arg0, arg1, arg2, arg3) -> contactsListAdapter.onItemSelected(arg2));
 
+
         return rootView;
     }
 
@@ -146,5 +152,20 @@ public class ContactsFragment extends Fragment implements IContactsView {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onOverflowClick(View v, int i) {
+
+    }
+
+    @Override
+    public void onItemClick(View v, int i) {
+
+    }
+
+    @Override
+    public boolean onItemLongClick(View v, int i) {
+        return false;
     }
 }

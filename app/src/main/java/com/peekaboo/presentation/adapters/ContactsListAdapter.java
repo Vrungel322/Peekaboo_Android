@@ -8,6 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.support.v7.widget.RecyclerView;
 
 import com.peekaboo.R;
 
@@ -15,7 +16,7 @@ import java.util.ArrayList;
 
 public class ContactsListAdapter extends BaseAdapter implements SectionIndexer {
 
-    private String mSections = "*ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    private String mSections = "✰ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     private ArrayList<String> mCurrentList;
     private Context mContext;
 
