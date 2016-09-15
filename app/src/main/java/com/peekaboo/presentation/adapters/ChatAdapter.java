@@ -16,7 +16,6 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.peekaboo.R;
-import com.peekaboo.data.repositories.database.messages.PMessage;
 import com.peekaboo.data.repositories.database.messages.PMessageAbs;
 import com.peekaboo.domain.DateSeparator;
 import com.peekaboo.presentation.app.view.RoundedTransformation;
@@ -225,7 +224,8 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     private void setAlignment(ViewHolder holder, boolean isMine, boolean wasPreviousMine, boolean isNextMine, int mediaType) {
         Log.i("ALIGMENT", Integer.toString(mediaType));
 
-        holder.tvChatTimestamp.setTextColor(ResourcesUtils.getColor(context, isMine ? R.color.colorDarkAccent : R.color.drawerDividerColor));
+        holder.tvChatTimestamp
+                .setTextColor(ResourcesUtils.getColor(context, isMine ? R.color.colorDarkAccent : R.color.timestampColor));
 
         RelativeLayout.LayoutParams layoutParams
                 = (RelativeLayout.LayoutParams) holder.chatBubble.getLayoutParams();
