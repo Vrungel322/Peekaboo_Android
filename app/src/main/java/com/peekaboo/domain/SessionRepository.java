@@ -5,6 +5,8 @@ import com.peekaboo.data.FileEntity;
 
 import java.io.File;
 
+import okhttp3.ResponseBody;
+import retrofit2.Call;
 import rx.Observable;
 
 /**
@@ -16,7 +18,7 @@ public interface SessionRepository {
     Observable<AccountUser> confirm(String id, String key);
     Observable<User> findFriendByName(String friendName);
 
-    Observable<FileEntity> uploadFile(String fileName, String receiverId);
+    Call<FileEntity> uploadFile(String fileName, String receiverId);
 
-    Observable<File> downloadFile(String fileName, String remoteFileName);
+    Call<ResponseBody> downloadFile(String remoteFileName);
 }

@@ -4,8 +4,6 @@ package com.peekaboo.presentation.fragments;
 import android.Manifest;
 import android.app.Activity;
 import android.content.pm.PackageManager;
-import android.media.AudioManager;
-import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -19,20 +17,16 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.peekaboo.R;
-import com.peekaboo.data.FileEntity;
 import com.peekaboo.domain.AccountUser;
 import com.peekaboo.domain.User;
 import com.peekaboo.domain.subscribers.BaseUseCaseSubscriber;
-import com.peekaboo.domain.usecase.DownloadFileUseCase;
 import com.peekaboo.domain.usecase.FindFriendUseCase;
-import com.peekaboo.domain.usecase.UploadFileUseCase;
 import com.peekaboo.presentation.PeekabooApplication;
 import com.peekaboo.presentation.services.INotifier;
 import com.peekaboo.presentation.services.Message;
 import com.peekaboo.presentation.services.MessageUtils;
 
 import java.io.File;
-import java.io.IOException;
 
 import javax.inject.Inject;
 
@@ -57,10 +51,10 @@ public class SocketTestFragment extends Fragment implements INotifier.Notificati
     TextView tvResult;
     @Inject
     FindFriendUseCase findFriendUseCase;
-    @Inject
-    UploadFileUseCase uploadFileUseCase;
-    @Inject
-    DownloadFileUseCase downloadFileUseCase;
+//    @Inject
+//    UploadFileUseCase uploadFileUseCase;
+//    @Inject
+//    DownloadFileUseCase downloadFileUseCase;
     @Inject
     INotifier<Message> notifier;
     @Inject
@@ -123,18 +117,18 @@ public class SocketTestFragment extends Fragment implements INotifier.Notificati
                     String message = etMessage.getText().toString();
                     if (message.isEmpty()) {
                         String fileName = "/sdcard/eric.wav";
-                        uploadFileUseCase.setInfo(fileName, user.getId());
-                        uploadFileUseCase.execute(new BaseUseCaseSubscriber<FileEntity>() {
-                            @Override
-                            public void onNext(FileEntity fileEntity) {
-                                super.onNext(fileEntity);
-                                Message typeMessage = MessageUtils.createTypeMessage(user.getId(), Message.Type.AUDIO, fileEntity.getName(), SocketTestFragment.this.user.getId());
-                                if (notifier.isAvailable()) {
-                                    Toast.makeText(getActivity(), typeMessage.toString(), Toast.LENGTH_LONG).show();
-                                    notifier.sendMessage(typeMessage);
-                                }
-                            }
-                        });
+//                        uploadFileUseCase.setInfo(fileName, user.getId());
+//                        uploadFileUseCase.execute(new BaseUseCaseSubscriber<FileEntity>() {
+//                            @Override
+//                            public void onNext(FileEntity fileEntity) {
+//                                super.onNext(fileEntity);
+//                                Message typeMessage = MessageUtils.createTypeMessage(user.getId(), Message.Type.AUDIO, fileEntity.getName(), SocketTestFragment.this.user.getId());
+//                                if (notifier.isAvailable()) {
+//                                    Toast.makeText(getActivity(), typeMessage.toString(), Toast.LENGTH_LONG).show();
+//                                    notifier.sendMessage(typeMessage);
+//                                }
+//                            }
+//                        });
                     } else {
                         Message message1 = MessageUtils.createTextMessage(message, user.getId(), SocketTestFragment.this.user.getId());
                         if (notifier.isAvailable()) {
@@ -186,23 +180,23 @@ public class SocketTestFragment extends Fragment implements INotifier.Notificati
         if (Message.Type.AUDIO.equals(messageType)) {
             String remoteFileName = new String(message.getBody());
             String fileName = "/sdcard/eric10.wav";
-
-            downloadFileUseCase.setInfo(fileName, remoteFileName);
-            downloadFileUseCase.execute(new BaseUseCaseSubscriber<File>() {
-                @Override
-                public void onNext(File file) {
-                    super.onNext(file);
-
-                    Toast.makeText(getActivity(), "file has come", Toast.LENGTH_LONG).show();
-                    Log.e("file", file.toString());
-                }
-
-                @Override
-                public void onError(Throwable e) {
-                    super.onError(e);
-                    Toast.makeText(getActivity(), e.toString(), Toast.LENGTH_LONG).show();
-                }
-            });
+//
+//            downloadFileUseCase.setInfo(fileName, remoteFileName);
+//            downloadFileUseCase.execute(new BaseUseCaseSubscriber<File>() {
+//                @Override
+//                public void onNext(File file) {
+//                    super.onNext(file);
+//
+//                    Toast.makeText(getActivity(), "file has come", Toast.LENGTH_LONG).show();
+//                    Log.e("file", file.toString());
+//                }
+//
+//                @Override
+//                public void onError(Throwable e) {
+//                    super.onError(e);
+//                    Toast.makeText(getActivity(), e.toString(), Toast.LENGTH_LONG).show();
+//                }
+//            });
         } else if (Message.Type.TEXT.equals(messageType)) {
             tvResult.setText(message.getTextBody());
         }

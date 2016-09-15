@@ -2,6 +2,7 @@ package com.peekaboo.data;
 
 import com.peekaboo.data.mappers.AbstractMapperFactory;
 import com.peekaboo.data.repositories.SessionDataRepository;
+import com.peekaboo.data.repositories.database.messages.PMessage;
 import com.peekaboo.data.rest.ConfirmKey;
 import com.peekaboo.data.rest.RestApi;
 import com.peekaboo.data.rest.entity.Credentials;
@@ -16,15 +17,22 @@ import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.Executors;
+import java.util.concurrent.LinkedBlockingQueue;
 
 import rx.Observable;
+import rx.Scheduler;
 import rx.Subscriber;
-import rx.functions.Action1;
+import rx.Subscription;
 import rx.observers.TestSubscriber;
+import rx.schedulers.Schedulers;
 
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Matchers.any;
+import static org.mockito.Mockito.mock;
+import static org.mockito.Mockito.timeout;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -47,19 +55,70 @@ public class SessionDataRepositoryTest {
         sessionDataRepository = new SessionDataRepository(restApi, mapper, user);
     }
 
+    final BlockingQueue<String> queue = new LinkedBlockingQueue<>();
+
+    @Test
+    public void rxQueueTest() {
+//        System.out.println(Thread.currentThread().hashCode());
+//
+//        Scheduler from = Schedulers.from(Executors.newSingleThreadExecutor());
+//        queue.add("a");
+//
+//        Subscription complete = Observable.create(new Observable.OnSubscribe<Observable<String>>() {
+//            @Override
+//            public void call(Subscriber<? super Observable<String>> subscriber) {
+//                while (!queue.isEmpty()) {
+//                    String poll = queue.poll();
+//                    System.out.println(poll + " " + Thread.currentThread().hashCode());
+//                    try {
+//                        Thread.sleep(100);
+//                    } catch (InterruptedException e) {
+//                        System.out.println(e);
+//                    }
+//                    subscriber.onNext(Observable.just(poll));
+//                }
+//                subscriber.onCompleted();
+//            }
+//        }).flatMap(stringObservable -> ).subscribeOn(from)
+//                .subscribe(new Subscriber<String>() {
+//                    @Override
+//                    public void onCompleted() {
+//                        System.out.println("complete");
+//                    }
+//
+//                    @Override
+//                    public void onError(Throwable e) {
+//
+//                    }
+//
+//                    @Override
+//                    public void onNext(String s) {
+//                        System.out.println("next " + s);
+//                    }
+//                });
+//        queue.add("a1");
+////        complete.unsubscribe();
+//        queue.add("a2");
+//        try {
+//            Thread.sleep(1000);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+//        queue.add("b");
+//        try {
+//            Thread.sleep(10000);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+
+    }
+
 
     private Object get() {
         Object o = null;
         return o;
     }
 
-    @Test
-    public void subscribeTest() {
-        Observable.just(new Object())
-                .map(o -> o)
-                .doOnCompleted(() -> System.out.println("complete"))
-                .doOnUnsubscribe(() -> System.out.println("unsubscribe")).subscribe(o1 -> System.out.println("next"));
-    }
 
     @Test
     public void rxText() {

@@ -43,6 +43,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="end"
                     android:text="yesterday"
+                    android:visibility="gone"
                     tools:textColor="@color/colorDarkAccent"
                     android:textSize="@dimen/chat_timestamp_text_size" />
 

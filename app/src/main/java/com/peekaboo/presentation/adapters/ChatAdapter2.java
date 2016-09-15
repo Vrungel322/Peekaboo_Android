@@ -3,6 +3,7 @@ package com.peekaboo.presentation.adapters;
 import android.content.Context;
 import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -142,13 +143,15 @@ public class ChatAdapter2 extends RecyclerView.Adapter<ChatAdapter2.ViewHolder> 
         switch (mediaType) {
             case PMessageAbs.PMESSAGE_MEDIA_TYPE.TEXT_MESSAGE:
                 if (holder instanceof ViewHolderText) {
-                    ((ViewHolderText) holder).tvChatMessage.setText(pMessageAbs.messageBody());
+                    ((ViewHolderText) holder).tvChatMessage.setText(Html.fromHtml(pMessageAbs.messageBody()));
                 }
                 break;
             case PMessageAbs.PMESSAGE_MEDIA_TYPE.AUDIO_MESSAGE:
                 if (holder instanceof ViewHolderAudio) {
                     ViewHolderAudio holderAudio = (ViewHolderAudio) holder;
                     presenter.setPlayerListener(playerListener);
+                    holderAudio.pbLoad.setVisibility(pMessageAbs.isDownloaded() ? View.GONE : View.VISIBLE);
+                    holderAudio.ibPlayRecord.setVisibility(!pMessageAbs.isDownloaded() ? View.GONE : View.VISIBLE);
                     holderAudio.ibPlayRecord.setOnClickListener(v -> {
                         presenter.onPlayButtonClick(pMessageAbs, playerListener);
                     });
@@ -328,10 +331,13 @@ public class ChatAdapter2 extends RecyclerView.Adapter<ChatAdapter2.ViewHolder> 
         SeekBar sbPlayProgress;
         @BindView(R.id.tvCurrentDuration)
         TextView tvCurrentDuration;
+        @BindView(R.id.pbLoad)
+        ProgressBar pbLoad;
 
         public ViewHolderAudio(View view) {
             super(view);
             ButterKnife.bind(this, view);
+
         }
     }
 

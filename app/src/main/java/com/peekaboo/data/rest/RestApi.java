@@ -9,10 +9,13 @@ import com.peekaboo.data.utils.FileUtils;
 import com.peekaboo.domain.User;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
 import rx.Observable;
 
 /**
@@ -42,7 +45,7 @@ public class RestApi {
         return api.getFriend(friendName);
     }
 
-    public Observable<FileEntity> uploadFile(String fileName, String receiverId, String bearer) {
+    public Call<FileEntity> uploadFile(String fileName, String receiverId, String bearer) {
         File file = new File(fileName);
         RequestBody requestFile =
                 RequestBody.create(MediaType.parse("multipart/form-data"), file);
@@ -50,12 +53,7 @@ public class RestApi {
         return api.uploadFile(receiverId, part, bearer);
     }
 
-    public Observable<File> downloadFile(String fileName, String remoteFileName, String bearer) {
-        return api.download(remoteFileName, bearer).map(body -> {
-            File file = FileUtils.writeResponseBodyToDisk(fileName, body);
-            //TODO error handling
-            if (file == null) throw new RuntimeException();
-            return file;
-        });
+    public Call<ResponseBody> downloadFile(String remoteFileName, String bearer) {
+        return api.download(remoteFileName, bearer);
     }
 }

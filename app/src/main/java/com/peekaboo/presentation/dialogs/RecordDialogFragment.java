@@ -63,7 +63,7 @@ public class RecordDialogFragment extends DialogFragment {
                 .create();
         ButterKnife.bind(this, view);
         fabRecord.setOnClickListener(v -> presenter.onRecordButtonClick());
-        fabSend.setOnClickListener(v -> presenter.onRecordSend());
+//        fabSend.setOnClickListener(v -> presenter.onRecordSend());
         switch (getArguments().getInt(STATE)) {
             case RESET:
                 fabSend.setVisibility(View.GONE);

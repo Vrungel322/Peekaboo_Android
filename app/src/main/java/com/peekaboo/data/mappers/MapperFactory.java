@@ -6,7 +6,6 @@ import com.peekaboo.data.repositories.database.contacts.PContact;
 import com.peekaboo.data.repositories.database.messages.PMessageAbs;
 import com.peekaboo.domain.User;
 import com.peekaboo.data.rest.entity.UserEntity;
-import com.peekaboo.data.repositories.database.messages.PMessage;
 import com.peekaboo.presentation.services.Message;
 
 /**

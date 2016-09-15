@@ -10,12 +10,14 @@ import android.net.Uri;
 import android.speech.RecognizerIntent;
 import android.speech.tts.TextToSpeech;
 import android.text.TextUtils;
+import android.util.Log;
 
 import com.peekaboo.data.mappers.AbstractMapperFactory;
 import com.peekaboo.data.repositories.database.messages.PMessage;
 import com.peekaboo.data.repositories.database.messages.PMessageAbs;
 import com.peekaboo.data.repositories.database.messages.PMessageHelper;
 import com.peekaboo.domain.AudioRecorder;
+import com.peekaboo.domain.Record;
 import com.peekaboo.presentation.adapters.ChatAdapter;
 import com.peekaboo.presentation.views.IChatView;
 import com.peekaboo.utils.Utility;
@@ -76,23 +78,24 @@ public class ChatPresenter extends BasePresenter<IChatView> implements IChatPres
         adapter.clearList();
     }
 
-
     @Override
     public void onStartRecordingAudioClick() {
 //        recorder = new AudioRecorder(new Record(receiver));
-        subscriptions.add(recorder.startRecording().subscribe());
+//        recorder.setOnStartRecordingListener(() -> Log.wtf("RECORDER", "onStartRecording"));
+//        recorder.setOnStopRecordingListener(() -> Log.wtf("RECORDER", "onStopRecording"));
+//        subscriptions.add(recorder.startRecording().subscribe());
     }
 
     @Override
     public void onStopRecordingAudioClick() {
         if (recorder != null) {
-            recorder.stopRecording().subscribe(record -> {
-                //TODO send audio message
-
-//                pMessageHelper.insert(receiver, new PMessage(
-//                        true, PMessageAbs.PMESSAGE_MEDIA_TYPE.AUDIO_MESSAGE, record.getFilename(),
-//                        System.currentTimeMillis()));
-            });
+            subscriptions.add(recorder.stopRecording().subscribe(record -> {
+//                pMessageHelper.insert(receiver, convertPMessage(new PMessage(Utility.getPackageId(),
+//                        PMessageAbs.PMESSAGE_MEDIA_TYPE.AUDIO_MESSAGE,
+//                        true, record.getFilename(),
+//                        System.currentTimeMillis(),
+//                        false, false, false)));
+            }));
         }
     }
 

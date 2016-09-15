@@ -121,6 +121,17 @@ public class PMessageHelper {
         return db.update(tableName, cvStatus, WHERE, new String[]{String.valueOf(message.id())});
     }
 
+    public int updateBody(String tableName, PMessage message, String newBody) {
+        Log.e("helper", "update body " + newBody + " " + message);
+        message.setMessageBody(newBody);
+        SQLiteDatabase db = helper.getWritableDatabase();
+        tableName = PREFIX + tableName;
+        String WHERE = PMessageAbs.ID + " = ?";
+        ContentValues cvStatus = new ContentValues();
+        cvStatus.put(PMessageAbs.MESSAGE_BODY, newBody);
+        return db.update(tableName, cvStatus, WHERE, new String[]{String.valueOf(message.id())});
+    }
+
     public int deleteMessageByPackageId(String tableName, PMessageAbs message) {
         SQLiteDatabase db = helper.getWritableDatabase();
         tableName = PREFIX + tableName;

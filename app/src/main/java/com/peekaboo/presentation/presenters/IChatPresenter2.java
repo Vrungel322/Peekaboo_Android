@@ -21,5 +21,5 @@ public interface IChatPresenter2<V extends IView> extends IPresenter<V>{
 
     void onRecordButtonClick();
 
-    void onRecordSend();
+//    void onRecordSend();
 }

@@ -14,6 +14,8 @@ import com.peekaboo.domain.User;
 
 import java.io.File;
 
+import okhttp3.ResponseBody;
+import retrofit2.Call;
 import rx.Observable;
 
 /**
@@ -66,12 +68,12 @@ public class SessionDataRepository implements SessionRepository {
     }
 
     @Override
-    public Observable<FileEntity> uploadFile(String fileName, String receiverId) {
+    public Call<FileEntity> uploadFile(String fileName, String receiverId) {
         return restApi.uploadFile(fileName, receiverId, user.getBearer());
     }
 
     @Override
-    public Observable<File> downloadFile(String fileName, String remoteFileName) {
-        return restApi.downloadFile(fileName, remoteFileName, user.getBearer());
+    public Call<ResponseBody> downloadFile(String remoteFileName) {
+        return restApi.downloadFile(remoteFileName, user.getBearer());
     }
 }

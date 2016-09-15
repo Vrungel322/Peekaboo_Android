@@ -20,7 +20,6 @@ import android.widget.Toast;
 import com.peekaboo.R;
 import com.peekaboo.data.repositories.database.messages.PMessage;
 import com.peekaboo.domain.AccountUser;
-import com.peekaboo.domain.usecase.UploadFileUseCase;
 import com.peekaboo.presentation.PeekabooApplication;
 import com.peekaboo.presentation.adapters.ChatAdapter2;
 import com.peekaboo.presentation.dialogs.RecordDialogFragment;
@@ -67,8 +66,6 @@ public class ChatActivity2 extends AppCompatActivity implements IChatView2 {
     ChatPresenter2 presenter;
     @Inject
     AccountUser accountUser;
-    @Inject
-    UploadFileUseCase uploadFileUseCase;
     @Inject
     INotifier<Message> notifier;
     private ChatAdapter2 adapter;
@@ -240,7 +237,7 @@ public class ChatActivity2 extends AppCompatActivity implements IChatView2 {
         RecordDialogFragment fragment = (RecordDialogFragment) getSupportFragmentManager()
                 .findFragmentByTag(RecordDialogFragment.TAG);
         if (fragment != null) {
-            fragment.showRecordStop();
+            fragment.dismiss();
         }
     }
 

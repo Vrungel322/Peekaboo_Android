@@ -20,8 +20,6 @@ import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
-import rx.Subscription;
-import rx.functions.Action1;
 import rx.subscriptions.CompositeSubscription;
 
 /**
@@ -30,19 +28,22 @@ import rx.subscriptions.CompositeSubscription;
 @Singleton
 public class ChatPresenter2 extends BasePresenter<IChatView2> implements IChatPresenter2<IChatView2>,
         IMessenger.MessengerListener {
-    private IMessenger messenger;
-    private AccountUser accountUser;
+    private final IMessenger messenger;
+    private final AccountUser accountUser;
     private CompositeSubscription subscriptions;
-    private AsyncAudioPlayer player;
-    private List<String> domens;
-    private AudioRecorder recorder;
+    private final AsyncAudioPlayer player;
+    private final List<String> domens;
+    private final AudioRecorder recorder;
 
     @Inject
-    public ChatPresenter2(IMessenger messenger, AccountUser accountUser, AsyncAudioPlayer player, @Named("domens") List<String> domens) {
+    public ChatPresenter2(AudioRecorder recorder, IMessenger messenger,
+                          AccountUser accountUser, AsyncAudioPlayer player,
+                          @Named("domens") List<String> domens) {
         this.messenger = messenger;
         this.accountUser = accountUser;
         this.player = player;
         this.domens = domens;
+        this.recorder = recorder;
     }
 
     @Override
@@ -70,10 +71,8 @@ public class ChatPresenter2 extends BasePresenter<IChatView2> implements IChatPr
                         }
                     }));
         } else {
-            Log.e("BUG", "onResume");
             subscriptions.add(messenger.getUnreadMessages(receiver)
                     .subscribe(pMessageAbses -> {
-                        Log.e("BUG", "unsubscribe");
                         subscriptions.unsubscribe();
                         IChatView2 view = getView();
                         if (view != null && !pMessageAbses.isEmpty()) {
@@ -89,27 +88,35 @@ public class ChatPresenter2 extends BasePresenter<IChatView2> implements IChatPr
 
         if (player.getAudioId() != pMessage.id() || player.state() == AudioPlayer.STATE_RESET) {
             player.reset();
-            HashMap<String, String> headers = new HashMap<>();
-            headers.put("authorization", accountUser.getBearer());
-            String url = domens.get(0) + "download/audio/" + pMessage.messageBody();
-            player.prepare(pMessage.id(), url, headers, listener);
+//            HashMap<String, String> headers = new HashMap<>();
+//            headers.put("authorization", accountUser.getBearer());
+//            String url = domens.get(0) + "download/audio/" + pMessage.messageBody();
+//            Log.e("presenter", "url " + url);
+//            Log.e("presenter", "headers " + headers);
+            String uri = pMessage.messageBody().split(" ")[1];
+            Log.e("presenter", "uri " + uri);
+            player.prepare(pMessage.id(), uri, listener);
         } else if (player.state() == AudioPlayer.STATE_PREPARED) {
-            Log.e("presenter", "start " + pMessage.id());
             player.start();
         } else if (player.state() == AudioPlayer.STATE_PLAYING) {
             player.pause();
         }
     }
 
-    boolean isRecording;
+
     @Override
     public void onRecordButtonClick() {
         IChatView2 view = getView();
         if (view != null) {
-            if (isRecording) {
+            if (recorder.isRecording()) {
                 Log.e("presenter", "record stop");
-                isRecording = false;
                 recorder.stopRecording().subscribe(record -> {
+                    PMessage message = new PMessage(true, PMessage.PMESSAGE_MEDIA_TYPE.AUDIO_MESSAGE,
+                            record.getFilename(), System.currentTimeMillis(),
+                            PMessage.PMESSAGE_STATUS.STATUS_SENT,
+                            view.getCompanionId(), accountUser.getId());
+                    messenger.sendMessage(message);
+
                     Log.e("presenter", "record stopped");
                     IChatView2 view1 = getView();
                     if (view1 != null) {
@@ -118,22 +125,14 @@ public class ChatPresenter2 extends BasePresenter<IChatView2> implements IChatPr
                 });
             } else {
                 Log.e("presenter", "record start");
-                recorder = new AudioRecorder(new Record(view.getCompanionId()));
-                isRecording = true;
-                recorder.startRecording().subscribe(record -> {
-                    Log.e("presenter", "record started");
-                    IChatView2 view1 = getView();
-                    if (view1 != null) {
-                        view1.showRecordStart();
-                    }
-                });
+                recorder.setRecord(new Record(view.getCompanionId()));
+                recorder.startRecording().subscribe();
+                IChatView2 view1 = getView();
+                if (view1 != null) {
+                    view1.showRecordStart();
+                }
             }
         }
-    }
-
-    @Override
-    public void onRecordSend() {
-
     }
 
     @Override

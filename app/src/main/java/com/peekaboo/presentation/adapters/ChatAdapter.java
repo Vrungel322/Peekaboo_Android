@@ -113,6 +113,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     @Override
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+
         if (holder instanceof DatesViewHolder) {
             ((DatesViewHolder) holder).tvDatesSeparator.setText(((DateSeparator) getItem(position)).getDate());
         } else if (holder instanceof ViewHolder && getItem(position) instanceof PMessageAbs) {
@@ -286,18 +287,18 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         super.onDetachedFromRecyclerView(recyclerView);
         presenter.onDetachedFromRecyclerView();
     }
-
-    private boolean needSeparator(PMessageAbs previous, PMessageAbs current) {
-        long previousTime = previous.timestamp();
-        long currentTime = current.timestamp();
-        int previousDay = Utility.getDay(previousTime);
-        int currentDay = Utility.getDay(currentTime);
-        if (currentDay > previousDay) {
-            return true;
-        } else {
-            return false;
-        }
-    }
+//
+//    private boolean needSeparator(PMessageAbs previous, PMessageAbs current) {
+//        long previousTime = previous.timestamp();
+//        long currentTime = current.timestamp();
+//        int previousDay = Utility.getDay(previousTime);
+//        int currentDay = Utility.getDay(currentTime);
+//        if (currentDay > previousDay) {
+//            return true;
+//        } else {
+//            return false;
+//        }
+//    }
 
     public interface IChatAdapterListener {
         void toLastMessage();

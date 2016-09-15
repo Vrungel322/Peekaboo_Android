@@ -24,15 +24,14 @@ import javax.inject.Singleton;
 public class AsyncAudioPlayer implements AudioPlayer, MediaPlayer.OnPreparedListener, MediaPlayer.OnCompletionListener, MediaPlayer.OnErrorListener {
     public static final int ACTION_ID = 1010;
     public static final int UPDATE_PROGRESS_INTERVAL_MILLIS = 500;
-
-
-    private Context context;
     private final MainThread mainThread;
+    private Context context;
     private AsyncExecutor executor;
     private MediaPlayer player;
     @Nullable
     private AudioPlayerListener listener;
     private int state;
+    private long audioId;
     private Runnable progressRunnable = new Runnable() {
         @Override
         public void run() {
@@ -50,30 +49,24 @@ public class AsyncAudioPlayer implements AudioPlayer, MediaPlayer.OnPreparedList
         @Override
         public void run() {
             Log.e("player", "prepare " + state());
-            reset();
-            setAudioId(getAudioId());
             try {
-                player.setDataSource(context, Uri.parse(getUrl()), getHeaders());
+                player.setDataSource(getUrl());
                 player.prepareAsync();
             } catch (IOException e) {
                 e.printStackTrace();
             }
         }
     };
-    private long audioId;
 
-    private void setAudioId(long audioId) {
-        this.audioId = audioId;
-    }
-
-    public long getAudioId() {
-        return audioId;
-    }
     @Inject
     public AsyncAudioPlayer(Context context, MainThread mainThread) {
         this.context = context;
         this.mainThread = mainThread;
         initMediaPlayer(context);
+    }
+
+    public long getAudioId() {
+        return audioId;
     }
 
     public void setListener(@Nullable AudioPlayerListener listener) {
@@ -92,7 +85,7 @@ public class AsyncAudioPlayer implements AudioPlayer, MediaPlayer.OnPreparedList
         final int state = state();
         mainThread.run(() -> {
             Log.e("notify", audioId + " " + state);
-            if (listener != null) {
+            if (listener != null)
                 switch (state) {
                     case STATE_PLAYING:
                         Log.e("player", "notify start " + audioId);
@@ -103,7 +96,6 @@ public class AsyncAudioPlayer implements AudioPlayer, MediaPlayer.OnPreparedList
                         listener.onStopPlaying(audioId);
                         break;
                 }
-            }
         });
     }
 
@@ -128,12 +120,12 @@ public class AsyncAudioPlayer implements AudioPlayer, MediaPlayer.OnPreparedList
     }
 
     @Override
-    public void prepare(long audioId, String url, HashMap<String, String> headers, AudioPlayerListener listener) {
+    public void prepare(long audioId, String uri, AudioPlayerListener listener) {
+        Log.e("player", "prepare " + uri);
         this.listener = listener;
-        setAudioId(audioId);
-        prepareRunnable.setAudioId(audioId);
-        prepareRunnable.setUrl(url);
-        prepareRunnable.setHeaders(headers);
+        this.audioId = audioId;
+        prepareRunnable.setUrl(uri);
+//        prepareRunnable.setHeaders(headers);
         executor.post(ACTION_ID, prepareRunnable);
     }
 
@@ -160,8 +152,6 @@ public class AsyncAudioPlayer implements AudioPlayer, MediaPlayer.OnPreparedList
             pause();
         }
         setState(STATE_RESET);
-//        listener = null;
-//        player.stop();
         player.reset();
     }
 
@@ -198,8 +188,7 @@ public class AsyncAudioPlayer implements AudioPlayer, MediaPlayer.OnPreparedList
 
     private static abstract class StringRunnable implements Runnable {
         private String url;
-        private HashMap<String, String> headers;
-        private long audioId;
+//        private HashMap<String, String> headers;
 
         public String getUrl() {
             return url;
@@ -209,16 +198,12 @@ public class AsyncAudioPlayer implements AudioPlayer, MediaPlayer.OnPreparedList
             this.url = url;
         }
 
-        public void setHeaders(HashMap<String,String> headers) {
-            this.headers = headers;
-        }
+//        public Map<String, String> getHeaders() {
+//            return headers;
+//        }
 
-        public Map<String,String> getHeaders() {
-            return headers;
-        }
-
-        public void setAudioId(long audioId) {
-            this.audioId = audioId;
-        }
+//        public void setHeaders(HashMap<String, String> headers) {
+//            this.headers = headers;
+//        }
     }
 }

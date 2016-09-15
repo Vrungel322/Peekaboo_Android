@@ -13,11 +13,12 @@ public interface AudioPlayer {
     /**
      * called when state is {@link #STATE_RESET}
      *
-     * @param url
-     * @param headers
+     * @param uri
      * @param listener
      */
-    void prepare(long audioId, String url, HashMap<String, String> headers, AudioPlayerListener listener);
+//    void prepare(long audioId, String url, HashMap<String, String> headers, AudioPlayerListener listener);
+
+    void prepare(long audioId, String uri, AudioPlayerListener listener);
 
     /**
      * can be called when state is {@link #STATE_PREPARED}

@@ -77,7 +77,11 @@ public class MessageUtils {
                 Message.Type.TEXT : Message.Type.AUDIO;
         result.addParam(Message.Params.TYPE, type);
         result.addParam(Message.Params.DESTINATION, message.receiverId());
-        result.setBody(message.messageBody().getBytes(Message.UTF_8));
+        String s = message.messageBody();
+        if (message.mediaType() == PMessage.PMESSAGE_MEDIA_TYPE.AUDIO_MESSAGE) {
+            s = s.split(" ")[0];
+        }
+        result.setBody(s.getBytes(Message.UTF_8));
 
         return result;
     }

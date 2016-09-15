@@ -3,7 +3,6 @@ package com.peekaboo.presentation.di;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.peekaboo.data.Constants;
 import com.peekaboo.data.di.DataModule;
 import com.peekaboo.data.mappers.MapperFactory;
 import com.peekaboo.data.repositories.database.messages.PMessageHelper;
@@ -12,6 +11,8 @@ import com.peekaboo.data.repositories.database.utils_db.DbModule;
 import com.peekaboo.domain.AccountUser;
 import com.peekaboo.domain.schedulers.ObserveOn;
 import com.peekaboo.domain.schedulers.SubscribeOn;
+import com.peekaboo.domain.usecase.FileDownloadUseCase;
+import com.peekaboo.domain.usecase.FileUploadUseCase;
 import com.peekaboo.presentation.PeekabooApplication;
 import com.peekaboo.presentation.services.IMessenger;
 import com.peekaboo.presentation.services.INotifier;
@@ -88,8 +89,8 @@ public class ApplicationModule {
 
     @Singleton
     @Provides
-    public IMessenger provideMessanger(INotifier<Message> notifier, PMessageHelper helper, ReadMessagesHelper readMessagesHelper, AccountUser user) {
-        return new Messenger(notifier, helper, readMessagesHelper, user, new MapperFactory());
+    public IMessenger provideMessanger(INotifier<Message> notifier, PMessageHelper helper, ReadMessagesHelper readMessagesHelper, AccountUser user, FileUploadUseCase fileUploadUseCase, FileDownloadUseCase downloadFileUseCase) {
+        return new Messenger(notifier, helper, readMessagesHelper, user, fileUploadUseCase, downloadFileUseCase);
     }
 
 }

@@ -1,16 +1,19 @@
 package com.peekaboo.presentation.services;
 
-import android.content.ContentValues;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
-import com.peekaboo.data.mappers.AbstractMapperFactory;
-import com.peekaboo.data.mappers.Mapper;
+import com.peekaboo.data.FileEntity;
 import com.peekaboo.data.repositories.database.messages.PMessage;
 import com.peekaboo.data.repositories.database.messages.PMessageAbs;
 import com.peekaboo.data.repositories.database.messages.PMessageHelper;
 import com.peekaboo.data.repositories.database.service.ReadMessagesHelper;
 import com.peekaboo.data.repositories.database.service.ServiceMessageAbs;
 import com.peekaboo.domain.AccountUser;
+import com.peekaboo.domain.Pair;
+import com.peekaboo.domain.subscribers.BaseUseCaseSubscriber;
+import com.peekaboo.domain.usecase.FileDownloadUseCase;
+import com.peekaboo.domain.usecase.FileUploadUseCase;
 
 import java.util.HashSet;
 import java.util.List;
@@ -28,20 +31,23 @@ public class Messenger implements IMessenger,
     private final INotifier<Message> notifier;
     private final PMessageHelper helper;
     private final ReadMessagesHelper readMessagesHelper;
-    private final Mapper<PMessageAbs, ContentValues> pMessageMapper;
     Subscription unreadMessages = Subscriptions.empty();
     Subscription undeliveredMessages = Subscriptions.empty();
     Subscription serviceMessages = Subscriptions.empty();
     private AccountUser user;
+    private FileUploadUseCase uploadFileUseCase;
+    private FileDownloadUseCase downloadFileUseCase;
     private Set<MessengerListener> listeners = new HashSet<>();
 
-    public Messenger(INotifier<Message> notifier, PMessageHelper helper, ReadMessagesHelper readMessagesHelper, AccountUser user,
-                     AbstractMapperFactory abstractMapperFactory) {
+    public Messenger(INotifier<Message> notifier, PMessageHelper helper,
+                     ReadMessagesHelper readMessagesHelper, AccountUser user,
+                     FileUploadUseCase uploadFileUseCase, FileDownloadUseCase downloadFileUseCase) {
         this.notifier = notifier;
         this.helper = helper;
         this.readMessagesHelper = readMessagesHelper;
         this.user = user;
-        pMessageMapper = abstractMapperFactory.getPMessageMapper();
+        this.uploadFileUseCase = uploadFileUseCase;
+        this.downloadFileUseCase = downloadFileUseCase;
         notifier.addListener(this);
     }
 
@@ -107,6 +113,9 @@ public class Messenger implements IMessenger,
      */
     private void handleIncomingMessage(Message message) {
         PMessage pMessage = MessageUtils.convert(user.getId(), message);
+//        if (pMessage.mediaType() == PMessage.PMESSAGE_MEDIA_TYPE.AUDIO_MESSAGE) {
+//            pMessage.setDownloaded(false);
+//        }
         pMessage.setStatus(PMessage.PMESSAGE_STATUS.STATUS_DELIVERED);
         String tableName = pMessage.senderId();
         helper.insert(tableName, pMessage);
@@ -127,6 +136,11 @@ public class Messenger implements IMessenger,
                 listener.onMessageUpdated(pMessage);
             }
         }
+
+        if (pMessage.mediaType() == PMessage.PMESSAGE_MEDIA_TYPE.AUDIO_MESSAGE) {
+            downloadFileUseCase.execute(pMessage, getDownloadSubscriber());
+        }
+
     }
 
     /**
@@ -180,9 +194,56 @@ public class Messenger implements IMessenger,
         for (MessengerListener listener : listeners) {
             listener.onMessageUpdated(message);
         }
-        if (isAvailable()) {
-            deliverMessage(message);
+        deliverMessageByMediatype(message);
+    }
+
+    private void deliverMessageByMediatype(PMessage message) {
+        switch (message.mediaType()) {
+            case PMessage.PMESSAGE_MEDIA_TYPE.TEXT_MESSAGE:
+                if (isAvailable()) {
+                    deliverMessage(message);
+                }
+                break;
+            case PMessage.PMESSAGE_MEDIA_TYPE.AUDIO_MESSAGE:
+                uploadAndDeliverFileMessage(message);
+                break;
         }
+    }
+
+    private void uploadAndDeliverFileMessage(PMessage message) {
+        uploadFileUseCase.execute(message, getUploadSubscriber());
+    }
+
+    @NonNull
+    private BaseUseCaseSubscriber<Pair<PMessage, String>> getDownloadSubscriber() {
+        return new BaseUseCaseSubscriber<Pair<PMessage, String>>() {
+            @Override
+            public void onNext(Pair<PMessage, String> pair) {
+                super.onNext(pair);
+                PMessage first = pair.first;
+                String second = pair.second;
+                helper.updateBody(first.receiverId(), first, first.messageBody() + " " + second);
+                for (MessengerListener listener : listeners) {
+                    listener.onMessageUpdated(first);
+                }
+            }
+        };
+    }
+
+    @NonNull
+    private BaseUseCaseSubscriber<Pair<PMessage, FileEntity>> getUploadSubscriber() {
+        return new BaseUseCaseSubscriber<Pair<PMessage, FileEntity>>() {
+            @Override
+            public void onNext(Pair<PMessage, FileEntity> pMessageFileEntityPair) {
+                Log.e("messanger", pMessageFileEntityPair + " " + hashCode());
+                if (isAvailable()) {
+                    PMessage pMessage = pMessageFileEntityPair.first;
+                    FileEntity fileEntity = pMessageFileEntityPair.second;
+                    helper.updateBody(pMessage.receiverId(), pMessage, fileEntity.getName() + " " + pMessage.messageBody());
+                    deliverMessage(pMessage);
+                }
+            }
+        };
     }
 
     /**
@@ -260,9 +321,7 @@ public class Messenger implements IMessenger,
                     Log.e("BUG1", "unsubscribe " + pMessageAbses);
                     undeliveredMessages.unsubscribe();
                     for (PMessage message : pMessageAbses) {
-                        if (isAvailable()) {
-                            deliverMessage(message);
-                        }
+                        deliverMessageByMediatype(message);
                     }
                 });
     }
