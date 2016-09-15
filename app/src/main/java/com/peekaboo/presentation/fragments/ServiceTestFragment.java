@@ -2,11 +2,9 @@ package com.peekaboo.presentation.fragments;
 
 
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.Html;
-import android.text.SpannedString;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,14 +15,12 @@ import android.widget.TextView;
 
 import com.peekaboo.R;
 import com.peekaboo.data.rest.PeekabooApi;
-import com.peekaboo.data.rest.entity.UserEntity;
 import com.peekaboo.domain.AccountUser;
-import com.peekaboo.domain.MessageUtils;
+import com.peekaboo.domain.AudioRecorder;
+import com.peekaboo.domain.Record;
 import com.peekaboo.presentation.PeekabooApplication;
-import com.peekaboo.presentation.services.AudioRecorder;
 import com.peekaboo.presentation.services.INotifier;
 import com.peekaboo.presentation.services.Message;
-import com.peekaboo.presentation.services.Record;
 
 import java.io.File;
 import java.io.IOException;

@@ -1,7 +1,12 @@
 package com.peekaboo.domain;
 
 /**
+<<<<<<< Updated upstream
  * Created by Nataliia on 05.09.2016.
+=======
+<<<<<<< HEAD
+ * Created by st1ch on 05.09.2016.
+>>>>>>> Stashed changes
  */
 
 public class DateSeparator {

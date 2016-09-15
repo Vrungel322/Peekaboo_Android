@@ -1,7 +1,5 @@
 package com.peekaboo.data.repositories;
 
-import android.util.Log;
-
 import com.peekaboo.data.FileEntity;
 import com.peekaboo.data.mappers.AbstractMapperFactory;
 import com.peekaboo.data.rest.ConfirmKey;
@@ -9,6 +7,7 @@ import com.peekaboo.data.rest.RestApi;
 import com.peekaboo.data.rest.entity.Credentials;
 import com.peekaboo.data.rest.entity.CredentialsSignUp;
 import com.peekaboo.domain.AccountUser;
+import com.peekaboo.data.rest.entity.ContactsEntity;
 import com.peekaboo.domain.SessionRepository;
 import com.peekaboo.domain.User;
 
@@ -73,5 +72,10 @@ public class SessionDataRepository implements SessionRepository {
     @Override
     public Observable<File> downloadFile(String fileName, String remoteFileName) {
         return restApi.downloadFile(fileName, remoteFileName, user.getBearer());
+    }
+
+    @Override
+    public Observable<ContactsEntity> loadAllContacts() {
+        return restApi.loadAllContacts();
     }
 }
