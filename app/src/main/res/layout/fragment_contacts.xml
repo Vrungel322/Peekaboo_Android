@@ -17,9 +17,35 @@
         <!--android:dividerHeight="1dp"-->
         <!--/>-->
 
-    <com.peekaboo.presentation.widget.IndexableRecyclerView
-        android:id="@+id/recycler_view"
-        android:scrollbars="vertical"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+
+    <com.peekaboo.presentation.widget.LetterBar
+        android:id="@+id/letter_bar"
+        android:layout_width="20dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:paddingBottom="20dp"
+        android:paddingTop="20dp"
+        app:textColor="#33b5e5"
+        app:textSize="20sp"
+        />
+<android.support.v7.widget.RecyclerView
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/recyclerView"/>
+
+    <TextView
+        android:id="@+id/tip_text"
+        android:singleLine="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="20dp"
+       />
+
+    <!--<com.peekaboo.presentation.widget.IndexableRecyclerView-->
+        <!--android:id="@+id/recycler_view"-->
+        <!--android:scrollbars="vertical"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="match_parent" />-->
 </RelativeLayout>
