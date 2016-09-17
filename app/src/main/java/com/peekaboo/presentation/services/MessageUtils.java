@@ -79,7 +79,7 @@ public class MessageUtils {
         result.addParam(Message.Params.DESTINATION, message.receiverId());
         String s = message.messageBody();
         if (message.mediaType() == PMessage.PMESSAGE_MEDIA_TYPE.AUDIO_MESSAGE) {
-            s = s.split(" ")[0];
+            s = s.split(PMessage.DIVIDER)[0];
         }
         result.setBody(s.getBytes(Message.UTF_8));
 

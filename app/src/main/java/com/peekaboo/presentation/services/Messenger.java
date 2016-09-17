@@ -222,7 +222,7 @@ public class Messenger implements IMessenger,
                 super.onNext(pair);
                 PMessage first = pair.first;
                 String second = pair.second;
-                helper.updateBody(first.receiverId(), first, first.messageBody() + " " + second);
+                helper.updateBody(first.receiverId(), first, first.messageBody() + PMessage.DIVIDER + second);
                 for (MessengerListener listener : listeners) {
                     listener.onMessageUpdated(first);
                 }
@@ -239,7 +239,7 @@ public class Messenger implements IMessenger,
                 if (isAvailable()) {
                     PMessage pMessage = pMessageFileEntityPair.first;
                     FileEntity fileEntity = pMessageFileEntityPair.second;
-                    helper.updateBody(pMessage.receiverId(), pMessage, fileEntity.getName() + " " + pMessage.messageBody());
+                    helper.updateBody(pMessage.receiverId(), pMessage, fileEntity.getName() + PMessage.DIVIDER + pMessage.messageBody());
                     deliverMessage(pMessage);
                 }
             }

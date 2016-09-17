@@ -16,7 +16,6 @@ import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import okhttp3.ResponseBody;
-import retrofit2.Call;
 import retrofit2.Response;
 
 @Singleton
@@ -32,7 +31,7 @@ public class FileDownloadUseCase extends QueueUseCase<PMessage, String> {
 
     @Override
     protected String getValue(PMessage key) throws IOException {
-        String remoteFileName = key.messageBody().split(" ")[0];
+        String remoteFileName = key.messageBody().split(PMessage.DIVIDER)[0];
         Response<ResponseBody> execute = repository.downloadFile(remoteFileName).execute();
         File file = null;
         if (execute.isSuccessful()) {

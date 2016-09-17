@@ -5,9 +5,11 @@ package com.peekaboo.domain;
  */
 public class User {
     private String id;
+    private String avatar;
 
-    public User(String id) {
+    public User(String id, String avatar) {
         this.id = id;
+        this.avatar = avatar;
     }
 
 
@@ -18,5 +20,17 @@ public class User {
 
     public String getId() {
         return id;
+    }
+
+    public String getAvatar() {
+        return avatar;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id='" + id + '\'' +
+                ", avatar='" + avatar + '\'' +
+                '}';
     }
 }

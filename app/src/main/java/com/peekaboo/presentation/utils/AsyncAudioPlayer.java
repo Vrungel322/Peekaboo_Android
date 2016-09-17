@@ -3,7 +3,6 @@ package com.peekaboo.presentation.utils;
 import android.content.Context;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.PowerManager;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -11,8 +10,6 @@ import android.util.Log;
 import com.peekaboo.utils.MainThread;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -23,9 +20,8 @@ import javax.inject.Singleton;
 @Singleton
 public class AsyncAudioPlayer implements AudioPlayer, MediaPlayer.OnPreparedListener, MediaPlayer.OnCompletionListener, MediaPlayer.OnErrorListener {
     public static final int ACTION_ID = 1010;
-    public static final int UPDATE_PROGRESS_INTERVAL_MILLIS = 500;
+    public static final int UPDATE_PROGRESS_INTERVAL_MILLIS = 200;
     private final MainThread mainThread;
-    private Context context;
     private AsyncExecutor executor;
     private MediaPlayer player;
     @Nullable
@@ -60,7 +56,6 @@ public class AsyncAudioPlayer implements AudioPlayer, MediaPlayer.OnPreparedList
 
     @Inject
     public AsyncAudioPlayer(Context context, MainThread mainThread) {
-        this.context = context;
         this.mainThread = mainThread;
         initMediaPlayer(context);
     }
@@ -92,7 +87,11 @@ public class AsyncAudioPlayer implements AudioPlayer, MediaPlayer.OnPreparedList
                         listener.onStartPlaying(audioId);
                         break;
                     case STATE_RESET:
+                        listener.onProgressChanged(audioId, 0, 0);
+//                        listener.onStopPlaying(audioId);
+//                        break;
                     case STATE_PREPARED:
+//                        listener.onProgressChanged(audioId, player.getCurrentPosition(), player.getDuration());
                         listener.onStopPlaying(audioId);
                         break;
                 }
@@ -182,7 +181,13 @@ public class AsyncAudioPlayer implements AudioPlayer, MediaPlayer.OnPreparedList
     @Override
     public void onCompletion(MediaPlayer mp) {
         Log.e("player", "onCompletion " + state());
+        mainThread.remove(progressRunnable);
+        player.seekTo(0);
         setState(STATE_PREPARED);
+        if (listener != null) {
+            listener.onProgressChanged(audioId, player.getCurrentPosition(), player.getDuration());
+        }
+
     }
 
 

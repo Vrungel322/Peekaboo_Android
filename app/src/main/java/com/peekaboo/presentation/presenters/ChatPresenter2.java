@@ -93,7 +93,7 @@ public class ChatPresenter2 extends BasePresenter<IChatView2> implements IChatPr
 //            String url = domens.get(0) + "download/audio/" + pMessage.messageBody();
 //            Log.e("presenter", "url " + url);
 //            Log.e("presenter", "headers " + headers);
-            String uri = pMessage.messageBody().split(" ")[1];
+            String uri = pMessage.messageBody().split(PMessage.DIVIDER)[1];
             Log.e("presenter", "uri " + uri);
             player.prepare(pMessage.id(), uri, listener);
         } else if (player.state() == AudioPlayer.STATE_PREPARED) {

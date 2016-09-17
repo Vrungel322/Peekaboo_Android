@@ -5,6 +5,7 @@ package com.peekaboo.data.repositories.database.messages;
  */
 public class PMessage extends PMessageAbs {
 
+    public static final String DIVIDER = "  ";
     private long id;
     private boolean isMine;
     private String messageBody;
@@ -13,7 +14,6 @@ public class PMessage extends PMessageAbs {
     private int status;
     private String receiverId;
     private String senderId;
-    private boolean isDownloaded;
 
     public PMessage(boolean isMine, int mediaType, String messageBody, long timestamp,
                     int status, String receiverId, String senderId) {
@@ -32,14 +32,8 @@ public class PMessage extends PMessageAbs {
     }
 
     public boolean isDownloaded() {
-        return messageBody.contains(" ");
+        return messageBody.contains(DIVIDER);
     }
-//
-//    public void setDownloaded(boolean downloaded) {
-//        String messageBody = messageBody();
-//        if (downloaded) setMessageBody(PMessage.PREFIX.SERVER + messageBody);
-//        else setMessageBody(messageBody.replace(PMessage.PREFIX.SERVER, ""));
-//    }
 
     public void setMessageBody(String messageBody) {
         this.messageBody = messageBody;

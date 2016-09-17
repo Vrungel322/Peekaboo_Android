@@ -38,7 +38,7 @@ import butterknife.ButterKnife;
  */
 public class ChatAdapter2 extends RecyclerView.Adapter<ChatAdapter2.ViewHolder> {
 
-    public static final int READ_DELAY = 500;
+    public static final int READ_DELAY = 100;
     private final Context context;
     private final LayoutInflater inflater;
     private final ChatPresenter2 presenter;
@@ -74,12 +74,12 @@ public class ChatAdapter2 extends RecyclerView.Adapter<ChatAdapter2.ViewHolder> 
 //            Log.e("adapter", "progress " + id + " " + position);
             if (viewHolder != null && viewHolder instanceof ViewHolderAudio) {
                 ViewHolderAudio viewHolderAudio = (ViewHolderAudio) viewHolder;
-                int max = (int) (duration / 1000);
-                int pos = (int) (position / 1000);
-                Log.e("adapter", "progress " + pos + " " + max);
+                int max = (int) (duration / 100);
+                int pos = (int) (position / 100);
+                Log.e("adapter", System.currentTimeMillis() + " progress " + pos + " " + max);
                 viewHolderAudio.sbPlayProgress.setMax(max);
-                viewHolderAudio.sbPlayProgress.setProgress((int) (position / 1000));
-                viewHolderAudio.tvCurrentDuration.setText(String.format("%02d:%02d", max / 60, max % 60));
+                viewHolderAudio.sbPlayProgress.setProgress(pos);
+                viewHolderAudio.tvCurrentDuration.setText(String.format("%02d:%02d", (pos / 10) / 60, (pos / 10) % 60));
             }
         }
     };
@@ -150,6 +150,7 @@ public class ChatAdapter2 extends RecyclerView.Adapter<ChatAdapter2.ViewHolder> 
                 if (holder instanceof ViewHolderAudio) {
                     ViewHolderAudio holderAudio = (ViewHolderAudio) holder;
                     presenter.setPlayerListener(playerListener);
+                    Log.e("adapter", pMessageAbs.id() + " " + pMessageAbs.messageBody() + " " + pMessageAbs.isMine() + " " + pMessageAbs.isDownloaded());
                     holderAudio.pbLoad.setVisibility(pMessageAbs.isDownloaded() ? View.GONE : View.VISIBLE);
                     holderAudio.ibPlayRecord.setVisibility(!pMessageAbs.isDownloaded() ? View.GONE : View.VISIBLE);
                     holderAudio.ibPlayRecord.setOnClickListener(v -> {

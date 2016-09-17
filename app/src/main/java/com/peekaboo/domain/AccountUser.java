@@ -15,13 +15,13 @@ public class AccountUser extends User {
     private String token;
 
     public AccountUser(SharedPreferences preferences) {
-        super(null);
+        super(null, null);
         this.preferences = preferences;
         restoreData();
     }
 
     public AccountUser(String str) {
-        super(str);
+        super(str, null);
     }
 
     @Nullable

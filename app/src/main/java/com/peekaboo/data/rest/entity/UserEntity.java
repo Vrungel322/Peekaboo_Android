@@ -5,6 +5,11 @@ package com.peekaboo.data.rest.entity;
  */
 public class UserEntity {
     private String id;
+    private String avatar;
+
+    public String getAvatar() {
+        return avatar;
+    }
 
     public String getId() {
         return id;

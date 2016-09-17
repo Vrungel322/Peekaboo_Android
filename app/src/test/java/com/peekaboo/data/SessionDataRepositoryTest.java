@@ -16,6 +16,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executors;
@@ -59,6 +60,7 @@ public class SessionDataRepositoryTest {
 
     @Test
     public void rxQueueTest() {
+        System.out.println(Arrays.deepToString("asd".split(" ")));
 //        System.out.println(Thread.currentThread().hashCode());
 //
 //        Scheduler from = Schedulers.from(Executors.newSingleThreadExecutor());
