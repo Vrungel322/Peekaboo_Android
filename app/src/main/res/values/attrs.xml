@@ -2,6 +2,7 @@
 <resources>
     <declare-styleable name="PasswordView">
     <attr name="textHint" format="string" />
+
     </declare-styleable>
 
     <attr name="siArrowPosition">

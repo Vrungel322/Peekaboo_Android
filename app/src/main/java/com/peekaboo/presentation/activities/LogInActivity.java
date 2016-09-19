@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -45,7 +46,7 @@ public class LogInActivity extends AppCompatActivity implements ICredentialsView
     @BindView(R.id.pvPassword)
     PasswordView passwordView;
     @BindView(R.id.lLogIn)
-    RelativeLayout lLogin;
+    LinearLayout lLogin;
     @BindView(R.id.tvSignUp)
     TextView tvSignUp;
 
@@ -184,8 +185,4 @@ public class LogInActivity extends AppCompatActivity implements ICredentialsView
 //        });
 //    }
 
-    @OnClick(R.id.tvSignUp)
-    public void onSignUpButtonCLick(){
-        navigator.startSignUpActivity(LogInActivity.this);
-    }
 }

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:custom="http://schemas.android.com/apk/res-auto"
     android:id="@+id/lLogIn"
@@ -7,22 +7,27 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <ImageView
-        android:id="@+id/logo"
-        android:layout_width="150dp"
-        android:layout_height="55dp"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="@dimen/padding_from_logo"
-        android:layout_marginTop="@dimen/padding_from_logo"
-        android:background="@drawable/logo_long"
-        android:scaleType="center" />
+
+        <ImageView
+            android:id="@+id/logo"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:layout_gravity="center"
+            android:foregroundGravity="center"
+            android:src="@drawable/logo_signup"
+            android:scaleType="center" />
+
 
     <LinearLayout
+        android:id="@+id/llLogIn"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_centerInParent="true"
+        android:layout_height="0dp"
+        android:layout_gravity="center"
+        android:layout_weight="1"
         android:focusable="true"
         android:focusableInTouchMode="true"
+        android:gravity="center"
         android:orientation="vertical"
         android:paddingLeft="@dimen/padding_signup_side"
         android:paddingRight="@dimen/padding_signup_side"
@@ -42,6 +47,7 @@
                 android:hint="@string/usernameOrLogin"
                 android:imeOptions="actionNext"
                 android:inputType="text"
+                android:textColor="@color/textColor"
                 android:textSize="@dimen/text_size" />
 
         </com.peekaboo.presentation.app.view.RobotoTextInputLayout>
@@ -93,16 +99,19 @@
         </LinearLayout>
     </LinearLayout>
 
+
     <com.peekaboo.presentation.app.view.ComfortaaTextView
         android:id="@+id/tvSignUp"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
+        android:layout_height="0dp"
+        android:layout_gravity="bottom|center_horizontal"
+        android:layout_weight="1"
         android:clickable="true"
+        android:gravity="bottom|center_horizontal"
         android:padding="@dimen/appIntroDefaultPaddingBottom"
         android:text="@string/sign_up"
         android:textColor="@color/colorAccent"
         android:textSize="@dimen/text_size" />
 
-</RelativeLayout>
+
+</LinearLayout>

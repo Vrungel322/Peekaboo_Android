@@ -117,6 +117,7 @@ public class SignUpActivity  extends AppCompatActivity implements ISignUpView {
                 pvPasswordConfirm.setError(getString(R.string.invalidPasswordConfirm));
                 pvPassword.setText("");
                 pvPasswordConfirm.setText("");
+
                 break;
             case LOGIN:
                 ilLogin.setErrorEnabled(true);

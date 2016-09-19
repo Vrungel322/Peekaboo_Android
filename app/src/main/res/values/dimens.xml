@@ -61,7 +61,7 @@
     <dimen name="padding_each_item_bot_top">13dp</dimen>
     <dimen name="padding_each_item_left_right">16dp</dimen>
 
-    <dimen name="padding_from_logo">84dp</dimen>
+    <dimen name="padding_from_logo">40dp</dimen>
 
     <dimen name="text_size">18sp</dimen>
     <dimen name="hint_text_size">14sp</dimen>
