@@ -13,13 +13,16 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.EditText;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -44,6 +47,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnFocusChange;
+import butterknife.OnTouch;
 import io.codetail.animation.ViewAnimationUtils;
 import io.codetail.widget.RevealFrameLayout;
 
@@ -62,7 +66,6 @@ public class ChatActivity extends AppCompatActivity
     LinearLayout llMessageBody;
     @BindView(R.id.rflMessageBody)
     RevealFrameLayout rflMessageBody;
-
     @BindView(R.id.bMessageOpen)
     ImageButton bMessageOpen;
     @BindView(R.id.bSendMessage)
@@ -71,6 +74,12 @@ public class ChatActivity extends AppCompatActivity
     HorizontalScrollView svItems;
     @BindView(R.id.llItems)
     LinearLayout llItems;
+    @BindView(R.id.micro_btn)
+    ImageButton bRecord;
+    @BindView(R.id.micro_anim)
+    ImageView microAnim;
+    @BindView(R.id.rflButtonRecord)
+    RevealFrameLayout rflButtonRecord;
     @Inject
     ChatPresenter chatPresenter;
 
@@ -182,11 +191,49 @@ public class ChatActivity extends AppCompatActivity
         takeGalleryImage();
     }
 
-    @OnClick(R.id.micro_btn)
-    void onRecordButtonClick() {
-        recordAudio();
-    }
+//    @OnClick(R.id.micro_btn)
+//    void onRecordButtonClick() {
+////        Log.wtf("onRecordButtonClick", "VISIBBLE");
+////        microAnim.setVisibility(View.VISIBLE);
+////        Log.wtf("onRecordButtonClick", "RECORD");
+//        recordAudio();
+////        Log.wtf("onRecordButtonClick", "GONE");
+////        microAnim.setVisibility(View.GONE);
+//
+//    }
 
+    @OnTouch(R.id.micro_btn)
+    boolean onRecordButtonTouch(MotionEvent mv){
+        if(mv.getAction() == MotionEvent.ACTION_UP){
+            rflButtonRecord.setVisibility(View.GONE);
+
+            recordAudio();
+            return true;
+        }
+        if(mv.getAction() == MotionEvent.ACTION_DOWN){
+            recordAudio();
+
+            rflButtonRecord.setVisibility(View.VISIBLE);
+            microAnim.post(() -> {
+                float cx, cy;
+                cx = (bRecord.getX() + bRecord.getWidth()) / 2;
+                cy = (bRecord.getY() + bRecord.getHeight()) / 2;
+
+                float dx = Math.max(cx, microAnim.getWidth() - cx);
+                float dy = Math.max(cy, microAnim.getHeight() - cy);
+                float finalRadius = (float) Math.hypot(dx, dy);
+
+                Animator animator =
+                        ViewAnimationUtils.createCircularReveal(microAnim, (int) cx, (int) cy, 0, finalRadius);
+                animator.setInterpolator(new AccelerateDecelerateInterpolator());
+                animator.setDuration(1000);
+                animator.start();
+            });
+
+            return true;
+        }
+        return true;
+    }
 
     @OnClick(R.id.bMessageOpen)
     void onbMessageOpenClick() {

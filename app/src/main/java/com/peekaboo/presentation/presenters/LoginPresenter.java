@@ -5,6 +5,7 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.peekaboo.data.repositories.database.contacts.Contact;
 import com.peekaboo.domain.AccountUser;
 import com.peekaboo.domain.UserMessageMapper;
 import com.peekaboo.domain.subscribers.BaseProgressSubscriber;
@@ -14,6 +15,8 @@ import com.peekaboo.presentation.views.ICredentialsView;
 import com.vk.sdk.VKScope;
 import com.vk.sdk.VKSdk;
 import com.vk.sdk.util.VKUtil;
+
+import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -42,10 +45,10 @@ public class LoginPresenter extends ProgressPresenter<ICredentialsView> implemen
     }
 
     @NonNull
-    private BaseProgressSubscriber<AccountUser> getSignInSubscriber() {
-        return new BaseProgressSubscriber<AccountUser>(this) {
+    private BaseProgressSubscriber<List<Contact>> getSignInSubscriber() {
+        return new BaseProgressSubscriber<List<Contact>>(this) {
             @Override
-            public void onNext(AccountUser response) {
+            public void onNext(List<Contact> response) {
                 super.onNext(response);
                 Log.e("onNext", String.valueOf(response));
                 if (getView() != null) {

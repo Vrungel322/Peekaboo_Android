@@ -107,11 +107,7 @@ public class ChatPresenter extends BasePresenter<IChatView> implements IChatPres
                 // for test
                 // odd mes - income, even mes - outgoing
                 isMineChanger++;
-                if (isMineChanger % 2 == 0) {
-                    isMine = true;
-                } else {
-                    isMine = false;
-                }
+                isMine = isMineChanger % 2 == 0;
 //                pMessageHelper.insert(receiver, convertPMessage(new TextPMessage(Utility.getPackageId(),
 //                        isMine, msgBody, System.currentTimeMillis(),
 //                        false, false, false)));

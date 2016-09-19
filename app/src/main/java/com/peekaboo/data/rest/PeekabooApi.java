@@ -5,6 +5,7 @@ import com.peekaboo.data.rest.entity.Credentials;
 import com.peekaboo.data.rest.entity.CredentialsSignUp;
 import com.peekaboo.data.rest.entity.TokenEntity;
 import com.peekaboo.data.rest.entity.UserEntity;
+import com.peekaboo.data.rest.entity.UserResponse;
 
 import okhttp3.MultipartBody;
 import okhttp3.ResponseBody;
@@ -50,9 +51,6 @@ public interface PeekabooApi {
             @Query("username") String username
     );
 
-
-
-
     @Multipart
     @POST("upload/audio/{id}")
     Call<FileEntity> uploadFile(
@@ -66,4 +64,7 @@ public interface PeekabooApi {
             @Path("fileName") String fileName,
             @Header("authorization") String bearer
     );
+
+    @GET("allusers/find")
+    Observable<UserResponse> getAllContacts();
 }

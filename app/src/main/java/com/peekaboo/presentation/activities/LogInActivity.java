@@ -62,7 +62,7 @@ public class LogInActivity extends AppCompatActivity implements ICredentialsView
         PeekabooApplication.getApp(this).getComponent().inject(this);
         loginPresenter.bind(this);
         bus.register(this);
-        onSwipe();
+//        onSwipe();
     }
 
     @Override
@@ -159,27 +159,32 @@ public class LogInActivity extends AppCompatActivity implements ICredentialsView
         Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG).show();
     }
 
-    private void onSwipe(){
-        lLogin.setOnTouchListener(new OnSwipeTouchListener(LogInActivity.this) {
-            public void onSwipeTop() {
-                navigator.startSignUpActivity(LogInActivity.this);
-            }
+//    private void onSwipe(){
+//        lLogin.setOnTouchListener(new OnSwipeTouchListener(LogInActivity.this) {
+//            public void onSwipeTop() {
+//                navigator.startSignUpActivity(LogInActivity.this);
+//            }
+//
+//
+//        });
+//        tvSignUp.setOnTouchListener(new OnSwipeTouchListener(LogInActivity.this) {
+//            public void onSwipeTop() {
+//                navigator.startSignUpActivity(LogInActivity.this);
+//            }
+//
+//            @Override
+//            public boolean onTouch(View v, MotionEvent event) {
+//                if(event.getAction() == MotionEvent.ACTION_DOWN){
+//                    navigator.startSignUpActivity(LogInActivity.this);
+//                    return true;
+//                }
+//                return false;
+//            }
+//        });
+//    }
 
-
-        });
-        tvSignUp.setOnTouchListener(new OnSwipeTouchListener(LogInActivity.this) {
-            public void onSwipeTop() {
-                navigator.startSignUpActivity(LogInActivity.this);
-            }
-
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if(event.getAction() == MotionEvent.ACTION_DOWN){
-                    navigator.startSignUpActivity(LogInActivity.this);
-                    return true;
-                }
-                return false;
-            }
-        });
+    @OnClick(R.id.tvSignUp)
+    public void onSignUpButtonCLick(){
+        navigator.startSignUpActivity(LogInActivity.this);
     }
 }

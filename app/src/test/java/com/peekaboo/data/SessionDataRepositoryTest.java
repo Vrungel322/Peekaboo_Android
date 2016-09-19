@@ -1,13 +1,16 @@
 package com.peekaboo.data;
 
+import com.google.gson.Gson;
 import com.peekaboo.data.mappers.AbstractMapperFactory;
 import com.peekaboo.data.repositories.SessionDataRepository;
+import com.peekaboo.data.repositories.database.contacts.Contact;
 import com.peekaboo.data.repositories.database.messages.PMessage;
 import com.peekaboo.data.rest.ConfirmKey;
 import com.peekaboo.data.rest.RestApi;
 import com.peekaboo.data.rest.entity.Credentials;
 import com.peekaboo.data.rest.entity.CredentialsSignUp;
 import com.peekaboo.data.rest.entity.TokenEntity;
+import com.peekaboo.data.rest.entity.UserEntity;
 import com.peekaboo.domain.AccountUser;
 
 import org.junit.Before;
@@ -58,9 +61,18 @@ public class SessionDataRepositoryTest {
 
     final BlockingQueue<String> queue = new LinkedBlockingQueue<>();
 
+
+
     @Test
     public void rxQueueTest() {
         System.out.println(Arrays.deepToString("asd".split(" ")));
+        ArrayList<UserEntity> userEntities = new ArrayList<>();
+        userEntities.add(new UserEntity("1","name1"));
+        userEntities.add(new UserEntity("2","name2"));
+        userEntities.add(new UserEntity("3","name3"));
+        Gson gson = new Gson();
+        String s = gson.toJson(userEntities);
+        System.out.println(s);
 //        System.out.println(Thread.currentThread().hashCode());
 //
 //        Scheduler from = Schedulers.from(Executors.newSingleThreadExecutor());
@@ -187,7 +199,7 @@ public class SessionDataRepositoryTest {
     @Test
     public void whenLoginSuccessThenReturnUser() {
         when(restApi.login(any(Credentials.class))).thenReturn(Observable.just(new TokenEntity(TOKEN, ID)));
-        TestSubscriber<AccountUser> subscriber = new TestSubscriber<>();
+        TestSubscriber<List<Contact>> subscriber = new TestSubscriber<>();
         sessionDataRepository.login("username", "password").subscribe(subscriber);
         subscriber.awaitTerminalEvent();
 
@@ -202,7 +214,7 @@ public class SessionDataRepositoryTest {
                 subscriber -> {
                     subscriber.onError(new RuntimeException("Not Great"));
                 }));
-        TestSubscriber<AccountUser> subscriber = new TestSubscriber<>();
+        TestSubscriber<List<Contact>> subscriber = new TestSubscriber<>();
         sessionDataRepository.login("username", "password").subscribe(subscriber);
         subscriber.awaitTerminalEvent();
 

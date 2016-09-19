@@ -14,7 +14,7 @@ import android.widget.Toast;
 
 import com.peekaboo.R;
 import com.peekaboo.data.mappers.PContactMapper;
-import com.peekaboo.data.repositories.database.contacts.PContact;
+import com.peekaboo.data.repositories.database.contacts.Contact;
 import com.peekaboo.data.repositories.database.contacts.PContactHelper;
 import com.peekaboo.data.repositories.database.messages.PMessageHelper;
 import com.peekaboo.domain.User;
@@ -61,21 +61,21 @@ public class FriendTestFragment extends Fragment {
         view.findViewById(R.id.findButton).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                contactHelper.getAllContacts().subscribe(new Action1<List<PContact>>() {
-//                    @Override
-//                    public void call(List<PContact> pContacts) {
-//                        String contactId = null;
+                contactHelper.getAllContacts().subscribe(new Action1<List<Contact>>() {
+                    @Override
+                    public void call(List<Contact> pContacts) {
+                        String contactId = null;
                         final String friendName = receiver.getText().toString();
 ////
-//                        for (PContact pContact : pContacts) {
-//                            String s = pContact.contactName();
-//                            if (s.equals(friendName)) {
-//                                contactId = pContact.contactId();
-//                                break;
-//                            }
-//                        }
+                        for (Contact pContact : pContacts) {
+                            String s = pContact.contactName();
+                            if (s.equals(friendName)) {
+                                contactId = pContact.contactId();
+                                break;
+                            }
+                        }
 //
-//                        if (contactId == null) {
+                        if (contactId == null) {
                             findFriendUseCase.setFriendName(friendName);
                             findFriendUseCase.execute(new BaseUseCaseSubscriber<User>() {
                                 @Override
@@ -83,26 +83,26 @@ public class FriendTestFragment extends Fragment {
                                     super.onNext(user);
                                     Log.e("friend", String.valueOf(user));
                                     Toast.makeText(getActivity(), user.toString(), Toast.LENGTH_LONG).show();
-                                    Picasso.with(getActivity()).load(user.getAvatar()).into(avatar);
+//                                    Picasso.with(getActivity()).load(user.getName()).into(avatar);
 
-//                                    PContactMapper pContactMapper = new PContactMapper();
-//                                    String contactId = user.getId();
-//                                    ContentValues values = pContactMapper.transform(
-//                                            new PContact(friendName, "surname", "nickname", false, "", contactId)
-//                                    );
-//                                    contactHelper.insert(values);
-//                                    messageHelper.createTable(contactId);
-//                                    navigator.startChatActivity(getActivity(), contactId);
+                                    PContactMapper pContactMapper = new PContactMapper();
+                                    String contactId = user.getId();
+                                    ContentValues values = pContactMapper.transform(
+                                            new Contact(0, friendName, "surname", "nickname", false, "", contactId)
+                                    );
+                                    contactHelper.insert(values);
+                                    messageHelper.createTable(contactId);
+                                    navigator.startChatActivity(getActivity(), contactId);
                                 }
                             });
-//                        } else {
-//                            navigator.startChatActivity(getActivity(), contactId);
-//                        }
+                        } else {
+                            navigator.startChatActivity(getActivity(), contactId);
+                        }
                     }
                 });
 
-//            }
-//        });
+            }
+        });
         return view;
     }
 }

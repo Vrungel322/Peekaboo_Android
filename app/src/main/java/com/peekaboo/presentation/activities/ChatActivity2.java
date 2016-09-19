@@ -9,11 +9,13 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.EditText;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
@@ -22,7 +24,6 @@ import com.peekaboo.data.repositories.database.messages.PMessage;
 import com.peekaboo.domain.AccountUser;
 import com.peekaboo.presentation.PeekabooApplication;
 import com.peekaboo.presentation.adapters.ChatAdapter2;
-import com.peekaboo.presentation.dialogs.RecordDialogFragment;
 import com.peekaboo.presentation.listeners.ChatClickListener;
 import com.peekaboo.presentation.listeners.ChatRecyclerTouchListener;
 import com.peekaboo.presentation.presenters.ChatPresenter2;
@@ -38,6 +39,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnFocusChange;
+import butterknife.OnTouch;
 import io.codetail.animation.ViewAnimationUtils;
 import io.codetail.widget.RevealFrameLayout;
 
@@ -62,6 +64,12 @@ public class ChatActivity2 extends AppCompatActivity implements IChatView2 {
     HorizontalScrollView svItems;
     @BindView(R.id.llItems)
     LinearLayout llItems;
+    @BindView(R.id.micro_btn)
+    ImageButton bRecord;
+    @BindView(R.id.micro_anim)
+    ImageView microAnim;
+    @BindView(R.id.rflButtonRecord)
+    RevealFrameLayout rflButtonRecord;
     @Inject
     ChatPresenter2 presenter;
     @Inject
@@ -145,14 +153,13 @@ public class ChatActivity2 extends AppCompatActivity implements IChatView2 {
         return etMessageBody.getText().toString().trim().replaceAll("[\\s&&[^\r?\n]]+", " ");
     }
 
-    @OnClick(R.id.micro_btn)
-    public void onRecordButtonClick() {
-        showRecordDialog();
-    }
-
-    private void showRecordDialog() {
-        android.support.v4.app.DialogFragment recordFragment = RecordDialogFragment.newInstance();
-        recordFragment.show(getSupportFragmentManager(), RecordDialogFragment.TAG);
+    @OnTouch(R.id.micro_btn)
+    boolean onRecordButtonClick(MotionEvent mv) {
+        if (mv.getAction() == MotionEvent.ACTION_UP ||
+                mv.getAction() == MotionEvent.ACTION_DOWN) {
+            presenter.onRecordButtonClick();
+        }
+        return true;
     }
 
     @OnClick(R.id.bMessageOpen)
@@ -225,20 +232,39 @@ public class ChatActivity2 extends AppCompatActivity implements IChatView2 {
 
     @Override
     public void showRecordStart() {
-        RecordDialogFragment fragment = (RecordDialogFragment) getSupportFragmentManager()
-                .findFragmentByTag(RecordDialogFragment.TAG);
-        if (fragment != null) {
-            fragment.showRecordStart();
-        }
+
+        rflButtonRecord.setVisibility(View.VISIBLE);
+        microAnim.post(() -> {
+            float cx, cy;
+            cx = (bRecord.getX() + bRecord.getWidth()) / 2;
+            cy = (bRecord.getY() + bRecord.getHeight()) / 2;
+
+            float dx = Math.max(cx, microAnim.getWidth() - cx);
+            float dy = Math.max(cy, microAnim.getHeight() - cy);
+            float finalRadius = (float) Math.hypot(dx, dy);
+
+            Animator animator =
+                    ViewAnimationUtils.createCircularReveal(microAnim, (int) cx, (int) cy, 0, finalRadius);
+            animator.setInterpolator(new AccelerateDecelerateInterpolator());
+            animator.setDuration(1000);
+            animator.start();
+        });
+
+//        RecordDialogFragment fragment = (RecordDialogFragment) getSupportFragmentManager()
+//                .findFragmentByTag(RecordDialogFragment.TAG);
+//        if (fragment != null) {
+//            fragment.showRecordStart();
+//        }
     }
 
     @Override
     public void showRecordStop() {
-        RecordDialogFragment fragment = (RecordDialogFragment) getSupportFragmentManager()
-                .findFragmentByTag(RecordDialogFragment.TAG);
-        if (fragment != null) {
-            fragment.dismiss();
-        }
+        rflButtonRecord.setVisibility(View.GONE);
+//        RecordDialogFragment fragment = (RecordDialogFragment) getSupportFragmentManager()
+//                .findFragmentByTag(RecordDialogFragment.TAG);
+//        if (fragment != null) {
+//            fragment.dismiss();
+//        }
     }
 
     @Override

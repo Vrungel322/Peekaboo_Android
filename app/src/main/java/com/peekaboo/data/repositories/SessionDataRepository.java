@@ -1,18 +1,22 @@
 package com.peekaboo.data.repositories;
 
-import android.util.Log;
-
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.peekaboo.data.FileEntity;
 import com.peekaboo.data.mappers.AbstractMapperFactory;
+import com.peekaboo.data.mappers.Mapper;
+import com.peekaboo.data.repositories.database.contacts.Contact;
 import com.peekaboo.data.rest.ConfirmKey;
 import com.peekaboo.data.rest.RestApi;
 import com.peekaboo.data.rest.entity.Credentials;
 import com.peekaboo.data.rest.entity.CredentialsSignUp;
 import com.peekaboo.domain.AccountUser;
+import com.peekaboo.data.rest.entity.ContactEntity;
 import com.peekaboo.domain.SessionRepository;
 import com.peekaboo.domain.User;
 
-import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -34,13 +38,13 @@ public class SessionDataRepository implements SessionRepository {
     }
 
     @Override
-    public Observable<AccountUser> login(String login, String password) {
+    public Observable<List<Contact>> login(String login, String password) {
         return restApi.login(new Credentials(login, password))
                 .map(token -> {
                     user.saveToken(token.getToken());
                     user.saveId(token.getId());
                     return user;
-                });
+                }).flatMap(accountUser -> loadAllContacts());
     }
 
     @Override
@@ -75,5 +79,14 @@ public class SessionDataRepository implements SessionRepository {
     @Override
     public Call<ResponseBody> downloadFile(String remoteFileName) {
         return restApi.downloadFile(remoteFileName, user.getBearer());
+    }
+
+    @Override
+    public Observable<List<Contact>> loadAllContacts() {
+        Mapper<ContactEntity, Contact> contactEntityMapper = abstractMapperFactory.getContactEntityMapper();
+        return restApi.getAllContacts().map(userResponse -> (List<ContactEntity>) new Gson().fromJson(userResponse.usersList, new TypeToken<ArrayList<ContactEntity>>(){}.getType()))
+                .flatMapIterable(l -> l)
+                .map(contactEntityMapper::transform)
+                .toList();
     }
 }

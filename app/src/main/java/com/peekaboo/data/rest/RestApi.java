@@ -1,15 +1,15 @@
 package com.peekaboo.data.rest;
 
 import com.peekaboo.data.FileEntity;
+import com.peekaboo.data.rest.entity.ContactEntity;
 import com.peekaboo.data.rest.entity.Credentials;
 import com.peekaboo.data.rest.entity.CredentialsSignUp;
 import com.peekaboo.data.rest.entity.TokenEntity;
 import com.peekaboo.data.rest.entity.UserEntity;
-import com.peekaboo.data.utils.FileUtils;
-import com.peekaboo.domain.User;
+import com.peekaboo.data.rest.entity.UserResponse;
 
 import java.io.File;
-import java.io.FileNotFoundException;
+import java.util.List;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -55,5 +55,9 @@ public class RestApi {
 
     public Call<ResponseBody> downloadFile(String remoteFileName, String bearer) {
         return api.download(remoteFileName, bearer);
+    }
+
+    public Observable<UserResponse> getAllContacts() {
+        return api.getAllContacts();
     }
 }

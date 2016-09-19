@@ -25,7 +25,6 @@ import rx.Observable;
 /**
  * Created by st1ch on 23.07.2016.
  */
-@Singleton
 public class PMessageHelper {
 
     private static final String PREFIX = "c";
@@ -35,7 +34,6 @@ public class PMessageHelper {
     private SubscribeOn subscribeOn;
     private ObserveOn observeOn;
 
-    @Inject
     public PMessageHelper(DBHelper helper, PContactHelper contactHelper, SubscribeOn subscribeOn, ObserveOn observeOn, AbstractMapperFactory factory) {
         this.helper = helper;
         this.contactHelper = contactHelper;

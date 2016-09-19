@@ -20,6 +20,7 @@ import com.peekaboo.data.repositories.database.messages.PMessageAbs;
 import com.peekaboo.domain.DateSeparator;
 import com.peekaboo.presentation.app.view.RoundedTransformation;
 import com.peekaboo.presentation.presenters.ChatPresenter;
+import com.peekaboo.presentation.utils.ResourcesUtils;
 import com.peekaboo.utils.Constants;
 import com.peekaboo.utils.Utility;
 import com.squareup.picasso.Callback;
@@ -115,49 +116,35 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
         if (holder instanceof DatesViewHolder) {
-            ((DatesViewHolder) holder).tvDatesSeparator.setText(((DateSeparator) getItem(position)).getDate());
+//            ((DatesViewHolder) holder).tvDatesSeparator.setText(((DateSeparator) getItem(position)).getDate());
         } else if (holder instanceof ViewHolder && getItem(position) instanceof PMessageAbs) {
-
-            PMessageAbs pMessageAbs = (PMessageAbs) getItem(position);
+            position = holder.getAdapterPosition();
+            PMessageAbs pMessageAbs = (PMessageAbs)getItem(position);
             int mediaType = pMessageAbs.mediaType();
-            ViewHolder chatHolder = (ChatAdapter.ViewHolder) holder;
-            if (position == 0) {
-                setAlignment(chatHolder, pMessageAbs.isMine(), true, mediaType);
-            } else {
-                PMessageAbs pPreviousMessageAbs;
-                if (getItem(position - 1) instanceof DateSeparator && getItem(position - 2) != null) {
-                    pPreviousMessageAbs = (PMessageAbs) getItem(position - 2);
-                } else {
-                    pPreviousMessageAbs = (PMessageAbs) getItem(position - 1);
+            boolean nextMine = false;
+            boolean prevMine = false;
+            if (getItemCount() > 1) {
+                if (position < getItemCount() - 1) {
+                    nextMine = ((PMessageAbs)getItem(position + 1)).isMine();
                 }
-
-                setAlignment(chatHolder, pMessageAbs.isMine(), pPreviousMessageAbs.isMine(), mediaType);
+                if (position > 0) {
+                    prevMine = ((PMessageAbs)getItem(position - 1)).isMine();
+                }
             }
+            setAlignment((ViewHolder) holder, pMessageAbs.isMine(), prevMine, nextMine, mediaType);
 
             switch (mediaType) {
                 case PMessageAbs.PMESSAGE_MEDIA_TYPE.TEXT_MESSAGE:
-                    ((ViewHolderText) holder).tvChatMessage.setText(pMessageAbs.messageBody());
-//                ((ViewHolderText) holder).tvChatMessage.post(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        int lines = ((ViewHolderText) holder).tvChatMessage.getLineCount();
-//                        Toast.makeText(context, Integer.toString(lines), Toast.LENGTH_SHORT).show();
-//
-//                        if(lines == 1){
-//                            ((ViewHolderText) holder).chatBubble.setBackgroundResource(R.drawable.round_left_bubble);
-//                        }
-//                    }
-//                });
+                    ViewHolderText chatHolder = (ViewHolderText) holder;
+                    chatHolder.tvChatMessage.setText(pMessageAbs.messageBody());
 
+                    chatHolder.tvChatTimestamp.setText(Utility.getFriendlyDayString(context, pMessageAbs.timestamp()));
+
+                    setMessageStatus(chatHolder, pMessageAbs);
                     Log.i("TEXT", Integer.toString(mediaType));
                     break;
+
                 case PMessageAbs.PMESSAGE_MEDIA_TYPE.AUDIO_MESSAGE:
-                    boolean isPlaying = false;
-                    ((ViewHolderAudio) holder).ibPlayRecord
-                            .setOnClickListener(v -> {
-                                presenter.onStopAndPlayAudioClick(pMessageAbs.messageBody(), position);
-                            });
-                    ((ViewHolderAudio) holder).sbPlayProgress.setOnTouchListener((v, event) -> true);
                     break;
                 case PMessageAbs.PMESSAGE_MEDIA_TYPE.IMAGE_MESSAGE:
                     String image = pMessageAbs.messageBody();
@@ -171,9 +158,6 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     break;
             }
 
-            chatHolder.tvChatTimestamp.setText(Utility.getFriendlyDayString(context, pMessageAbs.timestamp()));
-
-            setMessageStatus(chatHolder, pMessageAbs);
         }
     }
 
@@ -193,41 +177,76 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     public int getItemCount() {
         return messages.size();
     }
+//
+//    private void setAlignment(ViewHolder holder, boolean isMine, boolean wasPreviousMine, int mediaType) {
+//        Log.i("ALIGMENT", Integer.toString(mediaType));
+//
+//        if (!isMine) {
+//            if (wasPreviousMine == isMine || mediaType == Constants.PMESSAGE_MEDIA_TYPE.IMAGE_MESSAGE) {
+//                holder.chatBubble.setBackgroundResource(R.drawable.left_bubble);
+//            } else {
+//                holder.chatBubble.setBackgroundResource(R.drawable.circle_gray_corner);
+//            }
+//            holder.tvChatTimestamp.setTextColor(context.getResources().getColor(R.color.drawerDividerColor));
+//
+//            RelativeLayout.LayoutParams layoutParams
+//                    = (RelativeLayout.LayoutParams) holder.chatBubble.getLayoutParams();
+//            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, 0);
+//            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+//            layoutParams.setMargins(Constants.DESIGN_CONSTANTS.SIDE_MARGIN, Constants.DESIGN_CONSTANTS.TOP_OR_BOTTOM_MARGIN,
+//                    Constants.DESIGN_CONSTANTS.BIG_SIDE_MARGIN, Constants.DESIGN_CONSTANTS.TOP_OR_BOTTOM_MARGIN);
+//            holder.chatBubble.setLayoutParams(layoutParams);
+//        } else {
+//            if (wasPreviousMine != isMine || mediaType == Constants.PMESSAGE_MEDIA_TYPE.IMAGE_MESSAGE) {
+//                holder.chatBubble.setBackgroundResource(R.drawable.right_bubble);
+//            } else {
+//                holder.chatBubble.setBackgroundResource(R.drawable.circle_blue_corner);
+//            }
+//
+//            RelativeLayout.LayoutParams layoutParams
+//                    = (RelativeLayout.LayoutParams) holder.chatBubble.getLayoutParams();
+//            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT, 0);
+//            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+//            layoutParams.setMargins(Constants.DESIGN_CONSTANTS.BIG_SIDE_MARGIN, Constants.DESIGN_CONSTANTS.TOP_OR_BOTTOM_MARGIN,
+//                    Constants.DESIGN_CONSTANTS.SIDE_MARGIN, Constants.DESIGN_CONSTANTS.TOP_OR_BOTTOM_MARGIN);
+//            holder.chatBubble.setLayoutParams(layoutParams);
+//        }
+//
+//    }
+//
 
-    private void setAlignment(ViewHolder holder, boolean isMine, boolean wasPreviousMine, int mediaType) {
+
+    private void setAlignment(ViewHolder holder, boolean isMine, boolean wasPreviousMine, boolean isNextMine, int mediaType) {
         Log.i("ALIGMENT", Integer.toString(mediaType));
 
-        if (!isMine) {
-            if (wasPreviousMine == isMine || mediaType == PMessageAbs.PMESSAGE_MEDIA_TYPE.IMAGE_MESSAGE) {
-                holder.chatBubble.setBackgroundResource(R.drawable.left_bubble);
-            } else {
-                holder.chatBubble.setBackgroundResource(R.drawable.left);
-            }
-            holder.tvChatTimestamp.setTextColor(context.getResources().getColor(R.color.drawerDividerColor));
+        holder.tvChatTimestamp
+                .setTextColor(ResourcesUtils.getColor(context, isMine ? R.color.colorDarkAccent : R.color.timestampColor));
 
-            RelativeLayout.LayoutParams layoutParams
-                    = (RelativeLayout.LayoutParams) holder.chatBubble.getLayoutParams();
-            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, 0);
-            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-            layoutParams.setMargins(Constants.DESIGN_CONSTANTS.SIDE_MARGIN, Constants.DESIGN_CONSTANTS.TOP_OR_BOTTOM_MARGIN,
-                    Constants.DESIGN_CONSTANTS.BIG_SIDE_MARGIN, Constants.DESIGN_CONSTANTS.TOP_OR_BOTTOM_MARGIN);
-            holder.chatBubble.setLayoutParams(layoutParams);
+        RelativeLayout.LayoutParams layoutParams
+                = (RelativeLayout.LayoutParams) holder.chatBubble.getLayoutParams();
+        layoutParams.addRule(isMine ? RelativeLayout.ALIGN_PARENT_LEFT : RelativeLayout.ALIGN_PARENT_RIGHT, 0);
+        layoutParams.addRule(isMine ? RelativeLayout.ALIGN_PARENT_RIGHT : RelativeLayout.ALIGN_PARENT_LEFT);
+        layoutParams.setMargins(
+                isMine ? Constants.DESIGN_CONSTANTS.BIG_SIDE_MARGIN : Constants.DESIGN_CONSTANTS.SIDE_MARGIN,
+                Constants.DESIGN_CONSTANTS.TOP_OR_BOTTOM_MARGIN,
+                isMine ? Constants.DESIGN_CONSTANTS.SIDE_MARGIN : Constants.DESIGN_CONSTANTS.BIG_SIDE_MARGIN,
+                Constants.DESIGN_CONSTANTS.TOP_OR_BOTTOM_MARGIN
+        );
+        holder.chatBubble.setLayoutParams(layoutParams);
+        if (isMine) {
+            if (!isNextMine) {
+                holder.chatBubble.setBackgroundResource(R.drawable.circle_blue_corner);
+            } else {
+                holder.chatBubble.setBackgroundResource(R.drawable.circle_blue);
+            }
         } else {
-            if (wasPreviousMine != isMine || mediaType == PMessageAbs.PMESSAGE_MEDIA_TYPE.IMAGE_MESSAGE) {
-                holder.chatBubble.setBackgroundResource(R.drawable.right_bubble);
+
+            if (wasPreviousMine) {
+                holder.chatBubble.setBackgroundResource(R.drawable.circle_gray_corner);
             } else {
-                holder.chatBubble.setBackgroundResource(R.drawable.right);
+                holder.chatBubble.setBackgroundResource(R.drawable.circle_gray);
             }
-
-            RelativeLayout.LayoutParams layoutParams
-                    = (RelativeLayout.LayoutParams) holder.chatBubble.getLayoutParams();
-            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT, 0);
-            layoutParams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-            layoutParams.setMargins(Constants.DESIGN_CONSTANTS.BIG_SIDE_MARGIN, Constants.DESIGN_CONSTANTS.TOP_OR_BOTTOM_MARGIN,
-                    Constants.DESIGN_CONSTANTS.SIDE_MARGIN, Constants.DESIGN_CONSTANTS.TOP_OR_BOTTOM_MARGIN);
-            holder.chatBubble.setLayoutParams(layoutParams);
         }
-
     }
 
     private void setMessageStatus(ViewHolder holder, PMessageAbs message) {

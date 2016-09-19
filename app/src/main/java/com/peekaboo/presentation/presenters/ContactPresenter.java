@@ -1,12 +1,19 @@
 package com.peekaboo.presentation.presenters;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.peekaboo.data.mappers.AbstractMapperFactory;
-import com.peekaboo.data.repositories.database.contacts.PContact;
-import com.peekaboo.data.repositories.database.contacts.PContactAbs;
+import com.peekaboo.data.repositories.database.contacts.Contact;
+import com.peekaboo.data.repositories.database.contacts.ContactAbs;
 import com.peekaboo.data.repositories.database.contacts.PContactHelper;
+import com.peekaboo.domain.UserMessageMapper;
+import com.peekaboo.domain.subscribers.BaseProgressSubscriber;
+import com.peekaboo.domain.usecase.GetContactsUseCase;
+import com.peekaboo.presentation.views.IContactsView;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -15,27 +22,47 @@ import rx.functions.Action1;
 /**
  * Created by Nikita on 11.08.2016.
  */
-public class ContactPresenter implements IContactPresenter {
+public class ContactPresenter extends ProgressPresenter<IContactsView> implements IContactPresenter {
 
+    private GetContactsUseCase useCase;
+    private PContactHelper contactHelper;
     private Context context;
     private AbstractMapperFactory mapperFactory;
     private PContactHelper pContactHelper;
 
     @Inject
-    public ContactPresenter(Context context, AbstractMapperFactory mapperFactory, PContactHelper pContactHelper) {
+    public ContactPresenter(Context context, AbstractMapperFactory mapperFactory, PContactHelper contactHelper,
+                            GetContactsUseCase useCase, UserMessageMapper errorHandler) {
+        super(errorHandler);
         this.context = context;
         this.mapperFactory = mapperFactory;
-        this.pContactHelper = pContactHelper;
+        this.contactHelper = contactHelper;
+        this.useCase = useCase;
     }
 
     @Override
-    public void createTable(String tableName) {
-//        pContactHelper.createTable(tableName);
+    public void loadContactsList() {
+        useCase.execute(getContactsSubscriber());
+    }
+
+    @NonNull
+    private BaseProgressSubscriber<List<Contact>> getContactsSubscriber() {
+        return new BaseProgressSubscriber<List<Contact>>(this) {
+            @Override
+            public void onNext(List<Contact> response) {
+                super.onNext(response);
+                Log.e("onNext", String.valueOf(response));
+                IContactsView view = getView();
+                if (view != null) {
+                    view.loadContactsList();
+                }
+            }
+        };
     }
 
     @Override
-    public void insertContactToTable(String tableName, PContact contact) {
-        pContactHelper.insert(mapperFactory.getPContactMapper().transform(contact));
+    public void insertContactToTable(Contact contact) {
+        contactHelper.insert(mapperFactory.getPContactMapper().transform(contact));
     }
 
     @Override
@@ -44,15 +71,10 @@ public class ContactPresenter implements IContactPresenter {
     }
 
     @Override
-    public void dropTableAndCreate(String tableName) {
-        pContactHelper.dropTableAndCreate();
-    }
-
-    @Override
     public void getAllTableAsString(String tableName) {
-        pContactHelper.getAllContacts()
+        contactHelper.getAllContacts()
                 .subscribe(pContactAbses -> {
-                    for (PContactAbs pContact : pContactAbses){
+                    for (ContactAbs pContact : pContactAbses) {
                         Log.wtf("DB_LOG", "ID: " + pContact.contactId()
                                 + "; CONTACT_NAME: " + pContact.contactName()
                                 + "; CONTACT_SURNAME: " + pContact.contactSurname()

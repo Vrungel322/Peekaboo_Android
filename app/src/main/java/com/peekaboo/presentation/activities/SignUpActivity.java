@@ -4,10 +4,10 @@ import android.os.Bundle;
 import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.klinker.android.sliding.SlidingActivity;
 import com.peekaboo.R;
 import com.peekaboo.presentation.PeekabooApplication;
 import com.peekaboo.presentation.app.view.PasswordView;
@@ -27,7 +27,7 @@ import butterknife.OnTouch;
 /**
  * Created by sebastian on 05.07.16.
  */
-public class SignUpActivity extends SlidingActivity implements ISignUpView {
+public class SignUpActivity  extends AppCompatActivity implements ISignUpView {
 
     public static final String PROGRESS_DIALOG = "progress_dialog";
     public static final String CONFIRM_SIGN_UP_DIALOG = "confirmSignUpDialog";
@@ -52,27 +52,12 @@ public class SignUpActivity extends SlidingActivity implements ISignUpView {
     ActivityNavigator navigator;
 
     @Override
-    public void init(Bundle savedInstanceState) {
-        //super.onCreate(savedInstanceState);
-        //init(savedInstanceState);
-
-//        setTitle("Activity Title");
-//
-//        setPrimaryColors(
-//                getResources().getColor(R.color.colorPrimary),
-//                getResources().getColor(R.color.colorPrimaryDark)
-//        );
-
-
-        setContent(R.layout.activity_sign_up);
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_sign_up);
         ButterKnife.bind(this);
         PeekabooApplication.getApp(this).getComponent().inject(this);
         signUpPresenter.bind(this);
-        enableFullscreen();
-        disableHeader();
-//        showConfirmDialog();
-        //onSwipe();
-
     }
 
     @Override
@@ -92,16 +77,16 @@ public class SignUpActivity extends SlidingActivity implements ISignUpView {
             fragment.dismiss();
         }
     }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        etUsername.setText("Vrungel");
-        etLogin.setText("geronimoapachi@gmail.com");
-        pvPasswordConfirm.setText("asdasd");
-        pvPassword.setText("asdasd");
-
-    }
+//
+//    @Override
+//    protected void onStart() {
+//        super.onStart();
+//        etUsername.setText("Vrungel");
+//        etLogin.setText("geronimoapachi@gmail.com");
+//        pvPasswordConfirm.setText("asdasd");
+//        pvPassword.setText("asdasd");
+//
+//    }
 
     @Override
     protected void onDestroy() {
@@ -198,11 +183,4 @@ public class SignUpActivity extends SlidingActivity implements ISignUpView {
         signUpPresenter.onSignUpButtonClick(username, login, password, passwordConfirm);
     }
 
-    private void onSwipe() {
-//        lSignUp.setOnTouchListener(new OnSwipeTouchListener(SignUpActivity.this) {
-//            public void onSwipeBottom() {
-//                navigator.startLogInActivity(SignUpActivity.this);
-//            }
-//        });
-    }
 }

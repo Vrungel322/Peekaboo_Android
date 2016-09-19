@@ -12,7 +12,7 @@ import rx.functions.Func1;
  * Created by Nikita on 10.08.2016.
  */
 @AutoValue
-public abstract class PContactAbs {
+public abstract class ContactAbs {
 
     public static final String ID = "_id";
     public static final String CONTACT_NAME = "CONTACT_NAME";
@@ -29,22 +29,6 @@ public abstract class PContactAbs {
     public abstract String contactNickname();
     public abstract boolean isOnline();
     public abstract String contactImgUri();
-
-    public static final Func1<Cursor, PContactAbs> MAPPER = new Func1<Cursor, PContactAbs>() {
-        @Override
-        public PContactAbs call(Cursor cursor) {
-            long id = Db.getLong(cursor, ID);
-            String contactId = Db.getString(cursor, CONTACT_ID);
-            String contactName = Db.getString(cursor, CONTACT_NAME);
-            String contactSurname = Db.getString(cursor, CONTACT_SURNAME);
-            String contactNickname = Db.getString(cursor, CONTACT_NICKNAME);
-            boolean isOnline = Db.getBoolean(cursor, CONTACT_IS_ONLINE);
-            String contactImgUri = Db.getString(cursor, CONTACT_IMG_URI);
-
-            return new AutoValue_PContactAbs(id, contactId, contactName, contactSurname, contactNickname,
-                    isOnline, contactImgUri);
-        }
-    };
 
     public static final class Builder{
         private final ContentValues cv = new ContentValues();

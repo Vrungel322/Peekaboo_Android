@@ -22,7 +22,6 @@ import rx.Observable;
 /**
  * Created by Nikita on 10.08.2016.
  */
-@Singleton
 public class PContactHelper {
 
     private static final String TABLE_NAME = "Contacts";
@@ -30,7 +29,6 @@ public class PContactHelper {
     private SubscribeOn subscribeOn;
     private ObserveOn observeOn;
 
-    @Inject
     public PContactHelper(DBHelper helper, SubscribeOn subscribeOn, ObserveOn observeOn) {
         this.helper = helper;
         this.subscribeOn = subscribeOn;
@@ -42,13 +40,13 @@ public class PContactHelper {
         SQLiteDatabase db = helper.getWritableDatabase();
         String CREATE_TABLE = "CREATE TABLE IF NOT EXISTS " + TABLE_NAME + " " +
                 "(" +
-                PContactAbs.ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
-                PContactAbs.CONTACT_ID + " TEXT NOT NULL," +
-                PContactAbs.CONTACT_NAME + " TEXT NOT NULL," +
-                PContactAbs.CONTACT_SURNAME + " TEXT NOT NULL," +
-                PContactAbs.CONTACT_NICKNAME + " TEXT NOT NULL," +
-                PContactAbs.CONTACT_IS_ONLINE + " INTEGER NOT NULL," +
-                PContactAbs.CONTACT_IMG_URI + " TEXT NOT NULL" +
+                ContactAbs.ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
+                ContactAbs.CONTACT_ID + " TEXT NOT NULL," +
+                ContactAbs.CONTACT_NAME + " TEXT NOT NULL," +
+                ContactAbs.CONTACT_SURNAME + " TEXT NOT NULL," +
+                ContactAbs.CONTACT_NICKNAME + " TEXT NOT NULL," +
+                ContactAbs.CONTACT_IS_ONLINE + " INTEGER NOT NULL," +
+                ContactAbs.CONTACT_IMG_URI + " TEXT NOT NULL" +
                 ");";
         db.execSQL(CREATE_TABLE);
     }
@@ -58,7 +56,7 @@ public class PContactHelper {
         return db.insert(TABLE_NAME, null, cv);
     }
 
-    public Observable<List<PContact>> getAllContacts() {
+    public Observable<List<Contact>> getAllContacts() {
         String selectAll = "SELECT * FROM " + TABLE_NAME;
         return select(selectAll)
                 .subscribeOn(subscribeOn.getScheduler())
@@ -73,10 +71,10 @@ public class PContactHelper {
     }
 
     @NonNull
-    private Observable<List<PContact>> select(String query) {
+    private Observable<List<Contact>> select(String query) {
         Log.e("helper", query);
-        return Observable.create((Observable.OnSubscribe<List<PContact>>) subscriber -> {
-            List<PContact> messages = new ArrayList<>();
+        return Observable.create((Observable.OnSubscribe<List<Contact>>) subscriber -> {
+            List<Contact> messages = new ArrayList<>();
             SQLiteDatabase db = helper.getWritableDatabase();
 
             Cursor cursor = db.rawQuery(query, null);
@@ -92,14 +90,15 @@ public class PContactHelper {
         });
     }
 
-    private PContact fetchPContact(Cursor cursor) {
-        String contactId = Db.getString(cursor, PContactAbs.CONTACT_ID);
-        String contactName = Db.getString(cursor, PContactAbs.CONTACT_NAME);
-        String contactSurname = Db.getString(cursor, PContactAbs.CONTACT_SURNAME);
-        String contactNickname = Db.getString(cursor, PContactAbs.CONTACT_NICKNAME);
-        boolean isOnline = Db.getBoolean(cursor, PContactAbs.CONTACT_IS_ONLINE);
-        String contactImgUri = Db.getString(cursor, PContactAbs.CONTACT_IMG_URI);
+    private Contact fetchPContact(Cursor cursor) {
+        long id = Db.getLong(cursor, ContactAbs.CONTACT_ID);
+        String contactId = Db.getString(cursor, ContactAbs.CONTACT_ID);
+        String contactName = Db.getString(cursor, ContactAbs.CONTACT_NAME);
+        String contactSurname = Db.getString(cursor, ContactAbs.CONTACT_SURNAME);
+        String contactNickname = Db.getString(cursor, ContactAbs.CONTACT_NICKNAME);
+        boolean isOnline = Db.getBoolean(cursor, ContactAbs.CONTACT_IS_ONLINE);
+        String contactImgUri = Db.getString(cursor, ContactAbs.CONTACT_IMG_URI);
 
-        return new PContact(contactName, contactSurname, contactNickname, isOnline, contactImgUri, contactId);
+        return new Contact(id, contactName, contactSurname, contactNickname, isOnline, contactImgUri, contactId);
     }
 }

@@ -4,6 +4,9 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
 /**
  * Created by Nikita on 18.07.2016.
  */

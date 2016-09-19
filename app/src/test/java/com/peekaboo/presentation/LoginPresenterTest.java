@@ -2,6 +2,7 @@ package com.peekaboo.presentation;
 
 import android.test.mock.MockContext;
 
+import com.peekaboo.data.repositories.database.contacts.Contact;
 import com.peekaboo.domain.AccountUser;
 import com.peekaboo.domain.UserMessageMapper;
 import com.peekaboo.domain.SessionRepository;
@@ -11,6 +12,9 @@ import com.peekaboo.presentation.views.ICredentialsView;
 
 import org.junit.Test;
 import org.mockito.Mock;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import rx.Observable;
 import rx.Subscriber;
@@ -88,8 +92,8 @@ public class LoginPresenterTest extends BasePresenterTest {
         }
 
         @Override
-        protected Observable<AccountUser> getUseCaseObservable() {
-            return Observable.just(mock(AccountUser.class));
+        protected Observable<List<Contact>> getUseCaseObservable() {
+            return Observable.just(new ArrayList<>());
         }
     }
 
@@ -99,13 +103,8 @@ public class LoginPresenterTest extends BasePresenterTest {
         }
 
         @Override
-        protected Observable<AccountUser> getUseCaseObservable() {
-            return Observable.create(new Observable.OnSubscribe<AccountUser>() {
-                @Override
-                public void call(Subscriber<? super AccountUser> subscriber) {
-                    subscriber.onError(new RuntimeException("Not great"));
-                }
-            });
+        protected Observable<List<Contact>> getUseCaseObservable() {
+            return Observable.create((Observable.OnSubscribe<List<Contact>>) subscriber -> subscriber.onError(new RuntimeException("Not great")));
         }
     }
 

@@ -3,7 +3,7 @@ package com.peekaboo.data.repositories.database.contacts;
 /**
  * Created by Nikita on 10.08.2016.
  */
-public class PContact extends PContactAbs {
+public class Contact extends ContactAbs {
 
     private long id;
     private String contactName;
@@ -13,8 +13,9 @@ public class PContact extends PContactAbs {
     private String contactImgUri;
     private String contactId;
 
-    public PContact(String contactName, String contactSurname, String contactNickname,
-                    boolean isOnline, String contactImgUri, String contactId) {
+    public Contact(long id, String contactName, String contactSurname, String contactNickname,
+                   boolean isOnline, String contactImgUri, String contactId) {
+        this.id = id;
         this.contactName = contactName;
         this.contactSurname = contactSurname;
         this.contactNickname = contactNickname;
