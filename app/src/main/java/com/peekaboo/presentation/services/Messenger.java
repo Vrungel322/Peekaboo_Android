@@ -113,6 +113,7 @@ public class Messenger implements IMessenger,
      */
     private void handleIncomingMessage(Message message) {
         PMessage pMessage = MessageUtils.convert(user.getId(), message);
+        Log.e("Messenger", "type " + pMessage.mediaType());
 //        if (pMessage.mediaType() == PMessage.PMESSAGE_MEDIA_TYPE.AUDIO_MESSAGE) {
 //            pMessage.setDownloaded(false);
 //        }
@@ -136,8 +137,9 @@ public class Messenger implements IMessenger,
                 listener.onMessageUpdated(pMessage);
             }
         }
-
+        Log.e("Messenger", "type " + pMessage.mediaType());
         if (pMessage.mediaType() == PMessage.PMESSAGE_MEDIA_TYPE.AUDIO_MESSAGE) {
+            Log.e("Messenger", "download begin");
             downloadFileUseCase.execute(pMessage, getDownloadSubscriber());
         }
 
@@ -222,7 +224,8 @@ public class Messenger implements IMessenger,
                 super.onNext(pair);
                 PMessage first = pair.first;
                 String second = pair.second;
-                helper.updateBody(first.receiverId(), first, first.messageBody() + PMessage.DIVIDER + second);
+                helper.updateBody(first.senderId(), first, first.messageBody() + PMessage.DIVIDER + second);
+
                 for (MessengerListener listener : listeners) {
                     listener.onMessageUpdated(first);
                 }

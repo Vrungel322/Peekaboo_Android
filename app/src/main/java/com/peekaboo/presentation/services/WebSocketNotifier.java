@@ -80,7 +80,7 @@ public class WebSocketNotifier implements INotifier<Message> {
                                 mainThread.run(() -> {
 
                                     Message obtainedMessage = btm.transform(binary);
-                                    Log.e(TAG, "Status: transformed to " + obtainedMessage);
+                                    Log.e(TAG, "Status: transformed to " + obtainedMessage + " " + listeners);
 
                                     for (NotificationListener<Message> listener : listeners) {
                                         listener.onMessageObtained(obtainedMessage);

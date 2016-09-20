@@ -84,7 +84,7 @@ public class SessionDataRepository implements SessionRepository {
     @Override
     public Observable<List<Contact>> loadAllContacts() {
         Mapper<ContactEntity, Contact> contactEntityMapper = abstractMapperFactory.getContactEntityMapper();
-        return restApi.getAllContacts().map(userResponse -> (List<ContactEntity>) new Gson().fromJson(userResponse.usersList, new TypeToken<ArrayList<ContactEntity>>(){}.getType()))
+        return restApi.getAllContacts().map(userResponse -> userResponse.usersList/*(List<ContactEntity>) new Gson().fromJson(userResponse.usersList, new TypeToken<ArrayList<ContactEntity>>(){}.getType())*/)
                 .flatMapIterable(l -> l)
                 .map(contactEntityMapper::transform)
                 .toList();

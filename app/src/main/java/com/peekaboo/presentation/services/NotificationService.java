@@ -19,7 +19,7 @@ import javax.inject.Inject;
 public class NotificationService extends Service {
 
     @Inject
-    INotifier<Message> notifier;
+    IMessenger notifier;
 
     @Inject
     AccountUser user;

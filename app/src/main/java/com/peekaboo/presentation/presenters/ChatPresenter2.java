@@ -65,6 +65,7 @@ public class ChatPresenter2 extends BasePresenter<IChatView2> implements IChatPr
             subscriptions.add(messenger.getAllMessages(receiver)
                     .subscribe(pMessageAbses -> {
                         subscriptions.unsubscribe();
+                        Log.e("chat presenter", "" + pMessageAbses);
                         IChatView2 view = getView();
                         if (view != null) {
                             view.showMessages(pMessageAbses);

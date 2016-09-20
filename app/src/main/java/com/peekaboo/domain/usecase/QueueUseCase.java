@@ -1,6 +1,7 @@
 package com.peekaboo.domain.usecase;
 
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 import com.peekaboo.domain.Pair;
 import com.peekaboo.domain.schedulers.ObserveOn;
