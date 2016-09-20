@@ -120,7 +120,7 @@ public class ContactsFragment extends Fragment implements IContactsView {
     }
 
     @Override
-    public void loadContactsList() {
+    public void showContactsList() {
         listViewIndexable.setBackgroundColor(Color.CYAN);
         showToastMessage("MAKE NOTICE");
     }

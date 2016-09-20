@@ -54,7 +54,7 @@ public class ContactPresenter extends ProgressPresenter<IContactsView> implement
                 Log.e("onNext", String.valueOf(response));
                 IContactsView view = getView();
                 if (view != null) {
-                    view.loadContactsList();
+                    view.showContactsList();
                 }
             }
         };
