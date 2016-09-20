@@ -38,8 +38,7 @@ public class MapperFactory implements AbstractMapperFactory {
 
     @Override
     public Mapper<ContactEntity, Contact> getContactEntityMapper() {
-
-        return obj -> new Contact(0, obj.getName(), "", obj.getUsername(), false, "", String.valueOf(obj.getId()));
+        return new ContactEntityToContactMapper();
     }
 
 }
