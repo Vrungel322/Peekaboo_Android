@@ -27,4 +27,6 @@ public interface SessionRepository {
     Call<ResponseBody> downloadFile(String remoteFileName);
 
     Observable<List<Contact>> loadAllContacts();
+
+    Observable<List<Contact>> loadAllContactsFromDb();
 }

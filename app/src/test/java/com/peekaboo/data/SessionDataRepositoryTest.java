@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import com.peekaboo.data.mappers.AbstractMapperFactory;
 import com.peekaboo.data.repositories.SessionDataRepository;
 import com.peekaboo.data.repositories.database.contacts.Contact;
+import com.peekaboo.data.repositories.database.contacts.PContactHelper;
 import com.peekaboo.data.repositories.database.messages.PMessage;
 import com.peekaboo.data.rest.ConfirmKey;
 import com.peekaboo.data.rest.RestApi;
@@ -50,22 +51,19 @@ public class SessionDataRepositoryTest {
     private AccountUser user;
     @Mock
     private AbstractMapperFactory mapper;
+    @Mock
+    PContactHelper contactHelper;
 
     private SessionDataRepository sessionDataRepository;
 
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        sessionDataRepository = new SessionDataRepository(restApi, mapper, user);
+        sessionDataRepository = new SessionDataRepository(restApi, mapper, user, contactHelper);
     }
-
-    final BlockingQueue<String> queue = new LinkedBlockingQueue<>();
-
-
 
     @Test
     public void rxQueueTest() {
-        System.out.println(Arrays.deepToString("asd".split(" ")));
         ArrayList<UserEntity> userEntities = new ArrayList<>();
         userEntities.add(new UserEntity("1","name1"));
         userEntities.add(new UserEntity("2","name2"));

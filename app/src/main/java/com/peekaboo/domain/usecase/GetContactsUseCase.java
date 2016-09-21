@@ -25,6 +25,6 @@ public class GetContactsUseCase extends UseCase<List<Contact>> {
 
     @Override
     protected Observable<List<Contact>> getUseCaseObservable() {
-        return sessionRepository.loadAllContacts();
+        return sessionRepository.loadAllContactsFromDb();
     }
 }

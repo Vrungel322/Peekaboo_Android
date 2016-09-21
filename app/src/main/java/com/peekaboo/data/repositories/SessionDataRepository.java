@@ -6,6 +6,7 @@ import com.peekaboo.data.FileEntity;
 import com.peekaboo.data.mappers.AbstractMapperFactory;
 import com.peekaboo.data.mappers.Mapper;
 import com.peekaboo.data.repositories.database.contacts.Contact;
+import com.peekaboo.data.repositories.database.contacts.PContactHelper;
 import com.peekaboo.data.rest.ConfirmKey;
 import com.peekaboo.data.rest.RestApi;
 import com.peekaboo.data.rest.entity.Credentials;
@@ -21,6 +22,7 @@ import java.util.List;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import rx.Observable;
+import rx.functions.Func1;
 
 /**
  * Created by Arkadiy on 05.06.2016.
@@ -29,12 +31,14 @@ public class SessionDataRepository implements SessionRepository {
 
     private final AbstractMapperFactory abstractMapperFactory;
     private AccountUser user;
+    private PContactHelper contactHelper;
     private RestApi restApi;
 
-    public SessionDataRepository(RestApi restApi, AbstractMapperFactory abstractMapperFactory, AccountUser user) {
+    public SessionDataRepository(RestApi restApi, AbstractMapperFactory abstractMapperFactory, AccountUser user, PContactHelper contactHelper) {
         this.restApi = restApi;
         this.abstractMapperFactory = abstractMapperFactory;
         this.user = user;
+        this.contactHelper = contactHelper;
     }
 
     @Override
@@ -84,9 +88,18 @@ public class SessionDataRepository implements SessionRepository {
     @Override
     public Observable<List<Contact>> loadAllContacts() {
         Mapper<ContactEntity, Contact> contactEntityMapper = abstractMapperFactory.getContactEntityMapper();
-        return restApi.getAllContacts().map(userResponse -> userResponse.usersList/*(List<ContactEntity>) new Gson().fromJson(userResponse.usersList, new TypeToken<ArrayList<ContactEntity>>(){}.getType())*/)
+        return restApi.getAllContacts().map(userResponse -> userResponse.usersList)
                 .flatMapIterable(l -> l)
-                .map(contactEntityMapper::transform)
+                .map(contactEntity -> {
+                    Contact contact = contactEntityMapper.transform(contactEntity);
+                    contactHelper.insert(contact);
+                    return contact;
+                })
                 .toList();
+    }
+
+    @Override
+    public Observable<List<Contact>> loadAllContactsFromDb() {
+        return contactHelper.getAllContacts();
     }
 }

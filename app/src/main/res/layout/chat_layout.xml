@@ -6,24 +6,24 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <android.support.design.widget.AppBarLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:theme="@style/AppTheme.AppBarOverlay">
+    <!--<android.support.design.widget.AppBarLayout-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:theme="@style/AppTheme.AppBarOverlay">-->
 
-        <android.support.v7.widget.Toolbar
-            android:id="@+id/toolbarChat"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:background="@color/colorAccent"
-            android:titleTextColor="@color/textColor"
-            app:contentInsetStart="-20dp">
+        <!--<android.support.v7.widget.Toolbar-->
+            <!--android:id="@+id/toolbarChat"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="?attr/actionBarSize"-->
+            <!--android:background="@color/colorAccent"-->
+            <!--android:titleTextColor="@color/textColor"-->
+            <!--app:contentInsetStart="-20dp">-->
 
-            <include layout="@layout/toolbar_layout" />
+            <!--<include layout="@layout/toolbar_layout" />-->
 
-        </android.support.v7.widget.Toolbar>
+        <!--</android.support.v7.widget.Toolbar>-->
 
-    </android.support.design.widget.AppBarLayout>
+    <!--</android.support.design.widget.AppBarLayout>-->
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rvMessages"

@@ -3,7 +3,9 @@ package com.peekaboo.utils;
 import android.content.Context;
 import android.content.Intent;
 
-import com.peekaboo.presentation.activities.ChatActivity2;
+import com.peekaboo.R;
+import com.peekaboo.data.repositories.database.contacts.Contact;
+import com.peekaboo.presentation.activities.ChatFragment;
 import com.peekaboo.presentation.activities.LogInActivity;
 import com.peekaboo.presentation.activities.MainActivity;
 import com.peekaboo.presentation.activities.SignUpActivity;
@@ -47,9 +49,11 @@ public class ActivityNavigator {
         mActivityContext.startActivity(intent);
     }
 
-    public void startChatActivity(Context context, String companionId) {
-        Intent intent = new Intent(context, ChatActivity2.class);
-        intent.putExtra(ChatActivity2.COMPANION_ID, companionId);
-        context.startActivity(intent);
+    public void startChatActivity(MainActivity activity, Contact companion) {
+        activity.getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragmentContainer, ChatFragment.newInstance(companion))
+                .addToBackStack(null)
+                .commit();
     }
 }
