@@ -25,4 +25,6 @@ public interface AbstractMapperFactory {
     Mapper<Contact, ContentValues> getPContactMapper();
 
     Mapper<ContactEntity, Contact> getContactEntityMapper();
+
+    Mapper<Contact, ContentValues> getContactToContentValueMapper();
 }

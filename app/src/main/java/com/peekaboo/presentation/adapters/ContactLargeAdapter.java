@@ -12,10 +12,10 @@ import com.peekaboo.presentation.widget.RecyclerViewFastScroller.BubbleTextGette
 import java.util.ArrayList;
 import java.util.List;
 
-public final class LargeAdapter extends RecyclerView.Adapter<LargeAdapter.ViewHolder> implements BubbleTextGetter {
+public final class ContactLargeAdapter extends RecyclerView.Adapter<ContactLargeAdapter.ViewHolder> implements BubbleTextGetter {
     private final List<String> items;
 
-    public LargeAdapter(ArrayList<String> item) {
+    public ContactLargeAdapter(ArrayList<String> item) {
         List<String> items = new ArrayList<>();
         items.addAll(item);
         java.util.Collections.sort(items);

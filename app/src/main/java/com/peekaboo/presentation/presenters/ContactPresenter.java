@@ -10,13 +10,17 @@ import com.peekaboo.data.repositories.database.contacts.ContactAbs;
 import com.peekaboo.data.repositories.database.contacts.PContactHelper;
 import com.peekaboo.domain.UserMessageMapper;
 import com.peekaboo.domain.subscribers.BaseProgressSubscriber;
-import com.peekaboo.domain.usecase.GetContactsUseCase;
+import com.peekaboo.domain.subscribers.BaseUseCaseSubscriber;
+import com.peekaboo.domain.usecase.FetchContactsUseCase;
+import com.peekaboo.domain.usecase.GetContactFromDbUseCase;
+import com.peekaboo.domain.usecase.SaveContactToDbUseCase;
 import com.peekaboo.presentation.views.IContactsView;
 
 import java.util.List;
 
 import javax.inject.Inject;
 
+import rx.Subscriber;
 import rx.functions.Action1;
 
 /**
@@ -24,25 +28,31 @@ import rx.functions.Action1;
  */
 public class ContactPresenter extends ProgressPresenter<IContactsView> implements IContactPresenter {
 
-    private GetContactsUseCase useCase;
+    private FetchContactsUseCase fetchUseCase;
     private PContactHelper contactHelper;
     private Context context;
     private AbstractMapperFactory mapperFactory;
     private PContactHelper pContactHelper;
+    private GetContactFromDbUseCase getContactFromDbUseCase;
+    private SaveContactToDbUseCase saveContactToDbUseCase;
 
     @Inject
     public ContactPresenter(Context context, AbstractMapperFactory mapperFactory, PContactHelper contactHelper,
-                            GetContactsUseCase useCase, UserMessageMapper errorHandler) {
+                            FetchContactsUseCase fetchUseCase, UserMessageMapper errorHandler,
+                            GetContactFromDbUseCase getContactFromDbUseCase,
+                            SaveContactToDbUseCase saveContactToDbUseCase) {
         super(errorHandler);
         this.context = context;
         this.mapperFactory = mapperFactory;
         this.contactHelper = contactHelper;
-        this.useCase = useCase;
+        this.fetchUseCase = fetchUseCase;
+        this.getContactFromDbUseCase = getContactFromDbUseCase;
+        this.saveContactToDbUseCase = saveContactToDbUseCase;
     }
 
     @Override
     public void loadContactsList() {
-        useCase.execute(getContactsSubscriber());
+        fetchUseCase.execute(getContactsSubscriber());
     }
 
     @NonNull
@@ -52,10 +62,18 @@ public class ContactPresenter extends ProgressPresenter<IContactsView> implement
             public void onNext(List<Contact> response) {
                 super.onNext(response);
                 Log.e("onNext", String.valueOf(response));
-                IContactsView view = getView();
-                if (view != null) {
-                    view.showContactsList();
-                }
+                    saveContactToDbUseCase.setContact(response);
+                    getContactFromDbUseCase.execute(getContactsFromDb());
+            }
+        };
+    }
+
+    public Subscriber<List<Contact>> getContactsFromDb() {
+        return new BaseUseCaseSubscriber<List<Contact>>() {
+            @Override
+            public void onNext(List<Contact> contacts) {
+                super.onNext(contacts);
+                getView().showContactsList(contacts);
             }
         };
     }
@@ -68,6 +86,7 @@ public class ContactPresenter extends ProgressPresenter<IContactsView> implement
     @Override
     public void getAllContacts(String tableName, Action1 adapter) {
         //TODO: get all contacts
+        contactHelper.getAllContacts();
     }
 
     @Override
@@ -84,4 +103,5 @@ public class ContactPresenter extends ProgressPresenter<IContactsView> implement
                     }
                 });
     }
+
 }

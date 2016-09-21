@@ -1,21 +1,19 @@
 package com.peekaboo.data.repositories;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 import com.peekaboo.data.FileEntity;
 import com.peekaboo.data.mappers.AbstractMapperFactory;
 import com.peekaboo.data.mappers.Mapper;
 import com.peekaboo.data.repositories.database.contacts.Contact;
+import com.peekaboo.data.repositories.database.contacts.PContactHelper;
 import com.peekaboo.data.rest.ConfirmKey;
 import com.peekaboo.data.rest.RestApi;
+import com.peekaboo.data.rest.entity.ContactEntity;
 import com.peekaboo.data.rest.entity.Credentials;
 import com.peekaboo.data.rest.entity.CredentialsSignUp;
 import com.peekaboo.domain.AccountUser;
-import com.peekaboo.data.rest.entity.ContactEntity;
 import com.peekaboo.domain.SessionRepository;
 import com.peekaboo.domain.User;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.ResponseBody;
@@ -30,11 +28,14 @@ public class SessionDataRepository implements SessionRepository {
     private final AbstractMapperFactory abstractMapperFactory;
     private AccountUser user;
     private RestApi restApi;
+    private PContactHelper dbContacts;
 
-    public SessionDataRepository(RestApi restApi, AbstractMapperFactory abstractMapperFactory, AccountUser user) {
+    public SessionDataRepository(RestApi restApi, AbstractMapperFactory abstractMapperFactory,
+                                 AccountUser user, PContactHelper dbHelper) {
         this.restApi = restApi;
         this.abstractMapperFactory = abstractMapperFactory;
         this.user = user;
+        this.dbContacts = dbHelper;
     }
 
     @Override
@@ -88,5 +89,18 @@ public class SessionDataRepository implements SessionRepository {
                 .flatMapIterable(l -> l)
                 .map(contactEntityMapper::transform)
                 .toList();
+    }
+
+    @Override
+    public Observable<List<Contact>> getAllSavedContacts() {
+        return dbContacts.getAllContacts();
+    }
+
+    @Override
+    public Observable saveContactToDb(List<Contact> contact) {
+        return Observable.from(contact).flatMap(contact1 ->
+                Observable.just(
+                dbContacts.insert(abstractMapperFactory.getContactToContentValueMapper().transform(contact1))
+                ));
     }
 }

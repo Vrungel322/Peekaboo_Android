@@ -14,9 +14,6 @@ import com.peekaboo.domain.schedulers.SubscribeOn;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
-
 import rx.Observable;
 
 /**
@@ -47,7 +44,8 @@ public class PContactHelper {
                 ContactAbs.CONTACT_NICKNAME + " TEXT NOT NULL," +
                 ContactAbs.CONTACT_IS_ONLINE + " INTEGER NOT NULL," +
                 ContactAbs.CONTACT_IMG_URI + " TEXT NOT NULL" +
-                ");";
+                ")" +
+                ";";
         db.execSQL(CREATE_TABLE);
     }
 

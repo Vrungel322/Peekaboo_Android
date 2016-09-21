@@ -17,13 +17,15 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.peekaboo.R;
+import com.peekaboo.data.repositories.database.contacts.Contact;
 import com.peekaboo.presentation.PeekabooApplication;
-import com.peekaboo.presentation.adapters.LargeAdapter;
+import com.peekaboo.presentation.adapters.ContactLargeAdapter;
 import com.peekaboo.presentation.presenters.ContactPresenter;
 import com.peekaboo.presentation.views.IContactsView;
 import com.peekaboo.presentation.widget.RecyclerViewFastScroller;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -43,7 +45,7 @@ public class ContactsFragment extends Fragment implements IContactsView {
     @BindView(R.id.recyclerview)
     public RecyclerView recyclerView;
 
-    private ArrayList<String> list;
+    private ArrayList<String> contactList;
 
     int numberOfItems;
 
@@ -82,7 +84,7 @@ public class ContactsFragment extends Fragment implements IContactsView {
         super.onResume();
         //Make Query to get all real contacts from server
         //after that need to redo ContactListAdapter to match ContactsPOJO and json
-        //contactPresenter.loadContactsList();
+        contactPresenter.loadContactsList();
     }
 
     @Nullable
@@ -103,7 +105,7 @@ public class ContactsFragment extends Fragment implements IContactsView {
 
         initList();
 
-        final LargeAdapter adapter = new LargeAdapter(list);
+        final ContactLargeAdapter adapter = new ContactLargeAdapter(contactList);
         recyclerView.setAdapter(adapter);
         final RecyclerViewFastScroller fastScroller = (RecyclerViewFastScroller) rootView.findViewById(R.id.fastscroller);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false) {
@@ -149,19 +151,19 @@ public class ContactsFragment extends Fragment implements IContactsView {
     }
 
     @Override
-    public void showContactsList() {
+    public void showContactsList(List<Contact> response) {
         recyclerView.setBackgroundColor(Color.CYAN);
         showToastMessage("MAKE NOTICE");
     }
 
     private void initList() {
 
-        if (list == null)
-            list = new ArrayList<>();
+        if (contactList == null)
+            contactList = new ArrayList<>();
 
         String[] countries = getResources().getStringArray(R.array.countries_array);
         for (String country : countries) {
-            list.add(country);
+            contactList.add(country);
         }
     }
 

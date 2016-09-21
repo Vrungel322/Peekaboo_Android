@@ -90,7 +90,7 @@ public class ChatPresenter extends BasePresenter<IChatView> implements IChatPres
     public void onStopRecordingAudioClick() {
         if (recorder != null) {
             subscriptions.add(recorder.stopRecording().subscribe(record -> {
-//                pMessageHelper.insert(receiver, convertPMessage(new PMessage(Utility.getPackageId(),
+//                pMessageHelper.saveContactToDb(receiver, convertPMessage(new PMessage(Utility.getPackageId(),
 //                        PMessageAbs.PMESSAGE_MEDIA_TYPE.AUDIO_MESSAGE,
 //                        true, record.getFilename(),
 //                        System.currentTimeMillis(),
@@ -108,7 +108,7 @@ public class ChatPresenter extends BasePresenter<IChatView> implements IChatPres
                 // odd mes - income, even mes - outgoing
                 isMineChanger++;
                 isMine = isMineChanger % 2 == 0;
-//                pMessageHelper.insert(receiver, convertPMessage(new TextPMessage(Utility.getPackageId(),
+//                pMessageHelper.saveContactToDb(receiver, convertPMessage(new TextPMessage(Utility.getPackageId(),
 //                        isMine, msgBody, System.currentTimeMillis(),
 //                        false, false, false)));
 
@@ -121,7 +121,7 @@ public class ChatPresenter extends BasePresenter<IChatView> implements IChatPres
     @Override
     public void onSendImageButtonPress(Uri uri) {
         //TODO send image message
-//        pMessageHelper.insert(receiver, convertPMessage(new PMessage(Utility.getPackageId(),
+//        pMessageHelper.saveContactToDb(receiver, convertPMessage(new PMessage(Utility.getPackageId(),
 //                true, uri.toString(), System.currentTimeMillis(),
 //                false, false, false)));
     }
@@ -131,7 +131,7 @@ public class ChatPresenter extends BasePresenter<IChatView> implements IChatPres
         ArrayList<String> result = data
                 .getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
         //TODO send audio file
-//        pMessageHelper.insert(receiver, convertPMessage(new AudioPMessage(Utility.getPackageId(),
+//        pMessageHelper.saveContactToDb(receiver, convertPMessage(new AudioPMessage(Utility.getPackageId(),
 //                true, result.get(0), System.currentTimeMillis(),
 //                false, false, false)));
     }

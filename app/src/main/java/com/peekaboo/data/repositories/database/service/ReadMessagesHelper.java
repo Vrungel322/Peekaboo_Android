@@ -82,7 +82,7 @@ public class ReadMessagesHelper {
     }
 
     public void insert(String senderId) {
-        Log.e("helper", "insert read " + senderId);
+        Log.e("helper", "saveContactToDb read " + senderId);
         SQLiteDatabase db = helper.getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(ServiceMessageAbs.SENDER_ID, senderId);
