@@ -75,7 +75,7 @@ public class ContactsFragment extends Fragment implements IContactsView {
 //                true,
 //                "uri2"));
 
-        contactPresenter.getAllTableAsString("ContactsDb");
+        contactPresenter.getAllTableAsString();
 
     }
 
@@ -153,7 +153,7 @@ public class ContactsFragment extends Fragment implements IContactsView {
     @Override
     public void showContactsList(List<Contact> response) {
         recyclerView.setBackgroundColor(Color.CYAN);
-        showToastMessage("MAKE NOTICE");
+        showToastMessage(response.get(1).contactName().toString());
     }
 
     private void initList() {

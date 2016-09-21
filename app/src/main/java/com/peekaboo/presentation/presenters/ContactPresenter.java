@@ -61,9 +61,23 @@ public class ContactPresenter extends ProgressPresenter<IContactsView> implement
             @Override
             public void onNext(List<Contact> response) {
                 super.onNext(response);
-                Log.e("onNext", String.valueOf(response));
-                    saveContactToDbUseCase.setContact(response);
-                    getContactFromDbUseCase.execute(getContactsFromDb());
+                Log.e("onNext", String.valueOf(response.get(1).contactName()));
+                saveContactToDbUseCase.setContact(response);
+                saveContactToDbUseCase.execute(saveContactToDb());
+                getContactFromDbUseCase.execute(getContactsFromDb());
+                getAllTableAsString();
+            }
+        };
+    }
+
+    private Subscriber<List<Contact>> saveContactToDb() {
+        return new BaseUseCaseSubscriber<List<Contact>>() {
+            @Override
+            public void onNext(List<Contact> contacts) {
+                super.onNext(contacts);
+                for (Contact c : contacts) {
+                    Log.wtf("saved_To_DB :", c.contactName());
+                }
             }
         };
     }
@@ -90,7 +104,7 @@ public class ContactPresenter extends ProgressPresenter<IContactsView> implement
     }
 
     @Override
-    public void getAllTableAsString(String tableName) {
+    public void getAllTableAsString() {
         contactHelper.getAllContacts()
                 .subscribe(pContactAbses -> {
                     for (ContactAbs pContact : pContactAbses) {
