@@ -80,8 +80,11 @@ public class ChatActivity extends AppCompatActivity
     ImageView microAnim;
     @BindView(R.id.rflButtonRecord)
     RevealFrameLayout rflButtonRecord;
+    @BindView(R.id.llRecord)
+    LinearLayout llRecord;
     @Inject
     ChatPresenter chatPresenter;
+
 
     private ChatAdapter chatAdapter;
     private ChatItemDialog chatItemDialog;
@@ -224,7 +227,7 @@ public class ChatActivity extends AppCompatActivity
                 float finalRadius = (float) Math.hypot(dx, dy);
 
                 Animator animator =
-                        ViewAnimationUtils.createCircularReveal(microAnim, (int) cx, (int) cy, 0, finalRadius);
+                        ViewAnimationUtils.createCircularReveal(llRecord, (int) cx, (int) cy, 0, finalRadius);
                 animator.setInterpolator(new AccelerateDecelerateInterpolator());
                 animator.setDuration(1000);
                 animator.start();
