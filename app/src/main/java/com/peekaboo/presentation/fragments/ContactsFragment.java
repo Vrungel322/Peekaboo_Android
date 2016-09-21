@@ -1,8 +1,8 @@
 package com.peekaboo.presentation.fragments;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -13,21 +13,15 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 import android.widget.Toast;
-import android.support.v7.widget.DefaultItemAnimator;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 
 import com.peekaboo.R;
 import com.peekaboo.data.repositories.database.contacts.Contact;
-import com.peekaboo.presentation.widget.Record;
+import com.peekaboo.presentation.adapters.LargeAdapter;
 import com.peekaboo.presentation.PeekabooApplication;
-import com.peekaboo.presentation.adapters.ContactsListAdapter;
-import com.peekaboo.presentation.adapters.CustomAdapter;
-import com.peekaboo.presentation.adapters.RecyclerViewAdapter;
 import com.peekaboo.presentation.presenters.ContactPresenter;
 import com.peekaboo.presentation.views.IContactsView;
+import com.peekaboo.presentation.widget.RecyclerViewFastScroller;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -49,18 +43,13 @@ public class ContactsFragment extends Fragment implements IContactsView {
     @Inject
     ContactPresenter contactPresenter;
 
-//    @BindView(R.id.listViewIndexable)
-//     @BindView(R.id.rv)
-@BindView(R.id.recyclerView)
-//@BindView(R.id.recycler_view)
+    @BindView(R.id.recyclerview)
 
-//    ListView listViewIndexable;
-//    RecyclerView rv;
-//    CustomAdapter myadapter;
-public RecyclerView recyclerView;
+    public RecyclerView recyclerView;
 
     private ArrayList<String> list;
-//    private ContactsListAdapter contactsListAdapter;
+
+    int numberOfItems;
 
     @Inject
     public ContactsFragment() {
@@ -110,66 +99,45 @@ public RecyclerView recyclerView;
         setHasOptionsMenu(true);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(getString(R.string.title_contacts));
 
+        FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getActivity(), "ADD", Toast.LENGTH_LONG).show();
+            }
+        });
 
+        initList();
 
-        List<Record> records = new ArrayList<Record>();
-        populateRecords(records);
-
-//        RecyclerView recyclerView = (RecyclerView)rootView.findViewById(R.id.recyclerView);
-
-        RecyclerViewAdapter adapter = new RecyclerViewAdapter(records);
-        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        RecyclerView.ItemAnimator itemAnimator = new DefaultItemAnimator();
-
+        final LargeAdapter adapter = new LargeAdapter(list);
         recyclerView.setAdapter(adapter);
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setItemAnimator(itemAnimator);
-
-//-------------------------------------------------//
-        //hardcode list
-//        initList();
-//
-//        contactsListAdapter = new ContactsListAdapter(list, getActivity());
-//        listViewIndexable.setAdapter(contactsListAdapter);
-//        listViewIndexable.setFastScrollEnabled(true);
-//        listViewIndexable.setOnItemClickListener((arg0, arg1, arg2, arg3) -> contactsListAdapter.onItemSelected(arg2));
-//------------------------------------------------
-//        rv = (RecyclerView) rootView.findViewById(R.id.rv);
-//        rv.setHasFixedSize(true);
-//        LinearLayoutManager llm = new LinearLayoutManager(getActivity());
-//        rv.setLayoutManager(llm);
-//
-//        myadapter = new CustomAdapter(list,getContext());
-//
-
+        final RecyclerViewFastScroller fastScroller = (RecyclerViewFastScroller) rootView.findViewById(R.id.fastscroller);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false) {
+            @Override
+            public void onLayoutChildren(final RecyclerView.Recycler recycler, final RecyclerView.State state) {
+                super.onLayoutChildren(recycler, state);
+                //TODO if the items are filtered, considered hiding the fast scroller here
+                final int firstVisibleItemPosition = findFirstVisibleItemPosition();
+                if (firstVisibleItemPosition != 0) {
+                    // this avoids trying to handle un-needed calls
+                    if (firstVisibleItemPosition == -1)
+                        //not initialized, or no items shown, so hide fast-scroller
+                        fastScroller.setVisibility(View.GONE);
+                    return;
+                }
+                final int lastVisibleItemPosition = findLastVisibleItemPosition();
+                int itemsShown = lastVisibleItemPosition - firstVisibleItemPosition + 1;
+                //if all items are shown, hide the fast-scroller
+                fastScroller.setVisibility(adapter.getItemCount() > itemsShown ? View.VISIBLE : View.GONE);
+            }
+        });
+        fastScroller.setRecyclerView(recyclerView);
+        fastScroller.setViewsToUse(R.layout.recycler_view_fast_scroller__fast_scroller, R.id.fastscroller_bubble, R.id.fastscroller_handle);
 
 
         return rootView;
     }
-    private void populateRecords(List<Record> records){
-//        for (int i = 0; i<10; i++){
-//            Record record = new Record();
-//            record.setName("Item №" + i);
-//            record.setType(Record.Type.values()[i%3]);
-//            records.add(record);
-//
-            if (list == null)
-                list = new ArrayList<>();
 
-            String[] countries = getResources().getStringArray(R.array.countries_array);
-        int i = 0;
-            for (String country : countries) {
-//                list.add(country);
-                Record record = new Record();
-                record.setName(country);
-                record.setResourceId(i);
-                i++;
-//                record.setType(Record.Type.values()[1]);
-                records.add(record);
-            }
-
-
-    }
 
     @Override
     public void showProgress() {
