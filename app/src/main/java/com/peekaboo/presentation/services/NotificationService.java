@@ -18,18 +18,19 @@ import javax.inject.Inject;
 
 public class NotificationService extends Service {
 
-    private InternetBroadcastReceiver ibrInternetCheck;
     @Inject
-    INotifier notifier;
+    IMessenger notifier;
+
     @Inject
     AccountUser user;
+    private InternetBroadcastReceiver ibrInternetCheck;
 
     public static void launch(Context context, @Nullable String action) {
         Intent intent = new Intent(context, NotificationService.class);
         if (action != null) {
             intent.setAction(action);
         }
-//        context.startService(intent);
+        context.startService(intent);
     }
 
     @Override

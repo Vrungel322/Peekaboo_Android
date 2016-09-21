@@ -15,7 +15,7 @@ public class MessageMappersTest {
 
     @Test
     public void checkBodylessConvertation() {
-        Message message = new Message(Message.Command.SEND);
+        Message message = new Message(Message.Command.MESSAGE);
         message.addParam(Message.Params.TYPE, Message.Type.TEXT);
         message.addParam(Message.Params.DATE, "asd1");
         message.addParam(Message.Params.REASON, "asd2");
@@ -26,19 +26,18 @@ public class MessageMappersTest {
 
     @Test
     public void toStringTest() {
-        Message withBodyText = new Message(Message.Command.SEND)
+        Message withBodyText = new Message(Message.Command.MESSAGE)
                 .addParam(Message.Params.TYPE, Message.Type.TEXT)
-
                 .setTextBody("asd");
 
-        Message withoutBodyText = new Message(Message.Command.SEND)
+        Message withoutBodyText = new Message(Message.Command.MESSAGE)
                 .addParam(Message.Params.TYPE, Message.Type.TEXT);
 
-        Message withBodyBinary = new Message(Message.Command.SEND)
+        Message withBodyBinary = new Message(Message.Command.MESSAGE)
                 .addParam(Message.Params.TYPE, Message.Type.AUDIO)
                 .setBody(new byte[] {1,2,3});
 
-        Message withoutBodyBinary = new Message(Message.Command.SEND)
+        Message withoutBodyBinary = new Message(Message.Command.MESSAGE)
                 .addParam(Message.Params.TYPE, Message.Type.AUDIO);
 
         btm.transform(mtb.transform(withBodyText)).toString();
@@ -50,7 +49,7 @@ public class MessageMappersTest {
 
     @Test
     public void checkTextBody() {
-        Message message = new Message(Message.Command.SEND);
+        Message message = new Message(Message.Command.MESSAGE);
         message.addParam(Message.Params.TYPE, Message.Type.TEXT);
         message.addParam(Message.Params.DATE, "asd1");
         message.addParam(Message.Params.REASON, "asd2");
@@ -66,7 +65,7 @@ public class MessageMappersTest {
 
     @Test
     public void checkBinaryBody() {
-        Message message = new Message(Message.Command.SEND);
+        Message message = new Message(Message.Command.MESSAGE);
         message.addParam(Message.Params.TYPE, Message.Type.AUDIO);
         message.addParam(Message.Params.DATE, "asd1");
         message.addParam(Message.Params.REASON, "asd2");

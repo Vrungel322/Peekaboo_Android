@@ -7,12 +7,13 @@ import android.util.Log;
 import com.peekaboo.data.mappers.AbstractMapperFactory;
 import com.peekaboo.data.repositories.database.contacts.Contact;
 import com.peekaboo.data.repositories.database.contacts.ContactAbs;
-import com.peekaboo.data.repositories.database.contacts.ContactHelper;
-import com.peekaboo.data.rest.entity.ContactsEntity;
-import com.peekaboo.domain.ErrorHandler;
+import com.peekaboo.data.repositories.database.contacts.PContactHelper;
+import com.peekaboo.domain.UserMessageMapper;
 import com.peekaboo.domain.subscribers.BaseProgressSubscriber;
 import com.peekaboo.domain.usecase.GetContactsUseCase;
 import com.peekaboo.presentation.views.IContactsView;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -23,15 +24,16 @@ import rx.functions.Action1;
  */
 public class ContactPresenter extends ProgressPresenter<IContactsView> implements IContactPresenter {
 
-    private AbstractMapperFactory mapperFactory;
     private GetContactsUseCase useCase;
-    private ContactHelper contactHelper;
+    private PContactHelper contactHelper;
     private Context context;
+    private AbstractMapperFactory mapperFactory;
+    private PContactHelper pContactHelper;
 
     @Inject
-    public ContactPresenter(Context context, AbstractMapperFactory mapperFactory, ContactHelper contactHelper,
-                            GetContactsUseCase useCase, ErrorHandler errorHandler) {
-        super(context, errorHandler);
+    public ContactPresenter(Context context, AbstractMapperFactory mapperFactory, PContactHelper contactHelper,
+                            GetContactsUseCase useCase, UserMessageMapper errorHandler) {
+        super(errorHandler);
         this.context = context;
         this.mapperFactory = mapperFactory;
         this.contactHelper = contactHelper;
@@ -44,15 +46,15 @@ public class ContactPresenter extends ProgressPresenter<IContactsView> implement
     }
 
     @NonNull
-    private BaseProgressSubscriber<ContactsEntity> getContactsSubscriber() {
-        return new BaseProgressSubscriber<ContactsEntity>(this) {
+    private BaseProgressSubscriber<List<Contact>> getContactsSubscriber() {
+        return new BaseProgressSubscriber<List<Contact>>(this) {
             @Override
-            public void onNext(ContactsEntity response) {
+            public void onNext(List<Contact> response) {
                 super.onNext(response);
                 Log.e("onNext", String.valueOf(response));
                 IContactsView view = getView();
                 if (view != null) {
-                    view.loadContactsList();
+                    view.showContactsList();
                 }
             }
         };

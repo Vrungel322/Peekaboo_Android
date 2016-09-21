@@ -95,7 +95,6 @@ public class PasswordView extends FrameLayout {
         editText.setInputType(InputType.TYPE_CLASS_TEXT |
                 InputType.TYPE_TEXT_VARIATION_PASSWORD);
         showView.setOnTouchListener((v, event) -> {
-            Log.e("action", String.valueOf(event.getAction()));
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
                     editText.setInputType(InputType.TYPE_CLASS_TEXT |

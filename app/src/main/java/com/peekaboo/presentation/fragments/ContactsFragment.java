@@ -56,23 +56,22 @@ public class ContactsFragment extends Fragment implements IContactsView {
 
         PeekabooApplication.getApp(getActivity()).getComponent().inject(this);
         // Testing DB
-
         contactPresenter.bind(this);
-        contactPresenter.insertContactToTable(new Contact("Name0",
-                "Surname0",
-                "Nickname0",
-                true,
-                "uri0"));
-        contactPresenter.insertContactToTable(new Contact("Name1",
-                "Surname1",
-                "Nickname1",
-                true,
-                "uri1"));
-        contactPresenter.insertContactToTable(new Contact("Name2",
-                "Surname2",
-                "Nickname2",
-                true,
-                "uri2"));
+//        contactPresenter.insertContactToTable(new Contact("Name0",
+//                "Surname0",
+//                "Nickname0",
+//                true,
+//                "uri0"));
+//        contactPresenter.insertContactToTable(new Contact("Name1",
+//                "Surname1",
+//                "Nickname1",
+//                true,
+//                "uri1"));
+//        contactPresenter.insertContactToTable(new Contact("Name2",
+//                "Surname2",
+//                "Nickname2",
+//                true,
+//                "uri2"));
 
         contactPresenter.getAllTableAsString("ContactsDb");
 
@@ -121,7 +120,7 @@ public class ContactsFragment extends Fragment implements IContactsView {
     }
 
     @Override
-    public void loadContactsList() {
+    public void showContactsList() {
         listViewIndexable.setBackgroundColor(Color.CYAN);
         showToastMessage("MAKE NOTICE");
     }

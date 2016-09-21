@@ -22,18 +22,9 @@ public class InternetBroadcastReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         int type = getConnectivityStatus(context);
-
-        Log.e("socket", "internet broadcast " + String.valueOf(type) + " " + hashCode() + " " + intent);
         switch (type) {
-            case 0:
-//                Toast.makeText(context, "No Internet Access", Toast.LENGTH_LONG).show();
-                break;
             case 1:
-//                Toast.makeText(context, "Internet Access OK (WIFI)", Toast.LENGTH_LONG).show();
-                NotificationService.launch(context, NotificationService.ACTION.TRY_CONNECT);
-                break;
             case 2:
-//                Toast.makeText(context, "Internet Access OK (MOBILE)", Toast.LENGTH_LONG).show();
                 NotificationService.launch(context, NotificationService.ACTION.TRY_CONNECT);
                 break;
         }

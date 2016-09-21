@@ -41,12 +41,4 @@ public class Constants {
         int SIDE_MARGIN = 0;
         int BIG_TOP_OR_BOTTOM_MARGIN = 8;
     }
-
-    public interface PMESSAGE_MEDIA_TYPE {
-        int TEXT_MESSAGE = 0;
-        int AUDIO_MESSAGE = 1;
-        int IMAGE_MESSAGE = 2;
-        int VIDEO_MESSAGE = 3;
-        int DOCUMENT_MESSAGE = 4;
-    }
 }

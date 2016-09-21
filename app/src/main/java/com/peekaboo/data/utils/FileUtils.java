@@ -1,7 +1,11 @@
 package com.peekaboo.data.utils;
 
+import android.os.Environment;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
+
+import com.peekaboo.utils.Constants;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -16,9 +20,7 @@ import okhttp3.ResponseBody;
  */
 public class FileUtils {
 
-    public static File getNull() {
-        return null;
-    }
+    @Nullable
     public static File writeResponseBodyToDisk(String filePath, ResponseBody body) {
         try {
             File file = new File(filePath);
@@ -50,5 +52,20 @@ public class FileUtils {
         } catch (IOException e) {
             return null;
         }
+    }
+
+
+    @NonNull
+    public static String formAudioName(String folderName) {
+        String filepath = Environment.getExternalStorageDirectory().getPath();
+        File file = new File(filepath, Constants.SOUND_RECORDING.AUDIO_RECORDER_FOLDER
+                + "/" + folderName);
+
+        if (!file.exists()) {
+            file.mkdirs();
+        }
+
+        return (file.getAbsolutePath() + "/" + System.currentTimeMillis()
+                + Constants.SOUND_RECORDING.AUDIO_RECORDER_FILE_EXT_WAV);
     }
 }

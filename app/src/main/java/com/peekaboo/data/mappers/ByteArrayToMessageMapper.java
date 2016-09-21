@@ -1,8 +1,9 @@
 package com.peekaboo.data.mappers;
 
-import android.util.Log;
 //import android.util.Pair;
 
+import com.peekaboo.data.mappers.Mapper;
+import com.peekaboo.domain.Pair;
 import com.peekaboo.presentation.services.Message;
 
 import java.util.Arrays;
@@ -66,15 +67,5 @@ public class ByteArrayToMessageMapper implements Mapper<byte[], Message> {
         result = Message.Command.valueOf(stringCommand);
 
         return new Pair<>(result, i + 1);
-    }
-
-    public static class Pair<F, S> {
-        public final F first;
-        public final S second;
-
-        public Pair(F first, S second) {
-            this.first = first;
-            this.second = second;
-        }
     }
 }

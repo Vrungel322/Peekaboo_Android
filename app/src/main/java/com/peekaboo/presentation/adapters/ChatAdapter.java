@@ -41,18 +41,11 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         implements Action1<List<Object>> {
 
     private final LayoutInflater inflater;
+    public IChatAdapterListener chatAdapterListener;
     private Context context;
     private ChatPresenter presenter;
     private Picasso mPicasso;
-
-
     private List<Object> messages = Collections.emptyList();
-
-    public interface IChatAdapterListener {
-        void toLastMessage();
-    }
-
-    public IChatAdapterListener chatAdapterListener;
 
     public ChatAdapter(Context context, ChatPresenter presenter, Activity activity) {
         this.context = context;
@@ -72,6 +65,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     @Override
     public int getItemViewType(int position) {
         Object item = getItem(position);
+
 //        if(position != 0){
 //            Object previousItem = getItem(position -1);
 //            if (previousItem instanceof PMessageAbs && item instanceof PMessageAbs) {
@@ -96,18 +90,18 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View v;
         switch (viewType) {
-            case Constants.PMESSAGE_MEDIA_TYPE.TEXT_MESSAGE:
+            case PMessageAbs.PMESSAGE_MEDIA_TYPE.TEXT_MESSAGE:
                 v = inflater.inflate(R.layout.list_item_chat_text_message, parent, false);
                 return new ViewHolderText(v);
-            case Constants.PMESSAGE_MEDIA_TYPE.AUDIO_MESSAGE:
+            case PMessageAbs.PMESSAGE_MEDIA_TYPE.AUDIO_MESSAGE:
                 v = inflater.inflate(R.layout.list_item_chat_audio_message, parent, false);
                 return new ViewHolderAudio(v);
-            case Constants.PMESSAGE_MEDIA_TYPE.IMAGE_MESSAGE:
+            case PMessageAbs.PMESSAGE_MEDIA_TYPE.IMAGE_MESSAGE:
                 v = inflater.inflate(R.layout.list_item_chat_image_message, parent, false);
                 return new ViewHolderImage(v);
-            case Constants.PMESSAGE_MEDIA_TYPE.VIDEO_MESSAGE:
+            case PMessageAbs.PMESSAGE_MEDIA_TYPE.VIDEO_MESSAGE:
                 return null;
-            case Constants.PMESSAGE_MEDIA_TYPE.DOCUMENT_MESSAGE:
+            case PMessageAbs.PMESSAGE_MEDIA_TYPE.DOCUMENT_MESSAGE:
                 return null;
             case DateSeparator.MEDIA_TYPE:
                 v = inflater.inflate(R.layout.list_item_dates_separator, parent, false);
@@ -122,7 +116,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
         if (holder instanceof DatesViewHolder) {
-            ((DatesViewHolder) holder).tvDatesSeparator.setText(((DateSeparator) getItem(position)).getDate());
+//            ((DatesViewHolder) holder).tvDatesSeparator.setText(((DateSeparator) getItem(position)).getDate());
         } else if (holder instanceof ViewHolder && getItem(position) instanceof PMessageAbs) {
             position = holder.getAdapterPosition();
             PMessageAbs pMessageAbs = (PMessageAbs)getItem(position);
@@ -140,7 +134,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             setAlignment((ViewHolder) holder, pMessageAbs.isMine(), prevMine, nextMine, mediaType);
 
             switch (mediaType) {
-                case Constants.PMESSAGE_MEDIA_TYPE.TEXT_MESSAGE:
+                case PMessageAbs.PMESSAGE_MEDIA_TYPE.TEXT_MESSAGE:
                     ViewHolderText chatHolder = (ViewHolderText) holder;
                     chatHolder.tvChatMessage.setText(pMessageAbs.messageBody());
 
@@ -149,17 +143,18 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     setMessageStatus(chatHolder, pMessageAbs);
                     Log.i("TEXT", Integer.toString(mediaType));
                     break;
-                case Constants.PMESSAGE_MEDIA_TYPE.AUDIO_MESSAGE:
+
+                case PMessageAbs.PMESSAGE_MEDIA_TYPE.AUDIO_MESSAGE:
                     break;
-                case Constants.PMESSAGE_MEDIA_TYPE.IMAGE_MESSAGE:
+                case PMessageAbs.PMESSAGE_MEDIA_TYPE.IMAGE_MESSAGE:
                     String image = pMessageAbs.messageBody();
                     Timber.tag("IMAGE").wtf("image uri: " + image);
                     setImageMessage((ViewHolderImage) holder, image);
                     Log.i("IMAGE", Integer.toString(mediaType));
                     break;
-                case Constants.PMESSAGE_MEDIA_TYPE.VIDEO_MESSAGE:
+                case PMessageAbs.PMESSAGE_MEDIA_TYPE.VIDEO_MESSAGE:
                     break;
-                case Constants.PMESSAGE_MEDIA_TYPE.DOCUMENT_MESSAGE:
+                case PMessageAbs.PMESSAGE_MEDIA_TYPE.DOCUMENT_MESSAGE:
                     break;
             }
 
@@ -172,7 +167,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     @Override
     public long getItemId(int position) {
-        if(getItem(position) instanceof  PMessageAbs) {
+        if (getItem(position) instanceof PMessageAbs) {
             return ((PMessageAbs) getItem(position)).id();
         }
         return -1;
@@ -245,6 +240,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 holder.chatBubble.setBackgroundResource(R.drawable.circle_blue);
             }
         } else {
+
             if (wasPreviousMine) {
                 holder.chatBubble.setBackgroundResource(R.drawable.circle_gray_corner);
             } else {
@@ -254,10 +250,11 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     }
 
     private void setMessageStatus(ViewHolder holder, PMessageAbs message) {
-        if (message.isSent() && !message.isDelivered()) {
+        if (message.status() == PMessageAbs.PMESSAGE_STATUS.STATUS_SENT) {
             holder.ivChatMessageStatus.setVisibility(View.GONE);
         } else {
-            holder.ivChatMessageStatus.setImageResource(getStatusImage(message.isRead()));
+            boolean isRead = message.status() == PMessageAbs.PMESSAGE_STATUS.STATUS_READ;
+            holder.ivChatMessageStatus.setImageResource(getStatusImage(isRead));
         }
     }
 
@@ -296,8 +293,8 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         ((ViewHolderAudio) holder).sbPlayProgress.setProgress(progress);
     }
 
-    public void swithPlayButtonImage(RecyclerView.ViewHolder holder, boolean toPlay){
-        if(toPlay){
+    public void swithPlayButtonImage(RecyclerView.ViewHolder holder, boolean toPlay) {
+        if (toPlay) {
             ((ViewHolderAudio) holder).ibPlayRecord.setBackgroundResource(R.drawable.play_blue);
         } else {
             ((ViewHolderAudio) holder).ibPlayRecord.setBackgroundResource(R.drawable.pause_blue);
@@ -308,6 +305,22 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     public void onDetachedFromRecyclerView(RecyclerView recyclerView) {
         super.onDetachedFromRecyclerView(recyclerView);
         presenter.onDetachedFromRecyclerView();
+    }
+//
+//    private boolean needSeparator(PMessageAbs previous, PMessageAbs current) {
+//        long previousTime = previous.timestamp();
+//        long currentTime = current.timestamp();
+//        int previousDay = Utility.getDay(previousTime);
+//        int currentDay = Utility.getDay(currentTime);
+//        if (currentDay > previousDay) {
+//            return true;
+//        } else {
+//            return false;
+//        }
+//    }
+
+    public interface IChatAdapterListener {
+        void toLastMessage();
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {

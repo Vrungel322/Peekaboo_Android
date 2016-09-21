@@ -5,10 +5,11 @@ import com.peekaboo.data.rest.entity.Credentials;
 import com.peekaboo.data.rest.entity.CredentialsSignUp;
 import com.peekaboo.data.rest.entity.TokenEntity;
 import com.peekaboo.data.rest.entity.UserEntity;
-import com.peekaboo.data.rest.entity.ContactsEntity;
+import com.peekaboo.data.rest.entity.UserResponse;
 
 import okhttp3.MultipartBody;
 import okhttp3.ResponseBody;
+import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
@@ -50,21 +51,20 @@ public interface PeekabooApi {
             @Query("username") String username
     );
 
-
     @Multipart
     @POST("upload/audio/{id}")
-    Observable<FileEntity> uploadFile(
+    Call<FileEntity> uploadFile(
             @Path("id") String receiverId,
             @Part MultipartBody.Part body,
             @Header("authorization") String bearer
     );
 
     @GET("download/audio/{fileName}")
-    Observable<ResponseBody> download(
+    Call<ResponseBody> download(
             @Path("fileName") String fileName,
             @Header("authorization") String bearer
     );
 
-    //TODO: speak with backend to define details
-    Observable<ContactsEntity> loadAllContacts();
+    @GET("allusers/find")
+    Observable<UserResponse> getAllContacts();
 }

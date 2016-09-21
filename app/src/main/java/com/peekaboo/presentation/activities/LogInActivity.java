@@ -62,7 +62,6 @@ public class LogInActivity extends AppCompatActivity implements ICredentialsView
         ButterKnife.bind(this);
         PeekabooApplication.getApp(this).getComponent().inject(this);
         loginPresenter.bind(this);
-        loginPresenter.setCheckingInternet();
         bus.register(this);
 //        onSwipe();
     }

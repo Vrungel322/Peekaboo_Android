@@ -2,8 +2,9 @@ package com.peekaboo.presentation;
 
 import android.test.mock.MockContext;
 
+import com.peekaboo.data.repositories.database.contacts.Contact;
 import com.peekaboo.domain.AccountUser;
-import com.peekaboo.domain.ErrorHandler;
+import com.peekaboo.domain.UserMessageMapper;
 import com.peekaboo.domain.SessionRepository;
 import com.peekaboo.domain.usecase.LoginUseCase;
 import com.peekaboo.presentation.presenters.LoginPresenter;
@@ -11,6 +12,9 @@ import com.peekaboo.presentation.views.ICredentialsView;
 
 import org.junit.Test;
 import org.mockito.Mock;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import rx.Observable;
 import rx.Subscriber;
@@ -28,11 +32,11 @@ public class LoginPresenterTest extends BasePresenterTest {
     @Mock
     private ICredentialsView loginView;
     @Mock
-    private ErrorHandler errorHandler;
+    private UserMessageMapper errorHandler;
 
     @Test
     public void whenLoginSuccessThenNavigateToProfileIsCalled() {
-        LoginPresenter loginPresenter = new LoginPresenter(context, new LoginUseCaseSuccess(), errorHandler);
+        LoginPresenter loginPresenter = new LoginPresenter(new LoginUseCaseSuccess(), errorHandler);
         loginPresenter.bind(loginView);
         loginPresenter.onSignInButtonClick("aValidUsername", "aValidPassword");
 
@@ -41,7 +45,7 @@ public class LoginPresenterTest extends BasePresenterTest {
 
     @Test
     public void whenLoginSuccessThenNavigateToProfileIsCalledAfterRebind() {
-        LoginPresenter loginPresenter = new LoginPresenter(context, new LoginUseCaseSuccess(), errorHandler);
+        LoginPresenter loginPresenter = new LoginPresenter(new LoginUseCaseSuccess(), errorHandler);
         loginPresenter.bind(loginView);
         loginPresenter.onSignInButtonClick("aValidUsername", "aValidPassword");
         loginPresenter.unbind();
@@ -53,7 +57,7 @@ public class LoginPresenterTest extends BasePresenterTest {
 
     @Test
     public void whenInvalidLoginThenShowInputErrorIsCalled() {
-        LoginPresenter loginPresenter = new LoginPresenter(context, new LoginUseCaseSuccess(), errorHandler);
+        LoginPresenter loginPresenter = new LoginPresenter(new LoginUseCaseSuccess(), errorHandler);
         loginPresenter.bind(loginView);
         loginPresenter.onSignInButtonClick("short", "aValidPassword");
 
@@ -64,7 +68,7 @@ public class LoginPresenterTest extends BasePresenterTest {
 
     @Test
     public void whenInvalidPasswordThenShowInputErrorIsCalled() {
-        LoginPresenter loginPresenter = new LoginPresenter(context, new LoginUseCaseSuccess(), errorHandler);
+        LoginPresenter loginPresenter = new LoginPresenter(new LoginUseCaseSuccess(), errorHandler);
         loginPresenter.bind(loginView);
         loginPresenter.onSignInButtonClick("aValidLogin", "short");
 
@@ -74,12 +78,12 @@ public class LoginPresenterTest extends BasePresenterTest {
 
     @Test
     public void whenExternalErrorThenShowLoginErrorIsCalled() {
-        LoginPresenter loginPresenter = new LoginPresenter(context, new LoginUseCaseFailure(), errorHandler);
+        LoginPresenter loginPresenter = new LoginPresenter(new LoginUseCaseFailure(), errorHandler);
         loginPresenter.bind(loginView);
         loginPresenter.onSignInButtonClick("aValidLogin", "aValidPassword");
 
         verify(loginView, timeout(WAIT).times(0)).navigateToProfile();
-        verify(loginView, timeout(WAIT).times(1)).onError(any(String.class));
+        verify(loginView, timeout(WAIT).times(1)).showToastMessage(any(String.class));
     }
 
     private class LoginUseCaseSuccess extends LoginUseCase {
@@ -88,8 +92,8 @@ public class LoginPresenterTest extends BasePresenterTest {
         }
 
         @Override
-        protected Observable<AccountUser> getUseCaseObservable() {
-            return Observable.just(mock(AccountUser.class));
+        protected Observable<List<Contact>> getUseCaseObservable() {
+            return Observable.just(new ArrayList<>());
         }
     }
 
@@ -99,13 +103,8 @@ public class LoginPresenterTest extends BasePresenterTest {
         }
 
         @Override
-        protected Observable<AccountUser> getUseCaseObservable() {
-            return Observable.create(new Observable.OnSubscribe<AccountUser>() {
-                @Override
-                public void call(Subscriber<? super AccountUser> subscriber) {
-                    subscriber.onError(new RuntimeException("Not great"));
-                }
-            });
+        protected Observable<List<Contact>> getUseCaseObservable() {
+            return Observable.create((Observable.OnSubscribe<List<Contact>>) subscriber -> subscriber.onError(new RuntimeException("Not great")));
         }
     }
 

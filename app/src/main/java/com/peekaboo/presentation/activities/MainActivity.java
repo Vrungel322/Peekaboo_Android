@@ -9,7 +9,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
@@ -21,13 +20,19 @@ import com.peekaboo.presentation.adapters.HotFriendsAdapter;
 import com.peekaboo.presentation.fragments.CallsFragment;
 import com.peekaboo.presentation.fragments.ContactsFragment;
 import com.peekaboo.presentation.fragments.DialogsFragment;
+import com.peekaboo.presentation.fragments.FriendTestFragment;
 import com.peekaboo.presentation.fragments.ProfileFragment;
 import com.peekaboo.presentation.fragments.SettingsFragment;
 import com.peekaboo.presentation.fragments.SocketTestFragment;
 import com.peekaboo.presentation.pojo.HotFriendPOJO;
+import com.peekaboo.presentation.services.INotifier;
+import com.peekaboo.presentation.services.Message;
+import com.peekaboo.presentation.services.MessageUtils;
 import com.peekaboo.utils.Constants;
 
 import java.util.ArrayList;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -57,11 +62,10 @@ public class MainActivity extends AppCompatActivity {
     LinearLayout llSettings;
     @BindView(R.id.llExit)
     LinearLayout llExit;
-
+    @Inject
+    INotifier<Message> notifier;
     private HotFriendsAdapter hotFriendsAdapter;
     private ArrayList<HotFriendPOJO> alHotFriendPOJO;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,33 +84,33 @@ public class MainActivity extends AppCompatActivity {
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
+        if (getSupportFragmentManager().findFragmentById(R.id.fragmentContainer) == null) {
+            changeFragment(new FriendTestFragment(), null);
+        }
+
+//        changeFragment(new SocketTestFragment(), null);
+//        changeFragment(new ServiceTestFragment(), null);
+//        changeFragment(new RecordTestFragment(), null);
 
         //Hardcode list in right drawer
-        alHotFriendPOJO = new ArrayList<HotFriendPOJO>();
-        for (int i = 0; i < 20; i++){
+        alHotFriendPOJO = new ArrayList<>();
+        for (int i = 0; i < 20; i++) {
             alHotFriendPOJO.add(new HotFriendPOJO(R.drawable.raccoon, Math.random() < 0.5));
         }
         hotFriendsAdapter = new HotFriendsAdapter(getApplicationContext(), alHotFriendPOJO);
         OverScrollDecoratorHelper.setUpOverScroll(lvHotFriends);
         lvHotFriends.setAdapter(hotFriendsAdapter);
-        lvHotFriends.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Toast.makeText(getApplicationContext(), "clicked raccoon #" + position, Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(MainActivity.this, ChatActivity.class));
-                drawer.closeDrawer(Gravity.RIGHT, true);
-            }
+        lvHotFriends.setOnItemClickListener((parent, view, position, id) -> {
+            Toast.makeText(getApplicationContext(), "clicked raccoon #" + position, Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(MainActivity.this, ChatActivity.class));
+            drawer.closeDrawer(Gravity.RIGHT, true);
         });
-
-        changeFragment(new SocketTestFragment(), null);
-//        changeFragment(new ServiceTestFragment(), null);
-//        changeFragment(new RecordTestFragment(), null);
     }
 
     @OnClick({R.id.llDialogs, R.id.llCalls, R.id.llContacts, R.id.llProfile, R.id.llSettings, R.id.llExit})
     public void onDrawerItemClick(View v) {
         selectionMode(v.getId());
-        switch (v.getId()){
+        switch (v.getId()) {
             case R.id.llDialogs:
                 changeFragment(new DialogsFragment(), Constants.FRAGMENT_TAGS.DIALOGS_FRAGMENT);
                 break;
@@ -128,27 +132,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     @OnClick({R.id.bText, R.id.bAudio, R.id.bVideo})
-    public void onRadioButtonClicked(View v){
-        switch (v.getId()){
-            case R.id.bText:
-                if (!bText.isSelected()){
-                    bText.setSelected(true);
-                } else {bText.setSelected(false);}
-                Toast.makeText(getApplicationContext(), "Text", Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.bAudio:
-                if (!bAudio.isSelected()){
-                    bAudio.setSelected(true);
-                } else {bAudio.setSelected(false);}
-                Toast.makeText(getApplicationContext(), "Audio", Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.bVideo:
-                if (!bVideo.isSelected()){
-                    bVideo.setSelected(true);
-                } else {bVideo.setSelected(false);}
-                Toast.makeText(getApplicationContext(), "Video", Toast.LENGTH_SHORT).show();
-                break;
+    public void onRadioButtonClicked(View v) {
+        bText.setSelected(v.getId() == R.id.bText);
+        bAudio.setSelected(v.getId() == R.id.bAudio);
+        bVideo.setSelected(v.getId() == R.id.bVideo);
+        byte mode = (byte) (v.getId() == R.id.bText ? 1 : v.getId() == R.id.bAudio ? 2 : 0);
+        if (notifier.isAvailable()) {
 
+            Message switchModeMessage = MessageUtils.createSwitchModeMessage(mode);
+            Toast.makeText(this, switchModeMessage.toString(), Toast.LENGTH_LONG).show();
+            notifier.sendMessage(switchModeMessage);
         }
     }
 //

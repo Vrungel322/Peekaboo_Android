@@ -3,19 +3,26 @@ package com.peekaboo.presentation.services;
 /**
  * Created by sebastian on 12.07.16.
  */
-public interface INotifier {
-    void sendMessage(Message message);
+public interface INotifier<T> {
+
+    void sendMessage(T message);
+
     boolean isAvailable();
 
     void tryConnect(String authorization);
 
-    void addListener(NotificationListener listener);
+    void addListener(NotificationListener<T> listener);
 
-    void removeListener(NotificationListener listener);
+    void removeListener(NotificationListener<T> listener);
 
     void disconnect();
 
-    interface NotificationListener {
-        void onMessageObtained(Message message);
+    interface NotificationListener<T> {
+
+        void onMessageObtained(T message);
+
+        void onConnected();
+
+        void onDisconnected();
     }
 }

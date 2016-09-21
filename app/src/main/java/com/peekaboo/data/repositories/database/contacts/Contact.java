@@ -11,19 +11,31 @@ public class Contact extends ContactAbs {
     private String contactNickname;
     private boolean isOnline;
     private String contactImgUri;
+    private String contactId;
 
-    public Contact(String contactName, String contactSurname, String contactNickname,
-                   boolean isOnline, String contactImgUri) {
+    public Contact(long id, String contactName, String contactSurname, String contactNickname,
+                   boolean isOnline, String contactImgUri, String contactId) {
+        this.id = id;
         this.contactName = contactName;
         this.contactSurname = contactSurname;
         this.contactNickname = contactNickname;
         this.isOnline = isOnline;
         this.contactImgUri = contactImgUri;
+        this.contactId = contactId;
     }
 
     @Override
-    public long contactId() {
+    public long id() {
         return id;
+    }
+
+    @Override
+    public String contactId() {
+        return contactId;
+    }
+
+    public void setContactId(String contactId) {
+        this.contactId = contactId;
     }
 
     @Override

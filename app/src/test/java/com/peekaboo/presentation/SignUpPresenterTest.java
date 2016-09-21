@@ -3,7 +3,7 @@ package com.peekaboo.presentation;
 import android.test.mock.MockContext;
 
 import com.peekaboo.domain.AccountUser;
-import com.peekaboo.domain.ErrorHandler;
+import com.peekaboo.domain.UserMessageMapper;
 import com.peekaboo.domain.SessionRepository;
 import com.peekaboo.domain.usecase.ConfirmUseCase;
 import com.peekaboo.domain.usecase.SignUpUseCase;
@@ -27,11 +27,11 @@ public class SignUpPresenterTest extends BasePresenterTest {
     @Mock
     private ISignUpView signUpView;
     @Mock
-    private ErrorHandler errorHandler;
+    private UserMessageMapper errorHandler;
 
     @Test
     public void whenSignUpSuccessThenShowConfirmDialogIsCalled() {
-        SignUpPresenter signUpPresenter = new SignUpPresenter(context, new SignUpUseCaseSuccess(), new ConfirmUseCaseSuccess(), errorHandler);
+        SignUpPresenter signUpPresenter = new SignUpPresenter(new SignUpUseCaseSuccess(), new ConfirmUseCaseSuccess(), errorHandler);
         signUpPresenter.bind(signUpView);
         signUpPresenter.onSignUpButtonClick("aValidUsername", "aValid@mail", "aValidPassword", "aValidPassword");
 
@@ -40,7 +40,7 @@ public class SignUpPresenterTest extends BasePresenterTest {
 
     @Test
     public void whenSignUpSuccessThenShowConfirmDialogIsCalledAfterRebind() {
-        SignUpPresenter signUpPresenter = new SignUpPresenter(context, new SignUpUseCaseSuccess(), new ConfirmUseCaseSuccess(), errorHandler);
+        SignUpPresenter signUpPresenter = new SignUpPresenter(new SignUpUseCaseSuccess(), new ConfirmUseCaseSuccess(), errorHandler);
         signUpPresenter.bind(signUpView);
         signUpPresenter.onSignUpButtonClick("aValidUsername", "aValid@mail", "aValidPassword", "aValidPassword");
         signUpPresenter.unbind();
@@ -52,17 +52,17 @@ public class SignUpPresenterTest extends BasePresenterTest {
 
     @Test
     public void whenSignUpExternalErrorThenShowConfirmDialogIsCalled() {
-        SignUpPresenter signUpPresenter = new SignUpPresenter(context, new SignUpUseCaseFailure(), new ConfirmUseCaseSuccess(), errorHandler);
+        SignUpPresenter signUpPresenter = new SignUpPresenter(new SignUpUseCaseFailure(), new ConfirmUseCaseSuccess(), errorHandler);
         signUpPresenter.bind(signUpView);
         signUpPresenter.onSignUpButtonClick("aValidUsername", "aValid@mail", "aValidPassword", "aValidPassword");
 
         verify(signUpView, timeout(WAIT).times(0)).showConfirmDialog();
-        verify(signUpView, timeout(WAIT).times(1)).onError(any(String.class));
+        verify(signUpView, timeout(WAIT).times(1)).showToastMessage(any(String.class));
     }
 
     @Test
     public void whenInvalidUsernameThenShowInputErrorIsCalled() {
-        SignUpPresenter signUpPresenter = new SignUpPresenter(context, new SignUpUseCaseSuccess(), new ConfirmUseCaseSuccess(), errorHandler);
+        SignUpPresenter signUpPresenter = new SignUpPresenter(new SignUpUseCaseSuccess(), new ConfirmUseCaseSuccess(), errorHandler);
         signUpPresenter.bind(signUpView);
         signUpPresenter.onSignUpButtonClick("short", "aValid@mail", "aValidPassword", "aValidPassword");
 
@@ -72,7 +72,7 @@ public class SignUpPresenterTest extends BasePresenterTest {
 
     @Test
     public void whenInvalidLoginThenShowInputErrorIsCalled() {
-        SignUpPresenter signUpPresenter = new SignUpPresenter(context, new SignUpUseCaseSuccess(), new ConfirmUseCaseSuccess(), errorHandler);
+        SignUpPresenter signUpPresenter = new SignUpPresenter(new SignUpUseCaseSuccess(), new ConfirmUseCaseSuccess(), errorHandler);
         signUpPresenter.bind(signUpView);
         signUpPresenter.onSignUpButtonClick("aValidUsername", "anInvalidLogin", "aValidPassword", "aValidPassword");
 
@@ -82,7 +82,7 @@ public class SignUpPresenterTest extends BasePresenterTest {
 
     @Test
     public void whenInvalidPasswordThenShowInputErrorIsCalled() {
-        SignUpPresenter signUpPresenter = new SignUpPresenter(context, new SignUpUseCaseSuccess(), new ConfirmUseCaseSuccess(), errorHandler);
+        SignUpPresenter signUpPresenter = new SignUpPresenter(new SignUpUseCaseSuccess(), new ConfirmUseCaseSuccess(), errorHandler);
         signUpPresenter.bind(signUpView);
         signUpPresenter.onSignUpButtonClick("aValidUsername", "aValid@mail", "short", "aValidPassword");
 
@@ -92,7 +92,7 @@ public class SignUpPresenterTest extends BasePresenterTest {
 
     @Test
     public void whenPasswordNotConfirmedThenShowInputErrorIsCalled() {
-        SignUpPresenter signUpPresenter = new SignUpPresenter(context, new SignUpUseCaseSuccess(), new ConfirmUseCaseSuccess(), errorHandler);
+        SignUpPresenter signUpPresenter = new SignUpPresenter(new SignUpUseCaseSuccess(), new ConfirmUseCaseSuccess(), errorHandler);
         signUpPresenter.bind(signUpView);
         signUpPresenter.onSignUpButtonClick("aValidUsername", "aValid@mail", "aValidPassword", "notConfirmingPassword");
 
@@ -104,7 +104,7 @@ public class SignUpPresenterTest extends BasePresenterTest {
     public void whenConfirmSuccessThenNavigateToProfile() {
         ConfirmUseCaseSuccess confirmUseCase = new ConfirmUseCaseSuccess();
         confirmUseCase.setUserId("id");
-        SignUpPresenter signUpPresenter = new SignUpPresenter(context, new SignUpUseCaseSuccess(), confirmUseCase, errorHandler);
+        SignUpPresenter signUpPresenter = new SignUpPresenter(new SignUpUseCaseSuccess(), confirmUseCase, errorHandler);
         signUpPresenter.bind(signUpView);
         signUpPresenter.onCodeConfirmButtonClick("1234");
 
@@ -116,7 +116,7 @@ public class SignUpPresenterTest extends BasePresenterTest {
     public void whenConfirmSuccessThenNavigateToProfileAfterRebind() {
         ConfirmUseCaseSuccess confirmUseCase = new ConfirmUseCaseSuccess();
         confirmUseCase.setUserId("id");
-        SignUpPresenter signUpPresenter = new SignUpPresenter(context, new SignUpUseCaseSuccess(), confirmUseCase, errorHandler);
+        SignUpPresenter signUpPresenter = new SignUpPresenter(new SignUpUseCaseSuccess(), confirmUseCase, errorHandler);
         signUpPresenter.bind(signUpView);
         signUpPresenter.onCodeConfirmButtonClick("1234");
         signUpPresenter.unbind();
@@ -131,11 +131,11 @@ public class SignUpPresenterTest extends BasePresenterTest {
     public void whenInvalidCodeThenShowError() {
         ConfirmUseCaseSuccess confirmUseCase = new ConfirmUseCaseSuccess();
         confirmUseCase.setUserId("id");
-        SignUpPresenter signUpPresenter = new SignUpPresenter(context, new SignUpUseCaseSuccess(), confirmUseCase, errorHandler);
+        SignUpPresenter signUpPresenter = new SignUpPresenter(new SignUpUseCaseSuccess(), confirmUseCase, errorHandler);
         signUpPresenter.bind(signUpView);
         signUpPresenter.onCodeConfirmButtonClick("123");
 
-        verify(signUpView, timeout(WAIT).times(1)).onError(any(String.class));
+        verify(signUpView, timeout(WAIT).times(1)).showToastMessage(any(String.class));
         verify(signUpView, timeout(WAIT).times(0)).navigateToProfile();
         verify(signUpView, timeout(WAIT).times(0)).dismissConfirmDialog();
     }
@@ -144,11 +144,11 @@ public class SignUpPresenterTest extends BasePresenterTest {
     public void whenExternalFailureThenShowError() {
         ConfirmUseCaseFailure confirmUseCase = new ConfirmUseCaseFailure();
         confirmUseCase.setUserId("id");
-        SignUpPresenter signUpPresenter = new SignUpPresenter(context, new SignUpUseCaseSuccess(), confirmUseCase, errorHandler);
+        SignUpPresenter signUpPresenter = new SignUpPresenter(new SignUpUseCaseSuccess(), confirmUseCase, errorHandler);
         signUpPresenter.bind(signUpView);
         signUpPresenter.onCodeConfirmButtonClick("1234");
 
-        verify(signUpView, timeout(WAIT).times(1)).onError(any(String.class));
+        verify(signUpView, timeout(WAIT).times(1)).showToastMessage(any(String.class));
         verify(signUpView, timeout(WAIT).times(0)).navigateToProfile();
     }
 

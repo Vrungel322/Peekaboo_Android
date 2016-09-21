@@ -1,18 +1,21 @@
 package com.peekaboo.data.rest;
 
 import com.peekaboo.data.FileEntity;
+import com.peekaboo.data.rest.entity.ContactEntity;
 import com.peekaboo.data.rest.entity.Credentials;
 import com.peekaboo.data.rest.entity.CredentialsSignUp;
 import com.peekaboo.data.rest.entity.TokenEntity;
 import com.peekaboo.data.rest.entity.UserEntity;
-import com.peekaboo.data.utils.FileUtils;
-import com.peekaboo.data.rest.entity.ContactsEntity;
+import com.peekaboo.data.rest.entity.UserResponse;
 
 import java.io.File;
+import java.util.List;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
 import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
+import retrofit2.Call;
 import rx.Observable;
 
 /**
@@ -42,7 +45,7 @@ public class RestApi {
         return api.getFriend(friendName);
     }
 
-    public Observable<FileEntity> uploadFile(String fileName, String receiverId, String bearer) {
+    public Call<FileEntity> uploadFile(String fileName, String receiverId, String bearer) {
         File file = new File(fileName);
         RequestBody requestFile =
                 RequestBody.create(MediaType.parse("multipart/form-data"), file);
@@ -50,16 +53,11 @@ public class RestApi {
         return api.uploadFile(receiverId, part, bearer);
     }
 
-    public Observable<File> downloadFile(String fileName, String remoteFileName, String bearer) {
-        return api.download(remoteFileName, bearer).map(body -> {
-            File file = FileUtils.writeResponseBodyToDisk(fileName, body);
-            //TODO error handling
-            if (file == null) throw new RuntimeException();
-            return file;
-        });
+    public Call<ResponseBody> downloadFile(String remoteFileName, String bearer) {
+        return api.download(remoteFileName, bearer);
     }
 
-    public Observable<ContactsEntity> loadAllContacts() {
-        return api.loadAllContacts();
+    public Observable<UserResponse> getAllContacts() {
+        return api.getAllContacts();
     }
 }

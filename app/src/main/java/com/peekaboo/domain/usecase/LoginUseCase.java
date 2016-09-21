@@ -1,9 +1,12 @@
 package com.peekaboo.domain.usecase;
 
+import com.peekaboo.data.repositories.database.contacts.Contact;
 import com.peekaboo.domain.SessionRepository;
 import com.peekaboo.domain.AccountUser;
 import com.peekaboo.domain.schedulers.ObserveOn;
 import com.peekaboo.domain.schedulers.SubscribeOn;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
@@ -12,7 +15,7 @@ import rx.Observable;
 /**
  * Created by sebastian on 28.06.16.
  */
-public class LoginUseCase extends UseCase<AccountUser> {
+public class LoginUseCase extends UseCase<List<Contact>> {
     private SessionRepository sessionRepository;
     private String login;
     private String password;
@@ -28,7 +31,7 @@ public class LoginUseCase extends UseCase<AccountUser> {
         this.password = password;
     }
     @Override
-    protected Observable<AccountUser> getUseCaseObservable() {
+    protected Observable<List<Contact>> getUseCaseObservable() {
         return sessionRepository.login(login, password);
     }
 }

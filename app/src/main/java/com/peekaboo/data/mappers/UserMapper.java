@@ -1,7 +1,6 @@
 package com.peekaboo.data.mappers;
 
 import com.peekaboo.data.rest.entity.UserEntity;
-import com.peekaboo.domain.AccountUser;
 import com.peekaboo.domain.User;
 
 /**
@@ -10,6 +9,6 @@ import com.peekaboo.domain.User;
 public class UserMapper implements Mapper<UserEntity, User> {
     @Override
     public User transform(UserEntity obj) throws RuntimeException {
-        return new User(obj.getId());
+        return new User(obj.getId(), obj.getName());
     }
 }

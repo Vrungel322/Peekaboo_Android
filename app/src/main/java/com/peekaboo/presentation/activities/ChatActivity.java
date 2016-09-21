@@ -66,7 +66,6 @@ public class ChatActivity extends AppCompatActivity
     LinearLayout llMessageBody;
     @BindView(R.id.rflMessageBody)
     RevealFrameLayout rflMessageBody;
-
     @BindView(R.id.bMessageOpen)
     ImageButton bMessageOpen;
     @BindView(R.id.bSendMessage)
@@ -120,6 +119,7 @@ public class ChatActivity extends AppCompatActivity
         rvMessages.addOnItemTouchListener(new ChatRecyclerTouchListener(this, rvMessages, new ChatClickListener() {
             @Override
             public void onClick(View view, int position) {
+
             }
 
             @Override
@@ -129,7 +129,6 @@ public class ChatActivity extends AppCompatActivity
                 Bundle itemIndexBundle = new Bundle();
                 itemIndexBundle.putInt(Constants.ARG_CHAT_MESSAGE_ITEM_INDEX, position);
                 chatItemDialog.setArguments(itemIndexBundle);
-
                 chatItemDialog.show(ft, Constants.FRAGMENT_TAGS.CHAT_ITEM_DIALOG_FRAGMENT_TAG);
             }
         }));
@@ -141,7 +140,6 @@ public class ChatActivity extends AppCompatActivity
         super.onResume();
         chatPresenter.onResume();
         chatPresenter.onChatHistoryLoading(chatAdapter);
-
     }
 
     @Override
@@ -236,7 +234,6 @@ public class ChatActivity extends AppCompatActivity
         }
         return true;
     }
-
 
     @OnClick(R.id.bMessageOpen)
     void onbMessageOpenClick() {
@@ -408,20 +405,6 @@ public class ChatActivity extends AppCompatActivity
             bMessageOpen.setVisibility(View.VISIBLE);
             bSendMessage.setVisibility(View.GONE);
             rflMessageBody.setVisibility(View.GONE);
-
         }
-
     }
-
-
-//
-//    @OnTouch(R.id.svItems)
-//    public boolean onScrollViewTouch(View v, MotionEvent ev){
-//        if(ev.getAction() == MotionEvent.ACTION_DOWN){
-//            etMessageBody.clearFocus();
-//
-//        }
-//        return true;
-//    }
-
 }

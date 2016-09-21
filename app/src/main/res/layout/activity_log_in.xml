@@ -31,7 +31,7 @@
         android:orientation="vertical"
         android:paddingLeft="@dimen/padding_signup_side"
         android:paddingRight="@dimen/padding_signup_side"
-        android:paddingTop="@dimen/padding_top">
+        android:paddingTop="@dimen/login_form_padding_top">
 
         <com.peekaboo.presentation.app.view.RobotoTextInputLayout
             android:id="@+id/ilUsername"

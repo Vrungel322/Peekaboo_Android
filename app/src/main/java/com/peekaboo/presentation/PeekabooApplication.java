@@ -3,6 +3,7 @@ package com.peekaboo.presentation;
 import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
+import android.os.Handler;
 
 import com.peekaboo.presentation.activities.LogInActivity;
 import com.peekaboo.presentation.di.ApplicationComponent;
@@ -22,7 +23,7 @@ import timber.log.Timber;
 public class PeekabooApplication extends Application {
 
     private ApplicationComponent component;
-
+    private Handler handler;
     VKAccessTokenTracker vkAccessTokenTracker = new VKAccessTokenTracker() {
         @Override
         public void onVKAccessTokenChanged(VKAccessToken oldToken, VKAccessToken newToken) {
@@ -40,9 +41,14 @@ public class PeekabooApplication extends Application {
         return (PeekabooApplication) context.getApplicationContext();
     }
 
+    public Handler getHandler() {
+        return handler;
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
+        handler = new Handler();
         buildAppComponent();
         NotificationService.launch(this, NotificationService.ACTION.TRY_CONNECT);
         vkAccessTokenTracker.startTracking();

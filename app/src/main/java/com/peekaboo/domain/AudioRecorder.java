@@ -1,6 +1,14 @@
 package com.peekaboo.domain;
 
+import android.util.Log;
+
+import com.peekaboo.domain.schedulers.ObserveOn;
+import com.peekaboo.domain.schedulers.SubscribeOn;
+
+import javax.inject.Inject;
+
 import rx.Observable;
+import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 /**
@@ -9,47 +17,44 @@ import rx.schedulers.Schedulers;
 public class AudioRecorder {
 
     private Record record;
-    private OnStartRecordingListener onStartRecordingListener;
-    private OnStopRecordingListener onStopRecordingListener;
+    private boolean isRecording;
+    private SubscribeOn subscribeOn;
+    private ObserveOn observeOn;
 
-    public AudioRecorder(Record record) {
+    @Inject
+    public AudioRecorder(SubscribeOn subscribeOn, ObserveOn observeOn) {
+        this.subscribeOn = subscribeOn;
+        this.observeOn = observeOn;
+    }
+
+    public void setRecord(Record record) {
         this.record = record;
     }
 
     public Observable<Record> startRecording() {
-        onStartRecordingListener.onStartRecording();
+        isRecording = true;
         return Observable.just(record)
                 .subscribeOn(Schedulers.computation())
                 .map(record -> {
+                    Log.e("record", "start map " + Thread.currentThread().hashCode());
                     record.startRecording();
                     return record;
                 });
     }
 
     public Observable<Record> stopRecording() {
+        isRecording = false;
         return Observable.just(record)
                 .subscribeOn(Schedulers.computation())
                 .map(record -> {
-                    onStopRecordingListener.onStopRecording();
+                    Log.e("record", "stop map " + Thread.currentThread().hashCode());
                     record.stopRecording();
                     return record;
-                });
+                })
+                .observeOn(observeOn.getScheduler());
     }
 
-    public void setOnStartRecordingListener(OnStartRecordingListener listener){
-        onStartRecordingListener = listener;
+    public boolean isRecording() {
+        return isRecording;
     }
-
-    public void setOnStopRecordingListener(OnStopRecordingListener listener){
-        onStopRecordingListener = listener;
-    }
-
-    public interface OnStartRecordingListener {
-        void onStartRecording();
-    }
-
-    public interface OnStopRecordingListener {
-        void onStopRecording();
-    }
-
 }

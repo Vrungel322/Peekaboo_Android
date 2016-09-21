@@ -62,7 +62,7 @@ dependencies {
 //    androidTestCompile 'com.android.support.test.espresso:espresso-intents:2.2.1'
 //    androidTestCompile 'com.android.support.test.espresso:espresso-web:2.2.1'
 
-
+//    compile 'com.github.wseemann:FFmpegMediaPlayer:1.0.8'
     apt 'com.jakewharton:butterknife-compiler:8.1.0'
 
     apt 'com.google.dagger:dagger-compiler:2.0.2'
@@ -96,7 +96,7 @@ dependencies {
     compile 'me.everything:overscroll-decor-android:1.0.3'
     compile 'com.android.support:support-v4:23.4.0'
     compile 'com.android.support:recyclerview-v7:23.4.0'
-    compile 'com.squareup.sqlbrite:sqlbrite:0.7.0'
+//    compile 'com.squareup.sqlbrite:sqlbrite:0.7.0'
     compile 'com.jakewharton.timber:timber:4.1.2'
 
     compile 'com.squareup.picasso:picasso:2.5.2'

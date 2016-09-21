@@ -77,16 +77,16 @@ public class SignUpActivity  extends AppCompatActivity implements ISignUpView {
             fragment.dismiss();
         }
     }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        etUsername.setText("Vrungel");
-        etLogin.setText("geronimoapachi@gmail.com");
-        pvPasswordConfirm.setText("asdasd");
-        pvPassword.setText("asdasd");
-
-    }
+//
+//    @Override
+//    protected void onStart() {
+//        super.onStart();
+//        etUsername.setText("Vrungel");
+//        etLogin.setText("geronimoapachi@gmail.com");
+//        pvPasswordConfirm.setText("asdasd");
+//        pvPassword.setText("asdasd");
+//
+//    }
 
     @Override
     protected void onDestroy() {

@@ -3,17 +3,28 @@ package com.peekaboo.presentation.di;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.peekaboo.data.Constants;
 import com.peekaboo.data.di.DataModule;
 import com.peekaboo.data.mappers.MapperFactory;
+import com.peekaboo.data.repositories.database.messages.PMessageHelper;
+import com.peekaboo.data.repositories.database.service.ReadMessagesHelper;
 import com.peekaboo.data.repositories.database.utils_db.DbModule;
 import com.peekaboo.domain.AccountUser;
 import com.peekaboo.domain.schedulers.ObserveOn;
 import com.peekaboo.domain.schedulers.SubscribeOn;
+import com.peekaboo.domain.usecase.FileDownloadUseCase;
+import com.peekaboo.domain.usecase.FileUploadUseCase;
+import com.peekaboo.presentation.PeekabooApplication;
+import com.peekaboo.presentation.services.IMessenger;
 import com.peekaboo.presentation.services.INotifier;
+import com.peekaboo.presentation.services.Message;
+import com.peekaboo.presentation.services.Messenger;
 import com.peekaboo.presentation.services.WebSocketNotifier;
+import com.peekaboo.utils.MainThread;
 import com.squareup.otto.Bus;
 
+import java.util.List;
+
+import javax.inject.Named;
 import javax.inject.Singleton;
 
 import dagger.Module;
@@ -23,16 +34,22 @@ import rx.schedulers.Schedulers;
 
 @Module(includes = {DataModule.class, DbModule.class})
 public class ApplicationModule {
-    private final Context application;
+    private final PeekabooApplication application;
 
     public ApplicationModule(Context application) {
-        this.application = application;
+        this.application = (PeekabooApplication) application;
     }
 
     @Provides
     @Singleton
     Context provideApplicationContext() {
         return application;
+    }
+
+    @Provides
+    @Singleton
+    MainThread provideMainThread() {
+        return new MainThread(application.getHandler());
     }
 
     @Provides
@@ -50,15 +67,13 @@ public class ApplicationModule {
     @Singleton
     @Provides
     SharedPreferences provideSharedPreferences(Context mContext) {
-        return mContext.getSharedPreferences("com.peekaboo.Peekaboo", mContext.MODE_PRIVATE);
+        return mContext.getSharedPreferences("com.peekaboo.Peekaboo", Context.MODE_PRIVATE);
     }
-
 
     @Provides
     Bus provideEventBus() {
         return new Bus();
     }
-
 
     @Provides
     @Singleton
@@ -68,13 +83,14 @@ public class ApplicationModule {
 
     @Singleton
     @Provides
-    public INotifier provideNotifier() {
-        return new WebSocketNotifier(Constants.BASE_URL_SOCKET, 5000, new MapperFactory());
+    public INotifier<Message> provideNotifier(MainThread mainThread, @Named("domens") List<String> domens) {
+        return new WebSocketNotifier(domens.get(1), 5000, new MapperFactory(), mainThread);
     }
 
-//    @Singleton
-//    @Provides
-//    Errors provideErrors() {
-//        return new Errors(application);
-//    }
+    @Singleton
+    @Provides
+    public IMessenger provideMessanger(INotifier<Message> notifier, PMessageHelper helper, ReadMessagesHelper readMessagesHelper, AccountUser user, FileUploadUseCase fileUploadUseCase, FileDownloadUseCase downloadFileUseCase) {
+        return new Messenger(notifier, helper, readMessagesHelper, user, fileUploadUseCase, downloadFileUseCase);
+    }
+
 }

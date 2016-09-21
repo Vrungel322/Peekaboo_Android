@@ -15,7 +15,7 @@
     <string name="invalidEmail">Неподходящий email</string>
     <string name="invalidKey">Неподходящий код</string>
     <string name="bySignUp1">В процессе </string>
-    <string name="bySignUp2"> Регистрируясь </string>
+    <string name="bySignUp2"> Регистрации </string>
     <string name="bySignUp3"> Вы соглашаетесь с </string>
     <string name="bySignUp4"> Правилами использования </string>
     <string name="orSignIn">Или войдите с:</string>

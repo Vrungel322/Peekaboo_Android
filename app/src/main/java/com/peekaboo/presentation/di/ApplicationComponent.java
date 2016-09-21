@@ -2,14 +2,17 @@ package com.peekaboo.presentation.di;
 
 import com.peekaboo.data.rest.PeekabooApi;
 import com.peekaboo.presentation.activities.ChatActivity;
+import com.peekaboo.presentation.activities.ChatActivity2;
 import com.peekaboo.presentation.activities.LogInActivity;
 import com.peekaboo.presentation.activities.MainActivity;
 import com.peekaboo.presentation.activities.SignUpActivity;
 import com.peekaboo.presentation.activities.SplashActivity;
 import com.peekaboo.presentation.dialogs.ConfirmSignUpDialog;
+import com.peekaboo.presentation.dialogs.RecordDialogFragment;
 import com.peekaboo.presentation.fragments.ContactsFragment;
 import com.peekaboo.presentation.fragments.DialogsFragment;
-import com.peekaboo.presentation.fragments.ServiceTestFragment;
+import com.peekaboo.presentation.fragments.FriendTestFragment;
+import com.peekaboo.presentation.fragments.MessangerTestFragment;
 import com.peekaboo.presentation.fragments.SocketTestFragment;
 import com.peekaboo.presentation.services.NotificationService;
 
@@ -30,7 +33,6 @@ public interface ApplicationComponent {
 
 
 //    Inject of Fragments
-    void inject(ServiceTestFragment serviceTestFragment);
     void inject(ContactsFragment contactsFragment);
     void inject(ConfirmSignUpDialog confirmSignUpDialog);
     void inject(DialogsFragment dialogsFragment);
@@ -41,4 +43,12 @@ public interface ApplicationComponent {
     PeekabooApi api();
 
     void inject(SocketTestFragment socketTestFragment);
+
+    void inject(MessangerTestFragment messangerTestFragment);
+
+    void inject(FriendTestFragment friendTestFragment);
+
+    void inject(ChatActivity2 chatActivity2);
+
+    void inject(RecordDialogFragment recordDialogFragment);
 }

@@ -98,32 +98,38 @@
                         android:paddingBottom="12dp"
                         android:weightSum="3">
 
-                        <Button
-                            android:id="@+id/bText"
-                            android:layout_width="@dimen/switcher_item_size"
-                            android:layout_height="@dimen/switcher_item_size"
-                            android:layout_marginLeft="@dimen/marginForEachItemInSwitcher"
-                            android:layout_marginRight="@dimen/marginForEachItemInSwitcher"
-                            android:layout_weight="1"
-                            android:background="@drawable/thumb_text" />
+                        <RadioGroup
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
 
-                        <Button
-                            android:id="@+id/bAudio"
-                            android:layout_width="@dimen/switcher_item_size"
-                            android:layout_height="@dimen/switcher_item_size"
-                            android:layout_marginLeft="@dimen/marginForEachItemInSwitcher"
-                            android:layout_marginRight="@dimen/marginForEachItemInSwitcher"
-                            android:layout_weight="1"
-                            android:background="@drawable/thumb_audio" />
+                            <Button
+                                android:id="@+id/bText"
+                                android:layout_width="@dimen/switcher_item_size"
+                                android:layout_height="@dimen/switcher_item_size"
+                                android:layout_marginLeft="@dimen/marginForEachItemInSwitcher"
+                                android:layout_marginRight="@dimen/marginForEachItemInSwitcher"
+                                android:layout_weight="1"
+                                android:background="@drawable/thumb_text" />
 
-                        <Button
-                            android:id="@+id/bVideo"
-                            android:layout_width="@dimen/switcher_item_size"
-                            android:layout_height="@dimen/switcher_item_size"
-                            android:layout_marginLeft="@dimen/marginForEachItemInSwitcher"
-                            android:layout_marginRight="@dimen/marginForEachItemInSwitcher"
-                            android:layout_weight="1"
-                            android:background="@drawable/thumb_video" />
+                            <Button
+                                android:id="@+id/bAudio"
+                                android:layout_width="@dimen/switcher_item_size"
+                                android:layout_height="@dimen/switcher_item_size"
+                                android:layout_marginLeft="@dimen/marginForEachItemInSwitcher"
+                                android:layout_marginRight="@dimen/marginForEachItemInSwitcher"
+                                android:layout_weight="1"
+                                android:background="@drawable/thumb_audio" />
+
+                            <Button
+                                android:id="@+id/bVideo"
+                                android:layout_width="@dimen/switcher_item_size"
+                                android:layout_height="@dimen/switcher_item_size"
+                                android:layout_marginLeft="@dimen/marginForEachItemInSwitcher"
+                                android:layout_marginRight="@dimen/marginForEachItemInSwitcher"
+                                android:layout_weight="1"
+                                android:background="@drawable/thumb_video" />
+                        </RadioGroup>
 
                     </LinearLayout>
 

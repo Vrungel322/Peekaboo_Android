@@ -4,7 +4,9 @@ import android.media.AudioFormat;
 import android.media.AudioRecord;
 import android.media.MediaRecorder;
 import android.os.Environment;
+import android.support.annotation.NonNull;
 
+import com.peekaboo.data.utils.FileUtils;
 import com.peekaboo.utils.Constants;
 
 import java.io.File;
@@ -33,22 +35,14 @@ public class Record {
                 AudioFormat.ENCODING_PCM_16BIT);
     }
 
-    public String getFileName() {
-        String filepath = Environment.getExternalStorageDirectory().getPath();
-        File file = new File(filepath, Constants.SOUND_RECORDING.AUDIO_RECORDER_FOLDER
-                + "/" + folderName);
-
-        if (!file.exists()) {
-            file.mkdirs();
-        }
-
-        String filename = (file.getAbsolutePath() + "/" + System.currentTimeMillis()
-                + Constants.SOUND_RECORDING.AUDIO_RECORDER_FILE_EXT_WAV);
+    private String getFileName() {
+        String filename = FileUtils.formAudioName(folderName);
 
         setFilename(filename);
 
         return filename;
     }
+
 
     public String getTempFileName() {
         String filepath = Environment.getExternalStorageDirectory().getPath();

@@ -20,34 +20,27 @@ public abstract class ContactAbs {
     public static final String CONTACT_NICKNAME = "CONTACT_NICKNAME";
     public static final String CONTACT_IS_ONLINE = "CONTACT_IS_ONLINE";
     public static final String CONTACT_IMG_URI = "CONTACT_IMG_URI";
+    public static final String CONTACT_ID = "CONTACT_ID";
 
-    public abstract long contactId();
+    public abstract long id();
+    public abstract String contactId();
     public abstract String contactName();
     public abstract String contactSurname();
     public abstract String contactNickname();
     public abstract boolean isOnline();
     public abstract String contactImgUri();
 
-    public static final Func1<Cursor, ContactAbs> MAPPER = new Func1<Cursor, ContactAbs>() {
-        @Override
-        public ContactAbs call(Cursor cursor) {
-            long contactId = Db.getLong(cursor, ID);
-            String contactName = Db.getString(cursor, CONTACT_NAME);
-            String contactSurname = Db.getString(cursor, CONTACT_SURNAME);
-            String contactNickname = Db.getString(cursor, CONTACT_NICKNAME);
-            boolean isOnline = Db.getBoolean(cursor, CONTACT_IS_ONLINE);
-            String contactImgUri = Db.getString(cursor, CONTACT_IMG_URI);
-
-            return new AutoValue_ContactAbs(contactId, contactName, contactSurname, contactNickname,
-                    isOnline, contactImgUri);
-        }
-    };
-
     public static final class Builder{
         private final ContentValues cv = new ContentValues();
 
-        public Builder contactId(long id){
+        public Builder id(long id){
             cv.put(ID, id);
+            return this;
+        }
+
+
+        public Builder contactId(String contactId){
+            cv.put(CONTACT_ID, contactId);
             return this;
         }
 

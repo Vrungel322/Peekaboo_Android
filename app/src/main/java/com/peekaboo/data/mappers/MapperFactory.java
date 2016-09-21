@@ -3,9 +3,10 @@ package com.peekaboo.data.mappers;
 import android.content.ContentValues;
 
 import com.peekaboo.data.repositories.database.contacts.Contact;
+import com.peekaboo.data.repositories.database.messages.PMessageAbs;
+import com.peekaboo.data.rest.entity.ContactEntity;
 import com.peekaboo.domain.User;
 import com.peekaboo.data.rest.entity.UserEntity;
-import com.peekaboo.data.repositories.database.messages.PMessage;
 import com.peekaboo.presentation.services.Message;
 
 /**
@@ -15,14 +16,6 @@ public class MapperFactory implements AbstractMapperFactory {
     @Override
     public Mapper<UserEntity, User> getUserMapper() {
         return new UserMapper();
-    }
-
-    public Mapper<Message, String> getMessageToStringMapper() {
-        return new MessageJsonMapper();
-    }
-
-    public Mapper<String, Message> getStringToMessageMapper() {
-        return new JsonMessageMapper();
     }
 
     @Override
@@ -35,12 +28,17 @@ public class MapperFactory implements AbstractMapperFactory {
         return new MessageToByteArrayMapper();
     }
 
-    public Mapper<PMessage, ContentValues> getPMessageMapper() {
+    public Mapper<PMessageAbs, ContentValues> getPMessageMapper() {
         return new PMessageMapper();
     }
 
     public Mapper<Contact, ContentValues> getPContactMapper() {
         return new PContactMapper();
+    }
+
+    @Override
+    public Mapper<ContactEntity, Contact> getContactEntityMapper() {
+        return new ContactEntityToContactMapper();
     }
 
 }

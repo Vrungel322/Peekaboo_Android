@@ -1,4 +1,5 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     style="@style/AppTheme"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
@@ -20,7 +21,7 @@
                 android:id="@+id/tvChatMessage"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
+                android:layout_gravity="center_horizontal"
                 android:textColor="@color/underline_selected_color"
                 android:textSize="@dimen/chat_message_text_size" />
 
@@ -35,15 +36,16 @@
                     android:layout_width="@dimen/chat_message_status_size"
                     android:layout_height="@dimen/chat_message_status_size"
                     android:layout_gravity="end"
-                    android:src="@drawable/ic_check" />
+                    tools:src="@drawable/ic_check" />
 
                 <TextView
                     android:id="@+id/tvChatTimestamp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="yesterday"
-                    android:textColor="@color/colorDarkAccent"
                     android:layout_gravity="end"
+                    android:text="yesterday"
+                    android:visibility="gone"
+                    tools:textColor="@color/colorDarkAccent"
                     android:textSize="@dimen/chat_timestamp_text_size" />
 
 

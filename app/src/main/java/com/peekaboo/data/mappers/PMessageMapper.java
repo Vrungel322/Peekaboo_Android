@@ -8,18 +8,17 @@ import com.peekaboo.data.repositories.database.messages.PMessageAbs;
 /**
  * Created by st1ch on 23.07.2016.
  */
-public class PMessageMapper implements Mapper<PMessage, ContentValues> {
+public class PMessageMapper implements Mapper<PMessageAbs, ContentValues> {
     @Override
-    public ContentValues transform(PMessage obj) throws RuntimeException {
+    public ContentValues transform(PMessageAbs obj) throws RuntimeException {
         return new PMessageAbs.Builder()
-                .packageId(obj.packageId())
                 .isMine(obj.isMine())
                 .mediaType(obj.mediaType())
                 .messageBody(obj.messageBody())
                 .timestamp(obj.timestamp())
-                .isSent(obj.isSent())
-                .isDelivered(obj.isDelivered())
-                .isRead(obj.isRead())
+                .status(obj.status())
+                .senderId(obj.senderId())
+                .receiverId(obj.receiverId())
                 .build();
     }
 }

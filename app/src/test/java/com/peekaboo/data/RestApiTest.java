@@ -28,6 +28,7 @@ public class RestApiTest {
         PeekabooApi api = applicationComponent.api();
         restApi = new RestApi(api);
     }
+
 //
 //    @Test
 //    public void whenSignUpWithValidInputsThenGetCredentials() {
