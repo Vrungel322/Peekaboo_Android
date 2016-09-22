@@ -22,7 +22,7 @@ public interface AbstractMapperFactory {
 
     Mapper<PMessageAbs, ContentValues> getPMessageMapper();
 
-    Mapper<Contact, ContentValues> getPContactMapper();
+//    Mapper<Contact, ContentValues> getPContactMapper();
 
     Mapper<ContactEntity, Contact> getContactEntityMapper();
 

@@ -1,13 +1,11 @@
 package com.peekaboo.data.repositories.database.contacts;
 
-import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
 import android.util.Log;
-import android.widget.ImageView;
 
-import com.peekaboo.data.mappers.PContactMapper;
+import com.peekaboo.data.mappers.ContactToContentValueMapper;
 import com.peekaboo.data.repositories.database.service.DBHelper;
 import com.peekaboo.data.repositories.database.utils_db.Db;
 import com.peekaboo.domain.schedulers.ObserveOn;
@@ -27,7 +25,7 @@ public class PContactHelper {
     private final DBHelper helper;
     private final SubscribeOn subscribeOn;
     private final ObserveOn observeOn;
-    private final PContactMapper mapper = new PContactMapper();
+    private final ContactToContentValueMapper mapper = new ContactToContentValueMapper();
 
     public PContactHelper(DBHelper helper, SubscribeOn subscribeOn, ObserveOn observeOn) {
         this.helper = helper;
