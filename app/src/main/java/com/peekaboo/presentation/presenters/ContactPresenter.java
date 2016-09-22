@@ -53,13 +53,13 @@ public class ContactPresenter extends ProgressPresenter<IContactsView> implement
     @Override
     public void bind(IContactsView view) {
         super.bind(view);
-        if (!getContactFromDbUseCase.isWorking()) {
+        if (getContactFromDbUseCase.isWorking()) {
             getContactFromDbUseCase.execute(getContactsSubscriber());
         }
-        if (!saveContactToDbUseCase.isWorking()) {
+        if (saveContactToDbUseCase.isWorking()) {
             saveContactToDbUseCase.execute(getContactsSubscriber());
         }
-        if (!fetchUseCase.isWorking()) {
+        if (fetchUseCase.isWorking()) {
             fetchUseCase.execute(getContactsSubscriber());
         }
     }
