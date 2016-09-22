@@ -101,8 +101,12 @@ public class SessionDataRepository implements SessionRepository {
     }
 
     @Override
-    public Observable saveContactToDb(List<Contact> contact) {
-                return Observable.from(contact).flatMap(contact1 ->
-                        Observable.just(dbContacts.insert(contact1)));
+    public Observable<List<Contact>> saveContactToDb(List<Contact> contact) {
+                return Observable.from(contact)
+                        .map(contact1 -> {
+                            dbContacts.insert(contact1);
+                            return contact1;
+                        })
+                        .toList();
     }
 }

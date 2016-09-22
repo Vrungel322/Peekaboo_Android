@@ -86,7 +86,7 @@ public class ContactPresenter extends ProgressPresenter<IContactsView> implement
                 Log.e("onNext", String.valueOf(response.get(1).contactName()));
                 saveContactToDbUseCase.setContact(response);
                 saveContactToDbUseCase.execute(saveContactToDb());
-                getContactFromDbUseCase.execute(getContactsFromDb());
+//                getContactFromDbUseCase.execute(getContactsFromDb());
                 getAllTableAsString();
             }
         };
@@ -97,6 +97,7 @@ public class ContactPresenter extends ProgressPresenter<IContactsView> implement
             @Override
             public void onNext(List<Contact> contacts) {
                 super.onNext(contacts);
+                getContactFromDbUseCase.execute(getContactsFromDb());
             }
         };
     }
