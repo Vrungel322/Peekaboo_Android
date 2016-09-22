@@ -15,8 +15,8 @@ import com.peekaboo.data.repositories.database.contacts.PContactHelper;
 import com.peekaboo.data.rest.PeekabooApi;
 import com.peekaboo.data.rest.RestApi;
 import com.peekaboo.domain.AccountUser;
-import com.peekaboo.domain.UserMessageMapper;
 import com.peekaboo.domain.SessionRepository;
+import com.peekaboo.domain.UserMessageMapper;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -154,8 +154,8 @@ public class DataModule {
 
     @Provides
     @Singleton
-    public SessionRepository provideRepository(AccountUser user, RestApi restApi, PContactHelper contactHelper) {
-        return new SessionDataRepository(restApi, new MapperFactory(), user, contactHelper);
+    public SessionRepository provideRepository(AccountUser user, RestApi restApi, PContactHelper dbHelper) {
+        return new SessionDataRepository(restApi, new MapperFactory(), user, dbHelper);
     }
 
     @Provides

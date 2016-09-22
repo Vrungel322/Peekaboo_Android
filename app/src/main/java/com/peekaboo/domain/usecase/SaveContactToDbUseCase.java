@@ -12,26 +12,26 @@ import javax.inject.Inject;
 import rx.Observable;
 
 /**
- * Created by sebastian on 28.06.16.
+ * Created by Nikita on 21.09.2016.
  */
-public class LoginUseCase extends UseCase<List<Contact>> {
+public class SaveContactToDbUseCase extends UseCase<List<Contact>> {
     private SessionRepository sessionRepository;
-    private String login;
-    private String password;
+    private List<Contact> contact;
 
     @Inject
-    public LoginUseCase(SessionRepository sessionRepository, SubscribeOn subscribeOn, ObserveOn observeOn) {
+    public SaveContactToDbUseCase(SessionRepository sessionRepository, SubscribeOn subscribeOn, ObserveOn observeOn) {
         super(subscribeOn, observeOn);
         this.sessionRepository = sessionRepository;
     }
 
-    public void setCredentials(String login, String password) {
-        this.login = login;
-        this.password = password;
+
+    public void setContact(List<Contact> contact) {
+        this.contact = contact;
     }
 
+
     @Override
-    protected Observable<List<Contact>> getUseCaseObservable() {
-        return sessionRepository.login(login, password);
+    protected Observable getUseCaseObservable() {
+        return sessionRepository.saveContactToDb(contact);
     }
 }

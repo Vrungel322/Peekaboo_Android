@@ -28,5 +28,11 @@ public interface SessionRepository {
 
     Observable<List<Contact>> loadAllContacts();
 
+<<<<<<< HEAD
     Observable<List<Contact>> loadAllContactsFromDb();
+=======
+    Observable<List<Contact>> getAllSavedContacts();
+
+    Observable saveContactToDb(List<Contact> contact);
+>>>>>>> development
 }

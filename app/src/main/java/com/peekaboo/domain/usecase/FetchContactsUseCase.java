@@ -14,11 +14,11 @@ import rx.Observable;
 /**
  * Created by Nikita on 13.09.2016.
  */
-public class GetContactsUseCase extends UseCase<List<Contact>> {
+public class FetchContactsUseCase extends UseCase<List<Contact>> {
     private SessionRepository sessionRepository;
 
     @Inject
-    public GetContactsUseCase(SessionRepository sessionRepository, SubscribeOn subscribeOn, ObserveOn observeOn) {
+    public FetchContactsUseCase(SessionRepository sessionRepository, SubscribeOn subscribeOn, ObserveOn observeOn) {
         super(subscribeOn, observeOn);
         this.sessionRepository = sessionRepository;
     }

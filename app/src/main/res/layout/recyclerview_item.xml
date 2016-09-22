@@ -1,0 +1,81 @@
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="100dp"
+    android:orientation="horizontal">
+
+    <FrameLayout
+        android:id="@+id/contactspic"
+        android:layout_width="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_height="wrap_content"
+        android:paddingRight="5dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="8dp"
+        android:layout_marginLeft="8dp">
+
+        <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/ivDialog_contact"
+            android:layout_width="62dp"
+            android:layout_height="62dp"
+            android:layout_margin="@dimen/dialog_item_margin"
+            android:layout_marginBottom="@dimen/dialog_photo_margin"
+            android:src="@mipmap/ic_launcher"
+            app:border_color="@color/colorAccent" />
+        <!---->
+        <!--app:border_width="@dimen/circle_photo_border_width" -->
+
+
+        <TextView
+            android:id="@+id/tvConUnM"
+            android:layout_width="@dimen/dialog_number_dot"
+            android:layout_height="@dimen/dialog_number_dot"
+            android:layout_gravity="right|top"
+            android:background="@drawable/circle"
+            android:gravity="center"
+            android:text="8"
+            android:textColor="@android:color/black"
+            android:textSize="10sp" />
+    </FrameLayout>
+
+    <!--<ImageView-->
+        <!--android:id="@+id/recyclerViewItemIcon"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignParentLeft="true"-->
+        <!--android:layout_alignParentStart="true"-->
+        <!--android:layout_centerVertical="true"-->
+        <!--android:layout_marginRight="8dp"-->
+        <!--android:layout_marginLeft="8dp"/>-->
+
+    <TextView
+        android:id="@+id/recyclerViewItemName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/contactspic"
+        android:layout_toEndOf="@+id/contactspic"
+        android:layout_centerVertical="true"
+        tools:text="name"
+        android:textSize="20sp"/>
+
+    <!--<Button-->
+        <!--android:id="@+id/recyclerViewItemDeleteButton"-->
+        <!--android:layout_width="48dp"-->
+        <!--android:layout_height="48dp"-->
+        <!--android:layout_alignParentEnd="true"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:layout_centerVertical="true"-->
+        <!--/>-->
+
+    <!--<Button-->
+        <!--android:id="@+id/recyclerViewItemCopyButton"-->
+        <!--android:layout_width="48dp"-->
+        <!--android:layout_height="48dp"-->
+        <!--android:layout_toLeftOf="@+id/recyclerViewItemDeleteButton"-->
+        <!--android:layout_toStartOf="@+id/recyclerViewItemDeleteButton"-->
+        <!--android:layout_centerVertical="true"-->
+        <!--/>-->
+
+</RelativeLayout>

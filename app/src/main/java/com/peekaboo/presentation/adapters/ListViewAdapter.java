@@ -3,13 +3,13 @@ package com.peekaboo.presentation.adapters;
 /**
  * Created by patri_000 on 29.07.2016.
  */
+
 import android.content.Context;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
@@ -30,11 +30,12 @@ public class ListViewAdapter extends BaseSwipeAdapter {
     public int getSwipeLayoutResourceId(int position) {
         return R.id.swipe;
     }
-@Nullable
+
+    @Nullable
     @Override
     public View generateView(int position, ViewGroup parent) {
         View v = LayoutInflater.from(mContext).inflate(R.layout.listview_item, null);
-        SwipeLayout swipeLayout = (SwipeLayout)v.findViewById(getSwipeLayoutResourceId(position));
+        SwipeLayout swipeLayout = (SwipeLayout) v.findViewById(getSwipeLayoutResourceId(position));
         swipeLayout.addSwipeListener(new SimpleSwipeListener() {
             @Override
             public void onOpen(SwipeLayout layout) {
@@ -56,7 +57,7 @@ public class ListViewAdapter extends BaseSwipeAdapter {
 
     @Override
     public void fillValues(int position, View convertView) {
-        TextView t = (TextView)convertView.findViewById(R.id.position);
+        TextView t = (TextView) convertView.findViewById(R.id.position);
         t.setText((position + 1) + ".");
     }
 
