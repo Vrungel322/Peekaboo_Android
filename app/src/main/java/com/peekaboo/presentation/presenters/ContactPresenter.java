@@ -83,11 +83,6 @@ public class ContactPresenter extends ProgressPresenter<IContactsView> implement
             @Override
             public void onNext(List<Contact> response) {
                 super.onNext(response);
-//<<<<<<< HEAD
-//                IContactsView view = getView();
-//                if (view != null) {
-//                    view.showContactsList();
-//=======
                 Log.e("onNext", String.valueOf(response.get(1).contactName()));
                 saveContactToDbUseCase.setContact(response);
                 saveContactToDbUseCase.execute(saveContactToDb());
@@ -130,7 +125,6 @@ public class ContactPresenter extends ProgressPresenter<IContactsView> implement
         contactHelper.getAllContacts();
     }
 
-    @Override
     public void getAllTableAsString() {
         contactHelper.getAllContacts()
                 .subscribe(pContactAbses -> {

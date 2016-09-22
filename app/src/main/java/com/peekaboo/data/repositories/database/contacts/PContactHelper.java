@@ -5,6 +5,7 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
 import android.util.Log;
+import android.widget.ImageView;
 
 import com.peekaboo.data.mappers.PContactMapper;
 import com.peekaboo.data.repositories.database.service.DBHelper;
@@ -41,8 +42,8 @@ public class PContactHelper {
                 "(" +
                 ContactAbs.ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
                 ContactAbs.CONTACT_ID + " TEXT NOT NULL," +
-                ContactAbs.CONTACT_NAME + " TEXT NOT NULL," +
-                ContactAbs.CONTACT_SURNAME + " TEXT NOT NULL," +
+                ContactAbs.CONTACT_NAME + " TEXT," +
+                ContactAbs.CONTACT_SURNAME + " TEXT," +
                 ContactAbs.CONTACT_NICKNAME + " TEXT NOT NULL," +
                 ContactAbs.CONTACT_IS_ONLINE + " INTEGER NOT NULL," +
                 ContactAbs.CONTACT_IMG_URI + " TEXT NOT NULL" +

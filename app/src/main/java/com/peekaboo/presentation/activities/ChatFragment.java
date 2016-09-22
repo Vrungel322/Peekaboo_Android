@@ -107,7 +107,7 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        ((Toolbar) getActivity().findViewById(R.id.toolbar)).setTitle(companion.contactName());
+        ((Toolbar) getActivity().findViewById(R.id.toolbar)).setTitle(companion.contactNickname());
     }
 
     @Nullable

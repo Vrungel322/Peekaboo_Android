@@ -14,5 +14,4 @@ public interface IContactPresenter {
 //    void dropTableAndCreate(String tableName);
     void loadContactsList();
 
-    void getAllTableAsString();
 }
