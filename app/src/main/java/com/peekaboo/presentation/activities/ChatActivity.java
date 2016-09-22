@@ -103,11 +103,11 @@ public class ChatActivity extends AppCompatActivity
         String receiverName = getIntent().getStringExtra(Constants.EXTRA_RECEIVER_NAME);
         receiverName = "test";
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarChat);
+//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarChat);
         layoutParams = (LinearLayout.LayoutParams) rflMessageBody.getLayoutParams();
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
+//        setSupportActionBar(toolbar);
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         chatAdapter = new ChatAdapter(getApplicationContext(), chatPresenter, this);
         chatPresenter.bind(this, receiverName);
@@ -172,7 +172,6 @@ public class ChatActivity extends AppCompatActivity
             }
             case android.R.id.home: {
                 onBackPressed();
-                Toast.makeText(getApplicationContext(), "home b clicked", Toast.LENGTH_SHORT).show();
                 break;
             }
         }
@@ -270,13 +269,11 @@ public class ChatActivity extends AppCompatActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == Constants.REQUEST_CODES.REQUEST_CODE_CAMERA) {
-            Toast.makeText(getApplicationContext(), "CAMERA: " + resultCode, Toast.LENGTH_SHORT).show();
             if (resultCode == RESULT_OK) {
                 sendImage(imageUri);
             }
         }
         if (requestCode == Constants.REQUEST_CODES.REQUEST_CODE_GALERY) {
-            Toast.makeText(getApplicationContext(), "GALLERY: " + resultCode, Toast.LENGTH_SHORT).show();
             if (resultCode == RESULT_OK && null != data) {
                 sendImage(data.getData());
             }
@@ -308,10 +305,6 @@ public class ChatActivity extends AppCompatActivity
                 startActivityForResult(takePictureIntent, Constants.REQUEST_CODES.REQUEST_CODE_CAMERA);
             }
         }
-    }
-
-    public void takeDocument() {
-        Toast.makeText(this, "3", Toast.LENGTH_SHORT).show();
     }
 
     public void recordAudio() {
@@ -363,7 +356,6 @@ public class ChatActivity extends AppCompatActivity
 
     @OnClick(R.id.smile_btn)
     public void smileButtonClick() {
-        Toast.makeText(this, "SMILE", Toast.LENGTH_SHORT).show();
     }
 
     @Override

@@ -9,10 +9,12 @@ import android.support.annotation.Nullable;
 public class AccountUser extends User {
     public static final String TOKEN = "token";
     public static final String ID = "user_id";
+    public static final String MODE = "mode";
     private SharedPreferences preferences;
 
     @Nullable
     private String token;
+    private int mode;
 
     public AccountUser(SharedPreferences preferences) {
         super(null, null);
@@ -43,14 +45,23 @@ public class AccountUser extends User {
         preferences.edit().putString(TOKEN, token).commit();
     }
 
+    public void saveMode(int mode) {
+        this.mode = mode;
+        preferences.edit().putInt(MODE, mode).commit();
+    }
     public void saveId(String id) {
         setId(id);
         preferences.edit().putString(ID, id).commit();
     }
 
+    public int getMode() {
+        return mode;
+    }
+
     private void restoreData() {
         token = preferences.getString(TOKEN, null);
         setId(preferences.getString(ID, null));
+        mode = preferences.getInt(MODE, 0);
     }
 
     @Override

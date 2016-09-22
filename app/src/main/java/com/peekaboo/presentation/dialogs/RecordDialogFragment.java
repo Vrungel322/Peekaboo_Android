@@ -62,7 +62,7 @@ public class RecordDialogFragment extends DialogFragment {
                 .setView(view)
                 .create();
         ButterKnife.bind(this, view);
-        fabRecord.setOnClickListener(v -> presenter.onRecordButtonClick());
+//        fabRecord.setOnClickListener(v -> presenter.onRecordButtonClick());
 //        fabSend.setOnClickListener(v -> presenter.onRecordSend());
         switch (getArguments().getInt(STATE)) {
             case RESET:

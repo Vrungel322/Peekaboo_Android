@@ -3,28 +3,30 @@ package com.peekaboo.presentation.fragments;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
 import android.widget.Toast;
 
 import com.peekaboo.R;
 import com.peekaboo.data.repositories.database.contacts.Contact;
 import com.peekaboo.presentation.PeekabooApplication;
-import com.peekaboo.presentation.adapters.ContactsListAdapter;
+import com.peekaboo.presentation.adapters.ContactLargeAdapter;
 import com.peekaboo.presentation.presenters.ContactPresenter;
 import com.peekaboo.presentation.views.IContactsView;
+import com.peekaboo.presentation.widget.RecyclerViewFastScroller;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -32,31 +34,26 @@ import butterknife.ButterKnife;
 /**
  * Created by Nikita on 13.07.2016.
  */
-@Singleton
 public class ContactsFragment extends Fragment implements IContactsView {
-
-    private View rootView;
 
     @Inject
     ContactPresenter contactPresenter;
+    @BindView(R.id.recyclerview)
+    public RecyclerView recyclerView;
 
-    @BindView(R.id.listViewIndexable)
-    ListView listViewIndexable;
-    private ArrayList<String> list;
-    //    private IndexableListView listViewIndexable;
-    private ContactsListAdapter contactsListAdapter;
+    private ArrayList<String> contactList;
 
-    @Inject
+    int numberOfItems;
+
     public ContactsFragment() {
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        setHasOptionsMenu(true);
         PeekabooApplication.getApp(getActivity()).getComponent().inject(this);
         // Testing DB
-        contactPresenter.bind(this);
 //        contactPresenter.insertContactToTable(new Contact("Name0",
 //                "Surname0",
 //                "Nickname0",
@@ -73,7 +70,7 @@ public class ContactsFragment extends Fragment implements IContactsView {
 //                true,
 //                "uri2"));
 
-        contactPresenter.getAllTableAsString("ContactsDb");
+        contactPresenter.getAllTableAsString();
 
     }
 
@@ -82,27 +79,54 @@ public class ContactsFragment extends Fragment implements IContactsView {
         super.onResume();
         //Make Query to get all real contacts from server
         //after that need to redo ContactListAdapter to match ContactsPOJO and json
-        //contactPresenter.loadContactsList();
+        contactPresenter.loadContactsList();
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.fragment_contacts, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_contacts, container, false);
         ButterKnife.bind(this, rootView);
-        setHasOptionsMenu(true);
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(getString(R.string.title_contacts));
 
-        //hardcode list
+        FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.fab);
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(getActivity(), "ADD", Toast.LENGTH_LONG).show();
+            }
+        });
+
         initList();
 
-        contactsListAdapter = new ContactsListAdapter(list, getActivity());
-        listViewIndexable.setAdapter(contactsListAdapter);
-        listViewIndexable.setFastScrollEnabled(true);
-        listViewIndexable.setOnItemClickListener((arg0, arg1, arg2, arg3) -> contactsListAdapter.onItemSelected(arg2));
+        final ContactLargeAdapter adapter = new ContactLargeAdapter(contactList);
+        recyclerView.setAdapter(adapter);
+        final RecyclerViewFastScroller fastScroller = (RecyclerViewFastScroller) rootView.findViewById(R.id.fastscroller);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false) {
+            @Override
+            public void onLayoutChildren(final RecyclerView.Recycler recycler, final RecyclerView.State state) {
+                super.onLayoutChildren(recycler, state);
+                //TODO if the items are filtered, considered hiding the fast scroller here
+                final int firstVisibleItemPosition = findFirstVisibleItemPosition();
+                if (firstVisibleItemPosition != 0) {
+                    // this avoids trying to handle un-needed calls
+                    if (firstVisibleItemPosition == -1)
+                        //not initialized, or no items shown, so hide fast-scroller
+                        fastScroller.setVisibility(View.GONE);
+                    return;
+                }
+                final int lastVisibleItemPosition = findLastVisibleItemPosition();
+                int itemsShown = lastVisibleItemPosition - firstVisibleItemPosition + 1;
+                //if all items are shown, hide the fast-scroller
+                fastScroller.setVisibility(adapter.getItemCount() > itemsShown ? View.VISIBLE : View.GONE);
+            }
+        });
+        fastScroller.setRecyclerView(recyclerView);
+        fastScroller.setViewsToUse(R.layout.recycler_view_fast_scroller__fast_scroller, R.id.fastscroller_bubble, R.id.fastscroller_handle);
 
+        contactPresenter.bind(this);
         return rootView;
     }
+
 
     @Override
     public void showProgress() {
@@ -120,19 +144,25 @@ public class ContactsFragment extends Fragment implements IContactsView {
     }
 
     @Override
-    public void showContactsList() {
-        listViewIndexable.setBackgroundColor(Color.CYAN);
-        showToastMessage("MAKE NOTICE");
+    public void showContactsList(List<Contact> response) {
+        recyclerView.setBackgroundColor(Color.CYAN);
+        showToastMessage(response.get(1).contactName().toString());
+    }
+
+    @Override
+    public void onDestroyView() {
+        contactPresenter.unbind();
+        super.onDestroyView();
     }
 
     private void initList() {
 
-        if (list == null)
-            list = new ArrayList<>();
+        if (contactList == null)
+            contactList = new ArrayList<>();
 
         String[] countries = getResources().getStringArray(R.array.countries_array);
         for (String country : countries) {
-            list.add(country);
+            contactList.add(country);
         }
     }
 

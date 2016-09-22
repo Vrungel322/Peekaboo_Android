@@ -8,6 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.SectionIndexer;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.support.v7.widget.RecyclerView;
 
 import com.peekaboo.R;
 
@@ -15,13 +16,12 @@ import java.util.ArrayList;
 
 public class ContactsListAdapter extends BaseAdapter implements SectionIndexer {
 
-    private String mSections = "*ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+    private String mSections = "✰ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     private ArrayList<String> mCurrentList;
     private Context mContext;
 
-    public ContactsListAdapter(ArrayList<String> mCurrentList, Context mContext) {
-        super();
-        this.mCurrentList = mCurrentList;
+    public ContactsListAdapter(Context mContext) {
         this.mContext = mContext;
     }
 
@@ -30,13 +30,10 @@ public class ContactsListAdapter extends BaseAdapter implements SectionIndexer {
         return position;
     }
 
-    public void onItemSelected(int position) {
-        Toast.makeText(mContext, "ska", Toast.LENGTH_SHORT).show();
-    }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        final int p = position;
+//        final int p = position;
         LayoutInflater inflater = (LayoutInflater) mContext
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         convertView = inflater.inflate(R.layout.img_row_layout, null);
@@ -44,7 +41,8 @@ public class ContactsListAdapter extends BaseAdapter implements SectionIndexer {
         try {
             TextView textRow = (TextView) convertView.findViewById(R.id.name);
             textRow.setText(getItem(position));
-        } catch (Exception e) {}
+        } catch (Exception e) {
+        }
 
         return convertView;
     }
@@ -97,17 +95,11 @@ public class ContactsListAdapter extends BaseAdapter implements SectionIndexer {
 
     @Override
     public int getCount() {
-        if (mCurrentList != null)
-            return mCurrentList.size();
-        else
-            return 0;
+        return mCurrentList.size();
     }
 
     @Override
     public String getItem(int position) {
-        if (mCurrentList != null)
-            return mCurrentList.get(position);
-        else
-            return null;
+        return mCurrentList.get(position);
     }
 }

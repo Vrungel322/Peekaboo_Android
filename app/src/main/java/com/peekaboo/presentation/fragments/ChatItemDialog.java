@@ -80,10 +80,8 @@ public class ChatItemDialog extends DialogFragment {
                         chatItemEventListener.deleteMess(itemIndex);
                         break;
                     case 2:
-                        Toast.makeText(getActivity(), "2", Toast.LENGTH_SHORT).show();
                         break;
                     case 3:
-                        Toast.makeText(getActivity(), "3", Toast.LENGTH_SHORT).show();
                         break;
                     case 4:
                         chatItemEventListener.textToSpeech(itemIndex);

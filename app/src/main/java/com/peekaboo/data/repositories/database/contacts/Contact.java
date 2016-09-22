@@ -1,9 +1,11 @@
 package com.peekaboo.data.repositories.database.contacts;
 
+import java.io.Serializable;
+
 /**
  * Created by Nikita on 10.08.2016.
  */
-public class Contact extends ContactAbs {
+public class Contact extends ContactAbs implements Serializable {
 
     private long id;
     private String contactName;
@@ -61,5 +63,9 @@ public class Contact extends ContactAbs {
     @Override
     public String contactImgUri() {
         return contactImgUri;
+    }
+
+    public void setId(long id) {
+        this.id = id;
     }
 }

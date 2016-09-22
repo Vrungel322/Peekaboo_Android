@@ -32,12 +32,10 @@ public class DepthAnimation extends BaseAppIntro {
     public void onSkipPressed() {
         finish();
         loadLogInActivity();
-        Toast.makeText(getApplicationContext(), getString(R.string.skip), Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onNextPressed() {
-        Toast.makeText(getApplicationContext(), "Next", Toast.LENGTH_SHORT).show();
     }
 
     @Override

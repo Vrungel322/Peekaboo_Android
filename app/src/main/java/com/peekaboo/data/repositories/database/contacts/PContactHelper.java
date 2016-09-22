@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.peekaboo.data.mappers.PContactMapper;
 import com.peekaboo.data.repositories.database.service.DBHelper;
 import com.peekaboo.data.repositories.database.utils_db.Db;
 import com.peekaboo.domain.schedulers.ObserveOn;
@@ -13,9 +14,6 @@ import com.peekaboo.domain.schedulers.SubscribeOn;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.inject.Inject;
-import javax.inject.Singleton;
 
 import rx.Observable;
 
@@ -25,9 +23,10 @@ import rx.Observable;
 public class PContactHelper {
 
     private static final String TABLE_NAME = "Contacts";
-    private DBHelper helper;
-    private SubscribeOn subscribeOn;
-    private ObserveOn observeOn;
+    private final DBHelper helper;
+    private final SubscribeOn subscribeOn;
+    private final ObserveOn observeOn;
+    private final PContactMapper mapper = new PContactMapper();
 
     public PContactHelper(DBHelper helper, SubscribeOn subscribeOn, ObserveOn observeOn) {
         this.helper = helper;
@@ -47,13 +46,16 @@ public class PContactHelper {
                 ContactAbs.CONTACT_NICKNAME + " TEXT NOT NULL," +
                 ContactAbs.CONTACT_IS_ONLINE + " INTEGER NOT NULL," +
                 ContactAbs.CONTACT_IMG_URI + " TEXT NOT NULL" +
-                ");";
+                ")" +
+                ";";
         db.execSQL(CREATE_TABLE);
     }
 
-    public long insert(ContentValues cv) {
+    public long insert(Contact contact) {
         SQLiteDatabase db = helper.getWritableDatabase();
-        return db.insert(TABLE_NAME, null, cv);
+        long id = db.insert(TABLE_NAME, null, mapper.transform(contact));
+        contact.setId(id);
+        return id;
     }
 
     public Observable<List<Contact>> getAllContacts() {

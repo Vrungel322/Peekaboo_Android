@@ -21,6 +21,7 @@ import com.peekaboo.domain.User;
 import com.peekaboo.domain.subscribers.BaseUseCaseSubscriber;
 import com.peekaboo.domain.usecase.FindFriendUseCase;
 import com.peekaboo.presentation.PeekabooApplication;
+import com.peekaboo.presentation.activities.MainActivity;
 import com.peekaboo.utils.ActivityNavigator;
 import com.squareup.picasso.Picasso;
 
@@ -64,18 +65,18 @@ public class FriendTestFragment extends Fragment {
                 contactHelper.getAllContacts().subscribe(new Action1<List<Contact>>() {
                     @Override
                     public void call(List<Contact> pContacts) {
-                        String contactId = null;
+                        Contact contact = null;
                         final String friendName = receiver.getText().toString();
 ////
                         for (Contact pContact : pContacts) {
                             String s = pContact.contactName();
                             if (s.equals(friendName)) {
-                                contactId = pContact.contactId();
+                                contact = pContact;
                                 break;
                             }
                         }
 //
-                        if (contactId == null) {
+                        if (contact == null) {
                             findFriendUseCase.setFriendName(friendName);
                             findFriendUseCase.execute(new BaseUseCaseSubscriber<User>() {
                                 @Override
@@ -85,18 +86,15 @@ public class FriendTestFragment extends Fragment {
                                     Toast.makeText(getActivity(), user.toString(), Toast.LENGTH_LONG).show();
 //                                    Picasso.with(getActivity()).load(user.getName()).into(avatar);
 
-                                    PContactMapper pContactMapper = new PContactMapper();
                                     String contactId = user.getId();
-                                    ContentValues values = pContactMapper.transform(
-                                            new Contact(0, friendName, "surname", "nickname", false, "", contactId)
-                                    );
-                                    contactHelper.insert(values);
+                                    Contact newContact = new Contact(0, friendName, "surname", "nickname", false, "", contactId);
+                                    contactHelper.insert(newContact);
                                     messageHelper.createTable(contactId);
-                                    navigator.startChatActivity(getActivity(), contactId);
+                                    navigator.startChatActivity((MainActivity) getActivity(), newContact);
                                 }
                             });
                         } else {
-                            navigator.startChatActivity(getActivity(), contactId);
+                            navigator.startChatActivity((MainActivity) getActivity(), contact);
                         }
                     }
                 });

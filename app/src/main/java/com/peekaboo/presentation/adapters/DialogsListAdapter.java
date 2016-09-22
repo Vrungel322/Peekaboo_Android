@@ -20,7 +20,6 @@ import com.daimajia.swipe.adapters.BaseSwipeAdapter;
 import com.peekaboo.R;
 
 public class DialogsListAdapter extends BaseSwipeAdapter {
-
     private Context mContext;
 
     public DialogsListAdapter(Context mContext) {
@@ -49,25 +48,21 @@ public class DialogsListAdapter extends BaseSwipeAdapter {
         swipeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(mContext, "just click", Toast.LENGTH_SHORT).show();
             }
         });
         v.findViewById(R.id.iv_swipetrash).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(mContext, "click delete", Toast.LENGTH_SHORT).show();
             }
         });
         v.findViewById(R.id.iv_swipenosound).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(mContext, "click mute", Toast.LENGTH_SHORT).show();
             }
         });
         v.findViewById(R.id.iv_swipestar).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(mContext, "click star", Toast.LENGTH_SHORT).show();
             }
         });
         return v;

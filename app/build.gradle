@@ -10,7 +10,7 @@ android {
     defaultConfig {
         applicationId "com.peekaboo"
         minSdkVersion 15
-        targetSdkVersion 23
+        targetSdkVersion 21
         versionCode 1
         versionName "1.0"
 
@@ -115,4 +115,5 @@ dependencies {
     //slider lib
     compile 'com.github.lawloretienne:discreteslider:0.0.6'
 
+    compile 'org.mockito:mockito-all:1.10.8'
 }

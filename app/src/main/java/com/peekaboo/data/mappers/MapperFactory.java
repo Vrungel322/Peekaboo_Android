@@ -41,4 +41,9 @@ public class MapperFactory implements AbstractMapperFactory {
         return new ContactEntityToContactMapper();
     }
 
+    @Override
+    public Mapper<Contact, ContentValues> getContactToContentValueMapper() {
+        return new ContactToContentValueMapper();
+    }
+
 }

@@ -3,13 +3,13 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:paddingBottom="8dp"
-    android:paddingTop="8dp"
-    android:paddingLeft="6dp">
+    android:paddingLeft="6dp"
+    android:paddingTop="8dp">
 
     <FrameLayout
         android:layout_width="wrap_content"
-        android:layout_gravity="center_horizontal"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
         android:paddingRight="5dp">
 
         <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -20,8 +20,6 @@
             android:layout_marginBottom="@dimen/dialog_photo_margin"
             android:src="@mipmap/ic_launcher"
             app:border_color="@color/colorAccent" />
-        <!---->
-        <!--app:border_width="@dimen/circle_photo_border_width" -->
 
 
         <TextView
@@ -31,21 +29,21 @@
             android:layout_gravity="right|top"
             android:background="@drawable/circle"
             android:gravity="center"
-            android:text="8"
+            android:text=" "
             android:textColor="@android:color/black"
             android:textSize="10sp" />
     </FrameLayout>
+
     <TextView
         android:id="@+id/tvConName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_vertical"
         android:layout_marginLeft="0dp"
         android:layout_marginRight="35dp"
-        android:layout_gravity="center_vertical"
-        android:textColor="#000000"
-        android:textStyle="bold"
         android:singleLine="true"
-        android:textSize="16dp"
         android:text="loooooooooooooooooooooooooooooooool"
-        />
+        android:textColor="#000000"
+        android:textSize="16dp"
+        android:textStyle="bold" />
 </LinearLayout>
