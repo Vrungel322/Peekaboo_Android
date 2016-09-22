@@ -19,7 +19,6 @@ import java.util.List;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import rx.Observable;
-import rx.functions.Func1;
 
 /**
  * Created by Arkadiy on 05.06.2016.
@@ -28,24 +27,15 @@ public class SessionDataRepository implements SessionRepository {
 
     private final AbstractMapperFactory abstractMapperFactory;
     private AccountUser user;
-    private PContactHelper contactHelper;
     private RestApi restApi;
     private PContactHelper dbContacts;
 
-<<<<<<< HEAD
-    public SessionDataRepository(RestApi restApi, AbstractMapperFactory abstractMapperFactory, AccountUser user, PContactHelper contactHelper) {
-        this.restApi = restApi;
-        this.abstractMapperFactory = abstractMapperFactory;
-        this.user = user;
-        this.contactHelper = contactHelper;
-=======
     public SessionDataRepository(RestApi restApi, AbstractMapperFactory abstractMapperFactory,
                                  AccountUser user, PContactHelper dbHelper) {
         this.restApi = restApi;
         this.abstractMapperFactory = abstractMapperFactory;
         this.user = user;
         this.dbContacts = dbHelper;
->>>>>>> development
     }
 
     @Override
@@ -106,20 +96,13 @@ public class SessionDataRepository implements SessionRepository {
     }
 
     @Override
-<<<<<<< HEAD
-    public Observable<List<Contact>> loadAllContactsFromDb() {
-        return contactHelper.getAllContacts();
-=======
     public Observable<List<Contact>> getAllSavedContacts() {
         return dbContacts.getAllContacts();
     }
 
     @Override
     public Observable saveContactToDb(List<Contact> contact) {
-        return Observable.from(contact).flatMap(contact1 ->
-                Observable.just(
-                dbContacts.insert(abstractMapperFactory.getContactToContentValueMapper().transform(contact1))
-                ));
->>>>>>> development
+                return Observable.from(contact).flatMap(contact1 ->
+                        Observable.just(dbContacts.insert(contact1)));
     }
 }

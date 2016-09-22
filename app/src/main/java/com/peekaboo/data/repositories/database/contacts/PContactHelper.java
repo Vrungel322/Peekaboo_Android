@@ -51,10 +51,11 @@ public class PContactHelper {
         db.execSQL(CREATE_TABLE);
     }
 
-    public void insert(Contact contact) {
+    public long insert(Contact contact) {
         SQLiteDatabase db = helper.getWritableDatabase();
         long id = db.insert(TABLE_NAME, null, mapper.transform(contact));
         contact.setId(id);
+        return id;
     }
 
     public Observable<List<Contact>> getAllContacts() {
