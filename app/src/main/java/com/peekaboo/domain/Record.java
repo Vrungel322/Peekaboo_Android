@@ -61,11 +61,17 @@ public class Record {
 
         return (file.getAbsolutePath() + "/" + Constants.SOUND_RECORDING.AUDIO_RECORDER_TEMP_FILE);
     }
+//TODO Caused by: java.lang.NullPointerException
+//at com.peekaboo.domain.Record.writeAudioDataToFile(Record.java:97)
+//    at com.peekaboo.domain.Record.startRecording(Record.java:79)
+//    at com.peekaboo.domain.AudioRecorder.lambda$startRecording$0(AudioRecorder.java:40)
+//    at com.peekaboo.domain.AudioRecorder.access$lambda$0(AudioRecorder.java)
+//    at com.peekaboo.domain.AudioRecorder$$Lambda$1.call(Unknown Source)
 
     /**
      * RUN ONLY IN SEPARATE THREAD!
      */
-    public void startRecording(){
+    public void startRecording() throws RuntimeException {
         recorder = new AudioRecord(MediaRecorder.AudioSource.MIC,
                 Constants.SOUND_RECORDING.RECORDER_SAMPLERATE,
                 Constants.SOUND_RECORDING.RECORDER_CHANNELS,
@@ -112,7 +118,7 @@ public class Record {
         }
     }
 
-    public void stopRecording() {
+    public void stopRecording() throws RuntimeException {
         if (null != recorder) {
             isRecording = false;
 

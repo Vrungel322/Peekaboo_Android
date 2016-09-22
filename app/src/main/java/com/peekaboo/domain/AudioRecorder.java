@@ -8,6 +8,7 @@ import com.peekaboo.domain.schedulers.SubscribeOn;
 import javax.inject.Inject;
 
 import rx.Observable;
+import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -33,25 +34,34 @@ public class AudioRecorder {
 
     public Observable<Record> startRecording() {
         isRecording = true;
-        return Observable.just(record)
-                .subscribeOn(Schedulers.computation())
-                .map(record -> {
-                    Log.e("record", "start map " + Thread.currentThread().hashCode());
+        return Observable.create(new Observable.OnSubscribe<Record>() {
+            @Override
+            public void call(Subscriber<? super Record> subscriber) {
+                try {
                     record.startRecording();
-                    return record;
-                });
+                    subscriber.onNext(record);
+                    subscriber.onCompleted();
+                } catch (RuntimeException re) {
+                    subscriber.onError(re);
+                }
+            }
+        }).subscribeOn(Schedulers.computation()).observeOn(observeOn.getScheduler());
     }
 
     public Observable<Record> stopRecording() {
         isRecording = false;
-        return Observable.just(record)
-                .subscribeOn(Schedulers.computation())
-                .map(record -> {
-                    Log.e("record", "stop map " + Thread.currentThread().hashCode());
+        return Observable.create(new Observable.OnSubscribe<Record>() {
+            @Override
+            public void call(Subscriber<? super Record> subscriber) {
+                try {
                     record.stopRecording();
-                    return record;
-                })
-                .observeOn(observeOn.getScheduler());
+                    subscriber.onNext(record);
+                    subscriber.onCompleted();
+                } catch (RuntimeException re) {
+                    subscriber.onError(re);
+                }
+            }
+        }).subscribeOn(Schedulers.computation()).observeOn(observeOn.getScheduler());
     }
 
     public boolean isRecording() {

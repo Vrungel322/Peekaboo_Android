@@ -92,7 +92,7 @@ public class SessionDataRepository implements SessionRepository {
                 .flatMapIterable(l -> l)
                 .map(contactEntity -> {
                     Contact contact = contactEntityMapper.transform(contactEntity);
-                    contactHelper.insert(contact);
+//                    contactHelper.insert(contact);
                     return contact;
                 })
                 .toList();

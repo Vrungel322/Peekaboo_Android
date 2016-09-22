@@ -8,6 +8,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -154,9 +155,15 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
 
     @OnTouch(R.id.micro_btn)
     boolean onRecordButtonClick(MotionEvent mv) {
-        if (mv.getAction() == MotionEvent.ACTION_UP ||
-                mv.getAction() == MotionEvent.ACTION_DOWN) {
-            presenter.onRecordButtonClick();
+        switch (mv.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                etMessageBody.setFocusable(false);
+                presenter.onRecordButtonClick(true);
+                break;
+            case MotionEvent.ACTION_CANCEL:
+            case MotionEvent.ACTION_UP:
+                presenter.onRecordButtonClick(false);
+                break;
         }
         return true;
     }
@@ -254,6 +261,8 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
 
     @Override
     public void showRecordStop() {
+        etMessageBody.setFocusableInTouchMode(true);
+        etMessageBody.setFocusable(true);
         rflButtonRecord.setVisibility(View.GONE);
     }
 
