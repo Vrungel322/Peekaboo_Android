@@ -6,6 +6,10 @@ import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
+import android.util.Log;
+
+import com.peekaboo.R;
+import com.peekaboo.data.repositories.database.contacts.Contact;
 
 public class ResourcesUtils {
 
@@ -33,8 +37,10 @@ public class ResourcesUtils {
         }
     }
 
-    public static int dpToPx(Context c, int dp) {
-        return (int) (c.getResources().getDisplayMetrics().density * dp);
+    public static int dpToPx(Context c, float dp) {
+        float density = c.getResources().getDisplayMetrics().density;
+        Log.e("Resources",  density + " " + dp);
+        return (int) (density * dp);
     }
 
     public static ColorStateList getColorSateList(Context context, int resId) {
@@ -43,6 +49,10 @@ public class ResourcesUtils {
         } else {
             return context.getResources().getColorStateList(resId, context.getTheme());
         }
+    }
+
+    public static int getDimenInPx(Context c, int resId) {
+        return (int) c.getResources().getDimension(resId);
     }
 
 }

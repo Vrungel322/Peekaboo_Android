@@ -5,14 +5,12 @@ package com.peekaboo.domain;
  */
 public class User {
     private String id;
-    private String avatar;
+    private String name;
 
-    public User(String id, String avatar) {
+    public User(String id, String name) {
         this.id = id;
-        this.avatar = avatar;
+        this.name = name;
     }
-
-
 
     public void setId(String id) {
         this.id = id;
@@ -22,15 +20,15 @@ public class User {
         return id;
     }
 
-    public String getAvatar() {
-        return avatar;
+    public String getName() {
+        return name;
     }
 
     @Override
     public String toString() {
         return "User{" +
                 "id='" + id + '\'' +
-                ", avatar='" + avatar + '\'' +
+                ", name='" + name + '\'' +
                 '}';
     }
 }

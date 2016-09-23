@@ -77,8 +77,8 @@ public class ApplicationModule {
 
     @Provides
     @Singleton
-    public AccountUser provideUser(SharedPreferences prefs) {
-        return new AccountUser(prefs);
+    public AccountUser provideUser(SharedPreferences prefs, @Named("domens") List<String> domens) {
+        return new AccountUser(prefs, domens.get(0) + "avatar/");
     }
 
     @Singleton

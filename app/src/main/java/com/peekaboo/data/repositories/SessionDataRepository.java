@@ -44,6 +44,8 @@ public class SessionDataRepository implements SessionRepository {
                 .map(token -> {
                     user.saveToken(token.getToken());
                     user.saveId(token.getId());
+                    user.saveUsername(token.getUsername());
+                    user.saveMode(token.getMode());
                     return user;
                 }).flatMap(accountUser -> loadAllContacts());
     }
@@ -53,6 +55,7 @@ public class SessionDataRepository implements SessionRepository {
         return restApi.signUp(new CredentialsSignUp(username, login, password))
                 .map(token -> {
                     user.saveId(token.getId());
+                    user.saveUsername(token.getUsername());
                     return user;
                 });
     }
