@@ -10,6 +10,7 @@ import com.peekaboo.presentation.di.ApplicationComponent;
 import com.peekaboo.presentation.di.ApplicationModule;
 import com.peekaboo.presentation.di.DaggerApplicationComponent;
 import com.peekaboo.presentation.services.NotificationService;
+import com.peekaboo.presentation.services.WearLink;
 import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKAccessTokenTracker;
 import com.vk.sdk.VKSdk;
@@ -51,6 +52,7 @@ public class PeekabooApplication extends Application {
         handler = new Handler();
         buildAppComponent();
         NotificationService.launch(this, NotificationService.ACTION.TRY_CONNECT);
+        WearLink.launch(this);
         vkAccessTokenTracker.startTracking();
         VKSdk.initialize(this);
         Timber.plant(new Timber.DebugTree());

@@ -14,6 +14,7 @@ import com.peekaboo.presentation.fragments.DialogsFragment;
 import com.peekaboo.presentation.fragments.FriendTestFragment;
 import com.peekaboo.presentation.fragments.MessangerTestFragment;
 import com.peekaboo.presentation.services.NotificationService;
+import com.peekaboo.presentation.services.WearLink;
 
 import javax.inject.Singleton;
 
@@ -44,6 +45,7 @@ public interface ApplicationComponent {
 
     //    Inject of Services
     void inject(NotificationService notificationService);
+    void inject(WearLink wearLink);
 
     PeekabooApi api();
 

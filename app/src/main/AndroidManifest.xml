@@ -31,10 +31,10 @@
         <activity
             android:name=".presentation.activities.SplashActivity"
             android:theme="@style/SplashTheme">
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN" />-->
-                <!--<category android:name="android.intent.category.LAUNCHER" />-->
-            <!--</intent-filter>-->
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
 
         <activity
@@ -60,10 +60,10 @@
         <activity
             android:name=".presentation.activities.MainActivity"
             android:theme="@style/AppTheme">
-            <intent-filter>
-            <action android:name="android.intent.action.MAIN" />
-            <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            <!--<intent-filter>-->
+            <!--<action android:name="android.intent.action.MAIN" />-->
+            <!--<category android:name="android.intent.category.LAUNCHER" />-->
+            <!--</intent-filter>-->
         </activity>
 
         <activity
@@ -103,6 +103,11 @@
 
         <service
             android:name=".presentation.services.NotificationService"
+            android:enabled="true" />
+
+        <service
+            android:name=".presentation.services.WearLink"
+            android:exported="true"
             android:enabled="true" />
 
     </application>
