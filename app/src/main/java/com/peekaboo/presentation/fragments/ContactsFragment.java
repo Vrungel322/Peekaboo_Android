@@ -17,10 +17,12 @@ import android.widget.Toast;
 import com.peekaboo.R;
 import com.peekaboo.data.repositories.database.contacts.Contact;
 import com.peekaboo.presentation.PeekabooApplication;
+import com.peekaboo.presentation.activities.MainActivity;
 import com.peekaboo.presentation.adapters.ContactLargeAdapter;
 import com.peekaboo.presentation.presenters.ContactPresenter;
 import com.peekaboo.presentation.views.IContactsView;
 import com.peekaboo.presentation.widget.RecyclerViewFastScroller;
+import com.peekaboo.utils.ActivityNavigator;
 
 import java.util.List;
 
@@ -36,6 +38,8 @@ public class ContactsFragment extends Fragment implements IContactsView {
 
     @Inject
     ContactPresenter contactPresenter;
+    @Inject
+    ActivityNavigator navigator;
 
     @BindView(R.id.recyclerview)
     RecyclerView recyclerView;
@@ -80,7 +84,7 @@ public class ContactsFragment extends Fragment implements IContactsView {
     }
 
     private void setUpRecyclerView() {
-        contactLargeAdapter = new ContactLargeAdapter(getActivity());
+        contactLargeAdapter = new ContactLargeAdapter((MainActivity) getActivity(), navigator);
         recyclerView.setAdapter(contactLargeAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false) {
             @Override

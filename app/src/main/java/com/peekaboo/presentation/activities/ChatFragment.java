@@ -8,10 +8,7 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -91,7 +88,7 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
         ChatFragment fragment = new ChatFragment();
 
         Bundle args = new Bundle();
-        args.putSerializable(COMPANION, companion);
+        args.putParcelable(COMPANION, companion);
         fragment.setArguments(args);
 
         return fragment;
@@ -101,7 +98,7 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         PeekabooApplication.getApp(getActivity()).getComponent().inject(this);
-        companion = (Contact) getArguments().getSerializable(COMPANION);
+        companion = getArguments().getParcelable(COMPANION);
     }
 
     @Override

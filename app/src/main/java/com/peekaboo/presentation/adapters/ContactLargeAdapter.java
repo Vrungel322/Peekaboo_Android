@@ -1,17 +1,17 @@
 package com.peekaboo.presentation.adapters;
 
-import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.peekaboo.R;
 import com.peekaboo.data.repositories.database.contacts.Contact;
+import com.peekaboo.presentation.activities.MainActivity;
 import com.peekaboo.presentation.widget.RecyclerViewFastScroller.BubbleTextGetter;
+import com.peekaboo.utils.ActivityNavigator;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
@@ -20,15 +20,20 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public final class ContactLargeAdapter extends RecyclerView.Adapter<ContactLargeAdapter.ViewHolder>
         implements BubbleTextGetter {
 
+    private MainActivity activity;
     private final List<Contact> items = new ArrayList<>();
     private Picasso mPicasso;
+    private ActivityNavigator navigator;
 
-    public ContactLargeAdapter(Context context) {
-        this.mPicasso = Picasso.with(context);
+    public ContactLargeAdapter(MainActivity activity, ActivityNavigator navigator) {
+        this.activity = activity;
+        this.navigator = navigator;
+        this.mPicasso = Picasso.with(activity);
     }
 
     @Override
@@ -68,6 +73,13 @@ public final class ContactLargeAdapter extends RecyclerView.Adapter<ContactLarge
             holder.ivStatus.setImageResource(R.color.offline);
         }
 
+        holder.itemView.setOnClickListener(v -> {
+//            Intent intent = new Intent(context, ChatActivity.class);
+//            intent.putExtra(Constants.EXTRA_CONTACT, contact);
+//            context.startActivity(intent);
+            navigator.startChatActivity(activity, contact);
+        });
+
     }
 
     @Override
@@ -94,15 +106,15 @@ public final class ContactLargeAdapter extends RecyclerView.Adapter<ContactLarge
         @BindView(R.id.contact_name_text_view)
         TextView tvContactName;
         @BindView(R.id.contact_avatar_image_view)
-        ImageView ivAvatar;
+        CircleImageView ivAvatar;
         @BindView(R.id.contact_status_image_view)
-        ImageView ivStatus;
+        CircleImageView ivStatus;
         @BindView(R.id.loading_image_progress_bar)
         ProgressBar pbImageLoading;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            ButterKnife.bind(itemView);
+            ButterKnife.bind(this, itemView);
         }
 
     }
