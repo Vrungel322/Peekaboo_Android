@@ -8,9 +8,6 @@ import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.util.Log;
 
-import com.peekaboo.R;
-import com.peekaboo.data.repositories.database.contacts.Contact;
-
 public class ResourcesUtils {
 
     public static Drawable getDrawable(Context context, int resId) {
@@ -39,7 +36,6 @@ public class ResourcesUtils {
 
     public static int dpToPx(Context c, float dp) {
         float density = c.getResources().getDisplayMetrics().density;
-        Log.e("Resources",  density + " " + dp);
         return (int) (density * dp);
     }
 
