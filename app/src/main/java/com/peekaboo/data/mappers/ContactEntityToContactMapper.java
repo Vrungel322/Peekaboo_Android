@@ -10,7 +10,7 @@ import com.peekaboo.utils.Utility;
 public class ContactEntityToContactMapper implements Mapper<ContactEntity, Contact> {
     @Override
     public Contact transform(ContactEntity obj) throws RuntimeException {
-        return new Contact(obj.getId(), obj.getName(), obj.getSurname(), obj.getNickname(), Utility.convertIntToBoolean(obj.getState()),
-                obj.getImgUri(), String.valueOf(obj.getId()));
+        return new Contact(0, obj.getName(), obj.getSurname(), obj.getNickname(), Utility.convertIntToBoolean(obj.getState()),
+                obj.getImgUri(), obj.getId());
     }
 }

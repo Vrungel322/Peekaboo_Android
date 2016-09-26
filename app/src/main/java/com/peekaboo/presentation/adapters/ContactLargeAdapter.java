@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public final class ContactLargeAdapter extends RecyclerView.Adapter<ContactLargeAdapter.ViewHolder> implements BubbleTextGetter {
-    private final List<Contact> items = new ArrayList<Contact>();
+    private final List<Contact> items = new ArrayList<>();
 
     public ContactLargeAdapter() {
     }
@@ -47,7 +47,7 @@ public final class ContactLargeAdapter extends RecyclerView.Adapter<ContactLarge
         return items.size();
     }
 
-    public static final class ViewHolder extends RecyclerView.ViewHolder {
+    static final class ViewHolder extends RecyclerView.ViewHolder {
         private final TextView textView;
 
         private ViewHolder(View itemView) {

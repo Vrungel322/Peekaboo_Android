@@ -5,14 +5,16 @@ package com.peekaboo.data.rest.entity;
  */
 public class ContactEntity {
 
-    private Long id;
+    private String id;
     private String name;
     private String surname;
     private String nickname;
     private int state;
     private String imgUri;
 
-    public Long getId() {
+
+
+    public String getId() {
         return id;
     }
 

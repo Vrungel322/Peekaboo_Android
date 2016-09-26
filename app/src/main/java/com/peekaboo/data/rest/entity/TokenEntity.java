@@ -27,8 +27,10 @@ public class TokenEntity {
         return mode;
     }
 
-    public TokenEntity(String token, String id) {
+    public TokenEntity(String token, String id, int mode, String username) {
         this.token = token;
         this.id = id;
+        this.mode = mode;
+        this.username = username;
     }
 }

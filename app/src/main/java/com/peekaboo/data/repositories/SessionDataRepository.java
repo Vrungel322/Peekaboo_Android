@@ -19,6 +19,8 @@ import java.util.List;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import rx.Observable;
+import rx.functions.Action1;
+import rx.functions.Func1;
 
 /**
  * Created by Arkadiy on 05.06.2016.
@@ -90,12 +92,9 @@ public class SessionDataRepository implements SessionRepository {
         Mapper<ContactEntity, Contact> contactEntityMapper = abstractMapperFactory.getContactEntityMapper();
         return restApi.getAllContacts().map(userResponse -> userResponse.usersList)
                 .flatMapIterable(l -> l)
-                .map(contactEntity -> {
-                    Contact contact = contactEntityMapper.transform(contactEntity);
-//                    contactHelper.insert(contact);
-                    return contact;
-                })
-                .toList();
+                .map(contactEntityMapper::transform)
+                .toList()
+                .flatMap(this::saveContactToDb);
     }
 
     @Override
@@ -106,10 +105,7 @@ public class SessionDataRepository implements SessionRepository {
     @Override
     public Observable<List<Contact>> saveContactToDb(List<Contact> contact) {
                 return Observable.from(contact)
-                        .map(contact1 -> {
-                            dbContacts.insert(contact1);
-                            return contact1;
-                        })
+                        .doOnNext(contact1 -> dbContacts.insert(contact1))
                         .toList();
     }
 }
