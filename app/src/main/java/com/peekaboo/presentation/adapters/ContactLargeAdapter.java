@@ -4,6 +4,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.peekaboo.R;
@@ -13,7 +14,11 @@ import com.peekaboo.presentation.widget.RecyclerViewFastScroller.BubbleTextGette
 import java.util.ArrayList;
 import java.util.List;
 
-public final class ContactLargeAdapter extends RecyclerView.Adapter<ContactLargeAdapter.ViewHolder> implements BubbleTextGetter {
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
+public final class ContactLargeAdapter extends RecyclerView.Adapter<ContactLargeAdapter.ViewHolder>
+        implements BubbleTextGetter {
     private final List<Contact> items = new ArrayList<Contact>();
 
     public ContactLargeAdapter() {
@@ -27,8 +32,8 @@ public final class ContactLargeAdapter extends RecyclerView.Adapter<ContactLarge
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        String text = items.get(position).contactId();
-        holder.setText(text);
+        Contact contact = getItem(position);
+
     }
 
     @Override
@@ -47,16 +52,22 @@ public final class ContactLargeAdapter extends RecyclerView.Adapter<ContactLarge
         return items.size();
     }
 
-    public static final class ViewHolder extends RecyclerView.ViewHolder {
-        private final TextView textView;
+    public Contact getItem(int position){
+        return items.get(position);
+    }
 
-        private ViewHolder(View itemView) {
+    static class ViewHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.contact_name_text_view)
+        TextView tvContactName;
+        @BindView(R.id.contact_avatar_image_view)
+        ImageView ivAvatar;
+        @BindView(R.id.unread_count_text_view)
+        TextView tvUnreadCount;
+
+        public ViewHolder(View itemView) {
             super(itemView);
-            this.textView = (TextView) itemView.findViewById(R.id.tvConName);
+            ButterKnife.bind(itemView);
         }
 
-        public void setText(CharSequence text) {
-            textView.setText(text);
-        }
     }
 }

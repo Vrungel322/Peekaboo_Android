@@ -38,13 +38,10 @@ public class ContactsFragment extends Fragment implements IContactsView {
     ContactPresenter contactPresenter;
 
     @BindView(R.id.recyclerview)
-    public RecyclerView recyclerView;
-
+    private RecyclerView recyclerView;
     @BindView(R.id.fastscroller)
-    RecyclerViewFastScroller fastScroller;
+    private RecyclerViewFastScroller fastScroller;
 
-
-    int numberOfItems;
     private ContactLargeAdapter contactLargeAdapter;
 
     public ContactsFragment() {
@@ -55,24 +52,6 @@ public class ContactsFragment extends Fragment implements IContactsView {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         PeekabooApplication.getApp(getActivity()).getComponent().inject(this);
-        // Testing DB
-//        contactPresenter.insertContactToTable(new Contact("Name0",
-//                "Surname0",
-//                "Nickname0",
-//                true,
-//                "uri0"));
-//        contactPresenter.insertContactToTable(new Contact("Name1",
-//                "Surname1",
-//                "Nickname1",
-//                true,
-//                "uri1"));
-//        contactPresenter.insertContactToTable(new Contact("Name2",
-//                "Surname2",
-//                "Nickname2",
-//                true,
-//                "uri2"));
-
-        contactPresenter.getAllTableAsString();
 
     }
 
@@ -81,6 +60,7 @@ public class ContactsFragment extends Fragment implements IContactsView {
         super.onResume();
         //Make Query to get all real contacts from server
         //after that need to redo ContactListAdapter to match ContactsPOJO and json
+        // todo make it only when first launch and then when sync
         contactPresenter.loadContactsList();
     }
 
@@ -89,21 +69,17 @@ public class ContactsFragment extends Fragment implements IContactsView {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_contacts, container, false);
         ButterKnife.bind(this, rootView);
+        contactPresenter.bind(this);
 
         FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getActivity(), "ADD", Toast.LENGTH_LONG).show();
-            }
-        });
-//        initList();
-        manageRecyclerView();
-        contactPresenter.bind(this);
+        fab.setOnClickListener(v -> Toast.makeText(getActivity(), "ADD", Toast.LENGTH_LONG).show());
+        setUpRecyclerView();
+
+        contactPresenter.onCreate();
         return rootView;
     }
 
-    private void manageRecyclerView() {
+    private void setUpRecyclerView() {
         contactLargeAdapter = new ContactLargeAdapter();
         recyclerView.setAdapter(contactLargeAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false) {
@@ -126,15 +102,13 @@ public class ContactsFragment extends Fragment implements IContactsView {
             }
         });
         fastScroller.setRecyclerView(recyclerView);
-        fastScroller.setViewsToUse(R.layout.recycler_view_fast_scroller__fast_scroller, R.id.fastscroller_bubble, R.id.fastscroller_handle);
+        fastScroller.setViewsToUse(R.layout.recycler_view_fast_scroller__fast_scroller,
+                                    R.id.fastscroller_bubble, R.id.fastscroller_handle);
     }
 
     @Override
     public void showContactsList(List<Contact> response) {
-//        recyclerView.setBackgroundColor(Color.CYAN);
-//        showToastMessage(response.get(1).contactName().toString());
         contactLargeAdapter.setItems(response);
-
     }
 
     @Override
@@ -154,20 +128,9 @@ public class ContactsFragment extends Fragment implements IContactsView {
 
     @Override
     public void onDestroyView() {
-        contactPresenter.unbind();
+        contactPresenter.onDestroy();
         super.onDestroyView();
     }
-
-//    private void initList() {
-//
-//        if (contactList == null)
-//            contactList = new ArrayList<>();
-//
-//        String[] countries = getResources().getStringArray(R.array.countries_array);
-//        for (String country : countries) {
-//            contactList.add(country);
-//        }
-//    }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {

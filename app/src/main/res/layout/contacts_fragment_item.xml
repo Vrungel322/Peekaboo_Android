@@ -12,8 +12,9 @@
         android:layout_gravity="center_horizontal"
         android:paddingRight="5dp">
 
+        <!-- TODO  make custom ImageView with appropriate size -->
         <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-            android:id="@+id/ivDialog_contact"
+            android:id="@+id/contact_avatar_image_view"
             android:layout_width="62dp"
             android:layout_height="62dp"
             android:layout_margin="@dimen/dialog_item_margin"
@@ -23,27 +24,24 @@
 
 
         <TextView
-            android:id="@+id/tvConUnM"
+            android:id="@+id/unread_count_text_view"
             android:layout_width="@dimen/dialog_number_dot"
             android:layout_height="@dimen/dialog_number_dot"
-            android:layout_gravity="right|top"
+            android:layout_gravity="top|end"
             android:background="@drawable/circle"
             android:gravity="center"
-            android:text=" "
             android:textColor="@android:color/black"
-            android:textSize="10sp" />
+            android:textSize="@dimen/dialog_unread_count_text_size" />
     </FrameLayout>
 
     <TextView
-        android:id="@+id/tvConName"
+        android:id="@+id/contact_name_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_vertical"
-        android:layout_marginLeft="0dp"
         android:layout_marginRight="35dp"
-        android:singleLine="true"
-        android:text="loooooooooooooooooooooooooooooooool"
         android:textColor="#000000"
-        android:textSize="16dp"
-        android:textStyle="bold" />
+        android:textSize="@dimen/dialog_contact_name_text_size"
+        android:textStyle="bold"
+        android:maxLines="1" />
 </LinearLayout>

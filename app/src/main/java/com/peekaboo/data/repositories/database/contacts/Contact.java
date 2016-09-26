@@ -14,6 +14,7 @@ public class Contact extends ContactAbs implements Serializable {
     private boolean isOnline;
     private String contactImgUri;
     private String contactId;
+    private int unreadMessagesCount = 0;
 
     public Contact(long id, String contactName, String contactSurname, String contactNickname,
                    boolean isOnline, String contactImgUri, String contactId) {
@@ -63,6 +64,14 @@ public class Contact extends ContactAbs implements Serializable {
     @Override
     public String contactImgUri() {
         return contactImgUri;
+    }
+
+    public void setUnreadMessagesCount(int unreadMessagesCount) {
+        this.unreadMessagesCount = unreadMessagesCount;
+    }
+
+    public int getUnreadMessagesCount() {
+        return unreadMessagesCount;
     }
 
     public void setId(long id) {
