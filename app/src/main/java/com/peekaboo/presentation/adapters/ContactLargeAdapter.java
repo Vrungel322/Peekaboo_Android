@@ -27,7 +27,7 @@ public final class ContactLargeAdapter extends RecyclerView.Adapter<ContactLarge
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        String text = items.get(position).contactId();
+        String text = items.get(position).contactName();
         holder.setText(text);
     }
 
