@@ -94,13 +94,19 @@ public class Messenger implements IMessenger,
      * @param message READ notification message
      */
     private void handleIncomingReadNotification(Message message) {
-        String tableName1 = message.getParams().get(Message.Params.FROM);
-        unreadMessages = helper.getUnreadMessages(tableName1, true).subscribe(pMessages -> {
+        if (unreadMessages != null && !unreadMessages.isUnsubscribed()) {
             unreadMessages.unsubscribe();
-            for (PMessage pMessage1 : pMessages) {
-                updateMessageRead(pMessage1, tableName1);
-            }
-        });
+        }
+        final String tableName = message.getParams().get(Message.Params.FROM);
+        unreadMessages = helper.getUnreadMessages(tableName, true)
+                .subscribe(new BaseUseCaseSubscriber<List<PMessage>>() {
+                    @Override
+                    public void onNext(List<PMessage> pMessages) {
+                        for (PMessage pMessage : pMessages) {
+                            updateMessageRead(pMessage, tableName);
+                        }
+                    }
+                });
     }
 
     /**
@@ -114,9 +120,6 @@ public class Messenger implements IMessenger,
     private void handleIncomingMessage(Message message) {
         PMessage pMessage = MessageUtils.convert(user.getId(), message);
         Log.e("Messenger", "type " + pMessage.mediaType());
-//        if (pMessage.mediaType() == PMessage.PMESSAGE_MEDIA_TYPE.AUDIO_MESSAGE) {
-//            pMessage.setDownloaded(false);
-//        }
         pMessage.setStatus(PMessage.PMESSAGE_STATUS.STATUS_DELIVERED);
         String tableName = pMessage.senderId();
         helper.insert(tableName, pMessage);
@@ -238,7 +241,6 @@ public class Messenger implements IMessenger,
         return new BaseUseCaseSubscriber<Pair<PMessage, FileEntity>>() {
             @Override
             public void onNext(Pair<PMessage, FileEntity> pMessageFileEntityPair) {
-                Log.e("messanger", pMessageFileEntityPair + " " + hashCode());
                 if (isAvailable()) {
                     PMessage pMessage = pMessageFileEntityPair.first;
                     FileEntity fileEntity = pMessageFileEntityPair.second;
@@ -297,16 +299,21 @@ public class Messenger implements IMessenger,
      * which were read while socket was not available.
      */
     private void deliverReadServiceMessages() {
+        if (serviceMessages != null && !serviceMessages.isUnsubscribed()) {
+            serviceMessages.unsubscribe();
+        }
         serviceMessages = readMessagesHelper.getUnreadMessages()
-                .subscribe(senders -> {
-                    serviceMessages.unsubscribe();
-                    Log.e("senders", senders.toString());
-                    for (String sender : senders) {
-                        if (isAvailable()) {
-                            deliverReadServiceMessage(sender);
-                            readMessagesHelper.delete(sender);
+                .subscribe(new BaseUseCaseSubscriber<List<String>>() {
+                    @Override
+                    public void onNext(List<String> senders) {
+                        for (String sender : senders) {
+                            if (isAvailable()) {
+                                deliverReadServiceMessage(sender);
+                                readMessagesHelper.delete(sender);
+                            }
                         }
                     }
+
                 });
     }
 
@@ -315,16 +322,16 @@ public class Messenger implements IMessenger,
      * {@link #deliverMessage(PMessage)} will be called for each undelivered message
      */
     private void deliverSentMessages() {
-        Log.e("BUG1", "deliver " + (undeliveredMessages != null) + " " + (undeliveredMessages != null && !undeliveredMessages.isUnsubscribed()));
         if (undeliveredMessages != null && !undeliveredMessages.isUnsubscribed()) {
             undeliveredMessages.unsubscribe();
         }
         undeliveredMessages = helper.getUndeliveredMessages()
-                .subscribe(pMessageAbses -> {
-                    Log.e("BUG1", "unsubscribe " + pMessageAbses);
-                    undeliveredMessages.unsubscribe();
-                    for (PMessage message : pMessageAbses) {
-                        deliverMessageByMediatype(message);
+                .subscribe(new BaseUseCaseSubscriber<List<PMessage>>() {
+                    @Override
+                    public void onNext(List<PMessage> pMessages) {
+                        for (PMessage message : pMessages) {
+                            deliverMessageByMediatype(message);
+                        }
                     }
                 });
     }

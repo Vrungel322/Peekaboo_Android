@@ -1,5 +1,7 @@
 package com.peekaboo.data.rest.entity;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Created by Arkadiy on 02.06.2016.
  */

@@ -10,25 +10,45 @@ public class AccountUser extends User {
     public static final String TOKEN = "token";
     public static final String ID = "user_id";
     public static final String MODE = "mode";
+    public static final String USERNAME = "username";
     private SharedPreferences preferences;
+    private String domen;
 
     @Nullable
     private String token;
     private int mode;
+    @Nullable
+    private String username;
 
-    public AccountUser(SharedPreferences preferences) {
+    public AccountUser(SharedPreferences preferences, String domen) {
         super(null, null);
         this.preferences = preferences;
+        this.domen = domen;
         restoreData();
     }
 
-    public AccountUser(String str) {
-        super(str, null);
+    public AccountUser(String id) {
+        super(id, null);
+    }
+
+    @Nullable
+    public String getUsername() {
+        return username;
+    }
+
+    public void saveUsername(String username) {
+        this.username = username;
+        preferences.edit().putString(USERNAME, username).commit();
     }
 
     @Nullable
     public String getBearer() {
         return "Bearer " + token;
+    }
+
+
+    public String getAvatar() {
+        return domen + getId();
     }
 
     @Nullable
@@ -49,6 +69,7 @@ public class AccountUser extends User {
         this.mode = mode;
         preferences.edit().putInt(MODE, mode).commit();
     }
+
     public void saveId(String id) {
         setId(id);
         preferences.edit().putString(ID, id).commit();
@@ -62,6 +83,7 @@ public class AccountUser extends User {
         token = preferences.getString(TOKEN, null);
         setId(preferences.getString(ID, null));
         mode = preferences.getInt(MODE, 0);
+        username = preferences.getString(USERNAME, null);
     }
 
     @Override

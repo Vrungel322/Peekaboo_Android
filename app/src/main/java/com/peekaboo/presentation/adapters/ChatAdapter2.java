@@ -128,16 +128,22 @@ public class ChatAdapter2 extends RecyclerView.Adapter<ChatAdapter2.ViewHolder> 
         position = holder.getAdapterPosition();
         PMessage pMessageAbs = getItem(position);
         int mediaType = pMessageAbs.mediaType();
-        boolean nextMine = false;
-        boolean prevMine = false;
-        if (getItemCount() > 1) {
-            if (position < getItemCount() - 1) {
-                nextMine = getItem(position + 1).isMine();
-            }
-            if (position > 0) {
-                prevMine = getItem(position - 1).isMine();
-            }
+
+        boolean nextMine;
+        boolean prevMine;
+
+        if (position < getItemCount() - 1) {
+            nextMine = getItem(position + 1).isMine();
+        } else {
+            nextMine = false;
         }
+
+        if (position > 0) {
+            prevMine = getItem(position - 1).isMine();
+        } else {
+            prevMine = true;
+        }
+
         setAlignment(holder, pMessageAbs.isMine(), prevMine, nextMine, mediaType);
 
         switch (mediaType) {
