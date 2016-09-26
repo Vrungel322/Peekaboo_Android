@@ -74,7 +74,7 @@ public class PContactHelper {
     @NonNull
     private Observable<List<Contact>> select(String query) {
         Log.e("helper", query);
-        return Observable.create((Observable.OnSubscribe<List<Contact>>) subscriber -> {
+        return Observable.create(subscriber -> {
             List<Contact> messages = new ArrayList<>();
             SQLiteDatabase db = helper.getWritableDatabase();
 

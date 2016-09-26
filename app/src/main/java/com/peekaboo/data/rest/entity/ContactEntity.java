@@ -12,8 +12,6 @@ public class ContactEntity {
     private int state;
     private String imgUri;
 
-
-
     public String getId() {
         return id;
     }

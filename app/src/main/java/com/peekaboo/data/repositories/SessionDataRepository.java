@@ -19,8 +19,6 @@ import java.util.List;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import rx.Observable;
-import rx.functions.Action1;
-import rx.functions.Func1;
 
 /**
  * Created by Arkadiy on 05.06.2016.

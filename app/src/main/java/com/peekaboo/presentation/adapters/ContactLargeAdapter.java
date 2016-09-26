@@ -16,8 +16,6 @@ import java.util.List;
 public final class ContactLargeAdapter extends RecyclerView.Adapter<ContactLargeAdapter.ViewHolder> implements BubbleTextGetter {
     private final List<Contact> items = new ArrayList<>();
 
-    public ContactLargeAdapter() {
-    }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
