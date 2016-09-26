@@ -7,11 +7,14 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.peekaboo.R;
 import com.peekaboo.domain.AccountUser;
@@ -27,7 +30,9 @@ import com.peekaboo.presentation.pojo.HotFriendPOJO;
 import com.peekaboo.presentation.services.INotifier;
 import com.peekaboo.presentation.services.Message;
 import com.peekaboo.presentation.services.MessageUtils;
+import com.peekaboo.presentation.utils.ResourcesUtils;
 import com.peekaboo.utils.Constants;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -38,9 +43,10 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import de.hdodenhof.circleimageview.CircleImageView;
 import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements INotifier.NotificationListener<Message> {
     @BindView(R.id.drawer_layout)
     DrawerLayout drawer;
     @BindView(R.id.bText)
@@ -63,13 +69,19 @@ public class MainActivity extends AppCompatActivity {
     LinearLayout llSettings;
     @BindView(R.id.llExit)
     LinearLayout llExit;
+    @BindView(R.id.tvNameSurname)
+    TextView tvNameSurname;
+    @BindView(R.id.ivAccountAvatar)
+    ImageView ivAccountAvatar;
+    @BindView(R.id.ivOnlineStatus)
+    ImageView ivOnlineStatus;
     @Inject
     INotifier<Message> notifier;
     @Inject
     AccountUser accountUser;
     private HotFriendsAdapter hotFriendsAdapter;
     private ArrayList<HotFriendPOJO> alHotFriendPOJO;
-    private Set<OnBackPressListener> listeners = new HashSet();
+    private final Set<OnBackPressListener> listeners = new HashSet<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +104,15 @@ public class MainActivity extends AppCompatActivity {
             changeFragment(new FriendTestFragment(), null);
         }
         int mode = accountUser.getMode();
+        String avatarUrl = accountUser.getAvatar();
+        String userName = accountUser.getUsername();
+        tvNameSurname.setText(userName);
+        Log.e("activity", "" + avatarUrl);
+        int avatarSize = ResourcesUtils.getDimenInPx(this, R.dimen.widthOfIconInDrawer);
+        Picasso.with(this).load(avatarUrl)
+                .resize(0, avatarSize)
+                .into(ivAccountAvatar);
+
         bText.setSelected(mode == 1);
         bAudio.setSelected(mode == 2);
         bVideo.setSelected(mode == 0);
@@ -107,6 +128,19 @@ public class MainActivity extends AppCompatActivity {
             startActivity(new Intent(MainActivity.this, ChatActivity.class));
             drawer.closeDrawer(Gravity.RIGHT, true);
         });
+        notifier.addListener(this);
+        if (notifier.isAvailable()) {
+            onConnected();
+        } else {
+            notifier.tryConnect(accountUser.getBearer());
+            onDisconnected();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        notifier.removeListener(this);
+        super.onDestroy();
     }
 
     @OnClick({R.id.llDialogs, R.id.llCalls, R.id.llContacts, R.id.llProfile, R.id.llSettings, R.id.llExit})
@@ -202,6 +236,21 @@ public class MainActivity extends AppCompatActivity {
 
     public void removeListener(OnBackPressListener listener) {
         listeners.remove(listener);
+    }
+
+    @Override
+    public void onMessageObtained(Message message) {
+
+    }
+
+    @Override
+    public void onConnected() {
+        ivOnlineStatus.setImageResource(R.drawable.round_status_icon_cyan);
+    }
+
+    @Override
+    public void onDisconnected() {
+        ivOnlineStatus.setImageResource(R.drawable.round_status_icon_grey);
     }
 
     public interface OnBackPressListener {
