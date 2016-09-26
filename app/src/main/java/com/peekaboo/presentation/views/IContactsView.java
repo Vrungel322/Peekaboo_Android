@@ -5,7 +5,6 @@ import com.peekaboo.data.repositories.database.contacts.Contact;
 import java.util.List;
 
 /**
-<<<<<<< HEAD
  * Created by Nikita on 13.09.2016.
  */
 public interface IContactsView extends IProgressView {

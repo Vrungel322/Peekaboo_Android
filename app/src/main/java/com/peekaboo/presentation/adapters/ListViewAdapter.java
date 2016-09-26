@@ -10,7 +10,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
@@ -19,10 +18,11 @@ import com.daimajia.swipe.SwipeLayout;
 import com.daimajia.swipe.adapters.BaseSwipeAdapter;
 import com.peekaboo.R;
 
-public class DialogsListAdapter extends BaseSwipeAdapter {
+public class ListViewAdapter extends BaseSwipeAdapter {
+
     private Context mContext;
 
-    public DialogsListAdapter(Context mContext) {
+    public ListViewAdapter(Context mContext) {
         this.mContext = mContext;
     }
 
@@ -34,33 +34,20 @@ public class DialogsListAdapter extends BaseSwipeAdapter {
     @Nullable
     @Override
     public View generateView(int position, ViewGroup parent) {
-        View v = LayoutInflater.from(mContext).inflate(R.layout.list_item_dialog, null);//dialog_list_item
-
-        SwipeLayout swipeLayout = (SwipeLayout)v.findViewById(getSwipeLayoutResourceId(position));
-        swipeLayout.setShowMode(SwipeLayout.ShowMode.PullOut);
-
+        View v = LayoutInflater.from(mContext).inflate(R.layout.listview_item, null);
+        SwipeLayout swipeLayout = (SwipeLayout) v.findViewById(getSwipeLayoutResourceId(position));
         swipeLayout.addSwipeListener(new SimpleSwipeListener() {
             @Override
             public void onOpen(SwipeLayout layout) {
-//                YoYo.with(Techniques.Tada).duration(500).delay(100).playOn(layout.findViewById(R.id.iv_swipeblock));
+                YoYo.with(Techniques.Tada).duration(500).delay(100).playOn(layout.findViewById(R.id.trash));
             }
         });
-        swipeLayout.setOnClickListener(new View.OnClickListener() {
+        swipeLayout.setOnDoubleClickListener(new SwipeLayout.DoubleClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onDoubleClick(SwipeLayout layout, boolean surface) {
             }
         });
-        v.findViewById(R.id.iv_swipetrash).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-            }
-        });
-        v.findViewById(R.id.iv_swipenosound).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-            }
-        });
-        v.findViewById(R.id.iv_swipestar).setOnClickListener(new View.OnClickListener() {
+        v.findViewById(R.id.delete).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
             }
@@ -70,13 +57,13 @@ public class DialogsListAdapter extends BaseSwipeAdapter {
 
     @Override
     public void fillValues(int position, View convertView) {
-        TextView t = (TextView)convertView.findViewById(R.id.tvDialog_preview);
-        t.setText("text preview " + (position + 1) + ".");
+        TextView t = (TextView) convertView.findViewById(R.id.position);
+        t.setText((position + 1) + ".");
     }
 
     @Override
     public int getCount() {
-        return 15;
+        return 5;
     }
 
     @Override

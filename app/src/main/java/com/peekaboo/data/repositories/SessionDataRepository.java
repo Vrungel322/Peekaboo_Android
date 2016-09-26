@@ -44,6 +44,8 @@ public class SessionDataRepository implements SessionRepository {
                 .map(token -> {
                     user.saveToken(token.getToken());
                     user.saveId(token.getId());
+                    user.saveUsername(token.getUsername());
+                    user.saveMode(token.getMode());
                     return user;
                 }).flatMap(accountUser -> loadAllContacts());
     }
@@ -53,6 +55,7 @@ public class SessionDataRepository implements SessionRepository {
         return restApi.signUp(new CredentialsSignUp(username, login, password))
                 .map(token -> {
                     user.saveId(token.getId());
+                    user.saveUsername(token.getUsername());
                     return user;
                 });
     }
@@ -85,9 +88,13 @@ public class SessionDataRepository implements SessionRepository {
     @Override
     public Observable<List<Contact>> loadAllContacts() {
         Mapper<ContactEntity, Contact> contactEntityMapper = abstractMapperFactory.getContactEntityMapper();
-        return restApi.getAllContacts().map(userResponse -> userResponse.usersList/*(List<ContactEntity>) new Gson().fromJson(userResponse.usersList, new TypeToken<ArrayList<ContactEntity>>(){}.getType())*/)
+        return restApi.getAllContacts().map(userResponse -> userResponse.usersList)
                 .flatMapIterable(l -> l)
-                .map(contactEntityMapper::transform)
+                .map(contactEntity -> {
+                    Contact contact = contactEntityMapper.transform(contactEntity);
+//                    contactHelper.insert(contact);
+                    return contact;
+                })
                 .toList();
     }
 
@@ -97,10 +104,12 @@ public class SessionDataRepository implements SessionRepository {
     }
 
     @Override
-    public Observable saveContactToDb(List<Contact> contact) {
-        return Observable.from(contact).flatMap(contact1 ->
-                Observable.just(
-                dbContacts.insert(abstractMapperFactory.getContactToContentValueMapper().transform(contact1))
-                ));
+    public Observable<List<Contact>> saveContactToDb(List<Contact> contact) {
+                return Observable.from(contact)
+                        .map(contact1 -> {
+                            dbContacts.insert(contact1);
+                            return contact1;
+                        })
+                        .toList();
     }
 }

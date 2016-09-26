@@ -32,9 +32,9 @@ public class MapperFactory implements AbstractMapperFactory {
         return new PMessageMapper();
     }
 
-    public Mapper<Contact, ContentValues> getPContactMapper() {
-        return new PContactMapper();
-    }
+//    public Mapper<Contact, ContentValues> getPContactMapper() {
+//        return new PContactMapper();
+//    }
 
     @Override
     public Mapper<ContactEntity, Contact> getContactEntityMapper() {

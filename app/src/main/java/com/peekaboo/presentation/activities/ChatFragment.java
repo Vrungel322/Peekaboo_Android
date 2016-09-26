@@ -2,15 +2,19 @@ package com.peekaboo.presentation.activities;
 
 import android.animation.Animator;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
-import android.view.MenuItem;
+import android.view.MenuInflater;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.EditText;
 import android.widget.HorizontalScrollView;
@@ -20,6 +24,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.peekaboo.R;
+import com.peekaboo.data.repositories.database.contacts.Contact;
 import com.peekaboo.data.repositories.database.messages.PMessage;
 import com.peekaboo.domain.AccountUser;
 import com.peekaboo.presentation.PeekabooApplication;
@@ -46,8 +51,8 @@ import io.codetail.widget.RevealFrameLayout;
 /**
  * Created by sebastian on 09.09.16.
  */
-public class ChatActivity2 extends AppCompatActivity implements IChatView2 {
-    public static final String COMPANION_ID = "companionId";
+public class ChatFragment extends Fragment implements IChatView2, MainActivity.OnBackPressListener {
+    public static final String COMPANION = "companion";
     @BindView(R.id.etMessageBody)
     EditText etMessageBody;
     @BindView(R.id.rvMessages)
@@ -79,67 +84,62 @@ public class ChatActivity2 extends AppCompatActivity implements IChatView2 {
     private ChatAdapter2 adapter;
     private LinearLayout.LayoutParams layoutParams;
     private boolean isFirstResumeAfterCreate = true;
-    private String companionId;
+    private Contact companion;
+
+    public static ChatFragment newInstance(Contact companion) {
+
+        ChatFragment fragment = new ChatFragment();
+
+        Bundle args = new Bundle();
+        args.putSerializable(COMPANION, companion);
+        fragment.setArguments(args);
+
+        return fragment;
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.chat_layout);
-        companionId = getIntent().getStringExtra(COMPANION_ID);
-        ButterKnife.bind(this);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarChat);
+        PeekabooApplication.getApp(getActivity()).getComponent().inject(this);
+        companion = (Contact) getArguments().getSerializable(COMPANION);
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        ((Toolbar) getActivity().findViewById(R.id.toolbar)).setTitle(companion.contactNickname());
+    }
+
+    @Nullable
+    @Override
+    public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.chat_layout, container, false);
+        ButterKnife.bind(this, view);
+
         layoutParams = (LinearLayout.LayoutParams) rflMessageBody.getLayoutParams();
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
-        PeekabooApplication.getApp(this).getComponent().inject(this);
-
-        LinearLayoutManager layoutManager = new LinearLayoutManager(this);
+        LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
         layoutManager.setStackFromEnd(true);
         rvMessages.setLayoutManager(layoutManager);
-
         rvMessages.setItemAnimator(new DefaultItemAnimator());
-        adapter = new ChatAdapter2(this, presenter, rvMessages);
+        adapter = new ChatAdapter2(getActivity(), presenter, rvMessages);
         rvMessages.setAdapter(adapter);
-        rvMessages.addOnItemTouchListener(new ChatRecyclerTouchListener(this, rvMessages, new ChatClickListener() {
+        rvMessages.addOnItemTouchListener(new ChatRecyclerTouchListener(getActivity(), rvMessages, new ChatClickListener() {
             @Override
             public void onClick(View view, int position) {
             }
 
             @Override
             public void onLongClick(View view, int position) {
-//                FragmentTransaction ft = getFragmentManager().beginTransaction();
-//                chatItemDialog = new ChatItemDialog();
-//                Bundle itemIndexBundle = new Bundle();
-//                itemIndexBundle.putInt(Constants.ARG_CHAT_MESSAGE_ITEM_INDEX, position);
-//                chatItemDialog.setArguments(itemIndexBundle);
-//
-//                chatItemDialog.show(ft, Constants.FRAGMENT_TAGS.CHAT_ITEM_DIALOG_FRAGMENT_TAG);
+
             }
         }));
         presenter.bind(this);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.dialogs_menu, menu);
-        return super.onCreateOptionsMenu(menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home: {
-                onBackPressed();
-                break;
-            }
-        }
-        return super.onOptionsItemSelected(item);
+        return view;
     }
 
     @OnClick(R.id.bSendMessage)
-    void onButtonSendCLick() {
+    void onButtonSendClick() {
         presenter.onSendTextButtonPress(getMessageText());
     }
 
@@ -155,9 +155,15 @@ public class ChatActivity2 extends AppCompatActivity implements IChatView2 {
 
     @OnTouch(R.id.micro_btn)
     boolean onRecordButtonClick(MotionEvent mv) {
-        if (mv.getAction() == MotionEvent.ACTION_UP ||
-                mv.getAction() == MotionEvent.ACTION_DOWN) {
-            presenter.onRecordButtonClick();
+        switch (mv.getAction()) {
+            case MotionEvent.ACTION_DOWN:
+                etMessageBody.setFocusable(false);
+                presenter.onRecordButtonClick(true);
+                break;
+            case MotionEvent.ACTION_CANCEL:
+            case MotionEvent.ACTION_UP:
+                presenter.onRecordButtonClick(false);
+                break;
         }
         return true;
     }
@@ -192,22 +198,24 @@ public class ChatActivity2 extends AppCompatActivity implements IChatView2 {
     }
 
     @Override
-    protected void onResume() {
+    public void onResume() {
         super.onResume();
+        ((MainActivity) getActivity()).addListener(this);
         presenter.onResume(isFirstResumeAfterCreate, getCompanionId());
         isFirstResumeAfterCreate = false;
     }
 
     @Override
-    protected void onPause() {
+    public void onPause() {
         presenter.onPause();
+        ((MainActivity) getActivity()).removeListener(this);
         super.onPause();
     }
 
     @Override
-    protected void onDestroy() {
+    public void onDestroyView() {
         presenter.unbind();
-        super.onDestroy();
+        super.onDestroyView();
     }
 
     @Override
@@ -227,7 +235,7 @@ public class ChatActivity2 extends AppCompatActivity implements IChatView2 {
 
     @Override
     public String getCompanionId() {
-        return companionId;
+        return companion.contactId();
     }
 
     @Override
@@ -249,27 +257,18 @@ public class ChatActivity2 extends AppCompatActivity implements IChatView2 {
             animator.setDuration(1000);
             animator.start();
         });
-
-//        RecordDialogFragment fragment = (RecordDialogFragment) getSupportFragmentManager()
-//                .findFragmentByTag(RecordDialogFragment.TAG);
-//        if (fragment != null) {
-//            fragment.showRecordStart();
-//        }
     }
 
     @Override
     public void showRecordStop() {
+        etMessageBody.setFocusableInTouchMode(true);
+        etMessageBody.setFocusable(true);
         rflButtonRecord.setVisibility(View.GONE);
-//        RecordDialogFragment fragment = (RecordDialogFragment) getSupportFragmentManager()
-//                .findFragmentByTag(RecordDialogFragment.TAG);
-//        if (fragment != null) {
-//            fragment.dismiss();
-//        }
     }
 
     @Override
     public void showToastMessage(String text) {
-        Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG).show();
+        Toast.makeText(getActivity().getApplicationContext(), text, Toast.LENGTH_LONG).show();
     }
 
     @OnFocusChange(R.id.etMessageBody)
@@ -286,13 +285,14 @@ public class ChatActivity2 extends AppCompatActivity implements IChatView2 {
     }
 
     @Override
-    public void onBackPressed() {
+    public boolean onBackPress() {
         if (bMessageOpen.getVisibility() == View.VISIBLE) {
-            super.onBackPressed();
+            return false;
         } else {
             bMessageOpen.setVisibility(View.VISIBLE);
             bSendMessage.setVisibility(View.GONE);
             rflMessageBody.setVisibility(View.GONE);
+            return true;
         }
     }
 }

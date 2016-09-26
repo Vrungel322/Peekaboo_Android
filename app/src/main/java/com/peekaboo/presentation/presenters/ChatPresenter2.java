@@ -8,18 +8,19 @@ import com.peekaboo.data.repositories.database.messages.PMessageAbs;
 import com.peekaboo.domain.AccountUser;
 import com.peekaboo.domain.AudioRecorder;
 import com.peekaboo.domain.Record;
+import com.peekaboo.domain.subscribers.BaseUseCaseSubscriber;
 import com.peekaboo.presentation.services.IMessenger;
 import com.peekaboo.presentation.utils.AsyncAudioPlayer;
 import com.peekaboo.presentation.utils.AudioPlayer;
 import com.peekaboo.presentation.views.IChatView2;
 
-import java.util.HashMap;
 import java.util.List;
 
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.inject.Singleton;
 
+import rx.Subscriber;
 import rx.subscriptions.CompositeSubscription;
 
 /**
@@ -30,19 +31,16 @@ public class ChatPresenter2 extends BasePresenter<IChatView2> implements IChatPr
         IMessenger.MessengerListener {
     private final IMessenger messenger;
     private final AccountUser accountUser;
-    private CompositeSubscription subscriptions;
     private final AsyncAudioPlayer player;
-    private final List<String> domens;
     private final AudioRecorder recorder;
+    private CompositeSubscription subscriptions;
 
     @Inject
     public ChatPresenter2(AudioRecorder recorder, IMessenger messenger,
-                          AccountUser accountUser, AsyncAudioPlayer player,
-                          @Named("domens") List<String> domens) {
+                          AccountUser accountUser, AsyncAudioPlayer player) {
         this.messenger = messenger;
         this.accountUser = accountUser;
         this.player = player;
-        this.domens = domens;
         this.recorder = recorder;
     }
 
@@ -89,11 +87,6 @@ public class ChatPresenter2 extends BasePresenter<IChatView2> implements IChatPr
 
         if (player.getAudioId() != pMessage.id() || player.state() == AudioPlayer.STATE_RESET) {
             player.reset();
-//            HashMap<String, String> headers = new HashMap<>();
-//            headers.put("authorization", accountUser.getBearer());
-//            String url = domens.get(0) + "download/audio/" + pMessage.messageBody();
-//            Log.e("presenter", "url " + url);
-//            Log.e("presenter", "headers " + headers);
             String uri = pMessage.messageBody().split(PMessage.DIVIDER)[1];
             Log.e("presenter", "uri " + uri);
             player.prepare(pMessage.id(), uri, listener);
@@ -106,36 +99,63 @@ public class ChatPresenter2 extends BasePresenter<IChatView2> implements IChatPr
 
 
     @Override
-    public void onRecordButtonClick() {
+    public void onRecordButtonClick(boolean start) {
         IChatView2 view = getView();
         if (view != null) {
-            if (recorder.isRecording()) {
-                Log.e("presenter", "record stop");
-                recorder.stopRecording().subscribe(record -> {
-                    PMessage message = new PMessage(true, PMessage.PMESSAGE_MEDIA_TYPE.AUDIO_MESSAGE,
-                            record.getFilename(), System.currentTimeMillis(),
-                            PMessage.PMESSAGE_STATUS.STATUS_SENT,
-                            view.getCompanionId(), accountUser.getId());
-                    messenger.sendMessage(message);
+            if (recorder.isRecording() && !start) {
+                recorder.stopRecording().subscribe(new Subscriber<Record>() {
+                    @Override
+                    public void onCompleted() {
+                        showRecordStop();
+                    }
 
-                    Log.e("presenter", "record stopped");
-                    IChatView2 view1 = getView();
-                    if (view1 != null) {
-                        view1.showRecordStop();
+                    @Override
+                    public void onError(Throwable e) {
+                        showRecordStop();
+                    }
+
+
+                    @Override
+                    public void onNext(Record record) {
+                        PMessage message = new PMessage(true, PMessage.PMESSAGE_MEDIA_TYPE.AUDIO_MESSAGE,
+                                record.getFilename(), System.currentTimeMillis(),
+                                PMessage.PMESSAGE_STATUS.STATUS_SENT,
+                                view.getCompanionId(), accountUser.getId());
+                        messenger.sendMessage(message);
                     }
                 });
-            } else {
-                Log.e("presenter", "record start");
+            } else if (!recorder.isRecording() && start) {
                 recorder.setRecord(new Record(view.getCompanionId()));
-                recorder.startRecording().subscribe();
-                IChatView2 view1 = getView();
-                if (view1 != null) {
-                    view1.showRecordStart();
-                }
+                recorder.startRecording().subscribe(new BaseUseCaseSubscriber<Record>() {
+                    @Override
+                    public void onStart() {
+                        showRecordStart();
+                    }
+
+                    @Override
+                    public void onError(Throwable e) {
+                        showRecordStop();
+                    }
+                });
+
             }
         }
     }
 
+    private void showRecordStart() {
+        IChatView2 view = getView();
+        if (view != null) {
+            view.showRecordStart();
+        }
+    }
+
+
+    private void showRecordStop() {
+        IChatView2 view = getView();
+        if (view != null) {
+            view.showRecordStop();
+        }
+    }
     @Override
     public void onPause() {
         messenger.removeMessageListener(this);

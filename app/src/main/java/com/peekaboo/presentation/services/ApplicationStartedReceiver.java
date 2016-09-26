@@ -11,7 +11,6 @@ import android.widget.Toast;
  */
 public class ApplicationStartedReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
-        Toast.makeText(context, "app start receiver", Toast.LENGTH_LONG).show();
         Log.e("socket", "app start onReceive()");
         NotificationService.launch(context, NotificationService.ACTION.TRY_CONNECT);
     }

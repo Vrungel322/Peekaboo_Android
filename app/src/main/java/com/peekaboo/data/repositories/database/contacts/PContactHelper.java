@@ -1,11 +1,11 @@
 package com.peekaboo.data.repositories.database.contacts;
 
-import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.peekaboo.data.mappers.ContactToContentValueMapper;
 import com.peekaboo.data.repositories.database.service.DBHelper;
 import com.peekaboo.data.repositories.database.utils_db.Db;
 import com.peekaboo.domain.schedulers.ObserveOn;
@@ -22,9 +22,10 @@ import rx.Observable;
 public class PContactHelper {
 
     private static final String TABLE_NAME = "Contacts";
-    private DBHelper helper;
-    private SubscribeOn subscribeOn;
-    private ObserveOn observeOn;
+    private final DBHelper helper;
+    private final SubscribeOn subscribeOn;
+    private final ObserveOn observeOn;
+    private final ContactToContentValueMapper mapper = new ContactToContentValueMapper();
 
     public PContactHelper(DBHelper helper, SubscribeOn subscribeOn, ObserveOn observeOn) {
         this.helper = helper;
@@ -39,8 +40,8 @@ public class PContactHelper {
                 "(" +
                 ContactAbs.ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
                 ContactAbs.CONTACT_ID + " TEXT NOT NULL," +
-                ContactAbs.CONTACT_NAME + " TEXT NOT NULL," +
-                ContactAbs.CONTACT_SURNAME + " TEXT NOT NULL," +
+                ContactAbs.CONTACT_NAME + " TEXT," +
+                ContactAbs.CONTACT_SURNAME + " TEXT," +
                 ContactAbs.CONTACT_NICKNAME + " TEXT NOT NULL," +
                 ContactAbs.CONTACT_IS_ONLINE + " INTEGER NOT NULL," +
                 ContactAbs.CONTACT_IMG_URI + " TEXT NOT NULL" +
@@ -49,9 +50,11 @@ public class PContactHelper {
         db.execSQL(CREATE_TABLE);
     }
 
-    public long insert(ContentValues cv) {
+    public long insert(Contact contact) {
         SQLiteDatabase db = helper.getWritableDatabase();
-        return db.insert(TABLE_NAME, null, cv);
+        long id = db.insert(TABLE_NAME, null, mapper.transform(contact));
+        contact.setId(id);
+        return id;
     }
 
     public Observable<List<Contact>> getAllContacts() {

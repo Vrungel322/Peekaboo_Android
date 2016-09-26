@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -19,7 +20,9 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.widget.Chronometer;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -80,8 +83,18 @@ public class ChatActivity extends AppCompatActivity
     ImageView microAnim;
     @BindView(R.id.rflButtonRecord)
     RevealFrameLayout rflButtonRecord;
+    @BindView(R.id.llRecord)
+    LinearLayout llRecord;
     @Inject
     ChatPresenter chatPresenter;
+
+    @BindView(R.id.flTimer)
+    FrameLayout flTimer;
+    @BindView(R.id.timerRecord)
+    Chronometer timerRecord;
+    @BindView(R.id.rflTimer)
+    RevealFrameLayout rflTimer;
+
 
     private ChatAdapter chatAdapter;
     private ChatItemDialog chatItemDialog;
@@ -100,11 +113,11 @@ public class ChatActivity extends AppCompatActivity
         String receiverName = getIntent().getStringExtra(Constants.EXTRA_RECEIVER_NAME);
         receiverName = "test";
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarChat);
+//        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarChat);
         layoutParams = (LinearLayout.LayoutParams) rflMessageBody.getLayoutParams();
-        setSupportActionBar(toolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowTitleEnabled(false);
+//        setSupportActionBar(toolbar);
+//        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//        getSupportActionBar().setDisplayShowTitleEnabled(false);
 
         chatAdapter = new ChatAdapter(getApplicationContext(), chatPresenter, this);
         chatPresenter.bind(this, receiverName);
@@ -169,7 +182,6 @@ public class ChatActivity extends AppCompatActivity
             }
             case android.R.id.home: {
                 onBackPressed();
-                Toast.makeText(getApplicationContext(), "home b clicked", Toast.LENGTH_SHORT).show();
                 break;
             }
         }
@@ -204,35 +216,48 @@ public class ChatActivity extends AppCompatActivity
 
     @OnTouch(R.id.micro_btn)
     boolean onRecordButtonTouch(MotionEvent mv){
-        if(mv.getAction() == MotionEvent.ACTION_UP){
-            rflButtonRecord.setVisibility(View.GONE);
+        int[] button_coordinates = new int[2];
+        bRecord.getLocationOnScreen(button_coordinates);
 
-            recordAudio();
-            return true;
-        }
+        float cx, cy;
+        cx = (float)button_coordinates[0] + bRecord.getWidth() / 2;
+        cy = (float)button_coordinates[1] + bRecord.getHeight() / 2;
+
+        float dx = Math.max(cx, rflTimer.getWidth() - cx);
+        float dy = Math.max(cy, rflTimer.getHeight() - cy);
+        float finalRadius = (float) Math.hypot(dx, dy);
+
         if(mv.getAction() == MotionEvent.ACTION_DOWN){
-            recordAudio();
 
-            rflButtonRecord.setVisibility(View.VISIBLE);
-            microAnim.post(() -> {
-                float cx, cy;
-                cx = (bRecord.getX() + bRecord.getWidth()) / 2;
-                cy = (bRecord.getY() + bRecord.getHeight()) / 2;
 
-                float dx = Math.max(cx, microAnim.getWidth() - cx);
-                float dy = Math.max(cy, microAnim.getHeight() - cy);
-                float finalRadius = (float) Math.hypot(dx, dy);
+            timerRecord.post(() -> {
 
                 Animator animator =
-                        ViewAnimationUtils.createCircularReveal(microAnim, (int) cx, (int) cy, 0, finalRadius);
+                        ViewAnimationUtils.createCircularReveal(flTimer, (int) cx, (int) cy, 0, finalRadius);
                 animator.setInterpolator(new AccelerateDecelerateInterpolator());
                 animator.setDuration(1000);
+                rflTimer.setVisibility(View.VISIBLE);
                 animator.start();
             });
 
+            timerRecord.setOnChronometerTickListener(chronometer -> {
+            long elapsedMillis = SystemClock.elapsedRealtime()
+                - timerRecord.getBase();
+            });
+            timerRecord.setBase(SystemClock.elapsedRealtime());
+
+            timerRecord.start();
             return true;
         }
+        if(mv.getAction() == MotionEvent.ACTION_CANCEL || mv.getAction() == MotionEvent.ACTION_UP){
+            
+            rflTimer.setVisibility(View.GONE);
+            recordAudio();
+            return false;
+        }
+
         return true;
+
     }
 
     @OnClick(R.id.bMessageOpen)
@@ -267,13 +292,11 @@ public class ChatActivity extends AppCompatActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == Constants.REQUEST_CODES.REQUEST_CODE_CAMERA) {
-            Toast.makeText(getApplicationContext(), "CAMERA: " + resultCode, Toast.LENGTH_SHORT).show();
             if (resultCode == RESULT_OK) {
                 sendImage(imageUri);
             }
         }
         if (requestCode == Constants.REQUEST_CODES.REQUEST_CODE_GALERY) {
-            Toast.makeText(getApplicationContext(), "GALLERY: " + resultCode, Toast.LENGTH_SHORT).show();
             if (resultCode == RESULT_OK && null != data) {
                 sendImage(data.getData());
             }
@@ -305,10 +328,6 @@ public class ChatActivity extends AppCompatActivity
                 startActivityForResult(takePictureIntent, Constants.REQUEST_CODES.REQUEST_CODE_CAMERA);
             }
         }
-    }
-
-    public void takeDocument() {
-        Toast.makeText(this, "3", Toast.LENGTH_SHORT).show();
     }
 
     public void recordAudio() {
@@ -360,7 +379,7 @@ public class ChatActivity extends AppCompatActivity
 
     @OnClick(R.id.smile_btn)
     public void smileButtonClick() {
-        Toast.makeText(this, "SMILE", Toast.LENGTH_SHORT).show();
+
     }
 
     @Override

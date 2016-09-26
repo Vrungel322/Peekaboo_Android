@@ -7,19 +7,16 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.peekaboo.R;
+import com.peekaboo.data.repositories.database.contacts.Contact;
 import com.peekaboo.presentation.widget.RecyclerViewFastScroller.BubbleTextGetter;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public final class ContactLargeAdapter extends RecyclerView.Adapter<ContactLargeAdapter.ViewHolder> implements BubbleTextGetter {
-    private final List<String> items;
+    private final List<Contact> items = new ArrayList<Contact>();
 
-    public ContactLargeAdapter(ArrayList<String> item) {
-        List<String> items = new ArrayList<>();
-        items.addAll(item);
-        java.util.Collections.sort(items);
-        this.items = items;
+    public ContactLargeAdapter() {
     }
 
     @Override
@@ -30,13 +27,19 @@ public final class ContactLargeAdapter extends RecyclerView.Adapter<ContactLarge
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        String text = items.get(position);
+        String text = items.get(position).contactId();
         holder.setText(text);
     }
 
     @Override
     public String getTextToShowInBubble(final int pos) {
-        return Character.toString(items.get(pos).charAt(0));
+        return Character.toString(items.get(pos).contactNickname().charAt(0));
+    }
+
+    public void setItems(List<Contact> items) {
+        this.items.clear();
+        this.items.addAll(items);
+        notifyDataSetChanged();
     }
 
     @Override

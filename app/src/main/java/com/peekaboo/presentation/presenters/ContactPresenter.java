@@ -51,6 +51,28 @@ public class ContactPresenter extends ProgressPresenter<IContactsView> implement
     }
 
     @Override
+    public void bind(IContactsView view) {
+        super.bind(view);
+        if (getContactFromDbUseCase.isWorking()) {
+            getContactFromDbUseCase.execute(getContactsSubscriber());
+        }
+        if (saveContactToDbUseCase.isWorking()) {
+            saveContactToDbUseCase.execute(getContactsSubscriber());
+        }
+        if (fetchUseCase.isWorking()) {
+            fetchUseCase.execute(getContactsSubscriber());
+        }
+    }
+
+    @Override
+    public void unbind() {
+        saveContactToDbUseCase.unsubscribe();
+        getContactFromDbUseCase.unsubscribe();
+        fetchUseCase.unsubscribe();
+        super.unbind();
+    }
+
+    @Override
     public void loadContactsList() {
         fetchUseCase.execute(getContactsSubscriber());
     }
@@ -64,7 +86,7 @@ public class ContactPresenter extends ProgressPresenter<IContactsView> implement
                 Log.e("onNext", String.valueOf(response.get(1).contactName()));
                 saveContactToDbUseCase.setContact(response);
                 saveContactToDbUseCase.execute(saveContactToDb());
-                getContactFromDbUseCase.execute(getContactsFromDb());
+//                getContactFromDbUseCase.execute(getContactsFromDb());
                 getAllTableAsString();
             }
         };
@@ -75,9 +97,7 @@ public class ContactPresenter extends ProgressPresenter<IContactsView> implement
             @Override
             public void onNext(List<Contact> contacts) {
                 super.onNext(contacts);
-                for (Contact c : contacts) {
-                    Log.wtf("saved_To_DB :", c.contactName());
-                }
+                getContactFromDbUseCase.execute(getContactsFromDb());
             }
         };
     }
@@ -87,14 +107,17 @@ public class ContactPresenter extends ProgressPresenter<IContactsView> implement
             @Override
             public void onNext(List<Contact> contacts) {
                 super.onNext(contacts);
-                getView().showContactsList(contacts);
+                IContactsView view = getView();
+                if (view != null) {
+                    view.showContactsList(contacts);
+                }
             }
         };
     }
 
     @Override
     public void insertContactToTable(Contact contact) {
-        contactHelper.insert(mapperFactory.getPContactMapper().transform(contact));
+        contactHelper.insert(contact);
     }
 
     @Override
@@ -103,7 +126,6 @@ public class ContactPresenter extends ProgressPresenter<IContactsView> implement
         contactHelper.getAllContacts();
     }
 
-    @Override
     public void getAllTableAsString() {
         contactHelper.getAllContacts()
                 .subscribe(pContactAbses -> {

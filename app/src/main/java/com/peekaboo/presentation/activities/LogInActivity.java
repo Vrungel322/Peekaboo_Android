@@ -141,14 +141,10 @@ public class LogInActivity extends AppCompatActivity implements ICredentialsView
         if (!VKSdk.onActivityResult(requestCode, resultCode, data, new VKCallback<VKAccessToken>() {
             @Override
             public void onResult(VKAccessToken res) {
-                Toast.makeText(getApplicationContext(),
-                        "userID: " + res.userId + " email: " + res.email
-                        , Toast.LENGTH_SHORT).show();
             }
 
             @Override
             public void onError(VKError error) {
-                Toast.makeText(getApplicationContext(), "Error", Toast.LENGTH_SHORT).show();
             }
         })) {
             super.onActivityResult(requestCode, resultCode, data);
