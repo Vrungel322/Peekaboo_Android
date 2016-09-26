@@ -38,9 +38,9 @@ public class ContactsFragment extends Fragment implements IContactsView {
     ContactPresenter contactPresenter;
 
     @BindView(R.id.recyclerview)
-    private RecyclerView recyclerView;
+    RecyclerView recyclerView;
     @BindView(R.id.fastscroller)
-    private RecyclerViewFastScroller fastScroller;
+    RecyclerViewFastScroller fastScroller;
 
     private ContactLargeAdapter contactLargeAdapter;
 
@@ -80,7 +80,7 @@ public class ContactsFragment extends Fragment implements IContactsView {
     }
 
     private void setUpRecyclerView() {
-        contactLargeAdapter = new ContactLargeAdapter();
+        contactLargeAdapter = new ContactLargeAdapter(getActivity());
         recyclerView.setAdapter(contactLargeAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false) {
             @Override

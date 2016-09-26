@@ -1,15 +1,19 @@
 package com.peekaboo.presentation.adapters;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.peekaboo.R;
 import com.peekaboo.data.repositories.database.contacts.Contact;
 import com.peekaboo.presentation.widget.RecyclerViewFastScroller.BubbleTextGetter;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,9 +23,12 @@ import butterknife.ButterKnife;
 
 public final class ContactLargeAdapter extends RecyclerView.Adapter<ContactLargeAdapter.ViewHolder>
         implements BubbleTextGetter {
-    private final List<Contact> items = new ArrayList<Contact>();
 
-    public ContactLargeAdapter() {
+    private final List<Contact> items = new ArrayList<>();
+    private Picasso mPicasso;
+
+    public ContactLargeAdapter(Context context) {
+        this.mPicasso = Picasso.with(context);
     }
 
     @Override
@@ -33,6 +40,33 @@ public final class ContactLargeAdapter extends RecyclerView.Adapter<ContactLarge
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Contact contact = getItem(position);
+
+        //todo make caching images to sd and fetching them here not from url
+        mPicasso.load(contact.contactImgUri())
+                .resize(R.dimen.contact_list_avatar_size, R.dimen.contact_list_avatar_size)
+                .error(R.drawable.ic_alert_circle_outline)
+                .centerInside()
+                .into(holder.ivAvatar, new Callback.EmptyCallback(){
+                    @Override
+                    public void onSuccess() {
+                        super.onSuccess();
+                        holder.pbImageLoading.setVisibility(View.GONE);
+                    }
+
+                    @Override
+                    public void onError() {
+                        super.onError();
+                        holder.pbImageLoading.setVisibility(View.GONE);
+                    }
+                });
+
+        holder.tvContactName.setText(contact.contactName() + " " + contact.contactSurname());
+
+        if(contact.isOnline()){
+            holder.ivStatus.setImageResource(R.color.online);
+        } else {
+            holder.ivStatus.setImageResource(R.color.offline);
+        }
 
     }
 
@@ -61,8 +95,10 @@ public final class ContactLargeAdapter extends RecyclerView.Adapter<ContactLarge
         TextView tvContactName;
         @BindView(R.id.contact_avatar_image_view)
         ImageView ivAvatar;
-        @BindView(R.id.unread_count_text_view)
-        TextView tvUnreadCount;
+        @BindView(R.id.contact_status_image_view)
+        ImageView ivStatus;
+        @BindView(R.id.loading_image_progress_bar)
+        ProgressBar pbImageLoading;
 
         public ViewHolder(View itemView) {
             super(itemView);
