@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/list_item_dialog_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -15,8 +15,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal"
-            android:paddingRight="1dp">
+            android:orientation="horizontal">
 
             <FrameLayout
                 android:layout_width="wrap_content"
@@ -31,19 +30,20 @@
                     android:layout_marginBottom="@dimen/dialog_photo_margin"
                     android:src="@mipmap/ic_launcher"
                     app:border_color="@color/colorAccent" />
+                <!---->
+                <!--app:border_width="@dimen/circle_photo_border_width" -->
 
 
                 <TextView
+                    android:id="@+id/tv_num_mes"
                     android:layout_width="@dimen/dialog_number_dot"
                     android:layout_height="@dimen/dialog_number_dot"
                     android:layout_gravity="right|top"
-                    android:layout_marginRight="5dp"
-                    android:layout_marginTop="5dp"
                     android:background="@drawable/circle"
                     android:gravity="center"
                     android:text="8"
                     android:textColor="@android:color/black"
-                    android:textSize="7sp" />
+                    android:textSize="8sp" />
 
 
             </FrameLayout>
@@ -136,7 +136,6 @@
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
                             android:gravity="right"
-                            android:paddingRight="2dp"
                             android:orientation="vertical">
 
                             <TextView
@@ -172,8 +171,9 @@
     <View
         android:layout_width="@dimen/dialog_item_underline"
         android:layout_height="1dp"
-        android:layout_marginTop="@dimen/dialog_item_underline_margin_top"
+        android:layout_alignParentRight="true"
         android:layout_marginRight="10dp"
-        android:layout_marginLeft="60dp"
-        android:background="@color/colorPrimary"/>
-</android.support.design.widget.CoordinatorLayout>
+        android:layout_marginLeft="@dimen/dialog_item_underline_margin_left"
+        android:layout_marginTop="@dimen/dialog_item_underline_margin_top"
+        android:background="@color/colorPrimary" />
+</RelativeLayout>

@@ -8,7 +8,7 @@
     <dimen name="dialog_item_photo_size">58dp</dimen>
     <dimen name="dialog_photo_margin">15dp</dimen>
     <dimen name="dialog_number_dot">20dp</dimen>
-    <dimen name="dialog_name_width">160dp</dimen>
+    <dimen name="dialog_name_width">165dp</dimen>
     <dimen name="dialog_swipe_item_width">38dp</dimen>
     <dimen name="dialog_item_underline">290dp</dimen>
     <dimen name="dialog_item_underline_margin_top">73dp</dimen>
