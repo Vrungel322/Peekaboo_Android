@@ -14,7 +14,6 @@ import com.peekaboo.presentation.activities.MainActivity;
 import com.peekaboo.presentation.utils.ResourcesUtils;
 import com.peekaboo.presentation.widget.RecyclerViewFastScroller.BubbleTextGetter;
 import com.peekaboo.utils.ActivityNavigator;
-import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -27,20 +26,24 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public final class ContactLargeAdapter extends RecyclerView.Adapter<ContactLargeAdapter.ViewHolder>
         implements BubbleTextGetter {
 
+    private final int onlineColor;
+    private final int offlineColor;
     private MainActivity activity;
     private final List<Contact> items = new ArrayList<>();
     private Picasso mPicasso;
     private ActivityNavigator navigator;
 
-    public ContactLargeAdapter(MainActivity activity, ActivityNavigator navigator) {
+    public ContactLargeAdapter(MainActivity activity, ActivityNavigator navigator, Picasso mPicasso) {
         this.activity = activity;
         this.navigator = navigator;
-        this.mPicasso = Picasso.with(activity);
+        this.mPicasso = mPicasso;
+        onlineColor = ResourcesUtils.getColor(activity, R.color.online);
+        offlineColor = ResourcesUtils.getColor(activity, R.color.offline);
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.contacts_fragment_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_contact, parent, false);
         return new ViewHolder(view);
     }
 
@@ -70,12 +73,18 @@ public final class ContactLargeAdapter extends RecyclerView.Adapter<ContactLarge
                     }
                 }*/);
 
-        holder.tvContactName.setText(contact.contactName() + " " + contact.contactSurname());
-
-        if(contact.isOnline()){
-            holder.ivStatus.setImageResource(R.color.online);
+        String contactName = contact.contactName();
+        String contactSurname = contact.contactSurname();
+        if(contactSurname == null){
+            holder.tvContactName.setText(contactName);
         } else {
-            holder.ivStatus.setImageResource(R.color.offline);
+            holder.tvContactName.setText(contactName + " " + contactSurname);
+        }
+//TODO: fix online statuses
+        if(contact.isOnline()){
+            holder.ivStatus.setImageResource(R.drawable.round_status_icon_cyan);
+        } else {
+            holder.ivStatus.setImageResource(R.drawable.round_status_icon_grey);
         }
 
         holder.itemView.setOnClickListener(v -> {
