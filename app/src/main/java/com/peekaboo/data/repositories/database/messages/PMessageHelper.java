@@ -17,9 +17,6 @@ import com.peekaboo.domain.schedulers.SubscribeOn;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
-
 import rx.Observable;
 
 /**
@@ -55,6 +52,7 @@ public class PMessageHelper {
                 PMessageAbs.STATUS + " INTEGER DEFAULT 0 NOT NULL," +
                 PMessageAbs.RECEIVER_ID + " TEXT NOT NULL," +
                 PMessageAbs.SENDER_ID + " TEXT NOT NULL" +
+                " UNIQUE (" + PMessageAbs.RECEIVER_ID + ") ON CONFLICT REPLACE" +
                 ");";
         db.execSQL(CREATE_TABLE);
     }
