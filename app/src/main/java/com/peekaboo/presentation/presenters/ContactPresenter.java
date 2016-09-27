@@ -8,8 +8,10 @@ import com.peekaboo.data.repositories.database.contacts.PContactHelper;
 import com.peekaboo.domain.UserMessageMapper;
 import com.peekaboo.domain.subscribers.BaseProgressSubscriber;
 import com.peekaboo.domain.usecase.GetContactFromDbUseCase;
+import com.peekaboo.presentation.comparators.ContactComparator;
 import com.peekaboo.presentation.views.IContactsView;
 
+import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -54,6 +56,7 @@ public class ContactPresenter extends ProgressPresenter<IContactsView> implement
                 super.onNext(contacts);
                 IContactsView view = getView();
                 if (view != null) {
+                    Collections.sort(contacts, new ContactComparator());
                     view.showContactsList(contacts);
                     // for testing
                     getAllTableAsString();
