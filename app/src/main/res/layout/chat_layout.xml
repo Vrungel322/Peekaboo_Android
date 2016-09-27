@@ -46,7 +46,7 @@
             android:paddingRight="16dp"
             android:scrollbars="none" />
 
-        <HorizontalScrollView
+        <com.peekaboo.presentation.app.view.PHorizontalScrollView
             android:id="@+id/svItems"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -233,7 +233,7 @@
             </LinearLayout>
 
 
-        </HorizontalScrollView>
+        </com.peekaboo.presentation.app.view.PHorizontalScrollView>
 
 
     </LinearLayout>
