@@ -17,10 +17,12 @@ import android.widget.Toast;
 import com.peekaboo.R;
 import com.peekaboo.data.repositories.database.contacts.Contact;
 import com.peekaboo.presentation.PeekabooApplication;
+import com.peekaboo.presentation.activities.MainActivity;
 import com.peekaboo.presentation.adapters.ContactLargeAdapter;
 import com.peekaboo.presentation.presenters.ContactPresenter;
 import com.peekaboo.presentation.views.IContactsView;
 import com.peekaboo.presentation.widget.RecyclerViewFastScroller;
+import com.peekaboo.utils.ActivityNavigator;
 
 import java.util.List;
 
@@ -36,12 +38,13 @@ public class ContactsFragment extends Fragment implements IContactsView {
 
     @Inject
     ContactPresenter contactPresenter;
+    @Inject
+    ActivityNavigator navigator;
 
     @BindView(R.id.recyclerview)
     RecyclerView recyclerView;
     @BindView(R.id.fastscroller)
     RecyclerViewFastScroller fastScroller;
-
     private ContactLargeAdapter contactLargeAdapter;
 
     public ContactsFragment() {
@@ -55,30 +58,23 @@ public class ContactsFragment extends Fragment implements IContactsView {
 
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-        //Make Query to get all real contacts from server
-        //after that need to redo ContactListAdapter to match ContactsPOJO and json
-        contactPresenter.loadContactsList();
-    }
-
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_contacts, container, false);
         ButterKnife.bind(this, rootView);
-        contactPresenter.bind(this);
 
         FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.fab);
         fab.setOnClickListener(v -> Toast.makeText(getActivity(), "ADD", Toast.LENGTH_LONG).show());
-        manageRecyclerView();
+        setUpRecyclerView();
 
+        contactPresenter.bind(this);
+        contactPresenter.onCreate();
         return rootView;
     }
 
-    private void manageRecyclerView() {
-        contactLargeAdapter = new ContactLargeAdapter();
+    private void setUpRecyclerView() {
+        contactLargeAdapter = new ContactLargeAdapter((MainActivity) getActivity(), navigator);
         recyclerView.setAdapter(contactLargeAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false) {
             @Override
@@ -101,7 +97,7 @@ public class ContactsFragment extends Fragment implements IContactsView {
         });
         fastScroller.setRecyclerView(recyclerView);
         fastScroller.setViewsToUse(R.layout.recycler_view_fast_scroller__fast_scroller,
-                R.id.fastscroller_bubble, R.id.fastscroller_handle);
+                                    R.id.fastscroller_bubble, R.id.fastscroller_handle);
     }
 
     @Override
@@ -111,12 +107,12 @@ public class ContactsFragment extends Fragment implements IContactsView {
 
     @Override
     public void showProgress() {
-        showToastMessage("progress Started");
+//        showToastMessage("progress Started");
     }
 
     @Override
     public void hideProgress() {
-        showToastMessage("progress Hide");
+//        showToastMessage("progress Hide");
     }
 
     @Override
@@ -126,7 +122,7 @@ public class ContactsFragment extends Fragment implements IContactsView {
 
     @Override
     public void onDestroyView() {
-        contactPresenter.unbind();
+        contactPresenter.onDestroy();
         super.onDestroyView();
     }
 

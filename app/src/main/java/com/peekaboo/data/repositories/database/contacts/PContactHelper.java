@@ -53,6 +53,7 @@ public class PContactHelper {
     public long insert(Contact contact) {
         SQLiteDatabase db = helper.getWritableDatabase();
         long id = db.insert(TABLE_NAME, null, mapper.transform(contact));
+
         contact.setId(id);
         return id;
     }

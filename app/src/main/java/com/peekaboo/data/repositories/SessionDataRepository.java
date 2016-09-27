@@ -5,6 +5,7 @@ import com.peekaboo.data.mappers.AbstractMapperFactory;
 import com.peekaboo.data.mappers.Mapper;
 import com.peekaboo.data.repositories.database.contacts.Contact;
 import com.peekaboo.data.repositories.database.contacts.PContactHelper;
+import com.peekaboo.data.repositories.database.messages.PMessageHelper;
 import com.peekaboo.data.rest.ConfirmKey;
 import com.peekaboo.data.rest.RestApi;
 import com.peekaboo.data.rest.entity.ContactEntity;
@@ -29,13 +30,15 @@ public class SessionDataRepository implements SessionRepository {
     private AccountUser user;
     private RestApi restApi;
     private PContactHelper dbContacts;
+    private PMessageHelper messageHelper;
 
     public SessionDataRepository(RestApi restApi, AbstractMapperFactory abstractMapperFactory,
-                                 AccountUser user, PContactHelper dbHelper) {
+                                 AccountUser user, PContactHelper dbHelper, PMessageHelper messageHelper) {
         this.restApi = restApi;
         this.abstractMapperFactory = abstractMapperFactory;
         this.user = user;
         this.dbContacts = dbHelper;
+        this.messageHelper = messageHelper;
     }
 
     @Override
@@ -103,7 +106,11 @@ public class SessionDataRepository implements SessionRepository {
     @Override
     public Observable<List<Contact>> saveContactToDb(List<Contact> contact) {
                 return Observable.from(contact)
-                        .doOnNext(contact1 -> dbContacts.insert(contact1))
+                        .map(contact1 -> {
+                            dbContacts.insert(contact1);
+                            messageHelper.createTable(contact1.contactId());
+                            return contact1;
+                        })
                         .toList();
     }
 }

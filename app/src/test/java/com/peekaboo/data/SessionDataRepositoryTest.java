@@ -1,5 +1,7 @@
 package com.peekaboo.data;
 
+import android.support.annotation.NonNull;
+
 import com.peekaboo.data.mappers.AbstractMapperFactory;
 import com.peekaboo.data.mappers.ContactEntityToContactMapper;
 import com.peekaboo.data.mappers.MapperFactory;
@@ -16,10 +18,15 @@ import com.peekaboo.data.rest.entity.TokenEntity;
 import com.peekaboo.data.rest.entity.UserResponse;
 import com.peekaboo.domain.AccountUser;
 
+import org.hamcrest.BaseMatcher;
+import org.hamcrest.Description;
+import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
+import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
+import org.mockito.internal.creation.cglib.MockitoNamingPolicy;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +49,7 @@ public class SessionDataRepositoryTest {
     private static final String ID = "id";
     private static final String USERNAME = "username";
     private static final int MODE = 1;
+    private static final String AVATAR_URL = "asd";
     @Mock
     private RestApi restApi;
     @Mock
@@ -57,16 +65,17 @@ public class SessionDataRepositoryTest {
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        sessionDataRepository = new SessionDataRepository(restApi, mapper, user, contactHelper);
+        sessionDataRepository = new SessionDataRepository(restApi, mapper, user, contactHelper, messageHelper);
     }
 
     @Test
     public void whenLoginSuccessThenReturnUser() {
-        when(mapper.getContactEntityMapper()).thenReturn(new ContactEntityToContactMapper());
+        when(mapper.getContactEntityMapper()).thenReturn(new ContactEntityToContactMapper(AVATAR_URL));
         when(restApi.login(any(Credentials.class))).thenReturn(Observable.just(new TokenEntity(TOKEN, ID, MODE, USERNAME)));
         UserResponse value = new UserResponse();
         value.usersList = new ArrayList<>();
         ContactEntity e = new ContactEntity();
+        e.setId(ID);
 
         value.usersList.add(e);
         when(restApi.getAllContacts()).thenReturn(Observable.just(value));
@@ -79,6 +88,23 @@ public class SessionDataRepositoryTest {
         verify(user, times(1)).saveToken(TOKEN);
         verify(user, times(1)).saveUsername(USERNAME);
         verify(user, times(1)).saveMode(MODE);
+        verify(contactHelper, times(1)).insert(Mockito.argThat(getcontactMatcher()));
+        verify(messageHelper, times(1)).createTable(ID);
+    }
+
+    @NonNull
+    private BaseMatcher<Contact> getcontactMatcher() {
+        return new BaseMatcher<Contact>() {
+            @Override
+            public boolean matches(Object o) {
+                return o instanceof Contact && ((Contact) o).contactId().equals(ID);
+            }
+
+            @Override
+            public void describeTo(Description description) {
+
+            }
+        };
     }
 
     @Test
@@ -96,6 +122,8 @@ public class SessionDataRepositoryTest {
         verify(user, times(0)).saveToken(any());
         verify(user, times(0)).saveUsername(any());
         verify(user, times(0)).saveMode(anyInt());
+        verify(contactHelper, times(0)).insert(Mockito.argThat(getcontactMatcher()));
+        verify(messageHelper, times(0)).createTable(ID);
     }
 
     @Test

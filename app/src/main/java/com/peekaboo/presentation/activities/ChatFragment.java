@@ -88,7 +88,7 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
         ChatFragment fragment = new ChatFragment();
 
         Bundle args = new Bundle();
-        args.putSerializable(COMPANION, companion);
+        args.putParcelable(COMPANION, companion);
         fragment.setArguments(args);
 
         return fragment;
@@ -98,7 +98,7 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         PeekabooApplication.getApp(getActivity()).getComponent().inject(this);
-        companion = (Contact) getArguments().getSerializable(COMPANION);
+        companion = getArguments().getParcelable(COMPANION);
     }
 
     @Override

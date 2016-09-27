@@ -10,14 +10,13 @@ public class ContactEntity {
     private String surname;
     private String nickname;
     private int state;
-    private String imgUri;
+
+    public void setId(String id) {
+        this.id = id;
+    }
 
     public String getId() {
         return id;
-    }
-
-    public String getImgUri() {
-        return imgUri;
     }
 
     public String getName() {
