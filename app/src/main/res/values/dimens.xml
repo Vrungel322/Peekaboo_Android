@@ -87,4 +87,11 @@
     <dimen name="marginBotForBar">8dp</dimen>
     <dimen name="contact_list_avatar_size">62dp</dimen>
 
+    <dimen name="edit_text_width">300dp</dimen>
+    <dimen name="edit_text_side_padding">20dp</dimen>
+    <dimen name="edit_text_tb_padding">10dp</dimen>
+
+    <dimen name="audio_anim_height">200dp</dimen>
+    <dimen name="audio_chronometer_text_size">40sp</dimen>
+
 </resources>
