@@ -41,7 +41,6 @@
             android:listSelector="@android:color/transparent"
             android:overScrollMode="ifContentScrolls"
             android:padding="@dimen/items_margin"
-
             android:paddingBottom="4dp"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
@@ -167,7 +166,6 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:visibility="gone"
-
                                 >
 
                                 <LinearLayout

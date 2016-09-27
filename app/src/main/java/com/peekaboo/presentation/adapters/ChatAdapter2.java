@@ -38,7 +38,7 @@ import butterknife.ButterKnife;
  */
 public class ChatAdapter2 extends RecyclerView.Adapter<ChatAdapter2.ViewHolder> {
 
-    public static final int READ_DELAY = 100;
+    private static final int READ_DELAY = 100;
     private final Context context;
     private final LayoutInflater inflater;
     private final ChatPresenter2 presenter;
@@ -118,7 +118,7 @@ public class ChatAdapter2 extends RecyclerView.Adapter<ChatAdapter2.ViewHolder> 
         return null;
     }
 
-    public PMessage getItem(int position) {
+    private PMessage getItem(int position) {
         return messages.get(position);
     }
 
@@ -315,7 +315,7 @@ public class ChatAdapter2 extends RecyclerView.Adapter<ChatAdapter2.ViewHolder> 
         @BindView(R.id.chat_bubble)
         FrameLayout chatBubble;
 
-        public ViewHolder(View view) {
+        ViewHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);
         }
@@ -325,7 +325,7 @@ public class ChatAdapter2 extends RecyclerView.Adapter<ChatAdapter2.ViewHolder> 
         @BindView(R.id.tvChatMessage)
         TextView tvChatMessage;
 
-        public ViewHolderText(View view) {
+        ViewHolderText(View view) {
             super(view);
             ButterKnife.bind(this, view);
         }
@@ -341,7 +341,7 @@ public class ChatAdapter2 extends RecyclerView.Adapter<ChatAdapter2.ViewHolder> 
         @BindView(R.id.pbLoad)
         ProgressBar pbLoad;
 
-        public ViewHolderAudio(View view) {
+        ViewHolderAudio(View view) {
             super(view);
             ButterKnife.bind(this, view);
 
@@ -354,7 +354,7 @@ public class ChatAdapter2 extends RecyclerView.Adapter<ChatAdapter2.ViewHolder> 
         @BindView(R.id.pbLoadingImage)
         ProgressBar pbLoadingImage;
 
-        public ViewHolderImage(View view) {
+        ViewHolderImage(View view) {
             super(view);
             ButterKnife.bind(this, view);
         }

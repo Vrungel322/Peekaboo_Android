@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -88,21 +89,54 @@ public class MainActivity extends AppCompatActivity implements INotifier.Notific
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-
         PeekabooApplication.getApp(this).getComponent().inject(this);
+        prepareDrawer();
+        updateAccountData(accountUser);
 
+        if (getSupportFragmentManager().findFragmentById(R.id.fragmentContainer) == null) {
+            changeFragment(new FriendTestFragment(), null);
+        }
+        //Hardcode list in right drawer
+        prepareHotFriends();
+
+        notifier.addListener(this);
+        if (notifier.isAvailable()) {
+            onConnected();
+        } else {
+            onDisconnected();
+            notifier.tryConnect(accountUser.getBearer());
+        }
+    }
+
+    private void prepareHotFriends() {
+        alHotFriendPOJO = new ArrayList<>();
+        for (int i = 0; i < 20; i++) {
+            alHotFriendPOJO.add(new HotFriendPOJO(R.drawable.raccoon, Math.random() < 0.5));
+        }
+        hotFriendsAdapter = new HotFriendsAdapter(getApplicationContext(), alHotFriendPOJO);
+        OverScrollDecoratorHelper.setUpOverScroll(lvHotFriends);
+        lvHotFriends.setAdapter(hotFriendsAdapter);
+        lvHotFriends.setOnItemClickListener((parent, view, position, id) -> {
+            startActivity(new Intent(MainActivity.this, ChatActivity.class));
+            drawer.closeDrawer(Gravity.RIGHT, true);
+        });
+    }
+
+    private void prepareDrawer() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
+        ActionBar supportActionBar = getSupportActionBar();
+        if (supportActionBar != null) {
+            supportActionBar.setHomeButtonEnabled(true);
+            supportActionBar.setDisplayHomeAsUpEnabled(true);
+        }
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
-        if (getSupportFragmentManager().findFragmentById(R.id.fragmentContainer) == null) {
-            changeFragment(new FriendTestFragment(), null);
-        }
+    }
+
+    private void updateAccountData(AccountUser accountUser) {
         int mode = accountUser.getMode();
         String avatarUrl = accountUser.getAvatar();
         String userName = accountUser.getUsername();
@@ -116,25 +150,6 @@ public class MainActivity extends AppCompatActivity implements INotifier.Notific
         bText.setSelected(mode == 1);
         bAudio.setSelected(mode == 2);
         bVideo.setSelected(mode == 0);
-        //Hardcode list in right drawer
-        alHotFriendPOJO = new ArrayList<>();
-        for (int i = 0; i < 20; i++) {
-            alHotFriendPOJO.add(new HotFriendPOJO(R.drawable.raccoon, Math.random() < 0.5));
-        }
-        hotFriendsAdapter = new HotFriendsAdapter(getApplicationContext(), alHotFriendPOJO);
-        OverScrollDecoratorHelper.setUpOverScroll(lvHotFriends);
-        lvHotFriends.setAdapter(hotFriendsAdapter);
-        lvHotFriends.setOnItemClickListener((parent, view, position, id) -> {
-            startActivity(new Intent(MainActivity.this, ChatActivity.class));
-            drawer.closeDrawer(Gravity.RIGHT, true);
-        });
-        notifier.addListener(this);
-        if (notifier.isAvailable()) {
-            onConnected();
-        } else {
-            notifier.tryConnect(accountUser.getBearer());
-            onDisconnected();
-        }
     }
 
     @Override
@@ -163,7 +178,7 @@ public class MainActivity extends AppCompatActivity implements INotifier.Notific
                 changeFragment(new SettingsFragment(), Constants.FRAGMENT_TAGS.SETTINGS_FRAGMENT);
                 break;
             case R.id.llExit:
-                throw new RuntimeException();
+//                throw new RuntimeException();
         }
 
     }
