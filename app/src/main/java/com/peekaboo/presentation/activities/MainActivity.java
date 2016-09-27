@@ -185,7 +185,7 @@ public class MainActivity extends AppCompatActivity implements INotifier.Notific
 
     @OnClick({R.id.bText, R.id.bAudio, R.id.bVideo})
     public void onRadioButtonClicked(View v) {
-//        if (notifier.isAvailable()) {
+        if (notifier.isAvailable()) {
             bText.setSelected(v.getId() == R.id.bText);
             bAudio.setSelected(v.getId() == R.id.bAudio);
             bVideo.setSelected(v.getId() == R.id.bVideo);
@@ -193,7 +193,7 @@ public class MainActivity extends AppCompatActivity implements INotifier.Notific
             Message switchModeMessage = MessageUtils.createSwitchModeMessage(mode);
             notifier.sendMessage(switchModeMessage);
             accountUser.saveMode(mode);
-//        }
+        }
     }
 
     private void selectionMode(int id) {
