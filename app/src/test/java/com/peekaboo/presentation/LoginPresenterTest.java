@@ -59,7 +59,7 @@ public class LoginPresenterTest extends BasePresenterTest {
     public void whenInvalidLoginThenShowInputErrorIsCalled() {
         LoginPresenter loginPresenter = new LoginPresenter(new LoginUseCaseSuccess(), errorHandler);
         loginPresenter.bind(loginView);
-        loginPresenter.onSignInButtonClick("short", "aValidPassword");
+        loginPresenter.onSignInButtonClick("shor", "aValidPassword");
 
         verify(loginView, timeout(WAIT).times(0)).navigateToProfile();
         verify(loginView, timeout(WAIT).times(1)).showInputError(ICredentialsView.InputFieldError.LOGIN);

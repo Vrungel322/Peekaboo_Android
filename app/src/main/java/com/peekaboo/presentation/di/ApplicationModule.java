@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.peekaboo.data.di.DataModule;
+import com.peekaboo.data.mappers.AbstractMapperFactory;
 import com.peekaboo.data.mappers.MapperFactory;
 import com.peekaboo.data.repositories.database.messages.PMessageHelper;
 import com.peekaboo.data.repositories.database.service.ReadMessagesHelper;
@@ -76,15 +77,20 @@ public class ApplicationModule {
     }
 
     @Provides
+    @Named("avatar")
+    public String provideAvatarBaseUrl(@Named("domens") List<String> domens) {
+        return domens.get(0) + "avatar/";
+    }
+    @Provides
     @Singleton
-    public AccountUser provideUser(SharedPreferences prefs) {
-        return new AccountUser(prefs);
+    public AccountUser provideUser(SharedPreferences prefs, @Named("avatar") String avatarUrl) {
+        return new AccountUser(prefs,  avatarUrl);
     }
 
     @Singleton
     @Provides
-    public INotifier<Message> provideNotifier(MainThread mainThread, @Named("domens") List<String> domens) {
-        return new WebSocketNotifier(domens.get(1), 5000, new MapperFactory(), mainThread);
+    public INotifier<Message> provideNotifier(MainThread mainThread, @Named("domens") List<String> domens, AbstractMapperFactory abstractMapperFactory) {
+        return new WebSocketNotifier(domens.get(1), 5000, abstractMapperFactory, mainThread);
     }
 
     @Singleton

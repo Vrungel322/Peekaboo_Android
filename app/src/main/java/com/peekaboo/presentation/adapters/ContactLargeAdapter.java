@@ -1,25 +1,41 @@
 package com.peekaboo.presentation.adapters;
 
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.peekaboo.R;
+import com.peekaboo.data.repositories.database.contacts.Contact;
+import com.peekaboo.presentation.activities.MainActivity;
+import com.peekaboo.presentation.utils.ResourcesUtils;
 import com.peekaboo.presentation.widget.RecyclerViewFastScroller.BubbleTextGetter;
+import com.peekaboo.utils.ActivityNavigator;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public final class ContactLargeAdapter extends RecyclerView.Adapter<ContactLargeAdapter.ViewHolder> implements BubbleTextGetter {
-    private final List<String> items;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import de.hdodenhof.circleimageview.CircleImageView;
 
-    public ContactLargeAdapter(ArrayList<String> item) {
-        List<String> items = new ArrayList<>();
-        items.addAll(item);
-        java.util.Collections.sort(items);
-        this.items = items;
+public final class ContactLargeAdapter extends RecyclerView.Adapter<ContactLargeAdapter.ViewHolder>
+        implements BubbleTextGetter {
+
+    private MainActivity activity;
+    private final List<Contact> items = new ArrayList<>();
+    private Picasso mPicasso;
+    private ActivityNavigator navigator;
+
+    public ContactLargeAdapter(MainActivity activity, ActivityNavigator navigator) {
+        this.activity = activity;
+        this.navigator = navigator;
+        this.mPicasso = Picasso.with(activity);
     }
 
     @Override
@@ -30,13 +46,53 @@ public final class ContactLargeAdapter extends RecyclerView.Adapter<ContactLarge
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        String text = items.get(position);
-        holder.setText(text);
+        Contact contact = getItem(position);
+
+        //todo make caching images to sd and fetching them here not from url
+        Log.e("contact", "" + contact.contactImgUri());
+        int avatarSize = ResourcesUtils.getDimenInPx(activity, R.dimen.contact_list_avatar_size);
+
+        mPicasso.load(contact.contactImgUri())
+                .resize(0, avatarSize)
+                .error(R.drawable.ic_alert_circle_outline)
+//                .centerInside()
+                .into(holder.ivAvatar/*, new Callback.EmptyCallback(){
+                    @Override
+                    public void onSuccess() {
+                        super.onSuccess();
+                        holder.pbImageLoading.setVisibility(View.GONE);
+                    }
+
+                    @Override
+                    public void onError() {
+                        super.onError();
+                        holder.pbImageLoading.setVisibility(View.GONE);
+                    }
+                }*/);
+
+        holder.tvContactName.setText(contact.contactName() + " " + contact.contactSurname());
+
+        if(contact.isOnline()){
+            holder.ivStatus.setImageResource(R.color.online);
+        } else {
+            holder.ivStatus.setImageResource(R.color.offline);
+        }
+
+        holder.itemView.setOnClickListener(v -> {
+            navigator.startChatActivity(activity, contact);
+        });
+
     }
 
     @Override
     public String getTextToShowInBubble(final int pos) {
-        return Character.toString(items.get(pos).charAt(0));
+        return Character.toString(items.get(pos).contactNickname().charAt(0));
+    }
+
+    public void setItems(List<Contact> items) {
+        this.items.clear();
+        this.items.addAll(items);
+        notifyDataSetChanged();
     }
 
     @Override
@@ -44,16 +100,24 @@ public final class ContactLargeAdapter extends RecyclerView.Adapter<ContactLarge
         return items.size();
     }
 
-    public static final class ViewHolder extends RecyclerView.ViewHolder {
-        private final TextView textView;
+    private Contact getItem(int position){
+        return items.get(position);
+    }
 
-        private ViewHolder(View itemView) {
+    static class ViewHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.contact_name_text_view)
+        TextView tvContactName;
+        @BindView(R.id.contact_avatar_image_view)
+        CircleImageView ivAvatar;
+        @BindView(R.id.contact_status_image_view)
+        CircleImageView ivStatus;
+        @BindView(R.id.loading_image_progress_bar)
+        ProgressBar pbImageLoading;
+
+        ViewHolder(View itemView) {
             super(itemView);
-            this.textView = (TextView) itemView.findViewById(R.id.tvConName);
+            ButterKnife.bind(this, itemView);
         }
 
-        public void setText(CharSequence text) {
-            textView.setText(text);
-        }
     }
 }

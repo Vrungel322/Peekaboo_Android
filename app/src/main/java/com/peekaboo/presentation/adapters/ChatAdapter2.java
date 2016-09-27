@@ -38,7 +38,7 @@ import butterknife.ButterKnife;
  */
 public class ChatAdapter2 extends RecyclerView.Adapter<ChatAdapter2.ViewHolder> {
 
-    public static final int READ_DELAY = 100;
+    private static final int READ_DELAY = 100;
     private final Context context;
     private final LayoutInflater inflater;
     private final ChatPresenter2 presenter;
@@ -118,7 +118,7 @@ public class ChatAdapter2 extends RecyclerView.Adapter<ChatAdapter2.ViewHolder> 
         return null;
     }
 
-    public PMessage getItem(int position) {
+    private PMessage getItem(int position) {
         return messages.get(position);
     }
 
@@ -128,16 +128,22 @@ public class ChatAdapter2 extends RecyclerView.Adapter<ChatAdapter2.ViewHolder> 
         position = holder.getAdapterPosition();
         PMessage pMessageAbs = getItem(position);
         int mediaType = pMessageAbs.mediaType();
-        boolean nextMine = false;
-        boolean prevMine = false;
-        if (getItemCount() > 1) {
-            if (position < getItemCount() - 1) {
-                nextMine = getItem(position + 1).isMine();
-            }
-            if (position > 0) {
-                prevMine = getItem(position - 1).isMine();
-            }
+
+        boolean nextMine;
+        boolean prevMine;
+
+        if (position < getItemCount() - 1) {
+            nextMine = getItem(position + 1).isMine();
+        } else {
+            nextMine = false;
         }
+
+        if (position > 0) {
+            prevMine = getItem(position - 1).isMine();
+        } else {
+            prevMine = true;
+        }
+
         setAlignment(holder, pMessageAbs.isMine(), prevMine, nextMine, mediaType);
 
         switch (mediaType) {
@@ -309,7 +315,7 @@ public class ChatAdapter2 extends RecyclerView.Adapter<ChatAdapter2.ViewHolder> 
         @BindView(R.id.chat_bubble)
         FrameLayout chatBubble;
 
-        public ViewHolder(View view) {
+        ViewHolder(View view) {
             super(view);
             ButterKnife.bind(this, view);
         }
@@ -319,7 +325,7 @@ public class ChatAdapter2 extends RecyclerView.Adapter<ChatAdapter2.ViewHolder> 
         @BindView(R.id.tvChatMessage)
         TextView tvChatMessage;
 
-        public ViewHolderText(View view) {
+        ViewHolderText(View view) {
             super(view);
             ButterKnife.bind(this, view);
         }
@@ -335,7 +341,7 @@ public class ChatAdapter2 extends RecyclerView.Adapter<ChatAdapter2.ViewHolder> 
         @BindView(R.id.pbLoad)
         ProgressBar pbLoad;
 
-        public ViewHolderAudio(View view) {
+        ViewHolderAudio(View view) {
             super(view);
             ButterKnife.bind(this, view);
 
@@ -348,7 +354,7 @@ public class ChatAdapter2 extends RecyclerView.Adapter<ChatAdapter2.ViewHolder> 
         @BindView(R.id.pbLoadingImage)
         ProgressBar pbLoadingImage;
 
-        public ViewHolderImage(View view) {
+        ViewHolderImage(View view) {
             super(view);
             ButterKnife.bind(this, view);
         }

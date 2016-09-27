@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -20,7 +22,11 @@ import com.daimajia.swipe.util.Attributes;
 import com.peekaboo.R;
 import com.peekaboo.presentation.PeekabooApplication;
 import com.peekaboo.presentation.activities.ChatActivity;
+import com.peekaboo.presentation.adapters.DialogsLargeAdapter;
 import com.peekaboo.presentation.adapters.DialogsListAdapter;
+import com.peekaboo.presentation.widget.RecyclerViewFastScroller;
+
+import java.util.ArrayList;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -30,9 +36,11 @@ import butterknife.ButterKnife;
  */
 public class DialogsFragment extends Fragment {
     private View rootView;
-    @BindView(R.id.lvDialogs)
-    ListView mListView;
-    private DialogsListAdapter mAdapter;
+    @BindView(R.id.recycler_dialog)
+
+    public RecyclerView recyclerView;
+
+    private ArrayList<String> dialogsList;
 
     public DialogsFragment() {
     }
@@ -48,16 +56,24 @@ public class DialogsFragment extends Fragment {
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Dialogs");
 
 
-        mAdapter = new DialogsListAdapter(getActivity());
-        mListView.setAdapter(mAdapter);
-        mListView.setDivider(null);
-        mAdapter.setMode(Attributes.Mode.Single);
 
-        mListView.setOnItemClickListener((parent, view, position, id) -> {
-            startActivity(new Intent(getActivity(), ChatActivity.class));
-        });
+        initList();
+        final DialogsLargeAdapter adapter = new DialogsLargeAdapter(dialogsList);
+        recyclerView.setAdapter(adapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+
 
         return rootView;
+    }
+    private void initList() {
+
+        if (dialogsList == null)
+            dialogsList = new ArrayList<>();
+
+        String[] countries = getResources().getStringArray(R.array.countries_array);
+        for (String country : countries) {
+            dialogsList.add(country);
+        }
     }
 
     @Override

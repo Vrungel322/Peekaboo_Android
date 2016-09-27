@@ -16,7 +16,7 @@ import rx.Observable;
  */
 public class SaveContactToDbUseCase extends UseCase<List<Contact>> {
     private SessionRepository sessionRepository;
-    private List<Contact> contact;
+    private List<Contact> contactList;
 
     @Inject
     public SaveContactToDbUseCase(SessionRepository sessionRepository, SubscribeOn subscribeOn, ObserveOn observeOn) {
@@ -25,13 +25,13 @@ public class SaveContactToDbUseCase extends UseCase<List<Contact>> {
     }
 
 
-    public void setContact(List<Contact> contact) {
-        this.contact = contact;
+    public void setContactList(List<Contact> contactList) {
+        this.contactList = contactList;
     }
 
 
     @Override
     protected Observable getUseCaseObservable() {
-        return sessionRepository.saveContactToDb(contact);
+        return sessionRepository.saveContactToDb(contactList);
     }
 }

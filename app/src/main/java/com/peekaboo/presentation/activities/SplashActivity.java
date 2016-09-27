@@ -28,10 +28,10 @@ public class SplashActivity extends AppCompatActivity {
         ApplicationComponent component = PeekabooApplication.getApp(this).getComponent();
         component.inject(this);
 
-        if (splashActivityPresenter.isFirstLaunch()) {
+        /*if (splashActivityPresenter.isFirstLaunch()) {
             splashActivityPresenter.setSecondLaunch();
             mNavigator.startIntroScreen(this);
-        } else if (user.isAuthorized()) {
+        } else*/ if (user.isAuthorized()) {
             mNavigator.startMainActivity(this);
         } else {
             mNavigator.startLogInActivity(this);

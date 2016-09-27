@@ -1,6 +1,5 @@
 package com.peekaboo.presentation.fragments;
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -18,12 +17,13 @@ import android.widget.Toast;
 import com.peekaboo.R;
 import com.peekaboo.data.repositories.database.contacts.Contact;
 import com.peekaboo.presentation.PeekabooApplication;
+import com.peekaboo.presentation.activities.MainActivity;
 import com.peekaboo.presentation.adapters.ContactLargeAdapter;
 import com.peekaboo.presentation.presenters.ContactPresenter;
 import com.peekaboo.presentation.views.IContactsView;
 import com.peekaboo.presentation.widget.RecyclerViewFastScroller;
+import com.peekaboo.utils.ActivityNavigator;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -38,12 +38,14 @@ public class ContactsFragment extends Fragment implements IContactsView {
 
     @Inject
     ContactPresenter contactPresenter;
+    @Inject
+    ActivityNavigator navigator;
+
     @BindView(R.id.recyclerview)
-    public RecyclerView recyclerView;
-
-    private ArrayList<String> contactList;
-
-    int numberOfItems;
+    RecyclerView recyclerView;
+    @BindView(R.id.fastscroller)
+    RecyclerViewFastScroller fastScroller;
+    private ContactLargeAdapter contactLargeAdapter;
 
     public ContactsFragment() {
     }
@@ -53,33 +55,7 @@ public class ContactsFragment extends Fragment implements IContactsView {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         PeekabooApplication.getApp(getActivity()).getComponent().inject(this);
-        // Testing DB
-//        contactPresenter.insertContactToTable(new Contact("Name0",
-//                "Surname0",
-//                "Nickname0",
-//                true,
-//                "uri0"));
-//        contactPresenter.insertContactToTable(new Contact("Name1",
-//                "Surname1",
-//                "Nickname1",
-//                true,
-//                "uri1"));
-//        contactPresenter.insertContactToTable(new Contact("Name2",
-//                "Surname2",
-//                "Nickname2",
-//                true,
-//                "uri2"));
 
-        contactPresenter.getAllTableAsString();
-
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        //Make Query to get all real contacts from server
-        //after that need to redo ContactListAdapter to match ContactsPOJO and json
-        contactPresenter.loadContactsList();
     }
 
     @Nullable
@@ -89,18 +65,17 @@ public class ContactsFragment extends Fragment implements IContactsView {
         ButterKnife.bind(this, rootView);
 
         FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(getActivity(), "ADD", Toast.LENGTH_LONG).show();
-            }
-        });
+        fab.setOnClickListener(v -> Toast.makeText(getActivity(), "ADD", Toast.LENGTH_LONG).show());
+        setUpRecyclerView();
 
-        initList();
+        contactPresenter.bind(this);
+        contactPresenter.onCreate();
+        return rootView;
+    }
 
-        final ContactLargeAdapter adapter = new ContactLargeAdapter(contactList);
-        recyclerView.setAdapter(adapter);
-        final RecyclerViewFastScroller fastScroller = (RecyclerViewFastScroller) rootView.findViewById(R.id.fastscroller);
+    private void setUpRecyclerView() {
+        contactLargeAdapter = new ContactLargeAdapter((MainActivity) getActivity(), navigator);
+        recyclerView.setAdapter(contactLargeAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false) {
             @Override
             public void onLayoutChildren(final RecyclerView.Recycler recycler, final RecyclerView.State state) {
@@ -117,25 +92,27 @@ public class ContactsFragment extends Fragment implements IContactsView {
                 final int lastVisibleItemPosition = findLastVisibleItemPosition();
                 int itemsShown = lastVisibleItemPosition - firstVisibleItemPosition + 1;
                 //if all items are shown, hide the fast-scroller
-                fastScroller.setVisibility(adapter.getItemCount() > itemsShown ? View.VISIBLE : View.GONE);
+                fastScroller.setVisibility(contactLargeAdapter.getItemCount() > itemsShown ? View.VISIBLE : View.GONE);
             }
         });
         fastScroller.setRecyclerView(recyclerView);
-        fastScroller.setViewsToUse(R.layout.recycler_view_fast_scroller__fast_scroller, R.id.fastscroller_bubble, R.id.fastscroller_handle);
-
-        contactPresenter.bind(this);
-        return rootView;
+        fastScroller.setViewsToUse(R.layout.recycler_view_fast_scroller__fast_scroller,
+                                    R.id.fastscroller_bubble, R.id.fastscroller_handle);
     }
 
+    @Override
+    public void showContactsList(List<Contact> response) {
+        contactLargeAdapter.setItems(response);
+    }
 
     @Override
     public void showProgress() {
-        showToastMessage("progress Started");
+//        showToastMessage("progress Started");
     }
 
     @Override
     public void hideProgress() {
-        showToastMessage("progress Hide");
+//        showToastMessage("progress Hide");
     }
 
     @Override
@@ -144,26 +121,9 @@ public class ContactsFragment extends Fragment implements IContactsView {
     }
 
     @Override
-    public void showContactsList(List<Contact> response) {
-        recyclerView.setBackgroundColor(Color.CYAN);
-        showToastMessage(response.get(1).contactName().toString());
-    }
-
-    @Override
     public void onDestroyView() {
-        contactPresenter.unbind();
+        contactPresenter.onDestroy();
         super.onDestroyView();
-    }
-
-    private void initList() {
-
-        if (contactList == null)
-            contactList = new ArrayList<>();
-
-        String[] countries = getResources().getStringArray(R.array.countries_array);
-        for (String country : countries) {
-            contactList.add(country);
-        }
     }
 
     @Override

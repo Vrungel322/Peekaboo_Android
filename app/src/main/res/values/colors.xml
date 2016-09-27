@@ -32,4 +32,6 @@
     <color name="colorHeaderText">#ffffff</color>
     <color name="borderCircle_status_color">#303010</color>
     <color name="selected_itemIn_drawer">#33cccc</color>
+    <color name="offline">#cccccc</color>
+    <color name="online">#33cccc</color>
 </resources>

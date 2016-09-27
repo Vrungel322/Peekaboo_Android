@@ -13,6 +13,12 @@ import com.peekaboo.presentation.services.Message;
  * Created by sebastian on 28.06.16.
  */
 public class MapperFactory implements AbstractMapperFactory {
+    private String url;
+
+    public MapperFactory(String url) {
+        this.url = url;
+    }
+
     @Override
     public Mapper<UserEntity, User> getUserMapper() {
         return new UserMapper();
@@ -32,13 +38,13 @@ public class MapperFactory implements AbstractMapperFactory {
         return new PMessageMapper();
     }
 
-    public Mapper<Contact, ContentValues> getPContactMapper() {
-        return new PContactMapper();
-    }
+//    public Mapper<Contact, ContentValues> getPContactMapper() {
+//        return new PContactMapper();
+//    }
 
     @Override
     public Mapper<ContactEntity, Contact> getContactEntityMapper() {
-        return new ContactEntityToContactMapper();
+        return new ContactEntityToContactMapper(url);
     }
 
     @Override

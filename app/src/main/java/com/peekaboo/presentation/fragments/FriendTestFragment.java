@@ -87,7 +87,7 @@ public class FriendTestFragment extends Fragment {
 //                                    Picasso.with(getActivity()).load(user.getName()).into(avatar);
 
                                     String contactId = user.getId();
-                                    Contact newContact = new Contact(0, friendName, "surname", "nickname", false, "", contactId);
+                                    Contact newContact = new Contact(0, "name", "surname", friendName, false, "", contactId);
                                     contactHelper.insert(newContact);
                                     messageHelper.createTable(contactId);
                                     navigator.startChatActivity((MainActivity) getActivity(), newContact);

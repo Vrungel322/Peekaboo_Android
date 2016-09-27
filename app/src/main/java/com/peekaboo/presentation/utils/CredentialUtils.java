@@ -5,7 +5,7 @@ package com.peekaboo.presentation.utils;
  */
 public class CredentialUtils {
     public static boolean isUsernameValid(String login) {
-        return !(login.contains(" ") || login.length() < 6);
+        return !(login.contains(" ") || login.length() < 5);
     }
 
     public static boolean isPasswordValid(String password) {

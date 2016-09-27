@@ -1,12 +1,11 @@
 package com.peekaboo.data.repositories.database.contacts;
 
-import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import com.peekaboo.data.mappers.PContactMapper;
+import com.peekaboo.data.mappers.ContactToContentValueMapper;
 import com.peekaboo.data.repositories.database.service.DBHelper;
 import com.peekaboo.data.repositories.database.utils_db.Db;
 import com.peekaboo.domain.schedulers.ObserveOn;
@@ -26,7 +25,7 @@ public class PContactHelper {
     private final DBHelper helper;
     private final SubscribeOn subscribeOn;
     private final ObserveOn observeOn;
-    private final PContactMapper mapper = new PContactMapper();
+    private final ContactToContentValueMapper mapper = new ContactToContentValueMapper();
 
     public PContactHelper(DBHelper helper, SubscribeOn subscribeOn, ObserveOn observeOn) {
         this.helper = helper;
@@ -41,11 +40,11 @@ public class PContactHelper {
                 "(" +
                 ContactAbs.ID + " INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL," +
                 ContactAbs.CONTACT_ID + " TEXT NOT NULL," +
-                ContactAbs.CONTACT_NAME + " TEXT NOT NULL," +
-                ContactAbs.CONTACT_SURNAME + " TEXT NOT NULL," +
+                ContactAbs.CONTACT_NAME + " TEXT," +
+                ContactAbs.CONTACT_SURNAME + " TEXT," +
                 ContactAbs.CONTACT_NICKNAME + " TEXT NOT NULL," +
                 ContactAbs.CONTACT_IS_ONLINE + " INTEGER NOT NULL," +
-                ContactAbs.CONTACT_IMG_URI + " TEXT NOT NULL" +
+                ContactAbs.CONTACT_IMG_URI + " TEXT " +
                 ")" +
                 ";";
         db.execSQL(CREATE_TABLE);
@@ -54,6 +53,7 @@ public class PContactHelper {
     public long insert(Contact contact) {
         SQLiteDatabase db = helper.getWritableDatabase();
         long id = db.insert(TABLE_NAME, null, mapper.transform(contact));
+
         contact.setId(id);
         return id;
     }
@@ -75,7 +75,7 @@ public class PContactHelper {
     @NonNull
     private Observable<List<Contact>> select(String query) {
         Log.e("helper", query);
-        return Observable.create((Observable.OnSubscribe<List<Contact>>) subscriber -> {
+        return Observable.create(subscriber -> {
             List<Contact> messages = new ArrayList<>();
             SQLiteDatabase db = helper.getWritableDatabase();
 

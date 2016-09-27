@@ -12,6 +12,7 @@ import com.peekaboo.data.mappers.AbstractMapperFactory;
 import com.peekaboo.data.mappers.MapperFactory;
 import com.peekaboo.data.repositories.SessionDataRepository;
 import com.peekaboo.data.repositories.database.contacts.PContactHelper;
+import com.peekaboo.data.repositories.database.messages.PMessageHelper;
 import com.peekaboo.data.rest.PeekabooApi;
 import com.peekaboo.data.rest.RestApi;
 import com.peekaboo.domain.AccountUser;
@@ -154,8 +155,9 @@ public class DataModule {
 
     @Provides
     @Singleton
-    public SessionRepository provideRepository(AccountUser user, RestApi restApi, PContactHelper dbHelper) {
-        return new SessionDataRepository(restApi, new MapperFactory(), user, dbHelper);
+    public SessionRepository provideRepository(AccountUser user, RestApi restApi,
+                                               PContactHelper dbHelper, PMessageHelper messageHelper, AbstractMapperFactory mapperFactory) {
+        return new SessionDataRepository(restApi, mapperFactory, user, dbHelper, messageHelper);
     }
 
     @Provides
@@ -172,8 +174,8 @@ public class DataModule {
     }
 
     @Provides
-    public AbstractMapperFactory provideMapperFactory(){
-        return new MapperFactory();
+    public AbstractMapperFactory provideMapperFactory(@Named("avatar") String avatarUrl){
+        return new MapperFactory(avatarUrl);
     }
 
 
