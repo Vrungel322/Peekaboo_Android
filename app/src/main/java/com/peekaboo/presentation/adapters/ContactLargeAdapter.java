@@ -14,7 +14,6 @@ import com.peekaboo.presentation.activities.MainActivity;
 import com.peekaboo.presentation.utils.ResourcesUtils;
 import com.peekaboo.presentation.widget.RecyclerViewFastScroller.BubbleTextGetter;
 import com.peekaboo.utils.ActivityNavigator;
-import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -40,7 +39,7 @@ public final class ContactLargeAdapter extends RecyclerView.Adapter<ContactLarge
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.contacts_fragment_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_contact, parent, false);
         return new ViewHolder(view);
     }
 
@@ -70,7 +69,13 @@ public final class ContactLargeAdapter extends RecyclerView.Adapter<ContactLarge
                     }
                 }*/);
 
-        holder.tvContactName.setText(contact.contactName() + " " + contact.contactSurname());
+        String contactName = contact.contactName();
+        String contactSurname = contact.contactSurname();
+        if(contactSurname == null){
+            holder.tvContactName.setText(contactName);
+        } else {
+            holder.tvContactName.setText(contactName + " " + contactSurname);
+        }
 
         if(contact.isOnline()){
             holder.ivStatus.setImageResource(R.color.online);
