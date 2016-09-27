@@ -14,7 +14,6 @@ import com.peekaboo.presentation.activities.MainActivity;
 import com.peekaboo.presentation.utils.ResourcesUtils;
 import com.peekaboo.presentation.widget.RecyclerViewFastScroller.BubbleTextGetter;
 import com.peekaboo.utils.ActivityNavigator;
-import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -32,10 +31,10 @@ public final class ContactLargeAdapter extends RecyclerView.Adapter<ContactLarge
     private Picasso mPicasso;
     private ActivityNavigator navigator;
 
-    public ContactLargeAdapter(MainActivity activity, ActivityNavigator navigator) {
+    public ContactLargeAdapter(MainActivity activity, ActivityNavigator navigator, Picasso mPicasso) {
         this.activity = activity;
         this.navigator = navigator;
-        this.mPicasso = Picasso.with(activity);
+        this.mPicasso = mPicasso;
     }
 
     @Override
