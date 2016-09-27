@@ -6,6 +6,7 @@ package com.peekaboo.data.repositories.database.messages;
 public class PMessage extends PMessageAbs {
 
     public static final String DIVIDER = "  ";
+    public static final String ERROR = "<@error@>";
     private long id;
     private boolean isMine;
     private String messageBody;
@@ -60,7 +61,7 @@ public class PMessage extends PMessageAbs {
 
     @Override
     public String messageBody() {
-        return messageBody;
+        return messageBody.replace(ERROR, "");
     }
 
     @Override

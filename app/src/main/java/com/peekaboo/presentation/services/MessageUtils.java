@@ -1,6 +1,7 @@
 package com.peekaboo.presentation.services;
 
 import android.net.Uri;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.peekaboo.data.repositories.database.messages.PMessage;
@@ -53,6 +54,20 @@ public class MessageUtils {
         return result;
     }
 
+
+    public static String createAudioBody(@Nullable String remote, @Nullable String local, boolean error) {
+        String result = "";
+        if (remote != null) result = remote;
+        if (local != null) {
+            if (result.isEmpty()) {
+                result = local;
+            } else {
+                result = result + PMessage.DIVIDER + local;
+            }
+        }
+        if (error) result = result + PMessage.ERROR;
+        return result;
+    }
 
     private static Message copyMessage(Message message) {
         return new Message(message.getCommand())
