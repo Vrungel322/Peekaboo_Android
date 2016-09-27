@@ -2,9 +2,9 @@ package com.peekaboo.presentation.di;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.Build;
-import android.os.StatFs;
+import android.util.Log;
 
+import com.jakewharton.picasso.OkHttp3Downloader;
 import com.peekaboo.data.Constants;
 import com.peekaboo.data.di.DataModule;
 import com.peekaboo.data.mappers.AbstractMapperFactory;
@@ -24,10 +24,7 @@ import com.peekaboo.presentation.services.Messenger;
 import com.peekaboo.presentation.services.WebSocketNotifier;
 import com.peekaboo.utils.MainThread;
 import com.squareup.otto.Bus;
-import com.squareup.picasso.Downloader;
-import com.squareup.picasso.OkHttpDownloader;
 import com.squareup.picasso.Picasso;
-import com.squareup.picasso.UrlConnectionDownloader;
 
 import java.io.File;
 import java.util.List;
@@ -37,6 +34,8 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import okhttp3.Cache;
+import okhttp3.OkHttpClient;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -106,72 +105,18 @@ public class ApplicationModule {
         return new Messenger(notifier, helper, readMessagesHelper, user, fileUploadUseCase, downloadFileUseCase);
     }
 
-    @Provides
-    @Named("availableCacheSize")
-    public Long provideAvailableCacheSize(@Named("cache") File dir) {
-        long size = 0;
-        try {
-            StatFs statFs = new StatFs(dir.getAbsolutePath());
-            int sdkInt = Build.VERSION.SDK_INT;
-            long totalBytes;
-            long availableBytes;
-            if (sdkInt < Build.VERSION_CODES.JELLY_BEAN_MR2) {
-                int blockSize = statFs.getBlockSize();
-                availableBytes = ((long) statFs.getAvailableBlocks()) * blockSize;
-                totalBytes = ((long) statFs.getBlockCount()) * blockSize;
-            } else {
-                availableBytes = statFs.getAvailableBytes();
-                totalBytes = statFs.getTotalBytes();
-            }
-            // Target at least 90% of available or 25% of total space
-            size = (long) Math.min(availableBytes * Constants.CACHE.MAX_AVAILABLE_SPACE_USE_FRACTION,
-                    totalBytes * Constants.CACHE.MAX_TOTAL_SPACE_USE_FRACTION);
-        } catch (IllegalArgumentException ignored) {
-            // ignored
-        }
-        return size;
-    }
-
-    @Provides
-    @Named("diskCacheSize")
-    public Long provideDiskCacheSize(@Named("availableCacheSize") Long availableCacheSize) {
-        long size = Math.min(availableCacheSize, Constants.CACHE.MAX_DISK_CACHE_SIZE);
-        return Math.max(size, Constants.CACHE.MIN_DISK_CACHE_SIZE);
-    }
-
     @Singleton
     @Provides
-    @Named("cache")
-    public File createDefaultCacheDir(Context context) {
-        File cacheDir = context.getApplicationContext().getExternalCacheDir();
-        if (cacheDir == null)
-            cacheDir = context.getApplicationContext().getCacheDir();
-        File cache = new File(cacheDir, Constants.CACHE.BIG_CACHE_PATH);
-        if (!cache.exists()) {
-            cache.mkdirs();
-        }
-        return cache;
-    }
+    public Picasso providePicasso(Context context){
+        File httpCacheDirectory = new File(context.getApplicationContext().getCacheDir(), "picasso-cache");
+        Log.wtf("Cache_DIR", httpCacheDirectory.getAbsolutePath());
+        Cache cache = new Cache(httpCacheDirectory, Constants.CACHE.MIN_DISK_CACHE_SIZE);
 
-    @Singleton
-    @Provides
-    public Downloader provideDownloader(Context context, @Named("cache") File cache, @Named("diskCacheSize") Long diskCacheSize){
-        try {
-            Class.forName("com.squareup.okhttp.OkHttpClient");
-        } catch (ClassNotFoundException e) {
-            e.printStackTrace();
-        }
-        File cacheDir = cache;
-            long cacheSize = diskCacheSize;
-            OkHttpDownloader downloader = new OkHttpDownloader(cache, diskCacheSize);
-            return downloader;
-    }
-
-    @Singleton
-    @Provides
-    public Picasso providePicasso(Context context, @Named("avatar") String url, Downloader downloader){
+        OkHttpClient clientBuilder = new OkHttpClient.Builder().cache(cache).build();
         return new Picasso.Builder(context)
-                .downloader(downloader)
+                .downloader(new OkHttp3Downloader(clientBuilder))
+//                .indicatorsEnabled(true)
+//                .loggingEnabled(true)
                 .build();
     }
 }
