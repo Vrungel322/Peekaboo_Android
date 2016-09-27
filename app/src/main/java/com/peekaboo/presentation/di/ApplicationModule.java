@@ -115,8 +115,6 @@ public class ApplicationModule {
         OkHttpClient clientBuilder = new OkHttpClient.Builder().cache(cache).build();
         return new Picasso.Builder(context)
                 .downloader(new OkHttp3Downloader(clientBuilder))
-//                .indicatorsEnabled(true)
-//                .loggingEnabled(true)
                 .build();
     }
 }
