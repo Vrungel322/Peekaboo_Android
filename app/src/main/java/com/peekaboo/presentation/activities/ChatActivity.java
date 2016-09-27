@@ -228,10 +228,7 @@ public class ChatActivity extends AppCompatActivity
         float finalRadius = (float) Math.hypot(dx, dy);
 
         if(mv.getAction() == MotionEvent.ACTION_DOWN){
-
-
             timerRecord.post(() -> {
-
                 Animator animator =
                         ViewAnimationUtils.createCircularReveal(flTimer, (int) cx, (int) cy, 0, finalRadius);
                 animator.setInterpolator(new AccelerateDecelerateInterpolator());
@@ -250,7 +247,7 @@ public class ChatActivity extends AppCompatActivity
             return true;
         }
         if(mv.getAction() == MotionEvent.ACTION_CANCEL || mv.getAction() == MotionEvent.ACTION_UP){
-            
+
             rflTimer.setVisibility(View.GONE);
             recordAudio();
             return false;
