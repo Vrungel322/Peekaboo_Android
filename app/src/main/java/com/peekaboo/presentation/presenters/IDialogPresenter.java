@@ -9,6 +9,7 @@ import com.peekaboo.presentation.views.IDialogsView;
 public interface IDialogPresenter extends IPresenter<IDialogsView>{
 
     void onCreate();
+    void onPause();
     void onDestroy();
 
     void loadDialogList();
