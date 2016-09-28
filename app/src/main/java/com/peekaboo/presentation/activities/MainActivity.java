@@ -21,6 +21,7 @@ import com.peekaboo.R;
 import com.peekaboo.domain.AccountUser;
 import com.peekaboo.presentation.PeekabooApplication;
 import com.peekaboo.presentation.adapters.HotFriendsAdapter;
+import com.peekaboo.presentation.fragments.BlankDialogFragment;
 import com.peekaboo.presentation.fragments.CallsFragment;
 import com.peekaboo.presentation.fragments.ContactsFragment;
 import com.peekaboo.presentation.fragments.DialogsFragment;
@@ -56,8 +57,8 @@ public class MainActivity extends AppCompatActivity implements INotifier.Notific
     Button bAudio;
     @BindView(R.id.bVideo)
     Button bVideo;
-    @BindView(R.id.lvHotFriends)
-    ListView lvHotFriends;
+//    @BindView(R.id.lvHotFriends)
+//    ListView lvHotFriends;
     @BindView(R.id.llDialogs)
     LinearLayout llDialogs;
     @BindView(R.id.llCalls)
@@ -94,7 +95,8 @@ public class MainActivity extends AppCompatActivity implements INotifier.Notific
         updateAccountData(accountUser);
 
         if (getSupportFragmentManager().findFragmentById(R.id.fragmentContainer) == null) {
-            changeFragment(new FriendTestFragment(), null);
+            changeFragment(new ContactsFragment(), Constants.FRAGMENT_TAGS.CONTACTS_FRAGMENT);
+            selectionMode(R.id.llContacts);
         }
         //Hardcode list in right drawer
         prepareHotFriends();
@@ -109,17 +111,17 @@ public class MainActivity extends AppCompatActivity implements INotifier.Notific
     }
 
     private void prepareHotFriends() {
-        alHotFriendPOJO = new ArrayList<>();
-        for (int i = 0; i < 20; i++) {
-            alHotFriendPOJO.add(new HotFriendPOJO(R.drawable.raccoon, Math.random() < 0.5));
-        }
-        hotFriendsAdapter = new HotFriendsAdapter(getApplicationContext(), alHotFriendPOJO);
-        OverScrollDecoratorHelper.setUpOverScroll(lvHotFriends);
-        lvHotFriends.setAdapter(hotFriendsAdapter);
-        lvHotFriends.setOnItemClickListener((parent, view, position, id) -> {
-            startActivity(new Intent(MainActivity.this, ChatActivity.class));
-            drawer.closeDrawer(Gravity.RIGHT, true);
-        });
+//        alHotFriendPOJO = new ArrayList<>();
+//        for (int i = 0; i < 20; i++) {
+//            alHotFriendPOJO.add(new HotFriendPOJO(R.drawable.raccoon, Math.random() < 0.5));
+//        }
+//        hotFriendsAdapter = new HotFriendsAdapter(getApplicationContext(), alHotFriendPOJO);
+//        OverScrollDecoratorHelper.setUpOverScroll(lvHotFriends);
+//        lvHotFriends.setAdapter(hotFriendsAdapter);
+//        lvHotFriends.setOnItemClickListener((parent, view, position, id) -> {
+//            startActivity(new Intent(MainActivity.this, ChatActivity.class));
+//            drawer.closeDrawer(Gravity.RIGHT, true);
+//        });
     }
 
     private void prepareDrawer() {
@@ -163,7 +165,7 @@ public class MainActivity extends AppCompatActivity implements INotifier.Notific
         selectionMode(v.getId());
         switch (v.getId()) {
             case R.id.llDialogs:
-                changeFragment(new DialogsFragment(), Constants.FRAGMENT_TAGS.DIALOGS_FRAGMENT);
+                changeFragment(new BlankDialogFragment(), Constants.FRAGMENT_TAGS.DIALOGS_FRAGMENT);
                 break;
             case R.id.llCalls:
                 changeFragment(new CallsFragment(), Constants.FRAGMENT_TAGS.CALLS_FRAGMENT);

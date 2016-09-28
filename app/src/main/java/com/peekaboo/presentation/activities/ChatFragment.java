@@ -287,7 +287,7 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
             timerRecord.setBase(SystemClock.elapsedRealtime());
 
             timerRecord.start();
-            presenter.onRecordButtonClick(true);
+//            presenter.onRecordButtonClick(true);
     }
 
     @Override
