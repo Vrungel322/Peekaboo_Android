@@ -4,7 +4,9 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.DeadObjectException;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Looper;
 import android.os.RemoteException;
 import android.util.Log;
 
@@ -40,6 +42,8 @@ public class WearLink extends Service implements IMessenger.MessengerListener
 
     private final List<ChatRequestImpl> chatRequests = new CopyOnWriteArrayList<ChatRequestImpl>();
 
+    private Handler handler = new Handler(Looper.getMainLooper());
+
     class ChatRequestImpl extends ChatRequest.Stub {
         ChatListener listener;
 
@@ -65,11 +69,16 @@ public class WearLink extends Service implements IMessenger.MessengerListener
             } catch (IOException e) {
                 Log.e(TAG, "Error saving wav file", e);
             }
-            PMessage message = new PMessage(true, PMessage.PMESSAGE_MEDIA_TYPE.AUDIO_MESSAGE,
+            final PMessage message = new PMessage(true, PMessage.PMESSAGE_MEDIA_TYPE.AUDIO_MESSAGE,
                     record.getFilename(), System.currentTimeMillis(),
                     PMessage.PMESSAGE_STATUS.STATUS_SENT,
                     accountUser.getId(), accountUser.getId());
-            notifier.sendMessage(message);
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    notifier.sendMessage(message);
+                }
+            });
             return null;
         }
 
