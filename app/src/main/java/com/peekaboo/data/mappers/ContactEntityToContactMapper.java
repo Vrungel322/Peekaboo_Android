@@ -8,9 +8,15 @@ import com.peekaboo.utils.Utility;
  * Created by Nikita on 20.09.2016.
  */
 public class ContactEntityToContactMapper implements Mapper<ContactEntity, Contact> {
+    String url;
+
+    public ContactEntityToContactMapper(String url) {
+        this.url = url;
+    }
+
     @Override
     public Contact transform(ContactEntity obj) throws RuntimeException {
-        return new Contact(obj.getId(), obj.getName(), obj.getSurname(), obj.getNickname(), Utility.convertIntToBoolean(obj.getState()),
-                obj.getImgUri(), String.valueOf(obj.getId()));
+        return new Contact(0, obj.getName(), obj.getSurname(), obj.getNickname(), Utility.convertIntToBoolean(obj.getState()),
+                url + obj.getId(), obj.getId());
     }
 }

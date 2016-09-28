@@ -3,10 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical">
 
     <LinearLayout
-        android:layout_width="@dimen/nav_header_width"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/colorPrimaryLight"
         android:orientation="vertical">
@@ -41,19 +42,21 @@
                             android:layout_marginTop="25dp">
 
                             <de.hdodenhof.circleimageview.CircleImageView
+                                android:id="@+id/ivAccountAvatar"
                                 android:layout_width="@dimen/widthOfIconInDrawer"
                                 android:layout_height="@dimen/heightOfIconInDrawer"
                                 android:layout_gravity="center"
-                                android:src="@drawable/raccoon"
+                                tools:src="@drawable/raccoon"
                                 app:border_color="@android:color/transparent" />
 
 
                             <de.hdodenhof.circleimageview.CircleImageView
+                                android:id="@+id/ivOnlineStatus"
                                 android:layout_width="@dimen/hotFriendStatusIconSize"
                                 android:layout_height="@dimen/hotFriendStatusIconSize"
                                 android:layout_marginRight="2dp"
                                 android:layout_gravity="right|top"
-                                android:src="@drawable/round_status_icon_drawer"
+                                tools:src="@drawable/round_status_icon_drawer"
                                 app:border_color="@color/borderCircle_status_color"
                                 app:border_width="1dp" />
 
@@ -69,7 +72,7 @@
                                 android:id="@+id/tvNameSurname"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="@string/raccoon_doe"
+                                tools:text="@string/raccoon_doe"
                                 android:textAppearance="?android:attr/textAppearanceMedium"
                                 android:textColor="@color/colorHeaderText"
                                 android:textSize="@dimen/name_surnameSizeInDrawer" />

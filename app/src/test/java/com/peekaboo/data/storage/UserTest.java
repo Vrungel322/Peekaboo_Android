@@ -31,7 +31,7 @@ public class UserTest {
 
     @Test
     public void whenUserHasTokenAndIdThenIsAuthorizedReturnTrue() {
-        AccountUser user = new AccountUser(preferences);
+        AccountUser user = new AccountUser(preferences, "domen");
         user.saveId("id");
         user.saveToken("token");
 
@@ -43,14 +43,14 @@ public class UserTest {
 
     @Test
     public void whenUserHasNoTokenAndIdThenIsAuthorizedReturnFalse() {
-        AccountUser user = new AccountUser(preferences);
+        AccountUser user = new AccountUser(preferences, "domen");
 
         assertEquals(user.isAuthorized(), false);
     }
 
     @Test
     public void whenUserHasTokenThenIsAuthorizedReturnFalse() {
-        AccountUser user = new AccountUser(preferences);
+        AccountUser user = new AccountUser(preferences, "domen");
         user.saveToken("token");
 
         assertEquals(user.isAuthorized(), false);
@@ -60,7 +60,7 @@ public class UserTest {
 
     @Test
     public void whenUserHasIdThenIsAuthorizedReturnFalse() {
-        AccountUser user = new AccountUser(preferences);
+        AccountUser user = new AccountUser(preferences, "domen");
         user.saveId("id");
 
         assertEquals(user.isAuthorized(), false);
@@ -73,7 +73,7 @@ public class UserTest {
         when(preferences.getString(AccountUser.ID, null)).thenReturn("id");
         when(preferences.getString(AccountUser.TOKEN, null)).thenReturn("token");
 
-        AccountUser user = new AccountUser(preferences);
+        AccountUser user = new AccountUser(preferences, "domen");
 
         assertEquals(user.getId(), "id");
         assertEquals(user.getToken(), "token");

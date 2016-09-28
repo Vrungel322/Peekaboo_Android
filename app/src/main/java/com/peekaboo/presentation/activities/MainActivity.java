@@ -1,20 +1,25 @@
 package com.peekaboo.presentation.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.peekaboo.R;
 import com.peekaboo.domain.AccountUser;
+import com.peekaboo.domain.Dialog;
 import com.peekaboo.presentation.PeekabooApplication;
 import com.peekaboo.presentation.adapters.HotFriendsAdapter;
 import com.peekaboo.presentation.fragments.CallsFragment;
@@ -24,13 +29,19 @@ import com.peekaboo.presentation.fragments.FriendTestFragment;
 import com.peekaboo.presentation.fragments.ProfileFragment;
 import com.peekaboo.presentation.fragments.SettingsFragment;
 import com.peekaboo.presentation.pojo.HotFriendPOJO;
+import com.peekaboo.presentation.presenters.MainActivityPresenter;
 import com.peekaboo.presentation.services.INotifier;
 import com.peekaboo.presentation.services.Message;
 import com.peekaboo.presentation.services.MessageUtils;
+import com.peekaboo.presentation.utils.ResourcesUtils;
+import com.peekaboo.presentation.views.IMainView;
+import com.peekaboo.utils.ActivityNavigator;
 import com.peekaboo.utils.Constants;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.inject.Inject;
@@ -40,7 +51,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements IMainView, INotifier.NotificationListener<Message>{
     @BindView(R.id.drawer_layout)
     DrawerLayout drawer;
     @BindView(R.id.bText)
@@ -63,50 +74,115 @@ public class MainActivity extends AppCompatActivity {
     LinearLayout llSettings;
     @BindView(R.id.llExit)
     LinearLayout llExit;
+    @BindView(R.id.tvNameSurname)
+    TextView tvNameSurname;
+    @BindView(R.id.ivAccountAvatar)
+    ImageView ivAccountAvatar;
+    @BindView(R.id.ivOnlineStatus)
+    ImageView ivOnlineStatus;
+
     @Inject
     INotifier<Message> notifier;
     @Inject
     AccountUser accountUser;
+    @Inject
+    MainActivityPresenter presenter;
+    @Inject
+    Picasso mPicasso;
+    @Inject
+    ActivityNavigator navigator;
     private HotFriendsAdapter hotFriendsAdapter;
     private ArrayList<HotFriendPOJO> alHotFriendPOJO;
-    private Set<OnBackPressListener> listeners = new HashSet();
+    private final Set<OnBackPressListener> listeners = new HashSet<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
-
         PeekabooApplication.getApp(this).getComponent().inject(this);
+        presenter.bind(this);
+        prepareDrawer();
+        updateAccountData(accountUser);
 
+        if (getSupportFragmentManager().findFragmentById(R.id.fragmentContainer) == null) {
+            changeFragment(new FriendTestFragment(), null);
+        }
+
+        notifier.addListener(this);
+        if (notifier.isAvailable()) {
+            onConnected();
+        } else {
+            onDisconnected();
+            notifier.tryConnect(accountUser.getBearer());
+        }
+        hotFriendsAdapter = new HotFriendsAdapter(MainActivity.this, mPicasso, navigator);
+        OverScrollDecoratorHelper.setUpOverScroll(lvHotFriends);
+        lvHotFriends.setAdapter(hotFriendsAdapter);
+
+        drawer.setDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+
+            }
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                presenter.fillHotAdapter();
+            }
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+
+            }
+        });
+    }
+
+    @Override
+    public void hotFriendToShow(List<Dialog> hotDialogs) {
+        hotFriendsAdapter.setItems(hotDialogs);
+    }
+
+    private void prepareDrawer() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setHomeButtonEnabled(true);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-
+        ActionBar supportActionBar = getSupportActionBar();
+        if (supportActionBar != null) {
+            supportActionBar.setHomeButtonEnabled(true);
+            supportActionBar.setDisplayHomeAsUpEnabled(true);
+        }
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
-        if (getSupportFragmentManager().findFragmentById(R.id.fragmentContainer) == null) {
-            changeFragment(new FriendTestFragment(), null);
-        }
+    }
+
+    private void updateAccountData(AccountUser accountUser) {
         int mode = accountUser.getMode();
+        String avatarUrl = accountUser.getAvatar();
+        String userName = accountUser.getUsername();
+        tvNameSurname.setText(userName);
+        Log.e("activity", "" + avatarUrl);
+        int avatarSize = ResourcesUtils.getDimenInPx(this, R.dimen.widthOfIconInDrawer);
+        Picasso.with(this).load(avatarUrl)
+                .resize(0, avatarSize)
+                .into(ivAccountAvatar);
+
         bText.setSelected(mode == 1);
         bAudio.setSelected(mode == 2);
         bVideo.setSelected(mode == 0);
-        //Hardcode list in right drawer
-        alHotFriendPOJO = new ArrayList<>();
-        for (int i = 0; i < 20; i++) {
-            alHotFriendPOJO.add(new HotFriendPOJO(R.drawable.raccoon, Math.random() < 0.5));
-        }
-        hotFriendsAdapter = new HotFriendsAdapter(getApplicationContext(), alHotFriendPOJO);
-        OverScrollDecoratorHelper.setUpOverScroll(lvHotFriends);
-        lvHotFriends.setAdapter(hotFriendsAdapter);
-        lvHotFriends.setOnItemClickListener((parent, view, position, id) -> {
-            startActivity(new Intent(MainActivity.this, ChatActivity.class));
-            drawer.closeDrawer(Gravity.RIGHT, true);
-        });
+    }
+
+    @Override
+    protected void onDestroy() {
+        notifier.removeListener(this);
+        presenter.unbind();
+        super.onDestroy();
     }
 
     @OnClick({R.id.llDialogs, R.id.llCalls, R.id.llContacts, R.id.llProfile, R.id.llSettings, R.id.llExit})
@@ -129,7 +205,7 @@ public class MainActivity extends AppCompatActivity {
                 changeFragment(new SettingsFragment(), Constants.FRAGMENT_TAGS.SETTINGS_FRAGMENT);
                 break;
             case R.id.llExit:
-                throw new RuntimeException();
+//                throw new RuntimeException();
         }
 
     }
@@ -202,6 +278,36 @@ public class MainActivity extends AppCompatActivity {
 
     public void removeListener(OnBackPressListener listener) {
         listeners.remove(listener);
+    }
+
+    @Override
+    public void onMessageObtained(Message message) {
+
+    }
+
+    @Override
+    public void onConnected() {
+        ivOnlineStatus.setImageResource(R.drawable.round_status_icon_cyan);
+    }
+
+    @Override
+    public void onDisconnected() {
+        ivOnlineStatus.setImageResource(R.drawable.round_status_icon_grey);
+    }
+
+    @Override
+    public void showToastMessage(String text) {
+        Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void showProgress() {
+
+    }
+
+    @Override
+    public void hideProgress() {
+
     }
 
     public interface OnBackPressListener {

@@ -1,17 +1,15 @@
 package com.peekaboo.presentation.presenters;
 
-import com.peekaboo.data.repositories.database.contacts.Contact;
-
-import rx.functions.Action1;
+import com.peekaboo.presentation.views.IContactsView;
 
 /**
  * Created by Nikita on 11.08.2016.
  */
-public interface IContactPresenter {
-//    void createTable(String tableName);
-    void insertContactToTable(Contact contact);
-    void getAllContacts(String tableName, Action1 adapter);
-//    void dropTableAndCreate(String tableName);
+public interface IContactPresenter extends IPresenter<IContactsView> {
+
+    void onCreate();
+    void onDestroy();
+
     void loadContactsList();
 
 }

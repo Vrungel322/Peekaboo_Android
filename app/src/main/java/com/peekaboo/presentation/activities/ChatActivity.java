@@ -7,19 +7,20 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.widget.Chronometer;
 import android.widget.EditText;
+import android.widget.FrameLayout;
 import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -27,6 +28,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.peekaboo.R;
+import com.peekaboo.data.repositories.database.contacts.Contact;
 import com.peekaboo.data.repositories.database.messages.PMessageAbs;
 import com.peekaboo.presentation.PeekabooApplication;
 import com.peekaboo.presentation.adapters.ChatAdapter;
@@ -80,9 +82,20 @@ public class ChatActivity extends AppCompatActivity
     ImageView microAnim;
     @BindView(R.id.rflButtonRecord)
     RevealFrameLayout rflButtonRecord;
+    @BindView(R.id.llRecord)
+    LinearLayout llRecord;
     @Inject
     ChatPresenter chatPresenter;
 
+    @BindView(R.id.flTimer)
+    FrameLayout flTimer;
+    @BindView(R.id.timerRecord)
+    Chronometer timerRecord;
+    @BindView(R.id.rflTimer)
+    RevealFrameLayout rflTimer;
+
+
+    private Contact receiverContact;
     private ChatAdapter chatAdapter;
     private ChatItemDialog chatItemDialog;
     private LinearLayout.LayoutParams layoutParams;
@@ -97,8 +110,9 @@ public class ChatActivity extends AppCompatActivity
         setContentView(R.layout.chat_layout);
         ButterKnife.bind(this);
         PeekabooApplication.getApp(this).getComponent().inject(this);
-        String receiverName = getIntent().getStringExtra(Constants.EXTRA_RECEIVER_NAME);
-        receiverName = "test";
+
+        receiverContact = getIntent().getParcelableExtra(Constants.EXTRA_CONTACT);
+        String receiverName = receiverContact.contactName() + " " + receiverContact.contactSurname();
 
 //        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarChat);
         layoutParams = (LinearLayout.LayoutParams) rflMessageBody.getLayoutParams();
@@ -203,35 +217,45 @@ public class ChatActivity extends AppCompatActivity
 
     @OnTouch(R.id.micro_btn)
     boolean onRecordButtonTouch(MotionEvent mv){
-        if(mv.getAction() == MotionEvent.ACTION_UP){
-            rflButtonRecord.setVisibility(View.GONE);
+        int[] button_coordinates = new int[2];
+        bRecord.getLocationOnScreen(button_coordinates);
 
-            recordAudio();
-            return true;
-        }
+        float cx, cy;
+        cx = (float)button_coordinates[0] + bRecord.getWidth() / 2;
+        cy = (float)button_coordinates[1] + bRecord.getHeight() / 2;
+
+        float dx = Math.max(cx, rflTimer.getWidth() - cx);
+        float dy = Math.max(cy, rflTimer.getHeight() - cy);
+        float finalRadius = (float) Math.hypot(dx, dy);
+
         if(mv.getAction() == MotionEvent.ACTION_DOWN){
-            recordAudio();
-
-            rflButtonRecord.setVisibility(View.VISIBLE);
-            microAnim.post(() -> {
-                float cx, cy;
-                cx = (bRecord.getX() + bRecord.getWidth()) / 2;
-                cy = (bRecord.getY() + bRecord.getHeight()) / 2;
-
-                float dx = Math.max(cx, microAnim.getWidth() - cx);
-                float dy = Math.max(cy, microAnim.getHeight() - cy);
-                float finalRadius = (float) Math.hypot(dx, dy);
-
+            timerRecord.post(() -> {
                 Animator animator =
-                        ViewAnimationUtils.createCircularReveal(microAnim, (int) cx, (int) cy, 0, finalRadius);
+                        ViewAnimationUtils.createCircularReveal(flTimer, (int) cx, (int) cy, 0, finalRadius);
                 animator.setInterpolator(new AccelerateDecelerateInterpolator());
                 animator.setDuration(1000);
+                rflTimer.setVisibility(View.VISIBLE);
                 animator.start();
             });
 
+            timerRecord.setOnChronometerTickListener(chronometer -> {
+            long elapsedMillis = SystemClock.elapsedRealtime()
+                - timerRecord.getBase();
+            });
+            timerRecord.setBase(SystemClock.elapsedRealtime());
+
+            timerRecord.start();
             return true;
         }
+        if(mv.getAction() == MotionEvent.ACTION_CANCEL || mv.getAction() == MotionEvent.ACTION_UP){
+
+            rflTimer.setVisibility(View.GONE);
+            recordAudio();
+            return false;
+        }
+
         return true;
+
     }
 
     @OnClick(R.id.bMessageOpen)
@@ -353,6 +377,7 @@ public class ChatActivity extends AppCompatActivity
 
     @OnClick(R.id.smile_btn)
     public void smileButtonClick() {
+
     }
 
     @Override

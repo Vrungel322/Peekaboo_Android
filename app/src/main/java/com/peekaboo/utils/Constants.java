@@ -7,6 +7,7 @@ import android.media.AudioFormat;
  */
 public class Constants {
     public static final String EXTRA_RECEIVER_NAME = "receiver_name";
+    public static final String EXTRA_CONTACT = "contact";
     public static final String ARG_CHAT_MESSAGE_ITEM_INDEX = "message_item_index";
 
     public interface FRAGMENT_TAGS {
