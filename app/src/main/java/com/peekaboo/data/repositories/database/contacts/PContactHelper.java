@@ -44,7 +44,7 @@ public class PContactHelper {
                 ContactAbs.CONTACT_SURNAME + " TEXT," +
                 ContactAbs.CONTACT_NICKNAME + " TEXT NOT NULL," +
                 ContactAbs.CONTACT_IS_ONLINE + " INTEGER NOT NULL," +
-                ContactAbs.CONTACT_IMG_URI + " TEXT " +
+                ContactAbs.CONTACT_IMG_URI + " TEXT, " +
                 " UNIQUE (" + ContactAbs.CONTACT_ID + ") ON CONFLICT REPLACE" +
                 ")" +
                 ";";
