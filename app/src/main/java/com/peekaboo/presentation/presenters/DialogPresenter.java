@@ -34,11 +34,11 @@ public class DialogPresenter extends ProgressPresenter<IDialogsView>
 
     @Override
     public void onPause() {
-        getDialogsListUseCase.unsubscribe();
     }
 
     @Override
     public void onDestroy() {
+        getDialogsListUseCase.unsubscribe();
         unbind();
     }
 
