@@ -33,7 +33,7 @@
             android:layout_width="@dimen/dialog_number_dot"
             android:layout_height="@dimen/dialog_number_dot"
             android:layout_gravity="right|top"
-            android:background="@drawable/circle"
+            android:background="@drawable/circle_online"
             android:gravity="center"
             android:text="8"
             android:textColor="@android:color/black"

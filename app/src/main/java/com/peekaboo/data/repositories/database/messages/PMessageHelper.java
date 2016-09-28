@@ -65,6 +65,24 @@ public class PMessageHelper {
                 .observeOn(observeOn.getScheduler());
     }
 
+    public PMessage getLastMessage(String id) {
+        Log.e("helper", "get last message: " + id);
+        String tableName = PREFIX + id;
+        String selectLast = "SELECT * FROM " + tableName +
+                " WHERE " + PMessageAbs.ID + " = " +
+                "(SELECT MAX(" + PMessageAbs.ID + ") FROM " + tableName +")";
+        SQLiteDatabase db = helper.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectLast, null);
+        PMessage message = null;
+        if (cursor.moveToNext()) {
+            message = fetchPMessage(cursor);
+            cursor.close();
+        }
+
+        return message;
+
+    }
+
     public Observable<List<PMessage>> getUnreadMessages(String id, boolean isMine) {
         String tableName = PREFIX + id;
         String selectUnread = "SELECT * FROM " + tableName + " WHERE "
@@ -102,7 +120,7 @@ public class PMessageHelper {
         SQLiteDatabase db = helper.getWritableDatabase();
         tableName = PREFIX + tableName;
         message.setId(db.insert(tableName, null, pMessageMapper.transform(message)));
-        Log.e("helper", "saveContactToDb " + message);
+        Log.e("helper", "saveMessageToDb " + message);
     }
 
     public int updateStatus(String tableName, int status, PMessage message) {
@@ -145,7 +163,7 @@ public class PMessageHelper {
     @NonNull
     private Observable<List<PMessage>> select(String query) {
         Log.e("helper", query);
-        return Observable.create((Observable.OnSubscribe<List<PMessage>>) subscriber -> {
+        return Observable.create(subscriber -> {
             List<PMessage> messages = new ArrayList<>();
             SQLiteDatabase db = helper.getWritableDatabase();
             Cursor cursor = db.rawQuery(query, null);
