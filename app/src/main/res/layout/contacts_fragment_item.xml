@@ -28,8 +28,7 @@
             android:layout_height="62dp"
             android:layout_margin="@dimen/dialog_item_margin"
             android:layout_marginBottom="@dimen/dialog_photo_margin"
-            android:src="@mipmap/ic_launcher"
-            app:border_color="@color/colorAccent" />
+            android:src="@mipmap/ic_launcher" />
 
 
         <de.hdodenhof.circleimageview.CircleImageView
