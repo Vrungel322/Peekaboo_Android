@@ -9,11 +9,16 @@ import android.os.RemoteException;
 import android.util.Log;
 
 import com.peekaboo.data.repositories.database.messages.PMessage;
+import com.peekaboo.domain.AccountUser;
+import com.peekaboo.domain.Record;
 import com.peekaboo.presentation.PeekabooApplication;
+import com.peekaboo.utils.Constants;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -30,6 +35,8 @@ public class WearLink extends Service implements IMessenger.MessengerListener
 
     @Inject
     IMessenger notifier;
+    @Inject
+    AccountUser accountUser;
 
     private final List<ChatRequestImpl> chatRequests = new CopyOnWriteArrayList<ChatRequestImpl>();
 
@@ -37,7 +44,32 @@ public class WearLink extends Service implements IMessenger.MessengerListener
         ChatListener listener;
 
         @Override
-        public String post(String action, Map params, String data) throws RemoteException {
+        public String post(String action, Map params, byte[] data) throws RemoteException {
+            if (params == null)
+                return null;
+            if (!"22050".equals(params.get("rate")))
+                return null;
+            if (!"PCM16".equals(params.get("fmt")))
+                return null;
+            Record record = new Record(accountUser.getId());
+            long totalAudioLen = data.length;
+            long totalDataLen = totalAudioLen + 36;
+            long longSampleRate = 22050;
+            int channels = 1;
+            long byteRate = 16 * longSampleRate * channels / 8;
+            try {
+                FileOutputStream out = new FileOutputStream(record.getFilename());
+                record.WriteWaveFileHeader(out, totalAudioLen, totalDataLen, longSampleRate, 1, byteRate);
+                out.write(data);
+                out.close();
+            } catch (IOException e) {
+                Log.e(TAG, "Error saving wav file", e);
+            }
+            PMessage message = new PMessage(true, PMessage.PMESSAGE_MEDIA_TYPE.AUDIO_MESSAGE,
+                    record.getFilename(), System.currentTimeMillis(),
+                    PMessage.PMESSAGE_STATUS.STATUS_SENT,
+                    accountUser.getId(), accountUser.getId());
+            notifier.sendMessage(message);
             return null;
         }
 

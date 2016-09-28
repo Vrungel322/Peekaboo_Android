@@ -30,19 +30,11 @@ public class Record {
 
     public Record(String folderName) {
         this.folderName = folderName;
+        this.filename = FileUtils.formAudioName(folderName);
         bufferSize = AudioRecord.getMinBufferSize(44100,
                 AudioFormat.CHANNEL_IN_MONO,
                 AudioFormat.ENCODING_PCM_16BIT);
     }
-
-    private String getFileName() {
-        String filename = FileUtils.formAudioName(folderName);
-
-        setFilename(filename);
-
-        return filename;
-    }
-
 
     public String getTempFileName() {
         String filepath = Environment.getExternalStorageDirectory().getPath();
@@ -129,7 +121,7 @@ public class Record {
             recorder = null;
         }
 
-        copyWaveFile(getTempFileName(), getFileName());
+        copyWaveFile(getTempFileName(), getFilename());
         deleteTempFile();
     }
 
@@ -172,7 +164,7 @@ public class Record {
         }
     }
 
-    private void WriteWaveFileHeader(
+    public void WriteWaveFileHeader(
             FileOutputStream out, long totalAudioLen,
             long totalDataLen, long longSampleRate, int channels,
             long byteRate) throws IOException {
