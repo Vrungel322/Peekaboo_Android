@@ -5,6 +5,7 @@ import com.peekaboo.data.mappers.AbstractMapperFactory;
 import com.peekaboo.data.mappers.Mapper;
 import com.peekaboo.data.repositories.database.contacts.Contact;
 import com.peekaboo.data.repositories.database.contacts.PContactHelper;
+import com.peekaboo.data.repositories.database.messages.PMessage;
 import com.peekaboo.data.repositories.database.messages.PMessageHelper;
 import com.peekaboo.data.rest.ConfirmKey;
 import com.peekaboo.data.rest.RestApi;
@@ -12,6 +13,7 @@ import com.peekaboo.data.rest.entity.ContactEntity;
 import com.peekaboo.data.rest.entity.Credentials;
 import com.peekaboo.data.rest.entity.CredentialsSignUp;
 import com.peekaboo.domain.AccountUser;
+import com.peekaboo.domain.Dialog;
 import com.peekaboo.domain.SessionRepository;
 import com.peekaboo.domain.User;
 
@@ -29,7 +31,7 @@ public class SessionDataRepository implements SessionRepository {
     private final AbstractMapperFactory abstractMapperFactory;
     private AccountUser user;
     private RestApi restApi;
-    private PContactHelper dbContacts;
+    private PContactHelper contactHelper;
     private PMessageHelper messageHelper;
 
     public SessionDataRepository(RestApi restApi, AbstractMapperFactory abstractMapperFactory,
@@ -37,7 +39,7 @@ public class SessionDataRepository implements SessionRepository {
         this.restApi = restApi;
         this.abstractMapperFactory = abstractMapperFactory;
         this.user = user;
-        this.dbContacts = dbHelper;
+        this.contactHelper = dbHelper;
         this.messageHelper = messageHelper;
     }
 
@@ -100,17 +102,32 @@ public class SessionDataRepository implements SessionRepository {
 
     @Override
     public Observable<List<Contact>> getAllSavedContacts() {
-        return dbContacts.getAllContacts();
+        return contactHelper.getAllContacts();
     }
 
     @Override
     public Observable<List<Contact>> saveContactToDb(List<Contact> contact) {
                 return Observable.from(contact)
                         .map(contact1 -> {
-                            dbContacts.insert(contact1);
+                            contactHelper.insert(contact1);
                             messageHelper.createTable(contact1.contactId());
                             return contact1;
                         })
                         .toList();
+    }
+
+    @Override
+    public Observable<List<Dialog>> loadDialogs() {
+        return contactHelper.getAllContacts()
+                .flatMap(Observable::from)
+                .flatMap(contact -> {
+                    PMessage message = messageHelper.getLastMessage(contact.contactId());
+                    if(message == null){
+                        return null;
+                    }
+                    return Observable.just(new Dialog(contact, message));
+                })
+                .filter(dialog -> dialog != null)
+                .toList();
     }
 }

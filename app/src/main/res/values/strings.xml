@@ -79,4 +79,7 @@
     <!-- ContactsFragment strings -->
     <string name="title_contacts">Contacts</string>
 
+    <!-- DialogsFragment strings -->
+    <string name="title_dialogs">Dialogs</string>
+
 </resources>
