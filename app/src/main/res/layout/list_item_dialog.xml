@@ -20,7 +20,7 @@
             <FrameLayout
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/dialog_item_size"
-                android:paddingRight="8dp">
+                android:paddingRight="@dimen/dialog_photo_padding_right">
 
                 <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
                     android:id="@+id/ivDialog_contact"
@@ -30,17 +30,14 @@
                     android:layout_marginBottom="@dimen/dialog_photo_margin"
                     android:src="@mipmap/ic_launcher"
                     app:border_color="@color/colorAccent" />
-                <!---->
-                <!--app:border_width="@dimen/circle_photo_border_width" -->
-
 
                 <TextView
                     android:id="@+id/tv_num_mes"
                     android:layout_width="@dimen/dialog_number_dot"
                     android:layout_height="@dimen/dialog_number_dot"
                     android:layout_gravity="right|top"
-                    android:layout_marginRight="5dp"
-                    android:layout_marginTop="5dp"
+                    android:layout_marginRight="@dimen/dialog_bubble_mess_margin"
+                    android:layout_marginTop="@dimen/dialog_bubble_mess_margin"
                     android:background="@drawable/circle"
                     android:gravity="center"
                     android:text="88"
@@ -78,7 +75,7 @@
                             android:singleLine="true"
                             android:text="Very Looooooong Name Surname"
                             android:textSize="@dimen/dialog_username_text_size"
-                            android:textColor="#333333"/>
+                            android:textColor="@color/dialog_time_date_name"/>
 
                         <TextView
                             android:id="@+id/tvDialog_preview"
@@ -86,7 +83,7 @@
                             android:layout_height="wrap_content"
                             android:singleLine="true"
                             android:text="Some payload for example"
-                            android:textColor="#666666"/>
+                            android:textColor="@color/dialog_preview"/>
                     </LinearLayout>
 
                     <com.daimajia.swipe.SwipeLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -94,7 +91,6 @@
                         android:id="@+id/swipe"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:paddingTop="0dp"
                         swipe:rightEdgeSwipeOffset="0dp">
 
                         <LinearLayout
@@ -113,24 +109,24 @@
                                     android:id="@+id/iv_swipetrash"
                                     android:layout_width="@dimen/dialog_swipe_item_width"
                                     android:layout_height="match_parent"
-                                    android:paddingLeft="3dp"
-                                    android:paddingRight="3dp"
+                                    android:paddingLeft="@dimen/dialog_swipe_icon_padding"
+                                    android:paddingRight="@dimen/dialog_swipe_icon_padding"
                                     android:src="@drawable/musorka" />
 
                                 <ImageView
                                     android:id="@+id/iv_swipestar"
                                     android:layout_width="@dimen/dialog_swipe_item_width"
                                     android:layout_height="match_parent"
-                                    android:paddingLeft="3dp"
-                                    android:paddingRight="3dp"
+                                    android:paddingLeft="@dimen/dialog_swipe_icon_padding"
+                                    android:paddingRight="@dimen/dialog_swipe_icon_padding"
                                     android:src="@drawable/star" />
 
                                 <ImageView
                                     android:id="@+id/iv_swipenosound"
                                     android:layout_width="@dimen/dialog_swipe_item_width"
                                     android:layout_height="match_parent"
-                                    android:paddingLeft="3dp"
-                                    android:paddingRight="3dp"
+                                    android:paddingLeft="@dimen/dialog_swipe_icon_padding"
+                                    android:paddingRight="@dimen/dialog_swipe_icon_padding"
                                     android:src="@drawable/sound" />
                             </LinearLayout>
 
@@ -148,9 +144,9 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentRight="true"
-                                android:layout_marginRight="7dp"
+                                android:layout_marginRight="@dimen/dialog_timedate_margin_Right"
                                 android:text="16:15"
-                                android:textColor="#333333"
+                                android:textColor="@color/dialog_time_date_name"
                                 android:textSize="@dimen/dialog_timestamp_text_size" />
 
                             <ImageView
@@ -180,7 +176,7 @@
         android:layout_height="1dp"
         android:layout_alignParentRight="true"
         android:layout_marginLeft="@dimen/dialog_item_underline_margin_left"
-        android:layout_marginRight="8dp"
+        android:layout_marginRight="@dimen/dialog_underline_margin_right"
         android:layout_marginTop="@dimen/dialog_item_underline_margin_top"
-        android:background="#cccccc" />
+        android:background="@color/dialog_underline_color" />
 </RelativeLayout>

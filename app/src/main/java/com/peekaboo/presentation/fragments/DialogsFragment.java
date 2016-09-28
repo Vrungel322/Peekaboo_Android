@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.AbsListView;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import com.daimajia.swipe.util.Attributes;
 import com.peekaboo.R;
@@ -61,6 +62,12 @@ public class DialogsFragment extends Fragment {
         final DialogsLargeAdapter adapter = new DialogsLargeAdapter(dialogsList);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+//        recyclerView.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                Toast.makeText(getActivity(),"lol",Toast.LENGTH_SHORT).show();
+//            }
+//        });
 
 
         return rootView;

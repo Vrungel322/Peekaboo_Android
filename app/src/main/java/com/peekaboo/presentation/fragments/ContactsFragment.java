@@ -158,16 +158,6 @@ public class ContactsFragment extends Fragment implements IContactsView {
         super.onDestroyView();
     }
 
-//    private void initList() {
-//
-//        if (contactList == null)
-//            contactList = new ArrayList<>();
-//
-//        String[] countries = getResources().getStringArray(R.array.countries_array);
-//        for (String country : countries) {
-//            contactList.add(country);
-//        }
-//    }
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
