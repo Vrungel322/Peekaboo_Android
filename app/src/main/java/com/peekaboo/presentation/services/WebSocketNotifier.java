@@ -50,9 +50,11 @@ public class WebSocketNotifier implements INotifier<Message> {
                             @Override
                             public void onConnected(WebSocket websocket, Map<String, List<String>> headers) throws Exception {
                                 Log.e(TAG, "Status: Connected to " + BASE_URL);
-//                                    for (NotificationListener<Message> listener : listeners) {
-//                                        listener.onConnected();
-//                                    }
+                                mainThread.run(() -> {
+                                    for (NotificationListener<Message> listener : listeners) {
+                                        listener.onConnected();
+                                    }
+                                });
                             }
 
                             @Override
@@ -95,11 +97,11 @@ public class WebSocketNotifier implements INotifier<Message> {
                             @Override
                             public void onPongFrame(WebSocket websocket, WebSocketFrame frame) throws Exception {
                                 Log.e(TAG, "Status: Pong received " + frame);
-                                mainThread.run(() -> {
-                                    for (NotificationListener<Message> listener : listeners) {
-                                        listener.onConnected();
-                                    }
-                                });
+//                                mainThread.run(() -> {
+//                                    for (NotificationListener<Message> listener : listeners) {
+//                                        listener.onConnected();
+//                                    }
+//                                });
                             }
                         })
                         .addHeader(AUTHORIZATION, authorization)

@@ -19,7 +19,8 @@
             android:layout_height="62dp"
             android:layout_margin="@dimen/dialog_item_margin"
             android:layout_marginBottom="@dimen/dialog_photo_margin"
-            android:src="@mipmap/ic_launcher" />
+            android:src="@mipmap/ic_launcher"
+            android:visibility="gone"/>
 
         <!-- TODO  make custom ImageView with appropriate size -->
         <de.hdodenhof.circleimageview.CircleImageView
@@ -39,7 +40,7 @@
             android:layout_marginRight="5dp"
             android:layout_marginTop="5dp"
             android:src="@color/offline"
-            app:border_width="2dp"
+            app:border_width="1dp"
             app:border_color="@android:color/white" />
     </FrameLayout>
 

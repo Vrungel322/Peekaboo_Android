@@ -14,6 +14,8 @@ import com.peekaboo.presentation.activities.MainActivity;
 import com.peekaboo.presentation.utils.ResourcesUtils;
 import com.peekaboo.presentation.widget.RecyclerViewFastScroller.BubbleTextGetter;
 import com.peekaboo.utils.ActivityNavigator;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -57,31 +59,35 @@ public final class ContactLargeAdapter extends RecyclerView.Adapter<ContactLarge
 
         mPicasso.load(contact.contactImgUri())
                 .resize(0, avatarSize)
+//                .networkPolicy(NetworkPolicy.OFFLINE)
                 .error(R.drawable.ic_alert_circle_outline)
 //                .centerInside()
-                .into(holder.ivAvatar/*, new Callback.EmptyCallback(){
+                .into(holder.ivAvatar/*, new Callback.EmptyCallback() {
                     @Override
                     public void onSuccess() {
                         super.onSuccess();
-                        holder.pbImageLoading.setVisibility(View.GONE);
+//                        holder.pbImageLoading.setVisibility(View.GONE);
                     }
 
                     @Override
                     public void onError() {
                         super.onError();
-                        holder.pbImageLoading.setVisibility(View.GONE);
+//                        mPicasso.load(contact.contactImgUri())
+//                                .resize(0, avatarSize)
+//                                .error(R.drawable.ic_alert_circle_outline)
+//                                .into(holder.ivAvatar);
+//                        holder.pbImageLoading.setVisibility(View.GONE);
                     }
                 }*/);
 
         String contactName = contact.contactName();
         String contactSurname = contact.contactSurname();
-        if(contactSurname == null){
+        if (contactSurname == null) {
             holder.tvContactName.setText(contactName);
         } else {
             holder.tvContactName.setText(contactName + " " + contactSurname);
         }
-//TODO: fix online statuses
-        if(contact.isOnline()){
+        if (contact.isOnline()) {
             holder.ivStatus.setImageResource(R.drawable.round_status_icon_cyan);
         } else {
             holder.ivStatus.setImageResource(R.drawable.round_status_icon_grey);
@@ -109,7 +115,7 @@ public final class ContactLargeAdapter extends RecyclerView.Adapter<ContactLarge
         return items.size();
     }
 
-    private Contact getItem(int position){
+    private Contact getItem(int position) {
         return items.get(position);
     }
 
