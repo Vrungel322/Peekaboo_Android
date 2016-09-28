@@ -2,10 +2,12 @@ package com.peekaboo.presentation.di;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.util.Log;
 
+import com.jakewharton.picasso.OkHttp3Downloader;
+import com.peekaboo.data.Constants;
 import com.peekaboo.data.di.DataModule;
 import com.peekaboo.data.mappers.AbstractMapperFactory;
-import com.peekaboo.data.mappers.MapperFactory;
 import com.peekaboo.data.repositories.database.messages.PMessageHelper;
 import com.peekaboo.data.repositories.database.service.ReadMessagesHelper;
 import com.peekaboo.data.repositories.database.utils_db.DbModule;
@@ -22,7 +24,9 @@ import com.peekaboo.presentation.services.Messenger;
 import com.peekaboo.presentation.services.WebSocketNotifier;
 import com.peekaboo.utils.MainThread;
 import com.squareup.otto.Bus;
+import com.squareup.picasso.Picasso;
 
+import java.io.File;
 import java.util.List;
 
 import javax.inject.Named;
@@ -30,6 +34,8 @@ import javax.inject.Singleton;
 
 import dagger.Module;
 import dagger.Provides;
+import okhttp3.Cache;
+import okhttp3.OkHttpClient;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -99,4 +105,16 @@ public class ApplicationModule {
         return new Messenger(notifier, helper, readMessagesHelper, user, fileUploadUseCase, downloadFileUseCase);
     }
 
+    @Singleton
+    @Provides
+    public Picasso providePicasso(Context context){
+        File httpCacheDirectory = new File(context.getApplicationContext().getCacheDir(), "picasso-cache");
+        Log.wtf("Cache_DIR", httpCacheDirectory.getAbsolutePath());
+        Cache cache = new Cache(httpCacheDirectory, Constants.CACHE.MIN_DISK_CACHE_SIZE);
+
+        OkHttpClient clientBuilder = new OkHttpClient.Builder().cache(cache).build();
+        return new Picasso.Builder(context)
+                .downloader(new OkHttp3Downloader(clientBuilder))
+                .build();
+    }
 }

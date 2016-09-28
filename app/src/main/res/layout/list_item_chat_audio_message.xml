@@ -42,7 +42,6 @@
                     android:text="0:00"
                     android:visibility="gone"
                     android:textColor="@color/colorControlNormal"
-
                     android:textStyle="bold" />
 
                 <SeekBar
