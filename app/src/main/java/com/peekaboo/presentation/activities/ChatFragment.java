@@ -18,7 +18,6 @@ import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.Chronometer;
 import android.widget.EditText;
 import android.widget.FrameLayout;
-import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -95,6 +94,8 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
     private LinearLayout.LayoutParams layoutParams;
     private boolean isFirstResumeAfterCreate = true;
     private Contact companion;
+
+    private Animator animator;
 
     public static ChatFragment newInstance(Contact companion) {
 
@@ -175,13 +176,13 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
         switch (mv.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 svItems.setScrollAvailable(false);
-//                etMessageBody.setFocusable(false);
-                presenter.onRecordButtonClick(true);
+                showRecordStart();
                 break;
             case MotionEvent.ACTION_CANCEL:
             case MotionEvent.ACTION_UP:
                 svItems.setScrollAvailable(true);
                 presenter.onRecordButtonClick(false);
+                showRecordStop();
                 break;
         }
         return true;
@@ -263,31 +264,58 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
         bRecord.getLocationOnScreen(button_coordinates);
 
         float cx, cy;
-        cx = (float)button_coordinates[0] + bRecord.getWidth() / 2;
-        cy = (float)button_coordinates[1] + bRecord.getHeight() / 2;
+        cx = (float) button_coordinates[0] + bRecord.getWidth() / 2;
+        cy = (float) button_coordinates[1] + bRecord.getHeight() / 2;
 
         float dx = Math.max(cx, rflTimer.getWidth() - cx);
         float dy = Math.max(cy, rflTimer.getHeight() - cy);
         float finalRadius = (float) Math.hypot(dx, dy);
 
-            timerRecord.post(() -> {
+        timerRecord.post(() -> {
 
-                Animator animator =
-                        ViewAnimationUtils.createCircularReveal(flTimer, (int) cx, (int) cy, 0, finalRadius);
-                animator.setInterpolator(new AccelerateDecelerateInterpolator());
-                animator.setDuration(1000);
-                rflTimer.setVisibility(View.VISIBLE);
-                animator.start();
+            animator =
+                    ViewAnimationUtils.createCircularReveal(flTimer, (int) cx, (int) cy, 0, finalRadius);
+            animator.setInterpolator(new AccelerateDecelerateInterpolator());
+            animator.setDuration(600);
+            rflTimer.setVisibility(View.VISIBLE);
+            animator.start();
+            animator.addListener(new Animator.AnimatorListener() {
+                boolean cancelled;
+
+                @Override
+                public void onAnimationStart(Animator animation) {
+
+                }
+
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    if (!cancelled) {
+                        presenter.onRecordButtonClick(true);
+                    }
+                }
+
+                @Override
+                public void onAnimationCancel(Animator animation) {
+                    cancelled = true;
+                }
+
+                @Override
+                public void onAnimationRepeat(Animator animation) {
+
+                }
             });
 
-            timerRecord.setOnChronometerTickListener(chronometer -> {
-                long elapsedMillis = SystemClock.elapsedRealtime()
-                        - timerRecord.getBase();
-            });
-            timerRecord.setBase(SystemClock.elapsedRealtime());
+        });
 
-            timerRecord.start();
-            presenter.onRecordButtonClick(true);
+
+        timerRecord.setOnChronometerTickListener(chronometer -> {
+            long elapsedMillis = SystemClock.elapsedRealtime()
+                    - timerRecord.getBase();
+        });
+        timerRecord.setBase(SystemClock.elapsedRealtime());
+
+        timerRecord.start();
+
     }
 
     @Override
@@ -295,7 +323,9 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
         etMessageBody.setFocusableInTouchMode(true);
         etMessageBody.setFocusable(true);
         rflTimer.setVisibility(View.GONE);
-//        rflButtonRecord.setVisibility(View.GONE);
+        if (animator != null) {
+            animator.cancel();
+        }
     }
 
     @Override

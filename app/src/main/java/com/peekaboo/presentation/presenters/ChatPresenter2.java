@@ -14,10 +14,7 @@ import com.peekaboo.presentation.utils.AsyncAudioPlayer;
 import com.peekaboo.presentation.utils.AudioPlayer;
 import com.peekaboo.presentation.views.IChatView2;
 
-import java.util.List;
-
 import javax.inject.Inject;
-import javax.inject.Named;
 import javax.inject.Singleton;
 
 import rx.Subscriber;
@@ -129,7 +126,6 @@ public class ChatPresenter2 extends BasePresenter<IChatView2> implements IChatPr
                 recorder.startRecording().subscribe(new BaseUseCaseSubscriber<Record>() {
                     @Override
                     public void onStart() {
-                        showRecordStart();
                     }
 
                     @Override
