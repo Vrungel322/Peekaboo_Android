@@ -1,33 +1,30 @@
 package com.peekaboo.presentation.fragments;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
-import android.widget.AdapterView;
-import android.widget.ListView;
-import android.widget.Toast;
 
-import com.daimajia.swipe.util.Attributes;
 import com.peekaboo.R;
+import com.peekaboo.domain.Dialog;
 import com.peekaboo.presentation.PeekabooApplication;
-import com.peekaboo.presentation.activities.ChatActivity;
+import com.peekaboo.presentation.activities.MainActivity;
 import com.peekaboo.presentation.adapters.DialogsLargeAdapter;
-import com.peekaboo.presentation.adapters.DialogsListAdapter;
-import com.peekaboo.presentation.widget.RecyclerViewFastScroller;
+import com.peekaboo.presentation.presenters.DialogPresenter;
+import com.peekaboo.presentation.views.IDialogsView;
+import com.peekaboo.utils.ActivityNavigator;
 
-import java.util.ArrayList;
+import java.util.List;
+
+import javax.inject.Inject;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -35,13 +32,17 @@ import butterknife.ButterKnife;
 /**
  * Created by Nikita on 13.07.2016.
  */
-public class DialogsFragment extends Fragment {
-    private View rootView;
-    @BindView(R.id.recycler_dialog)
+public class DialogsFragment extends Fragment implements IDialogsView {
 
+    @BindView(R.id.recycler_dialog)
     public RecyclerView recyclerView;
 
-    private ArrayList<String> dialogsList;
+    @Inject
+    DialogPresenter presenter;
+    @Inject
+    ActivityNavigator navigator;
+
+    private DialogsLargeAdapter adapter;
 
     public DialogsFragment() {
     }
@@ -51,47 +52,26 @@ public class DialogsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         PeekabooApplication.getApp(getActivity()).getComponent().inject(this);
-        rootView = inflater.inflate(R.layout.fragment_dialogs, container, false);
+        presenter.bind(this);
+
+        View rootView = inflater.inflate(R.layout.fragment_dialogs, container, false);
         ButterKnife.bind(this, rootView);
         setHasOptionsMenu(true);
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Dialogs");
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(getString(R.string.title_dialogs));
 
-
-
-        initList();
-        final DialogsLargeAdapter adapter = new DialogsLargeAdapter(dialogsList);
+        adapter = new DialogsLargeAdapter((MainActivity) getActivity(), navigator);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-//        recyclerView.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-//                Toast.makeText(getActivity(),"lol",Toast.LENGTH_SHORT).show();
-//            }
-//        });
 
+        presenter.loadDialogList();
 
         return rootView;
-    }
-    private void initList() {
-
-        if (dialogsList == null)
-            dialogsList = new ArrayList<>();
-
-        String[] countries = getResources().getStringArray(R.array.countries_array);
-        for (String country : countries) {
-            dialogsList.add(country);
-        }
     }
 
     @Override
     public void onDestroyView() {
+        presenter.onDestroy();
         super.onDestroyView();
-        if (rootView != null) {
-            ViewGroup parentViewGroup = (ViewGroup) rootView.getParent();
-            if (parentViewGroup != null) {
-                parentViewGroup.removeAllViews();
-            }
-        }
     }
 
     @Override
@@ -103,5 +83,25 @@ public class DialogsFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void showDialogsList(List<Dialog> dialogs) {
+        adapter.setItems(dialogs);
+    }
+
+    @Override
+    public void showProgress() {
+
+    }
+
+    @Override
+    public void hideProgress() {
+
+    }
+
+    @Override
+    public void showToastMessage(String text) {
+
     }
 }

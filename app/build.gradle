@@ -32,6 +32,10 @@ android {
     testOptions {
         unitTests.returnDefaultValues = true
     }
+
+    packagingOptions {
+        exclude 'META-INF/LICENSE'
+    }
 }
 
 repositories {
@@ -116,4 +120,8 @@ dependencies {
     compile 'com.github.lawloretienne:discreteslider:0.0.6'
 
     compile 'org.mockito:mockito-all:1.10.8'
+
+    compile 'com.squareup.okhttp3:okhttp:3.2.0'
+    compile 'com.squareup.picasso:picasso:2.5.2'
+    compile 'com.jakewharton.picasso:picasso2-okhttp3-downloader:1.0.2'
 }

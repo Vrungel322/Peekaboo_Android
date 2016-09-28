@@ -7,6 +7,8 @@
     <dimen name="contact_item_size">55dp</dimen>
     <dimen name="dialog_item_photo_size">58dp</dimen>
     <dimen name="dialog_photo_margin">15dp</dimen>
+    <dimen name="dialog_unread_count_text_size">10sp</dimen>
+    <dimen name="dialog_contact_name_text_size">16sp</dimen>
     <dimen name="dialog_number_dot">20dp</dimen>
     <dimen name="dialog_name_width">165dp</dimen>
     <dimen name="dialog_swipe_item_width">38dp</dimen>
@@ -48,7 +50,7 @@
     <dimen name="chat_timestamp_text_size">10sp</dimen>
     <dimen name="chat_message_status_size">16dp</dimen>
     <dimen name="chat_message_bubble_max_width">240dp</dimen>
-    <dimen name="dialog_item_padding">2dp</dimen>
+    <dimen name="dialog_item_padding">8dp</dimen>
     <dimen name="dialog_status_size">20dp</dimen>
     <dimen name="dialog_timestamp_text_size">12sp</dimen>
     <dimen name="dialog_username_text_size">16sp</dimen>
@@ -91,5 +93,13 @@
 
     <dimen name="marginForEachItemInSwitcher">10dp</dimen>
     <dimen name="marginBotForBar">8dp</dimen>
+    <dimen name="contact_list_avatar_size">62dp</dimen>
+
+    <dimen name="edit_text_width">300dp</dimen>
+    <dimen name="edit_text_side_padding">20dp</dimen>
+    <dimen name="edit_text_tb_padding">10dp</dimen>
+
+    <dimen name="audio_anim_height">200dp</dimen>
+    <dimen name="audio_chronometer_text_size">40sp</dimen>
 
 </resources>

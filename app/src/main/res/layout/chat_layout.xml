@@ -41,7 +41,6 @@
             android:listSelector="@android:color/transparent"
             android:overScrollMode="ifContentScrolls"
             android:padding="@dimen/items_margin"
-
             android:paddingBottom="4dp"
             android:paddingLeft="16dp"
             android:paddingRight="16dp"
@@ -49,10 +48,9 @@
 
         <HorizontalScrollView
             android:id="@+id/svItems"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:background="#00d41616"
             android:foregroundGravity="center"
             android:paddingBottom="@dimen/marginBotForBar"
             android:scrollbars="none">
@@ -101,12 +99,12 @@
                                 android:focusable="true"
                                 android:focusableInTouchMode="true"
                                 android:maxLines="2"
-                                android:maxWidth="300dp"
-                                android:minWidth="300dp"
-                                android:paddingBottom="10dp"
-                                android:paddingLeft="20dp"
-                                android:paddingRight="20dp"
-                                android:paddingTop="10dp"
+                                android:maxWidth="@dimen/edit_text_width"
+                                android:minWidth="@dimen/edit_text_width"
+                                android:paddingBottom="@dimen/edit_text_tb_padding"
+                                android:paddingLeft="@dimen/edit_text_side_padding"
+                                android:paddingRight="@dimen/edit_text_side_padding"
+                                android:paddingTop="@dimen/edit_text_tb_padding"
                                 android:textColor="#000"
                                 android:textCursorDrawable="@drawable/color_cursor" />
 
@@ -167,7 +165,6 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:visibility="gone"
-
                                 >
 
                                 <LinearLayout
@@ -233,8 +230,6 @@
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
-
-
         </HorizontalScrollView>
 
 
@@ -243,28 +238,27 @@
     <io.codetail.widget.RevealFrameLayout
         android:id="@+id/rflTimer"
         android:layout_width="match_parent"
-        android:layout_height="200dp"
+        android:layout_height="@dimen/audio_anim_height"
         android:layout_gravity="bottom"
         android:visibility="gone">
+
         <FrameLayout
             android:id="@+id/flTimer"
-            android:layout_gravity="bottom"
             android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:background="@color/colorAccent"
-            >
+            android:layout_height="@dimen/audio_anim_height"
+            android:layout_gravity="bottom"
+            android:background="@color/colorAccent">
 
             <Chronometer
                 android:id="@+id/timerRecord"
-                android:layout_gravity="center"
-                android:gravity="center"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_gravity="center"
                 android:background="@color/colorAccent"
+                android:gravity="center"
                 android:textColor="@color/textColor"
-                android:textStyle="bold"
-                android:textSize="40sp"
-                />
+                android:textSize="@dimen/audio_chronometer_text_size"
+                android:textStyle="bold" />
         </FrameLayout>
     </io.codetail.widget.RevealFrameLayout>
 

@@ -64,7 +64,7 @@ public class SignUpPresenterTest extends BasePresenterTest {
     public void whenInvalidUsernameThenShowInputErrorIsCalled() {
         SignUpPresenter signUpPresenter = new SignUpPresenter(new SignUpUseCaseSuccess(), new ConfirmUseCaseSuccess(), errorHandler);
         signUpPresenter.bind(signUpView);
-        signUpPresenter.onSignUpButtonClick("short", "aValid@mail", "aValidPassword", "aValidPassword");
+        signUpPresenter.onSignUpButtonClick("shor", "aValid@mail", "aValidPassword", "aValidPassword");
 
         verify(signUpView, timeout(WAIT).times(0)).showConfirmDialog();
         verify(signUpView, timeout(WAIT).times(1)).showInputError(ICredentialsView.InputFieldError.USERNAME);

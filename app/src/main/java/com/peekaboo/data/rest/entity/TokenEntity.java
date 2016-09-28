@@ -9,6 +9,12 @@ public class TokenEntity {
     private int mode;
     private String username;
 
+    public TokenEntity(String token, String id, int mode, String username) {
+        this.token = token;
+        this.id = id;
+        this.mode = mode;
+        this.username = username;
+    }
 
     public String getUsername() {
         return username;
@@ -27,8 +33,4 @@ public class TokenEntity {
         return mode;
     }
 
-    public TokenEntity(String token, String id) {
-        this.token = token;
-        this.id = id;
-    }
 }

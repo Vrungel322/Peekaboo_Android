@@ -1,12 +1,8 @@
 package com.peekaboo.data.repositories.database.contacts;
 
 import android.content.ContentValues;
-import android.database.Cursor;
 
 import com.google.auto.value.AutoValue;
-import com.peekaboo.data.repositories.database.utils_db.Db;
-
-import rx.functions.Func1;
 
 /**
  * Created by Nikita on 10.08.2016.

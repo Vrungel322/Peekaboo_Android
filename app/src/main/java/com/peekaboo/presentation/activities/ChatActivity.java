@@ -13,8 +13,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -30,6 +28,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.peekaboo.R;
+import com.peekaboo.data.repositories.database.contacts.Contact;
 import com.peekaboo.data.repositories.database.messages.PMessageAbs;
 import com.peekaboo.presentation.PeekabooApplication;
 import com.peekaboo.presentation.adapters.ChatAdapter;
@@ -96,6 +95,7 @@ public class ChatActivity extends AppCompatActivity
     RevealFrameLayout rflTimer;
 
 
+    private Contact receiverContact;
     private ChatAdapter chatAdapter;
     private ChatItemDialog chatItemDialog;
     private LinearLayout.LayoutParams layoutParams;
@@ -110,8 +110,9 @@ public class ChatActivity extends AppCompatActivity
         setContentView(R.layout.chat_layout);
         ButterKnife.bind(this);
         PeekabooApplication.getApp(this).getComponent().inject(this);
-        String receiverName = getIntent().getStringExtra(Constants.EXTRA_RECEIVER_NAME);
-        receiverName = "test";
+
+        receiverContact = getIntent().getParcelableExtra(Constants.EXTRA_CONTACT);
+        String receiverName = receiverContact.contactName() + " " + receiverContact.contactSurname();
 
 //        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbarChat);
         layoutParams = (LinearLayout.LayoutParams) rflMessageBody.getLayoutParams();
@@ -228,10 +229,7 @@ public class ChatActivity extends AppCompatActivity
         float finalRadius = (float) Math.hypot(dx, dy);
 
         if(mv.getAction() == MotionEvent.ACTION_DOWN){
-
-
             timerRecord.post(() -> {
-
                 Animator animator =
                         ViewAnimationUtils.createCircularReveal(flTimer, (int) cx, (int) cy, 0, finalRadius);
                 animator.setInterpolator(new AccelerateDecelerateInterpolator());
@@ -250,7 +248,7 @@ public class ChatActivity extends AppCompatActivity
             return true;
         }
         if(mv.getAction() == MotionEvent.ACTION_CANCEL || mv.getAction() == MotionEvent.ACTION_UP){
-            
+
             rflTimer.setVisibility(View.GONE);
             recordAudio();
             return false;

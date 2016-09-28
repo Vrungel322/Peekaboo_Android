@@ -44,7 +44,9 @@ public class PContactHelper {
                 ContactAbs.CONTACT_SURNAME + " TEXT," +
                 ContactAbs.CONTACT_NICKNAME + " TEXT NOT NULL," +
                 ContactAbs.CONTACT_IS_ONLINE + " INTEGER NOT NULL," +
-                ContactAbs.CONTACT_IMG_URI + " TEXT NOT NULL" +
+//                ContactAbs.CONTACT_IMG_URI + " TEXT " +
+                ContactAbs.CONTACT_IMG_URI + " TEXT, " +
+                " UNIQUE (" + ContactAbs.CONTACT_ID + ") ON CONFLICT REPLACE" +
                 ")" +
                 ";";
         db.execSQL(CREATE_TABLE);
@@ -53,6 +55,7 @@ public class PContactHelper {
     public long insert(Contact contact) {
         SQLiteDatabase db = helper.getWritableDatabase();
         long id = db.insert(TABLE_NAME, null, mapper.transform(contact));
+
         contact.setId(id);
         return id;
     }
@@ -74,7 +77,7 @@ public class PContactHelper {
     @NonNull
     private Observable<List<Contact>> select(String query) {
         Log.e("helper", query);
-        return Observable.create((Observable.OnSubscribe<List<Contact>>) subscriber -> {
+        return Observable.create(subscriber -> {
             List<Contact> messages = new ArrayList<>();
             SQLiteDatabase db = helper.getWritableDatabase();
 
