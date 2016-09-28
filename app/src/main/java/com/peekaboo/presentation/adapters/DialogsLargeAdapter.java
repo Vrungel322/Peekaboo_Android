@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 import com.peekaboo.R;
 import com.peekaboo.data.repositories.database.contacts.Contact;
 import com.peekaboo.data.repositories.database.messages.PMessage;
@@ -80,6 +82,9 @@ public final class DialogsLargeAdapter extends RecyclerView.Adapter<DialogsLarge
             navigator.startChatActivity(activity, contact);
         });
 
+
+     
+
     }
 
     private void setMessageStatus(ViewHolder holder, PMessage message) {
@@ -123,6 +128,12 @@ public final class DialogsLargeAdapter extends RecyclerView.Adapter<DialogsLarge
         TextView tvTimestamp;
         @BindView(R.id.message_status_image_view)
         ImageView ivMessageStatus;
+        @BindView(R.id.delete_image_view)
+        ImageView ivDelete;
+        @BindView(R.id.favourite_image_view)
+        ImageView ivFavorite;
+        @BindView(R.id.mute_image_view)
+        ImageView ivMute;
 
 
         ViewHolder(View itemView) {

@@ -172,7 +172,7 @@
     <View
         android:layout_width="@dimen/dialog_item_underline"
         android:layout_height="1dp"
-        android:layout_marginLeft="60dp"
+        android:layout_marginLeft="70dp"
         android:layout_marginRight="10dp"
         android:layout_marginTop="@dimen/dialog_item_underline_margin_top"
         android:background="@color/dialog_underline_color" />
