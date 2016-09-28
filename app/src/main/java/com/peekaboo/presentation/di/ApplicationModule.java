@@ -24,6 +24,8 @@ import com.peekaboo.presentation.services.Messenger;
 import com.peekaboo.presentation.services.WebSocketNotifier;
 import com.peekaboo.utils.MainThread;
 import com.squareup.otto.Bus;
+import com.squareup.picasso.NetworkPolicy;
+import com.squareup.picasso.OkHttpDownloader;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
@@ -87,10 +89,11 @@ public class ApplicationModule {
     public String provideAvatarBaseUrl(@Named("domens") List<String> domens) {
         return domens.get(0) + "avatar/";
     }
+
     @Provides
     @Singleton
     public AccountUser provideUser(SharedPreferences prefs, @Named("avatar") String avatarUrl) {
-        return new AccountUser(prefs,  avatarUrl);
+        return new AccountUser(prefs, avatarUrl);
     }
 
     @Singleton
@@ -107,7 +110,7 @@ public class ApplicationModule {
 
     @Singleton
     @Provides
-    public Picasso providePicasso(Context context){
+    public Picasso providePicasso(Context context) {
         File httpCacheDirectory = new File(context.getApplicationContext().getCacheDir(), "picasso-cache");
         Log.wtf("Cache_DIR", httpCacheDirectory.getAbsolutePath());
         Cache cache = new Cache(httpCacheDirectory, Constants.CACHE.MIN_DISK_CACHE_SIZE);

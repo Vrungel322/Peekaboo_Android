@@ -234,14 +234,18 @@ public class MainActivity extends AppCompatActivity implements INotifier.Notific
 
     @Override
     public void onBackPressed() {
-        boolean callSuper = true;
-        for (OnBackPressListener listener : listeners) {
-            if (listener.onBackPress()) {
-                callSuper = false;
+        if (drawer.isDrawerOpen(Gravity.LEFT)) {
+            drawer.closeDrawer(Gravity.LEFT);
+        } else {
+            boolean callSuper = true;
+            for (OnBackPressListener listener : listeners) {
+                if (listener.onBackPress()) {
+                    callSuper = false;
+                }
             }
-        }
-        if (callSuper) {
-            super.onBackPressed();
+            if (callSuper) {
+                super.onBackPressed();
+            }
         }
     }
 
