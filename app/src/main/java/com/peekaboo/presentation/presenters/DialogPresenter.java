@@ -4,8 +4,10 @@ import com.peekaboo.domain.Dialog;
 import com.peekaboo.domain.UserMessageMapper;
 import com.peekaboo.domain.subscribers.BaseProgressSubscriber;
 import com.peekaboo.domain.usecase.GetDialogsListUseCase;
+import com.peekaboo.presentation.comparators.DialogComparator;
 import com.peekaboo.presentation.views.IDialogsView;
 
+import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -46,6 +48,7 @@ public class DialogPresenter extends ProgressPresenter<IDialogsView>
             public void onNext(List<Dialog> response) {
                 super.onNext(response);
                 if(getView() != null){
+                    Collections.sort(response, new DialogComparator());
                     getView().showDialogsList(response);
                 }
             }
