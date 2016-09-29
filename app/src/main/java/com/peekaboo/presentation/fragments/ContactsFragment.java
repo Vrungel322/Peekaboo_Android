@@ -1,6 +1,7 @@
 package com.peekaboo.presentation.fragments;
 
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
@@ -8,6 +9,7 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -39,6 +41,7 @@ import butterknife.ButterKnife;
  */
 public class ContactsFragment extends Fragment implements IContactsView {
 
+    public static final String LAYOUT_MANAGER_STATE = "layout_manager_state";
     @Inject
     ContactPresenter contactPresenter;
     @Inject
@@ -55,6 +58,14 @@ public class ContactsFragment extends Fragment implements IContactsView {
     public ContactsFragment() {
     }
 
+    public static ContactsFragment newInstance() {
+        Bundle args = new Bundle();
+
+        ContactsFragment fragment = new ContactsFragment();
+        fragment.setArguments(args);
+
+        return fragment;
+    }
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -75,6 +86,7 @@ public class ContactsFragment extends Fragment implements IContactsView {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        Log.e("contacts fragment", "onDestroyView");
         View rootView = inflater.inflate(R.layout.fragment_contacts, container, false);
         ButterKnife.bind(this, rootView);
 
@@ -117,6 +129,10 @@ public class ContactsFragment extends Fragment implements IContactsView {
     @Override
     public void showContactsList(List<Contact> response) {
         contactLargeAdapter.setItems(response);
+        Parcelable state = getArguments().getParcelable(LAYOUT_MANAGER_STATE);
+        if (state != null) {
+            recyclerView.getLayoutManager().onRestoreInstanceState(state);
+        }
     }
 
     @Override
@@ -136,6 +152,9 @@ public class ContactsFragment extends Fragment implements IContactsView {
 
     @Override
     public void onDestroyView() {
+        Log.e("contacts fragment", "onDestroyView");
+        Parcelable parcelable = recyclerView.getLayoutManager().onSaveInstanceState();
+        getArguments().putParcelable(LAYOUT_MANAGER_STATE, parcelable);
         contactPresenter.onDestroy();
         contactPresenter.unbind();
         super.onDestroyView();

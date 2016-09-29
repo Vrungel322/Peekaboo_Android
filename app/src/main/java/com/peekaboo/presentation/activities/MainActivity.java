@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity implements INotifier.Notific
         updateAccountData(accountUser);
 
         if (getSupportFragmentManager().findFragmentById(R.id.fragmentContainer) == null) {
-            changeFragment(new ContactsFragment(), Constants.FRAGMENT_TAGS.CONTACTS_FRAGMENT);
+            changeFragment(ContactsFragment.newInstance(), Constants.FRAGMENT_TAGS.CONTACTS_FRAGMENT);
             selectionMode(R.id.llContacts);
         }
         //Hardcode list in right drawer
@@ -171,7 +171,7 @@ public class MainActivity extends AppCompatActivity implements INotifier.Notific
                 changeFragment(new CallsFragment(), Constants.FRAGMENT_TAGS.CALLS_FRAGMENT);
                 break;
             case R.id.llContacts:
-                changeFragment(new ContactsFragment(), Constants.FRAGMENT_TAGS.CONTACTS_FRAGMENT);
+                changeFragment(ContactsFragment.newInstance(), Constants.FRAGMENT_TAGS.CONTACTS_FRAGMENT);
                 break;
             case R.id.llProfile:
                 changeFragment(new ProfileFragment(), Constants.FRAGMENT_TAGS.PROFILE_FRAGMENT);
