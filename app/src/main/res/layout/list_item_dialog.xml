@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/list_item_dialog_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -15,7 +15,8 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:orientation="horizontal">
+            android:orientation="horizontal"
+            android:paddingRight="1dp">
 
             <FrameLayout
                 android:layout_width="wrap_content"
@@ -23,30 +24,25 @@
                 android:paddingRight="8dp">
 
                 <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
-                    android:id="@+id/ivDialog_contact"
+                    android:id="@+id/contact_avatar_image_view"
                     android:layout_width="@dimen/dialog_item_photo_size"
                     android:layout_height="@dimen/dialog_item_photo_size"
                     android:layout_margin="@dimen/dialog_item_margin"
                     android:layout_marginBottom="@dimen/dialog_photo_margin"
                     android:src="@mipmap/ic_launcher"
                     app:border_color="@color/colorAccent" />
-                <!---->
-                <!--app:border_width="@dimen/circle_photo_border_width" -->
-
 
                 <TextView
-                    android:id="@+id/tv_num_mes"
+                    android:id="@+id/unread_count_text_view"
                     android:layout_width="@dimen/dialog_number_dot"
                     android:layout_height="@dimen/dialog_number_dot"
                     android:layout_gravity="right|top"
                     android:layout_marginRight="5dp"
                     android:layout_marginTop="5dp"
-                    android:background="@drawable/circle"
+                    android:background="@drawable/circle_online"
                     android:gravity="center"
-                    android:text="88"
-                    android:textColor="@color/vk_white"
-                    android:textSize="10sp" />
-
+                    android:textColor="@android:color/white"
+                    android:textSize="7sp" />
 
             </FrameLayout>
 
@@ -71,22 +67,18 @@
                         android:orientation="vertical">
 
                         <TextView
-                            android:id="@+id/tvDialog_name"
+                            android:id="@+id/contact_name_text_view"
                             android:layout_width="@dimen/dialog_name_width"
                             android:layout_height="wrap_content"
                             android:layout_alignParentLeft="true"
                             android:singleLine="true"
-                            android:text="Very Looooooong Name Surname"
-                            android:textSize="@dimen/dialog_username_text_size"
-                            android:textColor="#333333"/>
+                            android:textSize="@dimen/dialog_username_text_size" />
 
                         <TextView
-                            android:id="@+id/tvDialog_preview"
+                            android:id="@+id/message_preview_text_view"
                             android:layout_width="@dimen/dialog_name_width"
                             android:layout_height="wrap_content"
-                            android:singleLine="true"
-                            android:text="Some payload for example"
-                            android:textColor="#666666"/>
+                            android:maxLines="1" />
                     </LinearLayout>
 
                     <com.daimajia.swipe.SwipeLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -110,7 +102,7 @@
                                 android:orientation="horizontal">
 
                                 <ImageView
-                                    android:id="@+id/iv_swipetrash"
+                                    android:id="@+id/delete_image_view"
                                     android:layout_width="@dimen/dialog_swipe_item_width"
                                     android:layout_height="match_parent"
                                     android:paddingLeft="3dp"
@@ -118,7 +110,7 @@
                                     android:src="@drawable/musorka" />
 
                                 <ImageView
-                                    android:id="@+id/iv_swipestar"
+                                    android:id="@+id/favourite_image_view"
                                     android:layout_width="@dimen/dialog_swipe_item_width"
                                     android:layout_height="match_parent"
                                     android:paddingLeft="3dp"
@@ -126,7 +118,7 @@
                                     android:src="@drawable/star" />
 
                                 <ImageView
-                                    android:id="@+id/iv_swipenosound"
+                                    android:id="@+id/mute_image_view"
                                     android:layout_width="@dimen/dialog_swipe_item_width"
                                     android:layout_height="match_parent"
                                     android:paddingLeft="3dp"
@@ -139,22 +131,19 @@
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
-                            android:layout_marginRight="3dp"
                             android:gravity="right"
-                            android:orientation="vertical">
+                            android:orientation="vertical"
+                            android:paddingRight="2dp">
 
                             <TextView
-                                android:id="@+id/tvDialog_time_date"
+                                android:id="@+id/timestamp_text_view"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentRight="true"
-                                android:layout_marginRight="7dp"
-                                android:text="16:15"
-                                android:textColor="#333333"
                                 android:textSize="@dimen/dialog_timestamp_text_size" />
 
                             <ImageView
-                                android:id="@+id/ivDialog_status"
+                                android:id="@+id/message_status_image_view"
                                 android:layout_width="@dimen/dialog_status_size"
                                 android:layout_height="@dimen/dialog_status_size"
                                 android:layout_marginRight="@dimen/dialog_item_margin"
@@ -178,9 +167,8 @@
     <View
         android:layout_width="@dimen/dialog_item_underline"
         android:layout_height="1dp"
-        android:layout_alignParentRight="true"
-        android:layout_marginLeft="@dimen/dialog_item_underline_margin_left"
-        android:layout_marginRight="8dp"
+        android:layout_marginLeft="60dp"
+        android:layout_marginRight="10dp"
         android:layout_marginTop="@dimen/dialog_item_underline_margin_top"
-        android:background="#cccccc" />
-</RelativeLayout>
+        android:background="@color/colorPrimary" />
+</android.support.design.widget.CoordinatorLayout>

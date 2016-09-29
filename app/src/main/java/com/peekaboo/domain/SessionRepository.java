@@ -31,4 +31,6 @@ public interface SessionRepository {
     Observable<List<Contact>> getAllSavedContacts();
 
     Observable saveContactToDb(List<Contact> contact);
+
+    Observable<List<Dialog>> loadDialogs();
 }

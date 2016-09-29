@@ -1,14 +1,11 @@
 package com.peekaboo.presentation.presenters;
 
-import android.content.Context;
-import android.widget.Toast;
-
 import com.peekaboo.domain.Dialog;
 import com.peekaboo.domain.UserMessageMapper;
 import com.peekaboo.domain.subscribers.BaseProgressSubscriber;
 import com.peekaboo.domain.usecase.GetDialogsListUseCase;
 import com.peekaboo.presentation.comparators.DialogComparator;
-import com.peekaboo.presentation.views.IMainView;
+import com.peekaboo.presentation.views.IDialogsView;
 
 import java.util.Collections;
 import java.util.List;
@@ -16,29 +13,32 @@ import java.util.List;
 import javax.inject.Inject;
 
 /**
- * Created by Nikita on 28.06.2016.
+ * Created by st1ch on 27.09.2016.
  */
-public class MainActivityPresenter extends ProgressPresenter<IMainView> implements IMainPresenter<IMainView> {
 
-    private Context mContext;
+public class DialogPresenter extends ProgressPresenter<IDialogsView>
+        implements  IDialogPresenter{
 
     private GetDialogsListUseCase getDialogsListUseCase;
 
     @Inject
-    public MainActivityPresenter(Context context, UserMessageMapper errorHandler,
-                                 GetDialogsListUseCase getDialogsListUseCase) {
+    public DialogPresenter(UserMessageMapper errorHandler, GetDialogsListUseCase getDialogsListUseCase) {
         super(errorHandler);
-        mContext = context;
         this.getDialogsListUseCase = getDialogsListUseCase;
     }
 
     @Override
-    public void bind(IMainView view) {
-        super.bind(view);
+    public void onCreate() {
+
     }
 
     @Override
-    public void fillHotAdapter() {
+    public void onDestroy() {
+        unbind();
+    }
+
+    @Override
+    public void loadDialogList() {
         getDialogsListUseCase.execute(getDialogsListSubscriber());
     }
 
@@ -49,16 +49,9 @@ public class MainActivityPresenter extends ProgressPresenter<IMainView> implemen
                 super.onNext(response);
                 if(getView() != null){
                     Collections.sort(response, new DialogComparator());
-                    Toast.makeText(mContext, ""+ response.size(), Toast.LENGTH_SHORT).show();
-                    getView().hotFriendToShow(response);
+                    getView().showDialogsList(response);
                 }
             }
         };
-    }
-
-    @Override
-    public void unbind() {
-        getDialogsListUseCase.unsubscribe();
-        super.unbind();
     }
 }

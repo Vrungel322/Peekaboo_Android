@@ -79,4 +79,13 @@
     <!-- ContactsFragment strings -->
     <string name="title_contacts">Contacts</string>
 
+    <!-- DialogsFragment strings -->
+    <string name="title_dialogs">Dialogs</string>
+
+    <!-- message types -->
+    <string name="message_type_audio">Audio</string>
+    <string name="message_type_image">Image</string>
+    <string name="message_type_video">Video</string>
+    <string name="message_type_document">Document</string>
+
 </resources>
