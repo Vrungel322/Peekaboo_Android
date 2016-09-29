@@ -108,8 +108,18 @@ public final class DialogsLargeAdapter extends RecyclerView.Adapter<DialogsLarge
         holder.ivMute.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                boolean muted = true;
                 YoYo.with(Techniques.Tada).duration(500).delay(100).playOn(holder.ivMute);
-                Toast.makeText(activity,"Click Mute",Toast.LENGTH_SHORT).show();
+//                if (muted == true) {
+//                    Toast.makeText(activity, "Click Mute", Toast.LENGTH_SHORT).show();
+//                    muted = false;
+//                    holder.ivMute.setImageResource(R.drawable.nosound);
+//                } else {
+//                    Toast.makeText(activity, "Click UnMute", Toast.LENGTH_SHORT).show();
+//                    muted = true;
+//                    holder.ivMute.setImageResource(R.drawable.sound);
+//
+//                }
 
 
             }
