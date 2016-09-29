@@ -83,7 +83,7 @@ public final class DialogsLargeAdapter extends RecyclerView.Adapter<DialogsLarge
         });
 
 
-     
+
 
     }
 
@@ -139,6 +139,12 @@ public final class DialogsLargeAdapter extends RecyclerView.Adapter<DialogsLarge
         ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            ivDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    YoYo.with(Techniques.Tada).duration(500).delay(100).playOn(ivDelete);
+                }
+            });
         }
 
     }
