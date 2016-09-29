@@ -4,11 +4,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ProgressBar;
 
 import com.peekaboo.R;
 import com.peekaboo.domain.Dialog;
 import com.peekaboo.presentation.activities.MainActivity;
 import com.peekaboo.utils.ActivityNavigator;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -39,7 +41,11 @@ public class HotFriendsAdapter extends BaseAdapter {
 
     @Override
     public int getCount() {
-        return items.size();
+        if (items.size() > 9) {
+            return 10;
+        } else {
+            return items.size();
+        }
     }
 
     @Override
@@ -68,7 +74,19 @@ public class HotFriendsAdapter extends BaseAdapter {
         Dialog currentListData = getItem(position);
 
         mPicasso.load(currentListData.getContact().contactImgUri())
-                .into( mViewHolder.civHotFriendIcon);
+                .into(mViewHolder.civHotFriendIcon, new Callback.EmptyCallback() {
+                    @Override
+                    public void onSuccess() {
+                        super.onSuccess();
+                        mViewHolder.loading_hotFriend_progress_bar.setVisibility(View.GONE);
+                    }
+
+                    @Override
+                    public void onError() {
+                        super.onError();
+                        mViewHolder.loading_hotFriend_progress_bar.setVisibility(View.GONE);
+                    }
+                });
 
         if (currentListData.getContact().isOnline()) {
             mViewHolder.civHotFriendStatus.setImageResource(R.drawable.round_status_icon_cyan);
@@ -76,12 +94,8 @@ public class HotFriendsAdapter extends BaseAdapter {
             mViewHolder.civHotFriendStatus.setImageResource(R.drawable.round_status_icon_grey);
         }
 
-        convertView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                navigator.startChatActivity(activity, currentListData.getContact());
-            }
-        });
+        convertView.setOnClickListener(v ->
+                navigator.startChatActivity(activity, currentListData.getContact()));
         return convertView;
     }
 
@@ -92,6 +106,8 @@ public class HotFriendsAdapter extends BaseAdapter {
     }
 
     static class HotFriendsViewHolder {
+        @BindView(R.id.loading_hotFriend_progress_bar)
+        ProgressBar loading_hotFriend_progress_bar;
         @BindView(R.id.civHotFriendIcon)
         CircleImageView civHotFriendIcon;
         @BindView(R.id.civHotFriendStatus)
