@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -90,11 +91,11 @@ public class FriendTestFragment extends Fragment {
                                     Contact newContact = new Contact(0, "name", "surname", friendName, false, "", contactId);
                                     contactHelper.insert(newContact);
                                     messageHelper.createTable(contactId);
-                                    navigator.startChatActivity((MainActivity) getActivity(), newContact);
+                                    navigator.startChatActivity((AppCompatActivity) getActivity(), newContact);
                                 }
                             });
                         } else {
-                            navigator.startChatActivity((MainActivity) getActivity(), contact);
+                            navigator.startChatActivity((AppCompatActivity) getActivity(), contact);
                         }
                     }
                 });

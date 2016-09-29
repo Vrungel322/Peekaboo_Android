@@ -1,5 +1,6 @@
 package com.peekaboo.presentation.adapters;
 
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,12 +11,9 @@ import android.widget.TextView;
 
 import com.peekaboo.R;
 import com.peekaboo.data.repositories.database.contacts.Contact;
-import com.peekaboo.presentation.activities.MainActivity;
 import com.peekaboo.presentation.utils.ResourcesUtils;
 import com.peekaboo.presentation.widget.RecyclerViewFastScroller.BubbleTextGetter;
 import com.peekaboo.utils.ActivityNavigator;
-import com.squareup.picasso.Callback;
-import com.squareup.picasso.NetworkPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -30,12 +28,12 @@ public final class ContactLargeAdapter extends RecyclerView.Adapter<ContactLarge
 
     private final int onlineColor;
     private final int offlineColor;
-    private MainActivity activity;
+    private AppCompatActivity activity;
     private final List<Contact> items = new ArrayList<>();
     private Picasso mPicasso;
     private ActivityNavigator navigator;
 
-    public ContactLargeAdapter(MainActivity activity, ActivityNavigator navigator, Picasso mPicasso) {
+    public ContactLargeAdapter(AppCompatActivity activity, ActivityNavigator navigator, Picasso mPicasso) {
         this.activity = activity;
         this.navigator = navigator;
         this.mPicasso = mPicasso;
@@ -52,9 +50,6 @@ public final class ContactLargeAdapter extends RecyclerView.Adapter<ContactLarge
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Contact contact = getItem(position);
-
-        //todo make caching images to sd and fetching them here not from url
-        Log.e("contact", "" + contact.contactImgUri());
         int avatarSize = ResourcesUtils.getDimenInPx(activity, R.dimen.contact_list_avatar_size);
 
         mPicasso.load(contact.contactImgUri())

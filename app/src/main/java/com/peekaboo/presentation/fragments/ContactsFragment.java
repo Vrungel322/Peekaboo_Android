@@ -88,7 +88,7 @@ public class ContactsFragment extends Fragment implements IContactsView {
     }
 
     private void setUpRecyclerView() {
-        contactLargeAdapter = new ContactLargeAdapter((MainActivity) getActivity(), navigator, picasso);
+        contactLargeAdapter = new ContactLargeAdapter((AppCompatActivity) getActivity(), navigator, picasso);
         recyclerView.setAdapter(contactLargeAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false) {
             @Override
@@ -137,6 +137,7 @@ public class ContactsFragment extends Fragment implements IContactsView {
     @Override
     public void onDestroyView() {
         contactPresenter.onDestroy();
+        contactPresenter.unbind();
         super.onDestroyView();
     }
 
