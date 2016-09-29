@@ -17,6 +17,7 @@ import com.peekaboo.domain.Dialog;
 import com.peekaboo.presentation.activities.MainActivity;
 import com.peekaboo.presentation.utils.ResourcesUtils;
 import com.peekaboo.utils.ActivityNavigator;
+import com.peekaboo.utils.Utility;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -61,18 +62,21 @@ public final class DialogsLargeAdapter extends RecyclerView.Adapter<DialogsLarge
 
         String contactName = contact.contactName();
         String contactSurname = contact.contactSurname();
-        if(contactSurname == null){
+        if (contactSurname == null) {
             holder.tvContactName.setText(contactName);
         } else {
             holder.tvContactName.setText(contactName + " " + contactSurname);
         }
 
-        holder.tvMessagePreview.setText(lastMessage.messageBody());
+        setMessageBody(holder, lastMessage);
+
+        long timestamp = lastMessage.timestamp();
         // todo write converting timestamp
-//        holder.tvTimestamp.setText();
+        holder.tvTimestamp.setText(Utility.getFriendlyDayString(holder.itemView.getContext(), timestamp));
+
         setMessageStatus(holder, lastMessage);
 
-        if(contact.isOnline()){
+        if (contact.isOnline()) {
             holder.tvUnreadCount.setBackgroundResource(R.drawable.circle_online);
         } else {
             holder.tvUnreadCount.setBackgroundResource(R.drawable.circle_offline);
@@ -87,8 +91,33 @@ public final class DialogsLargeAdapter extends RecyclerView.Adapter<DialogsLarge
 
     }
 
+    private void setMessageBody(ViewHolder holder, PMessage message){
+        int messageType = message.mediaType();
+        switch (messageType) {
+            case PMessageAbs.PMESSAGE_MEDIA_TYPE.TEXT_MESSAGE:
+                holder.tvMessagePreview.setText(message.messageBody());
+                break;
+            case PMessageAbs.PMESSAGE_MEDIA_TYPE.AUDIO_MESSAGE:
+                holder.tvMessagePreview.setText(getStringResource(holder, R.string.message_type_audio));
+                break;
+            case PMessageAbs.PMESSAGE_MEDIA_TYPE.IMAGE_MESSAGE:
+                holder.tvMessagePreview.setText(getStringResource(holder, R.string.message_type_image));
+                break;
+            case PMessageAbs.PMESSAGE_MEDIA_TYPE.VIDEO_MESSAGE:
+                holder.tvMessagePreview.setText(getStringResource(holder, R.string.message_type_video));
+                break;
+            case PMessageAbs.PMESSAGE_MEDIA_TYPE.DOCUMENT_MESSAGE:
+                holder.tvMessagePreview.setText(getStringResource(holder, R.string.message_type_document));
+                break;
+        }
+    }
+
+    private String getStringResource(ViewHolder holder, int id){
+        return holder.itemView.getContext().getString(id);
+    }
+
     private void setMessageStatus(ViewHolder holder, PMessage message) {
-        if (message.status() == PMessageAbs.PMESSAGE_STATUS.STATUS_SENT) {
+        if (!message.isMine() || message.status() == PMessageAbs.PMESSAGE_STATUS.STATUS_SENT) {
             holder.ivMessageStatus.setVisibility(View.GONE);
         } else {
             holder.ivMessageStatus.setImageResource(getStatusImage(message.status()));
