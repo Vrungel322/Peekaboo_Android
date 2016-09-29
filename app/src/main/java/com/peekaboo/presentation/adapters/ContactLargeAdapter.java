@@ -14,6 +14,7 @@ import com.peekaboo.presentation.activities.MainActivity;
 import com.peekaboo.presentation.utils.ResourcesUtils;
 import com.peekaboo.presentation.widget.RecyclerViewFastScroller.BubbleTextGetter;
 import com.peekaboo.utils.ActivityNavigator;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -55,7 +56,7 @@ public final class ContactLargeAdapter extends RecyclerView.Adapter<ContactLarge
                 .resize(0, avatarSize)
                 .error(R.drawable.ic_alert_circle_outline)
 //                .centerInside()
-                .into(holder.ivAvatar/*, new Callback.EmptyCallback(){
+                .into(holder.ivAvatar, new Callback.EmptyCallback(){
                     @Override
                     public void onSuccess() {
                         super.onSuccess();
@@ -67,7 +68,7 @@ public final class ContactLargeAdapter extends RecyclerView.Adapter<ContactLarge
                         super.onError();
                         holder.pbImageLoading.setVisibility(View.GONE);
                     }
-                }*/);
+                });
 
         String contactName = contact.contactName();
         String contactSurname = contact.contactSurname();
