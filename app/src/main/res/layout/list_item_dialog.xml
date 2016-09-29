@@ -30,12 +30,12 @@
                     android:layout_margin="@dimen/dialog_item_margin"
                     android:layout_marginBottom="@dimen/dialog_photo_margin"
                     android:src="@mipmap/ic_launcher"
-                    />
-                    <!--app:border_color="@color/colorAccent" -->
+                    app:border_color="@color/colorPrimaryLight" />
+
 
                 <TextView
                     android:id="@+id/unread_count_text_view"
-                    android:layout_width="@dimen/dialog_number_dot"
+                    android:layout_width="match_parent"
                     android:layout_height="@dimen/dialog_number_dot"
                     android:layout_gravity="right|top"
                     android:layout_marginRight="5dp"
@@ -174,10 +174,10 @@
     </LinearLayout>
 
     <View
-        android:layout_width="@dimen/dialog_item_underline"
+        android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginLeft="70dp"
-        android:layout_marginRight="10dp"
+        android:layout_marginLeft="@dimen/dialog_item_underline_margin_left"
+        android:layout_marginRight="5dp"
         android:layout_marginTop="@dimen/dialog_item_underline_margin_top"
         android:background="@color/dialog_underline_color" />
 </android.support.design.widget.CoordinatorLayout>

@@ -12,17 +12,17 @@
     <dimen name="dialog_number_dot">20dp</dimen>
     <dimen name="dialog_name_width">150dp</dimen>
     <dimen name="dialog_swipe_item_width">38dp</dimen>
-    <dimen name="dialog_item_underline">280dp</dimen>
+    <dimen name="dialog_item_underline_margin_left">70dp</dimen>
     <dimen name="dialog_item_underline_margin_top">73dp</dimen>
 
     <dimen name="dialog_underline_margin_right">8dp</dimen>
-    <dimen name="dialog_timedate_margin_Right">7dp</dimen>
+    <dimen name="dialog_timedate_margin_Right">3dp</dimen>
     <dimen name="dialog_swipe_icon_padding">3dp</dimen>
     <dimen name="dialog_bubble_mess_margin">5dp</dimen>
     <dimen name="dialog_photo_padding_right">8dp</dimen>
    
 
-    <dimen name="dialog_item_underline_margin_left">68dp</dimen>
+    <dimen name="dialog_item_underline_margin_right">2dp</dimen>
     <dimen name="icon_drawer_margin">16dp</dimen>
     <dimen name="text_drawer_margin">16dp</dimen>
     <dimen name="padding_dialog">20dp</dimen>

@@ -6,6 +6,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
@@ -86,10 +87,42 @@ public final class DialogsLargeAdapter extends RecyclerView.Adapter<DialogsLarge
             navigator.startChatActivity(activity, contact);
         });
 
+        holder.ivFavorite.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                YoYo.with(Techniques.Tada).duration(500).delay(100).playOn(holder.ivFavorite);
+                Toast.makeText(activity,"Click Star",Toast.LENGTH_SHORT).show();
+                items.set(0,getItem(position));
 
+            }
+        });
+        holder.ivDelete.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                YoYo.with(Techniques.Tada).duration(500).delay(100).playOn(holder.ivDelete);
+                Toast.makeText(activity,"Click Delete "+position,Toast.LENGTH_SHORT).show();
+                delete(position);
+
+            }
+        });
+        holder.ivMute.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                YoYo.with(Techniques.Tada).duration(500).delay(100).playOn(holder.ivMute);
+                Toast.makeText(activity,"Click Mute",Toast.LENGTH_SHORT).show();
+
+
+            }
+        });
 
 
     }
+
+
+    private void delete(int position){
+        items.remove(position);
+        notifyItemRemoved(position);
+        }
 
     private void setMessageBody(ViewHolder holder, PMessage message){
         int messageType = message.mediaType();
@@ -111,6 +144,7 @@ public final class DialogsLargeAdapter extends RecyclerView.Adapter<DialogsLarge
                 break;
         }
     }
+
 
     private String getStringResource(ViewHolder holder, int id){
         return holder.itemView.getContext().getString(id);
@@ -168,12 +202,7 @@ public final class DialogsLargeAdapter extends RecyclerView.Adapter<DialogsLarge
         ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
-            ivDelete.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    YoYo.with(Techniques.Tada).duration(500).delay(100).playOn(ivDelete);
-                }
-            });
+
         }
 
     }
