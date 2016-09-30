@@ -109,6 +109,8 @@ public class MainActivity extends AppCompatActivity implements IMainView, INotif
             changeFragment(ContactsFragment.newInstance(), Constants.FRAGMENT_TAGS.CONTACTS_FRAGMENT);
             selectionMode(R.id.llContacts);
         }
+        //Hardcode list in right drawer
+        prepareHotFriends();
 
         notifier.addListener(this);
         if (notifier.isAvailable()) {
@@ -117,6 +119,9 @@ public class MainActivity extends AppCompatActivity implements IMainView, INotif
             onDisconnected();
             notifier.tryConnect(accountUser.getBearer());
         }
+    }
+
+    private void prepareHotFriends() {
         hotFriendsAdapter = new HotFriendsAdapter(MainActivity.this, mPicasso, navigator);
         OverScrollDecoratorHelper.setUpOverScroll(lvHotFriends);
         lvHotFriends.setAdapter(hotFriendsAdapter);
