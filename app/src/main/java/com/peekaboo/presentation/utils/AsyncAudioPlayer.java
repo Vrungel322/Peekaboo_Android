@@ -27,7 +27,7 @@ public class AsyncAudioPlayer implements AudioPlayer, MediaPlayer.OnPreparedList
     @Nullable
     private AudioPlayerListener listener;
     private int state;
-    private long audioId;
+    private String audioId;
     private Runnable progressRunnable = new Runnable() {
         @Override
         public void run() {
@@ -60,7 +60,7 @@ public class AsyncAudioPlayer implements AudioPlayer, MediaPlayer.OnPreparedList
         initMediaPlayer(context);
     }
 
-    public long getAudioId() {
+    public String getAudioId() {
         return audioId;
     }
 
@@ -76,7 +76,7 @@ public class AsyncAudioPlayer implements AudioPlayer, MediaPlayer.OnPreparedList
     }
 
     private void notifyListener(@Nullable final AudioPlayerListener listener) {
-        final long audioId = getAudioId();
+        final String audioId = getAudioId();
         final int state = state();
         mainThread.run(() -> {
             Log.e("notify", audioId + " " + state);
@@ -119,7 +119,7 @@ public class AsyncAudioPlayer implements AudioPlayer, MediaPlayer.OnPreparedList
     }
 
     @Override
-    public void prepare(long audioId, String uri, AudioPlayerListener listener) {
+    public void prepare(String audioId, String uri, AudioPlayerListener listener) {
         Log.e("player", "prepare " + uri);
         this.listener = listener;
         this.audioId = audioId;
