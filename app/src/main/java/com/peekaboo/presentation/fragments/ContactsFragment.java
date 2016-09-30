@@ -86,7 +86,6 @@ public class ContactsFragment extends Fragment implements IContactsView {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        Log.e("contacts fragment", "onDestroyView");
         View rootView = inflater.inflate(R.layout.fragment_contacts, container, false);
         ButterKnife.bind(this, rootView);
 
@@ -152,7 +151,6 @@ public class ContactsFragment extends Fragment implements IContactsView {
 
     @Override
     public void onDestroyView() {
-        Log.e("contacts fragment", "onDestroyView");
         Parcelable parcelable = recyclerView.getLayoutManager().onSaveInstanceState();
         getArguments().putParcelable(LAYOUT_MANAGER_STATE, parcelable);
         contactPresenter.onDestroy();

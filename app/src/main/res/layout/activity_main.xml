@@ -22,18 +22,16 @@
             android:layout_height="match_parent" />
     </FrameLayout>
 
-    <!--<FrameLayout-->
-        <!--android:layout_width="69dp"-->
-        <!--android:layout_height="match_parent"-->
-        <!--android:layout_gravity="end"-->
-        <!--android:visibility="gone"-->
-        <!--android:clickable="false"-->
-        <!--android:background="#ffffff">-->
+    <FrameLayout
+        android:layout_width="69dp"
+        android:layout_height="match_parent"
+        android:layout_gravity="end"
+        android:background="#ffffff">
 
-        <!--<include-->
-            <!--layout="@layout/custom_drawer_right"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="match_parent" />-->
-    <!--</FrameLayout>-->
+        <include
+            layout="@layout/custom_drawer_right"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent" />
+    </FrameLayout>
 
 </android.support.v4.widget.DrawerLayout>

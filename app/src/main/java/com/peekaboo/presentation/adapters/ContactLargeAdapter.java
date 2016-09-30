@@ -14,6 +14,7 @@ import com.peekaboo.data.repositories.database.contacts.Contact;
 import com.peekaboo.presentation.utils.ResourcesUtils;
 import com.peekaboo.presentation.widget.RecyclerViewFastScroller.BubbleTextGetter;
 import com.peekaboo.utils.ActivityNavigator;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
@@ -26,8 +27,6 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public final class ContactLargeAdapter extends RecyclerView.Adapter<ContactLargeAdapter.ViewHolder>
         implements BubbleTextGetter {
 
-    private final int onlineColor;
-    private final int offlineColor;
     private AppCompatActivity activity;
     private final List<Contact> items = new ArrayList<>();
     private Picasso mPicasso;
@@ -37,8 +36,6 @@ public final class ContactLargeAdapter extends RecyclerView.Adapter<ContactLarge
         this.activity = activity;
         this.navigator = navigator;
         this.mPicasso = mPicasso;
-        onlineColor = ResourcesUtils.getColor(activity, R.color.online);
-        offlineColor = ResourcesUtils.getColor(activity, R.color.offline);
     }
 
     @Override
@@ -54,26 +51,21 @@ public final class ContactLargeAdapter extends RecyclerView.Adapter<ContactLarge
 
         mPicasso.load(contact.contactImgUri())
                 .resize(0, avatarSize)
-//                .networkPolicy(NetworkPolicy.OFFLINE)
                 .error(R.drawable.ic_alert_circle_outline)
 //                .centerInside()
-                .into(holder.ivAvatar/*, new Callback.EmptyCallback() {
+                .into(holder.ivAvatar, new Callback.EmptyCallback(){
                     @Override
                     public void onSuccess() {
                         super.onSuccess();
-//                        holder.pbImageLoading.setVisibility(View.GONE);
+                        holder.pbImageLoading.setVisibility(View.GONE);
                     }
 
                     @Override
                     public void onError() {
                         super.onError();
-//                        mPicasso.load(contact.contactImgUri())
-//                                .resize(0, avatarSize)
-//                                .error(R.drawable.ic_alert_circle_outline)
-//                                .into(holder.ivAvatar);
-//                        holder.pbImageLoading.setVisibility(View.GONE);
+                        holder.pbImageLoading.setVisibility(View.GONE);
                     }
-                }*/);
+                });
 
         String contactName = contact.contactName();
         String contactSurname = contact.contactSurname();

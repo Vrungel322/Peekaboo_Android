@@ -1,6 +1,5 @@
 package com.peekaboo.presentation.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
@@ -16,12 +15,13 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.peekaboo.R;
 import com.peekaboo.domain.AccountUser;
+import com.peekaboo.domain.Dialog;
 import com.peekaboo.presentation.PeekabooApplication;
 import com.peekaboo.presentation.adapters.HotFriendsAdapter;
-import com.peekaboo.presentation.fragments.BlankDialogFragment;
 import com.peekaboo.presentation.fragments.CallsFragment;
 import com.peekaboo.presentation.fragments.ContactsFragment;
 import com.peekaboo.presentation.fragments.DialogsFragment;
@@ -29,15 +29,19 @@ import com.peekaboo.presentation.fragments.FriendTestFragment;
 import com.peekaboo.presentation.fragments.ProfileFragment;
 import com.peekaboo.presentation.fragments.SettingsFragment;
 import com.peekaboo.presentation.pojo.HotFriendPOJO;
+import com.peekaboo.presentation.presenters.MainActivityPresenter;
 import com.peekaboo.presentation.services.INotifier;
 import com.peekaboo.presentation.services.Message;
 import com.peekaboo.presentation.services.MessageUtils;
 import com.peekaboo.presentation.utils.ResourcesUtils;
+import com.peekaboo.presentation.views.IMainView;
+import com.peekaboo.utils.ActivityNavigator;
 import com.peekaboo.utils.Constants;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.inject.Inject;
@@ -45,10 +49,9 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import de.hdodenhof.circleimageview.CircleImageView;
 import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
 
-public class MainActivity extends AppCompatActivity implements INotifier.NotificationListener<Message> {
+public class MainActivity extends AppCompatActivity implements IMainView, INotifier.NotificationListener<Message>{
     @BindView(R.id.drawer_layout)
     DrawerLayout drawer;
     @BindView(R.id.bText)
@@ -57,8 +60,8 @@ public class MainActivity extends AppCompatActivity implements INotifier.Notific
     Button bAudio;
     @BindView(R.id.bVideo)
     Button bVideo;
-//    @BindView(R.id.lvHotFriends)
-//    ListView lvHotFriends;
+    @BindView(R.id.lvHotFriends)
+    ListView lvHotFriends;
     @BindView(R.id.llDialogs)
     LinearLayout llDialogs;
     @BindView(R.id.llCalls)
@@ -77,10 +80,17 @@ public class MainActivity extends AppCompatActivity implements INotifier.Notific
     ImageView ivAccountAvatar;
     @BindView(R.id.ivOnlineStatus)
     ImageView ivOnlineStatus;
+
     @Inject
     INotifier<Message> notifier;
     @Inject
     AccountUser accountUser;
+    @Inject
+    MainActivityPresenter presenter;
+    @Inject
+    Picasso mPicasso;
+    @Inject
+    ActivityNavigator navigator;
     private HotFriendsAdapter hotFriendsAdapter;
     private ArrayList<HotFriendPOJO> alHotFriendPOJO;
     private final Set<OnBackPressListener> listeners = new HashSet<>();
@@ -91,6 +101,7 @@ public class MainActivity extends AppCompatActivity implements INotifier.Notific
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         PeekabooApplication.getApp(this).getComponent().inject(this);
+        presenter.bind(this);
         prepareDrawer();
         updateAccountData(accountUser);
 
@@ -98,8 +109,6 @@ public class MainActivity extends AppCompatActivity implements INotifier.Notific
             changeFragment(ContactsFragment.newInstance(), Constants.FRAGMENT_TAGS.CONTACTS_FRAGMENT);
             selectionMode(R.id.llContacts);
         }
-        //Hardcode list in right drawer
-        prepareHotFriends();
 
         notifier.addListener(this);
         if (notifier.isAvailable()) {
@@ -108,20 +117,36 @@ public class MainActivity extends AppCompatActivity implements INotifier.Notific
             onDisconnected();
             notifier.tryConnect(accountUser.getBearer());
         }
+        hotFriendsAdapter = new HotFriendsAdapter(MainActivity.this, mPicasso, navigator);
+        OverScrollDecoratorHelper.setUpOverScroll(lvHotFriends);
+        lvHotFriends.setAdapter(hotFriendsAdapter);
+
+        drawer.setDrawerListener(new DrawerLayout.DrawerListener() {
+            @Override
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+
+            }
+
+            @Override
+            public void onDrawerOpened(View drawerView) {
+                presenter.fillHotAdapter();
+            }
+
+            @Override
+            public void onDrawerClosed(View drawerView) {
+
+            }
+
+            @Override
+            public void onDrawerStateChanged(int newState) {
+
+            }
+        });
     }
 
-    private void prepareHotFriends() {
-//        alHotFriendPOJO = new ArrayList<>();
-//        for (int i = 0; i < 20; i++) {
-//            alHotFriendPOJO.add(new HotFriendPOJO(R.drawable.raccoon, Math.random() < 0.5));
-//        }
-//        hotFriendsAdapter = new HotFriendsAdapter(getApplicationContext(), alHotFriendPOJO);
-//        OverScrollDecoratorHelper.setUpOverScroll(lvHotFriends);
-//        lvHotFriends.setAdapter(hotFriendsAdapter);
-//        lvHotFriends.setOnItemClickListener((parent, view, position, id) -> {
-//            startActivity(new Intent(MainActivity.this, ChatActivity.class));
-//            drawer.closeDrawer(Gravity.RIGHT, true);
-//        });
+    @Override
+    public void hotFriendToShow(List<Dialog> hotDialogs) {
+        hotFriendsAdapter.setItems(hotDialogs);
     }
 
     private void prepareDrawer() {
@@ -157,6 +182,7 @@ public class MainActivity extends AppCompatActivity implements INotifier.Notific
     @Override
     protected void onDestroy() {
         notifier.removeListener(this);
+        presenter.unbind();
         super.onDestroy();
     }
 
@@ -165,7 +191,7 @@ public class MainActivity extends AppCompatActivity implements INotifier.Notific
         selectionMode(v.getId());
         switch (v.getId()) {
             case R.id.llDialogs:
-                changeFragment(new BlankDialogFragment(), Constants.FRAGMENT_TAGS.DIALOGS_FRAGMENT);
+                changeFragment(new DialogsFragment(), Constants.FRAGMENT_TAGS.DIALOGS_FRAGMENT);
                 break;
             case R.id.llCalls:
                 changeFragment(new CallsFragment(), Constants.FRAGMENT_TAGS.CALLS_FRAGMENT);
@@ -272,6 +298,21 @@ public class MainActivity extends AppCompatActivity implements INotifier.Notific
     @Override
     public void onDisconnected() {
         ivOnlineStatus.setImageResource(R.drawable.round_status_icon_grey);
+    }
+
+    @Override
+    public void showToastMessage(String text) {
+        Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    public void showProgress() {
+
+    }
+
+    @Override
+    public void hideProgress() {
+
     }
 
     public interface OnBackPressListener {
