@@ -1,5 +1,6 @@
 package com.peekaboo.presentation.adapters;
 
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -53,6 +54,8 @@ public final class DialogsLargeAdapter extends RecyclerView.Adapter<DialogsLarge
         Dialog dialog = getItem(position);
         Contact contact = dialog.getContact();
         PMessage lastMessage = dialog.getLastMessage();
+        final boolean[] muted = {false};
+        final boolean[] stared = {false};
 
         int avatarSize = ResourcesUtils.getDimenInPx(activity, R.dimen.contact_list_avatar_size);
 
@@ -91,8 +94,15 @@ public final class DialogsLargeAdapter extends RecyclerView.Adapter<DialogsLarge
             @Override
             public void onClick(View v) {
                 YoYo.with(Techniques.Tada).duration(500).delay(100).playOn(holder.ivFavorite);
-                Toast.makeText(activity,"Click Star",Toast.LENGTH_SHORT).show();
-                items.set(0,getItem(position));
+//                items.set(0,getItem(position));
+                if (stared[0] == false) {
+                    stared[0] = true;
+                    holder.ivFavorite.setImageResource(R.drawable.stared);
+                } else {
+                    stared[0] = false;
+                    holder.ivFavorite.setImageResource(R.drawable.star);
+
+                }
 
             }
         });
@@ -100,27 +110,28 @@ public final class DialogsLargeAdapter extends RecyclerView.Adapter<DialogsLarge
             @Override
             public void onClick(View v) {
                 YoYo.with(Techniques.Tada).duration(500).delay(100).playOn(holder.ivDelete);
-                Toast.makeText(activity,"Click Delete "+position,Toast.LENGTH_SHORT).show();
+//                Toast.makeText(activity,"Click Delete "+position,Toast.LENGTH_SHORT).show();
                 delete(position);
+
 
             }
         });
         holder.ivMute.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                boolean muted = true;
-                YoYo.with(Techniques.Tada).duration(500).delay(100).playOn(holder.ivMute);
-//                if (muted == true) {
-//                    Toast.makeText(activity, "Click Mute", Toast.LENGTH_SHORT).show();
-//                    muted = false;
-//                    holder.ivMute.setImageResource(R.drawable.nosound);
-//                } else {
-//                    Toast.makeText(activity, "Click UnMute", Toast.LENGTH_SHORT).show();
-//                    muted = true;
-//                    holder.ivMute.setImageResource(R.drawable.sound);
-//
-//                }
 
+                YoYo.with(Techniques.Tada).duration(500).delay(100).playOn(holder.ivMute);
+
+                if (muted[0] == false) {
+//                    Toast.makeText(activity, "Click Mute", Toast.LENGTH_SHORT).show();
+                    muted[0] = true;
+                    holder.ivMute.setImageResource(R.drawable.nosound);
+                } else {
+//                    Toast.makeText(activity, "Click UnMute", Toast.LENGTH_SHORT).show();
+                    muted[0] = false;
+                    holder.ivMute.setImageResource(R.drawable.sound);
+
+                }
 
             }
         });
