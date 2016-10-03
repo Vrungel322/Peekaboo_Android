@@ -45,10 +45,10 @@ public class LoginPresenter extends ProgressPresenter<ICredentialsView> implemen
     }
 
     @NonNull
-    private BaseProgressSubscriber<List<Contact>> getSignInSubscriber() {
-        return new BaseProgressSubscriber<List<Contact>>(this) {
+    private BaseProgressSubscriber<AccountUser> getSignInSubscriber() {
+        return new BaseProgressSubscriber<AccountUser>(this) {
             @Override
-            public void onNext(List<Contact> response) {
+            public void onNext(AccountUser response) {
                 super.onNext(response);
                 Log.e("onNext", String.valueOf(response));
                 if (getView() != null) {

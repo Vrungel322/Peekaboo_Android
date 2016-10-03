@@ -44,7 +44,7 @@ public class SessionDataRepository implements SessionRepository {
     }
 
     @Override
-    public Observable<List<Contact>> login(String login, String password) {
+    public Observable<AccountUser> login(String login, String password) {
         return restApi.login(new Credentials(login, password))
                 .map(token -> {
                     user.saveToken(token.getToken());
@@ -52,7 +52,8 @@ public class SessionDataRepository implements SessionRepository {
                     user.saveUsername(token.getUsername());
                     user.saveMode(token.getMode());
                     return user;
-                }).flatMap(accountUser -> loadAllContacts());
+                }).flatMap(accountUser -> loadAllContacts())
+                .map(contacts -> user);
     }
 
     @Override
@@ -71,7 +72,8 @@ public class SessionDataRepository implements SessionRepository {
                 .map(token -> {
                     user.saveToken(token.getToken());
                     return user;
-                });
+                }).flatMap(accountUser -> loadAllContacts())
+                .map(contacts -> user);
     }
 
     @Override

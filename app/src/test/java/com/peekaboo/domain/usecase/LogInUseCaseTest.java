@@ -22,6 +22,7 @@ public class LogInUseCaseTest extends BaseUseCaseTest {
     private static final String A_VALID_PASSWORD = "aValidPassword";
     private static final String AN_INVALID_USERNAME = "anInvalidUsername";
     private static final String AN_INVALID_PASSWORD = "anInvalidPassword";
+    public static final String ID = "id";
     @Mock
     private SessionRepository sessionRepository;
     private LoginUseCase loginUseCase;
@@ -31,7 +32,7 @@ public class LogInUseCaseTest extends BaseUseCaseTest {
         super.setUp();
         loginUseCase = new LoginUseCase(sessionRepository, subscribeOn, observeOn);
 
-        when(sessionRepository.login(A_VALID_USERNAME, A_VALID_PASSWORD)).thenReturn(Observable.just(new ArrayList<>()));
+        when(sessionRepository.login(A_VALID_USERNAME, A_VALID_PASSWORD)).thenReturn(Observable.just(new AccountUser(ID)));
         when(sessionRepository.login(AN_INVALID_USERNAME, AN_INVALID_PASSWORD)).thenReturn(Observable.create(
                 subscriber -> {
                     subscriber.onError(new RuntimeException("Not Great"));
@@ -52,7 +53,7 @@ public class LogInUseCaseTest extends BaseUseCaseTest {
     }
 
     private void execute(int expectedErrors, int expectedEvents) {
-        TestSubscriber<List<Contact>> subscriber = new TestSubscriber<>();
+        TestSubscriber<AccountUser> subscriber = new TestSubscriber<>();
         loginUseCase.execute(subscriber);
         subscriber.awaitTerminalEvent();
 

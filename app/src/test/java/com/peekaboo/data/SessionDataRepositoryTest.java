@@ -80,7 +80,7 @@ public class SessionDataRepositoryTest {
         value.usersList.add(e);
         when(restApi.getAllContacts()).thenReturn(Observable.just(value));
 
-        TestSubscriber<List<Contact>> subscriber = new TestSubscriber<>();
+        TestSubscriber<AccountUser> subscriber = new TestSubscriber<>();
         sessionDataRepository.login("username", "password").subscribe(subscriber);
         subscriber.awaitTerminalEvent();
         assertThat(subscriber.getOnNextEvents().size(), is(1));
@@ -113,7 +113,7 @@ public class SessionDataRepositoryTest {
                 subscriber -> {
                     subscriber.onError(new RuntimeException("Not Great"));
                 }));
-        TestSubscriber<List<Contact>> subscriber = new TestSubscriber<>();
+        TestSubscriber<AccountUser> subscriber = new TestSubscriber<>();
         sessionDataRepository.login("username", "password").subscribe(subscriber);
         subscriber.awaitTerminalEvent();
 
@@ -160,11 +160,19 @@ public class SessionDataRepositoryTest {
 
     @Test
     public void whenConfirmSuccessThenReturnUser() {
+        when(mapper.getContactEntityMapper()).thenReturn(new ContactEntityToContactMapper(AVATAR_URL));
         when(restApi.confirm(any(ConfirmKey.class))).thenReturn(Observable.just(new TokenEntity(TOKEN, null, 0, null)));
+
+        UserResponse value = new UserResponse();
+        value.usersList = new ArrayList<>();
+        ContactEntity e = new ContactEntity();
+        e.setId(ID);
+        value.usersList.add(e);
+        when(restApi.getAllContacts()).thenReturn(Observable.just(value));
+
         TestSubscriber<AccountUser> subscriber = new TestSubscriber<>();
         sessionDataRepository.confirm("id", "key").subscribe(subscriber);
         subscriber.awaitTerminalEvent();
-
         assertThat(subscriber.getOnNextEvents().size(), is(1));
         verify(user, times(0)).saveId(any());
         verify(user, times(0)).saveMode(anyInt());

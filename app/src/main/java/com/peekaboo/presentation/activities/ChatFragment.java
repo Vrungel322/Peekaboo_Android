@@ -5,10 +5,11 @@ import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -118,7 +119,10 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        ((Toolbar) getActivity().findViewById(R.id.toolbar)).setTitle(companion.contactNickname());
+        ActionBar supportActionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+        if (supportActionBar != null) {
+            supportActionBar.setTitle(companion.contactNickname());
+        }
     }
 
     @Nullable
@@ -135,12 +139,7 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
         rvMessages.setItemAnimator(new DefaultItemAnimator());
         adapter = new ChatAdapter2(getActivity(), presenter, rvMessages);
         rvMessages.setAdapter(adapter);
-        svItems.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                return false;
-            }
-        });
+        svItems.setOnTouchListener((view1, motionEvent) -> false);
         rvMessages.addOnItemTouchListener(new ChatRecyclerTouchListener(getActivity(), rvMessages, new ChatClickListener() {
             @Override
             public void onClick(View view, int position) {
@@ -172,7 +171,6 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
 
     @OnTouch(R.id.micro_btn)
     boolean onRecordButtonClick(MotionEvent mv) {
-        Log.e("fragment", "" + mv);
         switch (mv.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 svItems.setScrollAvailable(false);
@@ -304,7 +302,6 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
 
                 }
             });
-
         });
 
 
@@ -325,6 +322,7 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
         rflTimer.setVisibility(View.GONE);
         if (animator != null) {
             animator.cancel();
+            animator = null;
         }
     }
 

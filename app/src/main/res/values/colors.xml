@@ -26,6 +26,10 @@
     <color name="rb_color_audio">#954bf1</color>
     <color name="rb_color_video">#7305fa</color>
     <color name="rightItemSelection">#303030</color>
+    <color name="dialog_time_date_name">#333333</color>
+    <color name="dialog_preview">#666666</color>
+    <color name="dialog_underline_color">#cccccc</color>
+
 
     <color name="drawerHeaderColor">#303030</color>
     <color name="colorText">#eeeeee</color>

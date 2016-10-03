@@ -28,6 +28,7 @@ import static org.mockito.Mockito.verify;
  * Created by sebastian on 16.07.16.
  */
 public class LoginPresenterTest extends BasePresenterTest {
+    public static final String ID = "id";
     MockContext context = new MockContext();
     @Mock
     private ICredentialsView loginView;
@@ -92,8 +93,8 @@ public class LoginPresenterTest extends BasePresenterTest {
         }
 
         @Override
-        protected Observable<List<Contact>> getUseCaseObservable() {
-            return Observable.just(new ArrayList<>());
+        protected Observable<AccountUser> getUseCaseObservable() {
+            return Observable.just(new AccountUser(ID));
         }
     }
 
@@ -103,8 +104,8 @@ public class LoginPresenterTest extends BasePresenterTest {
         }
 
         @Override
-        protected Observable<List<Contact>> getUseCaseObservable() {
-            return Observable.create((Observable.OnSubscribe<List<Contact>>) subscriber -> subscriber.onError(new RuntimeException("Not great")));
+        protected Observable<AccountUser> getUseCaseObservable() {
+            return Observable.create(subscriber -> subscriber.onError(new RuntimeException("Not great")));
         }
     }
 

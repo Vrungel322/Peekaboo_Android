@@ -2,6 +2,7 @@ package com.peekaboo.utils;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v7.app.AppCompatActivity;
 
 import com.peekaboo.R;
 import com.peekaboo.data.repositories.database.contacts.Contact;
@@ -49,7 +50,7 @@ public class ActivityNavigator {
         mActivityContext.startActivity(intent);
     }
 
-    public void startChatActivity(MainActivity activity, Contact companion) {
+    public void startChatActivity(AppCompatActivity activity, Contact companion) {
         activity.getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.fragmentContainer, ChatFragment.newInstance(companion))
