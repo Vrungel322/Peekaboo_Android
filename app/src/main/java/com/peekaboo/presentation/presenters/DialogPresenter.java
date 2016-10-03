@@ -39,7 +39,7 @@ public class DialogPresenter extends ProgressPresenter<IDialogsView>
 
     @Override
     public void onCreate() {
-//        messenger.tryConnect(accountUser.getBearer());
+        messenger.tryConnect(accountUser.getBearer());
         messenger.addMessageListener(this);
     }
 
