@@ -106,8 +106,11 @@ public class MainActivity extends AppCompatActivity implements IMainView, INotif
         updateAccountData(accountUser);
 
         if (getSupportFragmentManager().findFragmentById(R.id.fragmentContainer) == null) {
-            changeFragment(new FriendTestFragment(), null);
+            changeFragment(ContactsFragment.newInstance(), Constants.FRAGMENT_TAGS.CONTACTS_FRAGMENT);
+            selectionMode(R.id.llContacts);
         }
+        //Hardcode list in right drawer
+        prepareHotFriends();
 
         notifier.addListener(this);
         if (notifier.isAvailable()) {
@@ -116,6 +119,9 @@ public class MainActivity extends AppCompatActivity implements IMainView, INotif
             onDisconnected();
             notifier.tryConnect(accountUser.getBearer());
         }
+    }
+
+    private void prepareHotFriends() {
         hotFriendsAdapter = new HotFriendsAdapter(MainActivity.this, mPicasso, navigator);
         OverScrollDecoratorHelper.setUpOverScroll(lvHotFriends);
         lvHotFriends.setAdapter(hotFriendsAdapter);
@@ -196,7 +202,7 @@ public class MainActivity extends AppCompatActivity implements IMainView, INotif
                 changeFragment(new CallsFragment(), Constants.FRAGMENT_TAGS.CALLS_FRAGMENT);
                 break;
             case R.id.llContacts:
-                changeFragment(new ContactsFragment(), Constants.FRAGMENT_TAGS.CONTACTS_FRAGMENT);
+                changeFragment(ContactsFragment.newInstance(), Constants.FRAGMENT_TAGS.CONTACTS_FRAGMENT);
                 break;
             case R.id.llProfile:
                 changeFragment(new ProfileFragment(), Constants.FRAGMENT_TAGS.PROFILE_FRAGMENT);
@@ -261,14 +267,18 @@ public class MainActivity extends AppCompatActivity implements IMainView, INotif
 
     @Override
     public void onBackPressed() {
-        boolean callSuper = true;
-        for (OnBackPressListener listener : listeners) {
-            if (listener.onBackPress()) {
-                callSuper = false;
+        if (drawer.isDrawerOpen(Gravity.LEFT)) {
+            drawer.closeDrawer(Gravity.LEFT);
+        } else {
+            boolean callSuper = true;
+            for (OnBackPressListener listener : listeners) {
+                if (listener.onBackPress()) {
+                    callSuper = false;
+                }
             }
-        }
-        if (callSuper) {
-            super.onBackPressed();
+            if (callSuper) {
+                super.onBackPressed();
+            }
         }
     }
 

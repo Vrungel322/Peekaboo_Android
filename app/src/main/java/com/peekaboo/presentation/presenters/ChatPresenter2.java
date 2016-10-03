@@ -14,10 +14,7 @@ import com.peekaboo.presentation.utils.AsyncAudioPlayer;
 import com.peekaboo.presentation.utils.AudioPlayer;
 import com.peekaboo.presentation.views.IChatView2;
 
-import java.util.List;
-
 import javax.inject.Inject;
-import javax.inject.Named;
 import javax.inject.Singleton;
 
 import rx.Subscriber;
@@ -103,17 +100,7 @@ public class ChatPresenter2 extends BasePresenter<IChatView2> implements IChatPr
         IChatView2 view = getView();
         if (view != null) {
             if (recorder.isRecording() && !start) {
-                recorder.stopRecording().subscribe(new Subscriber<Record>() {
-                    @Override
-                    public void onCompleted() {
-                        showRecordStop();
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        showRecordStop();
-                    }
-
+                recorder.stopRecording().subscribe(new BaseUseCaseSubscriber<Record>() {
 
                     @Override
                     public void onNext(Record record) {
@@ -126,17 +113,7 @@ public class ChatPresenter2 extends BasePresenter<IChatView2> implements IChatPr
                 });
             } else if (!recorder.isRecording() && start) {
                 recorder.setRecord(new Record(view.getCompanionId()));
-                recorder.startRecording().subscribe(new BaseUseCaseSubscriber<Record>() {
-                    @Override
-                    public void onStart() {
-                        showRecordStart();
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        showRecordStop();
-                    }
-                });
+                recorder.startRecording().subscribe(new BaseUseCaseSubscriber<Record>() { });
 
             }
         }

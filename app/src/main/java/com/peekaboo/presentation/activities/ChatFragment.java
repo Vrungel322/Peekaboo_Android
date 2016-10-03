@@ -2,19 +2,23 @@ package com.peekaboo.presentation.activities;
 
 import android.animation.Animator;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBar;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.AccelerateDecelerateInterpolator;
+import android.widget.Chronometer;
 import android.widget.EditText;
-import android.widget.HorizontalScrollView;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -26,6 +30,7 @@ import com.peekaboo.data.repositories.database.messages.PMessage;
 import com.peekaboo.domain.AccountUser;
 import com.peekaboo.presentation.PeekabooApplication;
 import com.peekaboo.presentation.adapters.ChatAdapter2;
+import com.peekaboo.presentation.app.view.PHorizontalScrollView;
 import com.peekaboo.presentation.listeners.ChatClickListener;
 import com.peekaboo.presentation.listeners.ChatRecyclerTouchListener;
 import com.peekaboo.presentation.presenters.ChatPresenter2;
@@ -63,7 +68,7 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
     @BindView(R.id.bSendMessage)
     ImageButton bSendMessage;
     @BindView(R.id.svItems)
-    HorizontalScrollView svItems;
+    PHorizontalScrollView svItems;
     @BindView(R.id.llItems)
     LinearLayout llItems;
     @BindView(R.id.micro_btn)
@@ -72,6 +77,14 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
     ImageView microAnim;
     @BindView(R.id.rflButtonRecord)
     RevealFrameLayout rflButtonRecord;
+    @BindView(R.id.llRecord)
+    LinearLayout llRecord;
+    @BindView(R.id.flTimer)
+    FrameLayout flTimer;
+    @BindView(R.id.timerRecord)
+    Chronometer timerRecord;
+    @BindView(R.id.rflTimer)
+    RevealFrameLayout rflTimer;
     @Inject
     ChatPresenter2 presenter;
     @Inject
@@ -82,6 +95,8 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
     private LinearLayout.LayoutParams layoutParams;
     private boolean isFirstResumeAfterCreate = true;
     private Contact companion;
+
+    private Animator animator;
 
     public static ChatFragment newInstance(Contact companion) {
 
@@ -104,7 +119,10 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        ((Toolbar) getActivity().findViewById(R.id.toolbar)).setTitle(companion.contactNickname());
+        ActionBar supportActionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+        if (supportActionBar != null) {
+            supportActionBar.setTitle(companion.contactNickname());
+        }
     }
 
     @Nullable
@@ -121,6 +139,7 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
         rvMessages.setItemAnimator(new DefaultItemAnimator());
         adapter = new ChatAdapter2(getActivity(), presenter, rvMessages);
         rvMessages.setAdapter(adapter);
+        svItems.setOnTouchListener((view1, motionEvent) -> false);
         rvMessages.addOnItemTouchListener(new ChatRecyclerTouchListener(getActivity(), rvMessages, new ChatClickListener() {
             @Override
             public void onClick(View view, int position) {
@@ -154,12 +173,14 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
     boolean onRecordButtonClick(MotionEvent mv) {
         switch (mv.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                etMessageBody.setFocusable(false);
-                presenter.onRecordButtonClick(true);
+                svItems.setScrollAvailable(false);
+                showRecordStart();
                 break;
             case MotionEvent.ACTION_CANCEL:
             case MotionEvent.ACTION_UP:
+                svItems.setScrollAvailable(true);
                 presenter.onRecordButtonClick(false);
+                showRecordStop();
                 break;
         }
         return true;
@@ -237,30 +258,72 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
 
     @Override
     public void showRecordStart() {
+        int[] button_coordinates = new int[2];
+        bRecord.getLocationOnScreen(button_coordinates);
 
-        rflButtonRecord.setVisibility(View.VISIBLE);
-        microAnim.post(() -> {
-            float cx, cy;
-            cx = (bRecord.getX() + bRecord.getWidth()) / 2;
-            cy = (bRecord.getY() + bRecord.getHeight()) / 2;
+        float cx, cy;
+        cx = (float) button_coordinates[0] + bRecord.getWidth() / 2;
+        cy = (float) button_coordinates[1] + bRecord.getHeight() / 2;
 
-            float dx = Math.max(cx, microAnim.getWidth() - cx);
-            float dy = Math.max(cy, microAnim.getHeight() - cy);
-            float finalRadius = (float) Math.hypot(dx, dy);
+        float dx = Math.max(cx, rflTimer.getWidth() - cx);
+        float dy = Math.max(cy, rflTimer.getHeight() - cy);
+        float finalRadius = (float) Math.hypot(dx, dy);
 
-            Animator animator =
-                    ViewAnimationUtils.createCircularReveal(microAnim, (int) cx, (int) cy, 0, finalRadius);
+        timerRecord.post(() -> {
+
+            animator =
+                    ViewAnimationUtils.createCircularReveal(flTimer, (int) cx, (int) cy, 0, finalRadius);
             animator.setInterpolator(new AccelerateDecelerateInterpolator());
-            animator.setDuration(1000);
+            animator.setDuration(600);
+            rflTimer.setVisibility(View.VISIBLE);
             animator.start();
+            animator.addListener(new Animator.AnimatorListener() {
+                boolean cancelled;
+
+                @Override
+                public void onAnimationStart(Animator animation) {
+
+                }
+
+                @Override
+                public void onAnimationEnd(Animator animation) {
+                    if (!cancelled) {
+                        presenter.onRecordButtonClick(true);
+                    }
+                }
+
+                @Override
+                public void onAnimationCancel(Animator animation) {
+                    cancelled = true;
+                }
+
+                @Override
+                public void onAnimationRepeat(Animator animation) {
+
+                }
+            });
         });
+
+
+        timerRecord.setOnChronometerTickListener(chronometer -> {
+            long elapsedMillis = SystemClock.elapsedRealtime()
+                    - timerRecord.getBase();
+        });
+        timerRecord.setBase(SystemClock.elapsedRealtime());
+
+        timerRecord.start();
+
     }
 
     @Override
     public void showRecordStop() {
         etMessageBody.setFocusableInTouchMode(true);
         etMessageBody.setFocusable(true);
-        rflButtonRecord.setVisibility(View.GONE);
+        rflTimer.setVisibility(View.GONE);
+        if (animator != null) {
+            animator.cancel();
+            animator = null;
+        }
     }
 
     @Override

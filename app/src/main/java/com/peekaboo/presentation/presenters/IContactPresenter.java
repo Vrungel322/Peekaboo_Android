@@ -10,6 +10,5 @@ public interface IContactPresenter extends IPresenter<IContactsView> {
     void onCreate();
     void onDestroy();
 
-    void loadContactsList();
 
 }

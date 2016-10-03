@@ -32,7 +32,7 @@
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/rvMessages"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"
             android:cacheColorHint="@android:color/transparent"
@@ -46,7 +46,7 @@
             android:paddingRight="16dp"
             android:scrollbars="none" />
 
-        <HorizontalScrollView
+        <com.peekaboo.presentation.app.view.PHorizontalScrollView
             android:id="@+id/svItems"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -164,8 +164,7 @@
                                 android:id="@+id/rflButtonRecord"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:visibility="gone"
-                                >
+                                android:visibility="gone">
 
                                 <LinearLayout
                                     android:id="@+id/llRecord"
@@ -230,7 +229,7 @@
                     </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
-        </HorizontalScrollView>
+        </com.peekaboo.presentation.app.view.PHorizontalScrollView>
 
 
     </LinearLayout>

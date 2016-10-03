@@ -1,7 +1,6 @@
 package com.peekaboo.presentation.presenters;
 
 import android.content.Context;
-import android.widget.Toast;
 
 import com.peekaboo.domain.Dialog;
 import com.peekaboo.domain.UserMessageMapper;
@@ -28,7 +27,7 @@ public class MainActivityPresenter extends ProgressPresenter<IMainView> implemen
     public MainActivityPresenter(Context context, UserMessageMapper errorHandler,
                                  GetDialogsListUseCase getDialogsListUseCase) {
         super(errorHandler);
-        mContext = context;
+        this.mContext = context;
         this.getDialogsListUseCase = getDialogsListUseCase;
     }
 
@@ -49,7 +48,6 @@ public class MainActivityPresenter extends ProgressPresenter<IMainView> implemen
                 super.onNext(response);
                 if(getView() != null){
                     Collections.sort(response, new DialogComparator());
-                    Toast.makeText(mContext, ""+ response.size(), Toast.LENGTH_SHORT).show();
                     getView().hotFriendToShow(response);
                 }
             }

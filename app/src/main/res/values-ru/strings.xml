@@ -22,7 +22,7 @@
     <string name="existence_font">fonts/existence.otf</string>
     <string name="helvetica_font">fonts/helvetika.ttf</string>
     <string name="usernameOrLogin">Имя или логин</string>
-    <string name="emailOrPhoneNum">Email или номер телефона</string>
+    <!--<string name="emailOrPhoneNum">Email или номер телефона</string>-->
     <integer name="com_vk_sdk_AppId">5527207</integer>
 
     <string name="action_settings">Настройки</string>

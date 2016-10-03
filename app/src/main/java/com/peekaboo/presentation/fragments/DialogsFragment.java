@@ -3,6 +3,7 @@ package com.peekaboo.presentation.fragments;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -47,6 +48,15 @@ public class DialogsFragment extends Fragment implements IDialogsView {
     public DialogsFragment() {
     }
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        ActionBar supportActionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+        if (supportActionBar != null) {
+            supportActionBar.setTitle(getString(R.string.title_dialogs));
+        }
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -56,8 +66,7 @@ public class DialogsFragment extends Fragment implements IDialogsView {
 
         View rootView = inflater.inflate(R.layout.fragment_dialogs, container, false);
         ButterKnife.bind(this, rootView);
-        setHasOptionsMenu(true);
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(getString(R.string.title_dialogs));
+//        setHasOptionsMenu(true);
 
         adapter = new DialogsLargeAdapter((MainActivity) getActivity(), navigator);
         recyclerView.setAdapter(adapter);
@@ -66,6 +75,12 @@ public class DialogsFragment extends Fragment implements IDialogsView {
         presenter.loadDialogList();
 
         return rootView;
+    }
+
+    @Override
+    public void onPause() {
+        presenter.onPause();
+        super.onPause();
     }
 
     @Override

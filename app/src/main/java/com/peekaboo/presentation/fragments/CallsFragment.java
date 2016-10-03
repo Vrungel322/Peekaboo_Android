@@ -29,7 +29,7 @@ public class CallsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_calls, container, false);
         ButterKnife.bind(this, rootView);
-        setHasOptionsMenu(true);
+//        setHasOptionsMenu(true);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Calls");
 
         return rootView;

@@ -120,7 +120,7 @@ public class PMessageHelper {
         SQLiteDatabase db = helper.getWritableDatabase();
         tableName = PREFIX + tableName;
         message.setId(db.insert(tableName, null, pMessageMapper.transform(message)));
-        Log.e("helper", "saveContactToDb " + message);
+        Log.e("helper", "saveMessageToDb " + message);
     }
 
     public int updateStatus(String tableName, int status, PMessage message) {
