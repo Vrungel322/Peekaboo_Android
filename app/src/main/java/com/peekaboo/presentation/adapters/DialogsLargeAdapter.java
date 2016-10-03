@@ -1,13 +1,11 @@
 package com.peekaboo.presentation.adapters;
 
-import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
@@ -196,6 +194,10 @@ public final class DialogsLargeAdapter extends RecyclerView.Adapter<DialogsLarge
     public void setItems(List<Dialog> dialogs) {
         items.clear();
         items.addAll(dialogs);
+        notifyDataSetChanged();
+    }
+
+    public void updateDialogs(){
         notifyDataSetChanged();
     }
 
