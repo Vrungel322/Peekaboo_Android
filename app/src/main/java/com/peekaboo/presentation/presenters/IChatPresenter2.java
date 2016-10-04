@@ -24,6 +24,8 @@ public interface IChatPresenter2<V extends IView> extends IPresenter<V>{
 
     void onDeleteMessageClick(PMessageAbs message);
 
+    void onConvertTextToSpeechClick(PMessageAbs message);
+
 
 //    void onRecordSend();
 }

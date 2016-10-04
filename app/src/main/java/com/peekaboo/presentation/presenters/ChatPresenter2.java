@@ -1,5 +1,6 @@
 package com.peekaboo.presentation.presenters;
 
+import android.speech.tts.TextToSpeech;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -33,16 +34,18 @@ public class ChatPresenter2 extends BasePresenter<IChatView2> implements IChatPr
     private CompositeSubscription subscriptions;
     private PMessageHelper pMessageHelper;
     private String receiver;
+    private android.speech.tts.TextToSpeech textToSpeech;
 
     @Inject
     public ChatPresenter2(AudioRecorder recorder, IMessenger messenger,
                           AccountUser accountUser, AsyncAudioPlayer player,
-                          PMessageHelper pMessageHelper) {
+                          PMessageHelper pMessageHelper, TextToSpeech textToSpeech) {
         this.messenger = messenger;
         this.accountUser = accountUser;
         this.player = player;
         this.recorder = recorder;
         this.pMessageHelper = pMessageHelper;
+        this.textToSpeech = textToSpeech;
     }
 
     @Override
@@ -131,6 +134,11 @@ public class ChatPresenter2 extends BasePresenter<IChatView2> implements IChatPr
     @Override
     public void onDeleteMessageClick(PMessageAbs message) {
         pMessageHelper.deleteMessageByPackageId(receiver, message);
+    }
+
+    @Override
+    public void onConvertTextToSpeechClick(PMessageAbs message) {
+        textToSpeech.speak(message.messageBody(), TextToSpeech.QUEUE_FLUSH, null);
     }
 
     private void showRecordStart() {

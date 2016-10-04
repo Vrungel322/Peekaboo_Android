@@ -168,6 +168,7 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
 
                     @Override
                     public void textToSpeech(int index) {
+                        presenter.onConvertTextToSpeechClick(adapter.getItem(index));
 
                     }
                 });
