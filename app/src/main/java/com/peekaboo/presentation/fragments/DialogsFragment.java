@@ -63,6 +63,7 @@ public class DialogsFragment extends Fragment implements IDialogsView {
         super.onCreate(savedInstanceState);
         PeekabooApplication.getApp(getActivity()).getComponent().inject(this);
         presenter.bind(this);
+        presenter.onCreate();
 
         View rootView = inflater.inflate(R.layout.fragment_dialogs, container, false);
         ButterKnife.bind(this, rootView);
