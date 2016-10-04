@@ -89,13 +89,14 @@ public class HotFriendsAdapter extends BaseAdapter {
                 });
 
         if (currentListData.getContact().isOnline()) {
-            mViewHolder.civHotFriendStatus.setImageResource(R.drawable.round_status_icon_cyan);
+            mViewHolder.civHotFriendStatus.setBackgroundResource(R.drawable.list_online_indicator);
         } else {
-            mViewHolder.civHotFriendStatus.setImageResource(R.drawable.round_status_icon_grey);
+            mViewHolder.civHotFriendStatus.setBackgroundResource(R.drawable.list_offline_indicator);
         }
 
         convertView.setOnClickListener(v ->
-                navigator.startChatActivity(activity, currentListData.getContact()));
+                navigator.startChatActivity(activity, currentListData.getContact(), false)
+        );
         return convertView;
     }
 
@@ -111,7 +112,7 @@ public class HotFriendsAdapter extends BaseAdapter {
         @BindView(R.id.civHotFriendIcon)
         CircleImageView civHotFriendIcon;
         @BindView(R.id.civHotFriendStatus)
-        CircleImageView civHotFriendStatus;
+        View civHotFriendStatus;
 
         public HotFriendsViewHolder(View item) {
             ButterKnife.bind(this, item);

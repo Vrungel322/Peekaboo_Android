@@ -2,6 +2,7 @@ package com.peekaboo.presentation.activities;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -25,7 +26,6 @@ import com.peekaboo.presentation.adapters.HotFriendsAdapter;
 import com.peekaboo.presentation.fragments.CallsFragment;
 import com.peekaboo.presentation.fragments.ContactsFragment;
 import com.peekaboo.presentation.fragments.DialogsFragment;
-import com.peekaboo.presentation.fragments.FriendTestFragment;
 import com.peekaboo.presentation.fragments.ProfileFragment;
 import com.peekaboo.presentation.fragments.SettingsFragment;
 import com.peekaboo.presentation.pojo.HotFriendPOJO;
@@ -79,7 +79,7 @@ public class MainActivity extends AppCompatActivity implements IMainView, INotif
     @BindView(R.id.ivAccountAvatar)
     ImageView ivAccountAvatar;
     @BindView(R.id.ivOnlineStatus)
-    ImageView ivOnlineStatus;
+    View ivOnlineStatus;
 
     @Inject
     INotifier<Message> notifier;
@@ -194,6 +194,12 @@ public class MainActivity extends AppCompatActivity implements IMainView, INotif
     @OnClick({R.id.llDialogs, R.id.llCalls, R.id.llContacts, R.id.llProfile, R.id.llSettings, R.id.llExit})
     public void onDrawerItemClick(View v) {
         selectionMode(v.getId());
+        if (v.getId() != R.id.llExit) {
+            FragmentManager fm = getSupportFragmentManager();
+            for (int i = 0; i < fm.getBackStackEntryCount(); ++i) {
+                fm.popBackStack();
+            }
+        }
         switch (v.getId()) {
             case R.id.llDialogs:
                 changeFragment(new DialogsFragment(), Constants.FRAGMENT_TAGS.DIALOGS_FRAGMENT);
@@ -297,12 +303,12 @@ public class MainActivity extends AppCompatActivity implements IMainView, INotif
 
     @Override
     public void onConnected() {
-        ivOnlineStatus.setImageResource(R.drawable.round_status_icon_cyan);
+        ivOnlineStatus.setBackgroundResource(R.drawable.drawer_online_indicator);
     }
 
     @Override
     public void onDisconnected() {
-        ivOnlineStatus.setImageResource(R.drawable.round_status_icon_grey);
+        ivOnlineStatus.setBackgroundResource(R.drawable.drawer_offline_indicator);
     }
 
     @Override

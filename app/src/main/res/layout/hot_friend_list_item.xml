@@ -32,13 +32,11 @@
             app:border_color="@android:color/transparent" />
 
 
-        <de.hdodenhof.circleimageview.CircleImageView
+        <View
             android:id="@+id/civHotFriendStatus"
             android:layout_width="@dimen/hotFriendStatusIconSize"
             android:layout_height="@dimen/hotFriendStatusIconSize"
-            android:layout_gravity="right|top"
-            app:border_width="1dp"
-            app:border_color="@android:color/white" />
+            android:layout_gravity="right|top" />
 
     </FrameLayout>
 </LinearLayout>

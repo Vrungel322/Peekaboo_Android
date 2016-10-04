@@ -2,6 +2,7 @@ package com.peekaboo.utils;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 
 import com.peekaboo.R;
@@ -24,23 +25,23 @@ public class ActivityNavigator {
     public ActivityNavigator() {
     }
 
-    public void startLogInActivity(Context mActivityContext){
+    public void startLogInActivity(Context mActivityContext) {
         Intent intent = new Intent(mActivityContext, LogInActivity.class);
         mActivityContext.startActivity(intent);
     }
 
-    public void startProfileActivity(Context mActivityContext){
+    public void startProfileActivity(Context mActivityContext) {
         Intent intent = new Intent(mActivityContext, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         mActivityContext.startActivity(intent);
     }
 
-    public void startIntroScreen(Context mActivityContext){
+    public void startIntroScreen(Context mActivityContext) {
         Intent intent = new Intent(mActivityContext, DepthAnimation.class);
         mActivityContext.startActivity(intent);
     }
 
-    public void startSignUpActivity(Context mActivityContext){
+    public void startSignUpActivity(Context mActivityContext) {
         Intent intent = new Intent(mActivityContext, SignUpActivity.class);
         mActivityContext.startActivity(intent);
     }
@@ -50,11 +51,13 @@ public class ActivityNavigator {
         mActivityContext.startActivity(intent);
     }
 
-    public void startChatActivity(AppCompatActivity activity, Contact companion) {
-        activity.getSupportFragmentManager()
+    public void startChatActivity(AppCompatActivity activity, Contact companion, boolean addToBackStack) {
+        FragmentTransaction replace = activity.getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.fragmentContainer, ChatFragment.newInstance(companion))
-                .addToBackStack(null)
-                .commit();
+                .replace(R.id.fragmentContainer, ChatFragment.newInstance(companion));
+        if (addToBackStack) {
+            replace.addToBackStack(null);
+        }
+        replace.commit();
     }
 }
