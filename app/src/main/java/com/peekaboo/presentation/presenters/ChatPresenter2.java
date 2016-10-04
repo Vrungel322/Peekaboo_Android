@@ -1,5 +1,7 @@
 package com.peekaboo.presentation.presenters;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.speech.tts.TextToSpeech;
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -139,6 +141,12 @@ public class ChatPresenter2 extends BasePresenter<IChatView2> implements IChatPr
     @Override
     public void onConvertTextToSpeechClick(PMessageAbs message) {
         textToSpeech.speak(message.messageBody(), TextToSpeech.QUEUE_FLUSH, null);
+    }
+
+    @Override
+    public void onCopyMessageTextClick(ClipboardManager clipboard, PMessageAbs message) {
+        ClipData clip = ClipData.newPlainText("", message.messageBody());
+        clipboard.setPrimaryClip(clip);
     }
 
     private void showRecordStart() {

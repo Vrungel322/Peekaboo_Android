@@ -1,5 +1,7 @@
 package com.peekaboo.presentation.presenters;
 
+import android.content.ClipboardManager;
+
 import com.peekaboo.data.repositories.database.messages.PMessage;
 import com.peekaboo.data.repositories.database.messages.PMessageAbs;
 import com.peekaboo.presentation.utils.AudioPlayer;
@@ -25,6 +27,8 @@ public interface IChatPresenter2<V extends IView> extends IPresenter<V>{
     void onDeleteMessageClick(PMessageAbs message);
 
     void onConvertTextToSpeechClick(PMessageAbs message);
+
+    void onCopyMessageTextClick(ClipboardManager clipboard, PMessageAbs message);
 
 
 //    void onRecordSend();

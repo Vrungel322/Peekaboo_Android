@@ -1,6 +1,8 @@
 package com.peekaboo.presentation.activities;
 
 import android.animation.Animator;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.annotation.Nullable;
@@ -157,7 +159,8 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
                 chatItemDialog.setChatItemEventListener(new ChatItemDialog.IChatItemEventListener() {
                     @Override
                     public void copyText(int index) {
-
+                        presenter.onCopyMessageTextClick((ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE),
+                                 adapter.getItem(index));
                     }
 
                     @Override
