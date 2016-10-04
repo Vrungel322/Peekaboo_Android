@@ -50,6 +50,7 @@ public class DialogPresenter extends ProgressPresenter<IDialogsView>
     @Override
     public void onDestroy() {
         getDialogsListUseCase.unsubscribe();
+        messenger.removeMessageListener(this);
         unbind();
     }
 

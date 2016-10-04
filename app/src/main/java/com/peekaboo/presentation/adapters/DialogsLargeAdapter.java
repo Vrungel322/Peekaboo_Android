@@ -84,54 +84,46 @@ public final class DialogsLargeAdapter extends RecyclerView.Adapter<DialogsLarge
             holder.tvUnreadCount.setBackgroundResource(R.drawable.circle_offline);
         }
 
+        int unreadMessagesCount = contact.getUnreadMessagesCount();
+        if(unreadMessagesCount > 0){
+            holder.tvUnreadCount.setText(String.valueOf(unreadMessagesCount));
+        } else {
+            holder.tvUnreadCount.setText(null);
+        }
+
         holder.itemView.setOnClickListener(v -> {
             navigator.startChatActivity(activity, contact);
         });
 
-        holder.ivFavorite.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                YoYo.with(Techniques.Tada).duration(500).delay(100).playOn(holder.ivFavorite);
+        holder.ivFavorite.setOnClickListener(v -> {
+            YoYo.with(Techniques.Tada).duration(500).delay(100).playOn(holder.ivFavorite);
 //                items.set(0,getItem(position));
-                if (stared[0] == false) {
-                    stared[0] = true;
-                    holder.ivFavorite.setImageResource(R.drawable.stared);
-                } else {
-                    stared[0] = false;
-                    holder.ivFavorite.setImageResource(R.drawable.star);
-
-                }
+            if (stared[0] == false) {
+                stared[0] = true;
+                holder.ivFavorite.setImageResource(R.drawable.stared);
+            } else {
+                stared[0] = false;
+                holder.ivFavorite.setImageResource(R.drawable.star);
 
             }
+
         });
-        holder.ivDelete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                YoYo.with(Techniques.Tada).duration(500).delay(100).playOn(holder.ivDelete);
-//                Toast.makeText(activity,"Click Delete "+position,Toast.LENGTH_SHORT).show();
-                delete(position);
-
-
-            }
+        holder.ivDelete.setOnClickListener(v -> {
+            YoYo.with(Techniques.Tada).duration(500).delay(100).playOn(holder.ivDelete);
+            delete(position);
         });
-        holder.ivMute.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        holder.ivMute.setOnClickListener(v -> {
 
-                YoYo.with(Techniques.Tada).duration(500).delay(100).playOn(holder.ivMute);
+            YoYo.with(Techniques.Tada).duration(500).delay(100).playOn(holder.ivMute);
 
-                if (muted[0] == false) {
-//                    Toast.makeText(activity, "Click Mute", Toast.LENGTH_SHORT).show();
-                    muted[0] = true;
-                    holder.ivMute.setImageResource(R.drawable.nosound);
-                } else {
-//                    Toast.makeText(activity, "Click UnMute", Toast.LENGTH_SHORT).show();
-                    muted[0] = false;
-                    holder.ivMute.setImageResource(R.drawable.sound);
-
-                }
-
+            if (muted[0] == false) {
+                muted[0] = true;
+                holder.ivMute.setImageResource(R.drawable.nosound);
+            } else {
+                muted[0] = false;
+                holder.ivMute.setImageResource(R.drawable.sound);
             }
+
         });
 
 
@@ -194,10 +186,6 @@ public final class DialogsLargeAdapter extends RecyclerView.Adapter<DialogsLarge
     public void setItems(List<Dialog> dialogs) {
         items.clear();
         items.addAll(dialogs);
-        notifyDataSetChanged();
-    }
-
-    public void updateDialogs(){
         notifyDataSetChanged();
     }
 
