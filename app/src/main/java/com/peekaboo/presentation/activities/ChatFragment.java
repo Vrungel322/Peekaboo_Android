@@ -137,14 +137,9 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
         layoutManager.setStackFromEnd(true);
         rvMessages.setLayoutManager(layoutManager);
         rvMessages.setItemAnimator(new DefaultItemAnimator());
-        adapter = new ChatAdapter2(getActivity(), presenter, rvMessages);
+        adapter = new ChatAdapter2(getActivity(), presenter, rvMessages, companion);
         rvMessages.setAdapter(adapter);
-        svItems.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View view, MotionEvent motionEvent) {
-                return false;
-            }
-        });
+        svItems.setOnTouchListener((view1, motionEvent) -> false);
         rvMessages.addOnItemTouchListener(new ChatRecyclerTouchListener(getActivity(), rvMessages, new ChatClickListener() {
             @Override
             public void onClick(View view, int position) {
@@ -176,7 +171,6 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
 
     @OnTouch(R.id.micro_btn)
     boolean onRecordButtonClick(MotionEvent mv) {
-        Log.e("fragment", "" + mv);
         switch (mv.getAction()) {
             case MotionEvent.ACTION_DOWN:
                 svItems.setScrollAvailable(false);

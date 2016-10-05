@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical">
 
     <FrameLayout
@@ -15,22 +16,27 @@
         android:layout_marginTop="@dimen/top_botMarginHotFriendLayout"
         android:layout_marginBottom="@dimen/top_botMarginHotFriendLayout">
 
+        <ProgressBar
+            android:id="@+id/loading_hotFriend_progress_bar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/dialog_item_margin"
+            android:layout_marginBottom="@dimen/dialog_photo_margin" />
+
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/civHotFriendIcon"
             android:layout_width="@dimen/hotFriendIconSize"
             android:layout_height="@dimen/hotFriendIconSize"
             android:layout_gravity="center"
-            android:src="@drawable/raccoon"
+            tools:src="@drawable/raccoon"
             app:border_color="@android:color/transparent" />
 
 
-        <de.hdodenhof.circleimageview.CircleImageView
+        <View
             android:id="@+id/civHotFriendStatus"
             android:layout_width="@dimen/hotFriendStatusIconSize"
             android:layout_height="@dimen/hotFriendStatusIconSize"
-            android:layout_gravity="right|top"
-            app:border_width="1dp"
-            app:border_color="@android:color/white" />
+            android:layout_gravity="right|top" />
 
     </FrameLayout>
 </LinearLayout>

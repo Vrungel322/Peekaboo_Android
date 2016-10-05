@@ -24,8 +24,6 @@ import com.peekaboo.presentation.services.Messenger;
 import com.peekaboo.presentation.services.WebSocketNotifier;
 import com.peekaboo.utils.MainThread;
 import com.squareup.otto.Bus;
-import com.squareup.picasso.NetworkPolicy;
-import com.squareup.picasso.OkHttpDownloader;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;

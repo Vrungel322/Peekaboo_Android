@@ -81,7 +81,7 @@ public final class DialogsLargeAdapter extends RecyclerView.Adapter<DialogsLarge
         }
 
         holder.itemView.setOnClickListener(v -> {
-            navigator.startChatActivity(activity, contact);
+            navigator.startChatActivity(activity, contact, false);
         });
 
     }

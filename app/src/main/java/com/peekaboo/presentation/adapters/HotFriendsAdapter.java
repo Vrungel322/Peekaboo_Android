@@ -1,15 +1,20 @@
 package com.peekaboo.presentation.adapters;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ProgressBar;
 
 import com.peekaboo.R;
-import com.peekaboo.presentation.pojo.HotFriendPOJO;
+import com.peekaboo.domain.Dialog;
+import com.peekaboo.presentation.activities.MainActivity;
+import com.peekaboo.utils.ActivityNavigator;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -20,24 +25,32 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 public class HotFriendsAdapter extends BaseAdapter {
 
-    private Context context;
-    private ArrayList<HotFriendPOJO> hotFriendPOJOs;
+    private MainActivity activity;
     private LayoutInflater inflater;
+    private Picasso mPicasso;
+    private ActivityNavigator navigator;
+    private List<Dialog> items = new ArrayList<>();
 
-    public HotFriendsAdapter(Context context, ArrayList<HotFriendPOJO> hotFriendPOJOs) {
-        this.context = context;
-        this.hotFriendPOJOs = hotFriendPOJOs;
-        inflater = LayoutInflater.from(this.context);
+
+    public HotFriendsAdapter(MainActivity activity, Picasso mPicasso, ActivityNavigator navigator) {
+        this.activity = activity;
+        this.mPicasso = mPicasso;
+        this.navigator = navigator;
+        inflater = LayoutInflater.from(this.activity);
     }
 
     @Override
     public int getCount() {
-        return hotFriendPOJOs.size();
+        if (items.size() > 9) {
+            return 10;
+        } else {
+            return items.size();
+        }
     }
 
     @Override
-    public HotFriendPOJO getItem(int position) {
-        return hotFriendPOJOs.get(position);
+    public Dialog getItem(int position) {
+        return items.get(position);
     }
 
     @Override
@@ -58,25 +71,48 @@ public class HotFriendsAdapter extends BaseAdapter {
             mViewHolder = (HotFriendsViewHolder) convertView.getTag();
         }
 
-        HotFriendPOJO currentListData = getItem(position);
+        Dialog currentListData = getItem(position);
 
-        mViewHolder.civHotFriendIcon.setImageResource(currentListData.getIconId());
-        if (currentListData.getIsOnline()) {
-            mViewHolder.civHotFriendStatus.setImageResource(R.drawable.round_status_icon_cyan);
+        mPicasso.load(currentListData.getContact().contactImgUri())
+                .into(mViewHolder.civHotFriendIcon, new Callback.EmptyCallback() {
+                    @Override
+                    public void onSuccess() {
+                        super.onSuccess();
+                        mViewHolder.loading_hotFriend_progress_bar.setVisibility(View.GONE);
+                    }
+
+                    @Override
+                    public void onError() {
+                        super.onError();
+                        mViewHolder.loading_hotFriend_progress_bar.setVisibility(View.GONE);
+                    }
+                });
+
+        if (currentListData.getContact().isOnline()) {
+            mViewHolder.civHotFriendStatus.setBackgroundResource(R.drawable.list_online_indicator);
         } else {
-            mViewHolder.civHotFriendStatus.setImageResource(R.drawable.round_status_icon_grey);
+            mViewHolder.civHotFriendStatus.setBackgroundResource(R.drawable.list_offline_indicator);
         }
 
-
-
+        convertView.setOnClickListener(v ->
+                navigator.startChatActivity(activity, currentListData.getContact(), false)
+        );
         return convertView;
     }
 
+    public void setItems(List<Dialog> dialogs) {
+        items.clear();
+        items.addAll(dialogs);
+        notifyDataSetChanged();
+    }
+
     static class HotFriendsViewHolder {
+        @BindView(R.id.loading_hotFriend_progress_bar)
+        ProgressBar loading_hotFriend_progress_bar;
         @BindView(R.id.civHotFriendIcon)
         CircleImageView civHotFriendIcon;
         @BindView(R.id.civHotFriendStatus)
-        CircleImageView civHotFriendStatus;
+        View civHotFriendStatus;
 
         public HotFriendsViewHolder(View item) {
             ButterKnife.bind(this, item);

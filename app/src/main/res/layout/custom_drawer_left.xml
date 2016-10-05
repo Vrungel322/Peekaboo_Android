@@ -7,7 +7,7 @@
     android:orientation="vertical">
 
     <LinearLayout
-        android:layout_width="@dimen/nav_header_width"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/colorPrimaryLight"
         android:orientation="vertical">
@@ -48,16 +48,13 @@
                                 tools:src="@drawable/raccoon"
                                 app:border_color="@android:color/transparent" />
 
-
-                            <de.hdodenhof.circleimageview.CircleImageView
+                            <View
                                 android:id="@+id/ivOnlineStatus"
                                 android:layout_width="@dimen/hotFriendStatusIconSize"
                                 android:layout_height="@dimen/hotFriendStatusIconSize"
                                 android:layout_marginRight="2dp"
                                 android:layout_gravity="right|top"
-                                tools:src="@drawable/round_status_icon_drawer"
-                                app:border_color="@color/borderCircle_status_color"
-                                app:border_width="1dp" />
+                                tools:background="@drawable/drawer_offline_indicator" />
 
                         </FrameLayout>
 

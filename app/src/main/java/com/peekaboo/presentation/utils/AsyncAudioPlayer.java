@@ -79,19 +79,14 @@ public class AsyncAudioPlayer implements AudioPlayer, MediaPlayer.OnPreparedList
         final String audioId = getAudioId();
         final int state = state();
         mainThread.run(() -> {
-            Log.e("notify", audioId + " " + state);
             if (listener != null)
                 switch (state) {
                     case STATE_PLAYING:
-                        Log.e("player", "notify start " + audioId);
                         listener.onStartPlaying(audioId);
                         break;
                     case STATE_RESET:
                         listener.onProgressChanged(audioId, 0, 0);
-//                        listener.onStopPlaying(audioId);
-//                        break;
                     case STATE_PREPARED:
-//                        listener.onProgressChanged(audioId, player.getCurrentPosition(), player.getDuration());
                         listener.onStopPlaying(audioId);
                         break;
                 }
