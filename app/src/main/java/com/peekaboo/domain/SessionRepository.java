@@ -33,4 +33,6 @@ public interface SessionRepository {
     Observable saveContactToDb(List<Contact> contact);
 
     Observable<List<Dialog>> loadDialogs();
+
+    Observable<Integer> getUnreadMessagesCount(String id);
 }

@@ -132,4 +132,9 @@ public class SessionDataRepository implements SessionRepository {
                 .filter(dialog -> dialog != null)
                 .toList();
     }
+
+    @Override
+    public Observable<Integer> getUnreadMessagesCount(String id) {
+        return messageHelper.getUnreadMessagesCount(id);
+    }
 }

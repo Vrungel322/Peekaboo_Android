@@ -15,7 +15,6 @@ public class Contact extends ContactAbs implements Parcelable {
     private boolean isOnline;
     private String contactImgUri;
     private String contactId;
-    private int unreadMessagesCount = 0;
 
     public Contact(long id, String contactName, String contactSurname, String contactNickname,
                    boolean isOnline, String contactImgUri, String contactId) {
@@ -67,14 +66,6 @@ public class Contact extends ContactAbs implements Parcelable {
         return contactImgUri;
     }
 
-    public void setUnreadMessagesCount(int unreadMessagesCount) {
-        this.unreadMessagesCount = unreadMessagesCount;
-    }
-
-    public int getUnreadMessagesCount() {
-        return unreadMessagesCount;
-    }
-
     public void setId(long id) {
         this.id = id;
     }
@@ -93,7 +84,6 @@ public class Contact extends ContactAbs implements Parcelable {
         dest.writeBooleanArray(new boolean[]{isOnline});
         dest.writeString(contactImgUri);
         dest.writeString(contactId);
-        dest.writeInt(unreadMessagesCount);
     }
 
     public static final Parcelable.Creator<Contact> CREATOR = new Parcelable.Creator<Contact>() {
@@ -117,6 +107,5 @@ public class Contact extends ContactAbs implements Parcelable {
         isOnline = in.createBooleanArray()[0];
         contactImgUri = in.readString();
         contactId = in.readString();
-        unreadMessagesCount = in.readInt();
     }
 }

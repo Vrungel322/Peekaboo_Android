@@ -1,9 +1,6 @@
 package com.peekaboo.presentation.presenters;
 
-import android.util.Log;
-
 import com.peekaboo.data.repositories.database.messages.PMessage;
-import com.peekaboo.domain.AccountUser;
 import com.peekaboo.domain.Dialog;
 import com.peekaboo.domain.UserMessageMapper;
 import com.peekaboo.domain.subscribers.BaseProgressSubscriber;
@@ -25,17 +22,14 @@ public class DialogPresenter extends ProgressPresenter<IDialogsView>
         implements  IDialogPresenter, IMessenger.MessengerListener {
 
     private final IMessenger messenger;
-    private final AccountUser accountUser;
     private GetDialogsListUseCase getDialogsListUseCase;
 
     @Inject
     public DialogPresenter(UserMessageMapper errorHandler,
                            IMessenger messenger,
-                           AccountUser accountUser,
                            GetDialogsListUseCase getDialogsListUseCase) {
         super(errorHandler);
         this.messenger = messenger;
-        this.accountUser = accountUser;
         this.getDialogsListUseCase = getDialogsListUseCase;
     }
 
@@ -50,7 +44,6 @@ public class DialogPresenter extends ProgressPresenter<IDialogsView>
 
     @Override
     public void onDestroy() {
-        messenger.removeMessageListener(this);
         getDialogsListUseCase.unsubscribe();
         messenger.removeMessageListener(this);
         unbind();
@@ -77,7 +70,6 @@ public class DialogPresenter extends ProgressPresenter<IDialogsView>
     @Override
     public void onMessageUpdated(PMessage message) {
         getDialogsListUseCase.execute(getDialogsListSubscriber());
-        Log.wtf("onMessageUpdated :", message.messageBody());
     }
 
     @Override

@@ -79,12 +79,12 @@ public final class DialogsLargeAdapter extends RecyclerView.Adapter<DialogsLarge
         setMessageStatus(holder, lastMessage);
 
         if (contact.isOnline()) {
-            holder.tvUnreadCount.setBackgroundResource(R.drawable.circle_online);
+            holder.ivStatus.setImageResource(R.drawable.round_status_icon_cyan);
         } else {
-            holder.tvUnreadCount.setBackgroundResource(R.drawable.circle_offline);
+            holder.ivStatus.setImageResource(R.drawable.round_status_icon_grey);
         }
 
-        int unreadMessagesCount = contact.getUnreadMessagesCount();
+        int unreadMessagesCount = dialog.getUnreadMessagesCount();
         if(unreadMessagesCount > 0){
             holder.tvUnreadCount.setText(String.valueOf(unreadMessagesCount));
         } else {
@@ -192,6 +192,8 @@ public final class DialogsLargeAdapter extends RecyclerView.Adapter<DialogsLarge
     static class ViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.contact_avatar_image_view)
         CircleImageView ivAvatar;
+        @BindView(R.id.contact_status_image_view)
+        CircleImageView ivStatus;
         @BindView(R.id.unread_count_text_view)
         TextView tvUnreadCount;
         @BindView(R.id.contact_name_text_view)
