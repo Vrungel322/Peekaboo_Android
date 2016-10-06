@@ -5,6 +5,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 
 import com.peekaboo.R;
 import com.peekaboo.domain.Dialog;
@@ -88,15 +89,31 @@ public class HotFriendsAdapter extends BaseAdapter {
                     }
                 });
 
+        showIfContactIsOnline(mViewHolder, currentListData);
+
+        showUnreadMesCount(mViewHolder, currentListData);
+
+        convertView.setOnClickListener(v ->
+                navigator.startChatActivity(activity, currentListData.getContact()));
+        return convertView;
+    }
+
+    private void showIfContactIsOnline(HotFriendsViewHolder mViewHolder, Dialog currentListData) {
         if (currentListData.getContact().isOnline()) {
             mViewHolder.civHotFriendStatus.setImageResource(R.drawable.round_status_icon_cyan);
         } else {
             mViewHolder.civHotFriendStatus.setImageResource(R.drawable.round_status_icon_grey);
         }
+    }
 
-        convertView.setOnClickListener(v ->
-                navigator.startChatActivity(activity, currentListData.getContact()));
-        return convertView;
+    private void showUnreadMesCount(HotFriendsViewHolder mViewHolder, Dialog currentListData) {
+        if (currentListData.getUnreadMessagesCount() == 0) {
+            mViewHolder.tvUnreadMesCountInRightDrawer
+                    .setText(null);
+        } else {
+            mViewHolder.tvUnreadMesCountInRightDrawer
+                    .setText(String.valueOf(currentListData.getUnreadMessagesCount()));
+        }
     }
 
     public void setItems(List<Dialog> dialogs) {
@@ -112,6 +129,8 @@ public class HotFriendsAdapter extends BaseAdapter {
         CircleImageView civHotFriendIcon;
         @BindView(R.id.civHotFriendStatus)
         CircleImageView civHotFriendStatus;
+        @BindView(R.id.tvUnreadMesCountInRightDrawer)
+        TextView tvUnreadMesCountInRightDrawer;
 
         public HotFriendsViewHolder(View item) {
             ButterKnife.bind(this, item);
