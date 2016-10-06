@@ -24,6 +24,8 @@ public interface SessionRepository {
 
     Call<FileEntity> uploadFile(String fileName, String receiverId);
 
+    Observable<FileEntity> updateAvatar(String fileName, String bearer);
+
     Call<ResponseBody> downloadFile(String remoteFileName);
 
     Observable<List<Contact>> loadAllContacts();

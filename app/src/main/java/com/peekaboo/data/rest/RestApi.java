@@ -1,7 +1,6 @@
 package com.peekaboo.data.rest;
 
 import com.peekaboo.data.FileEntity;
-import com.peekaboo.data.rest.entity.ContactEntity;
 import com.peekaboo.data.rest.entity.Credentials;
 import com.peekaboo.data.rest.entity.CredentialsSignUp;
 import com.peekaboo.data.rest.entity.TokenEntity;
@@ -9,7 +8,6 @@ import com.peekaboo.data.rest.entity.UserEntity;
 import com.peekaboo.data.rest.entity.UserResponse;
 
 import java.io.File;
-import java.util.List;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -51,6 +49,14 @@ public class RestApi {
                 RequestBody.create(MediaType.parse("multipart/form-data"), file);
         MultipartBody.Part part = MultipartBody.Part.createFormData("file", file.getName(), requestFile);
         return api.uploadFile(receiverId, part, bearer);
+    }
+
+    public Observable<FileEntity> updateAvatar(String fileName, String bearer){
+        File file = new File(fileName);
+        RequestBody requestFile =
+                RequestBody.create(MediaType.parse("multipart/form-data"), file);
+        MultipartBody.Part part = MultipartBody.Part.createFormData("file", file.getName(), requestFile);
+        return api.updateAvatar(part, bearer);
     }
 
     public Call<ResponseBody> downloadFile(String remoteFileName, String bearer) {
