@@ -1,6 +1,7 @@
 package com.peekaboo.presentation.activities;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -360,7 +361,6 @@ public class MainActivity extends AppCompatActivity implements IMainView, Avatar
                 startActivityForResult(takePictureIntent, Constants.REQUEST_CODES.REQUEST_CODE_CAMERA);
             }
         }
-
     }
 
     @Override
@@ -369,13 +369,39 @@ public class MainActivity extends AppCompatActivity implements IMainView, Avatar
                 Constants.REQUEST_CODES.REQUEST_CODE_GALERY);
     }
 
-    private Uri getImageUri(){
+    private Uri getAvatarUri(){
         if(imageUri != null){
             return imageUri;
         }
-        if(getIntent().getData() != null){
-            return getIntent().getData();
-        }
         return null;
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        Bitmap bitmap = null;
+        if (requestCode == Constants.REQUEST_CODES.REQUEST_CODE_CAMERA) {
+
+            if (resultCode == RESULT_OK) {
+//                try {
+//                    bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imageUri);
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//                ivAccountAvatar.setImageBitmap(bitmap);
+
+            }
+        }
+        if (requestCode == Constants.REQUEST_CODES.REQUEST_CODE_GALERY) {
+            if (resultCode == RESULT_OK && null != data) {
+                imageUri = data.getData();
+//                try {
+//                    bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imageUri);
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//                ivAccountAvatar.setImageBitmap(bitmap);
+            }
+        }
     }
 }
