@@ -1,13 +1,11 @@
 package com.peekaboo.presentation.adapters;
 
-import android.graphics.drawable.Drawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
@@ -81,59 +79,51 @@ public final class DialogsLargeAdapter extends RecyclerView.Adapter<DialogsLarge
         setMessageStatus(holder, lastMessage);
 
         if (contact.isOnline()) {
-            holder.tvUnreadCount.setBackgroundResource(R.drawable.circle_online);
+            holder.ivStatus.setImageResource(R.drawable.round_status_icon_cyan);
         } else {
-            holder.tvUnreadCount.setBackgroundResource(R.drawable.circle_offline);
+            holder.ivStatus.setImageResource(R.drawable.round_status_icon_grey);
+        }
+
+        int unreadMessagesCount = dialog.getUnreadMessagesCount();
+        if(unreadMessagesCount > 0){
+            holder.tvUnreadCount.setText(String.valueOf(unreadMessagesCount));
+        } else {
+            holder.tvUnreadCount.setText(null);
         }
 
         holder.itemView.setOnClickListener(v -> {
             navigator.startChatActivity(activity, contact);
         });
 
-        holder.ivFavorite.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                YoYo.with(Techniques.Tada).duration(500).delay(100).playOn(holder.ivFavorite);
+        holder.ivFavorite.setOnClickListener(v -> {
+            YoYo.with(Techniques.Tada).duration(500).delay(100).playOn(holder.ivFavorite);
 //                items.set(0,getItem(position));
-                if (stared[0] == false) {
-                    stared[0] = true;
-                    holder.ivFavorite.setImageResource(R.drawable.stared);
-                } else {
-                    stared[0] = false;
-                    holder.ivFavorite.setImageResource(R.drawable.star);
-
-                }
+            if (stared[0] == false) {
+                stared[0] = true;
+                holder.ivFavorite.setImageResource(R.drawable.stared);
+            } else {
+                stared[0] = false;
+                holder.ivFavorite.setImageResource(R.drawable.star);
 
             }
+
         });
-        holder.ivDelete.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                YoYo.with(Techniques.Tada).duration(500).delay(100).playOn(holder.ivDelete);
-//                Toast.makeText(activity,"Click Delete "+position,Toast.LENGTH_SHORT).show();
-                delete(position);
-
-
-            }
+        holder.ivDelete.setOnClickListener(v -> {
+            YoYo.with(Techniques.Tada).duration(500).delay(100).playOn(holder.ivDelete);
+            delete(position);
         });
-        holder.ivMute.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        holder.ivMute.setOnClickListener(v -> {
 
-                YoYo.with(Techniques.Tada).duration(500).delay(100).playOn(holder.ivMute);
+            YoYo.with(Techniques.Tada).duration(500).delay(100).playOn(holder.ivMute);
 
-                if (muted[0] == false) {
-//                    Toast.makeText(activity, "Click Mute", Toast.LENGTH_SHORT).show();
-                    muted[0] = true;
-                    holder.ivMute.setImageResource(R.drawable.nosound);
-                } else {
-//                    Toast.makeText(activity, "Click UnMute", Toast.LENGTH_SHORT).show();
-                    muted[0] = false;
-                    holder.ivMute.setImageResource(R.drawable.sound);
-
-                }
-
+            if (muted[0] == false) {
+                muted[0] = true;
+                holder.ivMute.setImageResource(R.drawable.nosound);
+            } else {
+                muted[0] = false;
+                holder.ivMute.setImageResource(R.drawable.sound);
             }
+
         });
 
 
@@ -202,6 +192,8 @@ public final class DialogsLargeAdapter extends RecyclerView.Adapter<DialogsLarge
     static class ViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.contact_avatar_image_view)
         CircleImageView ivAvatar;
+        @BindView(R.id.contact_status_image_view)
+        CircleImageView ivStatus;
         @BindView(R.id.unread_count_text_view)
         TextView tvUnreadCount;
         @BindView(R.id.contact_name_text_view)

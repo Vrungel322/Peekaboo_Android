@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/list_item_dialog_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -32,18 +33,28 @@
                     android:src="@mipmap/ic_launcher"
                     app:border_color="@color/colorPrimaryLight" />
 
-
-                <TextView
-                    android:id="@+id/unread_count_text_view"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/dialog_number_dot"
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/contact_status_image_view"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     android:layout_gravity="right|top"
                     android:layout_marginRight="5dp"
                     android:layout_marginTop="5dp"
-                    android:background="@drawable/circle_online"
+                    android:src="@color/offline"
+                    app:border_color="@android:color/white"
+                    app:border_width="1dp" />
+
+                <TextView
+                    android:id="@+id/unread_count_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|top"
+                    android:layout_marginRight="11dp"
+                    android:layout_marginTop="6dp"
                     android:gravity="center"
                     android:textColor="@android:color/white"
-                    android:textSize="7sp" />
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
 
             </FrameLayout>
 
@@ -73,17 +84,16 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentLeft="true"
                             android:singleLine="true"
-                            android:textSize="@dimen/dialog_username_text_size"
                             android:textColor="@color/dialog_time_date_name"
-                            />
-                            <!--android:text="Albert Einstain" />-->
+                            android:textSize="@dimen/dialog_username_text_size" />
+                        <!--android:text="Albert Einstain" />-->
 
                         <TextView
                             android:id="@+id/message_preview_text_view"
                             android:layout_width="@dimen/dialog_name_width"
                             android:layout_height="wrap_content"
                             android:maxLines="1"
-                            android:textColor="@color/dialog_preview"/>
+                            android:textColor="@color/dialog_preview" />
                     </LinearLayout>
 
                     <com.daimajia.swipe.SwipeLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -145,8 +155,8 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentRight="true"
-                                android:layout_marginTop="4dp"
                                 android:layout_marginRight="@dimen/dialog_timedate_margin_Right"
+                                android:layout_marginTop="4dp"
                                 android:text="16:15"
                                 android:textColor="@color/dialog_time_date_name"
                                 android:textSize="@dimen/dialog_timestamp_text_size" />

@@ -24,6 +24,8 @@ public interface SessionRepository {
 
     Call<FileEntity> uploadFile(String fileName, String receiverId);
 
+    Observable<FileEntity> updateAvatar(String fileName, String bearer);
+
     Call<ResponseBody> downloadFile(String remoteFileName);
 
     Observable<List<Contact>> loadAllContacts();
@@ -33,4 +35,6 @@ public interface SessionRepository {
     Observable saveContactToDb(List<Contact> contact);
 
     Observable<List<Dialog>> loadDialogs();
+
+    Observable<Integer> getUnreadMessagesCount(String id);
 }

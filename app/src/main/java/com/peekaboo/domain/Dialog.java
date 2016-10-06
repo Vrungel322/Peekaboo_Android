@@ -10,6 +10,15 @@ import com.peekaboo.data.repositories.database.messages.PMessage;
 public class Dialog {
     private Contact contact;
     private PMessage lastMessage;
+    private int unreadMessagesCount;
+
+    public int getUnreadMessagesCount() {
+        return unreadMessagesCount;
+    }
+
+    public void setUnreadMessagesCount(int unreadMessagesCount) {
+        this.unreadMessagesCount = unreadMessagesCount;
+    }
 
     public Dialog(Contact contact, PMessage lastMessage) {
         this.contact = contact;
