@@ -1,10 +1,14 @@
 package com.peekaboo.presentation.presenters;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.speech.tts.TextToSpeech;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.peekaboo.data.repositories.database.messages.PMessage;
 import com.peekaboo.data.repositories.database.messages.PMessageAbs;
+import com.peekaboo.data.repositories.database.messages.PMessageHelper;
 import com.peekaboo.domain.AccountUser;
 import com.peekaboo.domain.AudioRecorder;
 import com.peekaboo.domain.Record;
@@ -14,13 +18,9 @@ import com.peekaboo.presentation.utils.AsyncAudioPlayer;
 import com.peekaboo.presentation.utils.AudioPlayer;
 import com.peekaboo.presentation.views.IChatView2;
 
-import java.util.List;
-
 import javax.inject.Inject;
-import javax.inject.Named;
 import javax.inject.Singleton;
 
-import rx.Subscriber;
 import rx.subscriptions.CompositeSubscription;
 
 /**
@@ -34,14 +34,20 @@ public class ChatPresenter2 extends BasePresenter<IChatView2> implements IChatPr
     private final AsyncAudioPlayer player;
     private final AudioRecorder recorder;
     private CompositeSubscription subscriptions;
+    private PMessageHelper pMessageHelper;
+    private String receiver;
+    private android.speech.tts.TextToSpeech textToSpeech;
 
     @Inject
     public ChatPresenter2(AudioRecorder recorder, IMessenger messenger,
-                          AccountUser accountUser, AsyncAudioPlayer player) {
+                          AccountUser accountUser, AsyncAudioPlayer player,
+                          PMessageHelper pMessageHelper, TextToSpeech textToSpeech) {
         this.messenger = messenger;
         this.accountUser = accountUser;
         this.player = player;
         this.recorder = recorder;
+        this.pMessageHelper = pMessageHelper;
+        this.textToSpeech = textToSpeech;
     }
 
     @Override
@@ -56,19 +62,12 @@ public class ChatPresenter2 extends BasePresenter<IChatView2> implements IChatPr
     public void onResume(boolean isFirstLaunch, String receiver) {
         messenger.tryConnect(accountUser.getBearer());
         messenger.addMessageListener(this);
+        this.receiver = receiver;
 
         subscriptions = new CompositeSubscription();
 
         if (isFirstLaunch) {
-            subscriptions.add(messenger.getAllMessages(receiver)
-                    .subscribe(pMessageAbses -> {
-                        subscriptions.unsubscribe();
-                        Log.e("chat presenter", "" + pMessageAbses);
-                        IChatView2 view = getView();
-                        if (view != null) {
-                            view.showMessages(pMessageAbses);
-                        }
-                    }));
+            showUpdatedMessages(receiver);
         } else {
             subscriptions.add(messenger.getUnreadMessages(receiver)
                     .subscribe(pMessageAbses -> {
@@ -80,6 +79,18 @@ public class ChatPresenter2 extends BasePresenter<IChatView2> implements IChatPr
                     }));
         }
 
+    }
+
+    public void showUpdatedMessages(String receiver) {
+        messenger.getAllMessages(receiver)
+                .subscribe(pMessageAbses -> {
+                    subscriptions.unsubscribe();
+                    Log.e("chat presenter", "" + pMessageAbses);
+                    IChatView2 view = getView();
+                    if (view != null) {
+                        view.showMessages(pMessageAbses);
+                    }
+                });
     }
 
     @Override
@@ -103,17 +114,7 @@ public class ChatPresenter2 extends BasePresenter<IChatView2> implements IChatPr
         IChatView2 view = getView();
         if (view != null) {
             if (recorder.isRecording() && !start) {
-                recorder.stopRecording().subscribe(new Subscriber<Record>() {
-                    @Override
-                    public void onCompleted() {
-                        showRecordStop();
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        showRecordStop();
-                    }
-
+                recorder.stopRecording().subscribe(new BaseUseCaseSubscriber<Record>() {
 
                     @Override
                     public void onNext(Record record) {
@@ -126,20 +127,26 @@ public class ChatPresenter2 extends BasePresenter<IChatView2> implements IChatPr
                 });
             } else if (!recorder.isRecording() && start) {
                 recorder.setRecord(new Record(view.getCompanionId()));
-                recorder.startRecording().subscribe(new BaseUseCaseSubscriber<Record>() {
-                    @Override
-                    public void onStart() {
-                        showRecordStart();
-                    }
-
-                    @Override
-                    public void onError(Throwable e) {
-                        showRecordStop();
-                    }
-                });
+                recorder.startRecording().subscribe(new BaseUseCaseSubscriber<Record>() { });
 
             }
         }
+    }
+
+    @Override
+    public void onDeleteMessageClick(PMessageAbs message) {
+        pMessageHelper.deleteMessageByPackageId(receiver, message);
+    }
+
+    @Override
+    public void onConvertTextToSpeechClick(PMessageAbs message) {
+        textToSpeech.speak(message.messageBody(), TextToSpeech.QUEUE_FLUSH, null);
+    }
+
+    @Override
+    public void onCopyMessageTextClick(ClipboardManager clipboard, PMessageAbs message) {
+        ClipData clip = ClipData.newPlainText("", message.messageBody());
+        clipboard.setPrimaryClip(clip);
     }
 
     private void showRecordStart() {

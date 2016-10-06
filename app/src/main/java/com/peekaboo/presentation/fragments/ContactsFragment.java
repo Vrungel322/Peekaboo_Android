@@ -1,12 +1,15 @@
 package com.peekaboo.presentation.fragments;
 
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -38,6 +41,7 @@ import butterknife.ButterKnife;
  */
 public class ContactsFragment extends Fragment implements IContactsView {
 
+    public static final String LAYOUT_MANAGER_STATE = "layout_manager_state";
     @Inject
     ContactPresenter contactPresenter;
     @Inject
@@ -54,13 +58,29 @@ public class ContactsFragment extends Fragment implements IContactsView {
     public ContactsFragment() {
     }
 
+    public static ContactsFragment newInstance() {
+        Bundle args = new Bundle();
+
+        ContactsFragment fragment = new ContactsFragment();
+        fragment.setArguments(args);
+
+        return fragment;
+    }
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
+//        setHasOptionsMenu(true);
         PeekabooApplication.getApp(getActivity()).getComponent().inject(this);
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(getString(R.string.title_contacts));
 
+    }
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        ActionBar supportActionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+        if (supportActionBar != null) {
+            supportActionBar.setTitle(R.string.contacts);
+        }
     }
 
     @Nullable
@@ -79,7 +99,7 @@ public class ContactsFragment extends Fragment implements IContactsView {
     }
 
     private void setUpRecyclerView() {
-        contactLargeAdapter = new ContactLargeAdapter((MainActivity) getActivity(), navigator, picasso);
+        contactLargeAdapter = new ContactLargeAdapter((AppCompatActivity) getActivity(), navigator, picasso);
         recyclerView.setAdapter(contactLargeAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false) {
             @Override
@@ -108,6 +128,10 @@ public class ContactsFragment extends Fragment implements IContactsView {
     @Override
     public void showContactsList(List<Contact> response) {
         contactLargeAdapter.setItems(response);
+        Parcelable state = getArguments().getParcelable(LAYOUT_MANAGER_STATE);
+        if (state != null) {
+            recyclerView.getLayoutManager().onRestoreInstanceState(state);
+        }
     }
 
     @Override
@@ -127,7 +151,10 @@ public class ContactsFragment extends Fragment implements IContactsView {
 
     @Override
     public void onDestroyView() {
+        Parcelable parcelable = recyclerView.getLayoutManager().onSaveInstanceState();
+        getArguments().putParcelable(LAYOUT_MANAGER_STATE, parcelable);
         contactPresenter.onDestroy();
+        contactPresenter.unbind();
         super.onDestroyView();
     }
 

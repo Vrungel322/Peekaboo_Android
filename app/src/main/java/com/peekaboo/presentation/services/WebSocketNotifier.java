@@ -21,6 +21,7 @@ import java.util.Set;
 public class WebSocketNotifier implements INotifier<Message> {
     private static final String AUTHORIZATION = "Authorization";
     private static final String TAG = "socket";
+    public static final int PING_INTERVAL = 20 * 1000;
 
     private final String BASE_URL;
     private final int TIMEOUT;
@@ -44,13 +45,16 @@ public class WebSocketNotifier implements INotifier<Message> {
             try {
                 ws = new WebSocketFactory()
                         .createSocket(BASE_URL, TIMEOUT)
+                        .setPingInterval(PING_INTERVAL)
                         .addListener(new WebSocketAdapter() {
                             @Override
                             public void onConnected(WebSocket websocket, Map<String, List<String>> headers) throws Exception {
                                 Log.e(TAG, "Status: Connected to " + BASE_URL);
-//                                    for (NotificationListener<Message> listener : listeners) {
-//                                        listener.onConnected();
-//                                    }
+                                mainThread.run(() -> {
+                                    for (NotificationListener<Message> listener : listeners) {
+                                        listener.onConnected();
+                                    }
+                                });
                             }
 
                             @Override
@@ -93,11 +97,11 @@ public class WebSocketNotifier implements INotifier<Message> {
                             @Override
                             public void onPongFrame(WebSocket websocket, WebSocketFrame frame) throws Exception {
                                 Log.e(TAG, "Status: Pong received " + frame);
-                                mainThread.run(() -> {
-                                    for (NotificationListener<Message> listener : listeners) {
-                                        listener.onConnected();
-                                    }
-                                });
+//                                mainThread.run(() -> {
+//                                    for (NotificationListener<Message> listener : listeners) {
+//                                        listener.onConnected();
+//                                    }
+//                                });
                             }
                         })
                         .addHeader(AUTHORIZATION, authorization)

@@ -14,7 +14,7 @@ import rx.Observable;
  * Created by Arkadiy on 05.06.2016.
  */
 public interface SessionRepository {
-    Observable<List<Contact>> login(String login, String password);
+    Observable<AccountUser> login(String login, String password);
 
     Observable<AccountUser> signUp(String username, String login, String password);
 
@@ -33,4 +33,6 @@ public interface SessionRepository {
     Observable saveContactToDb(List<Contact> contact);
 
     Observable<List<Dialog>> loadDialogs();
+
+    Observable<Integer> getUnreadMessagesCount(String id);
 }

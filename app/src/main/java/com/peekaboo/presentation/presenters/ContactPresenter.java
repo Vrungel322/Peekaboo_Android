@@ -15,21 +15,20 @@ import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 /**
  * Created by Nikita on 11.08.2016.
  */
+@Singleton
 public class ContactPresenter extends ProgressPresenter<IContactsView> implements IContactPresenter {
 
-    private PContactHelper contactHelper;
     private GetContactFromDbUseCase getContactFromDbUseCase;
 
     @Inject
-    public ContactPresenter(PContactHelper contactHelper,
-                            UserMessageMapper errorHandler,
+    public ContactPresenter(UserMessageMapper errorHandler,
                             GetContactFromDbUseCase getContactFromDbUseCase) {
         super(errorHandler);
-        this.contactHelper = contactHelper;
         this.getContactFromDbUseCase = getContactFromDbUseCase;
     }
 
@@ -41,11 +40,9 @@ public class ContactPresenter extends ProgressPresenter<IContactsView> implement
     @Override
     public void onDestroy() {
         getContactFromDbUseCase.unsubscribe();
-        unbind();
     }
 
-    @Override
-    public void loadContactsList() {
+    private void loadContactsList() {
         getContactFromDbUseCase.execute(getContactsFromDbSubscriber());
     }
 
@@ -59,24 +56,24 @@ public class ContactPresenter extends ProgressPresenter<IContactsView> implement
                     Collections.sort(contacts, new ContactComparator());
                     view.showContactsList(contacts);
                     // for testing
-                    getAllTableAsString();
+//                    getAllTableAsString();
                 }
             }
         };
     }
-
-    private void getAllTableAsString() {
-        contactHelper.getAllContacts()
-                .subscribe(pContactAbses -> {
-                    for (ContactAbs pContact : pContactAbses) {
-                        Log.wtf("DB_LOG", "ID: " + pContact.contactId()
-                                + "; CONTACT_NAME: " + pContact.contactName()
-                                + "; CONTACT_SURNAME: " + pContact.contactSurname()
-                                + "; CONTACT_NICKNAME: " + pContact.contactNickname()
-                                + "; CONTACT_IS_ONLINE: " + pContact.isOnline()
-                                + "; CONTACT_IMG_URI: " + pContact.contactImgUri());
-                    }
-                });
-    }
+//
+//    private void getAllTableAsString() {
+//        contactHelper.getAllContacts()
+//                .subscribe(pContactAbses -> {
+//                    for (ContactAbs pContact : pContactAbses) {
+//                        Log.wtf("DB_LOG", "ID: " + pContact.contactId()
+//                                + "; CONTACT_NAME: " + pContact.contactName()
+//                                + "; CONTACT_SURNAME: " + pContact.contactSurname()
+//                                + "; CONTACT_NICKNAME: " + pContact.contactNickname()
+//                                + "; CONTACT_IS_ONLINE: " + pContact.isOnline()
+//                                + "; CONTACT_IMG_URI: " + pContact.contactImgUri());
+//                    }
+//                });
+//    }
 
 }

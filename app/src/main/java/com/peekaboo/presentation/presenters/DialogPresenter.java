@@ -1,10 +1,12 @@
 package com.peekaboo.presentation.presenters;
 
+import com.peekaboo.data.repositories.database.messages.PMessage;
 import com.peekaboo.domain.Dialog;
 import com.peekaboo.domain.UserMessageMapper;
 import com.peekaboo.domain.subscribers.BaseProgressSubscriber;
 import com.peekaboo.domain.usecase.GetDialogsListUseCase;
 import com.peekaboo.presentation.comparators.DialogComparator;
+import com.peekaboo.presentation.services.IMessenger;
 import com.peekaboo.presentation.views.IDialogsView;
 
 import java.util.Collections;
@@ -17,23 +19,33 @@ import javax.inject.Inject;
  */
 
 public class DialogPresenter extends ProgressPresenter<IDialogsView>
-        implements  IDialogPresenter{
+        implements  IDialogPresenter, IMessenger.MessengerListener {
 
+    private final IMessenger messenger;
     private GetDialogsListUseCase getDialogsListUseCase;
 
     @Inject
-    public DialogPresenter(UserMessageMapper errorHandler, GetDialogsListUseCase getDialogsListUseCase) {
+    public DialogPresenter(UserMessageMapper errorHandler,
+                           IMessenger messenger,
+                           GetDialogsListUseCase getDialogsListUseCase) {
         super(errorHandler);
+        this.messenger = messenger;
         this.getDialogsListUseCase = getDialogsListUseCase;
     }
 
     @Override
     public void onCreate() {
+        messenger.addMessageListener(this);
+    }
 
+    @Override
+    public void onPause() {
     }
 
     @Override
     public void onDestroy() {
+        getDialogsListUseCase.unsubscribe();
+        messenger.removeMessageListener(this);
         unbind();
     }
 
@@ -53,5 +65,15 @@ public class DialogPresenter extends ProgressPresenter<IDialogsView>
                 }
             }
         };
+    }
+
+    @Override
+    public void onMessageUpdated(PMessage message) {
+        getDialogsListUseCase.execute(getDialogsListSubscriber());
+    }
+
+    @Override
+    public int willChangeStatus(PMessage message) {
+        return 0;
     }
 }

@@ -7,6 +7,8 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 import com.peekaboo.R;
 import com.peekaboo.data.repositories.database.contacts.Contact;
 import com.peekaboo.data.repositories.database.messages.PMessage;
@@ -50,6 +52,8 @@ public final class DialogsLargeAdapter extends RecyclerView.Adapter<DialogsLarge
         Dialog dialog = getItem(position);
         Contact contact = dialog.getContact();
         PMessage lastMessage = dialog.getLastMessage();
+        final boolean[] muted = {false};
+        final boolean[] stared = {false};
 
         int avatarSize = ResourcesUtils.getDimenInPx(activity, R.dimen.contact_list_avatar_size);
 
@@ -75,16 +79,61 @@ public final class DialogsLargeAdapter extends RecyclerView.Adapter<DialogsLarge
         setMessageStatus(holder, lastMessage);
 
         if (contact.isOnline()) {
-            holder.tvUnreadCount.setBackgroundResource(R.drawable.circle_online);
+            holder.ivStatus.setImageResource(R.drawable.round_status_icon_cyan);
         } else {
-            holder.tvUnreadCount.setBackgroundResource(R.drawable.circle_offline);
+            holder.ivStatus.setImageResource(R.drawable.round_status_icon_grey);
+        }
+
+        int unreadMessagesCount = dialog.getUnreadMessagesCount();
+        if(unreadMessagesCount > 0){
+            holder.tvUnreadCount.setText(String.valueOf(unreadMessagesCount));
+        } else {
+            holder.tvUnreadCount.setText(null);
         }
 
         holder.itemView.setOnClickListener(v -> {
             navigator.startChatActivity(activity, contact);
         });
 
+        holder.ivFavorite.setOnClickListener(v -> {
+            YoYo.with(Techniques.Tada).duration(500).delay(100).playOn(holder.ivFavorite);
+//                items.set(0,getItem(position));
+            if (stared[0] == false) {
+                stared[0] = true;
+                holder.ivFavorite.setImageResource(R.drawable.stared);
+            } else {
+                stared[0] = false;
+                holder.ivFavorite.setImageResource(R.drawable.star);
+
+            }
+
+        });
+        holder.ivDelete.setOnClickListener(v -> {
+            YoYo.with(Techniques.Tada).duration(500).delay(100).playOn(holder.ivDelete);
+            delete(position);
+        });
+        holder.ivMute.setOnClickListener(v -> {
+
+            YoYo.with(Techniques.Tada).duration(500).delay(100).playOn(holder.ivMute);
+
+            if (muted[0] == false) {
+                muted[0] = true;
+                holder.ivMute.setImageResource(R.drawable.nosound);
+            } else {
+                muted[0] = false;
+                holder.ivMute.setImageResource(R.drawable.sound);
+            }
+
+        });
+
+
     }
+
+
+    private void delete(int position){
+        items.remove(position);
+        notifyItemRemoved(position);
+        }
 
     private void setMessageBody(ViewHolder holder, PMessage message){
         int messageType = message.mediaType();
@@ -106,6 +155,7 @@ public final class DialogsLargeAdapter extends RecyclerView.Adapter<DialogsLarge
                 break;
         }
     }
+
 
     private String getStringResource(ViewHolder holder, int id){
         return holder.itemView.getContext().getString(id);
@@ -142,6 +192,8 @@ public final class DialogsLargeAdapter extends RecyclerView.Adapter<DialogsLarge
     static class ViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.contact_avatar_image_view)
         CircleImageView ivAvatar;
+        @BindView(R.id.contact_status_image_view)
+        CircleImageView ivStatus;
         @BindView(R.id.unread_count_text_view)
         TextView tvUnreadCount;
         @BindView(R.id.contact_name_text_view)
@@ -152,11 +204,18 @@ public final class DialogsLargeAdapter extends RecyclerView.Adapter<DialogsLarge
         TextView tvTimestamp;
         @BindView(R.id.message_status_image_view)
         ImageView ivMessageStatus;
+        @BindView(R.id.delete_image_view)
+        ImageView ivDelete;
+        @BindView(R.id.favourite_image_view)
+        ImageView ivFavorite;
+        @BindView(R.id.mute_image_view)
+        ImageView ivMute;
 
 
         ViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+
         }
 
     }

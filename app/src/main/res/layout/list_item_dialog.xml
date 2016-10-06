@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/list_item_dialog_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -30,19 +31,30 @@
                     android:layout_margin="@dimen/dialog_item_margin"
                     android:layout_marginBottom="@dimen/dialog_photo_margin"
                     android:src="@mipmap/ic_launcher"
-                    app:border_color="@color/colorAccent" />
+                    app:border_color="@color/colorPrimaryLight" />
 
-                <TextView
-                    android:id="@+id/unread_count_text_view"
-                    android:layout_width="@dimen/dialog_number_dot"
-                    android:layout_height="@dimen/dialog_number_dot"
+                <de.hdodenhof.circleimageview.CircleImageView
+                    android:id="@+id/contact_status_image_view"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
                     android:layout_gravity="right|top"
                     android:layout_marginRight="5dp"
                     android:layout_marginTop="5dp"
-                    android:background="@drawable/circle_online"
+                    android:src="@color/offline"
+                    app:border_color="@android:color/white"
+                    app:border_width="1dp" />
+
+                <TextView
+                    android:id="@+id/unread_count_text_view"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|top"
+                    android:layout_marginRight="11dp"
+                    android:layout_marginTop="6dp"
                     android:gravity="center"
                     android:textColor="@android:color/white"
-                    android:textSize="7sp" />
+                    android:textSize="12sp"
+                    android:textStyle="bold" />
 
             </FrameLayout>
 
@@ -72,13 +84,16 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentLeft="true"
                             android:singleLine="true"
+                            android:textColor="@color/dialog_time_date_name"
                             android:textSize="@dimen/dialog_username_text_size" />
+                        <!--android:text="Albert Einstain" />-->
 
                         <TextView
                             android:id="@+id/message_preview_text_view"
                             android:layout_width="@dimen/dialog_name_width"
                             android:layout_height="wrap_content"
-                            android:maxLines="1" />
+                            android:maxLines="1"
+                            android:textColor="@color/dialog_preview" />
                     </LinearLayout>
 
                     <com.daimajia.swipe.SwipeLayout xmlns:android="http://schemas.android.com/apk/res/android"
@@ -86,7 +101,6 @@
                         android:id="@+id/swipe"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:paddingTop="0dp"
                         swipe:rightEdgeSwipeOffset="0dp">
 
                         <LinearLayout
@@ -131,6 +145,7 @@
                         <LinearLayout
                             android:layout_width="wrap_content"
                             android:layout_height="match_parent"
+                            android:layout_marginRight="3dp"
                             android:gravity="right"
                             android:orientation="vertical"
                             android:paddingRight="2dp">
@@ -140,6 +155,10 @@
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_alignParentRight="true"
+                                android:layout_marginRight="@dimen/dialog_timedate_margin_Right"
+                                android:layout_marginTop="4dp"
+                                android:text="16:15"
+                                android:textColor="@color/dialog_time_date_name"
                                 android:textSize="@dimen/dialog_timestamp_text_size" />
 
                             <ImageView
@@ -165,10 +184,11 @@
     </LinearLayout>
 
     <View
-        android:layout_width="@dimen/dialog_item_underline"
+        android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_marginLeft="60dp"
-        android:layout_marginRight="10dp"
+        android:layout_marginLeft="@dimen/dialog_item_underline_margin_left"
+        android:layout_marginRight="5dp"
         android:layout_marginTop="@dimen/dialog_item_underline_margin_top"
-        android:background="@color/colorPrimary" />
+        android:background="@color/dialog_underline_color" />
 </android.support.design.widget.CoordinatorLayout>
+

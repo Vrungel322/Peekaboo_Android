@@ -70,7 +70,7 @@ public class PMessageHelper {
         String tableName = PREFIX + id;
         String selectLast = "SELECT * FROM " + tableName +
                 " WHERE " + PMessageAbs.ID + " = " +
-                "(SELECT MAX(" + PMessageAbs.ID + ") FROM " + tableName +")";
+                "(SELECT MAX(" + PMessageAbs.ID + ") FROM " + tableName + ")";
         SQLiteDatabase db = helper.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectLast, null);
         PMessage message = null;
@@ -91,6 +91,17 @@ public class PMessageHelper {
         return select(selectUnread)
                 .subscribeOn(subscribeOn.getScheduler())
                 .observeOn(observeOn.getScheduler());
+
+    }
+
+    public Observable<Integer> getUnreadMessagesCount(String id) {
+        String tableName = PREFIX + id;
+        String selectUnread = "SELECT COUNT(*) FROM " + tableName + " WHERE "
+                + PMessageAbs.STATUS + " = " + PMessageAbs.PMESSAGE_STATUS.STATUS_DELIVERED
+                + " AND " + PMessage.IS_MINE + " = 0";
+        return selectCount(selectUnread)
+                .subscribeOn(subscribeOn.getScheduler());
+
 
     }
 
@@ -120,7 +131,7 @@ public class PMessageHelper {
         SQLiteDatabase db = helper.getWritableDatabase();
         tableName = PREFIX + tableName;
         message.setId(db.insert(tableName, null, pMessageMapper.transform(message)));
-        Log.e("helper", "saveContactToDb " + message);
+        Log.e("helper", "saveMessageToDb " + message);
     }
 
     public int updateStatus(String tableName, int status, PMessage message) {
@@ -175,6 +186,23 @@ public class PMessageHelper {
             }
 
             subscriber.onNext(messages);
+            subscriber.onCompleted();
+        });
+    }
+
+    private Observable<Integer> selectCount(String query){
+        Log.e("helper", query);
+        return Observable.create(subscriber -> {
+            SQLiteDatabase db = helper.getWritableDatabase();
+            Cursor cursor = db.rawQuery(query, null);
+            Integer count = 0;
+
+            if (cursor != null && cursor.moveToFirst()) {
+                count = cursor.getInt(0);
+                cursor.close();
+            }
+
+            subscriber.onNext(count);
             subscriber.onCompleted();
         });
     }
