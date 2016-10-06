@@ -15,7 +15,6 @@ import rx.Observable;
 public class AvatarUpdateUseCase extends UseCase<FileEntity> {
     private SessionRepository sessionRepository;
     private String fileName;
-    private String bearer;
 
     @Inject
     public AvatarUpdateUseCase(SessionRepository sessionRepository, SubscribeOn subscribeOn, ObserveOn observeOn) {
@@ -23,13 +22,12 @@ public class AvatarUpdateUseCase extends UseCase<FileEntity> {
         this.sessionRepository = sessionRepository;
     }
 
-    public void setDataForUpdatingAvatar(String fileName, String bearer){
+    public void setDataForUpdatingAvatar(String fileName){
         this.fileName = fileName;
-        this.bearer = bearer;
     }
 
     @Override
     protected Observable<FileEntity> getUseCaseObservable() {
-        return sessionRepository.updateAvatar(fileName, bearer);
+        return sessionRepository.updateAvatar(fileName);
     }
 }

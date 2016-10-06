@@ -1,5 +1,6 @@
 package com.peekaboo.presentation.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
@@ -87,6 +88,7 @@ public class ContactsFragment extends Fragment implements IContactsView {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_contacts, container, false);
+
         ButterKnife.bind(this, rootView);
 
         FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.fab);
@@ -168,4 +170,13 @@ public class ContactsFragment extends Fragment implements IContactsView {
     public boolean onOptionsItemSelected(MenuItem item) {
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    public void onResume(){
+//        RecyclerView.LayoutParams lp = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+//        recyclerView.setLayoutParams(lp);
+        super.onResume();
+
+    }
+
 }

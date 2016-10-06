@@ -55,7 +55,7 @@ public class RestApi {
         File file = new File(fileName);
         RequestBody requestFile =
                 RequestBody.create(MediaType.parse("multipart/form-data"), file);
-        MultipartBody.Part part = MultipartBody.Part.createFormData("file", file.getName(), requestFile);
+        MultipartBody.Part part = MultipartBody.Part.createFormData("image", file.getName(), requestFile);
         return api.updateAvatar(part, bearer);
     }
 

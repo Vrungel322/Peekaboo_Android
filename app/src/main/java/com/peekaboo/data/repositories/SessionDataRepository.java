@@ -88,8 +88,8 @@ public class SessionDataRepository implements SessionRepository {
     }
 
     @Override
-    public Observable<FileEntity> updateAvatar(String fileName, String bearer) {
-        return restApi.updateAvatar(fileName, bearer);
+    public Observable<FileEntity> updateAvatar(String fileName) {
+        return restApi.updateAvatar(fileName, user.getBearer());
     }
 
 
