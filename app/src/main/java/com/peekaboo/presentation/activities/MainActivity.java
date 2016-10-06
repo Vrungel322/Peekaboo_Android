@@ -1,7 +1,12 @@
 package com.peekaboo.presentation.activities;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -22,6 +27,8 @@ import com.peekaboo.domain.AccountUser;
 import com.peekaboo.domain.Dialog;
 import com.peekaboo.presentation.PeekabooApplication;
 import com.peekaboo.presentation.adapters.HotFriendsAdapter;
+import com.peekaboo.presentation.dialogs.AvatarChangeDialog;
+import com.peekaboo.presentation.dialogs.ConfirmSignUpDialog;
 import com.peekaboo.presentation.fragments.CallsFragment;
 import com.peekaboo.presentation.fragments.ContactsFragment;
 import com.peekaboo.presentation.fragments.DialogsFragment;
@@ -37,8 +44,11 @@ import com.peekaboo.presentation.utils.ResourcesUtils;
 import com.peekaboo.presentation.views.IMainView;
 import com.peekaboo.utils.ActivityNavigator;
 import com.peekaboo.utils.Constants;
+import com.peekaboo.utils.Utility;
 import com.squareup.picasso.Picasso;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -51,7 +61,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
 
-public class MainActivity extends AppCompatActivity implements IMainView, INotifier.NotificationListener<Message>{
+public class MainActivity extends AppCompatActivity implements IMainView, AvatarChangeDialog.IAvatarChangeListener, INotifier.NotificationListener<Message>{
     @BindView(R.id.drawer_layout)
     DrawerLayout drawer;
     @BindView(R.id.bText)
@@ -94,6 +104,8 @@ public class MainActivity extends AppCompatActivity implements IMainView, INotif
     private HotFriendsAdapter hotFriendsAdapter;
     private ArrayList<HotFriendPOJO> alHotFriendPOJO;
     private final Set<OnBackPressListener> listeners = new HashSet<>();
+    private Uri imageUri;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -191,7 +203,7 @@ public class MainActivity extends AppCompatActivity implements IMainView, INotif
         super.onDestroy();
     }
 
-    @OnClick({R.id.llDialogs, R.id.llCalls, R.id.llContacts, R.id.llProfile, R.id.llSettings, R.id.llExit})
+    @OnClick({R.id.llDialogs, R.id.llCalls, R.id.llContacts, R.id.llProfile, R.id.llSettings, R.id.llExit, R.id.ivAccountAvatar})
     public void onDrawerItemClick(View v) {
         selectionMode(v.getId());
         switch (v.getId()) {
@@ -210,8 +222,16 @@ public class MainActivity extends AppCompatActivity implements IMainView, INotif
             case R.id.llSettings:
                 changeFragment(new SettingsFragment(), Constants.FRAGMENT_TAGS.SETTINGS_FRAGMENT);
                 break;
+            case R.id.ivAccountAvatar:
+                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+                AvatarChangeDialog avatarChangeDialog = new AvatarChangeDialog();
+                avatarChangeDialog.setStyle(DialogFragment.STYLE_NO_TITLE, 0);
+//        confirmSignUpDialog.setStyle(android.app.DialogFragment.STYLE_NO_FRAME, 0);
+                avatarChangeDialog.show(ft, "avatar_change_dialog");
+                break;
             case R.id.llExit:
 //                throw new RuntimeException();
+
         }
 
     }
@@ -322,5 +342,40 @@ public class MainActivity extends AppCompatActivity implements IMainView, INotif
 
     public interface OnBackPressListener {
         boolean onBackPress();
+    }
+
+    @Override
+    public void takePhoto(){
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
+            File photoFile = null;
+            try {
+                photoFile = Utility.createImageFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            if (photoFile != null) {
+                imageUri = Utility.getImageContentUri(MainActivity.this, photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+                startActivityForResult(takePictureIntent, Constants.REQUEST_CODES.REQUEST_CODE_CAMERA);
+            }
+        }
+
+    }
+
+    @Override
+    public void takeFromGallery(){
+        startActivityForResult(new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI),
+                Constants.REQUEST_CODES.REQUEST_CODE_GALERY);
+    }
+
+    private Uri getImageUri(){
+        if(imageUri != null){
+            return imageUri;
+        }
+        if(getIntent().getData() != null){
+            return getIntent().getData();
+        }
+        return null;
     }
 }

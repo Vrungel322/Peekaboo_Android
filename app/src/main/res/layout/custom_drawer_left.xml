@@ -46,7 +46,8 @@
                                 android:layout_height="@dimen/heightOfIconInDrawer"
                                 android:layout_gravity="center"
                                 tools:src="@drawable/raccoon"
-                                app:border_color="@android:color/transparent" />
+                                app:border_color="@android:color/transparent"
+                                android:clickable="true"/>
 
 
                             <de.hdodenhof.circleimageview.CircleImageView
