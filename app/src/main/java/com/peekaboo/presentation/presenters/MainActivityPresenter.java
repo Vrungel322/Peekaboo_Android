@@ -53,6 +53,9 @@ public class MainActivityPresenter extends ProgressPresenter<IMainView> implemen
 
     @Override
     public void updateAvatar(Uri avatarUri) {
+        if(getView() != null) {
+            getView().showProgress();
+        }
         avatarUpdateUseCase.setDataForUpdatingAvatar(ResourcesUtils.getRealPathFromURI(mContext, avatarUri));
         avatarUpdateUseCase.execute(getAvatarSubscriber());
     }
@@ -63,6 +66,7 @@ public class MainActivityPresenter extends ProgressPresenter<IMainView> implemen
             public void onNext(FileEntity response) {
                 super.onNext(response);
                 if(getView() != null){
+                    getView().hideProgress();
                     getView().updateAvatarView(response.getResult());
                 }
             }

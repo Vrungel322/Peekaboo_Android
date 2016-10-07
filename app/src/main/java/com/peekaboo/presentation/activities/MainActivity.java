@@ -19,6 +19,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -43,6 +44,7 @@ import com.peekaboo.presentation.views.IMainView;
 import com.peekaboo.utils.ActivityNavigator;
 import com.peekaboo.utils.Constants;
 import com.peekaboo.utils.Utility;
+import com.squareup.picasso.Callback;
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 
@@ -87,6 +89,8 @@ public class MainActivity extends AppCompatActivity implements IMainView, Avatar
     TextView tvNameSurname;
     @BindView(R.id.ivAccountAvatar)
     ImageView ivAccountAvatar;
+    @BindView(R.id.pbLoading_avatar_progress_bar)
+    ProgressBar pbLoading_avatar_progress_bar;
     @BindView(R.id.ivOnlineStatus)
     ImageView ivOnlineStatus;
 
@@ -104,7 +108,6 @@ public class MainActivity extends AppCompatActivity implements IMainView, Avatar
     private ArrayList<HotFriendPOJO> alHotFriendPOJO;
     private final Set<OnBackPressListener> listeners = new HashSet<>();
     private Uri imageUri;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -161,11 +164,12 @@ public class MainActivity extends AppCompatActivity implements IMainView, Avatar
 
     @Override
     public void updateAvatarView(String result) {
-        showAvatar(accountUser.getAvatar());
-//        if (result.equals("OK")) {
-//        } else {
-//            showToastMessage("Error in updating avatar... Sorryan");
-//        }
+        showProgress();
+        if (result.equals("Ok")) {
+            showAvatar(accountUser.getAvatar());
+        } else {
+            showToastMessage("Error in updating avatar... Sorryan");
+        }
     }
 
     private void prepareDrawer() {
@@ -202,7 +206,17 @@ public class MainActivity extends AppCompatActivity implements IMainView, Avatar
         int avatarSize = ResourcesUtils.getDimenInPx(this, R.dimen.widthOfIconInDrawer);
         Picasso.with(this).load(avatarUrl).memoryPolicy(MemoryPolicy.NO_CACHE)
                 .resize(0, avatarSize)
-                .into(ivAccountAvatar);
+                .into(ivAccountAvatar, new Callback() {
+                    @Override
+                    public void onSuccess() {
+                        hideProgress();
+                    }
+
+                    @Override
+                    public void onError() {
+
+                    }
+                });
     }
 
     @Override
@@ -341,12 +355,12 @@ public class MainActivity extends AppCompatActivity implements IMainView, Avatar
 
     @Override
     public void showProgress() {
-
+        pbLoading_avatar_progress_bar.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void hideProgress() {
-
+        pbLoading_avatar_progress_bar.setVisibility(View.GONE);
     }
 
     public interface OnBackPressListener {
