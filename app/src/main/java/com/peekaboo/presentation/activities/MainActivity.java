@@ -43,6 +43,7 @@ import com.peekaboo.presentation.views.IMainView;
 import com.peekaboo.utils.ActivityNavigator;
 import com.peekaboo.utils.Constants;
 import com.peekaboo.utils.Utility;
+import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
@@ -187,7 +188,10 @@ public class MainActivity extends AppCompatActivity implements IMainView, Avatar
         String userName = accountUser.getUsername();
         tvNameSurname.setText(userName);
         Log.e("activity", "" + avatarUrl);
-        showAvatar(avatarUrl);
+        int avatarSize = ResourcesUtils.getDimenInPx(this, R.dimen.widthOfIconInDrawer);
+        Picasso.with(this).load(avatarUrl)
+        .resize(0, avatarSize)
+                .into(ivAccountAvatar);
 
         bText.setSelected(mode == 1);
         bAudio.setSelected(mode == 2);
@@ -196,7 +200,7 @@ public class MainActivity extends AppCompatActivity implements IMainView, Avatar
 
     private void showAvatar(String avatarUrl) {
         int avatarSize = ResourcesUtils.getDimenInPx(this, R.dimen.widthOfIconInDrawer);
-        Picasso.with(this).load(avatarUrl)
+        Picasso.with(this).load(avatarUrl).memoryPolicy(MemoryPolicy.NO_CACHE)
                 .resize(0, avatarSize)
                 .into(ivAccountAvatar);
     }
