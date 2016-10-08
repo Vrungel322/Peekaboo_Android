@@ -5,6 +5,7 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
@@ -34,6 +35,9 @@ import javax.inject.Singleton;
 public class MessageNotificator implements IMessenger.MessengerListener {
 
     public static final int NOTIFICATION_ID = 101;
+    public static final int ON_MS = 500;
+    public static final int OFF_MS = 2000;
+    public static final int ARGB = Color.CYAN;
     private final NotificationManager notificationManager;
     private final GetAllUnreadMessagesInfoUseCase getAllUnreadMessagesInfoUseCase;
     private final Picasso picasso;
@@ -150,6 +154,8 @@ public class MessageNotificator implements IMessenger.MessengerListener {
                 .setContent(remoteView)
                 .setContentIntent(resultPendingIntent)
                 .setSound(ringtoneUri)
+//                .setColor(Color.GREEN)
+                .setLights(ARGB, ON_MS, OFF_MS)
                 .build();
     }
 
@@ -158,6 +164,7 @@ public class MessageNotificator implements IMessenger.MessengerListener {
                 .setSmallIcon(R.drawable.ic_message_white_24dp)
                 .setContent(remoteView)
                 .setContentIntent(resultPendingIntent)
+                .setLights(ARGB, ON_MS, OFF_MS)
                 .build();
     }
 
@@ -167,6 +174,7 @@ public class MessageNotificator implements IMessenger.MessengerListener {
                 .setSmallIcon(R.drawable.ic_message_white_24dp)
                 .setContentText(message)
                 .setContentTitle(title)
+                .setLights(ARGB, ON_MS, OFF_MS)
                 .setSound(ringtoneUri)
                 .setContentIntent(resultPendingIntent)
                 .build();
