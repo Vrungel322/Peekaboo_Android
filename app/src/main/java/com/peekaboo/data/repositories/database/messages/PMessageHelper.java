@@ -8,6 +8,7 @@ import android.util.Log;
 
 import com.peekaboo.data.mappers.AbstractMapperFactory;
 import com.peekaboo.data.mappers.Mapper;
+import com.peekaboo.data.repositories.database.contacts.Contact;
 import com.peekaboo.data.repositories.database.contacts.PContactHelper;
 import com.peekaboo.data.repositories.database.service.DBHelper;
 import com.peekaboo.data.repositories.database.utils_db.Db;
@@ -198,5 +199,25 @@ public class PMessageHelper {
     @NonNull
     private List<PMessage> getInitialValue() {
         return new ArrayList<>();
+    }
+
+    public Observable<List<PMessage>> getAllUnreadMessages(boolean isMine) {
+        return contactHelper.getAllContacts()
+                .flatMapIterable(l -> l)
+                .concatMap(pContactAbs -> {
+                    String tableName = PREFIX + pContactAbs.contactId();
+                    String selectUnread = String.format("SELECT * FROM %s WHERE %s = %d AND %s = %d",
+                            tableName,
+                            PMessageAbs.STATUS,
+                            PMessageAbs.PMESSAGE_STATUS.STATUS_DELIVERED,
+                            PMessageAbs.IS_MINE,
+                            isMine ? 1 : 0);
+
+                    return select(selectUnread);
+                })
+                .reduce(getInitialValue(), (result, messages) -> {
+                    result.addAll(messages);
+                    return result;
+                });
     }
 }

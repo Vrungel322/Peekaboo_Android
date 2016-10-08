@@ -6,13 +6,16 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.peekaboo.data.mappers.ContactToContentValueMapper;
+import com.peekaboo.data.repositories.database.messages.PMessage;
 import com.peekaboo.data.repositories.database.service.DBHelper;
 import com.peekaboo.data.repositories.database.utils_db.Db;
 import com.peekaboo.domain.schedulers.ObserveOn;
 import com.peekaboo.domain.schedulers.SubscribeOn;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import rx.Observable;
 
@@ -104,5 +107,26 @@ public class PContactHelper {
         String contactImgUri = Db.getString(cursor, ContactAbs.CONTACT_IMG_URI);
 
         return new Contact(id, contactName, contactSurname, contactNickname, isOnline, contactImgUri, contactId);
+    }
+
+    public Observable<Contact> getContactByContactId(String contactId) {
+        String selectAll = "SELECT * FROM " + TABLE_NAME + " WHERE " + Contact.CONTACT_ID + " = " + contactId;
+        return select(selectAll).filter(contacts -> contacts.size() == 1).map(contacts -> contacts.get(0));
+    }
+
+    public Observable<List<Contact>> getContactsForMessages(List<PMessage> pMessages) {
+        Set<String> contactIds = new HashSet<>();
+        for (PMessage pMessage : pMessages) {
+            contactIds.add(pMessage.senderId());
+        }
+        String inPart = "";
+        for (String contactId : contactIds) {
+            inPart += contactId + ", ";
+        }
+        if (!inPart.isEmpty()) {
+            inPart = inPart.substring(0, inPart.length() - 2);
+        }
+        String query = "SELECT * FROM " + TABLE_NAME + " WHERE " + Contact.CONTACT_ID + " in (" + inPart + ")";
+        return select(query);
     }
 }

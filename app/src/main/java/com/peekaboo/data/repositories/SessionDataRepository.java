@@ -14,6 +14,7 @@ import com.peekaboo.data.rest.entity.Credentials;
 import com.peekaboo.data.rest.entity.CredentialsSignUp;
 import com.peekaboo.domain.AccountUser;
 import com.peekaboo.domain.Dialog;
+import com.peekaboo.domain.Pair;
 import com.peekaboo.domain.SessionRepository;
 import com.peekaboo.domain.User;
 
@@ -22,6 +23,8 @@ import java.util.List;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import rx.Observable;
+import rx.functions.Func1;
+import rx.functions.Func2;
 
 /**
  * Created by Arkadiy on 05.06.2016.
@@ -131,5 +134,25 @@ public class SessionDataRepository implements SessionRepository {
                 })
                 .filter(dialog -> dialog != null)
                 .toList();
+    }
+
+    @Override
+    public Observable<Contact> getContactByContactId(String contactId) {
+        return contactHelper.getContactByContactId(contactId);
+    }
+
+    @Override
+    public Observable<List<PMessage>> getAllUnreadMessages(boolean isMine) {
+        return messageHelper.getAllUnreadMessages(isMine);
+    }
+
+    @Override
+    public Observable<Pair<List<PMessage>, List<Contact>>> getAllUnreadMessagesInfo() {
+        return messageHelper.getAllUnreadMessages(false).flatMap(new Func1<List<PMessage>, Observable<List<Contact>>>() {
+            @Override
+            public Observable<List<Contact>> call(List<PMessage> pMessages) {
+                return contactHelper.getContactsForMessages(pMessages);
+            }
+        }, Pair::new);
     }
 }

@@ -13,7 +13,8 @@ public class CredentialUtils {
     }
 
     public static boolean isEmailValid(String email) {
-        return !email.contains(" ") && email.contains("@");
+//        return !email.contains(" ") && email.contains("@");
+        return true;
     }
 
     public static boolean isPasswordConfirmed(String password, String passwordConfirm) {

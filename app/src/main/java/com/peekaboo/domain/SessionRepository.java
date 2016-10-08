@@ -3,6 +3,7 @@ package com.peekaboo.domain;
 
 import com.peekaboo.data.FileEntity;
 import com.peekaboo.data.repositories.database.contacts.Contact;
+import com.peekaboo.data.repositories.database.messages.PMessage;
 
 import java.util.List;
 
@@ -33,4 +34,10 @@ public interface SessionRepository {
     Observable saveContactToDb(List<Contact> contact);
 
     Observable<List<Dialog>> loadDialogs();
+
+    Observable<Contact> getContactByContactId(String contactId);
+
+    Observable<List<PMessage>> getAllUnreadMessages(boolean isMine);
+
+    Observable<Pair<List<PMessage>,List<Contact>>> getAllUnreadMessagesInfo();
 }

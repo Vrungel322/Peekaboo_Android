@@ -1,6 +1,10 @@
 package com.peekaboo.presentation.activities;
 
+import android.app.NotificationManager;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
@@ -19,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.peekaboo.R;
+import com.peekaboo.data.repositories.database.contacts.Contact;
 import com.peekaboo.domain.AccountUser;
 import com.peekaboo.domain.Dialog;
 import com.peekaboo.presentation.PeekabooApplication;
@@ -32,6 +37,7 @@ import com.peekaboo.presentation.pojo.HotFriendPOJO;
 import com.peekaboo.presentation.presenters.MainActivityPresenter;
 import com.peekaboo.presentation.services.INotifier;
 import com.peekaboo.presentation.services.Message;
+import com.peekaboo.presentation.services.MessageNotificator;
 import com.peekaboo.presentation.services.MessageUtils;
 import com.peekaboo.presentation.utils.ResourcesUtils;
 import com.peekaboo.presentation.views.IMainView;
@@ -51,7 +57,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
 
-public class MainActivity extends AppCompatActivity implements IMainView, INotifier.NotificationListener<Message>{
+public class MainActivity extends AppCompatActivity implements IMainView, INotifier.NotificationListener<Message> {
     @BindView(R.id.drawer_layout)
     DrawerLayout drawer;
     @BindView(R.id.bText)
@@ -106,8 +112,10 @@ public class MainActivity extends AppCompatActivity implements IMainView, INotif
         updateAccountData(accountUser);
 
         if (getSupportFragmentManager().findFragmentById(R.id.fragmentContainer) == null) {
-            changeFragment(ContactsFragment.newInstance(), Constants.FRAGMENT_TAGS.CONTACTS_FRAGMENT);
-            selectionMode(R.id.llContacts);
+            if (!handleNotificationIntent(getIntent(), false)) {
+                changeFragment(ContactsFragment.newInstance(), Constants.FRAGMENT_TAGS.CONTACTS_FRAGMENT);
+                selectionMode(R.id.llContacts);
+            }
         }
         //Hardcode list in right drawer
         prepareHotFriends();
@@ -119,6 +127,34 @@ public class MainActivity extends AppCompatActivity implements IMainView, INotif
             onDisconnected();
             notifier.tryConnect(accountUser.getBearer());
         }
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragmentContainer);
+        handleNotificationIntent(intent, fragment == null || !(fragment instanceof ChatFragment));
+    }
+
+    private boolean handleNotificationIntent(Intent intent, boolean addToStack) {
+        String action = intent.getAction();
+
+        if (ACTION.SHOW_CHAT.equals(action) && intent.hasExtra(ACTION.EXTRA.CONTACT_EXTRA)) {
+            Contact contact = intent.getParcelableExtra(ACTION.EXTRA.CONTACT_EXTRA);
+            NotificationManager notificationManager =
+                    (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            notificationManager.cancel(MessageNotificator.NOTIFICATION_ID);
+            navigator.startChatActivity(this, contact, addToStack);
+        } else if (ACTION.SHOW_DIALOGS.equals(action)){
+            NotificationManager notificationManager =
+                    (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            notificationManager.cancel(MessageNotificator.NOTIFICATION_ID);
+            navigator.startDialogFragment(this);
+        } else {
+            return false;
+        }
+
+        return true;
     }
 
     private void prepareHotFriends() {
@@ -264,7 +300,7 @@ public class MainActivity extends AppCompatActivity implements IMainView, INotif
         }
     }
 
-    private void changeFragment(Fragment fragment, String tag) {
+    private void changeFragment(Fragment fragment, @Nullable String tag) {
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragmentContainer, fragment, tag)
                 .commit();
@@ -328,5 +364,13 @@ public class MainActivity extends AppCompatActivity implements IMainView, INotif
 
     public interface OnBackPressListener {
         boolean onBackPress();
+    }
+
+    public interface ACTION {
+        String SHOW_DIALOGS = "action.show_dialogs";
+        String SHOW_CHAT = "action.show_chat";
+        interface EXTRA {
+            String CONTACT_EXTRA = "contact_extra";
+        }
     }
 }
