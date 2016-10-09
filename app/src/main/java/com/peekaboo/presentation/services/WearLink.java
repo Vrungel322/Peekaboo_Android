@@ -11,7 +11,6 @@ import android.os.Message;
 import android.os.RemoteException;
 import android.util.Log;
 
-import com.peekaboo.data.repositories.database.contacts.Contact;
 import com.peekaboo.data.repositories.database.messages.PMessage;
 import com.peekaboo.data.repositories.database.messages.PMessageAbs;
 import com.peekaboo.domain.AccountUser;
@@ -26,9 +25,7 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.util.List;
 import java.util.Map;
-import java.util.concurrent.CopyOnWriteArrayList;
 
 import javax.inject.Inject;
 
@@ -47,7 +44,7 @@ public class WearLink extends Service implements IMessenger.MessengerListener
     @Inject
     SessionRepository sessionRepository;
 
-    private final List<ChatRequestImpl> chatRequests = new CopyOnWriteArrayList<ChatRequestImpl>();
+    private final ChatRequestImpl chatRequest = new ChatRequestImpl();
 
     private static final int MSG_POST_CHAT_MESSAGE = 1;
 
@@ -144,7 +141,19 @@ public class WearLink extends Service implements IMessenger.MessengerListener
 //                    });
                     return json.toString();
                 } catch (Exception e) {
-                    Log.e(TAG, "Error saving wav file", e);
+                    Log.e(TAG, "Error on client attach", e);
+                }
+                return null;
+            }
+            if ("list-messages".equals(action)) {
+                try {
+                    String id = (String) params.get("id");
+                    notifier.getAllMessages(id).forEach(messages -> {
+                        for (PMessage msg : messages)
+                            onMessageUpdated(msg);
+                    });
+                } catch (Exception e) {
+                    Log.e(TAG, "Error listing messages", e);
                 }
                 return null;
             }
@@ -220,9 +229,7 @@ public class WearLink extends Service implements IMessenger.MessengerListener
     @Override
     public IBinder onBind(Intent intent) {
         Log.d(TAG, "onBind intent =" + intent);
-        ChatRequestImpl impl = new ChatRequestImpl();
-        chatRequests.add(impl);
-        return impl;
+        return chatRequest;
     }
 
     public static void launch(Context context) {
@@ -247,24 +254,20 @@ public class WearLink extends Service implements IMessenger.MessengerListener
 
     @Override
     public void onMessageUpdated(PMessage message) {
-        if (!message.isMine())
-            return;
         if (message.mediaType() != PMessage.PMESSAGE_MEDIA_TYPE.TEXT_MESSAGE)
             return;
         String text = message.messageBody();
         if (text == null || text.length() == 0)
             return;
-        for (ChatRequestImpl chat : chatRequests) {
-            try {
-                ChatListener listener = chat.listener;
-                if (listener != null)
-                    listener.onMessage("updated", encodeMessage(message));
-            } catch (DeadObjectException e) {
-                Log.e(TAG, "Chat listener died", e);
-                chatRequests.remove(chat);
-            } catch (RemoteException e) {
-                Log.e(TAG, "Cannot send message to chat listener", e);
-            }
+        try {
+            ChatListener listener = chatRequest.listener;
+            if (listener != null)
+                listener.onMessage("updated", encodeMessage(message));
+        } catch (DeadObjectException e) {
+            Log.e(TAG, "Chat listener died", e);
+            chatRequest.listener = null;
+        } catch (RemoteException e) {
+            Log.e(TAG, "Cannot send message to chat listener", e);
         }
     }
 
