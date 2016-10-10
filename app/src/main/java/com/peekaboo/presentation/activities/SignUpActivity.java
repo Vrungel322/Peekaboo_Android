@@ -192,7 +192,7 @@ public class SignUpActivity  extends AppCompatActivity implements ISignUpView {
         String login = etLogin.getText().toString();
         String password = pvPassword.getPassword();
         String passwordConfirm = pvPasswordConfirm.getPassword();
-        signUpPresenter.onSignUpButtonClick(username, login, password, passwordConfirm);
+        signUpPresenter.onSignUpButtonClick(phone, username, login, password, passwordConfirm);
     }
 
 }
