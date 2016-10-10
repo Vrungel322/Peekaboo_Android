@@ -20,8 +20,8 @@ public class NotificationService extends Service {
 
     @Inject
     IMessenger notifier;
-    @Inject
-    MessageNotificator messageNotificator;
+//    @Inject
+//    MessageNotificator messageNotificator;
 
     @Inject
     AccountUser user;

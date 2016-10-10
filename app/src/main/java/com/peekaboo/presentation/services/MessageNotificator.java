@@ -18,7 +18,6 @@ import com.peekaboo.data.repositories.database.messages.PMessage;
 import com.peekaboo.domain.Pair;
 import com.peekaboo.domain.subscribers.BaseUseCaseSubscriber;
 import com.peekaboo.domain.usecase.GetAllUnreadMessagesInfoUseCase;
-import com.peekaboo.domain.usecase.GetContactByContactIdUseCase;
 import com.peekaboo.presentation.activities.MainActivity;
 import com.peekaboo.presentation.utils.ResourcesUtils;
 import com.squareup.picasso.Picasso;
@@ -32,12 +31,12 @@ import javax.inject.Singleton;
  * Created by arkadius on 10/5/16.
  */
 @Singleton
-public class MessageNotificator implements IMessenger.MessengerListener {
+public class MessageNotificator {
 
     public static final int NOTIFICATION_ID = 101;
-    public static final int ON_MS = 500;
-    public static final int OFF_MS = 2000;
-    public static final int ARGB = Color.CYAN;
+    private static final int ON_MS = 500;
+    private static final int OFF_MS = 2000;
+    private static final int ARGB = Color.CYAN;
     private final NotificationManager notificationManager;
     private final GetAllUnreadMessagesInfoUseCase getAllUnreadMessagesInfoUseCase;
     private final Picasso picasso;
@@ -46,7 +45,7 @@ public class MessageNotificator implements IMessenger.MessengerListener {
     private Context context;
 
     @Inject
-    public MessageNotificator(Context context, IMessenger messenger,
+    public MessageNotificator(Context context,
                               GetAllUnreadMessagesInfoUseCase getAllUnreadMessagesInfoUseCase,
                               Picasso picasso) {
         this.context = context;
@@ -55,51 +54,39 @@ public class MessageNotificator implements IMessenger.MessengerListener {
         this.picasso = picasso;
         ringtoneUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         avatarSize = ResourcesUtils.getDimenInPx(context, R.dimen.notification_avatar_size);
-
-        messenger.addMessageListener(this);
     }
 
-    @Override
-    public void onMessageUpdated(final PMessage message) {
-        Log.e("MessageNotificator", "onMessageUpdate " + message);
-        if (!message.isMine() && message.status() == PMessage.PMESSAGE_STATUS.STATUS_DELIVERED) {
-            getAllUnreadMessagesInfoUseCase.execute(new BaseUseCaseSubscriber<Pair<List<PMessage>, List<Contact>>>() {
-                @Override
-                public void onNext(final Pair<List<PMessage>, List<Contact>> pair) {
-                    List<PMessage> messages = pair.first;
-                    List<Contact> contacts = pair.second;
-                    Log.e("MessageNotificator", "onNext " + messages.size() + " " + contacts.size());
-                    Contact currentContact = null;
-                    for (Contact contact : contacts) {
-                        if (message.senderId().equals(contact.contactId())) {
-                            currentContact = contact;
-                            break;
-                        }
-                    }
-                    if (currentContact != null && !messages.isEmpty() && !contacts.isEmpty()) {
-                        Log.e("MessageNotificator", "everything is good " + currentContact);
-                        String ticker = currentContact.contactNickname() + " - " + context.getString(R.string.newMessage);
-
-                        if (messages.size() == 1) {
-                            showSinglePersonNotification(ticker, message.messageBody(), currentContact);
-                        } else if (fromSinglePerson(messages)) {
-                            String text = messages.size() + " " + context.getString(R.string.newMessages);
-                            showSinglePersonNotification(ticker, text, currentContact);
-                        } else {
-                            String text = messages.size() + " " + context.getString(R.string.newMessages);
-                            String title = "";
-                            for (Contact contact : contacts) {
-                                title += contact.contactNickname() + ", ";
-                            }
-                            title = title.substring(0, title.length() - 2);
-                            showNotification(ticker, title, text);
-                        }
-                    }
-                }
-
-            });
+    private void showNotification(List<PMessage> messages, List<Contact> contacts, PMessage message) {
+        Contact currentContact = null;
+        for (Contact contact : contacts) {
+            if (message.senderId().equals(contact.contactId())) {
+                currentContact = contact;
+                break;
+            }
         }
+        if (currentContact != null && !messages.isEmpty() && !contacts.isEmpty()) {
+            String ticker = currentContact.contactNickname() + " - " + context.getString(R.string.newMessage);
 
+            if (messages.size() == 1) {
+                showSinglePersonNotification(ticker, message.messageBody(), currentContact);
+            } else if (fromSinglePerson(messages)) {
+                String text = messages.size() + " " + context.getString(R.string.newMessages);
+                showSinglePersonNotification(ticker, text, currentContact);
+            } else {
+                String text = messages.size() + " " + context.getString(R.string.newMessages);
+                String title = constructTitleForMultipleContacts(contacts);
+                showNotification(ticker, title, text);
+            }
+        }
+    }
+
+    private String constructTitleForMultipleContacts(List<Contact> contacts) {
+        String title = "";
+        for (Contact contact : contacts) {
+            title += contact.contactNickname() + ", ";
+        }
+        title = title.substring(0, title.length() - 2);
+        return title;
     }
 
     private boolean fromSinglePerson(List<PMessage> messages) {
@@ -154,7 +141,6 @@ public class MessageNotificator implements IMessenger.MessengerListener {
                 .setContent(remoteView)
                 .setContentIntent(resultPendingIntent)
                 .setSound(ringtoneUri)
-//                .setColor(Color.GREEN)
                 .setLights(ARGB, ON_MS, OFF_MS)
                 .build();
     }
@@ -180,8 +166,14 @@ public class MessageNotificator implements IMessenger.MessengerListener {
                 .build();
     }
 
-    @Override
-    public int willChangeStatus(PMessage message) {
-        return message.status();
+    public void onMessageObtained(final PMessage message) {
+        if (!message.isMine() && message.status() == PMessage.PMESSAGE_STATUS.STATUS_DELIVERED) {
+            getAllUnreadMessagesInfoUseCase.execute(new BaseUseCaseSubscriber<Pair<List<PMessage>, List<Contact>>>() {
+                @Override
+                public void onNext(final Pair<List<PMessage>, List<Contact>> pair) {
+                    showNotification(pair.first, pair.second, message);
+                }
+            });
+        }
     }
 }

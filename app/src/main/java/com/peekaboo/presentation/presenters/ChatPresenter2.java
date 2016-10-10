@@ -187,11 +187,11 @@ public class ChatPresenter2 extends BasePresenter<IChatView2> implements IChatPr
     }
 
     @Override
-    public int willChangeStatus(PMessage message) {
+    public int displayStatus(PMessage message) {
         IChatView2 view = getView();
         return view != null && isFromCurrentChat(message, view) ?
                 PMessageAbs.PMESSAGE_STATUS.STATUS_READ
-                : message.status();
+                : IMessenger.MessengerListener.STATUS_IGNORE;
     }
 
     public void setPlayerListener(AudioPlayer.AudioPlayerListener playerListener) {
