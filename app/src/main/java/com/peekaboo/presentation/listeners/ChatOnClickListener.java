@@ -31,6 +31,6 @@ public class ChatOnClickListener implements ChatClickListener {
         Bundle itemIndexBundle = new Bundle();
         itemIndexBundle.putInt(Constants.ARG_CHAT_MESSAGE_ITEM_INDEX, position);
         chatItemDialog.setArguments(itemIndexBundle);
-        chatItemDialog.show(ft, Constants.FRAGMENT_TAGS.CHAT_ITEM_DIALOG_FRAGMENT_TAG);
+//        chatItemDialog.show(ft, Constants.FRAGMENT_TAGS.CHAT_ITEM_DIALOG_FRAGMENT_TAG);
     }
 }

@@ -12,7 +12,7 @@ import com.peekaboo.R;
 import com.peekaboo.data.*;
 import com.peekaboo.data.Constants;
 import com.peekaboo.data.repositories.database.contacts.Contact;
-import com.peekaboo.presentation.activities.ChatFragment;
+import com.peekaboo.presentation.fragments.ChatFragment;
 import com.peekaboo.presentation.activities.LogInActivity;
 import com.peekaboo.presentation.activities.MainActivity;
 import com.peekaboo.presentation.activities.SignUpActivity;

@@ -91,6 +91,12 @@ public class SessionDataRepository implements SessionRepository {
     }
 
     @Override
+    public Observable<FileEntity> updateAvatar(String fileName) {
+        return restApi.updateAvatar(fileName, user.getBearer());
+    }
+
+
+    @Override
     public Call<ResponseBody> downloadFile(String remoteFileName) {
         return restApi.downloadFile(remoteFileName, user.getBearer());
     }
@@ -154,5 +160,10 @@ public class SessionDataRepository implements SessionRepository {
                 return contactHelper.getContactsForMessages(pMessages);
             }
         }, Pair::new);
+    }
+
+    @Override
+    public Observable<Integer> getUnreadMessagesCount(String id) {
+        return messageHelper.getUnreadMessagesCount(id);
     }
 }

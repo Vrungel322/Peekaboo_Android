@@ -132,7 +132,7 @@ public class ChatAdapter2 extends RecyclerView.Adapter<ChatAdapter2.ViewHolder> 
         return null;
     }
 
-    private PMessage getItem(int position) {
+    public PMessage getItem(int position) {
         return messages.get(position);
     }
 

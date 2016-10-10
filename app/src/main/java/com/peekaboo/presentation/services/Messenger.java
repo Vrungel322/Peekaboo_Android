@@ -144,6 +144,7 @@ public class Messenger implements IMessenger,
             readMessage(pMessage);
         } else {
             if (isIgnored) {
+                Log.e("messenger", "" + message);
                 messageNotificator.onMessageObtained(pMessage);
             }
             for (MessengerListener listener : messageListeners) {

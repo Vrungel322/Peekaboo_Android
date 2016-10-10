@@ -21,25 +21,25 @@ import javax.inject.Inject;
 public class DialogPresenter extends ProgressPresenter<IDialogsView>
         implements  IDialogPresenter, IMessenger.MessengerListener {
 
+    private final IMessenger messenger;
     private GetDialogsListUseCase getDialogsListUseCase;
-    private IMessenger messenger;
 
     @Inject
-    public DialogPresenter(UserMessageMapper errorHandler, GetDialogsListUseCase getDialogsListUseCase, IMessenger messenger) {
+    public DialogPresenter(UserMessageMapper errorHandler,
+                           IMessenger messenger,
+                           GetDialogsListUseCase getDialogsListUseCase) {
         super(errorHandler);
-        this.getDialogsListUseCase = getDialogsListUseCase;
         this.messenger = messenger;
+        this.getDialogsListUseCase = getDialogsListUseCase;
     }
 
     @Override
     public void onCreate() {
-
     }
 
     @Override
     public void onPause() {
         messenger.removeMessageListener(this);
-        getDialogsListUseCase.unsubscribe();
     }
 
     @Override
@@ -49,6 +49,7 @@ public class DialogPresenter extends ProgressPresenter<IDialogsView>
 
     @Override
     public void onDestroy() {
+        getDialogsListUseCase.unsubscribe();
         unbind();
     }
 
@@ -72,7 +73,7 @@ public class DialogPresenter extends ProgressPresenter<IDialogsView>
 
     @Override
     public void onMessageUpdated(PMessage message) {
-
+        getDialogsListUseCase.execute(getDialogsListSubscriber());
     }
 
     @Override

@@ -1,6 +1,8 @@
-package com.peekaboo.presentation.activities;
+package com.peekaboo.presentation.fragments;
 
 import android.animation.Animator;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.annotation.Nullable;
@@ -10,7 +12,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -29,6 +30,7 @@ import com.peekaboo.data.repositories.database.contacts.Contact;
 import com.peekaboo.data.repositories.database.messages.PMessage;
 import com.peekaboo.domain.AccountUser;
 import com.peekaboo.presentation.PeekabooApplication;
+import com.peekaboo.presentation.activities.MainActivity;
 import com.peekaboo.presentation.adapters.ChatAdapter2;
 import com.peekaboo.presentation.app.view.PHorizontalScrollView;
 import com.peekaboo.presentation.listeners.ChatClickListener;
@@ -37,6 +39,7 @@ import com.peekaboo.presentation.presenters.ChatPresenter2;
 import com.peekaboo.presentation.services.INotifier;
 import com.peekaboo.presentation.services.Message;
 import com.peekaboo.presentation.views.IChatView2;
+import com.peekaboo.utils.Constants;
 
 import java.util.List;
 
@@ -97,6 +100,8 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
     private Contact companion;
 
     private Animator animator;
+    private ChatItemDialog chatItemDialog;
+    private ChatItemDialog.IChatItemEventListener iChatItemEventListener;
 
     public static ChatFragment newInstance(Contact companion) {
 
@@ -147,6 +152,33 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
 
             @Override
             public void onLongClick(View view, int position) {
+                android.support.v4.app.FragmentTransaction ft = ((AppCompatActivity)getActivity())
+                        .getSupportFragmentManager().beginTransaction();
+                chatItemDialog = new ChatItemDialog();
+                Bundle itemIndexBundle = new Bundle();
+                chatItemDialog.setChatItemEventListener(new ChatItemDialog.IChatItemEventListener() {
+                    @Override
+                    public void copyText(int index) {
+                        presenter.onCopyMessageTextClick((ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE),
+                                 adapter.getItem(index));
+                    }
+
+                    @Override
+                    public void deleteMess(int index) {
+                        presenter.onDeleteMessageClick(adapter.getItem(index));
+                        presenter.showUpdatedMessages(getCompanionId());
+                    }
+
+                    @Override
+                    public void textToSpeech(int index) {
+                        presenter.onConvertTextToSpeechClick(adapter.getItem(index));
+
+                    }
+                });
+                itemIndexBundle.putInt(Constants.ARG_CHAT_MESSAGE_ITEM_INDEX, position);
+                chatItemDialog.setArguments(itemIndexBundle);
+                chatItemDialog.show(ft, Constants.FRAGMENT_TAGS.CHAT_ITEM_DIALOG_FRAGMENT_TAG);
+
 
             }
         }));

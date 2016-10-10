@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Peekaboo</string>
     <string name="pleaseWait">Please, wait...</string>
+    <string name="phoneNumber">Phone Number</string>
     <string name="username">Username</string>
     <string name="password">Password</string>
     <string name="createAccount">Create Account</string>
@@ -8,6 +9,7 @@
     <string name="skip">Skip</string>
     <string name="confirmPassword">Confirm password</string>
     <string name="email">Email or phone number</string>
+    <string name="invalidPhoneNumber">Invalid phone number</string>
     <string name="invalidLogin">Invalid login</string>
     <string name="invalidUsername">Invalid username</string>
     <string name="invalidPassword">Invalid password</string>
@@ -55,6 +57,10 @@
         <item>TEST: To speech</item>
     </string-array>
 
+    <string-array name="avatar_change_dialog">
+        <item>Photo</item>
+        <item>Pick from gallery</item>
+    </string-array>
     <!-- TODO: Remove or change this placeholder payload -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="selectImage">Select Image</string>

@@ -25,6 +25,8 @@ public interface SessionRepository {
 
     Call<FileEntity> uploadFile(String fileName, String receiverId);
 
+    Observable<FileEntity> updateAvatar(String fileName);
+
     Call<ResponseBody> downloadFile(String remoteFileName);
 
     Observable<List<Contact>> loadAllContacts();
@@ -40,4 +42,5 @@ public interface SessionRepository {
     Observable<List<PMessage>> getAllUnreadMessages(boolean isMine);
 
     Observable<Pair<List<PMessage>,List<Contact>>> getAllUnreadMessagesInfo();
+    Observable<Integer> getUnreadMessagesCount(String id);
 }
