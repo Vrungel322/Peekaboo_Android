@@ -4,7 +4,6 @@ import android.support.annotation.NonNull;
 
 import com.peekaboo.data.mappers.AbstractMapperFactory;
 import com.peekaboo.data.mappers.ContactEntityToContactMapper;
-import com.peekaboo.data.mappers.MapperFactory;
 import com.peekaboo.data.repositories.SessionDataRepository;
 import com.peekaboo.data.repositories.database.contacts.Contact;
 import com.peekaboo.data.repositories.database.contacts.PContactHelper;
@@ -20,19 +19,15 @@ import com.peekaboo.domain.AccountUser;
 
 import org.hamcrest.BaseMatcher;
 import org.hamcrest.Description;
-import org.hamcrest.Matcher;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.MockitoAnnotations;
-import org.mockito.internal.creation.cglib.MockitoNamingPolicy;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import rx.Observable;
-import rx.Subscriber;
 import rx.observers.TestSubscriber;
 
 import static org.hamcrest.CoreMatchers.is;
@@ -65,7 +60,7 @@ public class SessionDataRepositoryTest {
     @Before
     public void setUp() {
         MockitoAnnotations.initMocks(this);
-        sessionDataRepository = new SessionDataRepository(restApi, mapper, user, contactHelper, messageHelper);
+        sessionDataRepository = new SessionDataRepository(restApi, mapper, user, contactHelper, messageHelper, contentResolver);
     }
 
     @Test

@@ -3,6 +3,7 @@ package com.peekaboo.domain;
 
 import com.peekaboo.data.FileEntity;
 import com.peekaboo.data.repositories.database.contacts.Contact;
+import com.peekaboo.presentation.pojo.PhoneContactPOJO;
 
 import java.util.List;
 
@@ -37,4 +38,6 @@ public interface SessionRepository {
     Observable<List<Dialog>> loadDialogs();
 
     Observable<Integer> getUnreadMessagesCount(String id);
+
+    Observable<List<PhoneContactPOJO>> getPhoneContactList();
 }
