@@ -23,7 +23,7 @@
     </FrameLayout>
 
     <FrameLayout
-        android:layout_width="69dp"
+        android:layout_width="@dimen/right_panel_width"
         android:layout_height="match_parent"
         android:layout_gravity="end"
         android:background="#ffffff">

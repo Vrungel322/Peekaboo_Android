@@ -101,5 +101,7 @@
 
     <dimen name="audio_anim_height">200dp</dimen>
     <dimen name="audio_chronometer_text_size">40sp</dimen>
+    <dimen name="right_panel_width">69dp</dimen>
+    <dimen name="contact_status_image_size">20dp</dimen>
 
 </resources>

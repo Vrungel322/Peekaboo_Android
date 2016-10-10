@@ -394,13 +394,13 @@ public class MainActivity extends AppCompatActivity implements IMainView, Avatar
         }
         if (requestCode == Constants.REQUEST_CODES.REQUEST_CODE_GALERY) {
             if (resultCode == RESULT_OK && null != data) {
-                imageUri = data.getData();
-//                try {
-//                    bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imageUri);
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//                ivAccountAvatar.setImageBitmap(bitmap);
+//                imageUri = data.getData();
+//                    try {
+//                        bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imageUri);
+//                    } catch (IOException e) {
+//                        e.printStackTrace();
+//                    }
+//                    ivAccountAvatar.setImageBitmap(bitmap);
             }
         }
     }
