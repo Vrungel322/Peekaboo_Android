@@ -9,4 +9,5 @@ import java.util.List;
  */
 public interface  IMainView extends IView, IProgressView {
     void hotFriendToShow(List<Dialog> hotDialogs);
+    void updateAvatarView(String result);
 }

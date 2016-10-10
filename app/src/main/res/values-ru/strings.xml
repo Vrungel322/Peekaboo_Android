@@ -1,6 +1,7 @@
 <resources>
     <string name="app_name">Peekaboo</string>
     <string name="pleaseWait">Подождите...</string>
+    <string name="phoneNumber">Номер телефона</string>
     <string name="username">Имя пользователя</string>
     <string name="password">Пароль</string>
     <string name="createAccount">Создать аккаунт</string>
@@ -8,6 +9,7 @@
     <string name="skip">Пропустить</string>
     <string name="confirmPassword">Пдтверждение пароля</string>
     <string name="email">Email</string>
+    <string name="invalidPhoneNumber">Неподходящий номер телефона</string>
     <string name="invalidLogin">Неподходящий логин</string>
     <string name="invalidUsername">Неподходящий логин</string>
     <string name="invalidPassword">Неподходящий пароль</string>

@@ -20,6 +20,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,11 +30,9 @@ import com.peekaboo.domain.Dialog;
 import com.peekaboo.presentation.PeekabooApplication;
 import com.peekaboo.presentation.adapters.HotFriendsAdapter;
 import com.peekaboo.presentation.dialogs.AvatarChangeDialog;
-import com.peekaboo.presentation.dialogs.ConfirmSignUpDialog;
 import com.peekaboo.presentation.fragments.CallsFragment;
 import com.peekaboo.presentation.fragments.ContactsFragment;
 import com.peekaboo.presentation.fragments.DialogsFragment;
-import com.peekaboo.presentation.fragments.FriendTestFragment;
 import com.peekaboo.presentation.fragments.ProfileFragment;
 import com.peekaboo.presentation.fragments.SettingsFragment;
 import com.peekaboo.presentation.pojo.HotFriendPOJO;
@@ -46,6 +45,8 @@ import com.peekaboo.presentation.views.IMainView;
 import com.peekaboo.utils.ActivityNavigator;
 import com.peekaboo.utils.Constants;
 import com.peekaboo.utils.Utility;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
@@ -89,6 +90,8 @@ public class MainActivity extends AppCompatActivity implements IMainView, Avatar
     TextView tvNameSurname;
     @BindView(R.id.ivAccountAvatar)
     ImageView ivAccountAvatar;
+    @BindView(R.id.pbLoading_avatar_progress_bar)
+    ProgressBar pbLoading_avatar_progress_bar;
     @BindView(R.id.ivOnlineStatus)
     ImageView ivOnlineStatus;
 
@@ -106,7 +109,6 @@ public class MainActivity extends AppCompatActivity implements IMainView, Avatar
     private ArrayList<HotFriendPOJO> alHotFriendPOJO;
     private final Set<OnBackPressListener> listeners = new HashSet<>();
     private Uri imageUri;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -141,9 +143,7 @@ public class MainActivity extends AppCompatActivity implements IMainView, Avatar
 
         drawer.setDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
-            public void onDrawerSlide(View drawerView, float slideOffset) {
-
-            }
+            public void onDrawerSlide(View drawerView, float slideOffset) {}
 
             @Override
             public void onDrawerOpened(View drawerView) {
@@ -151,20 +151,26 @@ public class MainActivity extends AppCompatActivity implements IMainView, Avatar
             }
 
             @Override
-            public void onDrawerClosed(View drawerView) {
-
-            }
+            public void onDrawerClosed(View drawerView) {}
 
             @Override
-            public void onDrawerStateChanged(int newState) {
-
-            }
+            public void onDrawerStateChanged(int newState) {}
         });
     }
 
     @Override
     public void hotFriendToShow(List<Dialog> hotDialogs) {
         hotFriendsAdapter.setItems(hotDialogs);
+    }
+
+    @Override
+    public void updateAvatarView(String result) {
+        showProgress();
+        if (result.equals("Ok")) {
+            showAvatar(accountUser.getAvatar());
+        } else {
+            showToastMessage("Error in updating avatar... Sorryan");
+        }
     }
 
     private void prepareDrawer() {
@@ -189,12 +195,29 @@ public class MainActivity extends AppCompatActivity implements IMainView, Avatar
         Log.e("activity", "" + avatarUrl);
         int avatarSize = ResourcesUtils.getDimenInPx(this, R.dimen.widthOfIconInDrawer);
         Picasso.with(this).load(avatarUrl)
-                .resize(0, avatarSize)
+        .resize(0, avatarSize)
                 .into(ivAccountAvatar);
 
         bText.setSelected(mode == 1);
         bAudio.setSelected(mode == 2);
         bVideo.setSelected(mode == 0);
+    }
+
+    private void showAvatar(String avatarUrl) {
+        int avatarSize = ResourcesUtils.getDimenInPx(this, R.dimen.widthOfIconInDrawer);
+        Picasso.with(this).load(avatarUrl).memoryPolicy(MemoryPolicy.NO_CACHE)
+                .resize(0, avatarSize)
+                .into(ivAccountAvatar, new Callback() {
+                    @Override
+                    public void onSuccess() {
+                        hideProgress();
+                    }
+
+                    @Override
+                    public void onError() {
+
+                    }
+                });
     }
 
     @Override
@@ -333,16 +356,39 @@ public class MainActivity extends AppCompatActivity implements IMainView, Avatar
 
     @Override
     public void showProgress() {
-
+        pbLoading_avatar_progress_bar.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void hideProgress() {
-
+        pbLoading_avatar_progress_bar.setVisibility(View.GONE);
     }
 
     public interface OnBackPressListener {
         boolean onBackPress();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == Constants.REQUEST_CODES.REQUEST_CODE_CAMERA) {
+            if (resultCode == RESULT_OK) {
+                ivAccountAvatar.setImageURI(imageUri);
+                presenter.updateAvatar(getAvatarUri());
+            }
+        }
+        if (requestCode == Constants.REQUEST_CODES.REQUEST_CODE_GALERY) {
+            if (resultCode == RESULT_OK && null != data) {
+                imageUri = data.getData();
+//                Bitmap bitmap = null;
+//                try {
+//                    bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imageUri);
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
+//                ivAccountAvatar.setImageBitmap(bitmap);
+                presenter.updateAvatar(data.getData());
+            }
+        }
     }
 
     @Override
