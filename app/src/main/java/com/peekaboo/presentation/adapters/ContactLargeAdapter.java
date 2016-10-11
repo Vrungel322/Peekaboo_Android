@@ -75,13 +75,13 @@ public final class ContactLargeAdapter extends RecyclerView.Adapter<ContactLarge
             holder.tvContactName.setText(contactName + " " + contactSurname);
         }
         if (contact.isOnline()) {
-            holder.ivStatus.setImageResource(R.drawable.round_status_icon_cyan);
+            holder.ivStatus.setBackgroundResource(R.drawable.list_online_indicator);
         } else {
-            holder.ivStatus.setImageResource(R.drawable.round_status_icon_grey);
+            holder.ivStatus.setBackgroundResource(R.drawable.list_offline_indicator);
         }
 
         holder.itemView.setOnClickListener(v -> {
-            navigator.startChatActivity(activity, contact);
+            navigator.startChatActivity(activity, contact, true);
         });
 
     }
@@ -112,7 +112,7 @@ public final class ContactLargeAdapter extends RecyclerView.Adapter<ContactLarge
         @BindView(R.id.contact_avatar_image_view)
         CircleImageView ivAvatar;
         @BindView(R.id.contact_status_image_view)
-        CircleImageView ivStatus;
+        View ivStatus;
         @BindView(R.id.loading_image_progress_bar)
         ProgressBar pbImageLoading;
 

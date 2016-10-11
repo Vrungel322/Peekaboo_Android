@@ -142,7 +142,7 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
         layoutManager.setStackFromEnd(true);
         rvMessages.setLayoutManager(layoutManager);
         rvMessages.setItemAnimator(new DefaultItemAnimator());
-        adapter = new ChatAdapter2(getActivity(), presenter, rvMessages);
+        adapter = new ChatAdapter2(getActivity(), presenter, rvMessages, companion);
         rvMessages.setAdapter(adapter);
         svItems.setOnTouchListener((view1, motionEvent) -> false);
         rvMessages.addOnItemTouchListener(new ChatRecyclerTouchListener(getActivity(), rvMessages, new ChatClickListener() {

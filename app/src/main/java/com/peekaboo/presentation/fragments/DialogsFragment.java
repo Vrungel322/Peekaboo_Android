@@ -79,6 +79,12 @@ public class DialogsFragment extends Fragment implements IDialogsView {
     }
 
     @Override
+    public void onResume() {
+        super.onResume();
+        presenter.onResume();
+    }
+
+    @Override
     public void onPause() {
         super.onPause();
     }

@@ -19,6 +19,7 @@ import com.peekaboo.data.rest.entity.Credentials;
 import com.peekaboo.data.rest.entity.CredentialsSignUp;
 import com.peekaboo.domain.AccountUser;
 import com.peekaboo.domain.Dialog;
+import com.peekaboo.domain.Pair;
 import com.peekaboo.domain.SessionRepository;
 import com.peekaboo.domain.User;
 import com.peekaboo.presentation.pojo.PhoneContactPOJO;
@@ -149,6 +150,23 @@ public class SessionDataRepository implements SessionRepository {
                 })
                 .filter(dialog -> dialog != null)
                 .toList();
+    }
+
+    @Override
+    public Observable<Contact> getContactByContactId(String contactId) {
+        return contactHelper.getContactByContactId(contactId);
+    }
+
+    @Override
+    public Observable<List<PMessage>> getAllUnreadMessages(boolean isMine) {
+        return messageHelper.getAllUnreadMessages(isMine);
+    }
+
+    @Override
+    public Observable<Pair<List<PMessage>, List<Contact>>> getAllUnreadMessagesInfo() {
+        return messageHelper.getAllUnreadMessages(false).flatMap(pMessages -> {
+            return contactHelper.getContactsForMessages(pMessages);
+        }, Pair::new);
     }
 
     @Override

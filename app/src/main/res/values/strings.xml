@@ -8,13 +8,13 @@
     <string name="signIn">Sign In</string>
     <string name="skip">Skip</string>
     <string name="confirmPassword">Confirm password</string>
-    <string name="email">Email</string>
+    <string name="email">Email or phone number</string>
     <string name="invalidPhoneNumber">Invalid phone number</string>
     <string name="invalidLogin">Invalid login</string>
     <string name="invalidUsername">Invalid username</string>
     <string name="invalidPassword">Invalid password</string>
     <string name="invalidPasswordConfirm">Passwords don\'t match</string>
-    <string name="invalidEmail">Invalid email</string>
+    <string name="invalidEmail">Invalid email or phone number</string>
     <string name="invalidKey">Invalid key</string>
     <string name="bySignUp1">By </string>
     <string name="bySignUp2"> Sign Up </string>
@@ -93,5 +93,7 @@
     <string name="message_type_image">Image</string>
     <string name="message_type_video">Video</string>
     <string name="message_type_document">Document</string>
+    <string name="newMessages">new messages</string>
+    <string name="newMessage">new message</string>
 
 </resources>

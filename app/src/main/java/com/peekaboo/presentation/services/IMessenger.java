@@ -22,9 +22,10 @@ public interface IMessenger extends INotifier<PMessage> {
     void removeMessageListener(MessengerListener messengerListener);
 
     interface MessengerListener {
+        int STATUS_IGNORE = -1;
         void onMessageUpdated(PMessage message);
 
-        int willChangeStatus(PMessage message);
+        int displayStatus(PMessage message);
 
     }
 
