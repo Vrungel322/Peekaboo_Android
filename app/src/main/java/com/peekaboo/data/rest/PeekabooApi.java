@@ -59,6 +59,13 @@ public interface PeekabooApi {
             @Header("authorization") String bearer
     );
 
+    @Multipart
+    @POST("avatar")
+    Observable<FileEntity> updateAvatar(
+            @Part MultipartBody.Part body,
+            @Header("authorization") String bearer
+    );
+
     @GET("download/audio/{fileName}")
     Call<ResponseBody> download(
             @Path("fileName") String fileName,

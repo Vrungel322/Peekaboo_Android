@@ -3,6 +3,7 @@ package com.peekaboo.domain;
 
 import com.peekaboo.data.FileEntity;
 import com.peekaboo.data.repositories.database.contacts.Contact;
+import com.peekaboo.data.repositories.database.messages.PMessage;
 
 import java.util.List;
 
@@ -14,7 +15,7 @@ import rx.Observable;
  * Created by Arkadiy on 05.06.2016.
  */
 public interface SessionRepository {
-    Observable<List<Contact>> login(String login, String password);
+    Observable<AccountUser> login(String login, String password);
 
     Observable<AccountUser> signUp(String username, String login, String password);
 
@@ -24,6 +25,8 @@ public interface SessionRepository {
 
     Call<FileEntity> uploadFile(String fileName, String receiverId);
 
+    Observable<FileEntity> updateAvatar(String fileName);
+
     Call<ResponseBody> downloadFile(String remoteFileName);
 
     Observable<List<Contact>> loadAllContacts();
@@ -31,4 +34,13 @@ public interface SessionRepository {
     Observable<List<Contact>> getAllSavedContacts();
 
     Observable saveContactToDb(List<Contact> contact);
+
+    Observable<List<Dialog>> loadDialogs();
+
+    Observable<Contact> getContactByContactId(String contactId);
+
+    Observable<List<PMessage>> getAllUnreadMessages(boolean isMine);
+
+    Observable<Pair<List<PMessage>,List<Contact>>> getAllUnreadMessagesInfo();
+    Observable<Integer> getUnreadMessagesCount(String id);
 }

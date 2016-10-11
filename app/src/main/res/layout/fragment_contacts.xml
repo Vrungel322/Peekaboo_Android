@@ -2,26 +2,19 @@
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
-    tools:context=".presentation.fragments.ContactsFragment">
-
+    android:background="@android:color/white"
+    android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <android.support.v7.widget.RecyclerView
+            <android.support.v7.widget.RecyclerView
             android:id="@+id/recyclerview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:paddingBottom="@dimen/activity_vertical_margin"
-            android:paddingLeft="@dimen/activity_horizontal_margin"
-            android:paddingRight="@dimen/activity_horizontal_margin"
-            android:paddingTop="@dimen/activity_vertical_margin"
-            android:clipToPadding="false"
-            tools:context=".MainActivity"/>
+
+            android:clipToPadding="false" />
 
         <com.peekaboo.presentation.widget.RecyclerViewFastScroller
             android:id="@+id/fastscroller"
@@ -30,8 +23,7 @@
             android:layout_alignBottom="@id/recyclerview"
             android:layout_alignParentEnd="true"
             android:layout_alignParentRight="true"
-            android:layout_alignTop="@id/recyclerview"
-            />
+            android:layout_alignTop="@id/recyclerview" />
     </RelativeLayout>
 
     <android.support.design.widget.FloatingActionButton
@@ -43,6 +35,5 @@
         android:layout_marginBottom="@dimen/activity_vertical_margin"
         android:layout_marginRight="@dimen/activity_horizontal_margin"
         android:src="@drawable/plus"
-        android:visibility="gone"
-        />
+        android:visibility="gone" />
 </android.support.design.widget.CoordinatorLayout>

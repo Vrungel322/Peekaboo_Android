@@ -18,7 +18,7 @@ public interface AudioPlayer {
      */
 //    void prepare(long audioId, String url, HashMap<String, String> headers, AudioPlayerListener listener);
 
-    void prepare(long audioId, String uri, AudioPlayerListener listener);
+    void prepare(String audioId, String uri, AudioPlayerListener listener);
 
     /**
      * can be called when state is {@link #STATE_PREPARED}
@@ -35,10 +35,10 @@ public interface AudioPlayer {
     int state();
 
     interface AudioPlayerListener {
-        void onStartPlaying(long id);
+        void onStartPlaying(String id);
 
-        void onStopPlaying(long id);
+        void onStopPlaying(String id);
 
-        void onProgressChanged(long id, long position, long duration);
+        void onProgressChanged(String id, long position, long duration);
     }
 }

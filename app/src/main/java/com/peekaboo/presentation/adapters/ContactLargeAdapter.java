@@ -1,5 +1,6 @@
 package com.peekaboo.presentation.adapters;
 
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -10,7 +11,6 @@ import android.widget.TextView;
 
 import com.peekaboo.R;
 import com.peekaboo.data.repositories.database.contacts.Contact;
-import com.peekaboo.presentation.activities.MainActivity;
 import com.peekaboo.presentation.utils.ResourcesUtils;
 import com.peekaboo.presentation.widget.RecyclerViewFastScroller.BubbleTextGetter;
 import com.peekaboo.utils.ActivityNavigator;
@@ -27,36 +27,33 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public final class ContactLargeAdapter extends RecyclerView.Adapter<ContactLargeAdapter.ViewHolder>
         implements BubbleTextGetter {
 
-    private MainActivity activity;
+    private AppCompatActivity activity;
     private final List<Contact> items = new ArrayList<>();
     private Picasso mPicasso;
     private ActivityNavigator navigator;
 
-    public ContactLargeAdapter(MainActivity activity, ActivityNavigator navigator) {
+    public ContactLargeAdapter(AppCompatActivity activity, ActivityNavigator navigator, Picasso mPicasso) {
         this.activity = activity;
         this.navigator = navigator;
-        this.mPicasso = Picasso.with(activity);
+        this.mPicasso = mPicasso;
     }
 
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.contacts_fragment_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.list_item_contact, parent, false);
         return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Contact contact = getItem(position);
-
-        //todo make caching images to sd and fetching them here not from url
-        Log.e("contact", "" + contact.contactImgUri());
         int avatarSize = ResourcesUtils.getDimenInPx(activity, R.dimen.contact_list_avatar_size);
 
         mPicasso.load(contact.contactImgUri())
                 .resize(0, avatarSize)
                 .error(R.drawable.ic_alert_circle_outline)
 //                .centerInside()
-                .into(holder.ivAvatar/*, new Callback.EmptyCallback(){
+                .into(holder.ivAvatar, new Callback.EmptyCallback(){
                     @Override
                     public void onSuccess() {
                         super.onSuccess();
@@ -68,18 +65,23 @@ public final class ContactLargeAdapter extends RecyclerView.Adapter<ContactLarge
                         super.onError();
                         holder.pbImageLoading.setVisibility(View.GONE);
                     }
-                }*/);
+                });
 
-        holder.tvContactName.setText(contact.contactName() + " " + contact.contactSurname());
-
-        if(contact.isOnline()){
-            holder.ivStatus.setImageResource(R.color.online);
+        String contactName = contact.contactName();
+        String contactSurname = contact.contactSurname();
+        if (contactSurname == null) {
+            holder.tvContactName.setText(contactName);
         } else {
-            holder.ivStatus.setImageResource(R.color.offline);
+            holder.tvContactName.setText(contactName + " " + contactSurname);
+        }
+        if (contact.isOnline()) {
+            holder.ivStatus.setBackgroundResource(R.drawable.list_online_indicator);
+        } else {
+            holder.ivStatus.setBackgroundResource(R.drawable.list_offline_indicator);
         }
 
         holder.itemView.setOnClickListener(v -> {
-            navigator.startChatActivity(activity, contact);
+            navigator.startChatActivity(activity, contact, true);
         });
 
     }
@@ -100,7 +102,7 @@ public final class ContactLargeAdapter extends RecyclerView.Adapter<ContactLarge
         return items.size();
     }
 
-    private Contact getItem(int position){
+    private Contact getItem(int position) {
         return items.get(position);
     }
 
@@ -110,7 +112,7 @@ public final class ContactLargeAdapter extends RecyclerView.Adapter<ContactLarge
         @BindView(R.id.contact_avatar_image_view)
         CircleImageView ivAvatar;
         @BindView(R.id.contact_status_image_view)
-        CircleImageView ivStatus;
+        View ivStatus;
         @BindView(R.id.loading_image_progress_bar)
         ProgressBar pbImageLoading;
 

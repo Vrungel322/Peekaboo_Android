@@ -289,7 +289,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     public void updateAudioProgress(RecyclerView.ViewHolder holder, long totalDuration, long currentDuration, int progress) {
 //        ((ViewHolderAudio) holder).tvTotalDuration.setText(String.valueOf(Utility.milliSecondsToTimer(totalDuration)));
-        ((ViewHolderAudio) holder).tvCurrentDuration.setText(String.valueOf(Utility.milliSecondsToTimer(currentDuration)));
+//        ((ViewHolderAudio) holder).tvCurrentDuration.setText(String.valueOf(Utility.milliSecondsToTimer(currentDuration)));
         ((ViewHolderAudio) holder).sbPlayProgress.setProgress(progress);
     }
 
@@ -352,8 +352,8 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         ImageButton ibPlayRecord;
         @BindView(R.id.seekBarPlayProgress)
         SeekBar sbPlayProgress;
-        @BindView(R.id.tvCurrentDuration)
-        TextView tvCurrentDuration;
+//        @BindView(R.id.tvCurrentDuration)
+//        TextView tvCurrentDuration;
 //        @BindView(R.id.tvTotalDuration)
 //        TextView tvTotalDuration;
 

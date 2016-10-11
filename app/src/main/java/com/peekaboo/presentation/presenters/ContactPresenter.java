@@ -8,26 +8,27 @@ import com.peekaboo.data.repositories.database.contacts.PContactHelper;
 import com.peekaboo.domain.UserMessageMapper;
 import com.peekaboo.domain.subscribers.BaseProgressSubscriber;
 import com.peekaboo.domain.usecase.GetContactFromDbUseCase;
+import com.peekaboo.presentation.comparators.ContactComparator;
 import com.peekaboo.presentation.views.IContactsView;
 
+import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 /**
  * Created by Nikita on 11.08.2016.
  */
+@Singleton
 public class ContactPresenter extends ProgressPresenter<IContactsView> implements IContactPresenter {
 
-    private PContactHelper contactHelper;
     private GetContactFromDbUseCase getContactFromDbUseCase;
 
     @Inject
-    public ContactPresenter(PContactHelper contactHelper,
-                            UserMessageMapper errorHandler,
+    public ContactPresenter(UserMessageMapper errorHandler,
                             GetContactFromDbUseCase getContactFromDbUseCase) {
         super(errorHandler);
-        this.contactHelper = contactHelper;
         this.getContactFromDbUseCase = getContactFromDbUseCase;
     }
 
@@ -39,11 +40,9 @@ public class ContactPresenter extends ProgressPresenter<IContactsView> implement
     @Override
     public void onDestroy() {
         getContactFromDbUseCase.unsubscribe();
-        unbind();
     }
 
-    @Override
-    public void loadContactsList() {
+    private void loadContactsList() {
         getContactFromDbUseCase.execute(getContactsFromDbSubscriber());
     }
 
@@ -54,26 +53,27 @@ public class ContactPresenter extends ProgressPresenter<IContactsView> implement
                 super.onNext(contacts);
                 IContactsView view = getView();
                 if (view != null) {
+                    Collections.sort(contacts, new ContactComparator());
                     view.showContactsList(contacts);
                     // for testing
-                    getAllTableAsString();
+//                    getAllTableAsString();
                 }
             }
         };
     }
-
-    private void getAllTableAsString() {
-        contactHelper.getAllContacts()
-                .subscribe(pContactAbses -> {
-                    for (ContactAbs pContact : pContactAbses) {
-                        Log.wtf("DB_LOG", "ID: " + pContact.contactId()
-                                + "; CONTACT_NAME: " + pContact.contactName()
-                                + "; CONTACT_SURNAME: " + pContact.contactSurname()
-                                + "; CONTACT_NICKNAME: " + pContact.contactNickname()
-                                + "; CONTACT_IS_ONLINE: " + pContact.isOnline()
-                                + "; CONTACT_IMG_URI: " + pContact.contactImgUri());
-                    }
-                });
-    }
+//
+//    private void getAllTableAsString() {
+//        contactHelper.getAllContacts()
+//                .subscribe(pContactAbses -> {
+//                    for (ContactAbs pContact : pContactAbses) {
+//                        Log.wtf("DB_LOG", "ID: " + pContact.contactId()
+//                                + "; CONTACT_NAME: " + pContact.contactName()
+//                                + "; CONTACT_SURNAME: " + pContact.contactSurname()
+//                                + "; CONTACT_NICKNAME: " + pContact.contactNickname()
+//                                + "; CONTACT_IS_ONLINE: " + pContact.isOnline()
+//                                + "; CONTACT_IMG_URI: " + pContact.contactImgUri());
+//                    }
+//                });
+//    }
 
 }

@@ -15,10 +15,26 @@
         android:paddingRight="@dimen/padding_signup_side">
 
         <com.peekaboo.presentation.app.view.RobotoTextInputLayout
-            android:id="@+id/ilUsername"
+            android:id="@+id/ilPhone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="60dp"
+            app:errorTextAppearance="@style/Error.Design">
+
+            <com.peekaboo.presentation.app.view.RobotoEditText
+                android:id="@+id/etPhone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_horizontal"
+                android:hint="@string/phoneNumber"
+                android:imeOptions="actionNext"
+                android:inputType="text" />
+        </com.peekaboo.presentation.app.view.RobotoTextInputLayout>
+
+        <com.peekaboo.presentation.app.view.RobotoTextInputLayout
+            android:id="@+id/ilUsername"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             app:errorTextAppearance="@style/Error.Design">
 
             <com.peekaboo.presentation.app.view.RobotoEditText
@@ -43,7 +59,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
-                android:hint="@string/emailOrPhoneNum"
+                android:hint="@string/email"
                 android:imeOptions="actionNext"
                 android:inputType="text" />
 

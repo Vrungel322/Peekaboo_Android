@@ -31,6 +31,8 @@ public class WebSocketNotifier implements INotifier<Message> {
     private MainThread mainThread;
     @Nullable
     private WebSocket ws;
+    @Nullable
+    private String authorization;
 
     public WebSocketNotifier(String baseUrl, int timeout, AbstractMapperFactory abstractMapperFactory, MainThread mainThread) {
         this.BASE_URL = baseUrl;
@@ -50,15 +52,20 @@ public class WebSocketNotifier implements INotifier<Message> {
                             @Override
                             public void onConnected(WebSocket websocket, Map<String, List<String>> headers) throws Exception {
                                 Log.e(TAG, "Status: Connected to " + BASE_URL);
-//                                    for (NotificationListener<Message> listener : listeners) {
-//                                        listener.onConnected();
-//                                    }
+                                mainThread.run(() -> {
+                                    for (NotificationListener<Message> listener : listeners) {
+                                        listener.onConnected();
+                                    }
+                                });
                             }
 
                             @Override
                             public void onError(WebSocket websocket, WebSocketException cause) throws Exception {
                                 Log.e(TAG, "Status: Error " + cause);
-                                mainThread.run(() -> disconnect());
+                                mainThread.run(() -> {
+                                    WebSocketNotifier.this.authorization = null;
+                                    disconnect();
+                                });
                             }
 
                             @Override
@@ -71,6 +78,9 @@ public class WebSocketNotifier implements INotifier<Message> {
 
                                     for (NotificationListener<Message> listener : listeners) {
                                         listener.onDisconnected();
+                                    }
+                                    if (WebSocketNotifier.this.authorization != null) {
+                                        connectSocket(WebSocketNotifier.this.authorization);
                                     }
                                 });
                             }
@@ -95,11 +105,11 @@ public class WebSocketNotifier implements INotifier<Message> {
                             @Override
                             public void onPongFrame(WebSocket websocket, WebSocketFrame frame) throws Exception {
                                 Log.e(TAG, "Status: Pong received " + frame);
-                                mainThread.run(() -> {
-                                    for (NotificationListener<Message> listener : listeners) {
-                                        listener.onConnected();
-                                    }
-                                });
+//                                mainThread.run(() -> {
+//                                    for (NotificationListener<Message> listener : listeners) {
+//                                        listener.onConnected();
+//                                    }
+//                                });
                             }
                         })
                         .addHeader(AUTHORIZATION, authorization)
@@ -114,6 +124,7 @@ public class WebSocketNotifier implements INotifier<Message> {
     @Override
     public void tryConnect(String authorization) {
         Log.e(TAG, "try connect " + ws);
+        this.authorization = authorization;
         connectSocket(authorization);
     }
 

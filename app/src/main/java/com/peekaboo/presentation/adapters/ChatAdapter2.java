@@ -17,10 +17,12 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.peekaboo.R;
+import com.peekaboo.data.repositories.database.contacts.Contact;
 import com.peekaboo.data.repositories.database.messages.PMessage;
 import com.peekaboo.data.repositories.database.messages.PMessageAbs;
 import com.peekaboo.presentation.app.view.RoundedTransformation;
 import com.peekaboo.presentation.presenters.ChatPresenter2;
+import com.peekaboo.presentation.utils.AudioIdManager;
 import com.peekaboo.presentation.utils.AudioPlayer;
 import com.peekaboo.presentation.utils.ResourcesUtils;
 import com.peekaboo.utils.Constants;
@@ -43,53 +45,65 @@ public class ChatAdapter2 extends RecyclerView.Adapter<ChatAdapter2.ViewHolder> 
     private final LayoutInflater inflater;
     private final ChatPresenter2 presenter;
     private final Picasso mPicasso;
+    private Contact contact;
     private final List<PMessage> messages = new ArrayList<>();
     private RecyclerView recyclerView;
     private Handler handler;
     private AudioPlayer.AudioPlayerListener playerListener = new AudioPlayer.AudioPlayerListener() {
 
         @Override
-        public void onStartPlaying(long id) {
-            RecyclerView.ViewHolder viewHolder = recyclerView.findViewHolderForItemId(id);
-//            Log.e("adapter", "start player (id=" + id + ") (last message id=" + getItemId(location) + ") (last message id2=" + message.id() + ") " + viewHolder);
-            if (viewHolder != null && viewHolder instanceof ViewHolderAudio) {
-                ViewHolderAudio viewHolderAudio = (ViewHolderAudio) viewHolder;
-                viewHolderAudio.ibPlayRecord.setImageResource(R.drawable.pause_blue);
+        public void onStartPlaying(String audioId) {
+
+            long id = AudioIdManager.getMessageId(audioId);
+            String companionId = AudioIdManager.getCompanionId(audioId);
+            if (contact.contactId().equals(companionId)) {
+                RecyclerView.ViewHolder viewHolder = recyclerView.findViewHolderForItemId(id);
+                if (viewHolder != null && viewHolder instanceof ViewHolderAudio) {
+                    ViewHolderAudio viewHolderAudio = (ViewHolderAudio) viewHolder;
+                    viewHolderAudio.ibPlayRecord.setImageResource(R.drawable.pause_blue);
+                }
             }
         }
 
         @Override
-        public void onStopPlaying(long id) {
-            RecyclerView.ViewHolder viewHolder = recyclerView.findViewHolderForItemId(id);
-//            Log.e("adapter", "stop " + id + " " + viewHolder);
-            if (viewHolder != null && viewHolder instanceof ViewHolderAudio) {
-                ViewHolderAudio viewHolderAudio = (ViewHolderAudio) viewHolder;
-                viewHolderAudio.ibPlayRecord.setImageResource(R.drawable.play_blue);
+        public void onStopPlaying(String audioId) {
+            long id = AudioIdManager.getMessageId(audioId);
+            String companionId = AudioIdManager.getCompanionId(audioId);
+            if (contact.contactId().equals(companionId)) {
+                RecyclerView.ViewHolder viewHolder = recyclerView.findViewHolderForItemId(id);
+                if (viewHolder != null && viewHolder instanceof ViewHolderAudio) {
+                    ViewHolderAudio viewHolderAudio = (ViewHolderAudio) viewHolder;
+                    viewHolderAudio.ibPlayRecord.setImageResource(R.drawable.play_blue);
+                }
             }
         }
 
         @Override
-        public void onProgressChanged(long id, long position, long duration) {
-            RecyclerView.ViewHolder viewHolder = recyclerView.findViewHolderForItemId(id);
-//            Log.e("adapter", "progress " + id + " " + position);
-            if (viewHolder != null && viewHolder instanceof ViewHolderAudio) {
-                ViewHolderAudio viewHolderAudio = (ViewHolderAudio) viewHolder;
-                int max = (int) (duration / 100);
-                int pos = (int) (position / 100);
-                Log.e("adapter", System.currentTimeMillis() + " progress " + pos + " " + max);
-                viewHolderAudio.sbPlayProgress.setMax(max);
-                viewHolderAudio.sbPlayProgress.setProgress(pos);
-                viewHolderAudio.tvCurrentDuration.setText(String.format("%02d:%02d", (pos / 10) / 60, (pos / 10) % 60));
+        public void onProgressChanged(String audioId, long position, long duration) {
+            long id = AudioIdManager.getMessageId(audioId);
+            String companionId = AudioIdManager.getCompanionId(audioId);
+            if (contact.contactId().equals(companionId)) {
+                RecyclerView.ViewHolder viewHolder = recyclerView.findViewHolderForItemId(id);
+                if (viewHolder != null && viewHolder instanceof ViewHolderAudio) {
+                    ViewHolderAudio viewHolderAudio = (ViewHolderAudio) viewHolder;
+                    int max = (int) (duration / 100);
+                    int pos = (int) (position / 100);
+                    Log.e("adapter", System.currentTimeMillis() + " progress " + pos + " " + max);
+                    viewHolderAudio.sbPlayProgress.setMax(max);
+                    viewHolderAudio.sbPlayProgress.setProgress(pos);
+                    viewHolderAudio.tvCurrentDuration.setText(String.format("%02d:%02d", (pos / 10) / 60, (pos / 10) % 60));
+                }
             }
         }
     };
 
-    public ChatAdapter2(Context context, ChatPresenter2 presenter, RecyclerView recyclerView) {
+    public ChatAdapter2(Context context, ChatPresenter2 presenter, RecyclerView recyclerView, Contact contact) {
         this.context = context;
         this.recyclerView = recyclerView;
         this.inflater = LayoutInflater.from(context);
         this.presenter = presenter;
         this.mPicasso = Picasso.with(context);
+        this.contact = contact;
         handler = new Handler();
         setHasStableIds(true);
     }
@@ -118,7 +132,7 @@ public class ChatAdapter2 extends RecyclerView.Adapter<ChatAdapter2.ViewHolder> 
         return null;
     }
 
-    private PMessage getItem(int position) {
+    public PMessage getItem(int position) {
         return messages.get(position);
     }
 
@@ -359,5 +373,20 @@ public class ChatAdapter2 extends RecyclerView.Adapter<ChatAdapter2.ViewHolder> 
             ButterKnife.bind(this, view);
         }
     }
-
+//
+//    static class AudioIdManager {
+//        private static String DIVIDER = " ";
+//        static long getMessageId(String audioId) {
+//            return Long.parseLong(audioId.split(DIVIDER)[1]);
+//        }
+//
+//        static String getCompanionId(String audioId) {
+//            return audioId.split(DIVIDER)[0];
+//        }
+//
+//        static String constructId(String companionId, long messageId) {
+//            return companionId + DIVIDER + messageId;
+//        }
+//
+//    }
 }

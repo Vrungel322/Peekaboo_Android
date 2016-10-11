@@ -1,18 +1,20 @@
 <resources>
     <string name="app_name">Peekaboo</string>
     <string name="pleaseWait">Please, wait...</string>
+    <string name="phoneNumber">Phone Number</string>
     <string name="username">Username</string>
     <string name="password">Password</string>
     <string name="createAccount">Create Account</string>
     <string name="signIn">Sign In</string>
     <string name="skip">Skip</string>
     <string name="confirmPassword">Confirm password</string>
-    <string name="email">Email</string>
+    <string name="email">Email or phone number</string>
+    <string name="invalidPhoneNumber">Invalid phone number</string>
     <string name="invalidLogin">Invalid login</string>
     <string name="invalidUsername">Invalid username</string>
     <string name="invalidPassword">Invalid password</string>
     <string name="invalidPasswordConfirm">Passwords don\'t match</string>
-    <string name="invalidEmail">Invalid email</string>
+    <string name="invalidEmail">Invalid email or phone number</string>
     <string name="invalidKey">Invalid key</string>
     <string name="bySignUp1">By </string>
     <string name="bySignUp2"> Sign Up </string>
@@ -24,7 +26,7 @@
     <string name="roboto_font">fonts/roboto.ttf</string>
     <string name="helvetica_font">fonts/helvetika.ttf</string>
     <string name="usernameOrLogin">Username or login</string>
-    <string name="emailOrPhoneNum">Email or phone number</string>
+    <string name="emailOrPhoneNum">Email</string>
     <integer name="com_vk_sdk_AppId">5527207</integer>
 
     <string name="action_settings">Settings</string>
@@ -55,6 +57,10 @@
         <item>TEST: To speech</item>
     </string-array>
 
+    <string-array name="avatar_change_dialog">
+        <item>Photo</item>
+        <item>Pick from gallery</item>
+    </string-array>
     <!-- TODO: Remove or change this placeholder payload -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="selectImage">Select Image</string>
@@ -78,5 +84,16 @@
 
     <!-- ContactsFragment strings -->
     <string name="title_contacts">Contacts</string>
+
+    <!-- DialogsFragment strings -->
+    <string name="title_dialogs">Dialogs</string>
+
+    <!-- message types -->
+    <string name="message_type_audio">Audio</string>
+    <string name="message_type_image">Image</string>
+    <string name="message_type_video">Video</string>
+    <string name="message_type_document">Document</string>
+    <string name="newMessages">new messages</string>
+    <string name="newMessage">new message</string>
 
 </resources>

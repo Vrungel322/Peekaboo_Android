@@ -8,6 +8,7 @@ import android.util.Log;
 
 import com.peekaboo.data.mappers.AbstractMapperFactory;
 import com.peekaboo.data.mappers.Mapper;
+import com.peekaboo.data.repositories.database.contacts.Contact;
 import com.peekaboo.data.repositories.database.contacts.PContactHelper;
 import com.peekaboo.data.repositories.database.service.DBHelper;
 import com.peekaboo.data.repositories.database.utils_db.Db;
@@ -17,10 +18,8 @@ import com.peekaboo.domain.schedulers.SubscribeOn;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
-
 import rx.Observable;
+import rx.functions.Func1;
 
 /**
  * Created by st1ch on 23.07.2016.
@@ -68,6 +67,24 @@ public class PMessageHelper {
                 .observeOn(observeOn.getScheduler());
     }
 
+    public PMessage getLastMessage(String id) {
+        Log.e("helper", "get last message: " + id);
+        String tableName = PREFIX + id;
+        String selectLast = "SELECT * FROM " + tableName +
+                " WHERE " + PMessageAbs.ID + " = " +
+                "(SELECT MAX(" + PMessageAbs.ID + ") FROM " + tableName + ")";
+        SQLiteDatabase db = helper.getWritableDatabase();
+        Cursor cursor = db.rawQuery(selectLast, null);
+        PMessage message = null;
+        if (cursor.moveToNext()) {
+            message = fetchPMessage(cursor);
+            cursor.close();
+        }
+
+        return message;
+
+    }
+
     public Observable<List<PMessage>> getUnreadMessages(String id, boolean isMine) {
         String tableName = PREFIX + id;
         String selectUnread = "SELECT * FROM " + tableName + " WHERE "
@@ -76,6 +93,17 @@ public class PMessageHelper {
         return select(selectUnread)
                 .subscribeOn(subscribeOn.getScheduler())
                 .observeOn(observeOn.getScheduler());
+
+    }
+
+    public Observable<Integer> getUnreadMessagesCount(String id) {
+        String tableName = PREFIX + id;
+        String selectUnread = "SELECT COUNT(*) FROM " + tableName + " WHERE "
+                + PMessageAbs.STATUS + " = " + PMessageAbs.PMESSAGE_STATUS.STATUS_DELIVERED
+                + " AND " + PMessage.IS_MINE + " = 0";
+        return selectCount(selectUnread)
+                .subscribeOn(subscribeOn.getScheduler());
+
 
     }
 
@@ -105,7 +133,7 @@ public class PMessageHelper {
         SQLiteDatabase db = helper.getWritableDatabase();
         tableName = PREFIX + tableName;
         message.setId(db.insert(tableName, null, pMessageMapper.transform(message)));
-        Log.e("helper", "saveContactToDb " + message);
+        Log.e("helper", "saveMessageToDb " + message);
     }
 
     public int updateStatus(String tableName, int status, PMessage message) {
@@ -148,7 +176,7 @@ public class PMessageHelper {
     @NonNull
     private Observable<List<PMessage>> select(String query) {
         Log.e("helper", query);
-        return Observable.create((Observable.OnSubscribe<List<PMessage>>) subscriber -> {
+        return Observable.create(subscriber -> {
             List<PMessage> messages = new ArrayList<>();
             SQLiteDatabase db = helper.getWritableDatabase();
             Cursor cursor = db.rawQuery(query, null);
@@ -160,6 +188,23 @@ public class PMessageHelper {
             }
 
             subscriber.onNext(messages);
+            subscriber.onCompleted();
+        });
+    }
+
+    private Observable<Integer> selectCount(String query){
+        Log.e("helper", query);
+        return Observable.create(subscriber -> {
+            SQLiteDatabase db = helper.getWritableDatabase();
+            Cursor cursor = db.rawQuery(query, null);
+            Integer count = 0;
+
+            if (cursor != null && cursor.moveToFirst()) {
+                count = cursor.getInt(0);
+                cursor.close();
+            }
+
+            subscriber.onNext(count);
             subscriber.onCompleted();
         });
     }
@@ -183,5 +228,25 @@ public class PMessageHelper {
     @NonNull
     private List<PMessage> getInitialValue() {
         return new ArrayList<>();
+    }
+
+    public Observable<List<PMessage>> getAllUnreadMessages(boolean isMine) {
+        return contactHelper.getAllContacts()
+                .flatMapIterable(l -> l)
+                .concatMap(pContactAbs -> {
+                    String tableName = PREFIX + pContactAbs.contactId();
+                    String selectUnread = String.format("SELECT * FROM %s WHERE %s = %d AND %s = %d",
+                            tableName,
+                            PMessageAbs.STATUS,
+                            PMessageAbs.PMESSAGE_STATUS.STATUS_DELIVERED,
+                            PMessageAbs.IS_MINE,
+                            isMine ? 1 : 0);
+
+                    return select(selectUnread);
+                })
+                .reduce(getInitialValue(), (result, messages) -> {
+                    result.addAll(messages);
+                    return result;
+                });
     }
 }
