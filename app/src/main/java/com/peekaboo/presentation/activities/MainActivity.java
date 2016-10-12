@@ -410,7 +410,7 @@ public class MainActivity extends AppCompatActivity implements IMainView, Avatar
     }
 
     @Override
-    public void takeFromGallery(){
+    public void takeFromGallery(){ 
         startActivityForResult(new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI),
                 Constants.REQUEST_CODES.REQUEST_CODE_GALERY);
     }
@@ -422,32 +422,4 @@ public class MainActivity extends AppCompatActivity implements IMainView, Avatar
         return null;
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-
-        Bitmap bitmap = null;
-        if (requestCode == Constants.REQUEST_CODES.REQUEST_CODE_CAMERA) {
-
-            if (resultCode == RESULT_OK) {
-//                try {
-//                    bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imageUri);
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//                ivAccountAvatar.setImageBitmap(bitmap);
-
-            }
-        }
-        if (requestCode == Constants.REQUEST_CODES.REQUEST_CODE_GALERY) {
-            if (resultCode == RESULT_OK && null != data) {
-//                imageUri = data.getData();
-//                    try {
-//                        bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imageUri);
-//                    } catch (IOException e) {
-//                        e.printStackTrace();
-//                    }
-//                    ivAccountAvatar.setImageBitmap(bitmap);
-            }
-        }
-    }
 }

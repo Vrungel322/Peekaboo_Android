@@ -1,19 +1,11 @@
 package com.peekaboo.presentation.app.view;
 
 import android.content.Context;
-import android.graphics.Color;
-import android.graphics.ColorFilter;
 import android.graphics.PorterDuff;
 import android.graphics.Typeface;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.InsetDrawable;
-import android.graphics.drawable.StateListDrawable;
 import android.os.Build;
 import android.support.design.widget.TextInputEditText;
 import android.util.AttributeSet;
-import android.util.Log;
-import android.util.StateSet;
-import android.view.View;
 
 import com.peekaboo.R;
 import com.peekaboo.presentation.utils.ResourcesUtils;
