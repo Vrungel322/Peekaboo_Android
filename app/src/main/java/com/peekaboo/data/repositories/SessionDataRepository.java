@@ -1,5 +1,10 @@
 package com.peekaboo.data.repositories;
 
+import android.content.ContentResolver;
+import android.database.Cursor;
+import android.provider.ContactsContract;
+import android.util.Log;
+
 import com.peekaboo.data.FileEntity;
 import com.peekaboo.data.mappers.AbstractMapperFactory;
 import com.peekaboo.data.mappers.Mapper;
@@ -14,14 +19,18 @@ import com.peekaboo.data.rest.entity.Credentials;
 import com.peekaboo.data.rest.entity.CredentialsSignUp;
 import com.peekaboo.domain.AccountUser;
 import com.peekaboo.domain.Dialog;
+import com.peekaboo.domain.Pair;
 import com.peekaboo.domain.SessionRepository;
 import com.peekaboo.domain.User;
+import com.peekaboo.presentation.pojo.PhoneContactPOJO;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import rx.Observable;
+import rx.Subscriber;
 
 /**
  * Created by Arkadiy on 05.06.2016.
@@ -33,14 +42,17 @@ public class SessionDataRepository implements SessionRepository {
     private RestApi restApi;
     private PContactHelper contactHelper;
     private PMessageHelper messageHelper;
+    private ContentResolver contentResolver;
 
     public SessionDataRepository(RestApi restApi, AbstractMapperFactory abstractMapperFactory,
-                                 AccountUser user, PContactHelper dbHelper, PMessageHelper messageHelper) {
+                                 AccountUser user, PContactHelper dbHelper,
+                                 PMessageHelper messageHelper, ContentResolver contentResolver) {
         this.restApi = restApi;
         this.abstractMapperFactory = abstractMapperFactory;
         this.user = user;
         this.contactHelper = dbHelper;
         this.messageHelper = messageHelper;
+        this.contentResolver = contentResolver;
     }
 
     @Override
@@ -53,12 +65,13 @@ public class SessionDataRepository implements SessionRepository {
                     user.saveMode(token.getMode());
                     return user;
                 }).flatMap(accountUser -> loadAllContacts())
-                .map(contacts -> user);
+//                .flatMap(contacts -> getPhoneContactList())
+                .map(contacts1 -> user);
     }
 
     @Override
-    public Observable<AccountUser> signUp(String username, String login, String password) {
-        return restApi.signUp(new CredentialsSignUp(username, login, password))
+    public Observable<AccountUser> signUp(String phone, String username, String login, String password) {
+        return restApi.signUp(new CredentialsSignUp(phone, username, login, password))
                 .map(token -> {
                     user.saveId(token.getId());
                     user.saveUsername(token.getUsername());
@@ -140,7 +153,48 @@ public class SessionDataRepository implements SessionRepository {
     }
 
     @Override
+    public Observable<Contact> getContactByContactId(String contactId) {
+        return contactHelper.getContactByContactId(contactId);
+    }
+
+    @Override
+    public Observable<List<PMessage>> getAllUnreadMessages(boolean isMine) {
+        return messageHelper.getAllUnreadMessages(isMine);
+    }
+
+    @Override
+    public Observable<Pair<List<PMessage>, List<Contact>>> getAllUnreadMessagesInfo() {
+        return messageHelper.getAllUnreadMessages(false).flatMap(pMessages -> {
+            return contactHelper.getContactsForMessages(pMessages);
+        }, Pair::new);
+    }
+
+    @Override
     public Observable<Integer> getUnreadMessagesCount(String id) {
         return messageHelper.getUnreadMessagesCount(id);
+    }
+
+    @Override
+    public Observable<List<PhoneContactPOJO>> getPhoneContactList() {
+        Cursor phones = contentResolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null);
+        List<PhoneContactPOJO> alPhoneContactPOJOs = new ArrayList<PhoneContactPOJO>();
+        return Observable.create(new Observable.OnSubscribe<List<PhoneContactPOJO>>() {
+            @Override
+            public void call(Subscriber<? super List<PhoneContactPOJO>> subscriber) {
+
+                if (phones != null) {
+                    while (phones.moveToNext()) {
+                        String phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                        String name = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
+                        alPhoneContactPOJOs.add(new PhoneContactPOJO(name, phoneNumber));
+                        Log.wtf("pNumber : ", name);
+                    }
+                    phones.close();// close cursor
+                }
+                subscriber.onNext(alPhoneContactPOJOs);
+                subscriber.onCompleted();
+            }
+        }).distinct();
+
     }
 }

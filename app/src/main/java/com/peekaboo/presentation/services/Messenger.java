@@ -37,13 +37,16 @@ public class Messenger implements IMessenger,
     private AccountUser user;
     private FileUploadUseCase uploadFileUseCase;
     private FileDownloadUseCase downloadFileUseCase;
-    private Set<MessengerListener> listeners = new HashSet<>();
+    private Set<MessengerListener> messageListeners = new HashSet<>();
+    private MessageNotificator messageNotificator;
 
     public Messenger(INotifier<Message> notifier, PMessageHelper helper,
+                     MessageNotificator messageNotificator,
                      ReadMessagesHelper readMessagesHelper, AccountUser user,
                      FileUploadUseCase uploadFileUseCase, FileDownloadUseCase downloadFileUseCase) {
         this.notifier = notifier;
         this.helper = helper;
+        this.messageNotificator = messageNotificator;
         this.readMessagesHelper = readMessagesHelper;
         this.user = user;
         this.uploadFileUseCase = uploadFileUseCase;
@@ -63,12 +66,12 @@ public class Messenger implements IMessenger,
 
     @Override
     public void addMessageListener(MessengerListener messengerListener) {
-        listeners.add(messengerListener);
+        messageListeners.add(messengerListener);
     }
 
     @Override
     public void removeMessageListener(MessengerListener messengerListener) {
-        listeners.remove(messengerListener);
+        messageListeners.remove(messengerListener);
     }
 
     @Override
@@ -125,18 +128,26 @@ public class Messenger implements IMessenger,
         helper.insert(tableName, pMessage);
 
         boolean isRead = false;
-        for (MessengerListener listener : listeners) {
-            int status = listener.willChangeStatus(pMessage);
-            if (status == PMessageAbs.PMESSAGE_STATUS.STATUS_READ) {
-                isRead = true;
-                break;
+        boolean isIgnored = true;
+        for (MessengerListener listener : messageListeners) {
+            int status = listener.displayStatus(pMessage);
+            if (status != MessengerListener.STATUS_IGNORE) {
+                isIgnored = false;
+                if (status == PMessageAbs.PMESSAGE_STATUS.STATUS_READ) {
+                    isRead = true;
+                    break;
+                }
             }
         }
 
         if (isRead) {
             readMessage(pMessage);
         } else {
-            for (MessengerListener listener : listeners) {
+            if (isIgnored) {
+                Log.e("messenger", "" + message);
+                messageNotificator.onMessageObtained(pMessage);
+            }
+            for (MessengerListener listener : messageListeners) {
                 listener.onMessageUpdated(pMessage);
             }
         }
@@ -181,7 +192,7 @@ public class Messenger implements IMessenger,
     private void updateMessageRead(PMessage message, String tableName) {
         helper.updateStatus(tableName, PMessageAbs.PMESSAGE_STATUS.STATUS_READ, message);
 
-        for (MessengerListener listener : listeners) {
+        for (MessengerListener listener : messageListeners) {
             listener.onMessageUpdated(message);
         }
     }
@@ -196,7 +207,7 @@ public class Messenger implements IMessenger,
     public void sendMessage(PMessage message) {
         message.setStatus(PMessageAbs.PMESSAGE_STATUS.STATUS_SENT);
         helper.insert(message.receiverId(), message);
-        for (MessengerListener listener : listeners) {
+        for (MessengerListener listener : messageListeners) {
             listener.onMessageUpdated(message);
         }
         deliverMessageByMediatype(message);
@@ -229,7 +240,7 @@ public class Messenger implements IMessenger,
                 String second = pair.second;
                 helper.updateBody(first.senderId(), first, first.messageBody() + PMessage.DIVIDER + second);
 
-                for (MessengerListener listener : listeners) {
+                for (MessengerListener listener : messageListeners) {
                     listener.onMessageUpdated(first);
                 }
             }
@@ -260,7 +271,7 @@ public class Messenger implements IMessenger,
     private void deliverMessage(PMessage message) {
         notifier.sendMessage(MessageUtils.convert(message));
         helper.updateStatus(message.receiverId(), PMessageAbs.PMESSAGE_STATUS.STATUS_DELIVERED, message);
-        for (MessengerListener listener : listeners) {
+        for (MessengerListener listener : messageListeners) {
             listener.onMessageUpdated(message);
         }
     }

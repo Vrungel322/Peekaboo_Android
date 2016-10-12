@@ -10,6 +10,7 @@ public interface IDialogPresenter extends IPresenter<IDialogsView>{
 
     void onCreate();
     void onPause();
+    void onResume();
     void onDestroy();
 
     void loadDialogList();

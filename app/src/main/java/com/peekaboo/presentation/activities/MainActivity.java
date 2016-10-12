@@ -1,5 +1,12 @@
 package com.peekaboo.presentation.activities;
 
+import android.app.NotificationManager;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -25,12 +32,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.peekaboo.R;
+import com.peekaboo.data.repositories.database.contacts.Contact;
 import com.peekaboo.domain.AccountUser;
 import com.peekaboo.domain.Dialog;
 import com.peekaboo.presentation.PeekabooApplication;
 import com.peekaboo.presentation.adapters.HotFriendsAdapter;
 import com.peekaboo.presentation.dialogs.AvatarChangeDialog;
 import com.peekaboo.presentation.fragments.CallsFragment;
+import com.peekaboo.presentation.fragments.ChatFragment;
 import com.peekaboo.presentation.fragments.ContactsFragment;
 import com.peekaboo.presentation.fragments.DialogsFragment;
 import com.peekaboo.presentation.fragments.ProfileFragment;
@@ -39,6 +48,7 @@ import com.peekaboo.presentation.pojo.HotFriendPOJO;
 import com.peekaboo.presentation.presenters.MainActivityPresenter;
 import com.peekaboo.presentation.services.INotifier;
 import com.peekaboo.presentation.services.Message;
+import com.peekaboo.presentation.services.MessageNotificator;
 import com.peekaboo.presentation.services.MessageUtils;
 import com.peekaboo.presentation.utils.ResourcesUtils;
 import com.peekaboo.presentation.views.IMainView;
@@ -93,7 +103,7 @@ public class MainActivity extends AppCompatActivity implements IMainView, Avatar
     @BindView(R.id.pbLoading_avatar_progress_bar)
     ProgressBar pbLoading_avatar_progress_bar;
     @BindView(R.id.ivOnlineStatus)
-    ImageView ivOnlineStatus;
+    View ivOnlineStatus;
 
     @Inject
     INotifier<Message> notifier;
@@ -121,8 +131,10 @@ public class MainActivity extends AppCompatActivity implements IMainView, Avatar
         updateAccountData(accountUser);
 
         if (getSupportFragmentManager().findFragmentById(R.id.fragmentContainer) == null) {
-            changeFragment(ContactsFragment.newInstance(), Constants.FRAGMENT_TAGS.CONTACTS_FRAGMENT);
-            selectionMode(R.id.llContacts);
+            if (!handleNotificationIntent(getIntent(), false)) {
+                changeFragment(ContactsFragment.newInstance(), Constants.FRAGMENT_TAGS.CONTACTS_FRAGMENT);
+                selectionMode(R.id.llContacts);
+            }
         }
         //Hardcode list in right drawer
         prepareHotFriends();
@@ -134,6 +146,34 @@ public class MainActivity extends AppCompatActivity implements IMainView, Avatar
             onDisconnected();
             notifier.tryConnect(accountUser.getBearer());
         }
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragmentContainer);
+        handleNotificationIntent(intent, fragment == null || !(fragment instanceof ChatFragment));
+    }
+
+    private boolean handleNotificationIntent(Intent intent, boolean addToStack) {
+        String action = intent.getAction();
+
+        if (ACTION.SHOW_CHAT.equals(action) && intent.hasExtra(ACTION.EXTRA.CONTACT_EXTRA)) {
+            Contact contact = intent.getParcelableExtra(ACTION.EXTRA.CONTACT_EXTRA);
+            NotificationManager notificationManager =
+                    (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            notificationManager.cancel(MessageNotificator.NOTIFICATION_ID);
+            navigator.startChatActivity(this, contact, addToStack);
+        } else if (ACTION.SHOW_DIALOGS.equals(action)){
+            NotificationManager notificationManager =
+                    (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            notificationManager.cancel(MessageNotificator.NOTIFICATION_ID);
+            navigator.startDialogFragment(this);
+        } else {
+            return false;
+        }
+
+        return true;
     }
 
     private void prepareHotFriends() {
@@ -230,6 +270,12 @@ public class MainActivity extends AppCompatActivity implements IMainView, Avatar
     @OnClick({R.id.llDialogs, R.id.llCalls, R.id.llContacts, R.id.llProfile, R.id.llSettings, R.id.llExit, R.id.ivAccountAvatar})
     public void onDrawerItemClick(View v) {
         selectionMode(v.getId());
+        if (v.getId() != R.id.llExit) {
+            FragmentManager fm = getSupportFragmentManager();
+            for (int i = 0; i < fm.getBackStackEntryCount(); ++i) {
+                fm.popBackStack();
+            }
+        }
         switch (v.getId()) {
             case R.id.llDialogs:
                 changeFragment(new DialogsFragment(), Constants.FRAGMENT_TAGS.DIALOGS_FRAGMENT);
@@ -302,7 +348,7 @@ public class MainActivity extends AppCompatActivity implements IMainView, Avatar
         }
     }
 
-    private void changeFragment(Fragment fragment, String tag) {
+    private void changeFragment(Fragment fragment, @Nullable String tag) {
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragmentContainer, fragment, tag)
                 .commit();
@@ -341,12 +387,12 @@ public class MainActivity extends AppCompatActivity implements IMainView, Avatar
 
     @Override
     public void onConnected() {
-        ivOnlineStatus.setImageResource(R.drawable.round_status_icon_cyan);
+        ivOnlineStatus.setBackgroundResource(R.drawable.drawer_online_indicator);
     }
 
     @Override
     public void onDisconnected() {
-        ivOnlineStatus.setImageResource(R.drawable.round_status_icon_grey);
+        ivOnlineStatus.setBackgroundResource(R.drawable.drawer_offline_indicator);
     }
 
     @Override
@@ -368,6 +414,14 @@ public class MainActivity extends AppCompatActivity implements IMainView, Avatar
         boolean onBackPress();
     }
 
+    public interface ACTION {
+        String SHOW_DIALOGS = "action.show_dialogs";
+        String SHOW_CHAT = "action.show_chat";
+
+        interface EXTRA {
+            String CONTACT_EXTRA = "contact_extra";
+        }
+    }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == Constants.REQUEST_CODES.REQUEST_CODE_CAMERA) {

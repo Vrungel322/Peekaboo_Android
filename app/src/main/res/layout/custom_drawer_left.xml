@@ -55,16 +55,13 @@
                                 android:layout_width="@dimen/widthOfIconInDrawer"
                                 android:layout_height="@dimen/heightOfIconInDrawer" />
 
-
-                            <de.hdodenhof.circleimageview.CircleImageView
+                            <View
                                 android:id="@+id/ivOnlineStatus"
                                 android:layout_width="@dimen/hotFriendStatusIconSize"
                                 android:layout_height="@dimen/hotFriendStatusIconSize"
                                 android:layout_gravity="right|top"
-                                android:layout_marginRight="2dp"
-                                app:border_color="@color/borderCircle_status_color"
-                                app:border_width="1dp"
-                                tools:src="@drawable/round_status_icon_drawer" />
+                                tools:background="@drawable/drawer_offline_indicator"
+                                android:layout_marginRight="2dp"/>
 
                         </FrameLayout>
 
