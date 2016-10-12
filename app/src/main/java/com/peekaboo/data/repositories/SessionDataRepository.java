@@ -3,7 +3,6 @@ package com.peekaboo.data.repositories;
 import android.content.ContentResolver;
 import android.database.Cursor;
 import android.provider.ContactsContract;
-import android.util.Log;
 
 import com.peekaboo.data.FileEntity;
 import com.peekaboo.data.mappers.AbstractMapperFactory;
@@ -25,7 +24,9 @@ import com.peekaboo.domain.User;
 import com.peekaboo.presentation.pojo.PhoneContactPOJO;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import okhttp3.ResponseBody;
 import retrofit2.Call;
@@ -178,6 +179,7 @@ public class SessionDataRepository implements SessionRepository {
     public Observable<List<PhoneContactPOJO>> getPhoneContactList() {
         Cursor phones = contentResolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null);
         List<PhoneContactPOJO> alPhoneContactPOJOs = new ArrayList<PhoneContactPOJO>();
+        Set<PhoneContactPOJO> setPhoneContactPOJO = new HashSet<PhoneContactPOJO>();
         return Observable.create(new Observable.OnSubscribe<List<PhoneContactPOJO>>() {
             @Override
             public void call(Subscriber<? super List<PhoneContactPOJO>> subscriber) {
@@ -187,14 +189,20 @@ public class SessionDataRepository implements SessionRepository {
                         String phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
                         String name = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
                         alPhoneContactPOJOs.add(new PhoneContactPOJO(name, phoneNumber));
-                        Log.wtf("pNumber : ", name);
                     }
                     phones.close();// close cursor
                 }
                 subscriber.onNext(alPhoneContactPOJOs);
                 subscriber.onCompleted();
             }
-        }).distinct();
+        }).distinct().map(phoneContactPOJOs -> {
+            setPhoneContactPOJO.addAll(alPhoneContactPOJOs);
+            alPhoneContactPOJOs.clear();
+            alPhoneContactPOJOs.addAll(setPhoneContactPOJO);
+            
+            return alPhoneContactPOJOs;
+
+        });
 
     }
 }
