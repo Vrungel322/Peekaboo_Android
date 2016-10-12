@@ -14,6 +14,7 @@ import rx.Observable;
  */
 public class SignUpUseCase extends UseCase<AccountUser> {
     private SessionRepository sessionRepository;
+    private String phone;
     private String username;
     private String login;
     private String password;
@@ -24,7 +25,8 @@ public class SignUpUseCase extends UseCase<AccountUser> {
         this.sessionRepository = sessionRepository;
     }
 
-    public void setCredentials(String username, String login, String password) {
+    public void setCredentials(String phone, String username, String login, String password) {
+        this.phone = phone;
         this.username = username;
         this.login = login;
         this.password = password;
@@ -32,6 +34,6 @@ public class SignUpUseCase extends UseCase<AccountUser> {
 
     @Override
     protected Observable<AccountUser> getUseCaseObservable() {
-        return sessionRepository.signUp(username, login, password);
+        return sessionRepository.signUp(phone, username, login, password);
     }
 }

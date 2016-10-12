@@ -3,12 +3,12 @@ package com.peekaboo.presentation.presenters;
 import android.util.Log;
 
 import com.peekaboo.data.repositories.database.contacts.Contact;
-import com.peekaboo.data.repositories.database.contacts.ContactAbs;
-import com.peekaboo.data.repositories.database.contacts.PContactHelper;
 import com.peekaboo.domain.UserMessageMapper;
 import com.peekaboo.domain.subscribers.BaseProgressSubscriber;
 import com.peekaboo.domain.usecase.GetContactFromDbUseCase;
+import com.peekaboo.domain.usecase.GetPhoneContactListUseCase;
 import com.peekaboo.presentation.comparators.ContactComparator;
+import com.peekaboo.presentation.pojo.PhoneContactPOJO;
 import com.peekaboo.presentation.views.IContactsView;
 
 import java.util.Collections;
@@ -24,26 +24,47 @@ import javax.inject.Singleton;
 public class ContactPresenter extends ProgressPresenter<IContactsView> implements IContactPresenter {
 
     private GetContactFromDbUseCase getContactFromDbUseCase;
+    private GetPhoneContactListUseCase getPhoneContactListUseCase;
 
     @Inject
     public ContactPresenter(UserMessageMapper errorHandler,
-                            GetContactFromDbUseCase getContactFromDbUseCase) {
+                            GetContactFromDbUseCase getContactFromDbUseCase,
+                            GetPhoneContactListUseCase getPhoneContactListUseCase) {
         super(errorHandler);
         this.getContactFromDbUseCase = getContactFromDbUseCase;
+        this.getPhoneContactListUseCase = getPhoneContactListUseCase;
     }
 
     @Override
     public void onCreate() {
         loadContactsList();
+        loadPhoneContactList();
     }
 
     @Override
     public void onDestroy() {
         getContactFromDbUseCase.unsubscribe();
+        getPhoneContactListUseCase.unsubscribe();
     }
 
     private void loadContactsList() {
         getContactFromDbUseCase.execute(getContactsFromDbSubscriber());
+    }
+
+    private void loadPhoneContactList(){
+        getPhoneContactListUseCase.execute(getContactsFromContactBook());
+    }
+
+    public BaseProgressSubscriber<List<PhoneContactPOJO>> getContactsFromContactBook() {
+        return new BaseProgressSubscriber<List<PhoneContactPOJO>>(this){
+            @Override
+            public void onNext(List<PhoneContactPOJO> response) {
+                super.onNext(response);
+                for (PhoneContactPOJO p : response) {
+                    Log.wtf("name : ", p.getName());
+                }
+            }
+        };
     }
 
     private BaseProgressSubscriber<List<Contact>> getContactsFromDbSubscriber() {

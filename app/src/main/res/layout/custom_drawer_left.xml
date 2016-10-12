@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical">
 
     <LinearLayout
@@ -40,24 +40,28 @@
                             android:layout_gravity="center_horizontal"
                             android:layout_marginTop="25dp">
 
+
                             <de.hdodenhof.circleimageview.CircleImageView
                                 android:id="@+id/ivAccountAvatar"
                                 android:layout_width="@dimen/widthOfIconInDrawer"
                                 android:layout_height="@dimen/heightOfIconInDrawer"
                                 android:layout_gravity="center"
-                                tools:src="@drawable/raccoon"
-                                app:border_color="@android:color/transparent" />
+                                android:clickable="true"
+                                app:border_color="@android:color/transparent"
+                                tools:src="@drawable/raccoon" />
 
+                            <ProgressBar
+                                android:id="@+id/pbLoading_avatar_progress_bar"
+                                android:layout_width="@dimen/widthOfIconInDrawer"
+                                android:layout_height="@dimen/heightOfIconInDrawer" />
 
-                            <de.hdodenhof.circleimageview.CircleImageView
+                            <View
                                 android:id="@+id/ivOnlineStatus"
                                 android:layout_width="@dimen/hotFriendStatusIconSize"
                                 android:layout_height="@dimen/hotFriendStatusIconSize"
-                                android:layout_marginRight="2dp"
                                 android:layout_gravity="right|top"
-                                tools:src="@drawable/round_status_icon_drawer"
-                                app:border_color="@color/borderCircle_status_color"
-                                app:border_width="1dp" />
+                                tools:background="@drawable/drawer_offline_indicator"
+                                android:layout_marginRight="2dp"/>
 
                         </FrameLayout>
 
@@ -71,10 +75,10 @@
                                 android:id="@+id/tvNameSurname"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                tools:text="@string/raccoon_doe"
                                 android:textAppearance="?android:attr/textAppearanceMedium"
                                 android:textColor="@color/colorHeaderText"
-                                android:textSize="@dimen/name_surnameSizeInDrawer" />
+                                android:textSize="@dimen/name_surnameSizeInDrawer"
+                                tools:text="@string/raccoon_doe" />
 
                             <TextView
                                 android:id="@+id/tvUsername"

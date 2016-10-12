@@ -1,5 +1,6 @@
 package com.peekaboo.data.di;
 
+import android.content.ContentResolver;
 import android.content.Context;
 import android.os.Environment;
 import android.speech.tts.TextToSpeech;
@@ -155,9 +156,12 @@ public class DataModule {
 
     @Provides
     @Singleton
-    public SessionRepository provideRepository(AccountUser user, RestApi restApi, PContactHelper dbHelper,
-                                               PMessageHelper messageHelper, AbstractMapperFactory mapperFactory) {
-        return new SessionDataRepository(restApi, mapperFactory, user, dbHelper, messageHelper);
+    public SessionRepository provideRepository(AccountUser user, RestApi restApi,
+                                               PContactHelper dbHelper,
+                                               PMessageHelper messageHelper,
+                                               AbstractMapperFactory mapperFactory,
+                                               ContentResolver contentResolver) {
+        return new SessionDataRepository(restApi, mapperFactory, user, dbHelper, messageHelper, contentResolver);
     }
 
     @Provides
@@ -183,5 +187,11 @@ public class DataModule {
     @Singleton
     public UserMessageMapper provideErrorHandler(Context context) {
         return new ResponseErrorHandler(context);
+    }
+
+    @Provides
+    @Singleton
+    public ContentResolver provideContentResolver(Context context){
+        return context.getContentResolver();
     }
 }

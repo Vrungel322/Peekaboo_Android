@@ -21,6 +21,7 @@ import com.peekaboo.presentation.services.IMessenger;
 import com.peekaboo.presentation.services.INotifier;
 import com.peekaboo.presentation.services.ISMSManager;
 import com.peekaboo.presentation.services.Message;
+import com.peekaboo.presentation.services.MessageNotificator;
 import com.peekaboo.presentation.services.Messenger;
 import com.peekaboo.presentation.services.SMSManager;
 import com.peekaboo.presentation.services.WebSocketNotifier;
@@ -104,8 +105,8 @@ public class ApplicationModule {
 
     @Singleton
     @Provides
-    public IMessenger provideMessanger(INotifier<Message> notifier, PMessageHelper helper, ReadMessagesHelper readMessagesHelper, AccountUser user, FileUploadUseCase fileUploadUseCase, FileDownloadUseCase downloadFileUseCase) {
-        return new Messenger(notifier, helper, readMessagesHelper, user, fileUploadUseCase, downloadFileUseCase);
+    public IMessenger provideMessanger(INotifier<Message> notifier, MessageNotificator messageNotificator, PMessageHelper helper, ReadMessagesHelper readMessagesHelper, AccountUser user, FileUploadUseCase fileUploadUseCase, FileDownloadUseCase downloadFileUseCase) {
+        return new Messenger(notifier, helper, messageNotificator, readMessagesHelper, user, fileUploadUseCase, downloadFileUseCase);
     }
 
     @Singleton

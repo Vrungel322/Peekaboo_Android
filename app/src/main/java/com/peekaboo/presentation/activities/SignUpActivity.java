@@ -14,6 +14,7 @@ import com.peekaboo.presentation.app.view.PasswordView;
 import com.peekaboo.presentation.dialogs.ConfirmSignUpDialog;
 import com.peekaboo.presentation.dialogs.ProgressDialogFragment;
 import com.peekaboo.presentation.presenters.SignUpPresenter;
+import com.peekaboo.presentation.utils.CredentialUtils;
 import com.peekaboo.presentation.views.ISignUpView;
 import com.peekaboo.utils.ActivityNavigator;
 
@@ -32,6 +33,8 @@ public class SignUpActivity  extends AppCompatActivity implements ISignUpView {
     public static final String PROGRESS_DIALOG = "progress_dialog";
     public static final String CONFIRM_SIGN_UP_DIALOG = "confirmSignUpDialog";
 
+    @BindView(R.id.etPhone)
+    EditText etPhone;
     @BindView(R.id.etLogin)
     EditText etLogin;
     @BindView(R.id.etUsername)
@@ -40,6 +43,8 @@ public class SignUpActivity  extends AppCompatActivity implements ISignUpView {
     PasswordView pvPassword;
     @BindView(R.id.pvPasswordConfirm)
     PasswordView pvPasswordConfirm;
+    @BindView(R.id.ilPhone)
+    TextInputLayout ilPhone;
     @BindView(R.id.ilUsername)
     TextInputLayout ilUsername;
     @BindView(R.id.ilLogin)
@@ -58,6 +63,7 @@ public class SignUpActivity  extends AppCompatActivity implements ISignUpView {
         ButterKnife.bind(this);
         PeekabooApplication.getApp(this).getComponent().inject(this);
         signUpPresenter.bind(this);
+        etPhone.setText(CredentialUtils.getPhoneNumber(getApplicationContext()));
     }
 
     @Override
@@ -103,6 +109,10 @@ public class SignUpActivity  extends AppCompatActivity implements ISignUpView {
     @Override
     public void showInputError(InputFieldError error) {
         switch (error) {
+            case PHONE_NUMBER:
+                ilPhone.setErrorEnabled(true);
+                ilPhone.setError(getString(R.string.invalidPhoneNumber));
+                break;
             case USERNAME:
                 ilUsername.setErrorEnabled(true);
                 ilUsername.setError(getString(R.string.invalidUsername));
@@ -177,11 +187,12 @@ public class SignUpActivity  extends AppCompatActivity implements ISignUpView {
 
     @OnClick(R.id.bSignIn)
     void onSignInButtonClick() {
+        String phone = etPhone.getText().toString();
         String username = etUsername.getText().toString();
         String login = etLogin.getText().toString();
         String password = pvPassword.getPassword();
         String passwordConfirm = pvPasswordConfirm.getPassword();
-        signUpPresenter.onSignUpButtonClick(username, login, password, passwordConfirm);
+        signUpPresenter.onSignUpButtonClick(phone, username, login, password, passwordConfirm);
     }
 
 }

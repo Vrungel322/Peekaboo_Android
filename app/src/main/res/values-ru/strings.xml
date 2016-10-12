@@ -1,18 +1,20 @@
 <resources>
     <string name="app_name">Peekaboo</string>
     <string name="pleaseWait">Подождите...</string>
+    <string name="phoneNumber">Номер телефона</string>
     <string name="username">Имя пользователя</string>
     <string name="password">Пароль</string>
     <string name="createAccount">Создать аккаунт</string>
     <string name="signIn">Аутентификация</string>
     <string name="skip">Пропустить</string>
     <string name="confirmPassword">Пдтверждение пароля</string>
-    <string name="email">Email</string>
+    <string name="email">Email или телефон</string>
+    <string name="invalidPhoneNumber">Неподходящий номер телефона</string>
     <string name="invalidLogin">Неподходящий логин</string>
     <string name="invalidUsername">Неподходящий логин</string>
     <string name="invalidPassword">Неподходящий пароль</string>
     <string name="invalidPasswordConfirm">пароли не совпадают</string>
-    <string name="invalidEmail">Неподходящий email</string>
+    <string name="invalidEmail">Неподходящий email или телефон</string>
     <string name="invalidKey">Неподходящий код</string>
     <string name="bySignUp1">В процессе </string>
     <string name="bySignUp2"> Регистрации </string>
@@ -22,7 +24,6 @@
     <string name="existence_font">fonts/existence.otf</string>
     <string name="helvetica_font">fonts/helvetika.ttf</string>
     <string name="usernameOrLogin">Имя или логин</string>
-    <!--<string name="emailOrPhoneNum">Email или номер телефона</string>-->
     <integer name="com_vk_sdk_AppId">5527207</integer>
 
     <string name="action_settings">Настройки</string>
