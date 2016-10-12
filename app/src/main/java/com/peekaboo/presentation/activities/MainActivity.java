@@ -1,5 +1,6 @@
 package com.peekaboo.presentation.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
@@ -25,7 +26,6 @@ import com.peekaboo.presentation.adapters.HotFriendsAdapter;
 import com.peekaboo.presentation.fragments.CallsFragment;
 import com.peekaboo.presentation.fragments.ContactsFragment;
 import com.peekaboo.presentation.fragments.DialogsFragment;
-import com.peekaboo.presentation.fragments.FriendTestFragment;
 import com.peekaboo.presentation.fragments.ProfileFragment;
 import com.peekaboo.presentation.fragments.SettingsFragment;
 import com.peekaboo.presentation.pojo.HotFriendPOJO;
@@ -200,6 +200,8 @@ public class MainActivity extends AppCompatActivity implements IMainView, INotif
                 break;
             case R.id.llCalls:
                 changeFragment(new CallsFragment(), Constants.FRAGMENT_TAGS.CALLS_FRAGMENT);
+                //TESTING
+                startActivity(new Intent(this, TestSmsChatActivity.class));
                 break;
             case R.id.llContacts:
                 changeFragment(ContactsFragment.newInstance(), Constants.FRAGMENT_TAGS.CONTACTS_FRAGMENT);

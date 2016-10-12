@@ -155,8 +155,8 @@ public class DataModule {
 
     @Provides
     @Singleton
-    public SessionRepository provideRepository(AccountUser user, RestApi restApi,
-                                               PContactHelper dbHelper, PMessageHelper messageHelper, AbstractMapperFactory mapperFactory) {
+    public SessionRepository provideRepository(AccountUser user, RestApi restApi, PContactHelper dbHelper,
+                                               PMessageHelper messageHelper, AbstractMapperFactory mapperFactory) {
         return new SessionDataRepository(restApi, mapperFactory, user, dbHelper, messageHelper);
     }
 

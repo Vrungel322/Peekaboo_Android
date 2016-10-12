@@ -7,6 +7,7 @@ import com.peekaboo.presentation.activities.LogInActivity;
 import com.peekaboo.presentation.activities.MainActivity;
 import com.peekaboo.presentation.activities.SignUpActivity;
 import com.peekaboo.presentation.activities.SplashActivity;
+import com.peekaboo.presentation.activities.TestSmsChatActivity;
 import com.peekaboo.presentation.dialogs.ConfirmSignUpDialog;
 import com.peekaboo.presentation.dialogs.RecordDialogFragment;
 import com.peekaboo.presentation.fragments.ContactsFragment;
@@ -33,6 +34,8 @@ public interface ApplicationComponent {
     void inject(MainActivity mainActivity);
 
     void inject(ChatActivity chatActivity);
+
+    void inject(TestSmsChatActivity testSmsChatActivity);
 
 
     //    Inject of Fragments

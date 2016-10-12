@@ -15,6 +15,7 @@ import com.peekaboo.data.rest.entity.CredentialsSignUp;
 import com.peekaboo.domain.AccountUser;
 import com.peekaboo.domain.Dialog;
 import com.peekaboo.domain.SessionRepository;
+import com.peekaboo.domain.Sms;
 import com.peekaboo.domain.User;
 
 import java.util.List;
@@ -136,5 +137,10 @@ public class SessionDataRepository implements SessionRepository {
     @Override
     public Observable<Integer> getUnreadMessagesCount(String id) {
         return messageHelper.getUnreadMessagesCount(id);
+    }
+
+    @Override
+    public Observable<List<Sms>> getAllSmsList() {
+        return null;
     }
 }

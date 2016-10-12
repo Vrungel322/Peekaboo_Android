@@ -35,4 +35,6 @@ public interface SessionRepository {
     Observable<List<Dialog>> loadDialogs();
 
     Observable<Integer> getUnreadMessagesCount(String id);
+
+    Observable<List<Sms>> getAllSmsList();
 }
