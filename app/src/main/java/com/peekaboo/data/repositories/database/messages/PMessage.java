@@ -5,8 +5,8 @@ package com.peekaboo.data.repositories.database.messages;
  */
 public class PMessage extends PMessageAbs {
 
-    public static final String DIVIDER = "  ";
-    public static final String ERROR = "<@error@>";
+    public static final String DIVIDER = "<@>";
+    public static final String ERROR = "<@e@>";
     private long id;
     private boolean isMine;
     private String messageBody;
@@ -32,8 +32,12 @@ public class PMessage extends PMessageAbs {
         return "{ id=" + id + ", body=" + messageBody + ", isMine=" + isMine + ", status=" + status() + " }";
     }
 
-    public boolean isDownloaded() {
+    public boolean hasBothPaths() {
         return messageBody.contains(DIVIDER);
+    }
+
+    public boolean hasFileError() {
+        return messageBody.contains(ERROR);
     }
 
     public void setMessageBody(String messageBody) {

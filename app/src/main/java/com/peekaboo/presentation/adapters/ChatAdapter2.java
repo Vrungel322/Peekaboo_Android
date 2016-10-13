@@ -170,9 +170,9 @@ public class ChatAdapter2 extends RecyclerView.Adapter<ChatAdapter2.ViewHolder> 
                 if (holder instanceof ViewHolderAudio) {
                     ViewHolderAudio holderAudio = (ViewHolderAudio) holder;
                     presenter.setPlayerListener(playerListener);
-                    Log.e("adapter", pMessageAbs.id() + " " + pMessageAbs.messageBody() + " " + pMessageAbs.isMine() + " " + pMessageAbs.isDownloaded());
-                    holderAudio.pbLoad.setVisibility(pMessageAbs.isDownloaded() ? View.GONE : View.VISIBLE);
-                    holderAudio.ibPlayRecord.setVisibility(!pMessageAbs.isDownloaded() ? View.GONE : View.VISIBLE);
+                    Log.e("adapter", pMessageAbs.id() + " " + pMessageAbs.messageBody() + " " + pMessageAbs.isMine() + " " + pMessageAbs.hasBothPaths());
+                    holderAudio.pbLoad.setVisibility(pMessageAbs.hasBothPaths() || pMessageAbs.hasFileError() ? View.GONE : View.VISIBLE);
+                    holderAudio.ibPlayRecord.setVisibility(!pMessageAbs.hasBothPaths() || pMessageAbs.hasFileError() ? View.GONE : View.VISIBLE);
                     holderAudio.ibPlayRecord.setOnClickListener(v -> {
                         presenter.onPlayButtonClick(pMessageAbs, playerListener);
                     });
@@ -373,20 +373,4 @@ public class ChatAdapter2 extends RecyclerView.Adapter<ChatAdapter2.ViewHolder> 
             ButterKnife.bind(this, view);
         }
     }
-//
-//    static class AudioIdManager {
-//        private static String DIVIDER = " ";
-//        static long getMessageId(String audioId) {
-//            return Long.parseLong(audioId.split(DIVIDER)[1]);
-//        }
-//
-//        static String getCompanionId(String audioId) {
-//            return audioId.split(DIVIDER)[0];
-//        }
-//
-//        static String constructId(String companionId, long messageId) {
-//            return companionId + DIVIDER + messageId;
-//        }
-//
-//    }
 }

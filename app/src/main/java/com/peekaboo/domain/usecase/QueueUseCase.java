@@ -48,7 +48,7 @@ public abstract class QueueUseCase<K, V> {
                         K take = queue.take();
                         try {
                             V value = getValue(take);
-                            if (value != null) {
+                            if (take != null) {
                                 subscriber.onNext(new Pair<>(take, value));
                             }
                         } catch (Exception e) {

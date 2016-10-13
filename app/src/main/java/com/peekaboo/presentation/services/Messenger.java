@@ -241,7 +241,6 @@ public class Messenger implements IMessenger,
                 String remote = first.messageBody();
                 String audioBody = MessageUtils.createAudioBody(remote, local, local == null);
                 helper.updateBody(first.senderId(), first, audioBody);
-
                 for (MessengerListener listener : messageListeners) {
                     listener.onMessageUpdated(first);
                 }
@@ -254,13 +253,14 @@ public class Messenger implements IMessenger,
         return new BaseUseCaseSubscriber<Pair<PMessage, FileEntity>>() {
             @Override
             public void onNext(Pair<PMessage, FileEntity> pMessageFileEntityPair) {
-                if (isAvailable()) {
+                if (isAvailable() && pMessageFileEntityPair.second != null) {
                     PMessage pMessage = pMessageFileEntityPair.first;
                     FileEntity fileEntity = pMessageFileEntityPair.second;
-                    String remote = fileEntity == null ? null : fileEntity.getName();
+                    String remote = fileEntity.getName();
                     String local = pMessage.messageBody();
-                    String audioBody = MessageUtils.createAudioBody(remote, local, fileEntity == null);
+                    String audioBody = MessageUtils.createAudioBody(remote, local, false);
                     helper.updateBody(pMessage.receiverId(), pMessage, audioBody);
+                    Log.e("messenger", "upload " + pMessage);
                     deliverMessage(pMessage);
                 }
             }
