@@ -7,6 +7,8 @@ import com.peekaboo.domain.schedulers.SubscribeOn;
 
 import java.util.List;
 
+import javax.inject.Inject;
+
 import rx.Observable;
 
 /**
@@ -17,6 +19,7 @@ public class GetSmsDialogsListUseCase extends UseCase<List<SmsDialog>> {
 
     private SessionRepository sessionRepository;
 
+    @Inject
     public GetSmsDialogsListUseCase(SubscribeOn subscribeOn, ObserveOn observeOn, SessionRepository sessionRepository) {
         super(subscribeOn, observeOn);
         this.sessionRepository = sessionRepository;

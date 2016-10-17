@@ -4,7 +4,6 @@ import android.content.ContentResolver;
 import android.database.Cursor;
 import android.net.Uri;
 import android.provider.ContactsContract;
-import android.util.Log;
 
 import com.peekaboo.data.FileEntity;
 import com.peekaboo.data.mappers.AbstractMapperFactory;
@@ -167,9 +166,8 @@ public class SessionDataRepository implements SessionRepository {
 
     @Override
     public Observable<Pair<List<PMessage>, List<Contact>>> getAllUnreadMessagesInfo() {
-        return messageHelper.getAllUnreadMessages(false).flatMap(pMessages -> {
-            return contactHelper.getContactsForMessages(pMessages);
-        }, Pair::new);
+        return messageHelper.getAllUnreadMessages(false).flatMap(pMessages ->
+                contactHelper.getContactsForMessages(pMessages), Pair::new);
     }
 
     @Override
@@ -217,11 +215,17 @@ public class SessionDataRepository implements SessionRepository {
                 .flatMap(phoneContactPOJO -> {
                     String phoneNumber = phoneContactPOJO.getPhone();
                     List<Sms> smsList = getContactSmsList(phoneNumber).toBlocking().first();
-                    int lastMessageIndex = smsList.size() - 1;
-                    Sms lastSms = smsList.get(lastMessageIndex);
-                    int unreadMessagesCount = getSmsContactUnreadMessagesCount(phoneNumber).toBlocking().first();
-                    return Observable.just(new SmsDialog(phoneContactPOJO, lastSms, unreadMessagesCount));
-                }).toList();
+                    if (smsList != null && smsList.size() > 0) {
+                        Sms lastSms = smsList.get(0);
+                        int unreadMessagesCount = getSmsContactUnreadMessagesCount(phoneNumber).toBlocking().first();
+                        return Observable.just(new SmsDialog(phoneContactPOJO, lastSms, unreadMessagesCount));
+                    }
+
+                    return null;
+
+                })
+                .filter(smsDialog -> smsDialog != null)
+                .toList();
     }
 
     @Override
@@ -232,7 +236,7 @@ public class SessionDataRepository implements SessionRepository {
             Cursor messages = contentResolver.query(Uri.parse("content://sms/"), null, where, null, null);
             Integer count = 0;
             if (messages != null && messages.moveToFirst()) {
-                count = messages.getInt(0);
+                count = messages.getCount();
                 messages.close();
             }
             subscriber.onNext(count);
@@ -249,10 +253,15 @@ public class SessionDataRepository implements SessionRepository {
                 List<PhoneContactPOJO> alPhoneContactPOJOs = new ArrayList<>();
                 if (phones != null) {
                     while (phones.moveToNext()) {
-                        String phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
-                        String name = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
+                        String phoneNumber = phones.getString(
+                                phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER))
+                                .trim()
+                                .replaceAll(" ", "")
+                                .replaceAll("-", "");
+                        String name = phones.getString(
+                                phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
                         alPhoneContactPOJOs.add(new PhoneContactPOJO(name, phoneNumber));
-                        Log.wtf("pNumber : ", name);
+//                        Log.wtf("pNumber : ", name);
                     }
                     phones.close();
                 }
