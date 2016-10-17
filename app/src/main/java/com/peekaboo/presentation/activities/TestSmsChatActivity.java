@@ -1,11 +1,9 @@
 package com.peekaboo.presentation.activities;
 
-import android.database.Cursor;
-import android.net.Uri;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -21,7 +19,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class TestSmsChatActivity extends AppCompatActivity implements ISmsChatView{
+public class TestSmsChatActivity extends AppCompatActivity implements ISmsChatView {
 
     @Inject
     SmsChatPresenter presenter;
@@ -42,7 +40,7 @@ public class TestSmsChatActivity extends AppCompatActivity implements ISmsChatVi
     @Override
     protected void onResume() {
         super.onResume();
-        presenter.onResume("0689647569");
+        presenter.onResume("+380689647569");
     }
 
     @Override
@@ -52,37 +50,18 @@ public class TestSmsChatActivity extends AppCompatActivity implements ISmsChatVi
     }
 
     @OnClick(R.id.send_message_button)
-    public void send(){
+    public void send() {
         String text = etMessageInput.getText().toString();
-        if(!TextUtils.isEmpty(text)){
+        if (!TextUtils.isEmpty(text)) {
             presenter.sendMessage(text);
-        }
-
-        getHistory();
-
-    }
-
-    private void getHistory(){
-        Cursor cur = getContentResolver().query(Uri.parse("content://sms/"), null, null, null, null);
-
-        if (cur.moveToFirst()) { /* false = no sms */
-//            do {
-                String msgInfo = "";
-
-                for (int i = 0; i < cur.getColumnCount(); i++) {
-                    msgInfo += " " + cur.getColumnName(i) + ":" + cur.getString(i);
-                }
-
-                Log.wtf("TextSms", "SMS: " + msgInfo);
-
-//                Toast.makeText(this, msgInfo, Toast.LENGTH_SHORT).show();
-//            } while (cur.moveToNext());
+            etMessageInput.setText("");
         }
     }
 
     @Override
     public void showMessage(String text, String phone) {
-        String finalText = tvMessages.getText().toString() + "\n\n" + phone + ": " + text;
+        String finalText = tvMessages.getText().toString() + "\n" + phone + ": " + text;
+        tvMessages.setTextColor(Color.GREEN);
         tvMessages.setText(finalText);
     }
 

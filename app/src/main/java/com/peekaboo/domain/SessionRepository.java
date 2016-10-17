@@ -48,5 +48,7 @@ public interface SessionRepository {
 
     Observable<List<Sms>> getAllSmsList();
 
+    Observable<List<Sms>> getContactSmsList(String phoneNumber);
+
     Observable<List<PhoneContactPOJO>> getPhoneContactList();
 }

@@ -10,4 +10,5 @@ public interface ISmsChatPresenter extends IPresenter<ISmsChatView> {
     void onResume(String receiverPhone);
     void onDestroy();
     void sendMessage(String message);
+    void getAllContactsMessageList();
 }

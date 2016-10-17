@@ -2,6 +2,7 @@ package com.peekaboo.data.repositories;
 
 import android.content.ContentResolver;
 import android.database.Cursor;
+import android.net.Uri;
 import android.provider.ContactsContract;
 import android.util.Log;
 
@@ -129,13 +130,13 @@ public class SessionDataRepository implements SessionRepository {
 
     @Override
     public Observable<List<Contact>> saveContactToDb(List<Contact> contact) {
-                return Observable.from(contact)
-                        .map(contact1 -> {
-                            contactHelper.insert(contact1);
-                            messageHelper.createTable(contact1.contactId());
-                            return contact1;
-                        })
-                        .toList();
+        return Observable.from(contact)
+                .map(contact1 -> {
+                    contactHelper.insert(contact1);
+                    messageHelper.createTable(contact1.contactId());
+                    return contact1;
+                })
+                .toList();
     }
 
     @Override
@@ -144,7 +145,7 @@ public class SessionDataRepository implements SessionRepository {
                 .flatMap(Observable::from)
                 .flatMap(contact -> {
                     PMessage message = messageHelper.getLastMessage(contact.contactId());
-                    if(message == null){
+                    if (message == null) {
                         return null;
                     }
                     return Observable.just(new Dialog(contact, message));
@@ -177,17 +178,44 @@ public class SessionDataRepository implements SessionRepository {
 
     @Override
     public Observable<List<Sms>> getAllSmsList() {
-        return null;
+        return Observable.create(subscriber -> {
+            Cursor messages = contentResolver.query(Uri.parse("content://sms/"), null, null, null, null);
+            List<Sms> smsList = new ArrayList<>();
+            if (messages != null) {
+                while (messages.moveToNext()) {
+                    smsList.add(abstractMapperFactory.getSmsMapper().transform(messages));
+                }
+                messages.close();
+            }
+            subscriber.onNext(smsList);
+            subscriber.onCompleted();
+        });
+    }
+
+    @Override
+    public Observable<List<Sms>> getContactSmsList(String phoneNumber) {
+        return Observable.create(subscriber -> {
+            String where = Sms.COLUMN_ADDRESS + " = " + "\'" + phoneNumber + "\'";
+            Cursor messages = contentResolver.query(Uri.parse("content://sms/"), null, where, null, null);
+            List<Sms> smsList = new ArrayList<>();
+            if (messages != null) {
+                while (messages.moveToNext()) {
+                    smsList.add(abstractMapperFactory.getSmsMapper().transform(messages));
+                }
+                messages.close();
+            }
+            subscriber.onNext(smsList);
+            subscriber.onCompleted();
+        });
     }
 
     @Override
     public Observable<List<PhoneContactPOJO>> getPhoneContactList() {
-        Cursor phones = contentResolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null);
-        List<PhoneContactPOJO> alPhoneContactPOJOs = new ArrayList<PhoneContactPOJO>();
         return Observable.create(new Observable.OnSubscribe<List<PhoneContactPOJO>>() {
             @Override
             public void call(Subscriber<? super List<PhoneContactPOJO>> subscriber) {
-
+                Cursor phones = contentResolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null);
+                List<PhoneContactPOJO> alPhoneContactPOJOs = new ArrayList<>();
                 if (phones != null) {
                     while (phones.moveToNext()) {
                         String phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
@@ -195,7 +223,7 @@ public class SessionDataRepository implements SessionRepository {
                         alPhoneContactPOJOs.add(new PhoneContactPOJO(name, phoneNumber));
                         Log.wtf("pNumber : ", name);
                     }
-                    phones.close();// close cursor
+                    phones.close();
                 }
                 subscriber.onNext(alPhoneContactPOJOs);
                 subscriber.onCompleted();

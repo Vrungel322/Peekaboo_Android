@@ -15,7 +15,8 @@ public class SmsMapper implements Mapper<Cursor, Sms> {
                 obj.getLong(obj.getColumnIndex(Sms.COLUMN_ID)),
                 obj.getString(obj.getColumnIndex(Sms.COLUMN_ADDRESS)),
                 obj.getLong(obj.getColumnIndex(Sms.COLUMN_DATE)),
-                obj.getString(obj.getColumnIndex(Sms.COLUMN_BODY))
-                );
+                obj.getString(obj.getColumnIndex(Sms.COLUMN_BODY)),
+                obj.getInt(obj.getColumnIndex(Sms.COLUMN_TYPE)));
     }
+
 }
