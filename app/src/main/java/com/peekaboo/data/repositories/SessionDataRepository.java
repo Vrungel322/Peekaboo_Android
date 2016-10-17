@@ -23,6 +23,7 @@ import com.peekaboo.domain.Dialog;
 import com.peekaboo.domain.Pair;
 import com.peekaboo.domain.SessionRepository;
 import com.peekaboo.domain.Sms;
+import com.peekaboo.domain.SmsDialog;
 import com.peekaboo.domain.User;
 import com.peekaboo.presentation.pojo.PhoneContactPOJO;
 
@@ -210,6 +211,36 @@ public class SessionDataRepository implements SessionRepository {
     }
 
     @Override
+    public Observable<List<SmsDialog>> getSmsDialogsList() {
+        return getPhoneContactList()
+                .flatMap(Observable::from)
+                .flatMap(phoneContactPOJO -> {
+                    String phoneNumber = phoneContactPOJO.getPhone();
+                    List<Sms> smsList = getContactSmsList(phoneNumber).toBlocking().first();
+                    int lastMessageIndex = smsList.size() - 1;
+                    Sms lastSms = smsList.get(lastMessageIndex);
+                    int unreadMessagesCount = getSmsContactUnreadMessagesCount(phoneNumber).toBlocking().first();
+                    return Observable.just(new SmsDialog(phoneContactPOJO, lastSms, unreadMessagesCount));
+                }).toList();
+    }
+
+    @Override
+    public Observable<Integer> getSmsContactUnreadMessagesCount(String phoneNumber) {
+        return Observable.create(subscriber -> {
+            String where = Sms.COLUMN_ADDRESS + " = " + "\'" + phoneNumber + "\'"
+                    + " AND " + Sms.COLUMN_READ + " = 0";
+            Cursor messages = contentResolver.query(Uri.parse("content://sms/"), null, where, null, null);
+            Integer count = 0;
+            if (messages != null && messages.moveToFirst()) {
+                count = messages.getInt(0);
+                messages.close();
+            }
+            subscriber.onNext(count);
+            subscriber.onCompleted();
+        });
+    }
+
+    @Override
     public Observable<List<PhoneContactPOJO>> getPhoneContactList() {
         return Observable.create(new Observable.OnSubscribe<List<PhoneContactPOJO>>() {
             @Override
@@ -229,6 +260,5 @@ public class SessionDataRepository implements SessionRepository {
                 subscriber.onCompleted();
             }
         }).distinct();
-
     }
 }

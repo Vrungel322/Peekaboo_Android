@@ -11,6 +11,7 @@ public class Sms {
     public static final String COLUMN_DATE = "date";
     public static final String COLUMN_BODY = "body";
     public static final String COLUMN_TYPE = "type";
+    public static final String COLUMN_READ = "read";
 
     private long id;
     private String address;
