@@ -321,6 +321,12 @@ public class ChatAdapter2 extends RecyclerView.Adapter<ChatAdapter2.ViewHolder> 
         }
     }
 
+    // RV : optimize allocation of different view holders number
+    @Override
+    public boolean onFailedToRecycleView(ViewHolder holder) {
+        return true;
+    }
+
     static class ViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.tvChatTimestamp)
         TextView tvChatTimestamp;
