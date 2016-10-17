@@ -1,5 +1,7 @@
 package com.peekaboo.presentation.adapters;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -101,6 +103,12 @@ public final class DialogsLargeAdapter extends RecyclerView.Adapter<DialogsLarge
             if (stared[0] == false) {
                 stared[0] = true;
                 holder.ivFavorite.setImageResource(R.drawable.stared);
+                //test google maps
+//                String geoUriString = "geo:0,10?z=2";
+//                Uri geoUri = Uri.parse(geoUriString);
+//                Intent mapIntent = new Intent(Intent.ACTION_VIEW, geoUri);
+//                activity.startActivity(mapIntent);
+
             } else {
                 stared[0] = false;
                 holder.ivFavorite.setImageResource(R.drawable.star);

@@ -136,6 +136,18 @@ public class ChatPresenter extends BasePresenter<IChatView> implements IChatPres
 //                false, false, false)));
     }
 
+    @Override
+    public void onNavigationButtonClick() {
+        //TODO: open google maps
+//        Uri gmmIntentUri = Uri.parse("geo:37.7749,-122.4194");
+//        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+//        mapIntent.setPackage("com.google.android.apps.maps");
+//        if (mapIntent.resolveActivity(getPackageManager()) != null) {
+//        startActivity(mapIntent);
+//        }
+
+    }
+
 
     @Override
     public void onPause() {

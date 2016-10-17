@@ -28,6 +28,8 @@ public interface IChatPresenter extends IPresenter<IChatView> {
 
     void onSendAudioButtonPress(Intent data);
 
+    void onNavigationButtonClick();
+
     void onPause();
 
     void onResume();

@@ -49,6 +49,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnFocusChange;
+import butterknife.OnTextChanged;
 import butterknife.OnTouch;
 import io.codetail.animation.ViewAnimationUtils;
 import io.codetail.widget.RevealFrameLayout;
@@ -78,6 +79,10 @@ public class ChatActivity extends AppCompatActivity
     LinearLayout llItems;
     @BindView(R.id.micro_btn)
     ImageButton bRecord;
+
+    @BindView(R.id.navigation_btn)
+    ImageButton bNavigation;
+
     @BindView(R.id.micro_anim)
     ImageView microAnim;
     @BindView(R.id.rflButtonRecord)
@@ -204,6 +209,12 @@ public class ChatActivity extends AppCompatActivity
         takeGalleryImage();
     }
 
+    @OnClick(R.id.navigation_btn)
+    void onNavigationButtonClick(){
+        takeNavigation();
+        Toast.makeText(this, "LoL", Toast.LENGTH_SHORT).show();
+    }
+
 //    @OnClick(R.id.micro_btn)
 //    void onRecordButtonClick() {
 ////        Log.wtf("onRecordButtonClick", "VISIBBLE");
@@ -309,6 +320,16 @@ public class ChatActivity extends AppCompatActivity
     public void takeGalleryImage() {
         startActivityForResult(new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI),
                 Constants.REQUEST_CODES.REQUEST_CODE_GALERY);
+    }
+
+    public void takeNavigation(){
+        Uri gmmIntentUri = Uri.parse("geo:37.7749,-122.4194");
+        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+        mapIntent.setPackage("com.google.android.apps.maps");
+//        if (mapIntent.resolveActivity(getPackageManager()) != null) {
+            startActivity(mapIntent);
+//        }
+
     }
 
     public void takePhoto() {
