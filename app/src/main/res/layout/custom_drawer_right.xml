@@ -3,7 +3,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:gravity="bottom">
+    android:gravity="bottom"
+    android:background="#FFF"
+    >
 
     <ListView
         android:id="@+id/lvHotFriends"
@@ -14,6 +16,6 @@
         android:divider="@color/transparent"
         android:listSelector="@color/rightItemSelection"
         android:scrollbars="none"
-        android:foregroundGravity="bottom"
+        android:foregroundGravity="bottom|center_horizontal"
         android:stackFromBottom="true" />
 </LinearLayout>
