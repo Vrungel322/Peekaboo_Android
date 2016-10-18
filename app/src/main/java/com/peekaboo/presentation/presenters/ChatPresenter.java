@@ -11,6 +11,7 @@ import android.speech.RecognizerIntent;
 import android.speech.tts.TextToSpeech;
 import android.text.TextUtils;
 import android.util.Log;
+import android.widget.Toast;
 
 import com.peekaboo.data.mappers.AbstractMapperFactory;
 import com.peekaboo.data.repositories.database.messages.PMessage;
@@ -139,12 +140,12 @@ public class ChatPresenter extends BasePresenter<IChatView> implements IChatPres
     @Override
     public void onNavigationButtonClick() {
         //TODO: open google maps
+//        Toast.makeText(, "LoL", Toast.LENGTH_SHORT).show();
+
 //        Uri gmmIntentUri = Uri.parse("geo:37.7749,-122.4194");
 //        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
 //        mapIntent.setPackage("com.google.android.apps.maps");
-//        if (mapIntent.resolveActivity(getPackageManager()) != null) {
 //        startActivity(mapIntent);
-//        }
 
     }
 

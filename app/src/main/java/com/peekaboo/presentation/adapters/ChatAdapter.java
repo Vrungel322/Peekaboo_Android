@@ -375,6 +375,16 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         }
     }
 
+    static class ViewHolderNavigation extends ViewHolder {
+        @BindView(R.id.navigation_btn)
+        ImageButton ibNavigation;
+        public ViewHolderNavigation(View view){
+            super(view);
+            ButterKnife.bind(this, view);
+        }
+
+    }
+
     static class DatesViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.dates_separator_text_view)
         TextView tvDatesSeparator;
