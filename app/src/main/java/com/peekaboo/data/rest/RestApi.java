@@ -59,8 +59,8 @@ public class RestApi {
         return api.updateAvatar(part, bearer);
     }
 
-    public Call<ResponseBody> downloadFile(String remoteFileName, String bearer) {
-        return api.download(remoteFileName, bearer);
+    public Call<ResponseBody> downloadFile(String fileType, String remoteFileName, String bearer) {
+        return api.download(fileType, remoteFileName, bearer);
     }
 
     public Observable<UserResponse> getAllContacts() {

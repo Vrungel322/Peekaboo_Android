@@ -66,8 +66,9 @@ public interface PeekabooApi {
             @Header("authorization") String bearer
     );
 
-    @GET("download/audio/{fileName}")
+    @GET("download/{fileType}/{fileName}")
     Call<ResponseBody> download(
+            @Path("fileType") String fileType,
             @Path("fileName") String fileName,
             @Header("authorization") String bearer
     );

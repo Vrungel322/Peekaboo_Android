@@ -10,6 +10,13 @@ public class Constants {
     public static final String EXTRA_CONTACT = "contact";
     public static final String ARG_CHAT_MESSAGE_ITEM_INDEX = "message_item_index";
 
+    public interface MESSAGE_TYPE{
+        String TYPE_AUDIO    = "audio";
+        String TYPE_IMAGE    = "image";
+        String TYPE_VIDEO    = "video";
+        String TYPE_DOCUMENT = "document";
+    }
+
     public interface FRAGMENT_TAGS {
         String CHAT_ITEM_DIALOG_FRAGMENT_TAG = "chatItemDialog";
         String ATTACHMENT_DIALOG_FRAGMENT_TAG = "attachmentDialog";
@@ -36,6 +43,7 @@ public class Constants {
         int RECORDER_CHANNELS = AudioFormat.CHANNEL_IN_MONO;
         int RECORDER_AUDIO_ENCODING = AudioFormat.ENCODING_PCM_16BIT;
     }
+
     public interface DESIGN_CONSTANTS{
         int BIG_SIDE_MARGIN = 45;
         int TOP_OR_BOTTOM_MARGIN = 6;

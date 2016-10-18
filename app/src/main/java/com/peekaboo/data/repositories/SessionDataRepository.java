@@ -111,8 +111,8 @@ public class SessionDataRepository implements SessionRepository {
 
 
     @Override
-    public Call<ResponseBody> downloadFile(String remoteFileName) {
-        return restApi.downloadFile(remoteFileName, user.getBearer());
+    public Call<ResponseBody> downloadFile(String remoteFileName, String fileType) {
+        return restApi.downloadFile(fileType, remoteFileName, user.getBearer());
     }
 
     @Override
