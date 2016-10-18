@@ -17,6 +17,7 @@ import com.peekaboo.data.repositories.database.messages.PMessage;
 import com.peekaboo.data.repositories.database.messages.PMessageAbs;
 import com.peekaboo.domain.Dialog;
 import com.peekaboo.presentation.activities.MainActivity;
+import com.peekaboo.presentation.activities.MapActivity;
 import com.peekaboo.presentation.utils.ResourcesUtils;
 import com.peekaboo.utils.ActivityNavigator;
 import com.peekaboo.utils.Utility;
@@ -103,11 +104,7 @@ public final class DialogsLargeAdapter extends RecyclerView.Adapter<DialogsLarge
             if (stared[0] == false) {
                 stared[0] = true;
                 holder.ivFavorite.setImageResource(R.drawable.stared);
-                //test google maps
-//                String geoUriString = "geo:0,10?z=2";
-//                Uri geoUri = Uri.parse(geoUriString);
-//                Intent mapIntent = new Intent(Intent.ACTION_VIEW, geoUri);
-//                activity.startActivity(mapIntent);
+
 
             } else {
                 stared[0] = false;
