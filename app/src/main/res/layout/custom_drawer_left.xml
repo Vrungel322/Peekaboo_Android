@@ -69,7 +69,9 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:gravity="center_horizontal"
-                            android:orientation="vertical">
+                            android:orientation="vertical"
+                            android:layout_marginBottom="9dp"
+                            android:layout_marginTop="14dp">
 
                             <TextView
                                 android:id="@+id/tvNameSurname"
@@ -101,7 +103,7 @@
                         android:layout_marginTop="@dimen/marginTopForSwitcher"
                         android:background="@drawable/rounded_rectangle"
                         android:orientation="horizontal"
-                        android:paddingBottom="12dp"
+                        android:paddingBottom="6dp"
                         android:weightSum="3">
 
                         <RadioGroup
@@ -151,7 +153,7 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_marginTop="@dimen/nav_padding_list"
+                        android:layout_marginTop="8dp"
                         android:orientation="vertical">
 
                         <LinearLayout
