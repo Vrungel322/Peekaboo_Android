@@ -3,17 +3,13 @@ package com.peekaboo.presentation.activities;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -49,8 +45,8 @@ import com.peekaboo.presentation.presenters.MainActivityPresenter;
 import com.peekaboo.presentation.services.INotifier;
 import com.peekaboo.presentation.services.Message;
 import com.peekaboo.presentation.services.MessageNotificator;
-import com.peekaboo.presentation.services.MessageUtils;
 import com.peekaboo.presentation.utils.ResourcesUtils;
+import com.peekaboo.domain.usecase.UserModeChangerUseCase;
 import com.peekaboo.presentation.views.IMainView;
 import com.peekaboo.utils.ActivityNavigator;
 import com.peekaboo.utils.Constants;
@@ -115,6 +111,8 @@ public class MainActivity extends AppCompatActivity implements IMainView, Avatar
     Picasso mPicasso;
     @Inject
     ActivityNavigator navigator;
+//    @Inject
+//    UserModeChangerUseCase userModeChangerUseCase;
     private HotFriendsAdapter hotFriendsAdapter;
     private ArrayList<HotFriendPOJO> alHotFriendPOJO;
     private final Set<OnBackPressListener> listeners = new HashSet<>();
@@ -146,6 +144,34 @@ public class MainActivity extends AppCompatActivity implements IMainView, Avatar
             onDisconnected();
             notifier.tryConnect(accountUser.getBearer());
         }
+
+        presenter.setUserModeListener(type -> {
+            switch (type){
+                case UserModeChangerUseCase.IUserMode.TEXT_MODE:
+                    bText.setSelected(true);
+                    bAudio.setSelected(false);
+                    bVideo.setSelected(false);
+                    break;
+
+                case UserModeChangerUseCase.IUserMode.AUDIO_MODE:
+                    bText.setSelected(false);
+                    bAudio.setSelected(true);
+                    bVideo.setSelected(false);
+                    break;
+
+                case UserModeChangerUseCase.IUserMode.VIDEO_MODE:
+                    bText.setSelected(false);
+                    bAudio.setSelected(false);
+                    bVideo.setSelected(true);
+                    break;
+
+                case UserModeChangerUseCase.IUserMode.ALL_MODE:
+                    bText.setSelected(true);
+                    bAudio.setSelected(true);
+                    bVideo.setSelected(true);
+                    break;
+            }
+        });
     }
 
     @Override
@@ -309,13 +335,13 @@ public class MainActivity extends AppCompatActivity implements IMainView, Avatar
     @OnClick({R.id.bText, R.id.bAudio, R.id.bVideo})
     public void onRadioButtonClicked(View v) {
         if (notifier.isAvailable()) {
-            bText.setSelected(v.getId() == R.id.bText);
-            bAudio.setSelected(v.getId() == R.id.bAudio);
-            bVideo.setSelected(v.getId() == R.id.bVideo);
-            byte mode = (byte) (v.getId() == R.id.bText ? 1 : v.getId() == R.id.bAudio ? 2 : 0);
-            Message switchModeMessage = MessageUtils.createSwitchModeMessage(mode);
-            notifier.sendMessage(switchModeMessage);
-            accountUser.saveMode(mode);
+//            bText.setSelected(v.getId() == R.id.bText);
+//            bAudio.setSelected(v.getId() == R.id.bAudio);
+//            bVideo.setSelected(v.getId() == R.id.bVideo);
+            byte mode = (v.getId() == R.id.bText
+                    ? UserModeChangerUseCase.IUserMode.TEXT_MODE : v.getId() == R.id.bAudio ?
+                    UserModeChangerUseCase.IUserMode.AUDIO_MODE : UserModeChangerUseCase.IUserMode.ALL_MODE);
+            presenter.setUserMode(mode);
         }
     }
 
