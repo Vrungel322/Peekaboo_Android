@@ -61,6 +61,7 @@ public class ContactPresenter extends ProgressPresenter<IContactsView> implement
             public void onNext(List<PhoneContactPOJO> response) {
                 super.onNext(response);
                 for (PhoneContactPOJO p : response) {
+                    //TODO : sent response to view
                     Log.wtf("PhoneContactPOJO : ","name : " + p.getName() + " phone : " + p.getPhone());
                 }
             }
