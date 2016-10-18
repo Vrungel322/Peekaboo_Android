@@ -19,9 +19,11 @@ import com.peekaboo.domain.usecase.FileUploadUseCase;
 import com.peekaboo.presentation.PeekabooApplication;
 import com.peekaboo.presentation.services.IMessenger;
 import com.peekaboo.presentation.services.INotifier;
+import com.peekaboo.presentation.services.ISmsManager;
 import com.peekaboo.presentation.services.Message;
 import com.peekaboo.presentation.services.MessageNotificator;
 import com.peekaboo.presentation.services.Messenger;
+import com.peekaboo.presentation.services.SMSManager;
 import com.peekaboo.presentation.services.WebSocketNotifier;
 import com.peekaboo.utils.MainThread;
 import com.squareup.otto.Bus;
@@ -118,5 +120,11 @@ public class ApplicationModule {
         return new Picasso.Builder(context)
                 .downloader(new OkHttp3Downloader(clientBuilder))
                 .build();
+    }
+
+    @Singleton
+    @Provides
+    public ISmsManager provideSMSManager(){
+        return new SMSManager();
     }
 }

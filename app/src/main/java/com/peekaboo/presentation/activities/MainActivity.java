@@ -308,6 +308,8 @@ public class MainActivity extends AppCompatActivity implements IMainView, Avatar
                 break;
             case R.id.llCalls:
                 changeFragment(new CallsFragment(), Constants.FRAGMENT_TAGS.CALLS_FRAGMENT);
+                //TESTING
+                startActivity(new Intent(this, TestSmsChatActivity.class));
                 break;
             case R.id.llContacts:
                 changeFragment(ContactsFragment.newInstance(), Constants.FRAGMENT_TAGS.CONTACTS_FRAGMENT);
