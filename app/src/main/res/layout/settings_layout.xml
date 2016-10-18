@@ -1,0 +1,272 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    style="@style/SettingsTheme"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:theme="@style/SettingsTheme">
+
+
+        <android.support.design.widget.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="256dp">
+
+            <android.support.design.widget.CollapsingToolbarLayout
+                android:id="@+id/collapsingToolbarLayout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/margin_drawer_divider"
+                    android:layout_marginRight="@dimen/margin_drawer_divider">
+
+                    <EditText
+                        android:id="@+id/name"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:hint="@string/name" />
+
+                    <EditText
+                        android:id="@+id/country"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:hint="@string/country" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/margin_drawer_divider"
+                    android:layout_marginRight="@dimen/margin_drawer_divider">
+
+                    <EditText
+                        android:id="@+id/surname"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:hint="@string/surname" />
+
+                    <EditText
+                        android:id="@+id/city"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:hint="@string/city" />
+
+                </LinearLayout>
+
+
+            </android.support.design.widget.CollapsingToolbarLayout>
+
+        </android.support.design.widget.AppBarLayout>
+
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginBottom="12dp"
+            android:layout_marginLeft="@dimen/margin_drawer_divider"
+            android:layout_marginRight="@dimen/margin_drawer_divider"
+            android:layout_marginTop="12dp"
+            android:background="@color/colorAccent" />
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_drawer_divider"
+            android:layout_marginRight="@dimen/margin_drawer_divider"
+            android:layout_marginTop="@dimen/margin_divider_top">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:text="@string/sms_integrate"
+                android:textSize="@dimen/settings_text_size" />
+
+
+            <com.rm.rmswitch.RMSwitch
+                android:id="@+id/sms"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:checked="true"
+                android:foregroundGravity="right"
+                android:paddingLeft="4dp"
+                app:switchBkgCheckedColor="@color/colorAccent"
+                app:switchBkgNotCheckedColor="@color/colorDarkAccent"
+                app:switchToggleCheckedColor="@color/colorAccent"
+                app:switchToggleCheckedImage="@drawable/sms_white_36dp"
+                app:switchToggleNotCheckedColor="@color/colorDarkAccent" />
+
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_drawer_divider"
+            android:layout_marginRight="@dimen/margin_drawer_divider"
+            android:layout_marginTop="@dimen/margin_divider_top">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:text="@string/prefer_text"
+                android:textSize="@dimen/settings_text_size" />
+
+            <com.rm.rmswitch.RMSwitch
+                android:id="@+id/preferText"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:checked="true"
+                android:foregroundGravity="right"
+                android:paddingLeft="4dp"
+                app:switchBkgCheckedColor="@color/colorAccent"
+                app:switchBkgNotCheckedColor="@color/colorDarkAccent"
+                app:switchToggleCheckedColor="@color/colorAccent"
+                app:switchToggleCheckedImage="@drawable/text_format_white_24dp"
+                app:switchToggleNotCheckedColor="@color/colorDarkAccent" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_drawer_divider"
+            android:layout_marginRight="@dimen/margin_drawer_divider"
+            android:layout_marginTop="@dimen/margin_divider_top">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:text="@string/driver_mode"
+                android:textColor="@color/textColor"
+                android:textSize="@dimen/settings_text_size" />
+
+            <com.rm.rmswitch.RMSwitch
+                android:id="@+id/driverMode"
+                android:layout_width="60dp"
+                android:layout_height="wrap_content"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:checked="true"
+                android:foregroundGravity="right"
+                android:paddingLeft="4dp"
+                app:switchBkgCheckedColor="@color/colorAccent"
+                app:switchBkgNotCheckedColor="@color/colorDarkAccent"
+                app:switchToggleCheckedColor="@color/colorAccent"
+                app:switchToggleCheckedImage="@drawable/car_white_24dp"
+                app:switchToggleNotCheckedColor="@color/colorDarkAccent"
+                app:switchToggleNotCheckedImage="@drawable/directions_walk_white_24dp" />
+
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/margin_divider_top"
+            android:layout_marginLeft="@dimen/margin_drawer_divider"
+            android:layout_marginRight="@dimen/margin_drawer_divider"
+
+            android:layout_marginTop="@dimen/margin_divider_top">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:text="@string/disable_notifications"
+                android:textSize="@dimen/settings_text_size" />
+
+            <com.rm.rmswitch.RMSwitch
+                android:id="@+id/notificationOff"
+                android:layout_width="60dp"
+                android:layout_height="match_parent"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:checked="true"
+                android:foregroundGravity="right"
+                android:paddingLeft="4dp"
+                app:switchBkgCheckedColor="@color/colorAccent"
+                app:switchBkgNotCheckedColor="@color/colorDarkAccent"
+                app:switchToggleCheckedColor="@color/colorAccent"
+                app:switchToggleCheckedImage="@drawable/notifications_off_white_24dp"
+                app:switchToggleNotCheckedColor="@color/colorDarkAccent"
+                app:switchToggleNotCheckedImage="@drawable/notifications_white_24dp" />
+        </RelativeLayout>
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginBottom="12dp"
+            android:layout_marginLeft="@dimen/margin_drawer_divider"
+            android:layout_marginRight="@dimen/margin_drawer_divider"
+            android:layout_marginTop="12dp"
+            android:background="@color/colorAccent" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_drawer_divider"
+            android:layout_marginRight="@dimen/margin_drawer_divider"
+            android:layout_marginTop="@dimen/margin_divider_top"
+            android:clickable="true"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/default_cloud_storage"
+                android:textSize="@dimen/settings_text_size" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/google_cloud"
+                android:textColor="#969696"
+                android:textSize="14sp"
+
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_drawer_divider"
+            android:layout_marginRight="@dimen/margin_drawer_divider"
+            android:layout_marginTop="@dimen/margin_divider_top"
+            android:clickable="true"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/services_integration"
+                android:textSize="@dimen/settings_text_size" />
+        </LinearLayout>
+    </LinearLayout>
+</ScrollView>

@@ -20,6 +20,7 @@ public class SmartWidthEditText extends EditText {
         super(context, attrs);
         setWidth(context);
     }
+    
     public SmartWidthEditText(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         setWidth(context);
