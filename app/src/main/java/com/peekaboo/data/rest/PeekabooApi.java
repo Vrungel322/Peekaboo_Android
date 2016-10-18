@@ -52,8 +52,9 @@ public interface PeekabooApi {
     );
 
     @Multipart
-    @POST("upload/audio/{id}")
+    @POST("upload/{fileType}/{id}")
     Call<FileEntity> uploadFile(
+            @Path("fileType") String fileType,
             @Path("id") String receiverId,
             @Part MultipartBody.Part body,
             @Header("authorization") String bearer

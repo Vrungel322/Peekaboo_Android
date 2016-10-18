@@ -100,8 +100,8 @@ public class SessionDataRepository implements SessionRepository {
     }
 
     @Override
-    public Call<FileEntity> uploadFile(String fileName, String receiverId) {
-        return restApi.uploadFile(fileName, receiverId, user.getBearer());
+    public Call<FileEntity> uploadFile(String fileType, String fileName, String receiverId) {
+        return restApi.uploadFile(fileType, fileName, receiverId, user.getBearer());
     }
 
     @Override

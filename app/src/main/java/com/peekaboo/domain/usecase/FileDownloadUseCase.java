@@ -30,7 +30,8 @@ public class FileDownloadUseCase extends QueueUseCase<PMessage, String> {
     protected String getValue(PMessage key) throws IOException {
         String remoteFileName = key.messageBody().split(PMessage.DIVIDER)[0];
         Response<ResponseBody> execute
-                = repository.downloadFile(remoteFileName, Constants.MESSAGE_TYPE.TYPE_AUDIO).execute();
+                = repository.downloadFile(remoteFileName, Constants.MESSAGE_TYPE.TYPE_AUDIO)
+                .execute();
         File file = null;
         if (execute.isSuccessful()) {
             file = FileUtils.writeResponseBodyToDisk(FileUtils.formAudioName(key.receiverId()), execute.body());
