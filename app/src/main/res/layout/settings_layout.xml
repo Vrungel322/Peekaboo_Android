@@ -12,66 +12,49 @@
         android:orientation="vertical"
         android:theme="@style/SettingsTheme">
 
-
-        <android.support.design.widget.AppBarLayout
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="256dp">
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_drawer_divider"
+            android:layout_marginRight="@dimen/margin_drawer_divider">
 
-            <android.support.design.widget.CollapsingToolbarLayout
-                android:id="@+id/collapsingToolbarLayout"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                app:layout_scrollFlags="scroll|exitUntilCollapsed">
+            <EditText
+                android:id="@+id/name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="@string/name" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/margin_drawer_divider"
-                    android:layout_marginRight="@dimen/margin_drawer_divider">
+            <EditText
+                android:id="@+id/country"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="@string/country" />
 
-                    <EditText
-                        android:id="@+id/name"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:hint="@string/name" />
+        </LinearLayout>
 
-                    <EditText
-                        android:id="@+id/country"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:hint="@string/country" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/margin_drawer_divider"
+            android:layout_marginRight="@dimen/margin_drawer_divider">
 
-                </LinearLayout>
+            <EditText
+                android:id="@+id/surname"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="@string/surname" />
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/margin_drawer_divider"
-                    android:layout_marginRight="@dimen/margin_drawer_divider">
+            <EditText
+                android:id="@+id/city"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:hint="@string/city" />
 
-                    <EditText
-                        android:id="@+id/surname"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:hint="@string/surname" />
-
-                    <EditText
-                        android:id="@+id/city"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:hint="@string/city" />
-
-                </LinearLayout>
-
-
-            </android.support.design.widget.CollapsingToolbarLayout>
-
-        </android.support.design.widget.AppBarLayout>
-
+        </LinearLayout>
 
 
         <View
@@ -82,7 +65,6 @@
             android:layout_marginRight="@dimen/margin_drawer_divider"
             android:layout_marginTop="12dp"
             android:background="@color/colorAccent" />
-
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -99,7 +81,6 @@
                 android:text="@string/sms_integrate"
                 android:textSize="@dimen/settings_text_size" />
 
-
             <com.rm.rmswitch.RMSwitch
                 android:id="@+id/sms"
                 android:layout_width="60dp"
@@ -114,7 +95,6 @@
                 app:switchToggleCheckedColor="@color/colorAccent"
                 app:switchToggleCheckedImage="@drawable/sms_white_36dp"
                 app:switchToggleNotCheckedColor="@color/colorDarkAccent" />
-
 
         </RelativeLayout>
 
@@ -217,7 +197,6 @@
                 app:switchToggleNotCheckedColor="@color/colorDarkAccent"
                 app:switchToggleNotCheckedImage="@drawable/notifications_white_24dp" />
         </RelativeLayout>
-
 
         <View
             android:layout_width="match_parent"
