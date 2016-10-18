@@ -136,7 +136,6 @@ public class ContactsFragment extends Fragment implements IContactsView {
 
     @Override
     public void showPhoneContactList(List<PhoneContactPOJO> response) {
-        Toast.makeText(getContext(), "" + response.get(2).getPhone(), Toast.LENGTH_SHORT).show();
     }
 
     @Override

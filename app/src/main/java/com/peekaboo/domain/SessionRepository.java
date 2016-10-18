@@ -24,11 +24,11 @@ public interface SessionRepository {
 
     Observable<User> findFriendByName(String friendName);
 
-    Call<FileEntity> uploadFile(String fileName, String receiverId);
+    Call<FileEntity> uploadFile(String fileType, String fileName, String receiverId);
 
     Observable<FileEntity> updateAvatar(String fileName);
 
-    Call<ResponseBody> downloadFile(String remoteFileName);
+    Call<ResponseBody> downloadFile(String remoteFileName, String fileType);
 
     Observable<List<Contact>> loadAllContacts();
 
