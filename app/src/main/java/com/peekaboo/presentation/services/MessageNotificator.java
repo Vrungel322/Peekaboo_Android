@@ -122,36 +122,7 @@ public class MessageNotificator {
                 .putExtra(MainActivity.ACTION.EXTRA.CONTACT_EXTRA, contact);
 
         PendingIntent resultPendingIntent = PendingIntent.getActivity(context, NOTIFICATION_ID, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-        final RemoteViews remoteView = new RemoteViews(context.getPackageName(), R.layout.notification_widget);
-        remoteView.setTextViewText(R.id.tvAuthor, contact.contactNickname());
-        remoteView.setTextViewText(R.id.tvMessage, message);
-
-        notificationManager.notify(NOTIFICATION_ID, getNotification(ticker, resultPendingIntent, remoteView));
-
-        picasso.load(contact.contactImgUri())
-                .resize(avatarSize, 0)
-                .into(remoteView, R.id.ivAvatar, NOTIFICATION_ID, getNotification(resultPendingIntent, remoteView));
-    }
-
-    private Notification getNotification(String ticker, PendingIntent resultPendingIntent, RemoteViews remoteView) {
-        return new NotificationCompat.Builder(context)
-                .setTicker(ticker)
-                .setSmallIcon(R.drawable.ic_message_white_24dp)
-                .setContent(remoteView)
-                .setContentIntent(resultPendingIntent)
-                .setSound(ringtoneUri)
-                .setLights(ARGB, ON_MS, OFF_MS)
-                .build();
-    }
-
-    private Notification getNotification(PendingIntent resultPendingIntent, RemoteViews remoteView) {
-        return new NotificationCompat.Builder(context)
-                .setSmallIcon(R.drawable.ic_message_white_24dp)
-                .setContent(remoteView)
-                .setContentIntent(resultPendingIntent)
-                .setLights(ARGB, ON_MS, OFF_MS)
-                .build();
+        notificationManager.notify(NOTIFICATION_ID, getNotification(ticker, contact.contactNickname(), message, resultPendingIntent));
     }
 
     private Notification getNotification(String ticker, String title, String message, PendingIntent resultPendingIntent) {
