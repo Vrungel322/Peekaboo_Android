@@ -1,7 +1,6 @@
 package com.peekaboo.domain.usecase;
 
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import com.peekaboo.domain.Pair;
 import com.peekaboo.domain.schedulers.ObserveOn;
@@ -29,24 +28,24 @@ public abstract class QueueUseCase<K, V> {
         this.observeOn = observeOn;
     }
 
-    public void execute(K key, Subscriber<Pair<K, V>> subscriber) {
+    public void execute(K key, Subscriber<Pair<K, V>> subscriber, String fileType) {
         queue.add(key);
         if (observable == null) {
             subscribeOn = () -> Schedulers.from(Executors.newSingleThreadExecutor());
 
-            observable = getNewObservable();
+            observable = getNewObservable(fileType);
             observable.subscribe(subscriber);
         }
     }
 
-    private Observable<Pair<K, V>> getNewObservable() {
+    private Observable<Pair<K, V>> getNewObservable(String fileType) {
         return Observable.create(new Observable.OnSubscribe<Pair<K, V>>() {
             @Override
             public void call(Subscriber<? super Pair<K, V>> subscriber) {
                 while (!queue.isEmpty()) {
                     try {
                         K take = queue.take();
-                        V value = getValue(take);
+                        V value = getValue(take, fileType);
                         if (value != null) {
                             subscriber.onNext(new Pair<>(take, value));
                         }
@@ -70,5 +69,5 @@ public abstract class QueueUseCase<K, V> {
     }
 
     @Nullable
-    protected abstract V getValue(K take) throws IOException;
+    protected abstract V getValue(K take, String fileType) throws IOException;
 }

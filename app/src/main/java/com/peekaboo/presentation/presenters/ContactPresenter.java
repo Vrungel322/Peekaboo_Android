@@ -1,7 +1,5 @@
 package com.peekaboo.presentation.presenters;
 
-import android.util.Log;
-
 import com.peekaboo.data.repositories.database.contacts.Contact;
 import com.peekaboo.domain.UserMessageMapper;
 import com.peekaboo.domain.subscribers.BaseProgressSubscriber;
@@ -66,7 +64,7 @@ public class ContactPresenter extends ProgressPresenter<IContactsView> implement
                 }
                 for (PhoneContactPOJO p : response) {
                     //TODO : sent response to view
-                    Log.wtf("PhoneContactPOJO : ","name : " + p.getName() + " phone : " + p.getPhone());
+//                    Log.wtf("PhoneContactPOJO : ","name : " + p.getName() + " phone : " + p.getPhone());
                 }
             }
         };

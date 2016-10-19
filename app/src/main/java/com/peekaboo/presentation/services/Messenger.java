@@ -14,6 +14,7 @@ import com.peekaboo.domain.Pair;
 import com.peekaboo.domain.subscribers.BaseUseCaseSubscriber;
 import com.peekaboo.domain.usecase.FileDownloadUseCase;
 import com.peekaboo.domain.usecase.FileUploadUseCase;
+import com.peekaboo.utils.Constants;
 
 import java.util.HashSet;
 import java.util.List;
@@ -154,7 +155,12 @@ public class Messenger implements IMessenger,
         Log.e("Messenger", "type " + pMessage.mediaType());
         if (pMessage.mediaType() == PMessage.PMESSAGE_MEDIA_TYPE.AUDIO_MESSAGE) {
             Log.e("Messenger", "download begin");
-            downloadFileUseCase.execute(pMessage, getDownloadSubscriber());
+            downloadFileUseCase.execute(pMessage, getDownloadSubscriber(), Constants.MESSAGE_TYPE.TYPE_AUDIO);
+        }
+
+        if (pMessage.mediaType() == PMessage.PMESSAGE_MEDIA_TYPE.IMAGE_MESSAGE) {
+            Log.e("Messenger", "download begin");
+            downloadFileUseCase.execute(pMessage, getDownloadSubscriber(), Constants.MESSAGE_TYPE.TYPE_IMAGE);
         }
 
     }
@@ -221,13 +227,21 @@ public class Messenger implements IMessenger,
                 }
                 break;
             case PMessage.PMESSAGE_MEDIA_TYPE.AUDIO_MESSAGE:
+            case PMessage.PMESSAGE_MEDIA_TYPE.IMAGE_MESSAGE:
                 uploadAndDeliverFileMessage(message);
                 break;
         }
     }
 
     private void uploadAndDeliverFileMessage(PMessage message) {
-        uploadFileUseCase.execute(message, getUploadSubscriber());
+        if (message.mediaType() == PMessageAbs.PMESSAGE_MEDIA_TYPE.AUDIO_MESSAGE){
+            uploadFileUseCase.execute(message, getUploadSubscriber(), Constants.MESSAGE_TYPE.TYPE_AUDIO);
+        }
+
+        if (message.mediaType() == PMessageAbs.PMESSAGE_MEDIA_TYPE.IMAGE_MESSAGE){
+            Log.wtf("gus :", "uploadAndDeliverFileMessage -> IMAGE_MESSAGE");
+            uploadFileUseCase.execute(message, getUploadSubscriber(), Constants.MESSAGE_TYPE.TYPE_IMAGE);
+        }
     }
 
     @NonNull
@@ -255,6 +269,7 @@ public class Messenger implements IMessenger,
                 if (isAvailable()) {
                     PMessage pMessage = pMessageFileEntityPair.first;
                     FileEntity fileEntity = pMessageFileEntityPair.second;
+                    Log.wtf("response_to_upload_img : ", fileEntity.getResult() + " , " + fileEntity.getName());
                     helper.updateBody(pMessage.receiverId(), pMessage, fileEntity.getName() + PMessage.DIVIDER + pMessage.messageBody());
                     deliverMessage(pMessage);
                 }

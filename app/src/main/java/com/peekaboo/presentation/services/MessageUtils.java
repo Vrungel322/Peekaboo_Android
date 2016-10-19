@@ -1,18 +1,15 @@
 package com.peekaboo.presentation.services;
 
-import android.net.Uri;
 import android.util.Log;
 
 import com.peekaboo.data.repositories.database.messages.PMessage;
 import com.peekaboo.data.repositories.database.messages.PMessageAbs;
-import com.peekaboo.utils.Utility;
 
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 public class MessageUtils {
     public static Message createTextMessage(String message, String receiver, String from) {
@@ -74,11 +71,12 @@ public class MessageUtils {
         result = new Message(Message.Command.MESSAGE);
 
         String type = message.mediaType() == PMessageAbs.PMESSAGE_MEDIA_TYPE.TEXT_MESSAGE ?
-                Message.Type.TEXT : Message.Type.AUDIO;
+                Message.Type.TEXT : message.mediaType() == PMessageAbs.PMESSAGE_MEDIA_TYPE.AUDIO_MESSAGE ?
+                Message.Type.AUDIO : Message.Type.IMAGE;
         result.addParam(Message.Params.TYPE, type);
         result.addParam(Message.Params.DESTINATION, message.receiverId());
         String s = message.messageBody();
-        if (message.mediaType() == PMessage.PMESSAGE_MEDIA_TYPE.AUDIO_MESSAGE) {
+        if (message.mediaType() != PMessage.PMESSAGE_MEDIA_TYPE.TEXT_MESSAGE) {
             s = s.split(PMessage.DIVIDER)[0];
         }
         result.setBody(s.getBytes(Message.UTF_8));
@@ -88,13 +86,20 @@ public class MessageUtils {
 
 
     public static PMessage convert(String receiverId, Message message) {
-
         int mediaType = 0;
         String messageMediaType = message.getParams().get(Message.Params.TYPE);
         if (messageMediaType != null) {
-            mediaType = messageMediaType.equals(Message.Type.TEXT) ?
-                    PMessageAbs.PMESSAGE_MEDIA_TYPE.TEXT_MESSAGE
-                    : PMessageAbs.PMESSAGE_MEDIA_TYPE.AUDIO_MESSAGE;
+            switch (messageMediaType){
+                case Message.Type.TEXT:
+                    mediaType = PMessageAbs.PMESSAGE_MEDIA_TYPE.TEXT_MESSAGE;
+                    break;
+                case Message.Type.AUDIO:
+                    mediaType = PMessageAbs.PMESSAGE_MEDIA_TYPE.AUDIO_MESSAGE;
+                    break;
+                case Message.Type.IMAGE:
+                    mediaType = PMessageAbs.PMESSAGE_MEDIA_TYPE.IMAGE_MESSAGE;
+                    break;
+            }
         }
         byte[] bodyBytes = message.getBody();
         String body = "";
