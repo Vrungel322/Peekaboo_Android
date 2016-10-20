@@ -1,7 +1,5 @@
 package com.peekaboo.presentation.presenters;
 
-import android.util.Log;
-
 import com.peekaboo.data.repositories.database.contacts.Contact;
 import com.peekaboo.domain.UserMessageMapper;
 import com.peekaboo.domain.subscribers.BaseProgressSubscriber;
@@ -51,18 +49,22 @@ public class ContactPresenter extends ProgressPresenter<IContactsView> implement
         getContactFromDbUseCase.execute(getContactsFromDbSubscriber());
     }
 
-    private void loadPhoneContactList(){
+    private void loadPhoneContactList() {
         getPhoneContactListUseCase.execute(getContactsFromContactBook());
     }
 
     public BaseProgressSubscriber<List<PhoneContactPOJO>> getContactsFromContactBook() {
-        return new BaseProgressSubscriber<List<PhoneContactPOJO>>(this){
+        return new BaseProgressSubscriber<List<PhoneContactPOJO>>(this) {
             @Override
             public void onNext(List<PhoneContactPOJO> response) {
                 super.onNext(response);
+                IContactsView view = getView();
+                if (view != null) {
+                    getView().showPhoneContactList(response);
+                }
                 for (PhoneContactPOJO p : response) {
                     //TODO : sent response to view
-                    Log.wtf("PhoneContactPOJO : ","name : " + p.getName() + " phone : " + p.getPhone());
+//                    Log.wtf("PhoneContactPOJO : ","name : " + p.getName() + " phone : " + p.getPhone());
                 }
             }
         };

@@ -199,6 +199,25 @@ public class ChatPresenter2 extends BasePresenter<IChatView2> implements IChatPr
     }
 
     @Override
+    public void onSendImageButtonPress(String realPath) {
+        IChatView2 view = getView();
+        if (view != null) {
+            String receiver = view.getCompanionId();
+            PMessage pMessage = new PMessage(
+                    true, PMessageAbs.PMESSAGE_MEDIA_TYPE.IMAGE_MESSAGE, realPath, System.currentTimeMillis(),
+                    PMessageAbs.PMESSAGE_STATUS.STATUS_SENT,
+                    receiver, accountUser.getId());
+            messenger.sendMessage(pMessage);
+        }
+
+
+        //TODO save image real path to db
+//        pMessageHelper.saveContactToDb(receiver, convertPMessage(new PMessage(Utility.getPackageId(),
+//                true, uri.toString(), System.currentTimeMillis(),
+//                false, false, false)));
+    }
+
+    @Override
     public void onUserMessageRead(PMessage message) {
         messenger.readMessage(message);
     }

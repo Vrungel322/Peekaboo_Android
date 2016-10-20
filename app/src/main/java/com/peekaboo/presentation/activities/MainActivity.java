@@ -3,17 +3,13 @@ package com.peekaboo.presentation.activities;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.content.Intent;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
@@ -35,6 +31,7 @@ import com.peekaboo.R;
 import com.peekaboo.data.repositories.database.contacts.Contact;
 import com.peekaboo.domain.AccountUser;
 import com.peekaboo.domain.Dialog;
+import com.peekaboo.domain.usecase.UserModeChangerUseCase;
 import com.peekaboo.presentation.PeekabooApplication;
 import com.peekaboo.presentation.adapters.HotFriendsAdapter;
 import com.peekaboo.presentation.dialogs.AvatarChangeDialog;
@@ -49,12 +46,12 @@ import com.peekaboo.presentation.presenters.MainActivityPresenter;
 import com.peekaboo.presentation.services.INotifier;
 import com.peekaboo.presentation.services.Message;
 import com.peekaboo.presentation.services.MessageNotificator;
-import com.peekaboo.presentation.services.MessageUtils;
 import com.peekaboo.presentation.utils.ResourcesUtils;
 import com.peekaboo.presentation.views.IMainView;
 import com.peekaboo.utils.ActivityNavigator;
 import com.peekaboo.utils.Constants;
 import com.peekaboo.utils.Utility;
+import com.squareup.otto.Bus;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
@@ -73,7 +70,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
 
-public class MainActivity extends AppCompatActivity implements IMainView, AvatarChangeDialog.IAvatarChangeListener, INotifier.NotificationListener<Message>{
+public class MainActivity extends AppCompatActivity implements IMainView, AvatarChangeDialog.IAvatarChangeListener, INotifier.NotificationListener<Message> {
     @BindView(R.id.drawer_layout)
     DrawerLayout drawer;
     @BindView(R.id.bText)
@@ -115,6 +112,11 @@ public class MainActivity extends AppCompatActivity implements IMainView, Avatar
     Picasso mPicasso;
     @Inject
     ActivityNavigator navigator;
+    @Inject
+    Bus eventBus;
+
+    //    @Inject
+//    UserModeChangerUseCase userModeChangerUseCase;
     private HotFriendsAdapter hotFriendsAdapter;
     private ArrayList<HotFriendPOJO> alHotFriendPOJO;
     private final Set<OnBackPressListener> listeners = new HashSet<>();
@@ -126,6 +128,7 @@ public class MainActivity extends AppCompatActivity implements IMainView, Avatar
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         PeekabooApplication.getApp(this).getComponent().inject(this);
+        eventBus.register(this);
         presenter.bind(this);
         prepareDrawer();
         updateAccountData(accountUser);
@@ -146,6 +149,34 @@ public class MainActivity extends AppCompatActivity implements IMainView, Avatar
             onDisconnected();
             notifier.tryConnect(accountUser.getBearer());
         }
+
+        presenter.setUserModeListener(type -> {
+            switch (type) {
+                case UserModeChangerUseCase.IUserMode.TEXT_MODE:
+                    bText.setSelected(true);
+                    bAudio.setSelected(false);
+                    bVideo.setSelected(false);
+                    break;
+
+                case UserModeChangerUseCase.IUserMode.AUDIO_MODE:
+                    bText.setSelected(false);
+                    bAudio.setSelected(true);
+                    bVideo.setSelected(false);
+                    break;
+
+                case UserModeChangerUseCase.IUserMode.VIDEO_MODE:
+                    bText.setSelected(false);
+                    bAudio.setSelected(false);
+                    bVideo.setSelected(true);
+                    break;
+
+                case UserModeChangerUseCase.IUserMode.ALL_MODE:
+                    bText.setSelected(true);
+                    bAudio.setSelected(true);
+                    bVideo.setSelected(true);
+                    break;
+            }
+        });
     }
 
     @Override
@@ -164,7 +195,7 @@ public class MainActivity extends AppCompatActivity implements IMainView, Avatar
                     (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             notificationManager.cancel(MessageNotificator.NOTIFICATION_ID);
             navigator.startChatActivity(this, contact, addToStack);
-        } else if (ACTION.SHOW_DIALOGS.equals(action)){
+        } else if (ACTION.SHOW_DIALOGS.equals(action)) {
             NotificationManager notificationManager =
                     (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             notificationManager.cancel(MessageNotificator.NOTIFICATION_ID);
@@ -183,7 +214,8 @@ public class MainActivity extends AppCompatActivity implements IMainView, Avatar
 
         drawer.setDrawerListener(new DrawerLayout.DrawerListener() {
             @Override
-            public void onDrawerSlide(View drawerView, float slideOffset) {}
+            public void onDrawerSlide(View drawerView, float slideOffset) {
+            }
 
             @Override
             public void onDrawerOpened(View drawerView) {
@@ -191,10 +223,12 @@ public class MainActivity extends AppCompatActivity implements IMainView, Avatar
             }
 
             @Override
-            public void onDrawerClosed(View drawerView) {}
+            public void onDrawerClosed(View drawerView) {
+            }
 
             @Override
-            public void onDrawerStateChanged(int newState) {}
+            public void onDrawerStateChanged(int newState) {
+            }
         });
     }
 
@@ -235,7 +269,7 @@ public class MainActivity extends AppCompatActivity implements IMainView, Avatar
         Log.e("activity", "" + avatarUrl);
         int avatarSize = ResourcesUtils.getDimenInPx(this, R.dimen.widthOfIconInDrawer);
         Picasso.with(this).load(avatarUrl)
-        .resize(0, avatarSize)
+                .resize(0, avatarSize)
                 .into(ivAccountAvatar);
 
         bText.setSelected(mode == 1);
@@ -264,6 +298,7 @@ public class MainActivity extends AppCompatActivity implements IMainView, Avatar
     protected void onDestroy() {
         notifier.removeListener(this);
         presenter.unbind();
+        eventBus.unregister(this);
         super.onDestroy();
     }
 
@@ -282,6 +317,8 @@ public class MainActivity extends AppCompatActivity implements IMainView, Avatar
                 break;
             case R.id.llCalls:
                 changeFragment(new CallsFragment(), Constants.FRAGMENT_TAGS.CALLS_FRAGMENT);
+                //TESTING
+                startActivity(new Intent(this, TestSmsChatActivity.class));
                 break;
             case R.id.llContacts:
                 changeFragment(ContactsFragment.newInstance(), Constants.FRAGMENT_TAGS.CONTACTS_FRAGMENT);
@@ -309,13 +346,13 @@ public class MainActivity extends AppCompatActivity implements IMainView, Avatar
     @OnClick({R.id.bText, R.id.bAudio, R.id.bVideo})
     public void onRadioButtonClicked(View v) {
         if (notifier.isAvailable()) {
-            bText.setSelected(v.getId() == R.id.bText);
-            bAudio.setSelected(v.getId() == R.id.bAudio);
-            bVideo.setSelected(v.getId() == R.id.bVideo);
-            byte mode = (byte) (v.getId() == R.id.bText ? 1 : v.getId() == R.id.bAudio ? 2 : 0);
-            Message switchModeMessage = MessageUtils.createSwitchModeMessage(mode);
-            notifier.sendMessage(switchModeMessage);
-            accountUser.saveMode(mode);
+//            bText.setSelected(v.getId() == R.id.bText);
+//            bAudio.setSelected(v.getId() == R.id.bAudio);
+//            bVideo.setSelected(v.getId() == R.id.bVideo);
+            byte mode = (v.getId() == R.id.bText
+                    ? UserModeChangerUseCase.IUserMode.TEXT_MODE : v.getId() == R.id.bAudio ?
+                    UserModeChangerUseCase.IUserMode.AUDIO_MODE : UserModeChangerUseCase.IUserMode.ALL_MODE);
+            presenter.setUserMode(mode);
         }
     }
 
@@ -422,31 +459,38 @@ public class MainActivity extends AppCompatActivity implements IMainView, Avatar
             String CONTACT_EXTRA = "contact_extra";
         }
     }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == Constants.REQUEST_CODES.REQUEST_CODE_CAMERA) {
-            if (resultCode == RESULT_OK) {
-                ivAccountAvatar.setImageURI(imageUri);
-                presenter.updateAvatar(getAvatarUri());
-            }
-        }
-        if (requestCode == Constants.REQUEST_CODES.REQUEST_CODE_GALERY) {
-            if (resultCode == RESULT_OK && null != data) {
-                imageUri = data.getData();
-//                Bitmap bitmap = null;
-//                try {
-//                    bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), imageUri);
-//                } catch (IOException e) {
-//                    e.printStackTrace();
-//                }
-//                ivAccountAvatar.setImageBitmap(bitmap);
-                presenter.updateAvatar(data.getData());
-            }
+        switch (requestCode) {
+            case Constants.REQUEST_CODES.REQUEST_CODE_CAMERA:
+                if (resultCode == RESULT_OK) {
+                    presenter.updateAvatar(data.getData());
+                }
+                break;
+            case Constants.REQUEST_CODES.REQUEST_CODE_GALERY:
+                if (resultCode == RESULT_OK && null != data) {
+                    imageUri = data.getData();
+                    presenter.updateAvatar(data.getData());
+                }
+                break;
+            default:
+                Log.wtf("NULL : ", "onActivityResult _MAIN ACT" + requestCode);
+                sendEventToChatFragment(data);
+                break;
         }
     }
 
+
+    public void sendEventToChatFragment(Intent data) {
+        ChatFragment chatFragment = (ChatFragment) getSupportFragmentManager()
+                .findFragmentByTag(Constants.FRAGMENT_TAGS.CHAT_FRAGMENT_TAG);
+        chatFragment.onActivityResult(Constants.REQUEST_CODES.REQUEST_CODE_GALERY, RESULT_OK, data);
+
+    }
+
     @Override
-    public void takePhoto(){
+    public void takePhoto() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
             File photoFile = null;
@@ -464,13 +508,13 @@ public class MainActivity extends AppCompatActivity implements IMainView, Avatar
     }
 
     @Override
-    public void takeFromGallery(){ 
+    public void takeFromGallery() {
         startActivityForResult(new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI),
                 Constants.REQUEST_CODES.REQUEST_CODE_GALERY);
     }
 
-    private Uri getAvatarUri(){
-        if(imageUri != null){
+    private Uri getAvatarUri() {
+        if (imageUri != null) {
             return imageUri;
         }
         return null;

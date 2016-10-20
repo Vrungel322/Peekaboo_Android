@@ -24,11 +24,11 @@ public interface SessionRepository {
 
     Observable<User> findFriendByName(String friendName);
 
-    Call<FileEntity> uploadFile(String fileName, String receiverId);
+    Call<FileEntity> uploadFile(String fileType, String fileName, String receiverId);
 
     Observable<FileEntity> updateAvatar(String fileName);
 
-    Call<ResponseBody> downloadFile(String remoteFileName);
+    Call<ResponseBody> downloadFile(String remoteFileName, String fileType);
 
     Observable<List<Contact>> loadAllContacts();
 
@@ -45,6 +45,14 @@ public interface SessionRepository {
     Observable<Pair<List<PMessage>,List<Contact>>> getAllUnreadMessagesInfo();
 
     Observable<Integer> getUnreadMessagesCount(String id);
+
+    Observable<List<Sms>> getAllSmsList();
+
+    Observable<List<Sms>> getContactSmsList(String phoneNumber);
+
+    Observable<List<SmsDialog>> getSmsDialogsList();
+
+    Observable<Integer> getSmsContactUnreadMessagesCount(String phoneNumber);
 
     Observable<List<PhoneContactPOJO>> getPhoneContactList();
 }

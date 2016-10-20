@@ -3,7 +3,7 @@
     style="@style/AppTheme"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:layout_marginTop="10dp">
+    >
 
     <FrameLayout
         android:id="@+id/chat_bubble"
@@ -46,9 +46,7 @@
                     tools:textColor="@color/colorDarkAccent"
                     android:textSize="@dimen/chat_timestamp_text_size" />
 
-
             </LinearLayout>
-
         </LinearLayout>
     </FrameLayout>
 </RelativeLayout>
