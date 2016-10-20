@@ -2,21 +2,18 @@ package com.peekaboo.utils;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
 import com.peekaboo.R;
-import com.peekaboo.data.*;
-import com.peekaboo.data.Constants;
 import com.peekaboo.data.repositories.database.contacts.Contact;
-import com.peekaboo.presentation.fragments.ChatFragment;
 import com.peekaboo.presentation.activities.LogInActivity;
 import com.peekaboo.presentation.activities.MainActivity;
 import com.peekaboo.presentation.activities.SignUpActivity;
 import com.peekaboo.presentation.animation.DepthAnimation;
+import com.peekaboo.presentation.fragments.ChatFragment;
 import com.peekaboo.presentation.fragments.DialogsFragment;
 
 import javax.inject.Inject;
@@ -26,6 +23,7 @@ import javax.inject.Inject;
  */
 
 public class ActivityNavigator {
+
 
     @Inject
     public ActivityNavigator() {
@@ -61,7 +59,7 @@ public class ActivityNavigator {
         Log.e("notif", "start chat " + companion);
         FragmentTransaction replace = activity.getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.fragmentContainer, ChatFragment.newInstance(companion));
+                .replace(R.id.fragmentContainer, ChatFragment.newInstance(companion), Constants.FRAGMENT_TAGS.CHAT_FRAGMENT_TAG);
         if (addToBackStack) {
             replace.addToBackStack(null);
         }

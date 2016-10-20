@@ -89,7 +89,7 @@
     <dimen name="left_rightMarginHotFriendLayout">7dp</dimen>
     <dimen name="top_botMarginHotFriendLayout">10dp</dimen>
     <dimen name="hotFriendIconSize">55dp</dimen>
-    <dimen name="hotFriendStatusIconSize">18dp</dimen>
+    <dimen name="hotFriendStatusIconSize">20dp</dimen>
 
     <dimen name="marginForEachItemInSwitcher">10dp</dimen>
     <dimen name="marginBotForBar">8dp</dimen>
