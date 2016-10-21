@@ -129,7 +129,6 @@ public class ChatPresenter2 extends BasePresenter<IChatView2> implements IChatPr
                                 record.getFilename(), System.currentTimeMillis(),
                                 PMessage.PMESSAGE_STATUS.STATUS_SENT,
                                 view.getCompanionId(), accountUser.getId());
-                        messenger.setpbLoadingImageToServerDisableListener(() -> getView().hidePbLoadingImageToServer());
                         messenger.sendMessage(message);
                     }
                 });
@@ -208,6 +207,7 @@ public class ChatPresenter2 extends BasePresenter<IChatView2> implements IChatPr
                     true, PMessageAbs.PMESSAGE_MEDIA_TYPE.IMAGE_MESSAGE, realPath, System.currentTimeMillis(),
                     PMessageAbs.PMESSAGE_STATUS.STATUS_SENT,
                     receiver, accountUser.getId());
+            messenger.setpbLoadingImageToServerDisableListener(() -> getView().hidePbLoadingImageToServer());
             messenger.sendMessage(pMessage);
         }
 

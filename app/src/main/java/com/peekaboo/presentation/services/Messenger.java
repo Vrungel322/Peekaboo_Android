@@ -272,6 +272,7 @@ public class Messenger implements IMessenger,
             @Override
             public void onNext(Pair<PMessage, FileEntity> pMessageFileEntityPair) {
                 if (isAvailable()) {
+                    Log.wtf("getUploadSubscriber : ", "upload end");
                     PMessage pMessage = pMessageFileEntityPair.first;
                     if (pMessage.mediaType() == PMessageAbs.PMESSAGE_MEDIA_TYPE.IMAGE_MESSAGE & pbLoadingImageToServerDisableListener != null) {
                         pbLoadingImageToServerDisableListener.disablePbLoadingImageToServer();
