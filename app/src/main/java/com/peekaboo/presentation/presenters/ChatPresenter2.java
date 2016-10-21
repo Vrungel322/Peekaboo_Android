@@ -181,6 +181,7 @@ public class ChatPresenter2 extends BasePresenter<IChatView2> implements IChatPr
     @Override
     public void unbind() {
         player.setListener(null);
+        messenger.setpbLoadingImageToServerDisableListener(null);
         super.unbind();
     }
 
