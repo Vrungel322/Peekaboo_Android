@@ -20,7 +20,7 @@ import com.peekaboo.R;
  */
 
 public class MapActivity extends Activity implements OnMapReadyCallback {
-    /** Local variables **/
+
     GoogleMap googleMap;
 
     @Override
@@ -31,12 +31,8 @@ public class MapActivity extends Activity implements OnMapReadyCallback {
         addMarker();
     }
 
-    /**
-     * Adds a marker to the map
-     */
-    private void addMarker(){
 
-        /** Make sure that the map has been initialised **/
+    private void addMarker(){
         if(null != googleMap){
             googleMap.addMarker(new MarkerOptions()
                     .position(new LatLng(0, 0))
@@ -51,10 +47,7 @@ public class MapActivity extends Activity implements OnMapReadyCallback {
      * Initialises the mapview
      */
     private void createMapView(){
-        /**
-         * Catch the null pointer exception that
-         * may be thrown when initialising the map
-         */
+
         try {
             if(null == googleMap){
 //                googleMap = ((MapFragment) getFragmentManager().findFragmentById(
@@ -66,10 +59,6 @@ public class MapActivity extends Activity implements OnMapReadyCallback {
 
                 googleMap.getMapAsync(this);
 
-                /**
-                 * If the map is still null after attempted initialisation,
-                 * show an error to the user
-                 */
                 if(null == googleMap) {
                     Toast.makeText(getApplicationContext(),
                             "Error creating map", Toast.LENGTH_SHORT).show();

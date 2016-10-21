@@ -97,6 +97,10 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
     Chronometer timerRecord;
     @BindView(R.id.rflTimer)
     RevealFrameLayout rflTimer;
+    ////////
+    @BindView(R.id.navigation_btn)
+    ImageButton bNavigation;
+    ////////
     @Inject
     ChatPresenter2 presenter;
     @Inject
@@ -287,6 +291,25 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
                 startActivityForResult(takePictureIntent, Constants.REQUEST_CODES.REQUEST_CODE_CAMERA);
             }
         }
+    }
+
+
+    @OnClick(R.id.navigation_btn)
+    void onNavigationButtonClick(){
+        takeNavigation();
+//        Toast.makeText(this, "LoL", Toast.LENGTH_SHORT).show();
+//        Uri gmmIntentUri = Uri.parse("geo:37.7749,-122.4194?z=20");
+//        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+//        mapIntent.setPackage("com.google.android.apps.maps");
+//        startActivity(mapIntent);
+//        bNavigation.setVisibility(View.GONE);
+    }
+
+    public void takeNavigation(){
+        Uri gmmIntentUri = Uri.parse("geo:37.7749,-122.4194?z=20");
+        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+        mapIntent.setPackage("com.google.android.apps.maps");
+        startActivity(mapIntent);
     }
 
     @Override

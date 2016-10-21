@@ -211,13 +211,13 @@ public class ChatActivity extends AppCompatActivity
 
     @OnClick(R.id.navigation_btn)
     void onNavigationButtonClick(){
-//        takeNavigation();
-        Toast.makeText(this, "LoL", Toast.LENGTH_SHORT).show();
-        Uri gmmIntentUri = Uri.parse("geo:37.7749,-122.4194?z=20");
-        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-        mapIntent.setPackage("com.google.android.apps.maps");
-        startActivity(mapIntent);
-        bNavigation.setVisibility(View.GONE);
+        takeNavigation();
+//        Toast.makeText(this, "LoL", Toast.LENGTH_SHORT).show();
+//        Uri gmmIntentUri = Uri.parse("geo:37.7749,-122.4194?z=20");
+//        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+//        mapIntent.setPackage("com.google.android.apps.maps");
+//        startActivity(mapIntent);
+//        bNavigation.setVisibility(View.GONE);
         }
 
 //    @OnClick(R.id.micro_btn)
