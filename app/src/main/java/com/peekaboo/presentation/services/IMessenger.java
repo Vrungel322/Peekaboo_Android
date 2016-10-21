@@ -1,6 +1,7 @@
 package com.peekaboo.presentation.services;
 
 import com.peekaboo.data.repositories.database.messages.PMessage;
+import com.peekaboo.presentation.fragments.ChatFragment;
 
 import java.util.List;
 
@@ -12,6 +13,8 @@ import rx.Observable;
 public interface IMessenger extends INotifier<PMessage> {
 
     void readMessage(PMessage message);
+
+    void setpbLoadingImageToServerDisableListener(ChatFragment.DISABLE_pbLoadingImageToServer pbLoadingImageToServerDisableListener);
 
     Observable<List<PMessage>> getAllMessages(String tableName);
 

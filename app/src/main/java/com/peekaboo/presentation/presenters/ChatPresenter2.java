@@ -129,6 +129,7 @@ public class ChatPresenter2 extends BasePresenter<IChatView2> implements IChatPr
                                 record.getFilename(), System.currentTimeMillis(),
                                 PMessage.PMESSAGE_STATUS.STATUS_SENT,
                                 view.getCompanionId(), accountUser.getId());
+                        messenger.setpbLoadingImageToServerDisableListener(() -> getView().hidePbLoadingImageToServer());
                         messenger.sendMessage(message);
                     }
                 });

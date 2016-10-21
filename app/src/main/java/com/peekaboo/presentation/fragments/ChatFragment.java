@@ -28,6 +28,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.peekaboo.R;
@@ -97,6 +98,8 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
     Chronometer timerRecord;
     @BindView(R.id.rflTimer)
     RevealFrameLayout rflTimer;
+    @BindView(R.id.pbLoadingImageToServer)
+    ProgressBar pbLoadingImageToServer;
     @Inject
     ChatPresenter2 presenter;
     @Inject
@@ -121,6 +124,10 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
         args.putParcelable(COMPANION, companion);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    public interface DISABLE_pbLoadingImageToServer{
+        void disablePbLoadingImageToServer();
     }
 
     @Override
@@ -309,6 +316,7 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
 
     public boolean sendImage(Uri uri) {
         Log.wtf("NULL : ", "sendImage");
+        pbLoadingImageToServer.setVisibility(View.VISIBLE);
         if (uri == null) {
             return false;
         }
@@ -426,6 +434,11 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
             animator.cancel();
             animator = null;
         }
+    }
+
+    @Override
+    public void hidePbLoadingImageToServer() {
+        pbLoadingImageToServer.setVisibility(View.GONE);
     }
 
     @Override
