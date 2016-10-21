@@ -3,6 +3,7 @@ package com.peekaboo.presentation.fragments;
 import android.animation.Animator;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.annotation.Nullable;
@@ -25,6 +26,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.peekaboo.BuildConfig;
 import com.peekaboo.R;
 import com.peekaboo.data.repositories.database.contacts.Contact;
 import com.peekaboo.data.repositories.database.messages.PMessage;
@@ -221,21 +223,24 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
     @OnClick(R.id.bMessageOpen)
     void onbMessageOpenClick() {
         rflMessageBody.setVisibility(View.VISIBLE);
-        etMessageBody.post(() -> {
-            float cx, cy;
-            cx = (bMessageOpen.getX() + bMessageOpen.getWidth()) / 2;
-            cy = (bMessageOpen.getY() + bMessageOpen.getHeight()) / 2;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
 
-            float dx = Math.max(cx, llMessageBody.getWidth() - cx);
-            float dy = Math.max(cy, llMessageBody.getHeight() - cy);
-            float finalRadius = (float) Math.hypot(dx, dy);
+            etMessageBody.post(() -> {
+                float cx, cy;
+                cx = (bMessageOpen.getX() + bMessageOpen.getWidth()) / 2;
+                cy = (bMessageOpen.getY() + bMessageOpen.getHeight()) / 2;
 
-            Animator animator =
-                    ViewAnimationUtils.createCircularReveal(llMessageBody, (int) cx, (int) cy, 0, finalRadius);
-            animator.setInterpolator(new AccelerateDecelerateInterpolator());
-            animator.setDuration(300);
-            animator.start();
-        });
+                float dx = Math.max(cx, llMessageBody.getWidth() - cx);
+                float dy = Math.max(cy, llMessageBody.getHeight() - cy);
+                float finalRadius = (float) Math.hypot(dx, dy);
+
+                Animator animator =
+                        ViewAnimationUtils.createCircularReveal(llMessageBody, (int) cx, (int) cy, 0, finalRadius);
+                animator.setInterpolator(new AccelerateDecelerateInterpolator());
+                animator.setDuration(300);
+                animator.start();
+            });
+        }
 
         bMessageOpen.setVisibility(View.GONE);
         bSendMessage.setVisibility(View.VISIBLE);
