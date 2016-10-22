@@ -1,5 +1,9 @@
 package com.peekaboo.presentation.adapters;
 
+import android.graphics.Color;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -80,15 +84,36 @@ public final class DialogsLargeAdapter extends RecyclerView.Adapter<DialogsLarge
 
         if (contact.isOnline()) {
             holder.contact_status_view.setBackgroundResource(R.drawable.list_online_indicator);
+            holder.unread_count_text_view.setTextColor(Color.WHITE);
+
         } else {
             holder.contact_status_view.setBackgroundResource(R.drawable.list_offline_indicator);
+            holder.unread_count_text_view.setTextColor(activity.getResources().getColor(R.color.offline_text));
         }
 
         int unreadMessagesCount = dialog.getUnreadMessagesCount();
-        if(unreadMessagesCount > 0){
+        CoordinatorLayout.LayoutParams layoutParams = (CoordinatorLayout.LayoutParams) holder.dialogsDivider.getLayoutParams();
+        int topMargin = layoutParams.topMargin;
+        if(unreadMessagesCount > 0 && unreadMessagesCount < 100){
+            if(unreadMessagesCount > 10){
+                holder.unread_count_text_view.setTextSize(11);
+            }
             holder.unread_count_text_view.setText(String.valueOf(unreadMessagesCount));
+            holder.dialogContainer.setBackgroundColor(activity.getResources().getColor(R.color.unread_msg_background));
+
+            layoutParams.setMargins(0, topMargin, 0, 0);
         } else {
-            holder.unread_count_text_view.setText(null);
+            if(unreadMessagesCount >= 100){
+                holder.unread_count_text_view.setTextSize(10);
+                holder.unread_count_text_view.setText("99+");
+                holder.dialogContainer.setBackgroundColor(activity.getResources().getColor(R.color.unread_msg_background));
+                layoutParams.setMargins(0, topMargin, 0, 0);
+
+            }else{
+                holder.unread_count_text_view.setText(null);
+                holder.dialogContainer.setBackgroundColor(Color.WHITE);
+
+            }
         }
 
         holder.itemView.setOnClickListener(v -> {
@@ -166,6 +191,8 @@ public final class DialogsLargeAdapter extends RecyclerView.Adapter<DialogsLarge
             holder.ivMessageStatus.setVisibility(View.GONE);
         } else {
             holder.ivMessageStatus.setImageResource(getStatusImage(message.status()));
+            String textMessage = holder.tvMessagePreview.getText().toString();
+            holder.tvMessagePreview.setText("You: " + textMessage);
             holder.ivMessageStatus.setVisibility(View.VISIBLE);
         }
     }
@@ -210,6 +237,10 @@ public final class DialogsLargeAdapter extends RecyclerView.Adapter<DialogsLarge
         ImageView ivFavorite;
         @BindView(R.id.mute_image_view)
         ImageView ivMute;
+        @BindView (R.id.list_item_dialog_container)
+        CoordinatorLayout dialogContainer;
+        @BindView(R.id.dialogs_divider)
+        View dialogsDivider;
 
 
         ViewHolder(View itemView) {
