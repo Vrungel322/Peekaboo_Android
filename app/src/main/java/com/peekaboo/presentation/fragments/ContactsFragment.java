@@ -1,6 +1,5 @@
 package com.peekaboo.presentation.fragments;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
@@ -10,7 +9,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -22,8 +20,8 @@ import android.widget.Toast;
 import com.peekaboo.R;
 import com.peekaboo.data.repositories.database.contacts.Contact;
 import com.peekaboo.presentation.PeekabooApplication;
-import com.peekaboo.presentation.activities.MainActivity;
 import com.peekaboo.presentation.adapters.ContactLargeAdapter;
+import com.peekaboo.presentation.pojo.PhoneContactPOJO;
 import com.peekaboo.presentation.presenters.ContactPresenter;
 import com.peekaboo.presentation.views.IContactsView;
 import com.peekaboo.presentation.widget.RecyclerViewFastScroller;
@@ -134,6 +132,10 @@ public class ContactsFragment extends Fragment implements IContactsView {
         if (state != null) {
             recyclerView.getLayoutManager().onRestoreInstanceState(state);
         }
+    }
+
+    @Override
+    public void showPhoneContactList(List<PhoneContactPOJO> response) {
     }
 
     @Override

@@ -43,12 +43,12 @@ public class RestApi {
         return api.getFriend(friendName);
     }
 
-    public Call<FileEntity> uploadFile(String fileName, String receiverId, String bearer) {
+    public Call<FileEntity> uploadFile(String fileType, String fileName, String receiverId, String bearer) {
         File file = new File(fileName);
         RequestBody requestFile =
                 RequestBody.create(MediaType.parse("multipart/form-data"), file);
         MultipartBody.Part part = MultipartBody.Part.createFormData("file", file.getName(), requestFile);
-        return api.uploadFile(receiverId, part, bearer);
+        return api.uploadFile(fileType, receiverId, part, bearer);
     }
 
     public Observable<FileEntity> updateAvatar(String fileName, String bearer){
@@ -59,8 +59,8 @@ public class RestApi {
         return api.updateAvatar(part, bearer);
     }
 
-    public Call<ResponseBody> downloadFile(String remoteFileName, String bearer) {
-        return api.download(remoteFileName, bearer);
+    public Call<ResponseBody> downloadFile(String fileType, String remoteFileName, String bearer) {
+        return api.download(fileType, remoteFileName, bearer);
     }
 
     public Observable<UserResponse> getAllContacts() {

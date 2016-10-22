@@ -1,7 +1,5 @@
 package com.peekaboo.presentation.presenters;
 
-import android.content.Context;
-
 import com.peekaboo.R;
 import com.peekaboo.domain.AccountUser;
 import com.peekaboo.domain.UserMessageMapper;
@@ -73,9 +71,9 @@ public class SignUpPresenter extends ProgressPresenter<ISignUpView> implements I
     }
 
     @Override
-    public void onSignUpButtonClick(String username, String login, String password, String passwordConfirm) {
+    public void onSignUpButtonClick(String phone, String username, String login, String password, String passwordConfirm) {
         if (isValid(username, login, password, passwordConfirm)) {
-            signUpUseCase.setCredentials(username, login, password);
+            signUpUseCase.setCredentials(phone, username, login, password);
             signUpUseCase.execute(getSignUpSubscriber());
         }
     }

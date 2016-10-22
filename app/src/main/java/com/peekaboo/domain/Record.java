@@ -4,7 +4,6 @@ import android.media.AudioFormat;
 import android.media.AudioRecord;
 import android.media.MediaRecorder;
 import android.os.Environment;
-import android.support.annotation.NonNull;
 
 import com.peekaboo.data.utils.FileUtils;
 import com.peekaboo.utils.Constants;
@@ -36,7 +35,7 @@ public class Record {
     }
 
     private String getFileName() {
-        String filename = FileUtils.formAudioName(folderName);
+        String filename = FileUtils.formFileName(folderName, Constants.MESSAGE_TYPE.TYPE_AUDIO);
 
         setFilename(filename);
 

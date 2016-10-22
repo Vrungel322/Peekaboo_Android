@@ -95,5 +95,16 @@
     <string name="message_type_document">Document</string>
     <string name="newMessages">new messages</string>
     <string name="newMessage">new message</string>
+    <string name="sms_integrate">Integrate sms</string>
+    <string name="prefer_text">Preferred text to speech voice</string>
+    <string name="driver_mode">Driver Mode</string>
+    <string name="disable_notifications">Disable notifications</string>
+    <string name="name">Name</string>
+    <string name="surname">Surname</string>
+    <string name="country">Country</string>
+    <string name="city">City</string>
+    <string name="default_cloud_storage">Default cloud storage</string>
+    <string name="google_cloud">Google Cloud Storage</string>
+    <string name="services_integration">Services integration</string>
 
 </resources>

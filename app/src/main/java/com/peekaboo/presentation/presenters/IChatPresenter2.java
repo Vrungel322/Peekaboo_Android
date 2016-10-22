@@ -18,6 +18,8 @@ public interface IChatPresenter2<V extends IView> extends IPresenter<V>{
 
     void onSendTextButtonPress(String text);
 
+    void onSendImageButtonPress(String realPath);
+
     void onUserMessageRead(PMessage message);
 
     void onPlayButtonClick(PMessage message, AudioPlayer.AudioPlayerListener listener);

@@ -10,6 +10,7 @@ import com.peekaboo.domain.UserMessageMapper;
 import com.peekaboo.domain.subscribers.BaseProgressSubscriber;
 import com.peekaboo.domain.usecase.AvatarUpdateUseCase;
 import com.peekaboo.domain.usecase.GetDialogsListUseCase;
+import com.peekaboo.domain.usecase.UserModeChangerUseCase;
 import com.peekaboo.presentation.comparators.DialogComparator;
 import com.peekaboo.presentation.utils.ResourcesUtils;
 import com.peekaboo.presentation.views.IMainView;
@@ -27,17 +28,21 @@ public class MainActivityPresenter extends ProgressPresenter<IMainView> implemen
     private Context mContext;
     private GetDialogsListUseCase getDialogsListUseCase;
     private AvatarUpdateUseCase avatarUpdateUseCase;
+    private UserModeChangerUseCase userModeChangerUseCase;
+
     private AccountUser accountUser;
 
     @Inject
     public MainActivityPresenter(Context context, UserMessageMapper errorHandler,
                                  GetDialogsListUseCase getDialogsListUseCase,
                                  AvatarUpdateUseCase avatarUpdateUseCase,
+                                 UserModeChangerUseCase userModeChangerUseCase,
                                  AccountUser accountUser) {
         super(errorHandler);
         this.mContext = context;
         this.getDialogsListUseCase = getDialogsListUseCase;
         this.avatarUpdateUseCase = avatarUpdateUseCase;
+        this.userModeChangerUseCase = userModeChangerUseCase;
         this.accountUser = accountUser;
     }
 
@@ -84,6 +89,14 @@ public class MainActivityPresenter extends ProgressPresenter<IMainView> implemen
                 }
             }
         };
+    }
+
+    public void setUserMode(byte mode){
+        userModeChangerUseCase.setMode(mode);
+    }
+
+    public void setUserModeListener(UserModeChangerUseCase.IModeChangeListener listener){
+        userModeChangerUseCase.setListener(listener);
     }
 
     @Override

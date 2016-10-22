@@ -53,12 +53,14 @@
             android:layout_gravity="center"
             android:foregroundGravity="center"
             android:paddingBottom="@dimen/marginBotForBar"
-            android:scrollbars="none">
+            android:scrollbars="none"
+            android:fillViewport="true">
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical">
+                android:orientation="vertical"
+                android:gravity="center_horizontal">
 
                 <View
                     android:layout_width="match_parent"
@@ -89,24 +91,23 @@
                             android:background="@drawable/round_left_bubble"
                             android:orientation="horizontal">
 
-                            <EditText
+                            <com.peekaboo.presentation.app.view.SmartWidthEditText
                                 android:id="@+id/etMessageBody"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginLeft="2dp"
                                 android:background="@null"
                                 android:ellipsize="end"
+
                                 android:focusable="true"
                                 android:focusableInTouchMode="true"
                                 android:maxLines="2"
-                                android:maxWidth="@dimen/edit_text_width"
-                                android:minWidth="@dimen/edit_text_width"
                                 android:paddingBottom="@dimen/edit_text_tb_padding"
                                 android:paddingLeft="@dimen/edit_text_side_padding"
                                 android:paddingRight="@dimen/edit_text_side_padding"
                                 android:paddingTop="@dimen/edit_text_tb_padding"
                                 android:textColor="#000"
-                                android:textCursorDrawable="@drawable/color_cursor" />
+                                android:textCursorDrawable="@drawable/color_cursor"/>
 
 
                         </LinearLayout>
@@ -260,6 +261,5 @@
                 android:textStyle="bold" />
         </FrameLayout>
     </io.codetail.widget.RevealFrameLayout>
-
 
 </FrameLayout>

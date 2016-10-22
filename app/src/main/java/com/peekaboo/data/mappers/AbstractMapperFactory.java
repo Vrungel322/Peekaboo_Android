@@ -2,11 +2,13 @@ package com.peekaboo.data.mappers;
 
 
 import android.content.ContentValues;
+import android.database.Cursor;
 
 import com.peekaboo.data.repositories.database.contacts.Contact;
 import com.peekaboo.data.repositories.database.messages.PMessageAbs;
 import com.peekaboo.data.rest.entity.ContactEntity;
 import com.peekaboo.data.rest.entity.UserEntity;
+import com.peekaboo.domain.Sms;
 import com.peekaboo.domain.User;
 import com.peekaboo.presentation.services.Message;
 
@@ -27,4 +29,6 @@ public interface AbstractMapperFactory {
     Mapper<ContactEntity, Contact> getContactEntityMapper();
 
     Mapper<Contact, ContentValues> getContactToContentValueMapper();
+
+    Mapper<Cursor, Sms> getSmsMapper();
 }

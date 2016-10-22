@@ -9,6 +9,8 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.provider.MediaStore;
+import android.util.DisplayMetrics;
+
 
 public class ResourcesUtils {
 
@@ -66,6 +68,16 @@ public class ResourcesUtils {
                 cursor.close();
             }
         }
+    }
+
+    public static int getDisplayWidth(Context c){
+        DisplayMetrics metrics = c.getResources().getDisplayMetrics();
+        return metrics.widthPixels;
+    }
+
+    public static int getDisplayHeight(Context c){
+        DisplayMetrics metrics = c.getResources().getDisplayMetrics();
+        return metrics.heightPixels;
     }
 
 }

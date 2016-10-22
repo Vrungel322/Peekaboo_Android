@@ -1,6 +1,7 @@
 package com.peekaboo.presentation.adapters;
 
 import android.content.Context;
+import android.net.Uri;
 import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
@@ -29,6 +30,7 @@ import com.peekaboo.utils.Constants;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -142,6 +144,7 @@ public class ChatAdapter2 extends RecyclerView.Adapter<ChatAdapter2.ViewHolder> 
         position = holder.getAdapterPosition();
         PMessage pMessageAbs = getItem(position);
         int mediaType = pMessageAbs.mediaType();
+        Log.wtf("mediaType : ", String.valueOf(mediaType));
 
         boolean nextMine;
         boolean prevMine;
@@ -181,7 +184,11 @@ public class ChatAdapter2 extends RecyclerView.Adapter<ChatAdapter2.ViewHolder> 
             case PMessageAbs.PMESSAGE_MEDIA_TYPE.IMAGE_MESSAGE:
                 if (holder instanceof ViewHolderImage) {
                     String image = pMessageAbs.messageBody();
-                    setImageMessage((ViewHolderImage) holder, image);
+                    if (image.split(PMessage.DIVIDER).length == 2) {
+                        String imageFilePath = image.split(PMessage.DIVIDER)[1];
+                        Log.wtf("image : ", imageFilePath);
+                    setImageMessage((ViewHolderImage) holder, imageFilePath);
+                    }
                 }
                 break;
             case PMessageAbs.PMESSAGE_MEDIA_TYPE.VIDEO_MESSAGE:
@@ -252,7 +259,7 @@ public class ChatAdapter2 extends RecyclerView.Adapter<ChatAdapter2.ViewHolder> 
 
     private void setImageMessage(ChatAdapter2.ViewHolderImage holder, String imageUri) {
         holder.pbLoadingImage.setVisibility(View.VISIBLE);
-        mPicasso.load(imageUri).resizeDimen(R.dimen.chat_image_width, R.dimen.chat_image_height)
+        mPicasso.load(Uri.fromFile(new File(imageUri))).resizeDimen(R.dimen.chat_image_width, R.dimen.chat_image_height)
                 .error(R.drawable.ic_alert_circle_outline)
                 .centerInside()
                 .transform(new RoundedTransformation(25, 0))
@@ -319,6 +326,12 @@ public class ChatAdapter2 extends RecyclerView.Adapter<ChatAdapter2.ViewHolder> 
                 }
             }
         }
+    }
+
+    // RV : optimize allocation of different view holders number
+    @Override
+    public boolean onFailedToRecycleView(ViewHolder holder) {
+        return true;
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
