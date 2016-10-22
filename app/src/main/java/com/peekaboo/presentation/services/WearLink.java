@@ -3,6 +3,8 @@ package com.peekaboo.presentation.services;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.DeadObjectException;
 import android.os.Handler;
 import android.os.IBinder;
@@ -185,6 +187,7 @@ public class WearLink extends Service implements IMessenger.MessengerListener
                         long longSampleRate = rate;
                         int channels = 1;
                         long byteRate = 16 * longSampleRate * channels / 8;
+                        Log.e("WearLink", file + " " + record.getFilename());
                         FileInputStream inp = new FileInputStream(file);
                         FileOutputStream out = new FileOutputStream(record.getFilename());
                         record.WriteWaveFileHeader(out, totalAudioLen, totalDataLen, longSampleRate, 1, byteRate);
@@ -195,6 +198,7 @@ public class WearLink extends Service implements IMessenger.MessengerListener
                         out.close();
                         inp.close();
                         file.delete();
+                        Log.e("WearLink", "" + new File((String) params.get("audio")).exists());
                         message = new PMessage(true, PMessage.PMESSAGE_MEDIA_TYPE.AUDIO_MESSAGE,
                                 record.getFilename(), timestamp,
                                 PMessage.PMESSAGE_STATUS.STATUS_SENT,
