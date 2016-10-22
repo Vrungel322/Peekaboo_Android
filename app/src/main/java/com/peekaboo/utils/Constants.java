@@ -7,6 +7,7 @@ import android.media.AudioFormat;
  */
 public class Constants {
     public static final String EXTRA_RECEIVER_NAME = "receiver_name";
+    public static final String EXTRA_RECEIVER_CONTACT = "receiver_contact";
     public static final String EXTRA_CONTACT = "contact";
     public static final String ARG_CHAT_MESSAGE_ITEM_INDEX = "message_item_index";
 
@@ -25,6 +26,7 @@ public class Constants {
         String CONTACTS_FRAGMENT = "contactsFragment";
         String PROFILE_FRAGMENT = "profileFragment";
         String SETTINGS_FRAGMENT = "settingsFragment";
+        String SMS_DIALOGS_FRAGMENT = "smsDialogsFragment";
     }
 
     public interface REQUEST_CODES {

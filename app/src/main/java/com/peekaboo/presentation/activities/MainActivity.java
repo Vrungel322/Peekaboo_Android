@@ -31,22 +31,22 @@ import com.peekaboo.R;
 import com.peekaboo.data.repositories.database.contacts.Contact;
 import com.peekaboo.domain.AccountUser;
 import com.peekaboo.domain.Dialog;
+import com.peekaboo.domain.usecase.UserModeChangerUseCase;
 import com.peekaboo.presentation.PeekabooApplication;
 import com.peekaboo.presentation.adapters.HotFriendsAdapter;
 import com.peekaboo.presentation.dialogs.AvatarChangeDialog;
-import com.peekaboo.presentation.fragments.CallsFragment;
 import com.peekaboo.presentation.fragments.ChatFragment;
 import com.peekaboo.presentation.fragments.ContactsFragment;
 import com.peekaboo.presentation.fragments.DialogsFragment;
 import com.peekaboo.presentation.fragments.ProfileFragment;
 import com.peekaboo.presentation.fragments.SettingsFragment;
+import com.peekaboo.presentation.fragments.SmsDialogsFragment;
 import com.peekaboo.presentation.pojo.HotFriendPOJO;
 import com.peekaboo.presentation.presenters.MainActivityPresenter;
 import com.peekaboo.presentation.services.INotifier;
 import com.peekaboo.presentation.services.Message;
 import com.peekaboo.presentation.services.MessageNotificator;
 import com.peekaboo.presentation.utils.ResourcesUtils;
-import com.peekaboo.domain.usecase.UserModeChangerUseCase;
 import com.peekaboo.presentation.views.IMainView;
 import com.peekaboo.utils.ActivityNavigator;
 import com.peekaboo.utils.Constants;
@@ -307,9 +307,10 @@ public class MainActivity extends AppCompatActivity implements IMainView, Avatar
                 changeFragment(new DialogsFragment(), Constants.FRAGMENT_TAGS.DIALOGS_FRAGMENT);
                 break;
             case R.id.llCalls:
-                changeFragment(new CallsFragment(), Constants.FRAGMENT_TAGS.CALLS_FRAGMENT);
+//                changeFragment(new CallsFragment(), Constants.FRAGMENT_TAGS.CALLS_FRAGMENT);
                 //TESTING
-                startActivity(new Intent(this, TestSmsChatActivity.class));
+//                startActivity(new Intent(this, TestSmsChatActivity.class));
+                changeFragment(new SmsDialogsFragment(), Constants.FRAGMENT_TAGS.SMS_DIALOGS_FRAGMENT);
                 break;
             case R.id.llContacts:
                 changeFragment(ContactsFragment.newInstance(), Constants.FRAGMENT_TAGS.CONTACTS_FRAGMENT);

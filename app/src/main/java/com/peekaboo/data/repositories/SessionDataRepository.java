@@ -196,7 +196,8 @@ public class SessionDataRepository implements SessionRepository {
     @Override
     public Observable<List<Sms>> getContactSmsList(String phoneNumber) {
         return Observable.create(subscriber -> {
-            String where = Sms.COLUMN_ADDRESS + " = " + "\'" + phoneNumber + "\'";
+            String number = phoneNumber.trim().replaceAll(" ", "").replaceAll("-", "");
+            String where = Sms.COLUMN_ADDRESS + " = " + "\'" + number + "\'";
             Cursor messages = contentResolver.query(Uri.parse("content://sms/"), null, where, null, null);
             List<Sms> smsList = new ArrayList<>();
             if (messages != null) {
@@ -206,6 +207,23 @@ public class SessionDataRepository implements SessionRepository {
                 messages.close();
             }
             subscriber.onNext(smsList);
+            subscriber.onCompleted();
+        });
+    }
+
+    @Override
+    public Observable<Sms> getContactLastSms(String phoneNumber){
+        return Observable.create(subscriber -> {
+            String number = phoneNumber.trim().replaceAll(" ", "").replaceAll("-", "");
+            String where = Sms.COLUMN_ADDRESS + " = " + "\'" + number + "\'";
+            Cursor messages = contentResolver.query(Uri.parse("content://sms/"), null, where, null, null);
+            Sms sms = null;
+            if (messages != null) {
+                messages.moveToFirst();
+                sms = abstractMapperFactory.getSmsMapper().transform(messages);
+                messages.close();
+            }
+            subscriber.onNext(sms);
             subscriber.onCompleted();
         });
     }

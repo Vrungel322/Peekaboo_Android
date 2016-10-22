@@ -124,7 +124,7 @@ public class ApplicationModule {
 
     @Singleton
     @Provides
-    public ISmsManager provideSMSManager(){
-        return new SMSManager();
+    public ISmsManager provideSMSManager(Context context){
+        return new SMSManager(context);
     }
 }

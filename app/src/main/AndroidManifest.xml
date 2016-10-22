@@ -79,7 +79,6 @@
             <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
             <!-- </intent-filter> -->
         </activity>
-        <activity android:name=".presentation.activities.TestSmsChatActivity" />
 
         <activity
             android:name="com.vk.sdk.VKServiceActivity"
@@ -122,6 +121,7 @@
             android:enabled="true">
             <intent-filter android:priority="2147483647">
                 <action android:name="android.provider.Telephony.SMS_RECEIVED" />
+                <action android:name="android.provider.Telephony.SMS_SENT" />
             </intent-filter>
         </receiver>
 

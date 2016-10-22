@@ -8,12 +8,13 @@ import com.peekaboo.presentation.activities.MainActivity;
 import com.peekaboo.presentation.activities.SignUpActivity;
 import com.peekaboo.presentation.activities.SplashActivity;
 import com.peekaboo.presentation.dialogs.AvatarChangeDialog;
-import com.peekaboo.presentation.activities.TestSmsChatActivity;
 import com.peekaboo.presentation.dialogs.ConfirmSignUpDialog;
 import com.peekaboo.presentation.dialogs.RecordDialogFragment;
 import com.peekaboo.presentation.fragments.ContactsFragment;
 import com.peekaboo.presentation.fragments.DialogsFragment;
 import com.peekaboo.presentation.fragments.MessangerTestFragment;
+import com.peekaboo.presentation.fragments.SmsChatFragment;
+import com.peekaboo.presentation.fragments.SmsDialogsFragment;
 import com.peekaboo.presentation.services.NotificationService;
 
 import javax.inject.Singleton;
@@ -35,9 +36,6 @@ public interface ApplicationComponent {
 
     void inject(ChatActivity chatActivity);
 
-    void inject(TestSmsChatActivity testSmsChatActivity);
-
-
     //    Inject of Fragments
     void inject(ContactsFragment contactsFragment);
 
@@ -46,6 +44,10 @@ public interface ApplicationComponent {
     void inject(AvatarChangeDialog avatarChangeDialog);
 
     void inject(DialogsFragment dialogsFragment);
+
+    void inject(SmsDialogsFragment smsDialogsFragment);
+
+    void inject(SmsChatFragment smsChatFragment);
 
     //    Inject of Services
     void inject(NotificationService notificationService);
