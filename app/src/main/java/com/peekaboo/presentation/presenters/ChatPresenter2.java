@@ -4,6 +4,7 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.speech.tts.TextToSpeech;
 import android.support.annotation.NonNull;
+import android.text.TextUtils;
 import android.util.Log;
 
 import com.peekaboo.data.repositories.database.messages.PMessage;
@@ -15,6 +16,7 @@ import com.peekaboo.domain.Record;
 import com.peekaboo.domain.subscribers.BaseUseCaseSubscriber;
 import com.peekaboo.presentation.services.IMessenger;
 import com.peekaboo.presentation.utils.AsyncAudioPlayer;
+import com.peekaboo.presentation.utils.AudioIdManager;
 import com.peekaboo.presentation.utils.AudioPlayer;
 import com.peekaboo.presentation.views.IChatView2;
 
@@ -95,16 +97,21 @@ public class ChatPresenter2 extends BasePresenter<IChatView2> implements IChatPr
 
     @Override
     public void onPlayButtonClick(PMessage pMessage, AudioPlayer.AudioPlayerListener listener) {
-
-        if (player.getAudioId() != pMessage.id() || player.state() == AudioPlayer.STATE_RESET) {
-            player.reset();
-            String uri = pMessage.messageBody().split(PMessage.DIVIDER)[1];
-            Log.e("presenter", "uri " + uri);
-            player.prepare(pMessage.id(), uri, listener);
-        } else if (player.state() == AudioPlayer.STATE_PREPARED) {
-            player.start();
-        } else if (player.state() == AudioPlayer.STATE_PLAYING) {
-            player.pause();
+        IChatView2 view = getView();
+        if (view != null) {
+            String companionId = view.getCompanionId();
+            long messageId = pMessage.id();
+            String newAudioId = AudioIdManager.constructId(companionId, messageId);
+            if (!TextUtils.equals(newAudioId, player.getAudioId()) || player.state() == AudioPlayer.STATE_RESET) {
+                player.reset();
+                String uri = pMessage.messageBody().split(PMessage.DIVIDER)[1];
+                Log.e("presenter", "uri " + uri);
+                player.prepare(newAudioId, uri, listener);
+            } else if (player.state() == AudioPlayer.STATE_PREPARED) {
+                player.start();
+            } else if (player.state() == AudioPlayer.STATE_PLAYING) {
+                player.pause();
+            }
         }
     }
 
@@ -127,7 +134,8 @@ public class ChatPresenter2 extends BasePresenter<IChatView2> implements IChatPr
                 });
             } else if (!recorder.isRecording() && start) {
                 recorder.setRecord(new Record(view.getCompanionId()));
-                recorder.startRecording().subscribe(new BaseUseCaseSubscriber<Record>() { });
+                recorder.startRecording().subscribe(new BaseUseCaseSubscriber<Record>() {
+                });
 
             }
         }
@@ -163,6 +171,7 @@ public class ChatPresenter2 extends BasePresenter<IChatView2> implements IChatPr
             view.showRecordStop();
         }
     }
+
     @Override
     public void onPause() {
         messenger.removeMessageListener(this);
@@ -190,6 +199,25 @@ public class ChatPresenter2 extends BasePresenter<IChatView2> implements IChatPr
     }
 
     @Override
+    public void onSendImageButtonPress(String realPath) {
+        IChatView2 view = getView();
+        if (view != null) {
+            String receiver = view.getCompanionId();
+            PMessage pMessage = new PMessage(
+                    true, PMessageAbs.PMESSAGE_MEDIA_TYPE.IMAGE_MESSAGE, realPath, System.currentTimeMillis(),
+                    PMessageAbs.PMESSAGE_STATUS.STATUS_SENT,
+                    receiver, accountUser.getId());
+            messenger.sendMessage(pMessage);
+        }
+
+
+        //TODO save image real path to db
+//        pMessageHelper.saveContactToDb(receiver, convertPMessage(new PMessage(Utility.getPackageId(),
+//                true, uri.toString(), System.currentTimeMillis(),
+//                false, false, false)));
+    }
+
+    @Override
     public void onUserMessageRead(PMessage message) {
         messenger.readMessage(message);
     }
@@ -208,11 +236,11 @@ public class ChatPresenter2 extends BasePresenter<IChatView2> implements IChatPr
     }
 
     @Override
-    public int willChangeStatus(PMessage message) {
+    public int displayStatus(PMessage message) {
         IChatView2 view = getView();
         return view != null && isFromCurrentChat(message, view) ?
                 PMessageAbs.PMESSAGE_STATUS.STATUS_READ
-                : message.status();
+                : IMessenger.MessengerListener.STATUS_IGNORE;
     }
 
     public void setPlayerListener(AudioPlayer.AudioPlayerListener playerListener) {

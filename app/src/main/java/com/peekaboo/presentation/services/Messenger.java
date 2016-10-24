@@ -14,6 +14,7 @@ import com.peekaboo.domain.Pair;
 import com.peekaboo.domain.subscribers.BaseUseCaseSubscriber;
 import com.peekaboo.domain.usecase.FileDownloadUseCase;
 import com.peekaboo.domain.usecase.FileUploadUseCase;
+import com.peekaboo.utils.Constants;
 
 import java.util.HashSet;
 import java.util.List;
@@ -37,13 +38,16 @@ public class Messenger implements IMessenger,
     private AccountUser user;
     private FileUploadUseCase uploadFileUseCase;
     private FileDownloadUseCase downloadFileUseCase;
-    private Set<MessengerListener> listeners = new HashSet<>();
+    private Set<MessengerListener> messageListeners = new HashSet<>();
+    private MessageNotificator messageNotificator;
 
     public Messenger(INotifier<Message> notifier, PMessageHelper helper,
+                     MessageNotificator messageNotificator,
                      ReadMessagesHelper readMessagesHelper, AccountUser user,
                      FileUploadUseCase uploadFileUseCase, FileDownloadUseCase downloadFileUseCase) {
         this.notifier = notifier;
         this.helper = helper;
+        this.messageNotificator = messageNotificator;
         this.readMessagesHelper = readMessagesHelper;
         this.user = user;
         this.uploadFileUseCase = uploadFileUseCase;
@@ -63,12 +67,12 @@ public class Messenger implements IMessenger,
 
     @Override
     public void addMessageListener(MessengerListener messengerListener) {
-        listeners.add(messengerListener);
+        messageListeners.add(messengerListener);
     }
 
     @Override
     public void removeMessageListener(MessengerListener messengerListener) {
-        listeners.remove(messengerListener);
+        messageListeners.remove(messengerListener);
     }
 
     @Override
@@ -125,25 +129,38 @@ public class Messenger implements IMessenger,
         helper.insert(tableName, pMessage);
 
         boolean isRead = false;
-        for (MessengerListener listener : listeners) {
-            int status = listener.willChangeStatus(pMessage);
-            if (status == PMessageAbs.PMESSAGE_STATUS.STATUS_READ) {
-                isRead = true;
-                break;
+        boolean isIgnored = true;
+        for (MessengerListener listener : messageListeners) {
+            int status = listener.displayStatus(pMessage);
+            if (status != MessengerListener.STATUS_IGNORE) {
+                isIgnored = false;
+                if (status == PMessageAbs.PMESSAGE_STATUS.STATUS_READ) {
+                    isRead = true;
+                    break;
+                }
             }
         }
 
         if (isRead) {
             readMessage(pMessage);
         } else {
-            for (MessengerListener listener : listeners) {
+            if (isIgnored) {
+                Log.e("messenger", "" + message);
+                messageNotificator.onMessageObtained(pMessage);
+            }
+            for (MessengerListener listener : messageListeners) {
                 listener.onMessageUpdated(pMessage);
             }
         }
         Log.e("Messenger", "type " + pMessage.mediaType());
         if (pMessage.mediaType() == PMessage.PMESSAGE_MEDIA_TYPE.AUDIO_MESSAGE) {
             Log.e("Messenger", "download begin");
-            downloadFileUseCase.execute(pMessage, getDownloadSubscriber());
+            downloadFileUseCase.execute(pMessage, getDownloadSubscriber(), Constants.MESSAGE_TYPE.TYPE_AUDIO);
+        }
+
+        if (pMessage.mediaType() == PMessage.PMESSAGE_MEDIA_TYPE.IMAGE_MESSAGE) {
+            Log.e("Messenger", "download begin");
+            downloadFileUseCase.execute(pMessage, getDownloadSubscriber(), Constants.MESSAGE_TYPE.TYPE_IMAGE);
         }
 
     }
@@ -181,7 +198,7 @@ public class Messenger implements IMessenger,
     private void updateMessageRead(PMessage message, String tableName) {
         helper.updateStatus(tableName, PMessageAbs.PMESSAGE_STATUS.STATUS_READ, message);
 
-        for (MessengerListener listener : listeners) {
+        for (MessengerListener listener : messageListeners) {
             listener.onMessageUpdated(message);
         }
     }
@@ -196,7 +213,7 @@ public class Messenger implements IMessenger,
     public void sendMessage(PMessage message) {
         message.setStatus(PMessageAbs.PMESSAGE_STATUS.STATUS_SENT);
         helper.insert(message.receiverId(), message);
-        for (MessengerListener listener : listeners) {
+        for (MessengerListener listener : messageListeners) {
             listener.onMessageUpdated(message);
         }
         deliverMessageByMediatype(message);
@@ -210,13 +227,21 @@ public class Messenger implements IMessenger,
                 }
                 break;
             case PMessage.PMESSAGE_MEDIA_TYPE.AUDIO_MESSAGE:
+            case PMessage.PMESSAGE_MEDIA_TYPE.IMAGE_MESSAGE:
                 uploadAndDeliverFileMessage(message);
                 break;
         }
     }
 
     private void uploadAndDeliverFileMessage(PMessage message) {
-        uploadFileUseCase.execute(message, getUploadSubscriber());
+        if (message.mediaType() == PMessageAbs.PMESSAGE_MEDIA_TYPE.AUDIO_MESSAGE){
+            uploadFileUseCase.execute(message, getUploadSubscriber(), Constants.MESSAGE_TYPE.TYPE_AUDIO);
+        }
+
+        if (message.mediaType() == PMessageAbs.PMESSAGE_MEDIA_TYPE.IMAGE_MESSAGE){
+            Log.wtf("gus :", "uploadAndDeliverFileMessage -> IMAGE_MESSAGE");
+            uploadFileUseCase.execute(message, getUploadSubscriber(), Constants.MESSAGE_TYPE.TYPE_IMAGE);
+        }
     }
 
     @NonNull
@@ -226,10 +251,11 @@ public class Messenger implements IMessenger,
             public void onNext(Pair<PMessage, String> pair) {
                 super.onNext(pair);
                 PMessage first = pair.first;
-                String second = pair.second;
-                helper.updateBody(first.senderId(), first, first.messageBody() + PMessage.DIVIDER + second);
-
-                for (MessengerListener listener : listeners) {
+                String local = pair.second;
+                String remote = first.messageBody();
+                String audioBody = MessageUtils.createAudioBody(remote, local, local == null);
+                helper.updateBody(first.senderId(), first, audioBody);
+                for (MessengerListener listener : messageListeners) {
                     listener.onMessageUpdated(first);
                 }
             }
@@ -241,10 +267,14 @@ public class Messenger implements IMessenger,
         return new BaseUseCaseSubscriber<Pair<PMessage, FileEntity>>() {
             @Override
             public void onNext(Pair<PMessage, FileEntity> pMessageFileEntityPair) {
-                if (isAvailable()) {
+                if (isAvailable() && pMessageFileEntityPair.second != null) {
                     PMessage pMessage = pMessageFileEntityPair.first;
                     FileEntity fileEntity = pMessageFileEntityPair.second;
-                    helper.updateBody(pMessage.receiverId(), pMessage, fileEntity.getName() + PMessage.DIVIDER + pMessage.messageBody());
+                    String remote = fileEntity.getName();
+                    String local = pMessage.messageBody();
+                    String audioBody = MessageUtils.createAudioBody(remote, local, false);
+                    helper.updateBody(pMessage.receiverId(), pMessage, audioBody);
+                    Log.e("messenger", "upload " + pMessage);
                     deliverMessage(pMessage);
                 }
             }
@@ -260,7 +290,7 @@ public class Messenger implements IMessenger,
     private void deliverMessage(PMessage message) {
         notifier.sendMessage(MessageUtils.convert(message));
         helper.updateStatus(message.receiverId(), PMessageAbs.PMESSAGE_STATUS.STATUS_DELIVERED, message);
-        for (MessengerListener listener : listeners) {
+        for (MessengerListener listener : messageListeners) {
             listener.onMessageUpdated(message);
         }
     }

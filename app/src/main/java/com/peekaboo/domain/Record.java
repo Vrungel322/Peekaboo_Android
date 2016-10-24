@@ -4,7 +4,6 @@ import android.media.AudioFormat;
 import android.media.AudioRecord;
 import android.media.MediaRecorder;
 import android.os.Environment;
-import android.support.annotation.NonNull;
 
 import com.peekaboo.data.utils.FileUtils;
 import com.peekaboo.utils.Constants;
@@ -30,11 +29,20 @@ public class Record {
 
     public Record(String folderName) {
         this.folderName = folderName;
-        this.filename = FileUtils.formAudioName(folderName);
+        this.filename = FileUtils.formFileName(folderName, Constants.MESSAGE_TYPE.TYPE_AUDIO);
         bufferSize = AudioRecord.getMinBufferSize(44100,
                 AudioFormat.CHANNEL_IN_MONO,
                 AudioFormat.ENCODING_PCM_16BIT);
     }
+
+    private String getFileName() {
+        String filename = FileUtils.formFileName(folderName, Constants.MESSAGE_TYPE.TYPE_AUDIO);
+
+        setFilename(filename);
+
+        return filename;
+    }
+
 
     public String getTempFileName() {
         String filepath = Environment.getExternalStorageDirectory().getPath();

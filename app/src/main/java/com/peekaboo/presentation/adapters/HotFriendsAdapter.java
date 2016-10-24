@@ -94,15 +94,15 @@ public class HotFriendsAdapter extends BaseAdapter {
         showUnreadMesCount(mViewHolder, currentListData);
 
         convertView.setOnClickListener(v ->
-                navigator.startChatActivity(activity, currentListData.getContact()));
+                navigator.startChatActivity(activity, currentListData.getContact(), false));
         return convertView;
     }
 
     private void showIfContactIsOnline(HotFriendsViewHolder mViewHolder, Dialog currentListData) {
         if (currentListData.getContact().isOnline()) {
-            mViewHolder.civHotFriendStatus.setImageResource(R.drawable.round_status_icon_cyan);
+            mViewHolder.civHotFriendStatus.setBackgroundResource(R.drawable.list_online_indicator);
         } else {
-            mViewHolder.civHotFriendStatus.setImageResource(R.drawable.round_status_icon_grey);
+            mViewHolder.civHotFriendStatus.setBackgroundResource(R.drawable.list_offline_indicator);
         }
     }
 
@@ -128,7 +128,7 @@ public class HotFriendsAdapter extends BaseAdapter {
         @BindView(R.id.civHotFriendIcon)
         CircleImageView civHotFriendIcon;
         @BindView(R.id.civHotFriendStatus)
-        CircleImageView civHotFriendStatus;
+        View civHotFriendStatus;
         @BindView(R.id.tvUnreadMesCountInRightDrawer)
         TextView tvUnreadMesCountInRightDrawer;
 

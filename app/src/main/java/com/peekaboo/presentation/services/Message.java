@@ -120,6 +120,7 @@ public class Message {
     public interface Type {
         String TEXT = "text";
         String AUDIO = "audio";
+        String IMAGE = "image";
     }
 
     public interface Reason {

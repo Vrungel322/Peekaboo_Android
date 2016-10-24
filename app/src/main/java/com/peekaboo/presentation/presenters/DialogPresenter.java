@@ -35,17 +35,21 @@ public class DialogPresenter extends ProgressPresenter<IDialogsView>
 
     @Override
     public void onCreate() {
-        messenger.addMessageListener(this);
     }
 
     @Override
     public void onPause() {
+        messenger.removeMessageListener(this);
+    }
+
+    @Override
+    public void onResume() {
+        messenger.addMessageListener(this);
     }
 
     @Override
     public void onDestroy() {
         getDialogsListUseCase.unsubscribe();
-        messenger.removeMessageListener(this);
         unbind();
     }
 
@@ -73,7 +77,7 @@ public class DialogPresenter extends ProgressPresenter<IDialogsView>
     }
 
     @Override
-    public int willChangeStatus(PMessage message) {
-        return 0;
+    public int displayStatus(PMessage message) {
+        return message.status();
     }
 }

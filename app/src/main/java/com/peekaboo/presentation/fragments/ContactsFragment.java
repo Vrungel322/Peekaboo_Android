@@ -9,7 +9,6 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -21,8 +20,8 @@ import android.widget.Toast;
 import com.peekaboo.R;
 import com.peekaboo.data.repositories.database.contacts.Contact;
 import com.peekaboo.presentation.PeekabooApplication;
-import com.peekaboo.presentation.activities.MainActivity;
 import com.peekaboo.presentation.adapters.ContactLargeAdapter;
+import com.peekaboo.presentation.pojo.PhoneContactPOJO;
 import com.peekaboo.presentation.presenters.ContactPresenter;
 import com.peekaboo.presentation.views.IContactsView;
 import com.peekaboo.presentation.widget.RecyclerViewFastScroller;
@@ -87,6 +86,7 @@ public class ContactsFragment extends Fragment implements IContactsView {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_contacts, container, false);
+
         ButterKnife.bind(this, rootView);
 
         FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.fab);
@@ -135,6 +135,10 @@ public class ContactsFragment extends Fragment implements IContactsView {
     }
 
     @Override
+    public void showPhoneContactList(List<PhoneContactPOJO> response) {
+    }
+
+    @Override
     public void showProgress() {
 //        showToastMessage("progress Started");
     }
@@ -168,4 +172,13 @@ public class ContactsFragment extends Fragment implements IContactsView {
     public boolean onOptionsItemSelected(MenuItem item) {
         return super.onOptionsItemSelected(item);
     }
+
+    @Override
+    public void onResume(){
+//        RecyclerView.LayoutParams lp = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
+//        recyclerView.setLayoutParams(lp);
+        super.onResume();
+
+    }
+
 }

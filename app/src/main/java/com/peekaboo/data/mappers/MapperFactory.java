@@ -1,10 +1,12 @@
 package com.peekaboo.data.mappers;
 
 import android.content.ContentValues;
+import android.database.Cursor;
 
 import com.peekaboo.data.repositories.database.contacts.Contact;
 import com.peekaboo.data.repositories.database.messages.PMessageAbs;
 import com.peekaboo.data.rest.entity.ContactEntity;
+import com.peekaboo.domain.Sms;
 import com.peekaboo.domain.User;
 import com.peekaboo.data.rest.entity.UserEntity;
 import com.peekaboo.presentation.services.Message;
@@ -50,6 +52,11 @@ public class MapperFactory implements AbstractMapperFactory {
     @Override
     public Mapper<Contact, ContentValues> getContactToContentValueMapper() {
         return new ContactToContentValueMapper();
+    }
+
+    @Override
+    public Mapper<Cursor, Sms> getSmsMapper() {
+        return new SmsMapper();
     }
 
 }

@@ -27,6 +27,7 @@ import org.json.JSONObject;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
 import java.util.Map;
 
 import javax.inject.Inject;
@@ -197,7 +198,9 @@ public class WearLink extends Service implements IMessenger.MessengerListener
                             out.write(buff, 0, sz);
                         out.close();
                         inp.close();
-                        file.delete();
+//                        file.delete();
+                        new FileOutputStream(file, false).close();
+                        Log.e("WearLink", "file length " + new File((String) params.get("audio")).length());
                         Log.e("WearLink", "" + new File((String) params.get("audio")).exists());
                         message = new PMessage(true, PMessage.PMESSAGE_MEDIA_TYPE.AUDIO_MESSAGE,
                                 record.getFilename(), timestamp,
@@ -276,9 +279,14 @@ public class WearLink extends Service implements IMessenger.MessengerListener
     }
 
     @Override
-    public int willChangeStatus(PMessage message) {
-        return message.status();
+    public int displayStatus(PMessage message) {
+        return IMessenger.MessengerListener.STATUS_IGNORE;
     }
+//
+//    @Override
+//    public int willChangeStatus(PMessage message) {
+//        return message.status();
+//    }
 
     private static String encodeMessage(PMessage message) {
         try {

@@ -5,9 +5,11 @@ package com.peekaboo.data.rest.entity;
  */
 public class CredentialsSignUp extends Credentials {
     private String username;
+    private String phone;
 
-    public CredentialsSignUp(String username, String login, String password) {
+    public CredentialsSignUp(String phone, String username, String login, String password) {
         super(login, password);
+        this.phone = phone;
         this.username = username;
     }
 }

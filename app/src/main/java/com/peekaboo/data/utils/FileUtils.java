@@ -3,7 +3,6 @@ package com.peekaboo.data.utils;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import com.peekaboo.utils.Constants;
 
@@ -56,16 +55,32 @@ public class FileUtils {
 
 
     @NonNull
-    public static String formAudioName(String folderName) {
-        String filepath = Environment.getExternalStorageDirectory().getPath();
-        File file = new File(filepath, Constants.SOUND_RECORDING.AUDIO_RECORDER_FOLDER
-                + "/" + folderName);
+    public static String formFileName(String folderName, String fileType) {
+        if (fileType.equals(Constants.MESSAGE_TYPE.TYPE_AUDIO)) {
+            String filepath = Environment.getExternalStorageDirectory().getPath();
+            File file = new File(filepath, Constants.SOUND_RECORDING.AUDIO_RECORDER_FOLDER
+                    + "/" + folderName);
 
-        if (!file.exists()) {
-            file.mkdirs();
+            if (!file.exists()) {
+                file.mkdirs();
+            }
+
+            return (file.getAbsolutePath() + "/" + System.currentTimeMillis()
+                    + Constants.SOUND_RECORDING.AUDIO_RECORDER_FILE_EXT_WAV);
         }
 
-        return (file.getAbsolutePath() + "/" + System.currentTimeMillis()
-                + Constants.SOUND_RECORDING.AUDIO_RECORDER_FILE_EXT_WAV);
+        if (fileType.equals(Constants.MESSAGE_TYPE.TYPE_IMAGE)) {
+            String filepath = Environment.getExternalStorageDirectory().getPath();
+            File file = new File(filepath, Constants.IMAGE_SENDING.IMAGE_SENDING_FOLDER
+                    + "/" + folderName);
+
+            if (!file.exists()) {
+                file.mkdirs();
+            }
+
+            return (file.getAbsolutePath() + "/" + System.currentTimeMillis()
+                    + Constants.IMAGE_SENDING.IMAGE_SENDING_FILE_EXT_JPG);
+        }
+        return "";
     }
 }

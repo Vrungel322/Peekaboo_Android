@@ -108,4 +108,27 @@ public class Contact extends ContactAbs implements Parcelable {
         contactImgUri = in.readString();
         contactId = in.readString();
     }
+
+    @Override
+    public String toString() {
+        return id + " " + contactId() + " " + contactNickname();
+    }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Contact contact = (Contact) o;
+
+        return contactId.equals(contact.contactId);
+
+    }
+
+    @Override
+    public int hashCode() {
+        return contactId.hashCode();
+    }
+
 }

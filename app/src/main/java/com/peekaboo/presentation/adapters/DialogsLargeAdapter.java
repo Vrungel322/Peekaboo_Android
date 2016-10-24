@@ -79,20 +79,20 @@ public final class DialogsLargeAdapter extends RecyclerView.Adapter<DialogsLarge
         setMessageStatus(holder, lastMessage);
 
         if (contact.isOnline()) {
-            holder.ivStatus.setImageResource(R.drawable.round_status_icon_cyan);
+            holder.contact_status_view.setBackgroundResource(R.drawable.list_online_indicator);
         } else {
-            holder.ivStatus.setImageResource(R.drawable.round_status_icon_grey);
+            holder.contact_status_view.setBackgroundResource(R.drawable.list_offline_indicator);
         }
 
         int unreadMessagesCount = dialog.getUnreadMessagesCount();
         if(unreadMessagesCount > 0){
-            holder.tvUnreadCount.setText(String.valueOf(unreadMessagesCount));
+            holder.unread_count_text_view.setText(String.valueOf(unreadMessagesCount));
         } else {
-            holder.tvUnreadCount.setText(null);
+            holder.unread_count_text_view.setText(null);
         }
 
         holder.itemView.setOnClickListener(v -> {
-            navigator.startChatActivity(activity, contact);
+            navigator.startChatActivity(activity, contact, false);
         });
 
         holder.ivFavorite.setOnClickListener(v -> {
@@ -193,9 +193,9 @@ public final class DialogsLargeAdapter extends RecyclerView.Adapter<DialogsLarge
         @BindView(R.id.contact_avatar_image_view)
         CircleImageView ivAvatar;
         @BindView(R.id.contact_status_image_view)
-        CircleImageView ivStatus;
+        View contact_status_view;
         @BindView(R.id.unread_count_text_view)
-        TextView tvUnreadCount;
+        TextView unread_count_text_view;
         @BindView(R.id.contact_name_text_view)
         TextView tvContactName;
         @BindView(R.id.message_preview_text_view)

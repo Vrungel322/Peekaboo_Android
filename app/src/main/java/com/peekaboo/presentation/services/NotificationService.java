@@ -8,10 +8,10 @@ import android.net.ConnectivityManager;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.peekaboo.domain.AccountUser;
 import com.peekaboo.presentation.PeekabooApplication;
+import com.peekaboo.domain.usecase.UserModeChangerUseCase;
 import com.peekaboo.utils.InternetBroadcastReceiver;
 
 import javax.inject.Inject;
@@ -21,8 +21,16 @@ public class NotificationService extends Service {
     @Inject
     IMessenger notifier;
 
+
+//    @Inject
+//    MessageNotificator messageNotificator;
+
     @Inject
     AccountUser user;
+
+    @Inject
+    UserModeChangerUseCase userModeChangerUseCase;
+
     private InternetBroadcastReceiver ibrInternetCheck;
 
     public static void launch(Context context, @Nullable String action) {
@@ -52,13 +60,27 @@ public class NotificationService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         if (intent != null && intent.getAction() != null) {
-            if (intent.getAction().equals(ACTION.TRY_CONNECT)) {
-                boolean shouldTryConnect = user.isAuthorized() && !notifier.isAvailable();
-                Log.e("socket", "onStartCommand() try connect " + shouldTryConnect + intent.hashCode());
-                if (shouldTryConnect) {
-                    notifier.tryConnect(user.getBearer());
-                }
+            switch (intent.getAction()) {
+
+                case ACTION.TRY_CONNECT:
+                    boolean shouldTryConnect = user.isAuthorized() && !notifier.isAvailable();
+                    Log.e("socket", "onStartCommand() try connect " + shouldTryConnect + intent.hashCode());
+                    if (shouldTryConnect) {
+                        notifier.tryConnect(user.getBearer());
+                    }
+                    break;
+
+                case "com.peekaboo.userMode.normal":
+
+                    break;
+
+                case "com.peekaboo.userMode.silent":
+                    userModeChangerUseCase.setMode(UserModeChangerUseCase.IUserMode.TEXT_MODE);
+                    break;
+
             }
+//            if (intent.getAction().equals(ACTION.TRY_CONNECT)) {
+//            }
         }
         return START_STICKY;
     }

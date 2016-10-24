@@ -1,6 +1,7 @@
 package com.peekaboo.presentation.adapters;
 
 import android.content.Context;
+import android.net.Uri;
 import android.os.Handler;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
@@ -17,16 +18,19 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.peekaboo.R;
+import com.peekaboo.data.repositories.database.contacts.Contact;
 import com.peekaboo.data.repositories.database.messages.PMessage;
 import com.peekaboo.data.repositories.database.messages.PMessageAbs;
 import com.peekaboo.presentation.app.view.RoundedTransformation;
 import com.peekaboo.presentation.presenters.ChatPresenter2;
+import com.peekaboo.presentation.utils.AudioIdManager;
 import com.peekaboo.presentation.utils.AudioPlayer;
 import com.peekaboo.presentation.utils.ResourcesUtils;
 import com.peekaboo.utils.Constants;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,53 +47,65 @@ public class ChatAdapter2 extends RecyclerView.Adapter<ChatAdapter2.ViewHolder> 
     private final LayoutInflater inflater;
     private final ChatPresenter2 presenter;
     private final Picasso mPicasso;
+    private Contact contact;
     private final List<PMessage> messages = new ArrayList<>();
     private RecyclerView recyclerView;
     private Handler handler;
     private AudioPlayer.AudioPlayerListener playerListener = new AudioPlayer.AudioPlayerListener() {
 
         @Override
-        public void onStartPlaying(long id) {
-            RecyclerView.ViewHolder viewHolder = recyclerView.findViewHolderForItemId(id);
-//            Log.e("adapter", "start player (id=" + id + ") (last message id=" + getItemId(location) + ") (last message id2=" + message.id() + ") " + viewHolder);
-            if (viewHolder != null && viewHolder instanceof ViewHolderAudio) {
-                ViewHolderAudio viewHolderAudio = (ViewHolderAudio) viewHolder;
-                viewHolderAudio.ibPlayRecord.setImageResource(R.drawable.pause_blue);
+        public void onStartPlaying(String audioId) {
+
+            long id = AudioIdManager.getMessageId(audioId);
+            String companionId = AudioIdManager.getCompanionId(audioId);
+            if (contact.contactId().equals(companionId)) {
+                RecyclerView.ViewHolder viewHolder = recyclerView.findViewHolderForItemId(id);
+                if (viewHolder != null && viewHolder instanceof ViewHolderAudio) {
+                    ViewHolderAudio viewHolderAudio = (ViewHolderAudio) viewHolder;
+                    viewHolderAudio.ibPlayRecord.setImageResource(R.drawable.pause_blue);
+                }
             }
         }
 
         @Override
-        public void onStopPlaying(long id) {
-            RecyclerView.ViewHolder viewHolder = recyclerView.findViewHolderForItemId(id);
-//            Log.e("adapter", "stop " + id + " " + viewHolder);
-            if (viewHolder != null && viewHolder instanceof ViewHolderAudio) {
-                ViewHolderAudio viewHolderAudio = (ViewHolderAudio) viewHolder;
-                viewHolderAudio.ibPlayRecord.setImageResource(R.drawable.play_blue);
+        public void onStopPlaying(String audioId) {
+            long id = AudioIdManager.getMessageId(audioId);
+            String companionId = AudioIdManager.getCompanionId(audioId);
+            if (contact.contactId().equals(companionId)) {
+                RecyclerView.ViewHolder viewHolder = recyclerView.findViewHolderForItemId(id);
+                if (viewHolder != null && viewHolder instanceof ViewHolderAudio) {
+                    ViewHolderAudio viewHolderAudio = (ViewHolderAudio) viewHolder;
+                    viewHolderAudio.ibPlayRecord.setImageResource(R.drawable.play_blue);
+                }
             }
         }
 
         @Override
-        public void onProgressChanged(long id, long position, long duration) {
-            RecyclerView.ViewHolder viewHolder = recyclerView.findViewHolderForItemId(id);
-//            Log.e("adapter", "progress " + id + " " + position);
-            if (viewHolder != null && viewHolder instanceof ViewHolderAudio) {
-                ViewHolderAudio viewHolderAudio = (ViewHolderAudio) viewHolder;
-                int max = (int) (duration / 100);
-                int pos = (int) (position / 100);
-                Log.e("adapter", System.currentTimeMillis() + " progress " + pos + " " + max);
-                viewHolderAudio.sbPlayProgress.setMax(max);
-                viewHolderAudio.sbPlayProgress.setProgress(pos);
-                viewHolderAudio.tvCurrentDuration.setText(String.format("%02d:%02d", (pos / 10) / 60, (pos / 10) % 60));
+        public void onProgressChanged(String audioId, long position, long duration) {
+            long id = AudioIdManager.getMessageId(audioId);
+            String companionId = AudioIdManager.getCompanionId(audioId);
+            if (contact.contactId().equals(companionId)) {
+                RecyclerView.ViewHolder viewHolder = recyclerView.findViewHolderForItemId(id);
+                if (viewHolder != null && viewHolder instanceof ViewHolderAudio) {
+                    ViewHolderAudio viewHolderAudio = (ViewHolderAudio) viewHolder;
+                    int max = (int) (duration / 100);
+                    int pos = (int) (position / 100);
+                    Log.e("adapter", System.currentTimeMillis() + " progress " + pos + " " + max);
+                    viewHolderAudio.sbPlayProgress.setMax(max);
+                    viewHolderAudio.sbPlayProgress.setProgress(pos);
+                    viewHolderAudio.tvCurrentDuration.setText(String.format("%02d:%02d", (pos / 10) / 60, (pos / 10) % 60));
+                }
             }
         }
     };
 
-    public ChatAdapter2(Context context, ChatPresenter2 presenter, RecyclerView recyclerView) {
+    public ChatAdapter2(Context context, ChatPresenter2 presenter, RecyclerView recyclerView, Contact contact) {
         this.context = context;
         this.recyclerView = recyclerView;
         this.inflater = LayoutInflater.from(context);
         this.presenter = presenter;
         this.mPicasso = Picasso.with(context);
+        this.contact = contact;
         handler = new Handler();
         setHasStableIds(true);
     }
@@ -128,6 +144,7 @@ public class ChatAdapter2 extends RecyclerView.Adapter<ChatAdapter2.ViewHolder> 
         position = holder.getAdapterPosition();
         PMessage pMessageAbs = getItem(position);
         int mediaType = pMessageAbs.mediaType();
+        Log.wtf("mediaType : ", String.valueOf(mediaType));
 
         boolean nextMine;
         boolean prevMine;
@@ -156,9 +173,9 @@ public class ChatAdapter2 extends RecyclerView.Adapter<ChatAdapter2.ViewHolder> 
                 if (holder instanceof ViewHolderAudio) {
                     ViewHolderAudio holderAudio = (ViewHolderAudio) holder;
                     presenter.setPlayerListener(playerListener);
-                    Log.e("adapter", pMessageAbs.id() + " " + pMessageAbs.messageBody() + " " + pMessageAbs.isMine() + " " + pMessageAbs.isDownloaded());
-                    holderAudio.pbLoad.setVisibility(pMessageAbs.isDownloaded() ? View.GONE : View.VISIBLE);
-                    holderAudio.ibPlayRecord.setVisibility(!pMessageAbs.isDownloaded() ? View.GONE : View.VISIBLE);
+                    Log.e("adapter", pMessageAbs.id() + " " + pMessageAbs.messageBody() + " " + pMessageAbs.isMine() + " " + pMessageAbs.hasBothPaths());
+                    holderAudio.pbLoad.setVisibility(pMessageAbs.hasBothPaths() || pMessageAbs.hasFileError() ? View.GONE : View.VISIBLE);
+                    holderAudio.ibPlayRecord.setVisibility(!pMessageAbs.hasBothPaths() || pMessageAbs.hasFileError() ? View.GONE : View.VISIBLE);
                     holderAudio.ibPlayRecord.setOnClickListener(v -> {
                         presenter.onPlayButtonClick(pMessageAbs, playerListener);
                     });
@@ -167,7 +184,11 @@ public class ChatAdapter2 extends RecyclerView.Adapter<ChatAdapter2.ViewHolder> 
             case PMessageAbs.PMESSAGE_MEDIA_TYPE.IMAGE_MESSAGE:
                 if (holder instanceof ViewHolderImage) {
                     String image = pMessageAbs.messageBody();
-                    setImageMessage((ViewHolderImage) holder, image);
+                    if (image.split(PMessage.DIVIDER).length == 2) {
+                        String imageFilePath = image.split(PMessage.DIVIDER)[1];
+                        Log.wtf("image : ", imageFilePath);
+                    setImageMessage((ViewHolderImage) holder, imageFilePath);
+                    }
                 }
                 break;
             case PMessageAbs.PMESSAGE_MEDIA_TYPE.VIDEO_MESSAGE:
@@ -238,7 +259,7 @@ public class ChatAdapter2 extends RecyclerView.Adapter<ChatAdapter2.ViewHolder> 
 
     private void setImageMessage(ChatAdapter2.ViewHolderImage holder, String imageUri) {
         holder.pbLoadingImage.setVisibility(View.VISIBLE);
-        mPicasso.load(imageUri).resizeDimen(R.dimen.chat_image_width, R.dimen.chat_image_height)
+        mPicasso.load(Uri.fromFile(new File(imageUri))).resizeDimen(R.dimen.chat_image_width, R.dimen.chat_image_height)
                 .error(R.drawable.ic_alert_circle_outline)
                 .centerInside()
                 .transform(new RoundedTransformation(25, 0))
@@ -307,6 +328,12 @@ public class ChatAdapter2 extends RecyclerView.Adapter<ChatAdapter2.ViewHolder> 
         }
     }
 
+    // RV : optimize allocation of different view holders number
+    @Override
+    public boolean onFailedToRecycleView(ViewHolder holder) {
+        return true;
+    }
+
     static class ViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.tvChatTimestamp)
         TextView tvChatTimestamp;
@@ -359,5 +386,4 @@ public class ChatAdapter2 extends RecyclerView.Adapter<ChatAdapter2.ViewHolder> 
             ButterKnife.bind(this, view);
         }
     }
-
 }

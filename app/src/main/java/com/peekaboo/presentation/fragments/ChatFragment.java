@@ -1,10 +1,15 @@
-package com.peekaboo.presentation.activities;
+package com.peekaboo.presentation.fragments;
 
 import android.animation.Animator;
+import android.app.Activity;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.os.Build;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
@@ -12,6 +17,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -25,22 +31,27 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.peekaboo.BuildConfig;
 import com.peekaboo.R;
 import com.peekaboo.data.repositories.database.contacts.Contact;
 import com.peekaboo.data.repositories.database.messages.PMessage;
 import com.peekaboo.domain.AccountUser;
 import com.peekaboo.presentation.PeekabooApplication;
+import com.peekaboo.presentation.activities.MainActivity;
 import com.peekaboo.presentation.adapters.ChatAdapter2;
 import com.peekaboo.presentation.app.view.PHorizontalScrollView;
-import com.peekaboo.presentation.fragments.ChatItemDialog;
 import com.peekaboo.presentation.listeners.ChatClickListener;
 import com.peekaboo.presentation.listeners.ChatRecyclerTouchListener;
 import com.peekaboo.presentation.presenters.ChatPresenter2;
 import com.peekaboo.presentation.services.INotifier;
 import com.peekaboo.presentation.services.Message;
+import com.peekaboo.presentation.utils.ResourcesUtils;
 import com.peekaboo.presentation.views.IChatView2;
 import com.peekaboo.utils.Constants;
+import com.peekaboo.utils.Utility;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -102,6 +113,7 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
     private Animator animator;
     private ChatItemDialog chatItemDialog;
     private ChatItemDialog.IChatItemEventListener iChatItemEventListener;
+    private Uri imageUri;
 
     public static ChatFragment newInstance(Contact companion) {
 
@@ -110,7 +122,6 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
         Bundle args = new Bundle();
         args.putParcelable(COMPANION, companion);
         fragment.setArguments(args);
-
         return fragment;
     }
 
@@ -142,7 +153,7 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
         layoutManager.setStackFromEnd(true);
         rvMessages.setLayoutManager(layoutManager);
         rvMessages.setItemAnimator(new DefaultItemAnimator());
-        adapter = new ChatAdapter2(getActivity(), presenter, rvMessages);
+        adapter = new ChatAdapter2(getActivity(), presenter, rvMessages, companion);
         rvMessages.setAdapter(adapter);
         svItems.setOnTouchListener((view1, motionEvent) -> false);
         rvMessages.addOnItemTouchListener(new ChatRecyclerTouchListener(getActivity(), rvMessages, new ChatClickListener() {
@@ -221,21 +232,24 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
     @OnClick(R.id.bMessageOpen)
     void onbMessageOpenClick() {
         rflMessageBody.setVisibility(View.VISIBLE);
-        etMessageBody.post(() -> {
-            float cx, cy;
-            cx = (bMessageOpen.getX() + bMessageOpen.getWidth()) / 2;
-            cy = (bMessageOpen.getY() + bMessageOpen.getHeight()) / 2;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
 
-            float dx = Math.max(cx, llMessageBody.getWidth() - cx);
-            float dy = Math.max(cy, llMessageBody.getHeight() - cy);
-            float finalRadius = (float) Math.hypot(dx, dy);
+            etMessageBody.post(() -> {
+                float cx, cy;
+                cx = (bMessageOpen.getX() + bMessageOpen.getWidth()) / 2;
+                cy = (bMessageOpen.getY() + bMessageOpen.getHeight()) / 2;
 
-            Animator animator =
-                    ViewAnimationUtils.createCircularReveal(llMessageBody, (int) cx, (int) cy, 0, finalRadius);
-            animator.setInterpolator(new AccelerateDecelerateInterpolator());
-            animator.setDuration(300);
-            animator.start();
-        });
+                float dx = Math.max(cx, llMessageBody.getWidth() - cx);
+                float dy = Math.max(cy, llMessageBody.getHeight() - cy);
+                float finalRadius = (float) Math.hypot(dx, dy);
+
+                Animator animator =
+                        ViewAnimationUtils.createCircularReveal(llMessageBody, (int) cx, (int) cy, 0, finalRadius);
+                animator.setInterpolator(new AccelerateDecelerateInterpolator());
+                animator.setDuration(300);
+                animator.start();
+            });
+        }
 
         bMessageOpen.setVisibility(View.GONE);
         bSendMessage.setVisibility(View.VISIBLE);
@@ -245,6 +259,67 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
 
         llItems.setLayoutParams(layoutParamsLlItems);
 
+    }
+
+    @OnClick(R.id.photo_btn)
+    void onCameraButtonClick() {
+        takePhoto();
+    }
+
+    @OnClick(R.id.gallery_btn)
+    void onGalleryButtonClick() {
+        takeGalleryImage();
+    }
+
+    public void takeGalleryImage() {
+            Log.wtf("NULL : ", "takeGalleryImage");
+        startActivityForResult(new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI),
+                Constants.REQUEST_CODES.REQUEST_CODE_GALERY_FOR_FRAGMENT);
+    }
+
+    public void takePhoto() {
+        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        if (takePictureIntent.resolveActivity(getContext().getPackageManager()) != null) {
+            File photoFile = null;
+            try {
+                photoFile = Utility.createImageFile();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            if (photoFile != null) {
+                imageUri = Utility.getImageContentUri(getContext(), photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+                startActivityForResult(takePictureIntent, Constants.REQUEST_CODES.REQUEST_CODE_CAMERA);
+            }
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        Log.wtf("NULL : ", "onActivityResult in fragment");
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == Constants.REQUEST_CODES.REQUEST_CODE_CAMERA) {
+            if (resultCode == Activity.RESULT_OK) {
+                sendImage(imageUri);
+            }
+        }
+        if (requestCode == Constants.REQUEST_CODES.REQUEST_CODE_GALERY) {
+            if (resultCode == Activity.RESULT_OK && null != data) {
+                Log.wtf("NULL : ", "sendim img in fragment");
+                sendImage(data.getData());
+            }
+        }
+    }
+
+    public boolean sendImage(Uri uri) {
+        Log.wtf("NULL : ", "sendImage");
+        if (uri == null) {
+            return false;
+        }
+        presenter.onSendImageButtonPress(ResourcesUtils.getRealPathFromURI(getContext(), uri));
+        Utility.galleryAddPic(getContext(), uri);
+        return true;
     }
 
     @Override
