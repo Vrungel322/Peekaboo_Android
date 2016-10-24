@@ -212,7 +212,7 @@ public class SessionDataRepository implements SessionRepository {
     }
 
     @Override
-    public Observable<Sms> getContactLastSms(String phoneNumber){
+    public Observable<Sms> getContactLastSms(String phoneNumber) {
         return Observable.create(subscriber -> {
             String number = phoneNumber.trim().replaceAll(" ", "").replaceAll("-", "");
             String where = Sms.COLUMN_ADDRESS + " = " + "\'" + number + "\'";
@@ -266,28 +266,26 @@ public class SessionDataRepository implements SessionRepository {
 
     @Override
     public Observable<List<PhoneContactPOJO>> getPhoneContactList() {
-        Cursor phones = contentResolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null);
-        List<PhoneContactPOJO> alPhoneContactPOJOs = new ArrayList<PhoneContactPOJO>();
-        Set<PhoneContactPOJO> setPhoneContactPOJO = new HashSet<PhoneContactPOJO>();
-        return Observable.create(new Observable.OnSubscribe<List<PhoneContactPOJO>>() {
+        return Observable.create(new Observable.OnSubscribe<Set<PhoneContactPOJO>>() {
             @Override
-            public void call(Subscriber<? super List<PhoneContactPOJO>> subscriber) {
+            public void call(Subscriber<? super Set<PhoneContactPOJO>> subscriber) {
+                Cursor phones = contentResolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null);
+                Set<PhoneContactPOJO> setPhoneContactPOJO = new HashSet<>();
 
                 if (phones != null) {
                     while (phones.moveToNext()) {
                         String phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
                         String name = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
-                        alPhoneContactPOJOs.add(new PhoneContactPOJO(name, phoneNumber));
+                        setPhoneContactPOJO.add(new PhoneContactPOJO(name, phoneNumber));
                     }
                     phones.close();// close cursor
                 }
-                subscriber.onNext(alPhoneContactPOJOs);
+                subscriber.onNext(setPhoneContactPOJO);
                 subscriber.onCompleted();
             }
         }).distinct().map(phoneContactPOJOs -> {
-            setPhoneContactPOJO.addAll(alPhoneContactPOJOs);
-            alPhoneContactPOJOs.clear();
-            alPhoneContactPOJOs.addAll(setPhoneContactPOJO);
+            List<PhoneContactPOJO> alPhoneContactPOJOs = new ArrayList<>();
+            alPhoneContactPOJOs.addAll(phoneContactPOJOs);
 
             return alPhoneContactPOJOs;
 
