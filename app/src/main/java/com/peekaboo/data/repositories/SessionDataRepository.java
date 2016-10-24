@@ -248,18 +248,18 @@ public class SessionDataRepository implements SessionRepository {
 
     @Override
     public Observable<List<PhoneContactPOJO>> getPhoneContactList() {
-        Cursor phones = contentResolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null);
         List<PhoneContactPOJO> alPhoneContactPOJOs = new ArrayList<PhoneContactPOJO>();
         Set<PhoneContactPOJO> setPhoneContactPOJO = new HashSet<PhoneContactPOJO>();
         return Observable.create(new Observable.OnSubscribe<List<PhoneContactPOJO>>() {
             @Override
             public void call(Subscriber<? super List<PhoneContactPOJO>> subscriber) {
-
+                Cursor phones = contentResolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null);
                 if (phones != null) {
                     while (phones.moveToNext()) {
                         String phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
                         String name = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
-                        alPhoneContactPOJOs.add(new PhoneContactPOJO(name, phoneNumber));
+                        String photoThumbnail = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.PHOTO_THUMBNAIL_URI));
+                        setPhoneContactPOJO.add(new PhoneContactPOJO(name, phoneNumber, photoThumbnail));
                     }
                     phones.close();// close cursor
                 }
@@ -267,7 +267,6 @@ public class SessionDataRepository implements SessionRepository {
                 subscriber.onCompleted();
             }
         }).distinct().map(phoneContactPOJOs -> {
-            setPhoneContactPOJO.addAll(alPhoneContactPOJOs);
             alPhoneContactPOJOs.clear();
             alPhoneContactPOJOs.addAll(setPhoneContactPOJO);
 

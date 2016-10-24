@@ -1,15 +1,29 @@
 package com.peekaboo.presentation.pojo;
 
+import android.support.annotation.Nullable;
+
 /**
  * Created by Nikita on 10.10.2016.
  */
 public class PhoneContactPOJO {
     private String name;
     private String phone;
+    @Nullable
+    private String photoThumbnail;
 
-    public PhoneContactPOJO(String name, String phone) {
+    public PhoneContactPOJO(String name, String phone, String photoThumbnail) {
         this.name = name;
         this.phone = phone;
+        this.photoThumbnail = photoThumbnail;
+    }
+
+    @Nullable
+    public String getPhotoThumbnail() {
+        return photoThumbnail;
+    }
+
+    public void setPhotoThumbnail(@Nullable String photoThumbnail) {
+        this.photoThumbnail = photoThumbnail;
     }
 
     public String getName() {
