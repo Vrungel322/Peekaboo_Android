@@ -11,6 +11,8 @@ import android.os.Build;
 import android.provider.MediaStore;
 import android.util.DisplayMetrics;
 
+import com.peekaboo.data.repositories.database.messages.PMessage;
+
 
 public class ResourcesUtils {
 
@@ -78,6 +80,24 @@ public class ResourcesUtils {
     public static int getDisplayHeight(Context c){
         DisplayMetrics metrics = c.getResources().getDisplayMetrics();
         return metrics.heightPixels;
+    }
+
+    /**
+     * Called to split messageBody if image in there.
+     * if partToReturn == 1 - image name on server
+     * if partToReturn == 2 - image Path on device
+     * @param fullImgPath
+     * @param partToReturn
+     * @return
+     */
+    public static String splitImagePath(String fullImgPath, int partToReturn){
+        if (partToReturn == 1){
+            return fullImgPath.split(PMessage.DIVIDER)[0];
+        }
+        if (partToReturn == 2) {
+             return fullImgPath.split(PMessage.DIVIDER)[1];
+        }
+        return "CHECK IF U partToReturn 1 OR 2";
     }
 
 }

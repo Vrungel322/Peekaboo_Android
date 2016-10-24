@@ -34,6 +34,7 @@ import android.widget.Toast;
 import com.peekaboo.R;
 import com.peekaboo.data.repositories.database.contacts.Contact;
 import com.peekaboo.data.repositories.database.messages.PMessage;
+import com.peekaboo.data.repositories.database.messages.PMessageAbs;
 import com.peekaboo.domain.AccountUser;
 import com.peekaboo.presentation.PeekabooApplication;
 import com.peekaboo.presentation.activities.MainActivity;
@@ -126,7 +127,7 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
         return fragment;
     }
 
-    public interface DISABLE_pbLoadingImageToServer{
+    public interface DISABLE_pbLoadingImageToServer {
         void disablePbLoadingImageToServer();
     }
 
@@ -164,11 +165,19 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
         rvMessages.addOnItemTouchListener(new ChatRecyclerTouchListener(getActivity(), rvMessages, new ChatClickListener() {
             @Override
             public void onClick(View view, int position) {
+                if (adapter.getItemViewType(position) == PMessageAbs.PMESSAGE_MEDIA_TYPE.IMAGE_MESSAGE) {
+                    PreviewImageFragment previewImageFragment = new PreviewImageFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putString(Constants.FILEPATH_OF_IMAGE_TO_PREVIEW,
+                             ResourcesUtils.splitImagePath(adapter.getItem(position).messageBody(), 2));
+                    previewImageFragment.setArguments(bundle);
+                    previewImageFragment.show(getFragmentManager(), Constants.FRAGMENT_TAGS.PREVIEW_IMAGE_FRAGMENT);
+                }
             }
 
             @Override
             public void onLongClick(View view, int position) {
-                android.support.v4.app.FragmentTransaction ft = ((AppCompatActivity)getActivity())
+                android.support.v4.app.FragmentTransaction ft = ((AppCompatActivity) getActivity())
                         .getSupportFragmentManager().beginTransaction();
                 chatItemDialog = new ChatItemDialog();
                 Bundle itemIndexBundle = new Bundle();
@@ -176,7 +185,7 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
                     @Override
                     public void copyText(int index) {
                         presenter.onCopyMessageTextClick((ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE),
-                                 adapter.getItem(index));
+                                adapter.getItem(index));
                     }
 
                     @Override
@@ -274,7 +283,7 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
     }
 
     public void takeGalleryImage() {
-            Log.wtf("NULL : ", "takeGalleryImage");
+        Log.wtf("NULL : ", "takeGalleryImage");
         startActivityForResult(new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI),
                 Constants.REQUEST_CODES.REQUEST_CODE_GALERY_FOR_FRAGMENT);
     }
