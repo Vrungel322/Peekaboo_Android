@@ -181,6 +181,7 @@ public class ChatPresenter2 extends BasePresenter<IChatView2> implements IChatPr
     @Override
     public void unbind() {
         player.setListener(null);
+        messenger.setpbLoadingImageToServerDisableListener(null);
         super.unbind();
     }
 
@@ -207,6 +208,7 @@ public class ChatPresenter2 extends BasePresenter<IChatView2> implements IChatPr
                     true, PMessageAbs.PMESSAGE_MEDIA_TYPE.IMAGE_MESSAGE, realPath, System.currentTimeMillis(),
                     PMessageAbs.PMESSAGE_STATUS.STATUS_SENT,
                     receiver, accountUser.getId());
+            messenger.setpbLoadingImageToServerDisableListener(() -> getView().hidePbLoadingImageToServer());
             messenger.sendMessage(pMessage);
         }
 
