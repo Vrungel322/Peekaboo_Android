@@ -15,6 +15,8 @@ import com.peekaboo.presentation.activities.SignUpActivity;
 import com.peekaboo.presentation.animation.DepthAnimation;
 import com.peekaboo.presentation.fragments.ChatFragment;
 import com.peekaboo.presentation.fragments.DialogsFragment;
+import com.peekaboo.presentation.fragments.SmsChatFragment;
+import com.peekaboo.presentation.pojo.PhoneContactPOJO;
 
 import javax.inject.Inject;
 
@@ -60,6 +62,17 @@ public class ActivityNavigator {
         FragmentTransaction replace = activity.getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.fragmentContainer, ChatFragment.newInstance(companion), Constants.FRAGMENT_TAGS.CHAT_FRAGMENT_TAG);
+        if (addToBackStack) {
+            replace.addToBackStack(null);
+        }
+        replace.commit();
+    }
+
+    public void startSmsChatFragment(AppCompatActivity activity, PhoneContactPOJO companion, boolean addToBackStack) {
+        Log.e("notif", "start sms chat");
+        FragmentTransaction replace = activity.getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragmentContainer, SmsChatFragment.newInstance(companion));
         if (addToBackStack) {
             replace.addToBackStack(null);
         }

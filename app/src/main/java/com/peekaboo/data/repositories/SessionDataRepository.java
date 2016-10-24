@@ -196,7 +196,8 @@ public class SessionDataRepository implements SessionRepository {
     @Override
     public Observable<List<Sms>> getContactSmsList(String phoneNumber) {
         return Observable.create(subscriber -> {
-            String where = Sms.COLUMN_ADDRESS + " = " + "\'" + phoneNumber + "\'";
+            String number = phoneNumber.trim().replaceAll(" ", "").replaceAll("-", "");
+            String where = Sms.COLUMN_ADDRESS + " = " + "\'" + number + "\'";
             Cursor messages = contentResolver.query(Uri.parse("content://sms/"), null, where, null, null);
             List<Sms> smsList = new ArrayList<>();
             if (messages != null) {
@@ -206,6 +207,23 @@ public class SessionDataRepository implements SessionRepository {
                 messages.close();
             }
             subscriber.onNext(smsList);
+            subscriber.onCompleted();
+        });
+    }
+
+    @Override
+    public Observable<Sms> getContactLastSms(String phoneNumber) {
+        return Observable.create(subscriber -> {
+            String number = phoneNumber.trim().replaceAll(" ", "").replaceAll("-", "");
+            String where = Sms.COLUMN_ADDRESS + " = " + "\'" + number + "\'";
+            Cursor messages = contentResolver.query(Uri.parse("content://sms/"), null, where, null, null);
+            Sms sms = null;
+            if (messages != null) {
+                messages.moveToFirst();
+                sms = abstractMapperFactory.getSmsMapper().transform(messages);
+                messages.close();
+            }
+            subscriber.onNext(sms);
             subscriber.onCompleted();
         });
     }
@@ -248,28 +266,26 @@ public class SessionDataRepository implements SessionRepository {
 
     @Override
     public Observable<List<PhoneContactPOJO>> getPhoneContactList() {
-        List<PhoneContactPOJO> alPhoneContactPOJOs = new ArrayList<PhoneContactPOJO>();
-        Set<PhoneContactPOJO> setPhoneContactPOJO = new HashSet<PhoneContactPOJO>();
-        return Observable.create(new Observable.OnSubscribe<List<PhoneContactPOJO>>() {
+        return Observable.create(new Observable.OnSubscribe<Set<PhoneContactPOJO>>() {
             @Override
-            public void call(Subscriber<? super List<PhoneContactPOJO>> subscriber) {
+            public void call(Subscriber<? super Set<PhoneContactPOJO>> subscriber) {
                 Cursor phones = contentResolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null);
+                Set<PhoneContactPOJO> setPhoneContactPOJO = new HashSet<>();
                 if (phones != null) {
                     while (phones.moveToNext()) {
-                        String phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
                         String name = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
+                        String phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
                         String photoThumbnail = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.PHOTO_THUMBNAIL_URI));
                         setPhoneContactPOJO.add(new PhoneContactPOJO(name, phoneNumber, photoThumbnail));
                     }
                     phones.close();// close cursor
                 }
-                subscriber.onNext(alPhoneContactPOJOs);
+                subscriber.onNext(setPhoneContactPOJO);
                 subscriber.onCompleted();
             }
         }).distinct().map(phoneContactPOJOs -> {
-            alPhoneContactPOJOs.clear();
-            alPhoneContactPOJOs.addAll(setPhoneContactPOJO);
-
+            List<PhoneContactPOJO> alPhoneContactPOJOs = new ArrayList<>();
+            alPhoneContactPOJOs.addAll(phoneContactPOJOs);
             return alPhoneContactPOJOs;
 
         });

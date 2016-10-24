@@ -161,7 +161,7 @@ public class ChatAdapter2 extends RecyclerView.Adapter<ChatAdapter2.ViewHolder> 
             prevMine = true;
         }
 
-        setAlignment(holder, pMessageAbs.isMine(), prevMine, nextMine, mediaType);
+        setAlignment(holder, pMessageAbs.isMine(), prevMine, nextMine);
 
         switch (mediaType) {
             case PMessageAbs.PMESSAGE_MEDIA_TYPE.TEXT_MESSAGE:
@@ -213,9 +213,7 @@ public class ChatAdapter2 extends RecyclerView.Adapter<ChatAdapter2.ViewHolder> 
         super.onViewRecycled(holder);
     }
 
-    private void setAlignment(ViewHolder holder, boolean isMine, boolean wasPreviousMine, boolean isNextMine, int mediaType) {
-        Log.i("ALIGMENT", Integer.toString(mediaType));
-
+    private void setAlignment(ViewHolder holder, boolean isMine, boolean wasPreviousMine, boolean isNextMine) {
         holder.tvChatTimestamp.setTextColor(ResourcesUtils.getColor(context, isMine ? R.color.colorDarkAccent : R.color.drawerDividerColor));
 
         RelativeLayout.LayoutParams layoutParams
@@ -300,7 +298,7 @@ public class ChatAdapter2 extends RecyclerView.Adapter<ChatAdapter2.ViewHolder> 
     }
 
     public void appendMessages(List<PMessage> messages) {
-        int size = this.messages.size();
+        int size = getItemCount();
         this.messages.addAll(messages);
         notifyItemRangeInserted(size, messages.size());
         notifyItemChanged(size - 1);

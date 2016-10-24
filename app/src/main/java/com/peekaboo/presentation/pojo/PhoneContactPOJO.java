@@ -1,11 +1,14 @@
 package com.peekaboo.presentation.pojo;
 
+
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 
 /**
  * Created by Nikita on 10.10.2016.
  */
-public class PhoneContactPOJO {
+public class PhoneContactPOJO implements Parcelable {
     private String name;
     private String phone;
     @Nullable
@@ -56,5 +59,37 @@ public class PhoneContactPOJO {
     @Override
     public int hashCode() {
         return phone != null ? phone.hashCode() : 0;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(name);
+        dest.writeString(phone);
+        dest.writeString(photoThumbnail);
+    }
+
+    public static final Parcelable.Creator<PhoneContactPOJO> CREATOR = new Parcelable.Creator<PhoneContactPOJO>() {
+
+        @Override
+        public PhoneContactPOJO createFromParcel(Parcel source) {
+            return new PhoneContactPOJO(source);
+        }
+
+        @Override
+        public PhoneContactPOJO[] newArray(int size) {
+            return new PhoneContactPOJO[size];
+        }
+    };
+
+    private PhoneContactPOJO(Parcel in){
+        name = in.readString();
+        phone = in.readString();
+        photoThumbnail = in.readString();
+
     }
 }
