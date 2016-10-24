@@ -1,7 +1,6 @@
 package com.peekaboo.presentation.views;
 
 import com.peekaboo.data.repositories.database.messages.PMessage;
-import com.peekaboo.data.repositories.database.messages.PMessageAbs;
 
 import java.util.List;
 
@@ -21,4 +20,6 @@ public interface IChatView2 extends IView {
     void showRecordStart();
 
     void showRecordStop();
+
+    void hidePbLoadingImageToServer();
 }

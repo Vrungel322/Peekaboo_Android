@@ -26,6 +26,7 @@ import javax.inject.Inject;
 
 public class ActivityNavigator {
 
+
     @Inject
     public ActivityNavigator() {
     }
@@ -60,7 +61,7 @@ public class ActivityNavigator {
         Log.e("notif", "start chat " + companion);
         FragmentTransaction replace = activity.getSupportFragmentManager()
                 .beginTransaction()
-                .replace(R.id.fragmentContainer, ChatFragment.newInstance(companion));
+                .replace(R.id.fragmentContainer, ChatFragment.newInstance(companion), Constants.FRAGMENT_TAGS.CHAT_FRAGMENT_TAG);
         if (addToBackStack) {
             replace.addToBackStack(null);
         }

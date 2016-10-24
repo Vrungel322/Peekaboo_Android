@@ -4,8 +4,8 @@
     android:id="@+id/list_item_dialog_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="@dimen/dialog_item_margin_top"
-    android:padding="@dimen/dialog_item_padding">
+    android:paddingTop="@dimen/dialog_item_margin_top"
+    >
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -33,28 +33,29 @@
                     android:src="@mipmap/ic_launcher"
                     app:border_color="@color/colorPrimaryLight" />
 
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/contact_status_image_view"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_gravity="right|top"
-                    android:layout_marginRight="5dp"
-                    android:layout_marginTop="5dp"
-                    android:src="@color/offline"
-                    app:border_color="@android:color/white"
-                    app:border_width="1dp" />
-
-                <TextView
-                    android:id="@+id/unread_count_text_view"
+                <FrameLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="right|top"
-                    android:layout_marginRight="11dp"
-                    android:layout_marginTop="6dp"
-                    android:gravity="center"
-                    android:textColor="@android:color/white"
-                    android:textSize="12sp"
-                    android:textStyle="bold" />
+                    android:layout_gravity="end">
+
+                    <View
+                        android:id="@+id/contact_status_image_view"
+                        android:layout_width="@dimen/contact_status_image_size"
+                        android:layout_height="@dimen/contact_status_image_size"
+                        android:layout_gravity="end"
+                        android:src="@color/offline" />
+
+                    <TextView
+                        android:id="@+id/unread_count_text_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:textColor="@android:color/white"
+                        android:textSize="12sp"
+                        android:textStyle="bold" />
+                </FrameLayout>
+
 
             </FrameLayout>
 
@@ -70,7 +71,7 @@
                     android:layout_marginTop="@dimen/dialog_item_margin"
                     android:layout_toRightOf="@id/ivDialog_contact"
                     android:orientation="horizontal"
-                    android:paddingTop="10dp"
+                    android:paddingTop="3dp"
                     android:weightSum="1">
 
                     <LinearLayout
@@ -84,7 +85,7 @@
                             android:layout_height="wrap_content"
                             android:layout_alignParentLeft="true"
                             android:singleLine="true"
-                            android:textColor="@color/dialog_time_date_name"
+                            android:textColor="#000"
                             android:textSize="@dimen/dialog_username_text_size" />
                         <!--android:text="Albert Einstain" />-->
 
@@ -184,10 +185,10 @@
     </LinearLayout>
 
     <View
+        android:id="@+id/dialogs_divider"
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_marginLeft="@dimen/dialog_item_underline_margin_left"
-        android:layout_marginRight="5dp"
         android:layout_marginTop="@dimen/dialog_item_underline_margin_top"
         android:background="@color/dialog_underline_color" />
 </android.support.design.widget.CoordinatorLayout>

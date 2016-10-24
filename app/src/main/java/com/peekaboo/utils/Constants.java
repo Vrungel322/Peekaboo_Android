@@ -27,11 +27,14 @@ public class Constants {
         String PROFILE_FRAGMENT = "profileFragment";
         String SETTINGS_FRAGMENT = "settingsFragment";
         String SMS_DIALOGS_FRAGMENT = "smsDialogsFragment";
+        String  CHAT_FRAGMENT_TAG = "CHAT_FRAGMENT";
+
     }
 
     public interface REQUEST_CODES {
         int REQUEST_CODE_CAMERA = 1818;
         int REQUEST_CODE_GALERY = 1819;
+        int REQUEST_CODE_GALERY_FOR_FRAGMENT = 1820;
         int REQUEST_CODE_SPEECH_INPUT = 1822;
     }
 
@@ -44,6 +47,12 @@ public class Constants {
         int RECORDER_SAMPLERATE = 16000;
         int RECORDER_CHANNELS = AudioFormat.CHANNEL_IN_MONO;
         int RECORDER_AUDIO_ENCODING = AudioFormat.ENCODING_PCM_16BIT;
+    }
+
+    public interface IMAGE_SENDING {
+        String IMAGE_SENDING_FOLDER = "PeekabooImage";
+        String IMAGE_SENDING_FILE_EXT_JPG = ".jpg";
+
     }
 
     public interface DESIGN_CONSTANTS{

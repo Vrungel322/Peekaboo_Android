@@ -6,7 +6,6 @@ import com.peekaboo.data.FileEntity;
 import com.peekaboo.data.repositories.database.messages.PMessage;
 import com.peekaboo.domain.SessionRepository;
 import com.peekaboo.domain.schedulers.ObserveOn;
-import com.peekaboo.utils.Constants;
 
 import java.io.IOException;
 
@@ -28,9 +27,9 @@ public class FileUploadUseCase extends QueueUseCase<PMessage, FileEntity> {
 
     @Nullable
     @Override
-    protected FileEntity getValue(PMessage take) throws IOException {
+    protected FileEntity getValue(PMessage take, String fileType) throws IOException {
         Response<FileEntity> execute =
-                repository.uploadFile(Constants.MESSAGE_TYPE.TYPE_AUDIO, take.messageBody(), take.receiverId())
+                repository.uploadFile(fileType, take.messageBody(), take.receiverId())
                         .execute();
         if (execute.isSuccessful()) {
             return execute.body();
