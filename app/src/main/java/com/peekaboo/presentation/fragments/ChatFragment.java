@@ -30,12 +30,16 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 import com.peekaboo.R;
 import com.peekaboo.data.repositories.database.contacts.Contact;
 import com.peekaboo.data.repositories.database.messages.PMessage;
 import com.peekaboo.domain.AccountUser;
 import com.peekaboo.presentation.PeekabooApplication;
 import com.peekaboo.presentation.activities.MainActivity;
+import com.peekaboo.presentation.activities.MapActivity;
 import com.peekaboo.presentation.adapters.ChatAdapter2;
 import com.peekaboo.presentation.app.view.PHorizontalScrollView;
 import com.peekaboo.presentation.listeners.ChatClickListener;
@@ -306,10 +310,12 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
     }
 
     public void takeNavigation(){
-        Uri gmmIntentUri = Uri.parse("geo:37.7749,-122.4194?z=20");
-        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-        mapIntent.setPackage("com.google.android.apps.maps");
-        startActivity(mapIntent);
+//        Uri gmmIntentUri = Uri.parse("geo:37.7749,-122.4194?z=20");
+//        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+//        mapIntent.setPackage("com.google.android.apps.maps");
+//        startActivity(mapIntent);
+        Intent mapintent = new Intent(getActivity(), MapActivity.class);
+        startActivity(mapintent);
     }
 
     @Override
