@@ -47,6 +47,7 @@ import com.peekaboo.presentation.services.INotifier;
 import com.peekaboo.presentation.services.Message;
 import com.peekaboo.presentation.utils.ResourcesUtils;
 import com.peekaboo.presentation.views.IChatView2;
+import com.peekaboo.utils.ActivityNavigator;
 import com.peekaboo.utils.Constants;
 import com.peekaboo.utils.Utility;
 
@@ -107,6 +108,8 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
     AccountUser accountUser;
     @Inject
     INotifier<Message> notifier;
+    @Inject
+    ActivityNavigator activityNavigator;
     private ChatAdapter2 adapter;
     private LinearLayout.LayoutParams layoutParams;
     private boolean isFirstResumeAfterCreate = true;
@@ -171,6 +174,8 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
                     bundle.putString(Constants.FILEPATH_OF_IMAGE_TO_PREVIEW,
                              ResourcesUtils.splitImagePath(adapter.getItem(position).messageBody(), 2));
                     previewImageFragment.setArguments(bundle);
+//                    activityNavigator.startPreviewImageFragment((AppCompatActivity)getActivity(),
+//                            previewImageFragment, true, Constants.FRAGMENT_TAGS.PREVIEW_IMAGE_FRAGMENT);
                     previewImageFragment.show(getFragmentManager(), Constants.FRAGMENT_TAGS.PREVIEW_IMAGE_FRAGMENT);
                 }
             }

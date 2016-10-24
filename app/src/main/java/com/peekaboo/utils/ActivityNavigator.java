@@ -57,7 +57,7 @@ public class ActivityNavigator {
         mActivityContext.startActivity(intent);
     }
 
-    public void startChatActivity(AppCompatActivity activity, Contact companion, boolean addToBackStack) {
+    public void startChatFragment(AppCompatActivity activity, Contact companion, boolean addToBackStack) {
         Log.e("notif", "start chat " + companion);
         FragmentTransaction replace = activity.getSupportFragmentManager()
                 .beginTransaction()

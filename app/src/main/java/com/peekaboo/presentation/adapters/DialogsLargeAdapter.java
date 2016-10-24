@@ -2,8 +2,6 @@ package com.peekaboo.presentation.adapters;
 
 import android.graphics.Color;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.v4.content.ContextCompat;
-import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -116,7 +114,7 @@ public final class DialogsLargeAdapter extends RecyclerView.Adapter<DialogsLarge
             }
         }
 
-        holder.itemView.setOnClickListener(v -> navigator.startChatActivity(activity, contact, false));
+        holder.itemView.setOnClickListener(v -> navigator.startChatFragment(activity, contact, true));
 
         holder.ivFavorite.setOnClickListener(v -> {
             YoYo.with(Techniques.Tada).duration(500).delay(100).playOn(holder.ivFavorite);

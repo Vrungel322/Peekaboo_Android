@@ -194,7 +194,7 @@ public class MainActivity extends AppCompatActivity implements IMainView, Avatar
             NotificationManager notificationManager =
                     (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             notificationManager.cancel(MessageNotificator.NOTIFICATION_ID);
-            navigator.startChatActivity(this, contact, addToStack);
+            navigator.startChatFragment(this, contact, addToStack);
         } else if (ACTION.SHOW_DIALOGS.equals(action)) {
             NotificationManager notificationManager =
                     (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
