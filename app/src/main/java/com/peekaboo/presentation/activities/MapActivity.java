@@ -2,25 +2,25 @@ package com.peekaboo.presentation.activities;
 
 
 import android.app.Activity;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.util.Log;
-import android.view.View;
 import android.widget.Toast;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 
-import com.google.android.gms.maps.*;
+import com.google.android.gms.maps.CameraUpdate;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
-
 import com.peekaboo.R;
 
-import static com.google.android.gms.wearable.DataMap.TAG;
 
 
 /**
@@ -102,7 +102,7 @@ public class MapActivity extends Activity implements OnMapReadyCallback {
 
             @Override
             public void onMapClick(LatLng latLng) {
-                Log.d(TAG, "onMapClick: " + latLng.latitude + "," + latLng.longitude);
+                Log.d("MAPS_TAG", "onMapClick: " + latLng.latitude + "," + latLng.longitude);
 //                double altitude = location.getAltitude();
 //                double longtitude = location.getLongitude();
                 CameraPosition cameraPosition = new CameraPosition.Builder()
@@ -118,7 +118,7 @@ public class MapActivity extends Activity implements OnMapReadyCallback {
 
             @Override
             public void onMapLongClick(LatLng latLng) {
-                Log.d(TAG, "onMapLongClick: " + latLng.latitude + "," + latLng.longitude);
+                Log.d("MAPS_TAG", "onMapLongClick: " + latLng.latitude + "," + latLng.longitude);
                 googleMap.addMarker(new MarkerOptions().position(new LatLng(latLng.latitude,latLng.longitude)).draggable(true).icon(
                         BitmapDescriptorFactory.fromResource(R.drawable.locationbuble)));
 
