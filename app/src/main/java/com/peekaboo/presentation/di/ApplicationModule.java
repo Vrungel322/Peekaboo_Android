@@ -2,7 +2,6 @@ package com.peekaboo.presentation.di;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.util.Log;
 
 import com.jakewharton.picasso.OkHttp3Downloader;
 import com.peekaboo.data.Constants;
@@ -113,7 +112,7 @@ public class ApplicationModule {
     @Provides
     public Picasso providePicasso(Context context) {
         File httpCacheDirectory = new File(context.getApplicationContext().getCacheDir(), "picasso-cache");
-        Log.wtf("Cache_DIR", httpCacheDirectory.getAbsolutePath());
+//        Log.wtf("Cache_DIR", httpCacheDirectory.getAbsolutePath());
         Cache cache = new Cache(httpCacheDirectory, Constants.CACHE.MIN_DISK_CACHE_SIZE);
 
         OkHttpClient clientBuilder = new OkHttpClient.Builder().cache(cache).build();
@@ -124,7 +123,7 @@ public class ApplicationModule {
 
     @Singleton
     @Provides
-    public ISmsManager provideSMSManager(){
-        return new SMSManager();
+    public ISmsManager provideSMSManager(Context context){
+        return new SMSManager(context);
     }
 }

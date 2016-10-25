@@ -1,10 +1,13 @@
 package com.peekaboo.presentation.services;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.telephony.SmsManager;
 import android.telephony.SmsMessage;
+import android.util.Log;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -19,6 +22,7 @@ public class SmsReceiver extends BroadcastReceiver {
 
     public interface SmsReceiverListener {
         void onMessageReceived(SmsMessage smsMessage);
+        void onMessageSent();
     }
 
     public static void addListener(SmsReceiverListener listener) {
@@ -31,21 +35,41 @@ public class SmsReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        Bundle intentExtras = intent.getExtras();
+        String action = intent.getAction();
+        if(action.equals("android.provider.Telephony.SMS_SENT")){
+            for (SmsReceiverListener listener : listeners) {
+                switch (getResultCode()) {
+                    case Activity.RESULT_OK:
+                        listener.onMessageSent();
+                        break;
+                    case SmsManager.RESULT_ERROR_GENERIC_FAILURE:
+                        break;
+                    case SmsManager.RESULT_ERROR_NO_SERVICE:
+                        break;
+                    case SmsManager.RESULT_ERROR_NULL_PDU:
+                        break;
+                    case SmsManager.RESULT_ERROR_RADIO_OFF:
+                        break;
+                }
+            }
+        } else if (action.equals("android.provider.Telephony.SMS_RECEIVED")){
+            Bundle intentExtras = intent.getExtras();
 
-        if (intentExtras != null) {
-            Object[] sms = (Object[]) intentExtras.get("pdus");
+            if (intentExtras != null) {
+                Object[] sms = (Object[]) intentExtras.get("pdus");
 
-            if (sms != null) {
-                for (Object sm : sms) {
-                    SmsMessage smsMessage = SmsMessage.createFromPdu((byte[]) sm);
+                if (sms != null) {
+                    for (Object sm : sms) {
+                        SmsMessage smsMessage = SmsMessage.createFromPdu((byte[]) sm);
 
-                    for (SmsReceiverListener listener : listeners) {
-                        listener.onMessageReceived(smsMessage);
+                        for (SmsReceiverListener listener : listeners) {
+                            listener.onMessageReceived(smsMessage);
+                        }
+
                     }
-
                 }
             }
         }
+
     }
 }

@@ -7,8 +7,10 @@ import android.media.AudioFormat;
  */
 public class Constants {
     public static final String EXTRA_RECEIVER_NAME = "receiver_name";
+    public static final String EXTRA_RECEIVER_CONTACT = "receiver_contact";
     public static final String EXTRA_CONTACT = "contact";
     public static final String ARG_CHAT_MESSAGE_ITEM_INDEX = "message_item_index";
+    public static final String FILEPATH_OF_IMAGE_TO_PREVIEW = "FILEPATH_OF_IMAGE_TO_PREVIEW";
 
     public interface MESSAGE_TYPE{
         String TYPE_AUDIO    = "audio";
@@ -25,7 +27,9 @@ public class Constants {
         String CONTACTS_FRAGMENT = "contactsFragment";
         String PROFILE_FRAGMENT = "profileFragment";
         String SETTINGS_FRAGMENT = "settingsFragment";
-        String  CHAT_FRAGMENT_TAG = "CHAT_FRAGMENT";
+        String SMS_DIALOGS_FRAGMENT = "smsDialogsFragment";
+        String CHAT_FRAGMENT_TAG = "CHAT_FRAGMENT";
+        String PREVIEW_IMAGE_FRAGMENT = "PREVIEW_IMAGE_FRAGMENT";
 
     }
 

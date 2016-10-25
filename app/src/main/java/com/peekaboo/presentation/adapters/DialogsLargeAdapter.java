@@ -118,9 +118,7 @@ public final class DialogsLargeAdapter extends RecyclerView.Adapter<DialogsLarge
             }
         }
 
-        holder.itemView.setOnClickListener(v -> {
-            navigator.startChatActivity(activity, contact, false);
-        });
+        holder.itemView.setOnClickListener(v -> navigator.startChatFragment(activity, contact, true));
 
         holder.ivFavorite.setOnClickListener(v -> {
             YoYo.with(Techniques.Tada).duration(500).delay(100).playOn(holder.ivFavorite);

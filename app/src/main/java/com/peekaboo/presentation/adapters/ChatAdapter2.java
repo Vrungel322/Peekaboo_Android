@@ -161,7 +161,7 @@ public class ChatAdapter2 extends RecyclerView.Adapter<ChatAdapter2.ViewHolder> 
             prevMine = true;
         }
 
-        setAlignment(holder, pMessageAbs.isMine(), prevMine, nextMine, mediaType);
+        setAlignment(holder, pMessageAbs.isMine(), prevMine, nextMine);
 
         switch (mediaType) {
             case PMessageAbs.PMESSAGE_MEDIA_TYPE.TEXT_MESSAGE:
@@ -185,9 +185,8 @@ public class ChatAdapter2 extends RecyclerView.Adapter<ChatAdapter2.ViewHolder> 
                 if (holder instanceof ViewHolderImage) {
                     String image = pMessageAbs.messageBody();
                     if (image.split(PMessage.DIVIDER).length == 2) {
-                        String imageFilePath = image.split(PMessage.DIVIDER)[1];
-                        Log.wtf("image : ", imageFilePath);
-                    setImageMessage((ViewHolderImage) holder, imageFilePath);
+                        Log.wtf("image : ", ResourcesUtils.splitImagePath(image, 2));
+                    setImageMessage((ViewHolderImage) holder, ResourcesUtils.splitImagePath(image, 2));
                     }
                 }
                 break;
@@ -213,9 +212,7 @@ public class ChatAdapter2 extends RecyclerView.Adapter<ChatAdapter2.ViewHolder> 
         super.onViewRecycled(holder);
     }
 
-    private void setAlignment(ViewHolder holder, boolean isMine, boolean wasPreviousMine, boolean isNextMine, int mediaType) {
-        Log.i("ALIGMENT", Integer.toString(mediaType));
-
+    private void setAlignment(ViewHolder holder, boolean isMine, boolean wasPreviousMine, boolean isNextMine) {
         holder.tvChatTimestamp.setTextColor(ResourcesUtils.getColor(context, isMine ? R.color.colorDarkAccent : R.color.drawerDividerColor));
 
         RelativeLayout.LayoutParams layoutParams
@@ -300,7 +297,7 @@ public class ChatAdapter2 extends RecyclerView.Adapter<ChatAdapter2.ViewHolder> 
     }
 
     public void appendMessages(List<PMessage> messages) {
-        int size = this.messages.size();
+        int size = getItemCount();
         this.messages.addAll(messages);
         notifyItemRangeInserted(size, messages.size());
         notifyItemChanged(size - 1);
