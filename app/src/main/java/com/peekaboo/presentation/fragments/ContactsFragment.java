@@ -94,17 +94,16 @@ public class ContactsFragment extends Fragment implements IContactsView {
 
         ButterKnife.bind(this, rootView);
 
-        FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.fab);
-//        fab.setOnClickListener(v -> Toast.makeText(getActivity(), "ADD", Toast.LENGTH_LONG).show());
-        fab.setOnClickListener(v -> {
-            //test google maps
-                String geoUriString = "geo:50.2716,30.3125?z=15";
-                Uri geoUri = Uri.parse(geoUriString);
+//        FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.fab);
+//        fab.setOnClickListener(v -> {
+//            test google maps
+//                String geoUriString = "geo:50.2716,30.3125?z=15";
+//                Uri geoUri = Uri.parse(geoUriString);
 //                Intent mapIntent = new Intent(Intent.ACTION_VIEW, geoUri);
 //                startActivity(mapIntent);
-            Intent lolintent = new Intent(getActivity(), MapActivity.class);
-            startActivity(lolintent);
-        });
+//            Intent lolintent = new Intent(getActivity(), MapActivity.class);
+//            startActivity(lolintent);
+//        });
         setUpRecyclerView();
 
         contactPresenter.bind(this);

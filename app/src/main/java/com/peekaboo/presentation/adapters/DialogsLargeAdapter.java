@@ -3,6 +3,7 @@ package com.peekaboo.presentation.adapters;
 import android.graphics.Color;
 import android.content.Intent;
 import android.net.Uri;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;

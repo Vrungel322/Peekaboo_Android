@@ -282,6 +282,29 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 });
     }
 
+    private void setLocationMessage(ChatAdapter.ViewHolderImage holder, String locationUri) {
+        holder.pbLoadingImage.setVisibility(View.VISIBLE);
+        String latEiffelTower = "50.459507";
+        String lngEiffelTower = "30.514554";
+        String url = "http://maps.google.com/maps/api/staticmap?center=" + latEiffelTower + "," + lngEiffelTower + "&zoom=15&size=100x50&sensor=true";
+        mPicasso.load(url).resizeDimen(R.dimen.chat_image_width, R.dimen.chat_image_height)
+                .error(R.drawable.ic_alert_circle_outline)
+                .centerInside()
+                .transform(new RoundedTransformation(25, 0))
+                .into(holder.ivImageMessage, new Callback.EmptyCallback() {
+                    @Override
+                    public void onSuccess() {
+                        holder.pbLoadingImage.setVisibility(View.GONE);
+                    }
+
+                    @Override
+                    public void onError() {
+                        holder.pbLoadingImage.setVisibility(View.GONE);
+                    }
+
+                });
+    }
+
     public void clearList() {
         this.messages = Collections.emptyList();
         notifyDataSetChanged();

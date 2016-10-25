@@ -3,6 +3,7 @@ package com.peekaboo.presentation.activities;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
@@ -14,11 +15,13 @@ import com.google.android.gms.maps.*;
 import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import com.peekaboo.R;
 
 import static com.google.android.gms.wearable.DataMap.TAG;
+
 
 /**
  * Created by patri_000 on 18.10.2016.
@@ -28,25 +31,43 @@ public class MapActivity extends Activity implements OnMapReadyCallback {
 
     GoogleMap googleMap;
 
+
+    private LocationManager locationManager;
+    StringBuilder sbGPS = new StringBuilder();
+    StringBuilder sbNet = new StringBuilder();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.gmapstest);
+
+        locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         createMapView();
-//        addMarker();
+
+        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.mapfab);
+        fab.setOnClickListener(v -> {
+            Toast.makeText(this,googleMap.getMyLocation().getLatitude() + " " + googleMap.getMyLocation().getLongitude(), Toast.LENGTH_LONG).show();
+            CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(googleMap.getMyLocation().getLatitude(),googleMap.getMyLocation().getLongitude()))
+                    .zoom(10)
+                    .build();
+            CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition);
+            googleMap.animateCamera(cameraUpdate);
+        });
     }
-//    private void addMarker(){
-//        if(null != googleMap){
-//            googleMap.addMarker(new MarkerOptions()
-//                    .position(new LatLng(0, 0))
-//                    .title("Marker")
-//                    .draggable(true)
-//            );
-//        }
-//    }
 
+    private GoogleMap.OnMyLocationChangeListener myLocationChangeListener = new GoogleMap.OnMyLocationChangeListener() {
+        @Override
+        public void onMyLocationChange(Location location) {
+            LatLng loc = new LatLng(location.getLatitude(), location.getLongitude());
+            Marker mMarker = googleMap.addMarker(new MarkerOptions().position(loc).title("I'm here!").icon(
+                    BitmapDescriptorFactory.fromResource(R.drawable.locationbuble)));
+            if(googleMap != null){
+                googleMap.animateCamera(CameraUpdateFactory.newLatLngZoom(loc, 18.0f));
+            }
+        }
+    };
 
-    /**
+     /**
      * Initialises the mapview
      */
     private void createMapView(){
@@ -55,7 +76,6 @@ public class MapActivity extends Activity implements OnMapReadyCallback {
             if(null == googleMap){
                 MapFragment googleMap = (MapFragment) getFragmentManager()
                         .findFragmentById(R.id.mapView);
-
                 googleMap.getMapAsync(this);
 
                 if(null == googleMap) {
@@ -70,12 +90,12 @@ public class MapActivity extends Activity implements OnMapReadyCallback {
 
     @Override
     public void onMapReady(GoogleMap map) {
-
         googleMap = map;
         init();
         setUpMap();
 
     }
+
 
     private void init() {
         googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
@@ -83,8 +103,10 @@ public class MapActivity extends Activity implements OnMapReadyCallback {
             @Override
             public void onMapClick(LatLng latLng) {
                 Log.d(TAG, "onMapClick: " + latLng.latitude + "," + latLng.longitude);
+//                double altitude = location.getAltitude();
+//                double longtitude = location.getLongitude();
                 CameraPosition cameraPosition = new CameraPosition.Builder()
-                        .target(new LatLng(50.459465,30.515301))
+                        .target( new LatLng(latLng.latitude,latLng.longitude))
                         .zoom(19)
                         .build();
                 CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition);
@@ -103,13 +125,6 @@ public class MapActivity extends Activity implements OnMapReadyCallback {
             }
         });
 
-//        googleMap.setOnCameraChangeListener(new GoogleMap.OnCameraChangeListener() {
-//
-//            @Override
-//            public void onCameraChange(CameraPosition camera) {
-//                Log.d(TAG, "onCameraChange: " + camera.target.latitude + "," + camera.target.longitude);
-//            }
-//        });
     }
 
     public void setUpMap(){
@@ -120,9 +135,5 @@ public class MapActivity extends Activity implements OnMapReadyCallback {
         googleMap.setIndoorEnabled(false);
         googleMap.setBuildingsEnabled(true);
         googleMap.getUiSettings().setZoomControlsEnabled(true);
-//        googleMap.addMarker(new MarkerOptions().position(new LatLng(50.459465,30.515301)).title("Peekaboo").draggable(true));
-//        googleMap.addMarker(new MarkerOptions().position()
-
-
-    }
+        }
 }
