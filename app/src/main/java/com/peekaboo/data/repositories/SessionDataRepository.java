@@ -297,7 +297,7 @@ public class SessionDataRepository implements SessionRepository {
                     while (phones.moveToNext()) {
                         String phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
                         String name = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
-                        subscriber.onNext(new PhoneContactPOJO(name, phoneNumber));
+                        subscriber.onNext(new PhoneContactPOJO(name, phoneNumber, null));
                     }
                     phones.close();// close cursor
                 }
