@@ -186,7 +186,7 @@ public class ChatAdapter2 extends RecyclerView.Adapter<ChatAdapter2.ViewHolder> 
                     String image = pMessageAbs.messageBody();
                     if (image.split(PMessage.DIVIDER).length == 2) {
                         Log.wtf("image : ", ResourcesUtils.splitImagePath(image, 2));
-                    setImageMessage((ViewHolderImage) holder, ResourcesUtils.splitImagePath(image, 2));
+                        setImageMessage((ViewHolderImage) holder, ResourcesUtils.splitImagePath(image, 2));
                     }
                 }
                 break;

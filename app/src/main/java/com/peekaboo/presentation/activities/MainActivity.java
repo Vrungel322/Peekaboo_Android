@@ -475,6 +475,11 @@ public class MainActivity extends AppCompatActivity implements IMainView, Avatar
                     presenter.updateAvatar(data.getData());
                 }
                 break;
+            case Constants.REQUEST_CODES.REQUEST_CODE_GPS:
+                if (resultCode == RESULT_OK && null != data) {
+                    sendGPSToChatFragment(data);
+                }
+                break;
             default:
                 Log.wtf("NULL : ", "onActivityResult _MAIN ACT" + requestCode);
                 sendEventToChatFragment(data);
@@ -487,6 +492,13 @@ public class MainActivity extends AppCompatActivity implements IMainView, Avatar
         ChatFragment chatFragment = (ChatFragment) getSupportFragmentManager()
                 .findFragmentByTag(Constants.FRAGMENT_TAGS.CHAT_FRAGMENT_TAG);
         chatFragment.onActivityResult(Constants.REQUEST_CODES.REQUEST_CODE_GALERY, RESULT_OK, data);
+
+    }
+
+    public void sendGPSToChatFragment(Intent data) {
+        ChatFragment chatFragment = (ChatFragment) getSupportFragmentManager()
+                .findFragmentByTag(Constants.FRAGMENT_TAGS.CHAT_FRAGMENT_TAG);
+        chatFragment.onActivityResult(Constants.REQUEST_CODES.REQUEST_CODE_GPS, RESULT_OK, data);
 
     }
 

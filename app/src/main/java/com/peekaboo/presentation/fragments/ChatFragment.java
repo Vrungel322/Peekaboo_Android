@@ -54,6 +54,7 @@ import com.peekaboo.presentation.views.IChatView2;
 import com.peekaboo.utils.ActivityNavigator;
 import com.peekaboo.utils.Constants;
 import com.peekaboo.utils.Utility;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.IOException;
@@ -323,6 +324,7 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
     @OnClick(R.id.navigation_btn)
     void onNavigationButtonClick(){
         takeNavigation();
+
 //        Toast.makeText(this, "LoL", Toast.LENGTH_SHORT).show();
 //        Uri gmmIntentUri = Uri.parse("geo:37.7749,-122.4194?z=20");
 //        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
@@ -337,7 +339,10 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
 //        mapIntent.setPackage("com.google.android.apps.maps");
 //        startActivity(mapIntent);
         Intent mapintent = new Intent(getActivity(), MapActivity.class);
-        startActivity(mapintent);
+//        startActivity(mapintent);
+       getActivity().startActivityForResult(mapintent, Constants.REQUEST_CODES.REQUEST_CODE_GPS);
+
+//        Log.wtf("NULL : ","sendim gpsimg in fragment");
     }
 
     @Override
@@ -350,12 +355,22 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
                 sendImage(imageUri);
             }
         }
+        if (requestCode == Constants.REQUEST_CODES.REQUEST_CODE_GPS) {
+            if (resultCode == Activity.RESULT_OK && null !=data){
+                Log.wtf("NULL : ","sendim gpsimg in fragment");
+//                imageUri = Uri.parse(data.getStringExtra("staticmap"));
+                String mapuri = data.getStringExtra("staticmap");
+//                etMessageBody.setText(imageuri);
+//                Toast.makeText(getContext(), mapuri, Toast.LENGTH_SHORT).show();
+            }
+        }
         if (requestCode == Constants.REQUEST_CODES.REQUEST_CODE_GALERY) {
             if (resultCode == Activity.RESULT_OK && null != data) {
                 Log.wtf("NULL : ", "sendim img in fragment");
                 sendImage(data.getData());
             }
         }
+
     }
 
     public boolean sendImage(Uri uri) {
