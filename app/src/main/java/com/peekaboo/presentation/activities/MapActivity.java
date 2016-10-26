@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.Toast;
 import android.location.Location;
 import android.location.LocationListener;
@@ -19,8 +20,12 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import com.peekaboo.R;
+import com.peekaboo.presentation.app.view.RoundedTransformation;
+import com.squareup.picasso.Callback;
+import com.squareup.picasso.Picasso;
 
 import static com.google.android.gms.wearable.DataMap.TAG;
+import static com.peekaboo.R.id.imageView;
 
 
 /**
@@ -46,16 +51,42 @@ public class MapActivity extends Activity implements OnMapReadyCallback {
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.mapfab);
         fab.setOnClickListener(v -> {
-            Toast.makeText(this,googleMap.getMyLocation().getLatitude() + " " + googleMap.getMyLocation().getLongitude(), Toast.LENGTH_LONG).show();
-            CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(googleMap.getMyLocation().getLatitude(),googleMap.getMyLocation().getLongitude()))
-                    .zoom(10)
-                    .build();
-            CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition);
-            googleMap.animateCamera(cameraUpdate);
-        });
-    }
+                    Toast.makeText(this, googleMap.getMyLocation().getLatitude() + " " + googleMap.getMyLocation().getLongitude(), Toast.LENGTH_LONG).show();
+                    CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(googleMap.getMyLocation().getLatitude(), googleMap.getMyLocation().getLongitude()))
+                            .zoom(10)
+                            .build();
+                    CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition);
+                    googleMap.animateCamera(cameraUpdate);
 
-    private GoogleMap.OnMyLocationChangeListener myLocationChangeListener = new GoogleMap.OnMyLocationChangeListener() {
+            String latEiffelTower = String.valueOf(googleMap.getMyLocation().getLatitude());//"50.459507";
+            String lngEiffelTower = String.valueOf(googleMap.getMyLocation().getLongitude());//"30.514554";
+            String url = "http://maps.google.com/maps/api/staticmap?center=" + latEiffelTower + "," + lngEiffelTower + "&zoom=10&size=200x200&sensor=true";
+            Picasso.with(this).load(url).into((ImageView)findViewById(R.id.testimgview));
+
+        });
+//            new DownloadImageTask((ImageView) findViewById(R.id.testimgview))
+//                    .execute(url);
+//            Picasso.with(this).load(url).into((ImageView)findViewById(R.id.testimgview));
+//            mPicasso.load(url).resizeDimen(R.dimen.chat_image_width, R.dimen.chat_image_height)
+//                    .error(R.drawable.ic_alert_circle_outline)
+//                    .centerInside()
+//                    .transform(new RoundedTransformation(25, 0))
+//                    .into(holder.ivImageMessage, new Callback.EmptyCallback() {
+//                        @Override
+//                        public void onSuccess() {
+//                            holder.pbLoadingImage.setVisibility(View.GONE);
+//                        }
+//
+//                        @Override
+//                        public void onError() {
+//                            holder.pbLoadingImage.setVisibility(View.GONE);
+//                        }
+//
+//                    });
+//        });
+//    }
+
+    GoogleMap.OnMyLocationChangeListener myLocationChangeListener = new GoogleMap.OnMyLocationChangeListener() {
         @Override
         public void onMyLocationChange(Location location) {
             LatLng loc = new LatLng(location.getLatitude(), location.getLongitude());
@@ -66,6 +97,7 @@ public class MapActivity extends Activity implements OnMapReadyCallback {
             }
         }
     };
+    }
 
      /**
      * Initialises the mapview
