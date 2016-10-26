@@ -122,7 +122,7 @@ public class Messenger implements IMessenger,
      * @param message
      */
     private void handleIncomingMessage(Message message) {
-        PMessage pMessage = MessageUtils.convert(user.getId(), message);
+        PMessage pMessage = MessageUtils.convert(message);
         Log.e("Messenger", "type " + pMessage.mediaType());
         pMessage.setStatus(PMessage.PMESSAGE_STATUS.STATUS_DELIVERED);
         String tableName = pMessage.senderId();

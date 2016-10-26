@@ -12,6 +12,7 @@ import com.peekaboo.presentation.activities.TestSmsChatActivity;
 import com.peekaboo.presentation.dialogs.ConfirmSignUpDialog;
 import com.peekaboo.presentation.dialogs.RecordDialogFragment;
 import com.peekaboo.presentation.fragments.ContactsFragment;
+import com.peekaboo.presentation.fragments.CreateDialogFragment;
 import com.peekaboo.presentation.fragments.DialogsFragment;
 import com.peekaboo.presentation.fragments.MessangerTestFragment;
 import com.peekaboo.presentation.services.NotificationService;
@@ -59,4 +60,6 @@ public interface ApplicationComponent {
     void inject(ChatFragment chatFragment);
 
     void inject(RecordDialogFragment recordDialogFragment);
+
+    void inject(CreateDialogFragment createDialogFragment);
 }

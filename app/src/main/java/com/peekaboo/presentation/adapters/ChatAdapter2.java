@@ -3,6 +3,7 @@ package com.peekaboo.presentation.adapters;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Handler;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.util.Log;
@@ -98,6 +99,8 @@ public class ChatAdapter2 extends RecyclerView.Adapter<ChatAdapter2.ViewHolder> 
             }
         }
     };
+    @Nullable
+    private OnItemLongClickListener onItemLongClickListener;
 
     public ChatAdapter2(Context context, ChatPresenter2 presenter, RecyclerView recyclerView, Contact contact) {
         this.context = context;
@@ -145,7 +148,13 @@ public class ChatAdapter2 extends RecyclerView.Adapter<ChatAdapter2.ViewHolder> 
         PMessage pMessageAbs = getItem(position);
         int mediaType = pMessageAbs.mediaType();
         Log.wtf("mediaType : ", String.valueOf(mediaType));
-
+        final int finalPosition = position;
+        holder.itemView.setOnLongClickListener(view -> {
+            if (onItemLongClickListener != null) {
+                onItemLongClickListener.onLongClick(finalPosition);
+            }
+            return false;
+        });
         boolean nextMine;
         boolean prevMine;
 
@@ -211,6 +220,7 @@ public class ChatAdapter2 extends RecyclerView.Adapter<ChatAdapter2.ViewHolder> 
     @Override
     public void onViewRecycled(ViewHolder holder) {
         super.onViewRecycled(holder);
+        holder.itemView.setOnLongClickListener(null);
     }
 
     private void setAlignment(ViewHolder holder, boolean isMine, boolean wasPreviousMine, boolean isNextMine, int mediaType) {
@@ -333,6 +343,15 @@ public class ChatAdapter2 extends RecyclerView.Adapter<ChatAdapter2.ViewHolder> 
     public boolean onFailedToRecycleView(ViewHolder holder) {
         return true;
     }
+
+    public void setOnItemLongClickListener(@Nullable OnItemLongClickListener onItemLongClickListener) {
+        this.onItemLongClickListener = onItemLongClickListener;
+    }
+
+    public interface OnItemLongClickListener {
+        void onLongClick(int position);
+    }
+
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.tvChatTimestamp)

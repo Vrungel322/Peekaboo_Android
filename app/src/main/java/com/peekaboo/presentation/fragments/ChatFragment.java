@@ -31,7 +31,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.Toast;
 
-import com.peekaboo.BuildConfig;
 import com.peekaboo.R;
 import com.peekaboo.data.repositories.database.contacts.Contact;
 import com.peekaboo.data.repositories.database.messages.PMessage;
@@ -40,8 +39,6 @@ import com.peekaboo.presentation.PeekabooApplication;
 import com.peekaboo.presentation.activities.MainActivity;
 import com.peekaboo.presentation.adapters.ChatAdapter2;
 import com.peekaboo.presentation.app.view.PHorizontalScrollView;
-import com.peekaboo.presentation.listeners.ChatClickListener;
-import com.peekaboo.presentation.listeners.ChatRecyclerTouchListener;
 import com.peekaboo.presentation.presenters.ChatPresenter2;
 import com.peekaboo.presentation.services.INotifier;
 import com.peekaboo.presentation.services.Message;
@@ -156,43 +153,36 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
         adapter = new ChatAdapter2(getActivity(), presenter, rvMessages, companion);
         rvMessages.setAdapter(adapter);
         svItems.setOnTouchListener((view1, motionEvent) -> false);
-        rvMessages.addOnItemTouchListener(new ChatRecyclerTouchListener(getActivity(), rvMessages, new ChatClickListener() {
-            @Override
-            public void onClick(View view, int position) {
-            }
+        adapter.setOnItemLongClickListener((position) -> {
+            android.support.v4.app.FragmentTransaction ft = getActivity()
+                    .getSupportFragmentManager().beginTransaction();
+            chatItemDialog = new ChatItemDialog();
+            Bundle itemIndexBundle = new Bundle();
+            chatItemDialog.setChatItemEventListener(new ChatItemDialog.IChatItemEventListener() {
+                @Override
+                public void copyText(int index) {
+                    presenter.onCopyMessageTextClick((ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE),
+                             adapter.getItem(index));
+                }
 
-            @Override
-            public void onLongClick(View view, int position) {
-                android.support.v4.app.FragmentTransaction ft = ((AppCompatActivity)getActivity())
-                        .getSupportFragmentManager().beginTransaction();
-                chatItemDialog = new ChatItemDialog();
-                Bundle itemIndexBundle = new Bundle();
-                chatItemDialog.setChatItemEventListener(new ChatItemDialog.IChatItemEventListener() {
-                    @Override
-                    public void copyText(int index) {
-                        presenter.onCopyMessageTextClick((ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE),
-                                 adapter.getItem(index));
-                    }
+                @Override
+                public void deleteMess(int index) {
+                    presenter.onDeleteMessageClick(adapter.getItem(index));
+                    presenter.showUpdatedMessages(getCompanionId());
+                }
 
-                    @Override
-                    public void deleteMess(int index) {
-                        presenter.onDeleteMessageClick(adapter.getItem(index));
-                        presenter.showUpdatedMessages(getCompanionId());
-                    }
+                @Override
+                public void textToSpeech(int index) {
+                    presenter.onConvertTextToSpeechClick(adapter.getItem(index));
 
-                    @Override
-                    public void textToSpeech(int index) {
-                        presenter.onConvertTextToSpeechClick(adapter.getItem(index));
-
-                    }
-                });
-                itemIndexBundle.putInt(Constants.ARG_CHAT_MESSAGE_ITEM_INDEX, position);
-                chatItemDialog.setArguments(itemIndexBundle);
-                chatItemDialog.show(ft, Constants.FRAGMENT_TAGS.CHAT_ITEM_DIALOG_FRAGMENT_TAG);
+                }
+            });
+            itemIndexBundle.putInt(Constants.ARG_CHAT_MESSAGE_ITEM_INDEX, position);
+            chatItemDialog.setArguments(itemIndexBundle);
+            chatItemDialog.show(ft, Constants.FRAGMENT_TAGS.CHAT_ITEM_DIALOG_FRAGMENT_TAG);
 
 
-            }
-        }));
+        });
         presenter.bind(this);
         return view;
     }

@@ -14,44 +14,16 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MessageUtils {
-    public static Message createTextMessage(String message, String receiver, String from) {
-        return new Message(Message.Command.MESSAGE)
-                .addParam(Message.Params.DESTINATION, receiver)
-                .addParam(Message.Params.FROM, from)
-                .addParam(Message.Params.TYPE, Message.Type.TEXT)
-                .setTextBody(message);
-    }
 
-    public static Message createSwitchModeMessage(byte mode) {
+    public static final String SERVER = "server";
+
+    public static Message createSwitchModeMessage(byte mode, String from) {
         return new Message(Message.Command.SYSTEMMESSAGE)
                 .addParam(Message.Params.REASON, Message.Reason.MODE)
+                .addParam(Message.Params.DESTINATION, SERVER)
+                .addParam(Message.Params.FROM, from)
                 .setBody(new byte[]{mode});
     }
-
-    public static List<Message> createFileMessage(Message message, String filename, int partSize) {
-        List<Message> result = new ArrayList<>();
-        File file = new File(filename);
-        FileInputStream stream;
-        int fileLength = (int) file.length();
-
-        try {
-            stream = new FileInputStream(file);
-            while (stream.available() > 0) {
-                byte[] bytes = new byte[Math.min(stream.available(), partSize)];
-//                stream.read()
-                Log.e("available", String.valueOf(stream.available()));
-                stream.read(bytes);
-                result.add(copyMessage(message).setBody(bytes));
-            }
-            result.add(copyMessage(message).addParam(Message.Params.REASON, Message.Reason.END));
-            stream.close();
-        } catch (IOException e) {
-            Log.e("exception", String.valueOf(e));
-            result.clear();
-        }
-        return result;
-    }
-
 
     public static String createAudioBody(@Nullable String remote, @Nullable String local, boolean error) {
         String result = "";
@@ -67,19 +39,6 @@ public class MessageUtils {
         return result;
     }
 
-    private static Message copyMessage(Message message) {
-        return new Message(message.getCommand())
-                .setParams(message.getParams())
-                .setBody(message.getBody());
-    }
-
-    public static Message createTypeMessage(String receiver, String type, String body, String from) {
-        return new Message(Message.Command.MESSAGE)
-                .addParam(Message.Params.DESTINATION, receiver)
-                .addParam(Message.Params.TYPE, type)
-                .addParam(Message.Params.FROM, from)
-                .setBody(body.getBytes());
-    }
 
     public static Message convert(PMessage message) {
         Message result;
@@ -91,6 +50,8 @@ public class MessageUtils {
                 Message.Type.AUDIO : Message.Type.IMAGE;
         result.addParam(Message.Params.TYPE, type);
         result.addParam(Message.Params.DESTINATION, message.receiverId());
+        result.addParam(Message.Params.FROM, message.senderId());
+
         String s = message.messageBody();
         if (message.mediaType() != PMessage.PMESSAGE_MEDIA_TYPE.TEXT_MESSAGE) {
             s = s.split(PMessage.DIVIDER)[0];
@@ -101,7 +62,7 @@ public class MessageUtils {
     }
 
 
-    public static PMessage convert(String receiverId, Message message) {
+    public static PMessage convert(Message message) {
         int mediaType = 0;
         String messageMediaType = message.getParams().get(Message.Params.TYPE);
         if (messageMediaType != null) {
@@ -124,6 +85,7 @@ public class MessageUtils {
             body = messageMediaType.equals(Message.Type.TEXT) ? message.getTextBody() : new String(bodyBytes);
         }
         String senderId = message.getParams().get(Message.Params.FROM);
+        String receiverId = message.getParams().get(Message.Params.DESTINATION);
 
         return new PMessage(
                 false,
