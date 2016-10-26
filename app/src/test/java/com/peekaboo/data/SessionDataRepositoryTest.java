@@ -1,5 +1,6 @@
 package com.peekaboo.data;
 
+import android.content.ContentResolver;
 import android.support.annotation.NonNull;
 
 import com.peekaboo.data.mappers.AbstractMapperFactory;
@@ -56,6 +57,8 @@ public class SessionDataRepositoryTest {
     @Mock
     PMessageHelper messageHelper;
     private SessionDataRepository sessionDataRepository;
+    @Mock
+    ContentResolver contentResolver;
 
     @Before
     public void setUp() {
@@ -126,7 +129,7 @@ public class SessionDataRepositoryTest {
         TokenEntity value = new TokenEntity(null, ID, 0, USERNAME);
         when(restApi.signUp(any(CredentialsSignUp.class))).thenReturn(Observable.just(value));
         TestSubscriber<AccountUser> subscriber = new TestSubscriber<>();
-        sessionDataRepository.signUp("username", "login", "password").subscribe(subscriber);
+        sessionDataRepository.signUp("123", "username", "login", "password").subscribe(subscriber);
         subscriber.awaitTerminalEvent();
 
         assertThat(subscriber.getOnNextEvents().size(), is(1));
@@ -143,7 +146,7 @@ public class SessionDataRepositoryTest {
                     subscriber.onError(new RuntimeException("Not Great"));
                 }));
         TestSubscriber<AccountUser> subscriber = new TestSubscriber<>();
-        sessionDataRepository.signUp("username", "login", "password").subscribe(subscriber);
+        sessionDataRepository.signUp("123", "username", "login", "password").subscribe(subscriber);
         subscriber.awaitTerminalEvent();
 
         assertThat(subscriber.getOnErrorEvents().size(), is(1));

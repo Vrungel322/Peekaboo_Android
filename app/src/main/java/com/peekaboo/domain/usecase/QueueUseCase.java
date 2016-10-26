@@ -45,12 +45,18 @@ public abstract class QueueUseCase<K, V> {
                 while (!queue.isEmpty()) {
                     try {
                         K take = queue.take();
-                        V value = getValue(take, fileType);
-                        if (value != null) {
-                            subscriber.onNext(new Pair<>(take, value));
+                        try {
+                            V value = getValue(take, fileType);
+                            if (take != null) {
+                                subscriber.onNext(new Pair<>(take, value));
+                            }
+                        } catch (Exception e) {
+                            if (take != null) {
+                                subscriber.onNext(new Pair<K, V>(take, null));
+                            }
                         }
-                    } catch (Exception e) {
-                        subscriber.onError(e);
+                    } catch (Exception ignored) {
+
                     }
                 }
                 subscriber.onCompleted();

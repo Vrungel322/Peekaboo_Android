@@ -32,7 +32,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import rx.functions.Action1;
-import timber.log.Timber;
+//import timber.log.Timber;
 
 /**
  * Created by st1ch on 23.07.2016.
@@ -148,7 +148,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     break;
                 case PMessageAbs.PMESSAGE_MEDIA_TYPE.IMAGE_MESSAGE:
                     String image = pMessageAbs.messageBody();
-                    Timber.tag("IMAGE").wtf("image uri: " + image);
+//                    Timber.tag("IMAGE").wtf("image uri: " + image);
                     setImageMessage((ViewHolderImage) holder, image);
                     Log.i("IMAGE", Integer.toString(mediaType));
                     break;

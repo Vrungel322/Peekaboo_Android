@@ -4,6 +4,7 @@ import android.animation.Animator;
 import android.app.Activity;
 import android.content.ClipboardManager;
 import android.content.Context;
+import android.os.Build;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -44,8 +45,6 @@ import com.peekaboo.presentation.activities.MainActivity;
 import com.peekaboo.presentation.activities.MapActivity;
 import com.peekaboo.presentation.adapters.ChatAdapter2;
 import com.peekaboo.presentation.app.view.PHorizontalScrollView;
-import com.peekaboo.presentation.listeners.ChatClickListener;
-import com.peekaboo.presentation.listeners.ChatRecyclerTouchListener;
 import com.peekaboo.presentation.presenters.ChatPresenter2;
 import com.peekaboo.presentation.services.INotifier;
 import com.peekaboo.presentation.services.Message;
@@ -174,53 +173,63 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
         adapter = new ChatAdapter2(getActivity(), presenter, rvMessages, companion);
         rvMessages.setAdapter(adapter);
         svItems.setOnTouchListener((view1, motionEvent) -> false);
-        rvMessages.addOnItemTouchListener(new ChatRecyclerTouchListener(getActivity(), rvMessages, new ChatClickListener() {
-            @Override
-            public void onClick(View view, int position) {
-                if (adapter.getItemViewType(position) == PMessageAbs.PMESSAGE_MEDIA_TYPE.IMAGE_MESSAGE) {
-                    PreviewImageFragment previewImageFragment = new PreviewImageFragment();
-                    Bundle bundle = new Bundle();
-                    bundle.putString(Constants.FILEPATH_OF_IMAGE_TO_PREVIEW,
-                             ResourcesUtils.splitImagePath(adapter.getItem(position).messageBody(), 2));
-                    previewImageFragment.setArguments(bundle);
-//                    activityNavigator.startPreviewImageFragment((AppCompatActivity)getActivity(),
-//                            previewImageFragment, true, Constants.FRAGMENT_TAGS.PREVIEW_IMAGE_FRAGMENT);
-                    previewImageFragment.show(getFragmentManager(), Constants.FRAGMENT_TAGS.PREVIEW_IMAGE_FRAGMENT);
+        adapter.setOnItemLongClickListener((position) -> {
+            android.support.v4.app.FragmentTransaction ft = getActivity()
+                    .getSupportFragmentManager().beginTransaction();
+            chatItemDialog = new ChatItemDialog();
+            Bundle itemIndexBundle = new Bundle();
+            chatItemDialog.setChatItemEventListener(new ChatItemDialog.IChatItemEventListener() {
+                @Override
+                public void copyText(int index) {
+                    presenter.onCopyMessageTextClick((ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE),
+                             adapter.getItem(index));
                 }
-            }
 
-            @Override
-            public void onLongClick(View view, int position) {
-                android.support.v4.app.FragmentTransaction ft = ((AppCompatActivity) getActivity())
-                        .getSupportFragmentManager().beginTransaction();
-                chatItemDialog = new ChatItemDialog();
-                Bundle itemIndexBundle = new Bundle();
-                chatItemDialog.setChatItemEventListener(new ChatItemDialog.IChatItemEventListener() {
-                    @Override
-                    public void copyText(int index) {
-                        presenter.onCopyMessageTextClick((ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE),
-                                adapter.getItem(index));
-                    }
+//        rvMessages.addOnItemTouchListener(new ChatRecyclerTouchListener(getActivity(), rvMessages, new ChatClickListener() {
+//            @Override
+//            public void onClick(View view, int position) {
+//                if (adapter.getItemViewType(position) == PMessageAbs.PMESSAGE_MEDIA_TYPE.IMAGE_MESSAGE) {
+//                    PreviewImageFragment previewImageFragment = new PreviewImageFragment();
+//                    Bundle bundle = new Bundle();
+//                    bundle.putString(Constants.FILEPATH_OF_IMAGE_TO_PREVIEW,
+//                             ResourcesUtils.splitImagePath(adapter.getItem(position).messageBody(), 2));
+//                    previewImageFragment.setArguments(bundle);
+//                    previewImageFragment.show(getFragmentManager(), Constants.FRAGMENT_TAGS.PREVIEW_IMAGE_FRAGMENT);
+//                }
+//            }
 
-                    @Override
-                    public void deleteMess(int index) {
-                        presenter.onDeleteMessageClick(adapter.getItem(index));
-                        presenter.showUpdatedMessages(getCompanionId());
-                    }
+//            @Override
+//            public void onLongClick(View view, int position) {
+//                android.support.v4.app.FragmentTransaction ft = ((AppCompatActivity) getActivity())
+//                        .getSupportFragmentManager().beginTransaction();
+//                chatItemDialog = new ChatItemDialog();
+//                Bundle itemIndexBundle = new Bundle();
+//                chatItemDialog.setChatItemEventListener(new ChatItemDialog.IChatItemEventListener() {
+//                    @Override
+//                    public void copyText(int index) {
+//                        presenter.onCopyMessageTextClick((ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE),
+//                                adapter.getItem(index));
+//                    }
+//>>>>>>> development
 
-                    @Override
-                    public void textToSpeech(int index) {
-                        presenter.onConvertTextToSpeechClick(adapter.getItem(index));
+                @Override
+                public void deleteMess(int index) {
+                    presenter.onDeleteMessageClick(adapter.getItem(index));
+                    presenter.showUpdatedMessages(getCompanionId());
+                }
 
-                    }
-                });
-                itemIndexBundle.putInt(Constants.ARG_CHAT_MESSAGE_ITEM_INDEX, position);
-                chatItemDialog.setArguments(itemIndexBundle);
-                chatItemDialog.show(ft, Constants.FRAGMENT_TAGS.CHAT_ITEM_DIALOG_FRAGMENT_TAG);
+                @Override
+                public void textToSpeech(int index) {
+                    presenter.onConvertTextToSpeechClick(adapter.getItem(index));
+
+                }
+            });
+            itemIndexBundle.putInt(Constants.ARG_CHAT_MESSAGE_ITEM_INDEX, position);
+            chatItemDialog.setArguments(itemIndexBundle);
+            chatItemDialog.show(ft, Constants.FRAGMENT_TAGS.CHAT_ITEM_DIALOG_FRAGMENT_TAG);
 
 
-            }
-        }));
+        });
         presenter.bind(this);
         return view;
     }
@@ -260,21 +269,24 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
     @OnClick(R.id.bMessageOpen)
     void onbMessageOpenClick() {
         rflMessageBody.setVisibility(View.VISIBLE);
-        etMessageBody.post(() -> {
-            float cx, cy;
-            cx = (bMessageOpen.getX() + bMessageOpen.getWidth()) / 2;
-            cy = (bMessageOpen.getY() + bMessageOpen.getHeight()) / 2;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
 
-            float dx = Math.max(cx, llMessageBody.getWidth() - cx);
-            float dy = Math.max(cy, llMessageBody.getHeight() - cy);
-            float finalRadius = (float) Math.hypot(dx, dy);
+            etMessageBody.post(() -> {
+                float cx, cy;
+                cx = (bMessageOpen.getX() + bMessageOpen.getWidth()) / 2;
+                cy = (bMessageOpen.getY() + bMessageOpen.getHeight()) / 2;
 
-            Animator animator =
-                    ViewAnimationUtils.createCircularReveal(llMessageBody, (int) cx, (int) cy, 0, finalRadius);
-            animator.setInterpolator(new AccelerateDecelerateInterpolator());
-            animator.setDuration(300);
-            animator.start();
-        });
+                float dx = Math.max(cx, llMessageBody.getWidth() - cx);
+                float dy = Math.max(cy, llMessageBody.getHeight() - cy);
+                float finalRadius = (float) Math.hypot(dx, dy);
+
+                Animator animator =
+                        ViewAnimationUtils.createCircularReveal(llMessageBody, (int) cx, (int) cy, 0, finalRadius);
+                animator.setInterpolator(new AccelerateDecelerateInterpolator());
+                animator.setDuration(300);
+                animator.start();
+            });
+        }
 
         bMessageOpen.setVisibility(View.GONE);
         bSendMessage.setVisibility(View.VISIBLE);

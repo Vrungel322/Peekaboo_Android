@@ -74,25 +74,25 @@ public class UserModeChangerUseCase {
     }
 
     public void setTextMode() {
-        Message switchModeMessage = MessageUtils.createSwitchModeMessage(IUserMode.TEXT_MODE);
+        Message switchModeMessage = MessageUtils.createSwitchModeMessage(IUserMode.TEXT_MODE, user.getId());
         messageINotifier.sendMessage(switchModeMessage);
         user.saveMode(IUserMode.TEXT_MODE);
     }
 
     public void setAudioMode() {
-        Message switchModeMessage = MessageUtils.createSwitchModeMessage(IUserMode.AUDIO_MODE);
+        Message switchModeMessage = MessageUtils.createSwitchModeMessage(IUserMode.AUDIO_MODE, user.getId());
         messageINotifier.sendMessage(switchModeMessage);
         user.saveMode(IUserMode.AUDIO_MODE);
     }
 
     public void setVideoMode() {
-        Message switchModeMessage = MessageUtils.createSwitchModeMessage(IUserMode.VIDEO_MODE);
+        Message switchModeMessage = MessageUtils.createSwitchModeMessage(IUserMode.VIDEO_MODE, user.getId());
         messageINotifier.sendMessage(switchModeMessage);
         user.saveMode(IUserMode.VIDEO_MODE);
     }
 
     public void setAllMode() {
-        Message switchModeMessage = MessageUtils.createSwitchModeMessage(IUserMode.ALL_MODE);
+        Message switchModeMessage = MessageUtils.createSwitchModeMessage(IUserMode.ALL_MODE, user.getId());
         messageINotifier.sendMessage(switchModeMessage);
         user.saveMode(IUserMode.ALL_MODE);
     }
