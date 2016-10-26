@@ -94,7 +94,7 @@ public class HotFriendsAdapter extends BaseAdapter {
         showUnreadMesCount(mViewHolder, currentListData);
 
         convertView.setOnClickListener(v ->
-                navigator.startChatActivity(activity, currentListData.getContact(), false));
+                navigator.startChatFragment(activity, currentListData.getContact(), true));
         return convertView;
     }
 

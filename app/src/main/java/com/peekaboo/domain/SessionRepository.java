@@ -50,9 +50,15 @@ public interface SessionRepository {
 
     Observable<List<Sms>> getContactSmsList(String phoneNumber);
 
+    Observable<Sms> getContactLastSms(String phoneNumber);
+
     Observable<List<SmsDialog>> getSmsDialogsList();
 
+    Observable<SmsDialog> getSmsDialogs();
+
     Observable<Integer> getSmsContactUnreadMessagesCount(String phoneNumber);
+
+    Observable<PhoneContactPOJO> getPhoneContacts();
 
     Observable<List<PhoneContactPOJO>> getPhoneContactList();
 }

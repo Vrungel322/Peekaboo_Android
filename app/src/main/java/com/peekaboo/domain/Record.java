@@ -14,7 +14,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 
-import timber.log.Timber;
+//import timber.log.Timber;
 
 /**
  * Created by st1ch on 29.07.2016.
@@ -156,7 +156,7 @@ public class Record {
             totalAudioLen = in.getChannel().size();
             totalDataLen = totalAudioLen + 36;
 
-            Timber.tag("AUDIO_RECORDER").v("File size: " + totalDataLen);
+//            Timber.tag("AUDIO_RECORDER").v("File size: " + totalDataLen);
 
             WriteWaveFileHeader(out, totalAudioLen, totalDataLen,
                     longSampleRate, channels, byteRate);

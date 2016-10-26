@@ -25,6 +25,7 @@ android {
 
         renderscriptTargetApi 18
         renderscriptSupportModeEnabled true
+//        multiDexEnabled true
 
     }
     buildTypes {
@@ -99,8 +100,8 @@ dependencies {
     compile 'com.squareup.okhttp3:logging-interceptor:3.3.1'
     compile 'com.vk:androidsdk:+'
     compile 'com.github.paolorotolo:appintro:4.0.0'
-    compile 'com.fasterxml.jackson.core:jackson-databind:2.4.3'
-    compile 'io.jsonwebtoken:jjwt:0.6.0'
+//    compile 'com.fasterxml.jackson.core:jackson-databind:2.4.3'
+//    compile 'io.jsonwebtoken:jjwt:0.6.0'
     compile 'com.squareup:otto:1.3.8'
     compile 'com.neovisionaries:nv-websocket-client:1.28'
     compile 'com.github.glomadrian:CodeInput:1.1@aar'
@@ -109,14 +110,16 @@ dependencies {
     compile 'com.android.support:support-v4:23.4.0'
     compile 'com.android.support:recyclerview-v7:23.4.0'
 //    compile 'com.squareup.sqlbrite:sqlbrite:0.7.0'
-    compile 'com.jakewharton.timber:timber:4.1.2'
+//    compile 'com.jakewharton.timber:timber:4.1.2'
 
-    compile 'com.squareup.picasso:picasso:2.5.2'
+//    compile 'com.squareup.picasso:picasso:2.5.2'
 
     compile 'com.daimajia.swipelayout:library:1.2.0@aar'
     compile 'com.daimajia.androidanimations:library:1.1.2@aar'
-    compile 'com.nineoldandroids:library:2.4.0'
-    compile 'com.github.markushi:circlebutton:1.1'
+//    compile 'com.nineoldandroids:library:2.4.0'
+//    compile 'com.github.markushi:circlebutton:1.1'
+
+    compile 'com.google.android.gms:play-services-maps:9.4.0'
 
     compile "com.google.auto.value:auto-value:1.2"
     compile('com.github.ozodrukh:CircularReveal:2.0.1@aar') {
@@ -127,9 +130,9 @@ dependencies {
     //slider lib
     compile 'com.github.lawloretienne:discreteslider:0.0.6'
 
-    compile 'org.mockito:mockito-all:1.10.8'
+//    compile 'org.mockito:mockito-all:1.10.8'
 
-    compile 'com.squareup.okhttp3:okhttp:3.2.0'
+//    compile 'com.squareup.okhttp3:okhttp:3.2.0'
     compile 'com.squareup.picasso:picasso:2.5.2'
     compile 'com.jakewharton.picasso:picasso2-okhttp3-downloader:1.0.2'
     compile 'com.rm:rmswitch:1.1.1'

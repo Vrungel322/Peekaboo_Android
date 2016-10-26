@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/ChatActivityBackgroundTheme"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/sms_messages_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:cacheColorHint="@android:color/transparent"
+        android:clipToPadding="false"
+        android:divider="@null"
+        android:listSelector="@android:color/transparent"
+        android:overScrollMode="ifContentScrolls"
+        android:padding="@dimen/items_margin"
+        android:paddingBottom="4dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:scrollbars="none"
+        android:layout_above="@+id/send_containter"
+        android:layout_alignParentTop="true"
+        />
+
+    <LinearLayout
+        android:id="@+id/send_containter"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorPrimary"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:layout_alignParentBottom="true"
+        >
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="4dp"
+            android:background="@drawable/bot_bar_gradient" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingLeft="8dp"
+            android:paddingTop="8dp"
+            android:weightSum="10">
+
+            <LinearLayout
+                android:id="@+id/llMessageBody"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/round_left_bubble"
+                android:orientation="horizontal">
+
+                <com.peekaboo.presentation.app.view.SmartWidthEditText
+                    android:id="@+id/message_body_edit_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="2dp"
+                    android:background="@null"
+                    android:ellipsize="end"
+
+                    android:focusable="true"
+                    android:focusableInTouchMode="true"
+                    android:maxLines="2"
+                    android:paddingBottom="@dimen/edit_text_tb_padding"
+                    android:paddingLeft="@dimen/edit_text_side_padding"
+                    android:paddingRight="@dimen/edit_text_side_padding"
+                    android:paddingTop="@dimen/edit_text_tb_padding"
+                    android:textColor="#000"
+                    android:textCursorDrawable="@drawable/color_cursor" />
+
+
+            </LinearLayout>
+
+            <ImageButton
+                android:id="@+id/send_message_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/chat_buttons_margin"
+                android:layout_marginRight="@dimen/chat_buttons_margin"
+                android:background="@drawable/plane"
+                android:foregroundGravity="center_vertical" />
+
+        </LinearLayout>
+    </LinearLayout>
+
+</RelativeLayout>

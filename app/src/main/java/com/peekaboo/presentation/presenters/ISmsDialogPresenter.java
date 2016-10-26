@@ -5,4 +5,11 @@ package com.peekaboo.presentation.presenters;
  */
 
 public interface ISmsDialogPresenter {
+    void onCreate();
+    void onResume(boolean isFirstLaunch);
+    void onPause();
+    void onDestroy();
+    void loadDialogsList();
+
+    void loadDialogs();
 }

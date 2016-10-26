@@ -1,5 +1,8 @@
 package com.peekaboo.presentation.fragments;
 
+import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
@@ -20,6 +23,8 @@ import android.widget.Toast;
 import com.peekaboo.R;
 import com.peekaboo.data.repositories.database.contacts.Contact;
 import com.peekaboo.presentation.PeekabooApplication;
+import com.peekaboo.presentation.activities.MainActivity;
+import com.peekaboo.presentation.activities.MapActivity;
 import com.peekaboo.presentation.adapters.ContactLargeAdapter;
 import com.peekaboo.presentation.pojo.PhoneContactPOJO;
 import com.peekaboo.presentation.presenters.ContactPresenter;
@@ -89,8 +94,16 @@ public class ContactsFragment extends Fragment implements IContactsView {
 
         ButterKnife.bind(this, rootView);
 
-        FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.fab);
-        fab.setOnClickListener(v -> Toast.makeText(getActivity(), "ADD", Toast.LENGTH_LONG).show());
+//        FloatingActionButton fab = (FloatingActionButton) rootView.findViewById(R.id.fab);
+//        fab.setOnClickListener(v -> {
+//            test google maps
+//                String geoUriString = "geo:50.2716,30.3125?z=15";
+//                Uri geoUri = Uri.parse(geoUriString);
+//                Intent mapIntent = new Intent(Intent.ACTION_VIEW, geoUri);
+//                startActivity(mapIntent);
+//            Intent lolintent = new Intent(getActivity(), MapActivity.class);
+//            startActivity(lolintent);
+//        });
         setUpRecyclerView();
 
         contactPresenter.bind(this);

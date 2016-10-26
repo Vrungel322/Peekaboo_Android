@@ -7,8 +7,6 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.peekaboo.data.mappers.AbstractMapperFactory;
-import com.peekaboo.data.mappers.Mapper;
-import com.peekaboo.data.repositories.database.contacts.Contact;
 import com.peekaboo.data.repositories.database.contacts.PContactHelper;
 import com.peekaboo.data.repositories.database.service.DBHelper;
 import com.peekaboo.data.repositories.database.utils_db.Db;
@@ -19,7 +17,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import rx.Observable;
-import rx.functions.Func1;
 
 /**
  * Created by st1ch on 23.07.2016.
@@ -27,18 +24,19 @@ import rx.functions.Func1;
 public class PMessageHelper {
 
     private static final String PREFIX = "c";
-    private final Mapper<PMessageAbs, ContentValues> pMessageMapper;
     private DBHelper helper;
     private PContactHelper contactHelper;
+    private AbstractMapperFactory mapperFactory;
     private SubscribeOn subscribeOn;
     private ObserveOn observeOn;
 
-    public PMessageHelper(DBHelper helper, PContactHelper contactHelper, SubscribeOn subscribeOn, ObserveOn observeOn, AbstractMapperFactory factory) {
+    public PMessageHelper(DBHelper helper, PContactHelper contactHelper, SubscribeOn subscribeOn,
+                          ObserveOn observeOn, AbstractMapperFactory factory) {
         this.helper = helper;
         this.contactHelper = contactHelper;
         this.subscribeOn = subscribeOn;
         this.observeOn = observeOn;
-        pMessageMapper = factory.getPMessageMapper();
+        this.mapperFactory = factory;
     }
 
     public void createTable(String tableName) {
@@ -76,8 +74,10 @@ public class PMessageHelper {
         SQLiteDatabase db = helper.getWritableDatabase();
         Cursor cursor = db.rawQuery(selectLast, null);
         PMessage message = null;
-        if (cursor.moveToNext()) {
-            message = fetchPMessage(cursor);
+        if (cursor != null) {
+            if (cursor.moveToFirst()) {
+                message = fetchPMessage(cursor);
+            }
             cursor.close();
         }
 
@@ -132,7 +132,7 @@ public class PMessageHelper {
     public void insert(String tableName, PMessage message) {
         SQLiteDatabase db = helper.getWritableDatabase();
         tableName = PREFIX + tableName;
-        message.setId(db.insert(tableName, null, pMessageMapper.transform(message)));
+        message.setId(db.insert(tableName, null, mapperFactory.getPMessageMapper().transform(message)));
         Log.e("helper", "saveMessageToDb " + message);
     }
 
@@ -192,15 +192,17 @@ public class PMessageHelper {
         });
     }
 
-    private Observable<Integer> selectCount(String query){
+    private Observable<Integer> selectCount(String query) {
         Log.e("helper", query);
         return Observable.create(subscriber -> {
             SQLiteDatabase db = helper.getWritableDatabase();
             Cursor cursor = db.rawQuery(query, null);
             Integer count = 0;
 
-            if (cursor != null && cursor.moveToFirst()) {
-                count = cursor.getInt(0);
+            if (cursor != null) {
+                if (cursor.moveToFirst()) {
+                    count = cursor.getInt(0);
+                }
                 cursor.close();
             }
 

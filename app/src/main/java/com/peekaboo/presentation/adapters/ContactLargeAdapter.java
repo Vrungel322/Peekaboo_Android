@@ -2,7 +2,6 @@ package com.peekaboo.presentation.adapters;
 
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -81,7 +80,7 @@ public final class ContactLargeAdapter extends RecyclerView.Adapter<ContactLarge
         }
 
         holder.itemView.setOnClickListener(v -> {
-            navigator.startChatActivity(activity, contact, true);
+            navigator.startChatFragment(activity, contact, true);
         });
 
     }

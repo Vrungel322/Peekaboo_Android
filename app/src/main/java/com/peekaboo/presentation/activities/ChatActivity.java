@@ -49,6 +49,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.OnFocusChange;
+import butterknife.OnTextChanged;
 import butterknife.OnTouch;
 import io.codetail.animation.ViewAnimationUtils;
 import io.codetail.widget.RevealFrameLayout;
@@ -78,6 +79,10 @@ public class ChatActivity extends AppCompatActivity
     LinearLayout llItems;
     @BindView(R.id.micro_btn)
     ImageButton bRecord;
+////////
+    @BindView(R.id.navigation_btn)
+    ImageButton bNavigation;
+////////
     @BindView(R.id.micro_anim)
     ImageView microAnim;
     @BindView(R.id.rflButtonRecord)
@@ -204,6 +209,17 @@ public class ChatActivity extends AppCompatActivity
         takeGalleryImage();
     }
 
+    @OnClick(R.id.navigation_btn)
+    void onNavigationButtonClick(){
+        takeNavigation();
+//        Toast.makeText(this, "LoL", Toast.LENGTH_SHORT).show();
+//        Uri gmmIntentUri = Uri.parse("geo:37.7749,-122.4194?z=20");
+//        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+//        mapIntent.setPackage("com.google.android.apps.maps");
+//        startActivity(mapIntent);
+//        bNavigation.setVisibility(View.GONE);
+        }
+
 //    @OnClick(R.id.micro_btn)
 //    void onRecordButtonClick() {
 ////        Log.wtf("onRecordButtonClick", "VISIBBLE");
@@ -219,6 +235,8 @@ public class ChatActivity extends AppCompatActivity
     boolean onRecordButtonTouch(MotionEvent mv){
         int[] button_coordinates = new int[2];
         bRecord.getLocationOnScreen(button_coordinates);
+        Toast.makeText(this, "LoL", Toast.LENGTH_SHORT).show();
+
 
         float cx, cy;
         cx = (float)button_coordinates[0] + bRecord.getWidth() / 2;
@@ -311,6 +329,13 @@ public class ChatActivity extends AppCompatActivity
                 Constants.REQUEST_CODES.REQUEST_CODE_GALERY);
     }
 
+    public void takeNavigation(){
+        Uri gmmIntentUri = Uri.parse("geo:37.7749,-122.4194?z=20");
+        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+        mapIntent.setPackage("com.google.android.apps.maps");
+        startActivity(mapIntent);
+    }
+
     public void takePhoto() {
         Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
@@ -389,6 +414,8 @@ public class ChatActivity extends AppCompatActivity
     @Override
     public void deleteMess(int index) {
         chatPresenter.onDeleteMessageClick((PMessageAbs) chatAdapter.getItem(index));
+        Toast.makeText(this, "LoL", Toast.LENGTH_SHORT).show();
+
     }
 
     @Override

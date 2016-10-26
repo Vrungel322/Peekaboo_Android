@@ -1,19 +1,18 @@
 package com.peekaboo.presentation.presenters;
 
 import android.telephony.SmsMessage;
-import android.util.Log;
 
 import com.peekaboo.domain.Sms;
-import com.peekaboo.domain.SmsDialog;
 import com.peekaboo.domain.UserMessageMapper;
 import com.peekaboo.domain.subscribers.BaseProgressSubscriber;
-import com.peekaboo.domain.usecase.GetAllSmsUseCase;
 import com.peekaboo.domain.usecase.GetContactSmsUseCase;
-import com.peekaboo.domain.usecase.GetSmsDialogsListUseCase;
+import com.peekaboo.domain.usecase.GetLastSmsUseCase;
+import com.peekaboo.presentation.comparators.SmsComparator;
 import com.peekaboo.presentation.services.ISmsManager;
 import com.peekaboo.presentation.services.SmsReceiver;
 import com.peekaboo.presentation.views.ISmsChatView;
 
+import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -27,47 +26,55 @@ public class SmsChatPresenter extends ProgressPresenter<ISmsChatView> implements
 
     private final ISmsManager smsManager;
     private String receiverPhone;
-    private GetAllSmsUseCase getAllSmsUseCase;
     private GetContactSmsUseCase getContactSmsUseCase;
-    private GetSmsDialogsListUseCase getSmsDialogsListUseCase;
+    private GetLastSmsUseCase getLastSmsUseCase;
 
     @Inject
-    public SmsChatPresenter(UserMessageMapper errorHandler, ISmsManager smsManager,
-                            GetAllSmsUseCase getAllSmsUseCase,
-                            GetContactSmsUseCase getContactSmsUseCase,
-                            GetSmsDialogsListUseCase getSmsDialogsListUseCase) {
+    SmsChatPresenter(UserMessageMapper errorHandler, ISmsManager smsManager,
+                     GetContactSmsUseCase getContactSmsUseCase,
+                     GetLastSmsUseCase getLastSmsUseCase) {
         super(errorHandler);
         this.smsManager = smsManager;
-        this.getAllSmsUseCase = getAllSmsUseCase;
         this.getContactSmsUseCase = getContactSmsUseCase;
-        this.getSmsDialogsListUseCase = getSmsDialogsListUseCase;
+        this.getLastSmsUseCase = getLastSmsUseCase;
     }
 
     @Override
-    public void onResume(String receiverPhone) {
-        SmsReceiver.addListener(this);
+    public void onCreate(String receiverPhone) {
         this.receiverPhone = receiverPhone;
+        getContactSmsUseCase.setPhoneNumber(receiverPhone);
+        getLastSmsUseCase.setPhoneNumber(receiverPhone);
+    }
+
+    @Override
+    public void onResume() {
+        SmsReceiver.addListener(this);
         getAllContactsMessageList();
-        getDialogsList();
+    }
+
+    @Override
+    public void onPause() {
+        SmsReceiver.removeListener(this);
     }
 
     @Override
     public void onDestroy() {
-        SmsReceiver.removeListener(this);
-        getAllSmsUseCase.unsubscribe();
         getContactSmsUseCase.unsubscribe();
-        getSmsDialogsListUseCase.unsubscribe();
+        getLastSmsUseCase.unsubscribe();
         unbind();
     }
 
     @Override
     public void sendMessage(String message) {
-        smsManager.sendMessage(message, receiverPhone);
+        ISmsChatView view = getView();
+        if (!message.isEmpty() && view != null) {
+            smsManager.sendMessage(message, receiverPhone);
+            view.clearTextField();
+        }
     }
 
     @Override
     public void getAllContactsMessageList() {
-        getContactSmsUseCase.setPhoneNumber(receiverPhone);
         getContactSmsUseCase.execute(getContactsMessagesSubscriber());
     }
 
@@ -77,58 +84,41 @@ public class SmsChatPresenter extends ProgressPresenter<ISmsChatView> implements
             public void onNext(List<Sms> response) {
                 super.onNext(response);
 
-                for(Sms sms: response){
-                    String body = sms.getBody();
-                    String phone = sms.getAddress();
-                    int type = sms.getType();
-
-                    ISmsChatView view = getView();
-                    if(view != null){
-                        view.showMessage(body, phone);
-                    }
-//                    Log.wtf("SmsChatPresenter Contact", "Phone: " + phone +
-//                            " ;Body: " + body +
-//                            " ;Type: " + type);
-
+                ISmsChatView view = getView();
+                if (view != null) {
+                    Collections.sort(response, new SmsComparator());
+                    view.showMessages(response);
                 }
-            }
-        };
-    }
 
-    private void getDialogsList(){
-        getSmsDialogsListUseCase.execute(getSmsDialogSubscriber());
-    }
-
-    private BaseProgressSubscriber<List<SmsDialog>> getSmsDialogSubscriber(){
-        return new BaseProgressSubscriber<List<SmsDialog>>(this){
-            @Override
-            public void onNext(List<SmsDialog> response) {
-                super.onNext(response);
-
-                for(SmsDialog dialog : response){
-                    String contactName = dialog.getContact().getName();
-                    String phoneNumber = dialog.getContact().getPhone();
-                    String lastMessage = dialog.getLastMessage().getBody();
-                    int unread = dialog.getUnreadMessagesCount();
-
-                    Log.wtf("SmsChatPresenter DIALOG: ", "name: " + contactName
-                    + " ; number: " + phoneNumber + " ; message: " + lastMessage + " ; unread: " + unread);
-                }
             }
         };
     }
 
     @Override
     public void onMessageReceived(SmsMessage message) {
-//        String text = message.getMessageBody();
-//        String sender = message.getOriginatingAddress();
-//
-//        ISmsChatView view = getView();
-//        if(view != null){
-//            view.showMessage(text, sender);
-//            view.showToastMessage("phone: " + sender + " : " + text);
-//        }
+        String phone = message.getOriginatingAddress();
+        if (phone.equals(receiverPhone)) {
+            getLastSmsUseCase.execute(getLastSmsSubscriber());
+        }
+    }
 
+    @Override
+    public void onMessageSent() {
+        getLastSmsUseCase.execute(getLastSmsSubscriber());
+    }
+
+    private BaseProgressSubscriber<Sms> getLastSmsSubscriber() {
+        return new BaseProgressSubscriber<Sms>(this) {
+            @Override
+            public void onNext(Sms response) {
+                super.onNext(response);
+
+                ISmsChatView view = getView();
+                if (view != null) {
+                    view.appendMessage(response);
+                }
+            }
+        };
     }
 
 }
