@@ -28,8 +28,9 @@ public class DbModule {
 
     @Provides
     @Singleton
-    public PContactHelper provideContactHelper(DBHelper helper, SubscribeOn subscribeOn, ObserveOn observeOn) {
-        return new PContactHelper(helper, subscribeOn, observeOn);
+    public PContactHelper provideContactHelper(DBHelper helper, SubscribeOn subscribeOn, ObserveOn observeOn,
+                                               AbstractMapperFactory mapper) {
+        return new PContactHelper(helper, subscribeOn, observeOn, mapper);
     }
 
 

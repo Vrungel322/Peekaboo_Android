@@ -219,8 +219,10 @@ public class SessionDataRepository implements SessionRepository {
             Cursor messages = contentResolver.query(Uri.parse("content://sms/"), null, where, null, null);
             Sms sms = null;
             if (messages != null) {
-                messages.moveToFirst();
-                sms = abstractMapperFactory.getSmsMapper().transform(messages);
+                if (messages.getCount() > 0) {
+                    messages.moveToFirst();
+                    sms = abstractMapperFactory.getSmsMapper().transform(messages);
+                }
                 messages.close();
             }
             subscriber.onNext(sms);
@@ -234,9 +236,8 @@ public class SessionDataRepository implements SessionRepository {
                 .flatMap(Observable::from)
                 .flatMap(phoneContactPOJO -> {
                     String phoneNumber = phoneContactPOJO.getPhone();
-                    List<Sms> smsList = getContactSmsList(phoneNumber).toBlocking().first();
-                    if (smsList != null && smsList.size() > 0) {
-                        Sms lastSms = smsList.get(0);
+                    Sms lastSms = getContactLastSms(phoneNumber).toBlocking().first();
+                    if (lastSms != null) {
                         int unreadMessagesCount = getSmsContactUnreadMessagesCount(phoneNumber).toBlocking().first();
                         return Observable.just(new SmsDialog(phoneContactPOJO, lastSms, unreadMessagesCount));
                     }
@@ -246,21 +247,62 @@ public class SessionDataRepository implements SessionRepository {
                 })
                 .filter(smsDialog -> smsDialog != null)
                 .toList();
+
+    }
+
+    @Override
+    public Observable<SmsDialog> getSmsDialogs() {
+        return getPhoneContacts()
+                .flatMap(phoneContactPOJO -> {
+                    String phoneNumber = phoneContactPOJO.getPhone();
+                    Sms lastSms = getContactLastSms(phoneNumber).toBlocking().first();
+                    if (lastSms != null) {
+                        int unreadMessagesCount = getSmsContactUnreadMessagesCount(phoneNumber).toBlocking().first();
+                        return Observable.just(new SmsDialog(phoneContactPOJO, lastSms, unreadMessagesCount));
+                    }
+
+                    return null;
+                })
+                .filter(smsDialog -> smsDialog != null);
     }
 
     @Override
     public Observable<Integer> getSmsContactUnreadMessagesCount(String phoneNumber) {
         return Observable.create(subscriber -> {
-            String where = Sms.COLUMN_ADDRESS + " = " + "\'" + phoneNumber + "\'"
-                    + " AND " + Sms.COLUMN_READ + " = 0";
-            Cursor messages = contentResolver.query(Uri.parse("content://sms/"), null, where, null, null);
-            Integer count = 0;
-            if (messages != null && messages.moveToFirst()) {
-                count = messages.getCount();
-                messages.close();
+                    String where = Sms.COLUMN_ADDRESS + " = " + "\'" + phoneNumber + "\'"
+                            + " AND " + Sms.COLUMN_READ + " = 0";
+                    Cursor messages = contentResolver.query(Uri.parse("content://sms/"), null, where, null, null);
+                    Integer count = 0;
+                    if (messages != null) {
+                        if (messages.moveToFirst()) {
+                            count = messages.getCount();
+                        }
+                        messages.close();
+                    }
+                    subscriber.onNext(count);
+                    subscriber.onCompleted();
+                }
+
+        );
+    }
+
+    @Override
+    public Observable<PhoneContactPOJO> getPhoneContacts() {
+        return Observable.create(new Observable.OnSubscribe<PhoneContactPOJO>() {
+            @Override
+            public void call(Subscriber<? super PhoneContactPOJO> subscriber) {
+                Cursor phones = contentResolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null);
+
+                if (phones != null) {
+                    while (phones.moveToNext()) {
+                        String phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                        String name = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
+                        subscriber.onNext(new PhoneContactPOJO(name, phoneNumber));
+                    }
+                    phones.close();// close cursor
+                }
+                subscriber.onCompleted();
             }
-            subscriber.onNext(count);
-            subscriber.onCompleted();
         });
     }
 
