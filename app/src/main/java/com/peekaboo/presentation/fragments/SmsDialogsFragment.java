@@ -41,6 +41,7 @@ public class SmsDialogsFragment extends Fragment implements ISmsDialogsView {
     ActivityNavigator navigator;
 
     private SmsDialogsAdapter adapter;
+    private boolean isFirstLaunch = true;
 
     public SmsDialogsFragment() {
     }
@@ -58,7 +59,6 @@ public class SmsDialogsFragment extends Fragment implements ISmsDialogsView {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        PeekabooApplication.getApp(getActivity()).getComponent().inject(this);
         presenter.bind(this);
         presenter.onCreate();
 
@@ -66,19 +66,25 @@ public class SmsDialogsFragment extends Fragment implements ISmsDialogsView {
         ButterKnife.bind(this, rootView);
 //        setHasOptionsMenu(true);
 
-        adapter = new SmsDialogsAdapter((MainActivity) getActivity(), navigator);
         rvDialogs.setAdapter(adapter);
         rvDialogs.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-
-        presenter.loadDialogsList();
 
         return rootView;
     }
 
     @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        PeekabooApplication.getApp(getActivity()).getComponent().inject(this);
+        adapter = new SmsDialogsAdapter((MainActivity) getActivity(), navigator);
+
+    }
+
+    @Override
     public void onResume() {
         super.onResume();
-        presenter.onResume();
+        presenter.onResume(isFirstLaunch);
+        if(isFirstLaunch) isFirstLaunch = false;
     }
 
     @Override
