@@ -13,6 +13,7 @@ import com.peekaboo.presentation.fragments.ChatFragment;
 import com.peekaboo.presentation.fragments.ContactsFragment;
 import com.peekaboo.presentation.fragments.CreateDialogFragment;
 import com.peekaboo.presentation.fragments.DialogsFragment;
+import com.peekaboo.presentation.fragments.PeekabooDialogsFragment;
 import com.peekaboo.presentation.fragments.MessangerTestFragment;
 import com.peekaboo.presentation.fragments.PreviewImageFragment;
 import com.peekaboo.presentation.fragments.SmsChatFragment;
@@ -48,8 +49,9 @@ public interface ApplicationComponent {
 
     void inject(AvatarChangeDialog avatarChangeDialog);
 
-    void inject(DialogsFragment dialogsFragment);
+    void inject(PeekabooDialogsFragment peekabooDialogsFragment);
 
+    void inject(DialogsFragment dialogsFragment);
     //    Inject of Services
     void inject(NotificationService notificationService);
     void inject(WearLink wearLink);

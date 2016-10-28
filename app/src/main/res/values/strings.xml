@@ -85,7 +85,7 @@
     <!-- ContactsFragment strings -->
     <string name="title_contacts">Contacts</string>
 
-    <!-- DialogsFragment strings -->
+    <!-- PeekabooDialogsFragment strings -->
     <string name="title_dialogs">Dialogs</string>
 
     <!-- message types -->
