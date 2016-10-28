@@ -1,8 +1,9 @@
 package com.peekaboo.presentation.adapters;
 
 import android.graphics.Color;
+import android.content.Intent;
+import android.net.Uri;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.v4.content.ContextCompat;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -19,6 +20,7 @@ import com.peekaboo.data.repositories.database.messages.PMessage;
 import com.peekaboo.data.repositories.database.messages.PMessageAbs;
 import com.peekaboo.domain.Dialog;
 import com.peekaboo.presentation.activities.MainActivity;
+import com.peekaboo.presentation.activities.MapActivity;
 import com.peekaboo.presentation.utils.ResourcesUtils;
 import com.peekaboo.utils.ActivityNavigator;
 import com.peekaboo.utils.Utility;
@@ -116,9 +118,7 @@ public final class DialogsLargeAdapter extends RecyclerView.Adapter<DialogsLarge
             }
         }
 
-        holder.itemView.setOnClickListener(v -> {
-            navigator.startChatActivity(activity, contact, false);
-        });
+        holder.itemView.setOnClickListener(v -> navigator.startChatFragment(activity, contact, true));
 
         holder.ivFavorite.setOnClickListener(v -> {
             YoYo.with(Techniques.Tada).duration(500).delay(100).playOn(holder.ivFavorite);
@@ -126,6 +126,8 @@ public final class DialogsLargeAdapter extends RecyclerView.Adapter<DialogsLarge
             if (stared[0] == false) {
                 stared[0] = true;
                 holder.ivFavorite.setImageResource(R.drawable.stared);
+
+
             } else {
                 stared[0] = false;
                 holder.ivFavorite.setImageResource(R.drawable.star);

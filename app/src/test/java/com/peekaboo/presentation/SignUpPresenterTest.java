@@ -33,7 +33,7 @@ public class SignUpPresenterTest extends BasePresenterTest {
     public void whenSignUpSuccessThenShowConfirmDialogIsCalled() {
         SignUpPresenter signUpPresenter = new SignUpPresenter(new SignUpUseCaseSuccess(), new ConfirmUseCaseSuccess(), errorHandler);
         signUpPresenter.bind(signUpView);
-        signUpPresenter.onSignUpButtonClick("aValidUsername", "aValid@mail", "aValidPassword", "aValidPassword");
+        signUpPresenter.onSignUpButtonClick("123", "aValidUsername", "aValid@mail", "aValidPassword", "aValidPassword");
 
         verify(signUpView, timeout(WAIT).times(1)).showConfirmDialog();
     }
@@ -42,7 +42,7 @@ public class SignUpPresenterTest extends BasePresenterTest {
     public void whenSignUpSuccessThenShowConfirmDialogIsCalledAfterRebind() {
         SignUpPresenter signUpPresenter = new SignUpPresenter(new SignUpUseCaseSuccess(), new ConfirmUseCaseSuccess(), errorHandler);
         signUpPresenter.bind(signUpView);
-        signUpPresenter.onSignUpButtonClick("aValidUsername", "aValid@mail", "aValidPassword", "aValidPassword");
+        signUpPresenter.onSignUpButtonClick("123", "aValidUsername", "aValid@mail", "aValidPassword", "aValidPassword");
         signUpPresenter.unbind();
         sleep(WAIT);
         signUpPresenter.bind(signUpView);
@@ -54,7 +54,7 @@ public class SignUpPresenterTest extends BasePresenterTest {
     public void whenSignUpExternalErrorThenShowConfirmDialogIsCalled() {
         SignUpPresenter signUpPresenter = new SignUpPresenter(new SignUpUseCaseFailure(), new ConfirmUseCaseSuccess(), errorHandler);
         signUpPresenter.bind(signUpView);
-        signUpPresenter.onSignUpButtonClick("aValidUsername", "aValid@mail", "aValidPassword", "aValidPassword");
+        signUpPresenter.onSignUpButtonClick("123", "aValidUsername", "aValid@mail", "aValidPassword", "aValidPassword");
 
         verify(signUpView, timeout(WAIT).times(0)).showConfirmDialog();
         verify(signUpView, timeout(WAIT).times(1)).showToastMessage(any(String.class));
@@ -64,7 +64,7 @@ public class SignUpPresenterTest extends BasePresenterTest {
     public void whenInvalidUsernameThenShowInputErrorIsCalled() {
         SignUpPresenter signUpPresenter = new SignUpPresenter(new SignUpUseCaseSuccess(), new ConfirmUseCaseSuccess(), errorHandler);
         signUpPresenter.bind(signUpView);
-        signUpPresenter.onSignUpButtonClick("shor", "aValid@mail", "aValidPassword", "aValidPassword");
+        signUpPresenter.onSignUpButtonClick("123", "shor", "aValid@mail", "aValidPassword", "aValidPassword");
 
         verify(signUpView, timeout(WAIT).times(0)).showConfirmDialog();
         verify(signUpView, timeout(WAIT).times(1)).showInputError(ICredentialsView.InputFieldError.USERNAME);
@@ -74,7 +74,7 @@ public class SignUpPresenterTest extends BasePresenterTest {
     public void whenInvalidLoginThenShowInputErrorIsCalled() {
         SignUpPresenter signUpPresenter = new SignUpPresenter(new SignUpUseCaseSuccess(), new ConfirmUseCaseSuccess(), errorHandler);
         signUpPresenter.bind(signUpView);
-        signUpPresenter.onSignUpButtonClick("aValidUsername", "anInvalidLogin", "aValidPassword", "aValidPassword");
+        signUpPresenter.onSignUpButtonClick("123", "aValidUsername", "anInvalidLogin", "aValidPassword", "aValidPassword");
 
         verify(signUpView, timeout(WAIT).times(0)).showConfirmDialog();
         verify(signUpView, timeout(WAIT).times(1)).showInputError(ICredentialsView.InputFieldError.LOGIN);
@@ -84,7 +84,7 @@ public class SignUpPresenterTest extends BasePresenterTest {
     public void whenInvalidPasswordThenShowInputErrorIsCalled() {
         SignUpPresenter signUpPresenter = new SignUpPresenter(new SignUpUseCaseSuccess(), new ConfirmUseCaseSuccess(), errorHandler);
         signUpPresenter.bind(signUpView);
-        signUpPresenter.onSignUpButtonClick("aValidUsername", "aValid@mail", "short", "aValidPassword");
+        signUpPresenter.onSignUpButtonClick("123", "aValidUsername", "aValid@mail", "short", "aValidPassword");
 
         verify(signUpView, timeout(WAIT).times(0)).showConfirmDialog();
         verify(signUpView, timeout(WAIT).times(1)).showInputError(ICredentialsView.InputFieldError.PASSWORD);
@@ -94,7 +94,7 @@ public class SignUpPresenterTest extends BasePresenterTest {
     public void whenPasswordNotConfirmedThenShowInputErrorIsCalled() {
         SignUpPresenter signUpPresenter = new SignUpPresenter(new SignUpUseCaseSuccess(), new ConfirmUseCaseSuccess(), errorHandler);
         signUpPresenter.bind(signUpView);
-        signUpPresenter.onSignUpButtonClick("aValidUsername", "aValid@mail", "aValidPassword", "notConfirmingPassword");
+        signUpPresenter.onSignUpButtonClick("123", "aValidUsername", "aValid@mail", "aValidPassword", "notConfirmingPassword");
 
         verify(signUpView, timeout(WAIT).times(0)).showConfirmDialog();
         verify(signUpView, timeout(WAIT).times(1)).showInputError(ICredentialsView.InputFieldError.PASSWORD_CONFIRM);

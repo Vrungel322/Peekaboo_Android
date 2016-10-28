@@ -5,7 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import com.peekaboo.data.mappers.ContactToContentValueMapper;
+import com.peekaboo.data.mappers.AbstractMapperFactory;
 import com.peekaboo.data.repositories.database.messages.PMessage;
 import com.peekaboo.data.repositories.database.service.DBHelper;
 import com.peekaboo.data.repositories.database.utils_db.Db;
@@ -28,12 +28,13 @@ public class PContactHelper {
     private final DBHelper helper;
     private final SubscribeOn subscribeOn;
     private final ObserveOn observeOn;
-    private final ContactToContentValueMapper mapper = new ContactToContentValueMapper();
+    private final AbstractMapperFactory mapper;
 
-    public PContactHelper(DBHelper helper, SubscribeOn subscribeOn, ObserveOn observeOn) {
+    public PContactHelper(DBHelper helper, SubscribeOn subscribeOn, ObserveOn observeOn, AbstractMapperFactory mapper) {
         this.helper = helper;
         this.subscribeOn = subscribeOn;
         this.observeOn = observeOn;
+        this.mapper = mapper;
         createTable();
     }
 
@@ -57,7 +58,7 @@ public class PContactHelper {
 
     public long insert(Contact contact) {
         SQLiteDatabase db = helper.getWritableDatabase();
-        long id = db.insert(TABLE_NAME, null, mapper.transform(contact));
+        long id = db.insert(TABLE_NAME, null, mapper.getContactToContentValueMapper().transform(contact));
 
         contact.setId(id);
         return id;

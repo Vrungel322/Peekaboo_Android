@@ -41,4 +41,9 @@ public class SmsDialog {
     public void setUnreadMessagesCount(int unreadMessagesCount) {
         this.unreadMessagesCount = unreadMessagesCount;
     }
+
+    @Override
+    public String toString() {
+        return "Dialog: " + contact.getName();
+    }
 }

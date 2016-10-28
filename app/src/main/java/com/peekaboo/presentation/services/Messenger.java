@@ -1,6 +1,7 @@
 package com.peekaboo.presentation.services;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.peekaboo.data.FileEntity;
@@ -14,6 +15,7 @@ import com.peekaboo.domain.Pair;
 import com.peekaboo.domain.subscribers.BaseUseCaseSubscriber;
 import com.peekaboo.domain.usecase.FileDownloadUseCase;
 import com.peekaboo.domain.usecase.FileUploadUseCase;
+import com.peekaboo.presentation.fragments.ChatFragment;
 import com.peekaboo.utils.Constants;
 
 import java.util.HashSet;
@@ -40,6 +42,9 @@ public class Messenger implements IMessenger,
     private FileDownloadUseCase downloadFileUseCase;
     private Set<MessengerListener> messageListeners = new HashSet<>();
     private MessageNotificator messageNotificator;
+
+    @Nullable
+    private ChatFragment.DISABLE_pbLoadingImageToServer pbLoadingImageToServerDisableListener;
 
     public Messenger(INotifier<Message> notifier, PMessageHelper helper,
                      MessageNotificator messageNotificator,
@@ -122,7 +127,7 @@ public class Messenger implements IMessenger,
      * @param message
      */
     private void handleIncomingMessage(Message message) {
-        PMessage pMessage = MessageUtils.convert(user.getId(), message);
+        PMessage pMessage = MessageUtils.convert(message);
         Log.e("Messenger", "type " + pMessage.mediaType());
         pMessage.setStatus(PMessage.PMESSAGE_STATUS.STATUS_DELIVERED);
         String tableName = pMessage.senderId();
@@ -251,9 +256,10 @@ public class Messenger implements IMessenger,
             public void onNext(Pair<PMessage, String> pair) {
                 super.onNext(pair);
                 PMessage first = pair.first;
-                String second = pair.second;
-                helper.updateBody(first.senderId(), first, first.messageBody() + PMessage.DIVIDER + second);
-
+                String local = pair.second;
+                String remote = first.messageBody();
+                String audioBody = MessageUtils.createAudioBody(remote, local, local == null);
+                helper.updateBody(first.senderId(), first, audioBody);
                 for (MessengerListener listener : messageListeners) {
                     listener.onMessageUpdated(first);
                 }
@@ -266,11 +272,18 @@ public class Messenger implements IMessenger,
         return new BaseUseCaseSubscriber<Pair<PMessage, FileEntity>>() {
             @Override
             public void onNext(Pair<PMessage, FileEntity> pMessageFileEntityPair) {
-                if (isAvailable()) {
+                if (isAvailable() && pMessageFileEntityPair.second != null) {
+                    Log.wtf("getUploadSubscriber : ", "upload end");
                     PMessage pMessage = pMessageFileEntityPair.first;
+                    if (pMessage.mediaType() == PMessageAbs.PMESSAGE_MEDIA_TYPE.IMAGE_MESSAGE & pbLoadingImageToServerDisableListener != null) {
+                        pbLoadingImageToServerDisableListener.disablePbLoadingImageToServer();
+                    }
                     FileEntity fileEntity = pMessageFileEntityPair.second;
-                    Log.wtf("response_to_upload_img : ", fileEntity.getResult() + " , " + fileEntity.getName());
-                    helper.updateBody(pMessage.receiverId(), pMessage, fileEntity.getName() + PMessage.DIVIDER + pMessage.messageBody());
+                    String remote = fileEntity.getName();
+                    String local = pMessage.messageBody();
+                    String audioBody = MessageUtils.createAudioBody(remote, local, false);
+                    helper.updateBody(pMessage.receiverId(), pMessage, audioBody);
+                    Log.e("messenger", "upload " + pMessage);
                     deliverMessage(pMessage);
                 }
             }
@@ -289,6 +302,11 @@ public class Messenger implements IMessenger,
         for (MessengerListener listener : messageListeners) {
             listener.onMessageUpdated(message);
         }
+    }
+
+    @Override
+    public void setpbLoadingImageToServerDisableListener(ChatFragment.DISABLE_pbLoadingImageToServer pbLoadingImageToServerDisableListener){
+        this.pbLoadingImageToServerDisableListener = pbLoadingImageToServerDisableListener;
     }
 
     @Override

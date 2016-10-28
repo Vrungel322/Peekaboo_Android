@@ -196,7 +196,8 @@ public class SessionDataRepository implements SessionRepository {
     @Override
     public Observable<List<Sms>> getContactSmsList(String phoneNumber) {
         return Observable.create(subscriber -> {
-            String where = Sms.COLUMN_ADDRESS + " = " + "\'" + phoneNumber + "\'";
+            String number = phoneNumber.trim().replaceAll(" ", "").replaceAll("-", "");
+            String where = Sms.COLUMN_ADDRESS + " = " + "\'" + number + "\'";
             Cursor messages = contentResolver.query(Uri.parse("content://sms/"), null, where, null, null);
             List<Sms> smsList = new ArrayList<>();
             if (messages != null) {
@@ -211,14 +212,32 @@ public class SessionDataRepository implements SessionRepository {
     }
 
     @Override
+    public Observable<Sms> getContactLastSms(String phoneNumber) {
+        return Observable.create(subscriber -> {
+            String number = phoneNumber.trim().replaceAll(" ", "").replaceAll("-", "");
+            String where = Sms.COLUMN_ADDRESS + " = " + "\'" + number + "\'";
+            Cursor messages = contentResolver.query(Uri.parse("content://sms/"), null, where, null, null);
+            Sms sms = null;
+            if (messages != null) {
+                if (messages.getCount() > 0) {
+                    messages.moveToFirst();
+                    sms = abstractMapperFactory.getSmsMapper().transform(messages);
+                }
+                messages.close();
+            }
+            subscriber.onNext(sms);
+            subscriber.onCompleted();
+        });
+    }
+
+    @Override
     public Observable<List<SmsDialog>> getSmsDialogsList() {
         return getPhoneContactList()
                 .flatMap(Observable::from)
                 .flatMap(phoneContactPOJO -> {
                     String phoneNumber = phoneContactPOJO.getPhone();
-                    List<Sms> smsList = getContactSmsList(phoneNumber).toBlocking().first();
-                    if (smsList != null && smsList.size() > 0) {
-                        Sms lastSms = smsList.get(0);
+                    Sms lastSms = getContactLastSms(phoneNumber).toBlocking().first();
+                    if (lastSms != null) {
                         int unreadMessagesCount = getSmsContactUnreadMessagesCount(phoneNumber).toBlocking().first();
                         return Observable.just(new SmsDialog(phoneContactPOJO, lastSms, unreadMessagesCount));
                     }
@@ -228,49 +247,88 @@ public class SessionDataRepository implements SessionRepository {
                 })
                 .filter(smsDialog -> smsDialog != null)
                 .toList();
+
+    }
+
+    @Override
+    public Observable<SmsDialog> getSmsDialogs() {
+        return getPhoneContacts()
+                .flatMap(phoneContactPOJO -> {
+                    String phoneNumber = phoneContactPOJO.getPhone();
+                    Sms lastSms = getContactLastSms(phoneNumber).toBlocking().first();
+                    if (lastSms != null) {
+                        int unreadMessagesCount = getSmsContactUnreadMessagesCount(phoneNumber).toBlocking().first();
+                        return Observable.just(new SmsDialog(phoneContactPOJO, lastSms, unreadMessagesCount));
+                    }
+
+                    return null;
+                })
+                .filter(smsDialog -> smsDialog != null);
     }
 
     @Override
     public Observable<Integer> getSmsContactUnreadMessagesCount(String phoneNumber) {
         return Observable.create(subscriber -> {
-            String where = Sms.COLUMN_ADDRESS + " = " + "\'" + phoneNumber + "\'"
-                    + " AND " + Sms.COLUMN_READ + " = 0";
-            Cursor messages = contentResolver.query(Uri.parse("content://sms/"), null, where, null, null);
-            Integer count = 0;
-            if (messages != null && messages.moveToFirst()) {
-                count = messages.getCount();
-                messages.close();
-            }
-            subscriber.onNext(count);
-            subscriber.onCompleted();
-        });
+                    String where = Sms.COLUMN_ADDRESS + " = " + "\'" + phoneNumber + "\'"
+                            + " AND " + Sms.COLUMN_READ + " = 0";
+                    Cursor messages = contentResolver.query(Uri.parse("content://sms/"), null, where, null, null);
+                    Integer count = 0;
+                    if (messages != null) {
+                        if (messages.moveToFirst()) {
+                            count = messages.getCount();
+                        }
+                        messages.close();
+                    }
+                    subscriber.onNext(count);
+                    subscriber.onCompleted();
+                }
+
+        );
     }
 
     @Override
-    public Observable<List<PhoneContactPOJO>> getPhoneContactList() {
-        Cursor phones = contentResolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null);
-        List<PhoneContactPOJO> alPhoneContactPOJOs = new ArrayList<PhoneContactPOJO>();
-        Set<PhoneContactPOJO> setPhoneContactPOJO = new HashSet<PhoneContactPOJO>();
-        return Observable.create(new Observable.OnSubscribe<List<PhoneContactPOJO>>() {
+    public Observable<PhoneContactPOJO> getPhoneContacts() {
+        return Observable.create(new Observable.OnSubscribe<PhoneContactPOJO>() {
             @Override
-            public void call(Subscriber<? super List<PhoneContactPOJO>> subscriber) {
+            public void call(Subscriber<? super PhoneContactPOJO> subscriber) {
+                Cursor phones = contentResolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null);
 
                 if (phones != null) {
                     while (phones.moveToNext()) {
                         String phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
                         String name = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
-                        alPhoneContactPOJOs.add(new PhoneContactPOJO(name, phoneNumber));
+                        String photoThumbnail = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.PHOTO_THUMBNAIL_URI));
+                        subscriber.onNext(new PhoneContactPOJO(name, phoneNumber, photoThumbnail));
                     }
                     phones.close();// close cursor
                 }
-                subscriber.onNext(alPhoneContactPOJOs);
+                subscriber.onCompleted();
+            }
+        });
+    }
+
+    @Override
+    public Observable<List<PhoneContactPOJO>> getPhoneContactList() {
+        return Observable.create(new Observable.OnSubscribe<Set<PhoneContactPOJO>>() {
+            @Override
+            public void call(Subscriber<? super Set<PhoneContactPOJO>> subscriber) {
+                Cursor phones = contentResolver.query(ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null, null, null, null);
+                Set<PhoneContactPOJO> setPhoneContactPOJO = new HashSet<>();
+                if (phones != null) {
+                    while (phones.moveToNext()) {
+                        String name = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
+                        String phoneNumber = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                        String photoThumbnail = phones.getString(phones.getColumnIndex(ContactsContract.CommonDataKinds.Phone.PHOTO_THUMBNAIL_URI));
+                        setPhoneContactPOJO.add(new PhoneContactPOJO(name, phoneNumber, photoThumbnail));
+                    }
+                    phones.close();// close cursor
+                }
+                subscriber.onNext(setPhoneContactPOJO);
                 subscriber.onCompleted();
             }
         }).distinct().map(phoneContactPOJOs -> {
-            setPhoneContactPOJO.addAll(alPhoneContactPOJOs);
-            alPhoneContactPOJOs.clear();
-            alPhoneContactPOJOs.addAll(setPhoneContactPOJO);
-
+            List<PhoneContactPOJO> alPhoneContactPOJOs = new ArrayList<>();
+            alPhoneContactPOJOs.addAll(phoneContactPOJOs);
             return alPhoneContactPOJOs;
 
         });

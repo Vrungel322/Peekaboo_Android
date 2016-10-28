@@ -7,7 +7,9 @@ import com.peekaboo.presentation.views.ISmsChatView;
  */
 
 public interface ISmsChatPresenter extends IPresenter<ISmsChatView> {
-    void onResume(String receiverPhone);
+    void onCreate(String receiverPhone);
+    void onResume();
+    void onPause();
     void onDestroy();
     void sendMessage(String message);
     void getAllContactsMessageList();

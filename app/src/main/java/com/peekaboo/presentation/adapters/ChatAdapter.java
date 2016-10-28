@@ -32,7 +32,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import rx.functions.Action1;
-import timber.log.Timber;
+//import timber.log.Timber;
 
 /**
  * Created by st1ch on 23.07.2016.
@@ -148,7 +148,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     break;
                 case PMessageAbs.PMESSAGE_MEDIA_TYPE.IMAGE_MESSAGE:
                     String image = pMessageAbs.messageBody();
-                    Timber.tag("IMAGE").wtf("image uri: " + image);
+//                    Timber.tag("IMAGE").wtf("image uri: " + image);
                     setImageMessage((ViewHolderImage) holder, image);
                     Log.i("IMAGE", Integer.toString(mediaType));
                     break;
@@ -282,6 +282,29 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 });
     }
 
+    private void setLocationMessage(ChatAdapter.ViewHolderImage holder, String locationUri) {
+        holder.pbLoadingImage.setVisibility(View.VISIBLE);
+        String latEiffelTower = "50.459507";
+        String lngEiffelTower = "30.514554";
+        String url = "http://maps.google.com/maps/api/staticmap?center=" + latEiffelTower + "," + lngEiffelTower + "&zoom=15&size=100x50&sensor=true";
+        mPicasso.load(url).resizeDimen(R.dimen.chat_image_width, R.dimen.chat_image_height)
+                .error(R.drawable.ic_alert_circle_outline)
+                .centerInside()
+                .transform(new RoundedTransformation(25, 0))
+                .into(holder.ivImageMessage, new Callback.EmptyCallback() {
+                    @Override
+                    public void onSuccess() {
+                        holder.pbLoadingImage.setVisibility(View.GONE);
+                    }
+
+                    @Override
+                    public void onError() {
+                        holder.pbLoadingImage.setVisibility(View.GONE);
+                    }
+
+                });
+    }
+
     public void clearList() {
         this.messages = Collections.emptyList();
         notifyDataSetChanged();
@@ -373,6 +396,16 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             super(view);
             ButterKnife.bind(this, view);
         }
+    }
+
+    static class ViewHolderNavigation extends ViewHolder {
+        @BindView(R.id.navigation_btn)
+        ImageButton ibNavigation;
+        public ViewHolderNavigation(View view){
+            super(view);
+            ButterKnife.bind(this, view);
+        }
+
     }
 
     static class DatesViewHolder extends RecyclerView.ViewHolder {
