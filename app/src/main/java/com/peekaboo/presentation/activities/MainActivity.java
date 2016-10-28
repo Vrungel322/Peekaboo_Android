@@ -398,6 +398,8 @@ public class MainActivity extends AppCompatActivity implements IMainView, Avatar
     public void onBackPressed() {
         if (drawer.isDrawerOpen(Gravity.LEFT)) {
             drawer.closeDrawer(Gravity.LEFT);
+        } else if (drawer.isDrawerOpen(Gravity.RIGHT)) {
+            drawer.closeDrawer(Gravity.RIGHT);
         } else {
             boolean callSuper = true;
             for (OnBackPressListener listener : listeners) {
