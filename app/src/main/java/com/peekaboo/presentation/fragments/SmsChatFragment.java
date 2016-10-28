@@ -12,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.peekaboo.R;
 import com.peekaboo.domain.Sms;
@@ -149,6 +150,6 @@ public class SmsChatFragment extends Fragment implements ISmsChatView {
 
     @Override
     public void showToastMessage(String text) {
-
+        Toast.makeText(getActivity(), text, Toast.LENGTH_LONG).show();
     }
 }

@@ -107,6 +107,14 @@ public class SmsChatPresenter extends ProgressPresenter<ISmsChatView> implements
         getLastSmsUseCase.execute(getLastSmsSubscriber());
     }
 
+    @Override
+    public void onMessageNotSent() {
+        ISmsChatView view = getView();
+        if(view != null){
+            view.showToastMessage("Message not sent!");
+        }
+    }
+
     private BaseProgressSubscriber<Sms> getLastSmsSubscriber() {
         return new BaseProgressSubscriber<Sms>(this) {
             @Override
