@@ -31,8 +31,8 @@ public class SignInUseCaseTest extends BaseUseCaseTest {
         super.setUp();
         signUpUseCase = new SignUpUseCase(sessionRepository, subscribeOn, observeOn);
 
-        when(sessionRepository.signUp(A_VALID_USERNAME, A_VALID_LOGIN, A_VALID_PASSWORD)).thenReturn(Observable.just(new AccountUser("")));
-        when(sessionRepository.signUp(AN_INVALID_USERNAME, AN_INVALID_LOGIN, AN_INVALID_PASSWORD)).thenReturn(Observable.create(
+        when(sessionRepository.signUp("123", A_VALID_USERNAME, A_VALID_LOGIN, A_VALID_PASSWORD)).thenReturn(Observable.just(new AccountUser("")));
+        when(sessionRepository.signUp("123", AN_INVALID_USERNAME, AN_INVALID_LOGIN, AN_INVALID_PASSWORD)).thenReturn(Observable.create(
                 subscriber -> {
                     subscriber.onError(new RuntimeException("Not Great"));
                 })
@@ -41,13 +41,13 @@ public class SignInUseCaseTest extends BaseUseCaseTest {
 
     @Test
     public void whenSignUpSuccessThenReturnUser() {
-        signUpUseCase.setCredentials(A_VALID_USERNAME, A_VALID_LOGIN, A_VALID_PASSWORD);
+        signUpUseCase.setCredentials("123", A_VALID_USERNAME, A_VALID_LOGIN, A_VALID_PASSWORD);
         execute(0, 1);
     }
 
     @Test
     public void whenSignUpFailureThenReturnError() {
-        signUpUseCase.setCredentials(AN_INVALID_USERNAME, AN_INVALID_LOGIN, AN_INVALID_PASSWORD);
+        signUpUseCase.setCredentials("123", AN_INVALID_USERNAME, AN_INVALID_LOGIN, AN_INVALID_PASSWORD);
         execute(1, 0);
     }
 

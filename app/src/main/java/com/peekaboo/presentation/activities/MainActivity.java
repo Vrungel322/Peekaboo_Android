@@ -136,6 +136,7 @@ public class MainActivity extends AppCompatActivity implements IMainView, Avatar
         if (getSupportFragmentManager().findFragmentById(R.id.fragmentContainer) == null) {
             if (!handleNotificationIntent(getIntent(), false)) {
                 changeFragment(ContactsFragment.newInstance(), Constants.FRAGMENT_TAGS.CONTACTS_FRAGMENT);
+//                changeFragment(new CreateDialogFragment(), Constants.FRAGMENT_TAGS.CONTACTS_FRAGMENT);
                 selectionMode(R.id.llContacts);
             }
         }

@@ -3,6 +3,7 @@ package com.peekaboo.presentation.adapters;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Handler;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.util.Log;
@@ -98,6 +99,8 @@ public class ChatAdapter2 extends RecyclerView.Adapter<ChatAdapter2.ViewHolder> 
             }
         }
     };
+    @Nullable
+    private OnItemLongClickListener onItemLongClickListener;
 
     public ChatAdapter2(Context context, ChatPresenter2 presenter, RecyclerView recyclerView, Contact contact) {
         this.context = context;
@@ -145,7 +148,13 @@ public class ChatAdapter2 extends RecyclerView.Adapter<ChatAdapter2.ViewHolder> 
         PMessage pMessageAbs = getItem(position);
         int mediaType = pMessageAbs.mediaType();
         Log.wtf("mediaType : ", String.valueOf(mediaType));
-
+        final int finalPosition = position;
+        holder.itemView.setOnLongClickListener(view -> {
+            if (onItemLongClickListener != null) {
+                onItemLongClickListener.onLongClick(finalPosition);
+            }
+            return false;
+        });
         boolean nextMine;
         boolean prevMine;
 
@@ -173,9 +182,9 @@ public class ChatAdapter2 extends RecyclerView.Adapter<ChatAdapter2.ViewHolder> 
                 if (holder instanceof ViewHolderAudio) {
                     ViewHolderAudio holderAudio = (ViewHolderAudio) holder;
                     presenter.setPlayerListener(playerListener);
-                    Log.e("adapter", pMessageAbs.id() + " " + pMessageAbs.messageBody() + " " + pMessageAbs.isMine() + " " + pMessageAbs.isDownloaded());
-                    holderAudio.pbLoad.setVisibility(pMessageAbs.isDownloaded() ? View.GONE : View.VISIBLE);
-                    holderAudio.ibPlayRecord.setVisibility(!pMessageAbs.isDownloaded() ? View.GONE : View.VISIBLE);
+                    Log.e("adapter", pMessageAbs.id() + " " + pMessageAbs.messageBody() + " " + pMessageAbs.isMine() + " " + pMessageAbs.hasBothPaths());
+                    holderAudio.pbLoad.setVisibility(pMessageAbs.hasBothPaths() || pMessageAbs.hasFileError() ? View.GONE : View.VISIBLE);
+                    holderAudio.ibPlayRecord.setVisibility(!pMessageAbs.hasBothPaths() || pMessageAbs.hasFileError() ? View.GONE : View.VISIBLE);
                     holderAudio.ibPlayRecord.setOnClickListener(v -> {
                         presenter.onPlayButtonClick(pMessageAbs, playerListener);
                     });
@@ -210,6 +219,7 @@ public class ChatAdapter2 extends RecyclerView.Adapter<ChatAdapter2.ViewHolder> 
     @Override
     public void onViewRecycled(ViewHolder holder) {
         super.onViewRecycled(holder);
+        holder.itemView.setOnLongClickListener(null);
     }
 
     private void setAlignment(ViewHolder holder, boolean isMine, boolean wasPreviousMine, boolean isNextMine) {
@@ -331,6 +341,15 @@ public class ChatAdapter2 extends RecyclerView.Adapter<ChatAdapter2.ViewHolder> 
         return true;
     }
 
+    public void setOnItemLongClickListener(@Nullable OnItemLongClickListener onItemLongClickListener) {
+        this.onItemLongClickListener = onItemLongClickListener;
+    }
+
+    public interface OnItemLongClickListener {
+        void onLongClick(int position);
+    }
+
+
     static class ViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.tvChatTimestamp)
         TextView tvChatTimestamp;
@@ -383,20 +402,4 @@ public class ChatAdapter2 extends RecyclerView.Adapter<ChatAdapter2.ViewHolder> 
             ButterKnife.bind(this, view);
         }
     }
-//
-//    static class AudioIdManager {
-//        private static String DIVIDER = " ";
-//        static long getMessageId(String audioId) {
-//            return Long.parseLong(audioId.split(DIVIDER)[1]);
-//        }
-//
-//        static String getCompanionId(String audioId) {
-//            return audioId.split(DIVIDER)[0];
-//        }
-//
-//        static String constructId(String companionId, long messageId) {
-//            return companionId + DIVIDER + messageId;
-//        }
-//
-//    }
 }

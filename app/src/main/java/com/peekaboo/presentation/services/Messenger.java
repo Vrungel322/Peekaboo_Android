@@ -127,7 +127,7 @@ public class Messenger implements IMessenger,
      * @param message
      */
     private void handleIncomingMessage(Message message) {
-        PMessage pMessage = MessageUtils.convert(user.getId(), message);
+        PMessage pMessage = MessageUtils.convert(message);
         Log.e("Messenger", "type " + pMessage.mediaType());
         pMessage.setStatus(PMessage.PMESSAGE_STATUS.STATUS_DELIVERED);
         String tableName = pMessage.senderId();
@@ -256,9 +256,10 @@ public class Messenger implements IMessenger,
             public void onNext(Pair<PMessage, String> pair) {
                 super.onNext(pair);
                 PMessage first = pair.first;
-                String second = pair.second;
-                helper.updateBody(first.senderId(), first, first.messageBody() + PMessage.DIVIDER + second);
-
+                String local = pair.second;
+                String remote = first.messageBody();
+                String audioBody = MessageUtils.createAudioBody(remote, local, local == null);
+                helper.updateBody(first.senderId(), first, audioBody);
                 for (MessengerListener listener : messageListeners) {
                     listener.onMessageUpdated(first);
                 }
@@ -271,15 +272,18 @@ public class Messenger implements IMessenger,
         return new BaseUseCaseSubscriber<Pair<PMessage, FileEntity>>() {
             @Override
             public void onNext(Pair<PMessage, FileEntity> pMessageFileEntityPair) {
-                if (isAvailable()) {
+                if (isAvailable() && pMessageFileEntityPair.second != null) {
                     Log.wtf("getUploadSubscriber : ", "upload end");
                     PMessage pMessage = pMessageFileEntityPair.first;
                     if (pMessage.mediaType() == PMessageAbs.PMESSAGE_MEDIA_TYPE.IMAGE_MESSAGE & pbLoadingImageToServerDisableListener != null) {
                         pbLoadingImageToServerDisableListener.disablePbLoadingImageToServer();
                     }
                     FileEntity fileEntity = pMessageFileEntityPair.second;
-                    Log.wtf("response_to_upload_img : ", fileEntity.getResult() + " , " + fileEntity.getName());
-                    helper.updateBody(pMessage.receiverId(), pMessage, fileEntity.getName() + PMessage.DIVIDER + pMessage.messageBody());
+                    String remote = fileEntity.getName();
+                    String local = pMessage.messageBody();
+                    String audioBody = MessageUtils.createAudioBody(remote, local, false);
+                    helper.updateBody(pMessage.receiverId(), pMessage, audioBody);
+                    Log.e("messenger", "upload " + pMessage);
                     deliverMessage(pMessage);
                 }
             }
