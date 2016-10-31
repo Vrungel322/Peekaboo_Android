@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.telephony.SmsManager;
 import android.telephony.SmsMessage;
-import android.util.Log;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -23,6 +22,7 @@ public class SmsReceiver extends BroadcastReceiver {
     public interface SmsReceiverListener {
         void onMessageReceived(SmsMessage smsMessage);
         void onMessageSent();
+        void onMessageNotSent();
     }
 
     public static void addListener(SmsReceiverListener listener) {
@@ -43,12 +43,16 @@ public class SmsReceiver extends BroadcastReceiver {
                         listener.onMessageSent();
                         break;
                     case SmsManager.RESULT_ERROR_GENERIC_FAILURE:
+                        listener.onMessageNotSent();
                         break;
                     case SmsManager.RESULT_ERROR_NO_SERVICE:
+                        listener.onMessageNotSent();
                         break;
                     case SmsManager.RESULT_ERROR_NULL_PDU:
+                        listener.onMessageNotSent();
                         break;
                     case SmsManager.RESULT_ERROR_RADIO_OFF:
+                        listener.onMessageNotSent();
                         break;
                 }
             }
