@@ -228,7 +228,6 @@
                 android:text="@string/google_cloud"
                 android:textColor="#969696"
                 android:textSize="14sp"
-
                 />
         </LinearLayout>
 
