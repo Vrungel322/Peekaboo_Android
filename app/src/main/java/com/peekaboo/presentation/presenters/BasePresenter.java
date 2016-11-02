@@ -2,6 +2,7 @@ package com.peekaboo.presentation.presenters;
 
 import android.support.annotation.Nullable;
 
+import com.peekaboo.presentation.views.IChatView2;
 import com.peekaboo.presentation.views.IView;
 
 /**
@@ -26,4 +27,5 @@ public abstract class BasePresenter<V extends IView> implements IPresenter<V> {
     public V getView() {
         return view;
     }
+
 }

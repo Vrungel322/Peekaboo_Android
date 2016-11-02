@@ -203,12 +203,16 @@ public class ChatPresenter2 extends BasePresenter<IChatView2> implements IChatPr
     public void onSendImageButtonPress(String realPath) {
         IChatView2 view = getView();
         if (view != null) {
-            String receiver = view.getCompanionId();
             PMessage pMessage = new PMessage(
                     true, PMessageAbs.PMESSAGE_MEDIA_TYPE.IMAGE_MESSAGE, realPath, System.currentTimeMillis(),
                     PMessageAbs.PMESSAGE_STATUS.STATUS_SENT,
                     receiver, accountUser.getId());
-            messenger.setpbLoadingImageToServerDisableListener(() -> getView().hidePbLoadingImageToServer());
+            messenger.setpbLoadingImageToServerDisableListener(() -> {
+                IChatView2 view1 = getView();
+                if (view1 != null) {
+                    view1.hidePbLoadingImageToServer();
+                }
+            });
             messenger.sendMessage(pMessage);
         }
 

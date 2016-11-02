@@ -36,7 +36,7 @@ public class Constants {
     public interface REQUEST_CODES {
         int REQUEST_CODE_CAMERA = 1818;
         int REQUEST_CODE_GALERY = 1819;
-        int REQUEST_CODE_GALERY_FOR_FRAGMENT = 1820;
+//        int REQUEST_CODE_GALERY_FOR_FRAGMENT = 1820;
         int REQUEST_CODE_SPEECH_INPUT = 1822;
         int REQUEST_CODE_GPS = 1823;
     }

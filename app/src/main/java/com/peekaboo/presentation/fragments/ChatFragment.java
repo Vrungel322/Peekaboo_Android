@@ -4,10 +4,11 @@ import android.animation.Animator;
 import android.app.Activity;
 import android.content.ClipboardManager;
 import android.content.Context;
-import android.os.Build;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.os.SystemClock;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
@@ -32,13 +33,9 @@ import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.LatLng;
-import com.google.android.gms.maps.model.MarkerOptions;
 import com.peekaboo.R;
 import com.peekaboo.data.repositories.database.contacts.Contact;
 import com.peekaboo.data.repositories.database.messages.PMessage;
-import com.peekaboo.data.repositories.database.messages.PMessageAbs;
 import com.peekaboo.domain.AccountUser;
 import com.peekaboo.presentation.PeekabooApplication;
 import com.peekaboo.presentation.activities.MainActivity;
@@ -48,6 +45,7 @@ import com.peekaboo.presentation.app.view.PHorizontalScrollView;
 import com.peekaboo.presentation.presenters.ChatPresenter2;
 import com.peekaboo.presentation.services.INotifier;
 import com.peekaboo.presentation.services.Message;
+import com.peekaboo.presentation.utils.ActivityUtils;
 import com.peekaboo.presentation.utils.ResourcesUtils;
 import com.peekaboo.presentation.views.IChatView2;
 import com.peekaboo.utils.ActivityNavigator;
@@ -127,7 +125,6 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
     private Animator animator;
     private ChatItemDialog chatItemDialog;
     private ChatItemDialog.IChatItemEventListener iChatItemEventListener;
-    private Uri imageUri;
 
     public static ChatFragment newInstance(Contact companion) {
 
@@ -174,6 +171,14 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
         adapter = new ChatAdapter2(getActivity(), presenter, rvMessages, companion);
         rvMessages.setAdapter(adapter);
         svItems.setOnTouchListener((view1, motionEvent) -> false);
+        rvMessages.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                if (newState > RecyclerView.SCROLL_STATE_IDLE) {
+                    ActivityUtils.hideKeyboard(getActivity());
+                }
+            }
+        });
         adapter.setOnItemLongClickListener((position) -> {
             android.support.v4.app.FragmentTransaction ft = getActivity()
                     .getSupportFragmentManager().beginTransaction();
@@ -183,7 +188,7 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
                 @Override
                 public void copyText(int index) {
                     presenter.onCopyMessageTextClick((ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE),
-                             adapter.getItem(index));
+                            adapter.getItem(index));
                 }
 
 //        rvMessages.addOnItemTouchListener(new ChatRecyclerTouchListener(getActivity(), rvMessages, new ChatClickListener() {
@@ -312,7 +317,7 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
     public void takeGalleryImage() {
         Log.wtf("NULL : ", "takeGalleryImage");
         startActivityForResult(new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI),
-                Constants.REQUEST_CODES.REQUEST_CODE_GALERY_FOR_FRAGMENT);
+                Constants.REQUEST_CODES.REQUEST_CODE_GALERY);
     }
 
     public void takePhoto() {
@@ -325,7 +330,7 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
                 e.printStackTrace();
             }
             if (photoFile != null) {
-                imageUri = Utility.getImageContentUri(getContext(), photoFile);
+                Uri imageUri = Utility.getImageContentUri(getContext(), photoFile);
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
                 startActivityForResult(takePictureIntent, Constants.REQUEST_CODES.REQUEST_CODE_CAMERA);
             }
@@ -334,7 +339,7 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
 
 
     @OnClick(R.id.navigation_btn)
-    void onNavigationButtonClick(){
+    void onNavigationButtonClick() {
         takeNavigation();
 
 //        Toast.makeText(this, "LoL", Toast.LENGTH_SHORT).show();
@@ -345,7 +350,7 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
 //        bNavigation.setVisibility(View.GONE);
     }
 
-    public void takeNavigation(){
+    public void takeNavigation() {
 //        Uri gmmIntentUri = Uri.parse("geo:37.7749,-122.4194?z=20");
 //        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
 //        mapIntent.setPackage("com.google.android.apps.maps");
@@ -359,15 +364,24 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.wtf("NULL : ", "onActivityResult in fragment");
-        super.onActivityResult(requestCode, resultCode, data);
+        Log.wtf("NULL : ", "onActivityResult in fragment " + requestCode + " " + resultCode);
 
-        if (requestCode == Constants.REQUEST_CODES.REQUEST_CODE_CAMERA) {
-            if (resultCode == Activity.RESULT_OK) {
-                sendImage(imageUri);
-            }
-        }
-        if (requestCode == Constants.REQUEST_CODES.REQUEST_CODE_GPS) {
+        switch (requestCode) {
+            case Constants.REQUEST_CODES.REQUEST_CODE_CAMERA:
+                if (resultCode == Activity.RESULT_OK) {
+                    Uri imageUri = data.getData();
+                    if (imageUri != null) {
+                        sendImage(imageUri);
+                    }
+                }
+                break;
+            case Constants.REQUEST_CODES.REQUEST_CODE_GALERY:
+                if (resultCode == Activity.RESULT_OK && data != null) {
+                    Log.wtf("NULL : ", "sendim img in fragment");
+                    sendImage(data.getData());
+                }
+                break;
+            case Constants.REQUEST_CODES.REQUEST_CODE_GPS:
             if (resultCode == Activity.RESULT_OK && null !=data){
                 Log.wtf("NULL : ","sendim gpsimg in fragment");
 //                imageUri = Uri.parse(data.getStringExtra("staticmap"));
@@ -375,18 +389,15 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
 //                etMessageBody.setText(imageuri);
 //                Toast.makeText(getContext(), mapuri, Toast.LENGTH_SHORT).show();
             }
-        }
-        if (requestCode == Constants.REQUEST_CODES.REQUEST_CODE_GALERY) {
-            if (resultCode == Activity.RESULT_OK && null != data) {
-                Log.wtf("NULL : ", "sendim img in fragment");
-                sendImage(data.getData());
-            }
+            break;
+            default:
+                super.onActivityResult(requestCode, resultCode, data);
         }
 
     }
 
     public boolean sendImage(Uri uri) {
-        Log.wtf("NULL : ", "sendImage");
+        Log.wtf("NULL : ", "sendImage " + uri);
         pbLoadingImageToServer.setVisibility(View.VISIBLE);
         if (uri == null) {
             return false;

@@ -5,6 +5,7 @@ import android.content.ClipboardManager;
 import com.peekaboo.data.repositories.database.messages.PMessage;
 import com.peekaboo.data.repositories.database.messages.PMessageAbs;
 import com.peekaboo.presentation.utils.AudioPlayer;
+import com.peekaboo.presentation.views.IChatView2;
 import com.peekaboo.presentation.views.IView;
 
 /**

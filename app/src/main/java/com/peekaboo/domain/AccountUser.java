@@ -13,10 +13,9 @@ public class AccountUser extends User {
     public static final String USERNAME = "username";
     private SharedPreferences preferences;
     private String domen;
-
     @Nullable
     private String token;
-    private int mode;
+    private byte mode;
     @Nullable
     private String username;
 
@@ -65,7 +64,7 @@ public class AccountUser extends User {
         preferences.edit().putString(TOKEN, token).commit();
     }
 
-    public void saveMode(int mode) {
+    public void saveMode(byte mode) {
         this.mode = mode;
         preferences.edit().putInt(MODE, mode).commit();
     }
@@ -75,14 +74,14 @@ public class AccountUser extends User {
         preferences.edit().putString(ID, id).commit();
     }
 
-    public int getMode() {
+    public byte getMode() {
         return mode;
     }
 
     private void restoreData() {
         token = preferences.getString(TOKEN, null);
         setId(preferences.getString(ID, null));
-        mode = preferences.getInt(MODE, 0);
+        mode = (byte) preferences.getInt(MODE, 0);
         username = preferences.getString(USERNAME, null);
     }
 
