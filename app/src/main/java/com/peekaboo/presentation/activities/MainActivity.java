@@ -19,6 +19,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -46,6 +47,7 @@ import com.peekaboo.presentation.presenters.MainActivityPresenter;
 import com.peekaboo.presentation.services.INotifier;
 import com.peekaboo.presentation.services.Message;
 import com.peekaboo.presentation.services.MessageNotificator;
+import com.peekaboo.presentation.utils.ActivityUtils;
 import com.peekaboo.presentation.utils.ResourcesUtils;
 import com.peekaboo.presentation.views.IMainView;
 import com.peekaboo.utils.ActivityNavigator;
@@ -212,25 +214,30 @@ public class MainActivity extends AppCompatActivity implements IMainView, Avatar
         hotFriendsAdapter = new HotFriendsAdapter(MainActivity.this, mPicasso, navigator);
         OverScrollDecoratorHelper.setUpOverScroll(lvHotFriends);
         lvHotFriends.setAdapter(hotFriendsAdapter);
+        drawer.addDrawerListener(
+                new DrawerLayout.DrawerListener() {
+                    @Override
+                    public void onDrawerSlide(View drawerView, float slideOffset) {
+                    }
 
-        drawer.setDrawerListener(new DrawerLayout.DrawerListener() {
-            @Override
-            public void onDrawerSlide(View drawerView, float slideOffset) {
-            }
+                    @Override
+                    public void onDrawerOpened(View drawerView) {
+                        presenter.fillHotAdapter();
+                    }
 
-            @Override
-            public void onDrawerOpened(View drawerView) {
-                presenter.fillHotAdapter();
-            }
+                    @Override
+                    public void onDrawerClosed(View drawerView) {
+                    }
 
-            @Override
-            public void onDrawerClosed(View drawerView) {
-            }
+                    @Override
+                    public void onDrawerStateChanged(int newState) {
+                        if (newState > DrawerLayout.STATE_IDLE) {
+                            ActivityUtils.hideKeyboard(MainActivity.this);
+                        }
+                    }
+                }
 
-            @Override
-            public void onDrawerStateChanged(int newState) {
-            }
-        });
+        );
     }
 
     @Override
@@ -462,6 +469,7 @@ public class MainActivity extends AppCompatActivity implements IMainView, Avatar
         interface EXTRA {
             String CONTACT_EXTRA = "contact_extra";
         }
+
     }
 
     @Override
@@ -479,18 +487,9 @@ public class MainActivity extends AppCompatActivity implements IMainView, Avatar
                 }
                 break;
             default:
-                Log.wtf("NULL : ", "onActivityResult _MAIN ACT" + requestCode);
-                sendEventToChatFragment(data);
+                super.onActivityResult(requestCode, resultCode, data);
                 break;
         }
-    }
-
-
-    public void sendEventToChatFragment(Intent data) {
-        ChatFragment chatFragment = (ChatFragment) getSupportFragmentManager()
-                .findFragmentByTag(Constants.FRAGMENT_TAGS.CHAT_FRAGMENT_TAG);
-        chatFragment.onActivityResult(Constants.REQUEST_CODES.REQUEST_CODE_GALERY, RESULT_OK, data);
-
     }
 
     @Override
