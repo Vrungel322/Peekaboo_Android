@@ -101,6 +101,7 @@ public class MainActivityPresenter extends ProgressPresenter<IMainView> implemen
 
     @Override
     public void unbind() {
+        avatarUpdateUseCase.unsubscribe();
         getDialogsListUseCase.unsubscribe();
         super.unbind();
     }

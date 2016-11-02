@@ -19,7 +19,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -40,10 +39,8 @@ import com.peekaboo.presentation.fragments.CallsFragment;
 import com.peekaboo.presentation.fragments.ChatFragment;
 import com.peekaboo.presentation.fragments.ContactsFragment;
 import com.peekaboo.presentation.fragments.DialogsFragment;
-import com.peekaboo.presentation.fragments.PeekabooDialogsFragment;
 import com.peekaboo.presentation.fragments.ProfileFragment;
 import com.peekaboo.presentation.fragments.SettingsFragment;
-import com.peekaboo.presentation.fragments.SmsDialogsFragment;
 import com.peekaboo.presentation.pojo.HotFriendPOJO;
 import com.peekaboo.presentation.presenters.MainActivityPresenter;
 import com.peekaboo.presentation.services.INotifier;
@@ -122,6 +119,7 @@ public class MainActivity extends AppCompatActivity implements IMainView, Avatar
     private HotFriendsAdapter hotFriendsAdapter;
     private ArrayList<HotFriendPOJO> alHotFriendPOJO;
     private final Set<OnBackPressListener> listeners = new HashSet<>();
+    private SettingsFragment settingsFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -334,11 +332,14 @@ public class MainActivity extends AppCompatActivity implements IMainView, Avatar
                 changeFragment(new ProfileFragment(), Constants.FRAGMENT_TAGS.PROFILE_FRAGMENT);
                 break;
             case R.id.llSettings:
-                changeFragment(new SettingsFragment(), Constants.FRAGMENT_TAGS.SETTINGS_FRAGMENT);
+                settingsFragment = new SettingsFragment();
+                settingsFragment.setUpdaterOfAvatarInDrawer(() -> showAvatar(accountUser.getAvatar()));
+                changeFragment(settingsFragment, Constants.FRAGMENT_TAGS.SETTINGS_FRAGMENT);
                 break;
             case R.id.ivAccountAvatar:
                 FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
                 AvatarChangeDialog avatarChangeDialog = new AvatarChangeDialog();
+                avatarChangeDialog.setListenerToUpdateAvatar(this);
                 avatarChangeDialog.setStyle(DialogFragment.STYLE_NO_TITLE, 0);
 //        confirmSignUpDialog.setStyle(android.app.DialogFragment.STYLE_NO_FRAME, 0);
                 avatarChangeDialog.show(ft, "avatar_change_dialog");

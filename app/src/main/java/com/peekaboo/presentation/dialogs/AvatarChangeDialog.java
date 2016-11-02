@@ -38,10 +38,13 @@ public class AvatarChangeDialog extends DialogFragment {
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         setStyle(STYLE_NO_TITLE,0);
+    }
+
+    public void setListenerToUpdateAvatar(IAvatarChangeListener listener){
         try {
-            iAvatarChangeListener = (IAvatarChangeListener) activity;
+            iAvatarChangeListener = listener;
         } catch (ClassCastException e) {
-            throw new ClassCastException(activity.toString() + " must implement onSomeEventListener");
+            throw new ClassCastException(listener + " must implement onSomeEventListener");
         }
     }
 
