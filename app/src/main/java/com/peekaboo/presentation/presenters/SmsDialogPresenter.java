@@ -45,6 +45,10 @@ public class SmsDialogPresenter extends ProgressPresenter<ISmsDialogsView>
     }
 
     @Override
+    public void onMessageNotSent() {
+    }
+
+    @Override
     public void onCreate() {
 
     }

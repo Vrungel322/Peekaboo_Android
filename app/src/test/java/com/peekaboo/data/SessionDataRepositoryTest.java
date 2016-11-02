@@ -34,8 +34,7 @@ import rx.observers.TestSubscriber;
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.mockito.Matchers.any;
-import static org.mockito.Matchers.anyInt;
-import static org.mockito.Mockito.mock;
+import static org.mockito.Matchers.anyByte;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -44,7 +43,7 @@ public class SessionDataRepositoryTest {
     private static final String TOKEN = "token";
     private static final String ID = "id";
     private static final String USERNAME = "username";
-    private static final int MODE = 1;
+    private static final byte MODE = 1;
     private static final String AVATAR_URL = "asd";
     @Mock
     private RestApi restApi;
@@ -119,14 +118,14 @@ public class SessionDataRepositoryTest {
         verify(user, times(0)).saveId(any());
         verify(user, times(0)).saveToken(any());
         verify(user, times(0)).saveUsername(any());
-        verify(user, times(0)).saveMode(anyInt());
+        verify(user, times(0)).saveMode(anyByte());
         verify(contactHelper, times(0)).insert(Mockito.argThat(getcontactMatcher()));
         verify(messageHelper, times(0)).createTable(ID);
     }
 
     @Test
     public void whenSignUpSuccessThenReturnUser() {
-        TokenEntity value = new TokenEntity(null, ID, 0, USERNAME);
+        TokenEntity value = new TokenEntity(null, ID, (byte) 0, USERNAME);
         when(restApi.signUp(any(CredentialsSignUp.class))).thenReturn(Observable.just(value));
         TestSubscriber<AccountUser> subscriber = new TestSubscriber<>();
         sessionDataRepository.signUp("123", "username", "login", "password").subscribe(subscriber);
@@ -136,7 +135,7 @@ public class SessionDataRepositoryTest {
         verify(user, times(1)).saveId(ID);
         verify(user, times(1)).saveUsername(USERNAME);
         verify(user, times(0)).saveToken(any());
-        verify(user, times(0)).saveMode(anyInt());
+        verify(user, times(0)).saveMode(anyByte());
     }
 
     @Test
@@ -152,14 +151,14 @@ public class SessionDataRepositoryTest {
         assertThat(subscriber.getOnErrorEvents().size(), is(1));
         verify(user, times(0)).saveId(any());
         verify(user, times(0)).saveToken(any());
-        verify(user, times(0)).saveMode(anyInt());
+        verify(user, times(0)).saveMode(anyByte());
         verify(user, times(0)).saveUsername(any());
     }
 
     @Test
     public void whenConfirmSuccessThenReturnUser() {
         when(mapper.getContactEntityMapper()).thenReturn(new ContactEntityToContactMapper(AVATAR_URL));
-        when(restApi.confirm(any(ConfirmKey.class))).thenReturn(Observable.just(new TokenEntity(TOKEN, null, 0, null)));
+        when(restApi.confirm(any(ConfirmKey.class))).thenReturn(Observable.just(new TokenEntity(TOKEN, null, (byte) 0, null)));
 
         UserResponse value = new UserResponse();
         value.usersList = new ArrayList<>();
@@ -173,7 +172,7 @@ public class SessionDataRepositoryTest {
         subscriber.awaitTerminalEvent();
         assertThat(subscriber.getOnNextEvents().size(), is(1));
         verify(user, times(0)).saveId(any());
-        verify(user, times(0)).saveMode(anyInt());
+        verify(user, times(0)).saveMode(anyByte());
         verify(user, times(0)).saveUsername(any());
         verify(user, times(1)).saveToken(TOKEN);
     }
@@ -192,6 +191,6 @@ public class SessionDataRepositoryTest {
         verify(user, times(0)).saveId(any());
         verify(user, times(0)).saveToken(any());
         verify(user, times(0)).saveUsername(any());
-        verify(user, times(0)).saveMode(anyInt());
+        verify(user, times(0)).saveMode(anyByte());
     }
 }
