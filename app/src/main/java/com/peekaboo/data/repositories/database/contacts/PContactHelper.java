@@ -82,20 +82,29 @@ public class PContactHelper {
     private Observable<List<Contact>> select(String query) {
         Log.e("helper", query);
         return Observable.create(subscriber -> {
-            List<Contact> messages = new ArrayList<>();
-            SQLiteDatabase db = helper.getWritableDatabase();
-
-            Cursor cursor = db.rawQuery(query, null);
-            if (cursor != null) {
-                while (cursor.moveToNext()) {
-                    messages.add(fetchPContact(cursor));
-                }
-                cursor.close();
-            }
+            List<Contact> messages = synchronousSelect(query);
 
             subscriber.onNext(messages);
             subscriber.onCompleted();
         });
+    }
+
+    public List<Contact> getAllContactsSync() {
+        String selectAll = "SELECT * FROM " + TABLE_NAME;
+        return synchronousSelect(selectAll);
+    }
+    private List<Contact> synchronousSelect(String query) {
+        List<Contact> messages = new ArrayList<>();
+        SQLiteDatabase db = helper.getWritableDatabase();
+
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor != null) {
+            while (cursor.moveToNext()) {
+                messages.add(fetchPContact(cursor));
+            }
+            cursor.close();
+        }
+        return messages;
     }
 
     private Contact fetchPContact(Cursor cursor) {

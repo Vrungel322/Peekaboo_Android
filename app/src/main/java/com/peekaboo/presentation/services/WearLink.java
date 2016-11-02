@@ -13,6 +13,9 @@ import android.os.Message;
 import android.os.RemoteException;
 import android.util.Log;
 
+import com.google.gson.Gson;
+import com.peekaboo.data.repositories.database.contacts.Contact;
+import com.peekaboo.data.repositories.database.contacts.PContactHelper;
 import com.peekaboo.data.repositories.database.messages.PMessage;
 import com.peekaboo.data.repositories.database.messages.PMessageAbs;
 import com.peekaboo.domain.AccountUser;
@@ -28,6 +31,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 
 import javax.inject.Inject;
@@ -46,6 +51,8 @@ public class WearLink extends Service implements IMessenger.MessengerListener
     AccountUser accountUser;
     @Inject
     SessionRepository sessionRepository;
+    @Inject
+    PContactHelper contactHelper;
 
     private final ChatRequestImpl chatRequest = new ChatRequestImpl();
 
@@ -119,6 +126,16 @@ public class WearLink extends Service implements IMessenger.MessengerListener
             "   }" +
             "]";
 
+    class WearContact {
+        private String id;
+        private String name;
+
+        public WearContact(String id, String name) {
+            this.id = id;
+            this.name = name;
+        }
+    }
+
     class ChatRequestImpl extends ChatRequest.Stub {
         ChatListener listener;
 
@@ -126,10 +143,18 @@ public class WearLink extends Service implements IMessenger.MessengerListener
         public String post(String action, Map params, String data) throws RemoteException {
             if ("attach".equals(action)) {
                 try {
+                    List<Contact> allContactsSync = contactHelper.getAllContactsSync();
+                    List<WearContact> wearContacts = new ArrayList<>();
+                    for (Contact contact : allContactsSync) {
+                        wearContacts.add(new WearContact(contact.contactId(), contact.contactNickname()));
+                    }
                     JSONObject json = new JSONObject();
                     json.put("id", accountUser.getId());
                     json.put("name", accountUser.getUsername());
-                    json.put("contacts", new JSONArray(predefinedContacts));
+                    String value = new Gson().toJson(wearContacts);
+                    Log.e("WearLink", value);
+                    Log.e("WearLink", predefinedContacts);
+                    json.put("contacts", new JSONArray(value));
 //                    final JSONArray jarr = new JSONArray();
 //                    sessionRepository.getAllSavedContacts().forEach(contacts -> {
 //                        for (Contact c : contacts) {
