@@ -73,6 +73,7 @@ import butterknife.OnClick;
 import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
 
 public class MainActivity extends AppCompatActivity implements IMainView, AvatarChangeDialog.IAvatarChangeListener, INotifier.NotificationListener<Message> {
+    private static final String IMAGE_URI ="image_uri";
     @BindView(R.id.drawer_layout)
     DrawerLayout drawer;
     @BindView(R.id.bText)
@@ -116,13 +117,9 @@ public class MainActivity extends AppCompatActivity implements IMainView, Avatar
     ActivityNavigator navigator;
     @Inject
     Bus eventBus;
-
-    //    @Inject
-//    UserModeChangerUseCase userModeChangerUseCase;
     private HotFriendsAdapter hotFriendsAdapter;
     private ArrayList<HotFriendPOJO> alHotFriendPOJO;
     private final Set<OnBackPressListener> listeners = new HashSet<>();
-    private Uri imageUri;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,7 +135,6 @@ public class MainActivity extends AppCompatActivity implements IMainView, Avatar
         if (getSupportFragmentManager().findFragmentById(R.id.fragmentContainer) == null) {
             if (!handleNotificationIntent(getIntent(), false)) {
                 changeFragment(ContactsFragment.newInstance(), Constants.FRAGMENT_TAGS.CONTACTS_FRAGMENT);
-//                changeFragment(new CreateDialogFragment(), Constants.FRAGMENT_TAGS.CONTACTS_FRAGMENT);
                 selectionMode(R.id.llContacts);
             }
         }
@@ -153,33 +149,35 @@ public class MainActivity extends AppCompatActivity implements IMainView, Avatar
             notifier.tryConnect(accountUser.getBearer());
         }
 
-        presenter.setUserModeListener(type -> {
-            switch (type) {
-                case UserModeChangerUseCase.IUserMode.TEXT_MODE:
-                    bText.setSelected(true);
-                    bAudio.setSelected(false);
-                    bVideo.setSelected(false);
-                    break;
+        presenter.setUserModeListener(this::renderState);
+    }
 
-                case UserModeChangerUseCase.IUserMode.AUDIO_MODE:
-                    bText.setSelected(false);
-                    bAudio.setSelected(true);
-                    bVideo.setSelected(false);
-                    break;
+    private void renderState(byte type) {
+        switch (type) {
+            case UserModeChangerUseCase.IUserMode.TEXT_MODE:
+                bText.setSelected(true);
+                bAudio.setSelected(false);
+                bVideo.setSelected(false);
+                break;
 
-                case UserModeChangerUseCase.IUserMode.VIDEO_MODE:
-                    bText.setSelected(false);
-                    bAudio.setSelected(false);
-                    bVideo.setSelected(true);
-                    break;
+            case UserModeChangerUseCase.IUserMode.AUDIO_MODE:
+                bText.setSelected(false);
+                bAudio.setSelected(true);
+                bVideo.setSelected(false);
+                break;
 
-                case UserModeChangerUseCase.IUserMode.ALL_MODE:
-                    bText.setSelected(true);
-                    bAudio.setSelected(true);
-                    bVideo.setSelected(true);
-                    break;
-            }
-        });
+            case UserModeChangerUseCase.IUserMode.VIDEO_MODE:
+                bText.setSelected(false);
+                bAudio.setSelected(false);
+                bVideo.setSelected(true);
+                break;
+
+            case UserModeChangerUseCase.IUserMode.ALL_MODE:
+                bText.setSelected(true);
+                bAudio.setSelected(true);
+                bVideo.setSelected(true);
+                break;
+        }
     }
 
     @Override
@@ -270,7 +268,7 @@ public class MainActivity extends AppCompatActivity implements IMainView, Avatar
     }
 
     private void updateAccountData(AccountUser accountUser) {
-        int mode = accountUser.getMode();
+        byte mode = accountUser.getMode();
         String avatarUrl = accountUser.getAvatar();
         String userName = accountUser.getUsername();
         tvNameSurname.setText(userName);
@@ -280,9 +278,7 @@ public class MainActivity extends AppCompatActivity implements IMainView, Avatar
                 .resize(0, avatarSize)
                 .into(ivAccountAvatar);
 
-        bText.setSelected(mode == 1);
-        bAudio.setSelected(mode == 2);
-        bVideo.setSelected(mode == 0);
+        renderState(mode);
     }
 
     private void showAvatar(String avatarUrl) {
@@ -481,9 +477,9 @@ public class MainActivity extends AppCompatActivity implements IMainView, Avatar
                 }
                 break;
             case Constants.REQUEST_CODES.REQUEST_CODE_GALERY:
-                if (resultCode == RESULT_OK && null != data) {
-                    imageUri = data.getData();
-                    presenter.updateAvatar(data.getData());
+                if (resultCode == RESULT_OK && data != null) {
+                    Uri imageUri = data.getData();
+                    presenter.updateAvatar(imageUri);
                 }
                 break;
             default:
@@ -503,8 +499,8 @@ public class MainActivity extends AppCompatActivity implements IMainView, Avatar
                 e.printStackTrace();
             }
             if (photoFile != null) {
-                imageUri = Utility.getImageContentUri(MainActivity.this, photoFile);
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+                Uri cameraImageUri = Utility.getImageContentUri(MainActivity.this, photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, cameraImageUri);
                 startActivityForResult(takePictureIntent, Constants.REQUEST_CODES.REQUEST_CODE_CAMERA);
             }
         }
@@ -515,12 +511,4 @@ public class MainActivity extends AppCompatActivity implements IMainView, Avatar
         startActivityForResult(new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI),
                 Constants.REQUEST_CODES.REQUEST_CODE_GALERY);
     }
-
-    private Uri getAvatarUri() {
-        if (imageUri != null) {
-            return imageUri;
-        }
-        return null;
-    }
-
 }

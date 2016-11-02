@@ -6,10 +6,10 @@ public class TokenEntity {
     private String token;
     private String id;
     @SerializedName("state")
-    private int mode;
+    private byte mode;
     private String username;
 
-    public TokenEntity(String token, String id, int mode, String username) {
+    public TokenEntity(String token, String id, byte mode, String username) {
         this.token = token;
         this.id = id;
         this.mode = mode;
@@ -29,7 +29,7 @@ public class TokenEntity {
     }
 
 
-    public int getMode() {
+    public byte getMode() {
         return mode;
     }
 

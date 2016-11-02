@@ -71,7 +71,6 @@ import io.codetail.widget.RevealFrameLayout;
  */
 public class ChatFragment extends Fragment implements IChatView2, MainActivity.OnBackPressListener {
     public static final String COMPANION = "companion";
-    private static final String IMAGE_URI = "image_uri";
     @BindView(R.id.etMessageBody)
     EditText etMessageBody;
     @BindView(R.id.rvMessages)
@@ -125,7 +124,6 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
     private Animator animator;
     private ChatItemDialog chatItemDialog;
     private ChatItemDialog.IChatItemEventListener iChatItemEventListener;
-//    private Uri imageUri;
 
     public static ChatFragment newInstance(Contact companion) {
 
@@ -332,7 +330,6 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
             }
             if (photoFile != null) {
                 Uri imageUri = Utility.getImageContentUri(getContext(), photoFile);
-                getArguments().putParcelable(IMAGE_URI, imageUri);
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
                 startActivityForResult(takePictureIntent, Constants.REQUEST_CODES.REQUEST_CODE_CAMERA);
             }
@@ -367,8 +364,7 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
         switch (requestCode) {
             case Constants.REQUEST_CODES.REQUEST_CODE_CAMERA:
                 if (resultCode == Activity.RESULT_OK) {
-                    Uri imageUri = getArguments().getParcelable(IMAGE_URI);
-                    getArguments().putParcelable(IMAGE_URI, null);
+                    Uri imageUri = data.getData();
                     if (imageUri != null) {
                         sendImage(imageUri);
                     }
