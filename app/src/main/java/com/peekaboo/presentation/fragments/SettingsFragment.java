@@ -2,7 +2,9 @@ package com.peekaboo.presentation.fragments;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -12,8 +14,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.peekaboo.R;
+import com.peekaboo.presentation.dialogs.AvatarChangeDialog;
 
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by Nikita on 14.07.2016.
@@ -43,5 +47,14 @@ public class SettingsFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         return super.onOptionsItemSelected(item);
+    }
+
+    @OnClick(R.id.settings_icon)
+    public void changeAvatar(){
+        FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
+        AvatarChangeDialog avatarChangeDialog = new AvatarChangeDialog();
+        avatarChangeDialog.setStyle(DialogFragment.STYLE_NO_TITLE, 0);
+//        confirmSignUpDialog.setStyle(android.app.DialogFragment.STYLE_NO_FRAME, 0);
+        avatarChangeDialog.show(ft, "avatar_change_dialog");
     }
 }

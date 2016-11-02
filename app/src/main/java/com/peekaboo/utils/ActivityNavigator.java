@@ -14,7 +14,7 @@ import com.peekaboo.presentation.activities.MainActivity;
 import com.peekaboo.presentation.activities.SignUpActivity;
 import com.peekaboo.presentation.animation.DepthAnimation;
 import com.peekaboo.presentation.fragments.ChatFragment;
-import com.peekaboo.presentation.fragments.DialogsFragment;
+import com.peekaboo.presentation.fragments.PeekabooDialogsFragment;
 import com.peekaboo.presentation.fragments.SmsChatFragment;
 import com.peekaboo.presentation.pojo.PhoneContactPOJO;
 
@@ -85,7 +85,7 @@ public class ActivityNavigator {
         for (int i = 0; i < fm.getBackStackEntryCount(); ++i) {
             fm.popBackStack();
         }
-        DialogsFragment fragment = new DialogsFragment();
+        PeekabooDialogsFragment fragment = new PeekabooDialogsFragment();
         fm.beginTransaction()
                 .replace(R.id.fragmentContainer, fragment, com.peekaboo.utils.Constants.FRAGMENT_TAGS.DIALOGS_FRAGMENT)
                 .commit();
