@@ -3,7 +3,8 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -38,7 +39,7 @@
                     android:layout_marginLeft="@dimen/settings_card_margin">
 
                     <FrameLayout
-                        android:id="@+id/settings_icon"
+                        android:id="@+id/flSettingsIconAvatar"
                         android:layout_width="@dimen/widthOfIconInDrawer"
                         android:layout_height="@dimen/widthOfIconInDrawer"
                         android:layout_alignParentLeft="true"
@@ -46,9 +47,10 @@
                         android:clickable="true">
 
                         <ImageView
+                            android:id="@+id/userAvatarInSettings"
                             android:layout_width="@dimen/widthOfIconInDrawer"
                             android:layout_height="@dimen/widthOfIconInDrawer"
-                            android:background="@drawable/raccoon" />
+                            tools:background="@drawable/raccoon" />
 
                         <ImageView
                             android:layout_width="wrap_content"
@@ -65,7 +67,7 @@
                         android:layout_alignParentRight="true"
                         android:layout_marginLeft="@dimen/settings_card_margin"
                         android:layout_marginRight="@dimen/settings_card_margin"
-                        android:layout_toRightOf="@id/settings_icon"
+                        android:layout_toRightOf="@id/flSettingsIconAvatar"
                         android:background="@null"
                         android:hint="@string/name"
                         android:textColor="#000"
@@ -80,7 +82,7 @@
                         android:layout_marginBottom="@dimen/settings_underline_margin"
                         android:layout_marginLeft="@dimen/settings_card_margin"
                         android:layout_marginTop="@dimen/settings_underline_margin"
-                        android:layout_toRightOf="@id/settings_icon"
+                        android:layout_toRightOf="@id/flSettingsIconAvatar"
                         android:background="@color/dialog_underline_color" />
 
                     <EditText
@@ -91,7 +93,7 @@
                         android:layout_below="@id/divider"
                         android:layout_marginLeft="@dimen/settings_card_margin"
                         android:layout_marginRight="@dimen/settings_card_margin"
-                        android:layout_toRightOf="@id/settings_icon"
+                        android:layout_toRightOf="@id/flSettingsIconAvatar"
                         android:background="@null"
                         android:hint="@string/surname"
                         android:textColor="#000"
@@ -104,7 +106,7 @@
                         android:layout_below="@id/surname"
                         android:layout_marginLeft="@dimen/settings_card_margin"
                         android:layout_marginTop="@dimen/settings_underline_margin"
-                        android:layout_toRightOf="@id/settings_icon"
+                        android:layout_toRightOf="@id/flSettingsIconAvatar"
                         android:background="@color/dialog_underline_color" />
 
                 </RelativeLayout>

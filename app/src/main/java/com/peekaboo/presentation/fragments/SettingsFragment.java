@@ -12,10 +12,18 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import com.peekaboo.R;
+import com.peekaboo.domain.AccountUser;
+import com.peekaboo.presentation.PeekabooApplication;
 import com.peekaboo.presentation.dialogs.AvatarChangeDialog;
+import com.peekaboo.presentation.utils.ResourcesUtils;
+import com.squareup.picasso.Picasso;
 
+import javax.inject.Inject;
+
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -23,17 +31,34 @@ import butterknife.OnClick;
  * Created by Nikita on 14.07.2016.
  */
 public class SettingsFragment extends Fragment {
-    private View rootView;
+    @Inject
+    AccountUser accountUser;
+    @Inject
+    Picasso mPicasso;
+
+    @BindView(R.id.userAvatarInSettings)
+    ImageView userAvatarInSettings;
 
     public SettingsFragment(){}
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        PeekabooApplication.getApp(getActivity()).getComponent().inject(this);
+
+    }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        rootView = inflater.inflate(R.layout.settings_layout, container, false);
+        View rootView = inflater.inflate(R.layout.settings_layout, container, false);
         ButterKnife.bind(this, rootView);
 //        setHasOptionsMenu(true);
         ((AppCompatActivity)getActivity()).getSupportActionBar().setTitle("Settings");
+
+        Picasso.with(getContext()).load(accountUser.getAvatar())
+                .resize(0, ResourcesUtils.getDimenInPx(getContext(), R.dimen.widthOfIconInDrawer))
+                .into(userAvatarInSettings);
 
         return rootView;
     }
@@ -49,7 +74,7 @@ public class SettingsFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
-    @OnClick(R.id.settings_icon)
+    @OnClick(R.id.flSettingsIconAvatar)
     public void changeAvatar(){
         FragmentTransaction ft = getActivity().getSupportFragmentManager().beginTransaction();
         AvatarChangeDialog avatarChangeDialog = new AvatarChangeDialog();
