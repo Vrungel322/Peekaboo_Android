@@ -2,6 +2,7 @@ package com.peekaboo.presentation.presenters;
 
 import android.content.Context;
 import android.net.Uri;
+import android.util.Log;
 
 import com.peekaboo.data.FileEntity;
 import com.peekaboo.domain.AccountUser;
@@ -58,8 +59,10 @@ public class MainActivityPresenter extends ProgressPresenter<IMainView> implemen
 
     @Override
     public void updateAvatar(Uri avatarUri) {
-        if(getView() != null) {
-            getView().showProgress();
+        Log.e("progress", "updateAvatar ");
+        IMainView view = getView();
+        if(view != null) {
+            view.showProgress();
         }
         avatarUpdateUseCase.setDataForUpdatingAvatar(ResourcesUtils.getRealPathFromURI(mContext, avatarUri));
         avatarUpdateUseCase.execute(getAvatarSubscriber());
@@ -70,9 +73,10 @@ public class MainActivityPresenter extends ProgressPresenter<IMainView> implemen
             @Override
             public void onNext(FileEntity response) {
                 super.onNext(response);
-                if(getView() != null){
-                    getView().hideProgress();
-                    getView().updateAvatarView(response.getResult());
+                IMainView view = getView();
+                if(view != null){
+                    view.hideProgress();
+                    view.updateAvatarView(response.getResult());
                 }
             }
         };

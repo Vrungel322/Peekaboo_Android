@@ -1,8 +1,14 @@
 package com.peekaboo.presentation.activities;
 
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
+import android.animation.AnimatorSet;
+import android.animation.ObjectAnimator;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -19,7 +25,6 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -38,29 +43,29 @@ import com.peekaboo.presentation.adapters.HotFriendsAdapter;
 import com.peekaboo.presentation.dialogs.AvatarChangeDialog;
 import com.peekaboo.presentation.fragments.ChatFragment;
 import com.peekaboo.presentation.fragments.ContactsFragment;
+import com.peekaboo.presentation.fragments.CreateDialogFragment;
 import com.peekaboo.presentation.fragments.DialogsFragment;
 import com.peekaboo.presentation.fragments.ProfileFragment;
 import com.peekaboo.presentation.fragments.SettingsFragment;
 import com.peekaboo.presentation.fragments.SmsDialogsFragment;
-import com.peekaboo.presentation.pojo.HotFriendPOJO;
 import com.peekaboo.presentation.presenters.MainActivityPresenter;
 import com.peekaboo.presentation.services.INotifier;
 import com.peekaboo.presentation.services.Message;
 import com.peekaboo.presentation.services.MessageNotificator;
 import com.peekaboo.presentation.utils.ActivityUtils;
+import com.peekaboo.presentation.utils.ImageUtils;
 import com.peekaboo.presentation.utils.ResourcesUtils;
 import com.peekaboo.presentation.views.IMainView;
 import com.peekaboo.utils.ActivityNavigator;
 import com.peekaboo.utils.Constants;
 import com.peekaboo.utils.Utility;
 import com.squareup.otto.Bus;
-import com.squareup.picasso.Callback;
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Target;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -73,7 +78,8 @@ import butterknife.OnClick;
 import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
 
 public class MainActivity extends AppCompatActivity implements IMainView, AvatarChangeDialog.IAvatarChangeListener, INotifier.NotificationListener<Message> {
-    private static final String IMAGE_URI ="image_uri";
+    public static final int BLUR_RATE = 20;
+    public static final String IMAGE_URI = "image_uri";
     @BindView(R.id.drawer_layout)
     DrawerLayout drawer;
     @BindView(R.id.bText)
@@ -100,11 +106,12 @@ public class MainActivity extends AppCompatActivity implements IMainView, Avatar
     TextView tvNameSurname;
     @BindView(R.id.ivAccountAvatar)
     ImageView ivAccountAvatar;
+    @BindView(R.id.ivAvatarBlur)
+    ImageView ivAvatarBlur;
     @BindView(R.id.pbLoading_avatar_progress_bar)
     ProgressBar pbLoading_avatar_progress_bar;
     @BindView(R.id.ivOnlineStatus)
     View ivOnlineStatus;
-
     @Inject
     INotifier<Message> notifier;
     @Inject
@@ -117,9 +124,47 @@ public class MainActivity extends AppCompatActivity implements IMainView, Avatar
     ActivityNavigator navigator;
     @Inject
     Bus eventBus;
+    private Uri cameraImageUri;
     private HotFriendsAdapter hotFriendsAdapter;
-    private ArrayList<HotFriendPOJO> alHotFriendPOJO;
     private final Set<OnBackPressListener> listeners = new HashSet<>();
+    private Target avatarTarget = new Target() {
+        @Override
+        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+            final Bitmap blurredImage = ImageUtils.getBlurredImage(bitmap, BLUR_RATE, false);
+            ivAccountAvatar.setImageBitmap(bitmap);
+            ivAvatarBlur.setImageBitmap(blurredImage);
+        }
+
+        @Override
+        public void onBitmapFailed(Drawable errorDrawable) {
+            Log.e("animator", "bitmapFailed");
+            ivAvatarBlur.setImageBitmap(null);
+
+        }
+
+        @Override
+        public void onPrepareLoad(Drawable placeHolderDrawable) {
+            Log.e("animator", "prepareLoad");
+        }
+    };
+    private Target avatarTargetAnimated = new Target() {
+        @Override
+        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
+            setAvatarWithBlur(bitmap);
+        }
+
+        @Override
+        public void onBitmapFailed(Drawable errorDrawable) {
+            Log.e("animator", "bitmapFailed");
+            ivAvatarBlur.setImageBitmap(null);
+
+        }
+
+        @Override
+        public void onPrepareLoad(Drawable placeHolderDrawable) {
+            Log.e("animator", "prepareLoad");
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,6 +172,7 @@ public class MainActivity extends AppCompatActivity implements IMainView, Avatar
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         PeekabooApplication.getApp(this).getComponent().inject(this);
+        restoreState(savedInstanceState);
         eventBus.register(this);
         presenter.bind(this);
         prepareDrawer();
@@ -134,7 +180,8 @@ public class MainActivity extends AppCompatActivity implements IMainView, Avatar
 
         if (getSupportFragmentManager().findFragmentById(R.id.fragmentContainer) == null) {
             if (!handleNotificationIntent(getIntent(), false)) {
-                changeFragment(ContactsFragment.newInstance(), Constants.FRAGMENT_TAGS.CONTACTS_FRAGMENT);
+//                changeFragment(ContactsFragment.newInstance(), Constants.FRAGMENT_TAGS.CONTACTS_FRAGMENT);
+                changeFragment(new CreateDialogFragment(), null);
                 selectionMode(R.id.llContacts);
             }
         }
@@ -150,6 +197,12 @@ public class MainActivity extends AppCompatActivity implements IMainView, Avatar
         }
 
         presenter.setUserModeListener(this::renderState);
+    }
+
+    private void restoreState(Bundle savedInstanceState) {
+        if (savedInstanceState != null) {
+            cameraImageUri = savedInstanceState.getParcelable(IMAGE_URI);
+        }
     }
 
     private void renderState(byte type) {
@@ -263,8 +316,14 @@ public class MainActivity extends AppCompatActivity implements IMainView, Avatar
         }
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
+        drawer.addDrawerListener(toggle);
         toggle.syncState();
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        outState.putParcelable(IMAGE_URI, cameraImageUri);
+        super.onSaveInstanceState(outState);
     }
 
     private void updateAccountData(AccountUser accountUser) {
@@ -272,11 +331,11 @@ public class MainActivity extends AppCompatActivity implements IMainView, Avatar
         String avatarUrl = accountUser.getAvatar();
         String userName = accountUser.getUsername();
         tvNameSurname.setText(userName);
-        Log.e("activity", "" + avatarUrl);
+        Log.e("animator", "avatarUrl " + avatarUrl);
         int avatarSize = ResourcesUtils.getDimenInPx(this, R.dimen.widthOfIconInDrawer);
         Picasso.with(this).load(avatarUrl)
                 .resize(0, avatarSize)
-                .into(ivAccountAvatar);
+                .into(avatarTarget);
 
         renderState(mode);
     }
@@ -285,17 +344,7 @@ public class MainActivity extends AppCompatActivity implements IMainView, Avatar
         int avatarSize = ResourcesUtils.getDimenInPx(this, R.dimen.widthOfIconInDrawer);
         Picasso.with(this).load(avatarUrl).memoryPolicy(MemoryPolicy.NO_CACHE)
                 .resize(0, avatarSize)
-                .into(ivAccountAvatar, new Callback() {
-                    @Override
-                    public void onSuccess() {
-                        hideProgress();
-                    }
-
-                    @Override
-                    public void onError() {
-
-                    }
-                });
+                .into(avatarTargetAnimated);
     }
 
     @Override
@@ -446,12 +495,12 @@ public class MainActivity extends AppCompatActivity implements IMainView, Avatar
 
     @Override
     public void showProgress() {
-        pbLoading_avatar_progress_bar.setVisibility(View.VISIBLE);
+//        pbLoading_avatar_progress_bar.setVisibility(View.VISIBLE);
     }
 
     @Override
     public void hideProgress() {
-        pbLoading_avatar_progress_bar.setVisibility(View.GONE);
+//        pbLoading_avatar_progress_bar.setVisibility(View.GONE);
     }
 
     public interface OnBackPressListener {
@@ -470,10 +519,12 @@ public class MainActivity extends AppCompatActivity implements IMainView, Avatar
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
             case Constants.REQUEST_CODES.REQUEST_CODE_CAMERA:
-                if (resultCode == RESULT_OK) {
-                    presenter.updateAvatar(data.getData());
+                if (resultCode == RESULT_OK && cameraImageUri != null) {
+                    presenter.updateAvatar(cameraImageUri);
+                    cameraImageUri = null;
                 }
                 break;
             case Constants.REQUEST_CODES.REQUEST_CODE_GALERY:
@@ -481,9 +532,6 @@ public class MainActivity extends AppCompatActivity implements IMainView, Avatar
                     Uri imageUri = data.getData();
                     presenter.updateAvatar(imageUri);
                 }
-                break;
-            default:
-                super.onActivityResult(requestCode, resultCode, data);
                 break;
         }
     }
@@ -499,7 +547,7 @@ public class MainActivity extends AppCompatActivity implements IMainView, Avatar
                 e.printStackTrace();
             }
             if (photoFile != null) {
-                Uri cameraImageUri = Utility.getImageContentUri(MainActivity.this, photoFile);
+                cameraImageUri = Utility.getImageContentUri(MainActivity.this, photoFile);
                 takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, cameraImageUri);
                 startActivityForResult(takePictureIntent, Constants.REQUEST_CODES.REQUEST_CODE_CAMERA);
             }
@@ -510,5 +558,24 @@ public class MainActivity extends AppCompatActivity implements IMainView, Avatar
     public void takeFromGallery() {
         startActivityForResult(new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI),
                 Constants.REQUEST_CODES.REQUEST_CODE_GALERY);
+    }
+
+    private void setAvatarWithBlur(Bitmap bitmap) {
+        final Bitmap blurredImage = ImageUtils.getBlurredImage(bitmap, BLUR_RATE, false);
+        ivAccountAvatar.setImageBitmap(bitmap);
+        AnimatorSet animatorSet = new AnimatorSet();
+        Log.e("animator", "bitmapLoaded " + blurredImage + " " + bitmap);
+        Animator hide = ObjectAnimator.ofFloat(ivAvatarBlur, "alpha", 0f).setDuration(200);
+        hide.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                super.onAnimationEnd(animation);
+                Log.e("animator", "" + animation);
+                ivAvatarBlur.setImageBitmap(blurredImage);
+            }
+        });
+        Animator show = ObjectAnimator.ofFloat(ivAvatarBlur, "alpha", 1f).setDuration(200);
+        animatorSet.playSequentially(hide, show);
+        animatorSet.start();
     }
 }

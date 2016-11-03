@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.os.SystemClock;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
@@ -71,6 +70,7 @@ import io.codetail.widget.RevealFrameLayout;
  */
 public class ChatFragment extends Fragment implements IChatView2, MainActivity.OnBackPressListener {
     public static final String COMPANION = "companion";
+    public static final String IMAGE_URI = "image_uri";
     @BindView(R.id.etMessageBody)
     EditText etMessageBody;
     @BindView(R.id.rvMessages)
@@ -120,6 +120,7 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
     private LinearLayout.LayoutParams layoutParams;
     private boolean isFirstResumeAfterCreate = true;
     private Contact companion;
+    private Uri cameraImageUri;
 
     private Animator animator;
     private ChatItemDialog chatItemDialog;
@@ -144,6 +145,14 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
         super.onCreate(savedInstanceState);
         PeekabooApplication.getApp(getActivity()).getComponent().inject(this);
         companion = getArguments().getParcelable(COMPANION);
+        restoreState(savedInstanceState);
+    }
+
+
+    private void restoreState(Bundle savedInstanceState) {
+        if (savedInstanceState != null) {
+            cameraImageUri = savedInstanceState.getParcelable(IMAGE_URI);
+        }
     }
 
     @Override
@@ -329,13 +338,18 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
                 e.printStackTrace();
             }
             if (photoFile != null) {
-                Uri imageUri = Utility.getImageContentUri(getContext(), photoFile);
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
+                cameraImageUri = Utility.getImageContentUri(getContext(), photoFile);
+                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, cameraImageUri);
                 startActivityForResult(takePictureIntent, Constants.REQUEST_CODES.REQUEST_CODE_CAMERA);
             }
         }
     }
 
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putParcelable(IMAGE_URI, cameraImageUri);
+        super.onSaveInstanceState(outState);
+    }
 
     @OnClick(R.id.navigation_btn)
     void onNavigationButtonClick() {
@@ -363,11 +377,9 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
 
         switch (requestCode) {
             case Constants.REQUEST_CODES.REQUEST_CODE_CAMERA:
-                if (resultCode == Activity.RESULT_OK) {
-                    Uri imageUri = data.getData();
-                    if (imageUri != null) {
-                        sendImage(imageUri);
-                    }
+                if (resultCode == Activity.RESULT_OK && cameraImageUri != null) {
+                    sendImage(cameraImageUri);
+                    cameraImageUri = null;
                 }
                 break;
             case Constants.REQUEST_CODES.REQUEST_CODE_GALERY:

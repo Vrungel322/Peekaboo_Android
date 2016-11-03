@@ -81,9 +81,7 @@ public class Message {
     public String toString() {
         String bodyString = body == null ?
                 "null"
-                : (Type.TEXT.equals(params.get(Params.TYPE)) ?
-                getTextBody() :
-                Arrays.toString(body));
+                : getTextBody();
 
         return "Message{" +
                 "command=" + command +

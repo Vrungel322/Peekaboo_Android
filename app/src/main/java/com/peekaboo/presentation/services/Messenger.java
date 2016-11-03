@@ -239,11 +239,11 @@ public class Messenger implements IMessenger,
     }
 
     private void uploadAndDeliverFileMessage(PMessage message) {
-        if (message.mediaType() == PMessageAbs.PMESSAGE_MEDIA_TYPE.AUDIO_MESSAGE){
+        if (message.mediaType() == PMessageAbs.PMESSAGE_MEDIA_TYPE.AUDIO_MESSAGE) {
             uploadFileUseCase.execute(message, getUploadSubscriber(), Constants.MESSAGE_TYPE.TYPE_AUDIO);
         }
 
-        if (message.mediaType() == PMessageAbs.PMESSAGE_MEDIA_TYPE.IMAGE_MESSAGE){
+        if (message.mediaType() == PMessageAbs.PMESSAGE_MEDIA_TYPE.IMAGE_MESSAGE) {
             Log.wtf("gus :", "uploadAndDeliverFileMessage -> IMAGE_MESSAGE");
             uploadFileUseCase.execute(message, getUploadSubscriber(), Constants.MESSAGE_TYPE.TYPE_IMAGE);
         }
@@ -305,7 +305,7 @@ public class Messenger implements IMessenger,
     }
 
     @Override
-    public void setpbLoadingImageToServerDisableListener(ChatFragment.DISABLE_pbLoadingImageToServer pbLoadingImageToServerDisableListener){
+    public void setpbLoadingImageToServerDisableListener(ChatFragment.DISABLE_pbLoadingImageToServer pbLoadingImageToServerDisableListener) {
         this.pbLoadingImageToServerDisableListener = pbLoadingImageToServerDisableListener;
     }
 
