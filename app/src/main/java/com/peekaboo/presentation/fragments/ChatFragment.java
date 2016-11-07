@@ -67,6 +67,8 @@ import butterknife.OnTouch;
 import io.codetail.animation.ViewAnimationUtils;
 import io.codetail.widget.RevealFrameLayout;
 
+import static com.peekaboo.utils.Utility.createImageFile;
+
 /**
  * Created by sebastian on 09.09.16.
  */
@@ -325,7 +327,7 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
         if (takePictureIntent.resolveActivity(getContext().getPackageManager()) != null) {
             File photoFile = null;
             try {
-                photoFile = Utility.createImageFile();
+                photoFile = createImageFile();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -351,13 +353,14 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
     }
 
     public void takeNavigation() {
-//        Uri gmmIntentUri = Uri.parse("geo:37.7749,-122.4194?z=20");
-//        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-//        mapIntent.setPackage("com.google.android.apps.maps");
-//        startActivity(mapIntent);
-        Intent mapintent = new Intent(getActivity(), MapActivity.class);
-//        startActivity(mapintent);
-       getActivity().startActivityForResult(mapintent, Constants.REQUEST_CODES.REQUEST_CODE_GPS);
+        Uri gmmIntentUri = Uri.parse("geo:37.7749,-122.4194?z=20");
+        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+        mapIntent.setPackage("com.google.android.apps.maps");
+        startActivity(mapIntent);
+//        ---
+//        Intent mapintent = new Intent(getActivity(), MapActivity.class);
+
+//        getActivity().startActivityForResult(mapintent, Constants.REQUEST_CODES.REQUEST_CODE_GPS);
 
 //        Log.wtf("NULL : ","sendim gpsimg in fragment");
     }
@@ -367,6 +370,7 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
         Log.wtf("NULL : ", "onActivityResult in fragment " + requestCode + " " + resultCode);
 
         switch (requestCode) {
+
             case Constants.REQUEST_CODES.REQUEST_CODE_CAMERA:
                 if (resultCode == Activity.RESULT_OK) {
                     Uri imageUri = data.getData();
@@ -382,18 +386,29 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
                 }
                 break;
             case Constants.REQUEST_CODES.REQUEST_CODE_GPS:
-            if (resultCode == Activity.RESULT_OK && null !=data){
-                Log.wtf("NULL : ","sendim gpsimg in fragment");
-//                imageUri = Uri.parse(data.getStringExtra("staticmap"));
-                String mapuri = data.getStringExtra("staticmap");
-//                etMessageBody.setText(imageuri);
-//                Toast.makeText(getContext(), mapuri, Toast.LENGTH_SHORT).show();
-            }
-            break;
+                if (resultCode == Activity.RESULT_OK && null != data) {
+                    String mapuri = data.getStringExtra("staticmap");
+                    Toast.makeText(getContext(), mapuri, Toast.LENGTH_SHORT).show();
+                    Log.wtf("NULL : ", "sendImage " + mapuri);
+//                    sendMapImage(Uri.parse(mapuri));
+
+                }
+                break;
             default:
                 super.onActivityResult(requestCode, resultCode, data);
         }
 
+    }
+
+    public boolean sendMapImage(Uri uri)  {
+        Log.wtf("NULL : ", "sendGPS " + uri);
+        pbLoadingImageToServer.setVisibility(View.VISIBLE);
+        if (uri == null) {
+            return false;
+        }
+        presenter.onSendGPSButtonPress(ResourcesUtils.getRealPathFromURI(getContext(),uri));
+//        Utility.createImageFile(File.createTempFile("prefix","suffix",get));
+        return true;
     }
 
     public boolean sendImage(Uri uri) {

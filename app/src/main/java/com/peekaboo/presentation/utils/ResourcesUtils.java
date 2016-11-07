@@ -25,7 +25,7 @@ public class ResourcesUtils {
     }
 
     public static int getColorFromAttr(Context context, int attrId) {
-        int[] attribute = new int[] { attrId };
+        int[] attribute = new int[]{attrId};
         TypedArray array = context.getTheme().obtainStyledAttributes(attribute);
         int color = array.getColor(0, Color.RED);
         array.recycle();
@@ -60,8 +60,8 @@ public class ResourcesUtils {
     public static String getRealPathFromURI(Context context, Uri contentUri) {
         Cursor cursor = null;
         try {
-            String[] proj = { MediaStore.Images.Media.DATA };
-            cursor = context.getContentResolver().query(contentUri,  proj, null, null, null);
+            String[] proj = {MediaStore.Images.Media.DATA};
+            cursor = context.getContentResolver().query(contentUri, proj, null, null, null);
             int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
             cursor.moveToFirst();
             return cursor.getString(column_index);
@@ -72,12 +72,12 @@ public class ResourcesUtils {
         }
     }
 
-    public static int getDisplayWidth(Context c){
+    public static int getDisplayWidth(Context c) {
         DisplayMetrics metrics = c.getResources().getDisplayMetrics();
         return metrics.widthPixels;
     }
 
-    public static int getDisplayHeight(Context c){
+    public static int getDisplayHeight(Context c) {
         DisplayMetrics metrics = c.getResources().getDisplayMetrics();
         return metrics.heightPixels;
     }
@@ -86,16 +86,17 @@ public class ResourcesUtils {
      * Called to split messageBody if image in there.
      * if partToReturn == 1 - image name on server
      * if partToReturn == 2 - image Path on device
+     *
      * @param fullImgPath
      * @param partToReturn
      * @return
      */
-    public static String splitImagePath(String fullImgPath, int partToReturn){
-        if (partToReturn == 1){
+    public static String splitImagePath(String fullImgPath, int partToReturn) {
+        if (partToReturn == 1) {
             return fullImgPath.split(PMessage.DIVIDER)[0];
         }
         if (partToReturn == 2) {
-             return fullImgPath.split(PMessage.DIVIDER)[1];
+            return fullImgPath.split(PMessage.DIVIDER)[1];
         }
         return "CHECK IF U partToReturn 1 OR 2";
     }

@@ -222,6 +222,29 @@ public class ChatPresenter2 extends BasePresenter<IChatView2> implements IChatPr
 //                true, uri.toString(), System.currentTimeMillis(),
 //                false, false, false)));
     }
+    @Override
+    public void onSendGPSButtonPress(String realPath) {
+        IChatView2 view = getView();
+        if (view != null) {
+            PMessage pMessage = new PMessage(
+                    true, PMessageAbs.PMESSAGE_MEDIA_TYPE.IMAGE_MESSAGE, realPath, System.currentTimeMillis(),
+                    PMessageAbs.PMESSAGE_STATUS.STATUS_SENT,
+                    receiver, accountUser.getId());
+            messenger.setpbLoadingImageToServerDisableListener(() -> {
+                IChatView2 view1 = getView();
+                if (view1 != null) {
+                    view1.hidePbLoadingImageToServer();
+                }
+            });
+            messenger.sendMessage(pMessage);
+        }
+
+
+        //TODO save image real path to db
+//        pMessageHelper.saveContactToDb(receiver, convertPMessage(new PMessage(Utility.getPackageId(),
+//                true, uri.toString(), System.currentTimeMillis(),
+//                false, false, false)));
+    }
 
     @Override
     public void onUserMessageRead(PMessage message) {

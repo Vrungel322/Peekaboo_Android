@@ -266,22 +266,41 @@ public class ChatAdapter2 extends RecyclerView.Adapter<ChatAdapter2.ViewHolder> 
 
     private void setImageMessage(ChatAdapter2.ViewHolderImage holder, String imageUri) {
         holder.pbLoadingImage.setVisibility(View.VISIBLE);
-        mPicasso.load(Uri.fromFile(new File(imageUri))).resizeDimen(R.dimen.chat_image_width, R.dimen.chat_image_height)
-                .error(R.drawable.ic_alert_circle_outline)
-                .centerInside()
-                .transform(new RoundedTransformation(25, 0))
-                .into(holder.ivImageMessage, new Callback.EmptyCallback() {
-                    @Override
-                    public void onSuccess() {
-                        holder.pbLoadingImage.setVisibility(View.GONE);
-                    }
 
-                    @Override
-                    public void onError() {
-                        holder.pbLoadingImage.setVisibility(View.GONE);
-                    }
+            mPicasso.load(Uri.fromFile(new File(imageUri))).resizeDimen(R.dimen.chat_image_width, R.dimen.chat_image_height)
+                    .error(R.drawable.ic_alert_circle_outline)
+                    .centerInside()
+                    .transform(new RoundedTransformation(25, 0))
+                    .into(holder.ivImageMessage, new Callback.EmptyCallback() {
+                        @Override
+                        public void onSuccess() {
+                            holder.pbLoadingImage.setVisibility(View.GONE);
+                        }
 
-                });
+                        @Override
+                        public void onError() {
+                            holder.pbLoadingImage.setVisibility(View.GONE);
+                        }
+
+                    });
+
+
+//        mPicasso.load(Uri.parse(imageUri)).resizeDimen(R.dimen.chat_image_width, R.dimen.chat_image_height)
+//                .error(R.drawable.ic_alert_circle_outline)
+//                .centerInside()
+//                .transform(new RoundedTransformation(25, 0))
+//                .into(holder.ivImageMessage, new Callback.EmptyCallback() {
+//                    @Override
+//                    public void onSuccess() {
+//                        holder.pbLoadingImage.setVisibility(View.GONE);
+//                    }
+//
+//                    @Override
+//                    public void onError() {
+//                        holder.pbLoadingImage.setVisibility(View.GONE);
+//                    }
+//
+//                });
     }
 
 
