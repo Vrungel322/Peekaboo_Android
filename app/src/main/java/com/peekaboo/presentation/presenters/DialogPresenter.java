@@ -1,5 +1,7 @@
 package com.peekaboo.presentation.presenters;
 
+import android.util.Log;
+
 import com.peekaboo.data.repositories.database.messages.PMessage;
 import com.peekaboo.domain.Dialog;
 import com.peekaboo.domain.UserMessageMapper;
@@ -56,6 +58,8 @@ public class DialogPresenter extends ProgressPresenter<IDialogsView>
     @Override
     public void loadDialogList() {
         getDialogsListUseCase.execute(getDialogsListSubscriber());
+        Log.wtf("DialogPresenter", "loadDialogList()");
+
     }
 
     private BaseProgressSubscriber<List<Dialog>> getDialogsListSubscriber(){
@@ -63,6 +67,8 @@ public class DialogPresenter extends ProgressPresenter<IDialogsView>
             @Override
             public void onNext(List<Dialog> response) {
                 super.onNext(response);
+                Log.wtf("DialogPresenter", "onNext()" + getView());
+
                 if(getView() != null){
                     Collections.sort(response, new DialogComparator());
                     getView().showDialogsList(response);

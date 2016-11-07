@@ -74,7 +74,7 @@
 
     <dimen name="padding_from_logo">40dp</dimen>
 
-    <dimen name="text_size">18sp</dimen>
+    <dimen name="text_size">20sp</dimen>
     <dimen name="hint_text_size">14sp</dimen>
 
     <dimen name="chat_image_width">350dp</dimen>
@@ -102,10 +102,12 @@
     <dimen name="audio_anim_height">200dp</dimen>
     <dimen name="audio_chronometer_text_size">40sp</dimen>
     <dimen name="primary_text_size">16sp</dimen>
-    <dimen name="secondary_text_size">14sp</dimen>
+    <dimen name="secondary_text_size">12sp</dimen>
     <dimen name="notification_avatar_size">64dp</dimen>
 <dimen name="right_panel_width">69dp</dimen>
     <dimen name="contact_status_image_size">20dp</dimen>
     <dimen name="margin_divider_top">18dp</dimen>
     <dimen name="settings_text_size">16sp</dimen>
+    <dimen name="settings_underline_margin">18dp</dimen>
+    <dimen name="settings_card_margin">14dp</dimen>
 </resources>

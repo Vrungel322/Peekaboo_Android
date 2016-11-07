@@ -2,250 +2,425 @@
 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    style="@style/SettingsTheme"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:theme="@style/SettingsTheme">
+        android:padding="3dp">
 
-        <LinearLayout
+
+        <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/margin_drawer_divider"
-            android:layout_marginRight="@dimen/margin_drawer_divider">
+            android:layout_gravity="center"
+            android:layout_margin="8dp"
+            card_view:cardCornerRadius="4dp">
 
-            <EditText
-                android:id="@+id/name"
-                android:layout_width="0dp"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:hint="@string/name" />
+                android:orientation="vertical">
 
-            <EditText
-                android:id="@+id/country"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:hint="@string/country" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/settings_card_margin"
+                    android:layout_marginBottom="@dimen/settings_underline_margin"
+                    android:text="@string/name"
+                    android:textColor="@color/colorAccent" />
 
-        </LinearLayout>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/settings_card_margin">
 
-        <LinearLayout
+                    <FrameLayout
+                        android:id="@+id/flSettingsIconAvatar"
+                        android:layout_width="@dimen/widthOfIconInDrawer"
+                        android:layout_height="@dimen/widthOfIconInDrawer"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:clickable="true">
+
+                        <ImageView
+                            android:id="@+id/userAvatarInSettings"
+                            android:layout_width="@dimen/widthOfIconInDrawer"
+                            android:layout_height="@dimen/widthOfIconInDrawer"
+                            tools:background="@drawable/raccoon" />
+
+                        <ImageView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_gravity="end|bottom"
+                            android:src="@drawable/ic_photo_camera" />
+                    </FrameLayout>
+
+
+                    <EditText
+                        android:id="@+id/name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_marginLeft="@dimen/settings_card_margin"
+                        android:layout_marginRight="@dimen/settings_card_margin"
+                        android:layout_toRightOf="@id/flSettingsIconAvatar"
+                        android:background="@null"
+                        android:hint="@string/name"
+                        android:textColor="#000"
+                        android:textSize="@dimen/primary_text_size" />
+
+                    <View
+                        android:id="@+id/divider"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_below="@id/name"
+                        android:layout_marginBottom="@dimen/settings_underline_margin"
+                        android:layout_marginLeft="@dimen/settings_card_margin"
+                        android:layout_marginTop="@dimen/settings_underline_margin"
+                        android:layout_toRightOf="@id/flSettingsIconAvatar"
+                        android:background="@color/dialog_underline_color" />
+
+                    <EditText
+                        android:id="@+id/surname"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:layout_below="@id/divider"
+                        android:layout_marginLeft="@dimen/settings_card_margin"
+                        android:layout_marginRight="@dimen/settings_card_margin"
+                        android:layout_toRightOf="@id/flSettingsIconAvatar"
+                        android:background="@null"
+                        android:hint="@string/surname"
+                        android:textColor="#000"
+                        android:textSize="@dimen/primary_text_size" />
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_alignParentRight="true"
+                        android:layout_below="@id/surname"
+                        android:layout_marginLeft="@dimen/settings_card_margin"
+                        android:layout_marginTop="@dimen/settings_underline_margin"
+                        android:layout_toRightOf="@id/flSettingsIconAvatar"
+                        android:background="@color/dialog_underline_color" />
+
+                </RelativeLayout>
+
+                <EditText
+                    android:id="@+id/nickname"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/settings_card_margin"
+                    android:layout_marginRight="@dimen/settings_card_margin"
+                    android:layout_marginTop="@dimen/settings_underline_margin"
+                    android:background="@null"
+                    android:hint="@string/nickname"
+                    android:textColor="#000"
+                    android:textSize="@dimen/primary_text_size" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginBottom="@dimen/settings_underline_margin"
+                    android:layout_marginTop="@dimen/settings_underline_margin"
+                    android:background="@color/dialog_underline_color" />
+
+                <EditText
+                    android:id="@+id/number"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/settings_underline_margin"
+                    android:layout_marginLeft="@dimen/settings_card_margin"
+                    android:layout_marginRight="@dimen/settings_card_margin"
+                    android:background="@null"
+                    android:hint="@string/phoneNumber"
+                    android:textColor="#000"
+                    android:textSize="@dimen/primary_text_size" />
+
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/margin_drawer_divider"
-            android:layout_marginRight="@dimen/margin_drawer_divider">
+            android:layout_gravity="center"
+            android:layout_margin="8dp"
+            card_view:cardCornerRadius="4dp">
 
-            <EditText
-                android:id="@+id/surname"
-                android:layout_width="0dp"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:hint="@string/surname" />
+                android:orientation="vertical">
 
-            <EditText
-                android:id="@+id/city"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:hint="@string/city" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/settings_card_margin"
+                    android:layout_marginBottom="@dimen/settings_underline_margin"
+                    android:text="@string/city"
+                    android:textColor="@color/colorAccent" />
 
-        </LinearLayout>
+                <EditText
+                    android:id="@+id/country"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/settings_card_margin"
+                    android:layout_marginRight="@dimen/settings_card_margin"
+                    android:background="@null"
+                    android:hint="@string/country"
+                    android:textColor="#000"
+                    android:textSize="@dimen/primary_text_size" />
 
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginBottom="@dimen/settings_underline_margin"
+                    android:layout_marginTop="@dimen/settings_underline_margin"
+                    android:background="@color/dialog_underline_color" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginBottom="12dp"
-            android:layout_marginLeft="@dimen/margin_drawer_divider"
-            android:layout_marginRight="@dimen/margin_drawer_divider"
-            android:layout_marginTop="12dp"
-            android:background="@color/colorAccent" />
+                <EditText
+                    android:id="@+id/city"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/settings_underline_margin"
+                    android:layout_marginLeft="@dimen/settings_card_margin"
+                    android:layout_marginRight="@dimen/settings_card_margin"
+                    android:background="@null"
+                    android:hint="@string/city"
+                    android:textColor="#000"
+                    android:textSize="@dimen/primary_text_size" />
+            </LinearLayout>
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/margin_drawer_divider"
-            android:layout_marginRight="@dimen/margin_drawer_divider"
-            android:layout_marginTop="@dimen/margin_divider_top">
+        </android.support.v7.widget.CardView>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:text="@string/sms_integrate"
-                android:textSize="@dimen/settings_text_size" />
-
-            <com.rm.rmswitch.RMSwitch
-                android:id="@+id/sms"
-                android:layout_width="60dp"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:checked="true"
-                android:foregroundGravity="right"
-                android:paddingLeft="4dp"
-                app:switchBkgCheckedColor="@color/colorAccent"
-                app:switchBkgNotCheckedColor="@color/colorDarkAccent"
-                app:switchToggleCheckedColor="@color/colorAccent"
-                app:switchToggleCheckedImage="@drawable/sms_white_36dp"
-                app:switchToggleNotCheckedColor="@color/colorDarkAccent" />
-
-        </RelativeLayout>
-
-        <RelativeLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/margin_drawer_divider"
-            android:layout_marginRight="@dimen/margin_drawer_divider"
-            android:layout_marginTop="@dimen/margin_divider_top">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:text="@string/prefer_text"
-                android:textSize="@dimen/settings_text_size" />
-
-            <com.rm.rmswitch.RMSwitch
-                android:id="@+id/preferText"
-                android:layout_width="60dp"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:checked="true"
-                android:foregroundGravity="right"
-                android:paddingLeft="4dp"
-                app:switchBkgCheckedColor="@color/colorAccent"
-                app:switchBkgNotCheckedColor="@color/colorDarkAccent"
-                app:switchToggleCheckedColor="@color/colorAccent"
-                app:switchToggleCheckedImage="@drawable/text_format_white_24dp"
-                app:switchToggleNotCheckedColor="@color/colorDarkAccent" />
-
-        </RelativeLayout>
-
-        <RelativeLayout
+        <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/margin_drawer_divider"
-            android:layout_marginRight="@dimen/margin_drawer_divider"
-            android:layout_marginTop="@dimen/margin_divider_top">
+            android:layout_gravity="center"
+            android:layout_margin="8dp"
+            card_view:cardCornerRadius="4dp">
 
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:text="@string/driver_mode"
-                android:textColor="@color/textColor"
-                android:textSize="@dimen/settings_text_size" />
+                android:orientation="vertical">
 
-            <com.rm.rmswitch.RMSwitch
-                android:id="@+id/driverMode"
-                android:layout_width="60dp"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:checked="true"
-                android:foregroundGravity="right"
-                android:paddingLeft="4dp"
-                app:switchBkgCheckedColor="@color/colorAccent"
-                app:switchBkgNotCheckedColor="@color/colorDarkAccent"
-                app:switchToggleCheckedColor="@color/colorAccent"
-                app:switchToggleCheckedImage="@drawable/car_white_24dp"
-                app:switchToggleNotCheckedColor="@color/colorDarkAccent"
-                app:switchToggleNotCheckedImage="@drawable/directions_walk_white_24dp" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/settings_card_margin"
+                    android:layout_marginBottom="@dimen/settings_underline_margin"
+                    android:text="@string/general"
+                    android:textColor="@color/colorAccent" />
 
-        </RelativeLayout>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/settings_card_margin"
+                    android:layout_marginRight="@dimen/settings_card_margin">
 
-        <RelativeLayout
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:text="@string/sms_integrate"
+                        android:textColor="#000"
+                        android:textSize="@dimen/primary_text_size" />
+
+                    <com.rm.rmswitch.RMSwitch
+                        android:id="@+id/sms"
+                        android:layout_width="60dp"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:checked="true"
+                        android:foregroundGravity="right"
+                        android:paddingLeft="4dp"
+                        app:switchBkgCheckedColor="@color/colorAccent"
+                        app:switchBkgNotCheckedColor="@color/colorDarkAccent"
+                        app:switchToggleCheckedColor="@color/colorAccent"
+                        app:switchToggleCheckedImage="@drawable/sms_white"
+                        app:switchToggleNotCheckedColor="@color/colorDarkAccent"
+                        app:switchToggleNotCheckedImage="@drawable/no_sms_white" />
+
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginBottom="@dimen/settings_underline_margin"
+                    android:layout_marginTop="@dimen/settings_underline_margin"
+                    android:background="@color/dialog_underline_color" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/settings_card_margin"
+                    android:layout_marginRight="@dimen/settings_card_margin">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:text="@string/driver_mode"
+                        android:textColor="#000"
+                        android:textSize="@dimen/primary_text_size" />
+
+                    <com.rm.rmswitch.RMSwitch
+                        android:id="@+id/driverMode"
+                        android:layout_width="60dp"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:checked="true"
+                        android:foregroundGravity="right"
+                        android:paddingLeft="4dp"
+                        app:switchBkgCheckedColor="@color/colorAccent"
+                        app:switchBkgNotCheckedColor="@color/colorDarkAccent"
+                        app:switchToggleCheckedColor="@color/colorAccent"
+                        app:switchToggleCheckedImage="@drawable/car_white_24dp"
+                        app:switchToggleNotCheckedColor="@color/colorDarkAccent"
+                        app:switchToggleNotCheckedImage="@drawable/directions_walk_white_24dp" />
+
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginBottom="@dimen/settings_underline_margin"
+                    android:layout_marginTop="@dimen/settings_underline_margin"
+                    android:background="@color/dialog_underline_color" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/settings_card_margin"
+                    android:layout_marginRight="@dimen/settings_card_margin">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentLeft="true"
+                        android:layout_alignParentStart="true"
+                        android:text="@string/disable_notifications"
+                        android:textColor="#000"
+                        android:textSize="@dimen/primary_text_size" />
+
+                    <com.rm.rmswitch.RMSwitch
+                        android:id="@+id/notificationOff"
+                        android:layout_width="60dp"
+                        android:layout_height="match_parent"
+                        android:layout_alignParentEnd="true"
+                        android:layout_alignParentRight="true"
+                        android:checked="true"
+                        android:foregroundGravity="right"
+                        android:paddingLeft="4dp"
+                        app:switchBkgCheckedColor="@color/colorAccent"
+                        app:switchBkgNotCheckedColor="@color/colorDarkAccent"
+                        app:switchToggleCheckedColor="@color/colorAccent"
+                        app:switchToggleCheckedImage="@drawable/notifications_off_white_24dp"
+                        app:switchToggleNotCheckedColor="@color/colorDarkAccent"
+                        app:switchToggleNotCheckedImage="@drawable/notifications_white_24dp" />
+                </RelativeLayout>
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginBottom="@dimen/settings_underline_margin"
+                    android:layout_marginTop="@dimen/settings_underline_margin"
+                    android:background="@color/dialog_underline_color" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="22dp"
+                    android:layout_marginLeft="@dimen/settings_card_margin"
+                    android:layout_marginRight="@dimen/settings_card_margin"
+                    android:clickable="true"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="@string/prefer_text"
+                        android:textColor="#000"
+                        android:textSize="@dimen/primary_text_size" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="DE-DE BirgitVoice"
+                        android:textColor="#969696"
+                        android:textSize="@dimen/secondary_text_size" />
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.CardView xmlns:card_view="http://schemas.android.com/apk/res-auto"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/margin_divider_top"
-            android:layout_marginLeft="@dimen/margin_drawer_divider"
-            android:layout_marginRight="@dimen/margin_drawer_divider"
+            android:layout_gravity="center"
+            android:layout_margin="8dp"
+            card_view:cardCornerRadius="4dp">
 
-            android:layout_marginTop="@dimen/margin_divider_top">
-
-            <TextView
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentStart="true"
-                android:text="@string/disable_notifications"
-                android:textSize="@dimen/settings_text_size" />
+                android:orientation="vertical">
 
-            <com.rm.rmswitch.RMSwitch
-                android:id="@+id/notificationOff"
-                android:layout_width="60dp"
-                android:layout_height="match_parent"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:checked="true"
-                android:foregroundGravity="right"
-                android:paddingLeft="4dp"
-                app:switchBkgCheckedColor="@color/colorAccent"
-                app:switchBkgNotCheckedColor="@color/colorDarkAccent"
-                app:switchToggleCheckedColor="@color/colorAccent"
-                app:switchToggleCheckedImage="@drawable/notifications_off_white_24dp"
-                app:switchToggleNotCheckedColor="@color/colorDarkAccent"
-                app:switchToggleNotCheckedImage="@drawable/notifications_white_24dp" />
-        </RelativeLayout>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/settings_card_margin"
+                    android:layout_marginBottom="@dimen/settings_underline_margin"
+                    android:text="@string/advanced"
+                    android:textColor="@color/colorAccent" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginBottom="12dp"
-            android:layout_marginLeft="@dimen/margin_drawer_divider"
-            android:layout_marginRight="@dimen/margin_drawer_divider"
-            android:layout_marginTop="12dp"
-            android:background="@color/colorAccent" />
+                <TextView
+                    android:id="@+id/cloud_storage"
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/margin_drawer_divider"
-            android:layout_marginRight="@dimen/margin_drawer_divider"
-            android:layout_marginTop="@dimen/margin_divider_top"
-            android:clickable="true"
-            android:orientation="vertical">
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/settings_card_margin"
+                    android:layout_marginRight="@dimen/settings_card_margin"
+                    android:background="@null"
+                    android:clickable="true"
+                    android:text="@string/default_cloud_storage"
+                    android:textColor="#000"
+                    android:textSize="@dimen/primary_text_size" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/default_cloud_storage"
-                android:textSize="@dimen/settings_text_size" />
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginBottom="@dimen/settings_underline_margin"
+                    android:layout_marginTop="@dimen/settings_underline_margin"
+                    android:background="@color/dialog_underline_color" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/google_cloud"
-                android:textColor="#969696"
-                android:textSize="14sp"
+                <TextView
+                    android:id="@+id/services_inter"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="22dp"
+                    android:layout_marginLeft="@dimen/settings_card_margin"
+                    android:layout_marginRight="@dimen/settings_card_margin"
+                    android:background="@null"
+                    android:clickable="true"
+                    android:text="@string/services_integration"
+                    android:textColor="#000"
+                    android:textSize="@dimen/primary_text_size" />
+            </LinearLayout>
 
-                />
-        </LinearLayout>
+        </android.support.v7.widget.CardView>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/margin_drawer_divider"
-            android:layout_marginRight="@dimen/margin_drawer_divider"
-            android:layout_marginTop="@dimen/margin_divider_top"
-            android:clickable="true"
-            android:orientation="vertical">
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="@string/services_integration"
-                android:textSize="@dimen/settings_text_size" />
-        </LinearLayout>
     </LinearLayout>
 </ScrollView>

@@ -85,7 +85,7 @@
     <!-- ContactsFragment strings -->
     <string name="title_contacts">Contacts</string>
 
-    <!-- DialogsFragment strings -->
+    <!-- PeekabooDialogsFragment strings -->
     <string name="title_dialogs">Dialogs</string>
 
     <!-- message types -->
@@ -106,5 +106,8 @@
     <string name="default_cloud_storage">Default cloud storage</string>
     <string name="google_cloud">Google Cloud Storage</string>
     <string name="services_integration">Services integration</string>
+    <string name="advanced">Advanced</string>
+    <string name="nickname">Nickname</string>
+    <string name="general">General</string>
 
 </resources>
