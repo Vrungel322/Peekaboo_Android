@@ -1,7 +1,15 @@
 package com.peekaboo.data.repositories.database.contacts;
 
+import android.content.ContentValues;
+import android.database.Cursor;
 import android.os.Parcel;
 import android.os.Parcelable;
+
+import com.peekaboo.data.repositories.database.utils_db.Db;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * Created by Nikita on 10.08.2016.
@@ -15,9 +23,10 @@ public class Contact extends ContactAbs implements Parcelable {
     private boolean isOnline;
     private String contactImgUri;
     private String contactId;
+    private List<String> chatContacts;
 
     public Contact(long id, String contactName, String contactSurname, String contactNickname,
-                   boolean isOnline, String contactImgUri, String contactId) {
+                   boolean isOnline, String contactImgUri, String contactId, List<String> chatContacts) {
         this.id = id;
         this.contactName = contactName;
         this.contactSurname = contactSurname;
@@ -25,7 +34,9 @@ public class Contact extends ContactAbs implements Parcelable {
         this.isOnline = isOnline;
         this.contactImgUri = contactImgUri;
         this.contactId = contactId;
+        this.chatContacts = chatContacts;
     }
+
 
     @Override
     public long id() {
@@ -66,6 +77,11 @@ public class Contact extends ContactAbs implements Parcelable {
         return contactImgUri;
     }
 
+    @Override
+    public List<String> chatContacts() {
+        return chatContacts;
+    }
+
     public void setId(long id) {
         this.id = id;
     }
@@ -84,6 +100,7 @@ public class Contact extends ContactAbs implements Parcelable {
         dest.writeBooleanArray(new boolean[]{isOnline});
         dest.writeString(contactImgUri);
         dest.writeString(contactId);
+        dest.writeStringList(chatContacts);
     }
 
     public static final Parcelable.Creator<Contact> CREATOR = new Parcelable.Creator<Contact>() {
@@ -99,7 +116,7 @@ public class Contact extends ContactAbs implements Parcelable {
         }
     };
 
-    private Contact(Parcel in){
+    private Contact(Parcel in) {
         id = in.readLong();
         contactName = in.readString();
         contactSurname = in.readString();
@@ -107,6 +124,9 @@ public class Contact extends ContactAbs implements Parcelable {
         isOnline = in.createBooleanArray()[0];
         contactImgUri = in.readString();
         contactId = in.readString();
+        ArrayList<String> strings = new ArrayList<>();
+        in.readStringList(strings);
+        chatContacts = (!strings.isEmpty()) ? strings : null;
     }
 
     @Override
@@ -129,6 +149,80 @@ public class Contact extends ContactAbs implements Parcelable {
     @Override
     public int hashCode() {
         return contactId.hashCode();
+    }
+
+
+
+    public static Contact fetchPContact(Cursor cursor) {
+        long id = Db.getLong(cursor, ContactAbs.CONTACT_ID);
+        String contactId = Db.getString(cursor, ContactAbs.CONTACT_ID);
+        String contactName = Db.getString(cursor, ContactAbs.CONTACT_NAME);
+        String contactSurname = Db.getString(cursor, ContactAbs.CONTACT_SURNAME);
+        String contactNickname = Db.getString(cursor, ContactAbs.CONTACT_NICKNAME);
+        boolean isOnline = Db.getBoolean(cursor, ContactAbs.CONTACT_IS_ONLINE);
+        String contactImgUri = Db.getString(cursor, ContactAbs.CONTACT_IMG_URI);
+        List<String> chatContacts;
+        String contactsString = Db.getString(cursor, ContactAbs.CHAT_CONTACTS);
+        if (contactsString == null) {
+            chatContacts = null;
+        } else {
+            contactsString = contactsString.substring(1, contactsString.length() - 1);
+            chatContacts = Arrays.asList(contactsString.split(","));
+        }
+
+        return new Contact(id, contactName, contactSurname, contactNickname, isOnline, contactImgUri, contactId, chatContacts);
+    }
+
+    public static final class Builder{
+        private final ContentValues cv = new ContentValues();
+
+        public Builder id(long id){
+            cv.put(ID, id);
+            return this;
+        }
+
+        public Builder contactId(String contactId){
+            cv.put(CONTACT_ID, contactId);
+            return this;
+        }
+
+        public Builder contactName(String contactName){
+            cv.put(CONTACT_NAME, contactName);
+            return this;
+        }
+
+        public Builder contactSurname(String contactSurname){
+            cv.put(CONTACT_SURNAME, contactSurname);
+            return this;
+        }
+
+        public Builder contactNickname(String contactNickname){
+            cv.put(CONTACT_NICKNAME, contactNickname);
+            return this;
+        }
+
+        public Builder isOnline(boolean isOnline){
+            cv.put(CONTACT_IS_ONLINE, isOnline);
+            return this;
+        }
+
+        public Builder contactImgUri(String contactImgUri){
+            cv.put(CONTACT_IMG_URI, contactImgUri);
+            return this;
+        }
+
+        public Builder chatContacts(List<String> chatContacts){
+            if (chatContacts != null) {
+                cv.put(CHAT_CONTACTS, chatContacts.toString().replace(" ", ""));
+            } else {
+                cv.putNull(CHAT_CONTACTS);
+            }
+            return this;
+        }
+
+        public ContentValues build(){
+            return cv;
+        }
     }
 
 }

@@ -11,13 +11,14 @@ import com.peekaboo.data.repositories.database.contacts.ContactAbs;
 public class PContactMapper implements Mapper<Contact, ContentValues> {
     @Override
     public ContentValues transform(Contact obj) throws RuntimeException {
-        return new ContactAbs.Builder()
+        return new Contact.Builder()
                 .contactName(obj.contactName())
                 .contactSurname(obj.contactSurname())
                 .contactNickname(obj.contactNickname())
                 .isOnline(obj.isOnline())
                 .contactImgUri(obj.contactImgUri())
                 .contactId(obj.contactId())
+                .chatContacts(obj.chatContacts())
                 .build();
     }
 }

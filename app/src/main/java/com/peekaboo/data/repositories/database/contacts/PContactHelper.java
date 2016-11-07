@@ -50,6 +50,7 @@ public class PContactHelper {
                 ContactAbs.CONTACT_IS_ONLINE + " INTEGER NOT NULL," +
 //                ContactAbs.CONTACT_IMG_URI + " TEXT " +
                 ContactAbs.CONTACT_IMG_URI + " TEXT, " +
+                ContactAbs.CONTACT_IMG_URI + " TEXT, " +
                 " UNIQUE (" + ContactAbs.CONTACT_ID + ") ON CONFLICT REPLACE" +
                 ")" +
                 ";";
@@ -100,24 +101,13 @@ public class PContactHelper {
         Cursor cursor = db.rawQuery(query, null);
         if (cursor != null) {
             while (cursor.moveToNext()) {
-                messages.add(fetchPContact(cursor));
+                messages.add(Contact.fetchPContact(cursor));
             }
             cursor.close();
         }
         return messages;
     }
 
-    private Contact fetchPContact(Cursor cursor) {
-        long id = Db.getLong(cursor, ContactAbs.CONTACT_ID);
-        String contactId = Db.getString(cursor, ContactAbs.CONTACT_ID);
-        String contactName = Db.getString(cursor, ContactAbs.CONTACT_NAME);
-        String contactSurname = Db.getString(cursor, ContactAbs.CONTACT_SURNAME);
-        String contactNickname = Db.getString(cursor, ContactAbs.CONTACT_NICKNAME);
-        boolean isOnline = Db.getBoolean(cursor, ContactAbs.CONTACT_IS_ONLINE);
-        String contactImgUri = Db.getString(cursor, ContactAbs.CONTACT_IMG_URI);
-
-        return new Contact(id, contactName, contactSurname, contactNickname, isOnline, contactImgUri, contactId);
-    }
 
     public Observable<Contact> getContactByContactId(String contactId) {
         String selectAll = "SELECT * FROM " + TABLE_NAME + " WHERE " + Contact.CONTACT_ID + " = " + contactId;

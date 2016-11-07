@@ -17,6 +17,6 @@ public class ContactEntityToContactMapper implements Mapper<ContactEntity, Conta
     @Override
     public Contact transform(ContactEntity obj) throws RuntimeException {
         return new Contact(0, obj.getName(), obj.getSurname(), obj.getNickname(), Utility.convertIntToBoolean(obj.getState()),
-                url + obj.getId(), obj.getId());
+                url + obj.getId(), obj.getId(), null);
     }
 }
