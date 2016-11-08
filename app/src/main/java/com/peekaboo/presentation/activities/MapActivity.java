@@ -70,72 +70,17 @@ public class MapActivity extends Activity implements OnMapReadyCallback {
 
             String lat = String.valueOf(googleMap.getMyLocation().getLatitude());//"50.459507";
             String lng = String.valueOf(googleMap.getMyLocation().getLongitude());//"30.514554";
-            String mapuri = "http://maps.google.com/maps/api/staticmap?center=" + lat + "," + lng + "&zoom=18&size=350x230&sensor=true";
-//            Picasso.with(this).load(mapuri).into((ImageView)findViewById(R.id.testimgview));
-//            Picasso.with(this).load(mapuri).into(new Target() {
-//                @Override
-//                public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-//                    new Thread(new Runnable() {
-//                        @Override
-//                        public void run() {
-//
-//                            File file = new File(
-//                                    Environment.getExternalStorageDirectory().getPath()
-//                                            + "/saved.jpg");
-//                            try {
-//                                file.createNewFile();
-//                                FileOutputStream ostream = new FileOutputStream(file);
-//                                bitmap.compress(Bitmap.CompressFormat.JPEG,100,ostream);
-//                                ostream.close();
-//                            }
-//                            catch (Exception e) {
-//                                e.printStackTrace();
-//                            }
-//                        }
-//                    }).start();
-//
-//
-//                }
-//
-//                @Override
-//                public void onBitmapFailed(Drawable errorDrawable) {
-//
-//                }
-//
-//                @Override
-//                public void onPrepareLoad(Drawable placeHolderDrawable) {
-//
-//                }
-//            });
+            String mapuri = "http://maps.google.com/maps/api/staticmap?center=" + lat + "," + lng +
+                    "&zoom=18&size=350x230" + "&markers=icon:http://chart.apis.google.com/chart?chst=d_map_pin_icon|" + lat + "," + lng +
+                    "&sensor=true";
             Intent intent = new Intent();
             intent.putExtra("staticmap", mapuri);
             setResult(RESULT_OK, intent);
-//            Log.wtf("NULL : ","sendim gpsimg in fragment");
 
             finish();
 
         });
-//            new DownloadImageTask((ImageView) findViewById(R.id.testimgview))
-//                    .execute(url);
-//            Picasso.with(this).load(url).into((ImageView)findViewById(R.id.testimgview));
-//            mPicasso.load(url).resizeDimen(R.dimen.chat_image_width, R.dimen.chat_image_height)
-//                    .error(R.drawable.ic_alert_circle_outline)
-//                    .centerInside()
-//                    .transform(new RoundedTransformation(25, 0))
-//                    .into(holder.ivImageMessage, new Callback.EmptyCallback() {
-//                        @Override
-//                        public void onSuccess() {
-//                            holder.pbLoadingImage.setVisibility(View.GONE);
-//                        }
-//
-//                        @Override
-//                        public void onError() {
-//                            holder.pbLoadingImage.setVisibility(View.GONE);
-//                        }
-//
-//                    });
-//        });
-//    }
+
 
         GoogleMap.OnMyLocationChangeListener myLocationChangeListener = new GoogleMap.OnMyLocationChangeListener() {
             @Override

@@ -343,26 +343,17 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
     @OnClick(R.id.navigation_btn)
     void onNavigationButtonClick() {
         takeNavigation();
+    }
 
-//        Toast.makeText(this, "LoL", Toast.LENGTH_SHORT).show();
+    public void takeNavigation() {
 //        Uri gmmIntentUri = Uri.parse("geo:37.7749,-122.4194?z=20");
 //        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
 //        mapIntent.setPackage("com.google.android.apps.maps");
 //        startActivity(mapIntent);
-//        bNavigation.setVisibility(View.GONE);
-    }
-
-    public void takeNavigation() {
-        Uri gmmIntentUri = Uri.parse("geo:37.7749,-122.4194?z=20");
-        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-        mapIntent.setPackage("com.google.android.apps.maps");
-        startActivity(mapIntent);
 //        ---
-//        Intent mapintent = new Intent(getActivity(), MapActivity.class);
-
-//        getActivity().startActivityForResult(mapintent, Constants.REQUEST_CODES.REQUEST_CODE_GPS);
-
-//        Log.wtf("NULL : ","sendim gpsimg in fragment");
+        Intent mapintent = new Intent(getActivity(), MapActivity.class);
+        getActivity().startActivityForResult(mapintent, Constants.REQUEST_CODES.REQUEST_CODE_GPS);
+        Log.wtf("NULL : ", "sendim gpsimg in fragment");
     }
 
     @Override
@@ -387,10 +378,10 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
                 break;
             case Constants.REQUEST_CODES.REQUEST_CODE_GPS:
                 if (resultCode == Activity.RESULT_OK && null != data) {
-                    String mapuri = data.getStringExtra("staticmap");
-                    Toast.makeText(getContext(), mapuri, Toast.LENGTH_SHORT).show();
-                    Log.wtf("NULL : ", "sendImage " + mapuri);
-//                    sendMapImage(Uri.parse(mapuri));
+                    String link = data.getStringExtra("staticmap");
+//                    Toast.makeText(getContext(), link, Toast.LENGTH_SHORT).show();
+                    Log.wtf("NULL : ", "sendImage " + link);
+                    sendGeo(link);
 
                 }
                 break;
@@ -400,14 +391,12 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
 
     }
 
-    public boolean sendMapImage(Uri uri)  {
-        Log.wtf("NULL : ", "sendGPS " + uri);
-        pbLoadingImageToServer.setVisibility(View.VISIBLE);
-        if (uri == null) {
+    public boolean sendGeo(String link) {
+        Log.wtf("NULL : ", "sendGeo " + link);
+        if (link == null) {
             return false;
         }
-        presenter.onSendGPSButtonPress(ResourcesUtils.getRealPathFromURI(getContext(),uri));
-//        Utility.createImageFile(File.createTempFile("prefix","suffix",get));
+        presenter.onSendGPSButtonPress(link);
         return true;
     }
 

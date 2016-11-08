@@ -222,20 +222,23 @@ public class ChatPresenter2 extends BasePresenter<IChatView2> implements IChatPr
 //                true, uri.toString(), System.currentTimeMillis(),
 //                false, false, false)));
     }
+
     @Override
-    public void onSendGPSButtonPress(String realPath) {
+    public void onSendGPSButtonPress(String link) {
         IChatView2 view = getView();
         if (view != null) {
             PMessage pMessage = new PMessage(
-                    true, PMessageAbs.PMESSAGE_MEDIA_TYPE.IMAGE_MESSAGE, realPath, System.currentTimeMillis(),
+                    true, PMessageAbs.PMESSAGE_MEDIA_TYPE.GEO_MESSAGE, link, System.currentTimeMillis(),
                     PMessageAbs.PMESSAGE_STATUS.STATUS_SENT,
                     receiver, accountUser.getId());
-            messenger.setpbLoadingImageToServerDisableListener(() -> {
-                IChatView2 view1 = getView();
-                if (view1 != null) {
-                    view1.hidePbLoadingImageToServer();
-                }
-            });
+//            messenger.setpbLoadingImageToServerDisableListener(() -> {
+//                IChatView2 view1 = getView();
+//                if (view1 != null) {
+//                    view1.hidePbLoadingImageToServer();
+//                }
+//            });
+            Log.wtf("NULL : ", "sendim gpsimg in presenter");
+
             messenger.sendMessage(pMessage);
         }
 

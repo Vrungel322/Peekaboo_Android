@@ -117,5 +117,6 @@ public abstract class PMessageAbs {
         int IMAGE_MESSAGE = 2;
         int VIDEO_MESSAGE = 3;
         int DOCUMENT_MESSAGE = 4;
+        int GEO_MESSAGE = 5;
     }
 }

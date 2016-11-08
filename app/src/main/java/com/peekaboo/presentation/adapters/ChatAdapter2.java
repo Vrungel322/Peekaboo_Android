@@ -132,6 +132,10 @@ public class ChatAdapter2 extends RecyclerView.Adapter<ChatAdapter2.ViewHolder> 
             case PMessageAbs.PMESSAGE_MEDIA_TYPE.IMAGE_MESSAGE:
                 v = inflater.inflate(R.layout.list_item_chat_image_message, parent, false);
                 return new ViewHolderImage(v);
+            case PMessageAbs.PMESSAGE_MEDIA_TYPE.GEO_MESSAGE:
+                v = inflater.inflate(R.layout.list_item_chat_image_message, parent, false);
+                return new ViewHolderGeo(v);
+
         }
 
         return null;
@@ -173,6 +177,14 @@ public class ChatAdapter2 extends RecyclerView.Adapter<ChatAdapter2.ViewHolder> 
         setAlignment(holder, pMessageAbs.isMine(), prevMine, nextMine);
 
         switch (mediaType) {
+            case PMessageAbs.PMESSAGE_MEDIA_TYPE.GEO_MESSAGE:
+                if (holder instanceof ViewHolderGeo) {
+                    String link = pMessageAbs.messageBody();
+                    Log.wtf("geo link : ", link);
+                    setGeoMessage((ViewHolderGeo) holder, link);
+
+                }
+                break;
             case PMessageAbs.PMESSAGE_MEDIA_TYPE.TEXT_MESSAGE:
                 if (holder instanceof ViewHolderText) {
                     ((ViewHolderText) holder).tvChatMessage.setText(Html.fromHtml(pMessageAbs.messageBody()));
@@ -267,40 +279,43 @@ public class ChatAdapter2 extends RecyclerView.Adapter<ChatAdapter2.ViewHolder> 
     private void setImageMessage(ChatAdapter2.ViewHolderImage holder, String imageUri) {
         holder.pbLoadingImage.setVisibility(View.VISIBLE);
 
-            mPicasso.load(Uri.fromFile(new File(imageUri))).resizeDimen(R.dimen.chat_image_width, R.dimen.chat_image_height)
-                    .error(R.drawable.ic_alert_circle_outline)
-                    .centerInside()
-                    .transform(new RoundedTransformation(25, 0))
-                    .into(holder.ivImageMessage, new Callback.EmptyCallback() {
-                        @Override
-                        public void onSuccess() {
-                            holder.pbLoadingImage.setVisibility(View.GONE);
-                        }
+        mPicasso.load(Uri.fromFile(new File(imageUri))).resizeDimen(R.dimen.chat_image_width, R.dimen.chat_image_height)
+                .error(R.drawable.ic_alert_circle_outline)
+                .centerInside()
+                .transform(new RoundedTransformation(25, 0))
+                .into(holder.ivImageMessage, new Callback.EmptyCallback() {
+                    @Override
+                    public void onSuccess() {
+                        holder.pbLoadingImage.setVisibility(View.GONE);
+                    }
 
-                        @Override
-                        public void onError() {
-                            holder.pbLoadingImage.setVisibility(View.GONE);
-                        }
+                    @Override
+                    public void onError() {
+                        holder.pbLoadingImage.setVisibility(View.GONE);
+                    }
 
-                    });
+                });
+    }
 
+    private void setGeoMessage(ChatAdapter2.ViewHolderGeo holder, String link) {
+        holder.pbLoadingImage.setVisibility(View.VISIBLE);
 
-//        mPicasso.load(Uri.parse(imageUri)).resizeDimen(R.dimen.chat_image_width, R.dimen.chat_image_height)
-//                .error(R.drawable.ic_alert_circle_outline)
-//                .centerInside()
-//                .transform(new RoundedTransformation(25, 0))
-//                .into(holder.ivImageMessage, new Callback.EmptyCallback() {
-//                    @Override
-//                    public void onSuccess() {
-//                        holder.pbLoadingImage.setVisibility(View.GONE);
-//                    }
-//
-//                    @Override
-//                    public void onError() {
-//                        holder.pbLoadingImage.setVisibility(View.GONE);
-//                    }
-//
-//                });
+        mPicasso.load(Uri.parse(link)).resizeDimen(R.dimen.chat_image_width, R.dimen.chat_image_height)
+                .error(R.drawable.ic_alert_circle_outline)
+                .centerInside()
+                .transform(new RoundedTransformation(25, 0))
+                .into(holder.ivImageMessage, new Callback.EmptyCallback() {
+                    @Override
+                    public void onSuccess() {
+                        holder.pbLoadingImage.setVisibility(View.GONE);
+                    }
+
+                    @Override
+                    public void onError() {
+                        holder.pbLoadingImage.setVisibility(View.GONE);
+                    }
+
+                });
     }
 
 
@@ -417,6 +432,18 @@ public class ChatAdapter2 extends RecyclerView.Adapter<ChatAdapter2.ViewHolder> 
         ProgressBar pbLoadingImage;
 
         ViewHolderImage(View view) {
+            super(view);
+            ButterKnife.bind(this, view);
+        }
+    }
+
+    static class ViewHolderGeo extends ViewHolder {
+        @BindView(R.id.ivImageMessage)
+        ImageView ivImageMessage;
+        @BindView(R.id.pbLoadingImage)
+        ProgressBar pbLoadingImage;
+
+        ViewHolderGeo(View view) {
             super(view);
             ButterKnife.bind(this, view);
         }
