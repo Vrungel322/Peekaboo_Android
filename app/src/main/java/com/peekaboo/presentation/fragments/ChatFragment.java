@@ -394,18 +394,18 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
+    public void onStart() {
+        super.onStart();
         ((MainActivity) getActivity()).addListener(this);
         presenter.onResume(isFirstResumeAfterCreate, getCompanionId());
         isFirstResumeAfterCreate = false;
     }
 
     @Override
-    public void onPause() {
+    public void onStop() {
         presenter.onPause();
         ((MainActivity) getActivity()).removeListener(this);
-        super.onPause();
+        super.onStop();
     }
 
     @Override
