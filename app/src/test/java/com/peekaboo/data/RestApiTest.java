@@ -26,7 +26,7 @@ public class RestApiTest {
         MockitoAnnotations.initMocks(this);
         ApplicationComponent applicationComponent = DaggerApplicationComponent.builder().applicationModule(new ApplicationModule(context)).build();
         PeekabooApi api = applicationComponent.api();
-        restApi = new RestApi(api);
+        restApi = new RestApi(api, context);
     }
 
 //

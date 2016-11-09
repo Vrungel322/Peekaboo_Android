@@ -41,6 +41,7 @@ import com.peekaboo.domain.usecase.UserModeChangerUseCase;
 import com.peekaboo.presentation.PeekabooApplication;
 import com.peekaboo.presentation.adapters.HotFriendsAdapter;
 import com.peekaboo.presentation.dialogs.AvatarChangeDialog;
+import com.peekaboo.presentation.dialogs.ChooseImageDialogFragment;
 import com.peekaboo.presentation.fragments.ChatFragment;
 import com.peekaboo.presentation.fragments.ContactsFragment;
 import com.peekaboo.presentation.fragments.CreateDialogFragment;
@@ -77,7 +78,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
 
-public class MainActivity extends AppCompatActivity implements IMainView, AvatarChangeDialog.IAvatarChangeListener, INotifier.NotificationListener<Message> {
+public class MainActivity extends AppCompatActivity implements IMainView, ChooseImageDialogFragment.ChooseImageListener, INotifier.NotificationListener<Message> {
     public static final int BLUR_RATE = 20;
     public static final String IMAGE_URI = "image_uri";
     @BindView(R.id.drawer_layout)
@@ -124,7 +125,6 @@ public class MainActivity extends AppCompatActivity implements IMainView, Avatar
     ActivityNavigator navigator;
     @Inject
     Bus eventBus;
-    private Uri cameraImageUri;
     private HotFriendsAdapter hotFriendsAdapter;
     private final Set<OnBackPressListener> listeners = new HashSet<>();
     private Target avatarTarget = new Target() {
@@ -172,7 +172,6 @@ public class MainActivity extends AppCompatActivity implements IMainView, Avatar
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
         PeekabooApplication.getApp(this).getComponent().inject(this);
-        restoreState(savedInstanceState);
         eventBus.register(this);
         presenter.bind(this);
         prepareDrawer();
@@ -180,8 +179,8 @@ public class MainActivity extends AppCompatActivity implements IMainView, Avatar
 
         if (getSupportFragmentManager().findFragmentById(R.id.fragmentContainer) == null) {
             if (!handleNotificationIntent(getIntent(), false)) {
-//                changeFragment(ContactsFragment.newInstance(), Constants.FRAGMENT_TAGS.CONTACTS_FRAGMENT);
-                changeFragment(new CreateDialogFragment(), null);
+                changeFragment(ContactsFragment.newInstance(), Constants.FRAGMENT_TAGS.CONTACTS_FRAGMENT);
+//                changeFragment(new CreateDialogFragment(), null);
                 selectionMode(R.id.llContacts);
             }
         }
@@ -197,12 +196,6 @@ public class MainActivity extends AppCompatActivity implements IMainView, Avatar
         }
 
         presenter.setUserModeListener(this::renderState);
-    }
-
-    private void restoreState(Bundle savedInstanceState) {
-        if (savedInstanceState != null) {
-            cameraImageUri = savedInstanceState.getParcelable(IMAGE_URI);
-        }
     }
 
     private void renderState(byte type) {
@@ -320,12 +313,6 @@ public class MainActivity extends AppCompatActivity implements IMainView, Avatar
         toggle.syncState();
     }
 
-    @Override
-    protected void onSaveInstanceState(Bundle outState) {
-        outState.putParcelable(IMAGE_URI, cameraImageUri);
-        super.onSaveInstanceState(outState);
-    }
-
     private void updateAccountData(AccountUser accountUser) {
         byte mode = accountUser.getMode();
         String avatarUrl = accountUser.getAvatar();
@@ -384,11 +371,13 @@ public class MainActivity extends AppCompatActivity implements IMainView, Avatar
                 changeFragment(new SettingsFragment(), Constants.FRAGMENT_TAGS.SETTINGS_FRAGMENT);
                 break;
             case R.id.ivAccountAvatar:
-                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
-                AvatarChangeDialog avatarChangeDialog = new AvatarChangeDialog();
-                avatarChangeDialog.setStyle(DialogFragment.STYLE_NO_TITLE, 0);
+                DialogFragment newFragment = new ChooseImageDialogFragment();
+                newFragment.show(getSupportFragmentManager(), ChooseImageDialogFragment.TAG);
+//                FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+//                AvatarChangeDialog avatarChangeDialog = new AvatarChangeDialog();
+//                avatarChangeDialog.setStyle(DialogFragment.STYLE_NO_TITLE, 0);
 //        confirmSignUpDialog.setStyle(android.app.DialogFragment.STYLE_NO_FRAME, 0);
-                avatarChangeDialog.show(ft, "avatar_change_dialog");
+//                avatarChangeDialog.show(ft, "avatar_change_dialog");
                 break;
             case R.id.llExit:
 //                throw new RuntimeException();
@@ -503,6 +492,12 @@ public class MainActivity extends AppCompatActivity implements IMainView, Avatar
 //        pbLoading_avatar_progress_bar.setVisibility(View.GONE);
     }
 
+    @Override
+    public void onImageChosen(String file) {
+        Log.e("MainActivity", "image " + file);
+        presenter.updateAvatar(file);
+    }
+
     public interface OnBackPressListener {
         boolean onBackPress();
     }
@@ -515,49 +510,6 @@ public class MainActivity extends AppCompatActivity implements IMainView, Avatar
             String CONTACT_EXTRA = "contact_extra";
         }
 
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        switch (requestCode) {
-            case Constants.REQUEST_CODES.REQUEST_CODE_CAMERA:
-                if (resultCode == RESULT_OK && cameraImageUri != null) {
-                    presenter.updateAvatar(cameraImageUri);
-                    cameraImageUri = null;
-                }
-                break;
-            case Constants.REQUEST_CODES.REQUEST_CODE_GALERY:
-                if (resultCode == RESULT_OK && data != null) {
-                    Uri imageUri = data.getData();
-                    presenter.updateAvatar(imageUri);
-                }
-                break;
-        }
-    }
-
-    @Override
-    public void takePhoto() {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
-            File photoFile = null;
-            try {
-                photoFile = Utility.createImageFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            if (photoFile != null) {
-                cameraImageUri = Utility.getImageContentUri(MainActivity.this, photoFile);
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, cameraImageUri);
-                startActivityForResult(takePictureIntent, Constants.REQUEST_CODES.REQUEST_CODE_CAMERA);
-            }
-        }
-    }
-
-    @Override
-    public void takeFromGallery() {
-        startActivityForResult(new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI),
-                Constants.REQUEST_CODES.REQUEST_CODE_GALERY);
     }
 
     private void setAvatarWithBlur(Bitmap bitmap) {

@@ -108,4 +108,6 @@
     <dimen name="contact_status_image_size">20dp</dimen>
     <dimen name="margin_divider_top">18dp</dimen>
     <dimen name="settings_text_size">16sp</dimen>
+    <dimen name="list_padding">8dp</dimen>
+    <dimen name="list_item_icon_size">36dp</dimen>
 </resources>

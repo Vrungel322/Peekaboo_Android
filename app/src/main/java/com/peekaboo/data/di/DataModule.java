@@ -150,8 +150,8 @@ public class DataModule {
 
     @Provides
     @Singleton
-    public RestApi provideRestApi(PeekabooApi api) {
-        return new RestApi(api);
+    public RestApi provideRestApi(PeekabooApi api, Context c) {
+        return new RestApi(api, c);
     }
 
     @Provides

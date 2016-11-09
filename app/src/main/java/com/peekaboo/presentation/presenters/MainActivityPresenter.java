@@ -1,7 +1,6 @@
 package com.peekaboo.presentation.presenters;
 
 import android.content.Context;
-import android.net.Uri;
 import android.util.Log;
 
 import com.peekaboo.data.FileEntity;
@@ -58,13 +57,9 @@ public class MainActivityPresenter extends ProgressPresenter<IMainView> implemen
     }
 
     @Override
-    public void updateAvatar(Uri avatarUri) {
+    public void updateAvatar(String avatarPath) {
         Log.e("progress", "updateAvatar ");
-        IMainView view = getView();
-        if(view != null) {
-            view.showProgress();
-        }
-        avatarUpdateUseCase.setDataForUpdatingAvatar(ResourcesUtils.getRealPathFromURI(mContext, avatarUri));
+        avatarUpdateUseCase.setDataForUpdatingAvatar(avatarPath);
         avatarUpdateUseCase.execute(getAvatarSubscriber());
     }
 

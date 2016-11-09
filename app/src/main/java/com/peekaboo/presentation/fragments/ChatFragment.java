@@ -9,7 +9,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
-import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
@@ -41,6 +40,7 @@ import com.peekaboo.presentation.activities.MainActivity;
 import com.peekaboo.presentation.activities.MapActivity;
 import com.peekaboo.presentation.adapters.ChatAdapter2;
 import com.peekaboo.presentation.app.view.PHorizontalScrollView;
+import com.peekaboo.presentation.dialogs.ChooseImageDialogFragment;
 import com.peekaboo.presentation.presenters.ChatPresenter2;
 import com.peekaboo.presentation.services.INotifier;
 import com.peekaboo.presentation.services.Message;
@@ -49,10 +49,9 @@ import com.peekaboo.presentation.utils.ResourcesUtils;
 import com.peekaboo.presentation.views.IChatView2;
 import com.peekaboo.utils.ActivityNavigator;
 import com.peekaboo.utils.Constants;
+import com.peekaboo.utils.IntentUtils;
 import com.peekaboo.utils.Utility;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -65,12 +64,14 @@ import butterknife.OnTouch;
 import io.codetail.animation.ViewAnimationUtils;
 import io.codetail.widget.RevealFrameLayout;
 
+import static android.app.Activity.RESULT_OK;
+
 /**
  * Created by sebastian on 09.09.16.
  */
 public class ChatFragment extends Fragment implements IChatView2, MainActivity.OnBackPressListener {
     public static final String COMPANION = "companion";
-    public static final String IMAGE_URI = "image_uri";
+    public static final String IMAGE_FILE = "image_file";
     @BindView(R.id.etMessageBody)
     EditText etMessageBody;
     @BindView(R.id.rvMessages)
@@ -120,7 +121,7 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
     private LinearLayout.LayoutParams layoutParams;
     private boolean isFirstResumeAfterCreate = true;
     private Contact companion;
-    private Uri cameraImageUri;
+    private String imageFile;
 
     private Animator animator;
     private ChatItemDialog chatItemDialog;
@@ -151,7 +152,7 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
 
     private void restoreState(Bundle savedInstanceState) {
         if (savedInstanceState != null) {
-            cameraImageUri = savedInstanceState.getParcelable(IMAGE_URI);
+            imageFile = savedInstanceState.getParcelable(IMAGE_FILE);
         }
     }
 
@@ -323,31 +324,22 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
     }
 
     public void takeGalleryImage() {
-        Log.wtf("NULL : ", "takeGalleryImage");
-        startActivityForResult(new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI),
-                Constants.REQUEST_CODES.REQUEST_CODE_GALERY);
+        boolean canTake = IntentUtils.takeGalleryImage(this);
+        if (!canTake) {
+            showToastMessage(getString(R.string.galleryIsNotAvailable));
+        }
     }
 
     public void takePhoto() {
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        if (takePictureIntent.resolveActivity(getContext().getPackageManager()) != null) {
-            File photoFile = null;
-            try {
-                photoFile = Utility.createImageFile();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            if (photoFile != null) {
-                cameraImageUri = Utility.getImageContentUri(getContext(), photoFile);
-                takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, cameraImageUri);
-                startActivityForResult(takePictureIntent, Constants.REQUEST_CODES.REQUEST_CODE_CAMERA);
-            }
+        imageFile = IntentUtils.capturePhoto(this);
+        if (imageFile == null) {
+            showToastMessage(getString(R.string.cameraIsNotAvailable));
         }
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        outState.putParcelable(IMAGE_URI, cameraImageUri);
+        outState.putString(IMAGE_FILE, imageFile);
         super.onSaveInstanceState(outState);
     }
 
@@ -373,35 +365,31 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        Log.wtf("NULL : ", "onActivityResult in fragment " + requestCode + " " + resultCode);
-
+        super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
-            case Constants.REQUEST_CODES.REQUEST_CODE_CAMERA:
-                if (resultCode == Activity.RESULT_OK && cameraImageUri != null) {
-                    sendImage(cameraImageUri);
-                    cameraImageUri = null;
+            case IntentUtils.CAMERA_REQUEST_CODE:
+            case IntentUtils.GALLERY_REQUEST_CODE:
+                if (resultCode == Activity.RESULT_OK) {
+                    if (imageFile == null) {
+                        imageFile = IntentUtils.onGalleryActivityResult(getActivity(), requestCode, resultCode, data);
+                    }
+                    Log.e("ChatFragment", "onActivityResult() " + imageFile);
+                    if (imageFile != null) {
+                        sendImage(imageFile);
+                    }
+                } else {
+                    imageFile = null;
                 }
                 break;
-            case Constants.REQUEST_CODES.REQUEST_CODE_GALERY:
-                if (resultCode == Activity.RESULT_OK && data != null) {
-                    Log.wtf("NULL : ", "sendim img in fragment");
-                    sendImage(data.getData());
-                }
-                break;
-            default:
-                super.onActivityResult(requestCode, resultCode, data);
         }
+
     }
 
-    public boolean sendImage(Uri uri) {
-        Log.wtf("NULL : ", "sendImage " + uri);
+    public void sendImage(String imageFile) {
         pbLoadingImageToServer.setVisibility(View.VISIBLE);
-        if (uri == null) {
-            return false;
-        }
-        presenter.onSendImageButtonPress(ResourcesUtils.getRealPathFromURI(getContext(), uri));
-        Utility.galleryAddPic(getContext(), uri);
-        return true;
+        presenter.onSendImageButtonPress(imageFile);
+//        Utility.galleryAddPic(getContext(), uri);
+//        return true;
     }
 
     @Override

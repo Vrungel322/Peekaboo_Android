@@ -9,5 +9,5 @@ import com.peekaboo.presentation.views.IView;
  */
 public interface IMainPresenter <V extends IView> extends IPresenter<V> {
     void fillHotAdapter();
-    void updateAvatar(Uri avatarUri);
+    void updateAvatar(String avatarPath);
 }
