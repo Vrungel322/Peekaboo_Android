@@ -152,7 +152,7 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
 
     private void restoreState(Bundle savedInstanceState) {
         if (savedInstanceState != null) {
-            imageFile = savedInstanceState.getParcelable(IMAGE_FILE);
+            imageFile = savedInstanceState.getString(IMAGE_FILE);
         }
     }
 
@@ -376,6 +376,7 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
                     Log.e("ChatFragment", "onActivityResult() " + imageFile);
                     if (imageFile != null) {
                         sendImage(imageFile);
+                        imageFile = null;
                     }
                 } else {
                     imageFile = null;

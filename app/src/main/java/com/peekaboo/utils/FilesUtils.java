@@ -16,10 +16,12 @@ import java.util.Date;
 import java.util.Locale;
 
 import javax.inject.Inject;
+import javax.inject.Singleton;
 
 /**
  * Created by sebastian on 13.07.16.
  */
+@Singleton
 public class FilesUtils {
     private static final String IMAGE_DIRECTORY_NAME = "Costo";
     private Context context;
@@ -63,6 +65,11 @@ public class FilesUtils {
         return getRealPathFromURI(context, contentURI);
     }
 
+    public File createUploadableImageFile(String originalFile, int preferredSize) throws IOException {
+        double max = 0.8 * Math.sqrt(Runtime.getRuntime().freeMemory() / 4);
+        return FilesUtils.saveTempFile(context, originalFile, Math.min((int) max, preferredSize));
+    }
+
     public static String getRealPathFromURI(Context context, Uri contentURI) {
         String result;
         Cursor cursor = context.getContentResolver().query(contentURI, null, null, null, null);
@@ -92,7 +99,7 @@ public class FilesUtils {
     }
 
 
-    public static void deleteFile(File file) {
-        file.delete();
+    public static boolean deleteFile(File file) {
+        return file.delete();
     }
 }

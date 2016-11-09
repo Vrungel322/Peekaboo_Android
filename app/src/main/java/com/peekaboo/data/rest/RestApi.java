@@ -29,10 +29,12 @@ public class RestApi {
 
     private final PeekabooApi api;
     private Context c;
+    private FilesUtils filesUtils;
 
-    public RestApi(PeekabooApi api, Context c) {
+    public RestApi(PeekabooApi api, Context c, FilesUtils filesUtils) {
         this.api = api;
         this.c = c;
+        this.filesUtils = filesUtils;
     }
 
     public Observable<TokenEntity> login(Credentials credentials) {
@@ -63,10 +65,8 @@ public class RestApi {
         return Observable.create(new Observable.OnSubscribe<MultipartBody.Part>() {
             @Override
             public void call(Subscriber<? super MultipartBody.Part> subscriber) {
-                File tmpFile;
                 try {
-                    double max = 0.8 * Math.sqrt(Runtime.getRuntime().freeMemory() / 4);
-                    tmpFile = FilesUtils.saveTempFile(c, fileName, Math.min((int) max, Constants.IMAGE_SIZES.AVATAR_SIZE));
+                    File tmpFile = filesUtils.createUploadableImageFile(fileName, Constants.IMAGE_SIZES.AVATAR_SIZE);
                     RequestBody requestFile =
                             RequestBody.create(MediaType.parse("multipart/form-data"), tmpFile);
                     MultipartBody.Part part = MultipartBody.Part.createFormData("image", tmpFile.getName(), requestFile);
@@ -80,11 +80,6 @@ public class RestApi {
                 }
             }
         }).flatMap(part -> api.updateAvatar(part, bearer));
-//        File file = new File(fileName);
-//        RequestBody requestFile =
-//                RequestBody.create(MediaType.parse("multipart/form-data"), file);
-//        MultipartBody.Part part = MultipartBody.Part.createFormData("image", file.getName(), requestFile);
-//        return api.updateAvatar(part, bearer);
     }
 
     public Call<ResponseBody> downloadFile(String fileType, String remoteFileName, String bearer) {
