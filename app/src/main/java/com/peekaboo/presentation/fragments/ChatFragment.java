@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.os.SystemClock;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
@@ -119,6 +118,8 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
     INotifier<Message> notifier;
     @Inject
     ActivityNavigator activityNavigator;
+    @Inject
+    Picasso mPicasso;
     private ChatAdapter2 adapter;
     private LinearLayout.LayoutParams layoutParams;
     private boolean isFirstResumeAfterCreate = true;
@@ -170,7 +171,7 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
         layoutManager.setStackFromEnd(true);
         rvMessages.setLayoutManager(layoutManager);
         rvMessages.setItemAnimator(new DefaultItemAnimator());
-        adapter = new ChatAdapter2(getActivity(), presenter, rvMessages, companion);
+        adapter = new ChatAdapter2(getActivity(), presenter, rvMessages, companion, mPicasso);
         rvMessages.setAdapter(adapter);
         svItems.setOnTouchListener((view1, motionEvent) -> false);
         rvMessages.addOnScrollListener(new RecyclerView.OnScrollListener() {

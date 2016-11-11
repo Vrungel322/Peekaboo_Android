@@ -102,12 +102,14 @@ public class ChatAdapter2 extends RecyclerView.Adapter<ChatAdapter2.ViewHolder> 
     @Nullable
     private OnItemLongClickListener onItemLongClickListener;
 
-    public ChatAdapter2(Context context, ChatPresenter2 presenter, RecyclerView recyclerView, Contact contact) {
+    public ChatAdapter2(Context context, ChatPresenter2 presenter, RecyclerView recyclerView, Contact contact,
+                        Picasso mPicasso) {
         this.context = context;
         this.recyclerView = recyclerView;
         this.inflater = LayoutInflater.from(context);
         this.presenter = presenter;
-        this.mPicasso = Picasso.with(context);
+//        this.mPicasso = Picasso.with(context);
+        this.mPicasso = mPicasso;
         this.contact = contact;
         handler = new Handler();
         setHasStableIds(true);
