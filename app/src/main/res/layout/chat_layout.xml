@@ -42,8 +42,8 @@
             android:overScrollMode="ifContentScrolls"
             android:padding="@dimen/items_margin"
             android:paddingBottom="4dp"
-            android:paddingLeft="16dp"
-            android:paddingRight="16dp"
+            android:paddingLeft="@dimen/chat_horizontal_margin"
+            android:paddingRight="@dimen/chat_horizontal_margin"
             android:scrollbars="none" />
 
         <ProgressBar

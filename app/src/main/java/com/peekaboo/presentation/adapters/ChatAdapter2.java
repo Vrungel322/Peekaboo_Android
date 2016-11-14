@@ -48,6 +48,11 @@ public class ChatAdapter2 extends RecyclerView.Adapter<ChatAdapter2.ViewHolder> 
     private final LayoutInflater inflater;
     private final ChatPresenter2 presenter;
     private final Picasso mPicasso;
+    private final int bubbleSmallHorizontalMargin;
+    private final int bubbleLargeHorizontalMargin;
+    private final int bubbleVerticalMargin;
+    private final int bubbleMaxWidth;
+    private final int imageMaxHeight;
     private Contact contact;
     private final List<PMessage> messages = new ArrayList<>();
     private RecyclerView recyclerView;
@@ -101,6 +106,7 @@ public class ChatAdapter2 extends RecyclerView.Adapter<ChatAdapter2.ViewHolder> 
     };
     @Nullable
     private OnItemLongClickListener onItemLongClickListener;
+    private int imageMessageRadius;
 
     public ChatAdapter2(Context context, ChatPresenter2 presenter, RecyclerView recyclerView, Contact contact) {
         this.context = context;
@@ -110,6 +116,14 @@ public class ChatAdapter2 extends RecyclerView.Adapter<ChatAdapter2.ViewHolder> 
         this.mPicasso = Picasso.with(context);
         this.contact = contact;
         handler = new Handler();
+        imageMessageRadius = ResourcesUtils.getDimenInPx(context, R.dimen.bubble_corner_radius_code);
+        bubbleSmallHorizontalMargin = ResourcesUtils.getDimenInPx(context, R.dimen.chat_small_horizontal_margin);
+        bubbleLargeHorizontalMargin = ResourcesUtils.getDimenInPx(context, R.dimen.chat_large_horizontal_margin);
+        bubbleVerticalMargin = ResourcesUtils.getDimenInPx(context, R.dimen.chat_vertical_margin);
+        bubbleMaxWidth = ResourcesUtils.getDisplayWidth(context) - bubbleLargeHorizontalMargin - bubbleSmallHorizontalMargin
+                - 2 * (ResourcesUtils.getDimenInPx(context, R.dimen.chat_horizontal_margin) + ResourcesUtils.getDimenInPx(context, R.dimen.chat_image_message_padding));
+        imageMaxHeight = ResourcesUtils.getDimenInPx(context, R.dimen.chat_image_height);
+        Log.e("ChatAdapter", bubbleMaxWidth + " " + imageMaxHeight);
         setHasStableIds(true);
     }
 
@@ -230,23 +244,23 @@ public class ChatAdapter2 extends RecyclerView.Adapter<ChatAdapter2.ViewHolder> 
         layoutParams.addRule(isMine ? RelativeLayout.ALIGN_PARENT_LEFT : RelativeLayout.ALIGN_PARENT_RIGHT, 0);
         layoutParams.addRule(isMine ? RelativeLayout.ALIGN_PARENT_RIGHT : RelativeLayout.ALIGN_PARENT_LEFT);
         layoutParams.setMargins(
-                isMine ? Constants.DESIGN_CONSTANTS.BIG_SIDE_MARGIN : Constants.DESIGN_CONSTANTS.SIDE_MARGIN,
-                Constants.DESIGN_CONSTANTS.TOP_OR_BOTTOM_MARGIN,
-                isMine ? Constants.DESIGN_CONSTANTS.SIDE_MARGIN : Constants.DESIGN_CONSTANTS.BIG_SIDE_MARGIN,
-                Constants.DESIGN_CONSTANTS.TOP_OR_BOTTOM_MARGIN
+                isMine ? bubbleLargeHorizontalMargin : bubbleSmallHorizontalMargin,
+                bubbleVerticalMargin,
+                isMine ? bubbleSmallHorizontalMargin : bubbleLargeHorizontalMargin,
+                bubbleVerticalMargin
         );
         holder.chatBubble.setLayoutParams(layoutParams);
         if (isMine) {
             if (!isNextMine) {
-                holder.chatBubble.setBackgroundResource(R.drawable.circle_blue_corner);
+                holder.chatBubble.setBackgroundResource(R.drawable.circle_blue_corner2);
             } else {
-                holder.chatBubble.setBackgroundResource(R.drawable.circle_blue);
+                holder.chatBubble.setBackgroundResource(R.drawable.circle_blue2);
             }
         } else {
             if (wasPreviousMine) {
-                holder.chatBubble.setBackgroundResource(R.drawable.circle_gray_corner);
+                holder.chatBubble.setBackgroundResource(R.drawable.circle_gray_corner2);
             } else {
-                holder.chatBubble.setBackgroundResource(R.drawable.circle_gray);
+                holder.chatBubble.setBackgroundResource(R.drawable.circle_gray2);
             }
         }
     }
@@ -266,10 +280,10 @@ public class ChatAdapter2 extends RecyclerView.Adapter<ChatAdapter2.ViewHolder> 
 
     private void setImageMessage(ChatAdapter2.ViewHolderImage holder, String imageUri) {
         holder.pbLoadingImage.setVisibility(View.VISIBLE);
-        mPicasso.load(Uri.fromFile(new File(imageUri))).resizeDimen(R.dimen.chat_image_width, R.dimen.chat_image_height)
+        mPicasso.load(Uri.fromFile(new File(imageUri))).resize(bubbleMaxWidth, imageMaxHeight)
                 .error(R.drawable.ic_alert_circle_outline)
                 .centerInside()
-                .transform(new RoundedTransformation(25, 0))
+                .transform(new RoundedTransformation(imageMessageRadius, 0))
                 .into(holder.ivImageMessage, new Callback.EmptyCallback() {
                     @Override
                     public void onSuccess() {
