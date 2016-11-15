@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.os.SystemClock;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
@@ -51,6 +50,7 @@ import com.peekaboo.presentation.views.IChatView2;
 import com.peekaboo.utils.ActivityNavigator;
 import com.peekaboo.utils.Constants;
 import com.peekaboo.utils.Utility;
+import com.squareup.picasso.Picasso;
 
 import java.io.File;
 import java.io.IOException;
@@ -65,6 +65,8 @@ import butterknife.OnFocusChange;
 import butterknife.OnTouch;
 import io.codetail.animation.ViewAnimationUtils;
 import io.codetail.widget.RevealFrameLayout;
+
+import static com.peekaboo.utils.Utility.createImageFile;
 
 /**
  * Created by sebastian on 09.09.16.
@@ -116,6 +118,8 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
     INotifier<Message> notifier;
     @Inject
     ActivityNavigator activityNavigator;
+    @Inject
+    Picasso mPicasso;
     private ChatAdapter2 adapter;
     private LinearLayout.LayoutParams layoutParams;
     private boolean isFirstResumeAfterCreate = true;
@@ -167,7 +171,7 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
         layoutManager.setStackFromEnd(true);
         rvMessages.setLayoutManager(layoutManager);
         rvMessages.setItemAnimator(new DefaultItemAnimator());
-        adapter = new ChatAdapter2(getActivity(), presenter, rvMessages, companion);
+        adapter = new ChatAdapter2(getActivity(), presenter, rvMessages, companion, mPicasso);
         rvMessages.setAdapter(adapter);
         svItems.setOnTouchListener((view1, motionEvent) -> false);
         rvMessages.addOnScrollListener(new RecyclerView.OnScrollListener() {
@@ -324,7 +328,7 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
         if (takePictureIntent.resolveActivity(getContext().getPackageManager()) != null) {
             File photoFile = null;
             try {
-                photoFile = Utility.createImageFile();
+                photoFile = createImageFile();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -340,12 +344,6 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
     @OnClick(R.id.navigation_btn)
     void onNavigationButtonClick() {
         takeNavigation();
-//        Toast.makeText(this, "LoL", Toast.LENGTH_SHORT).show();
-//        Uri gmmIntentUri = Uri.parse("geo:37.7749,-122.4194?z=20");
-//        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-//        mapIntent.setPackage("com.google.android.apps.maps");
-//        startActivity(mapIntent);
-//        bNavigation.setVisibility(View.GONE);
     }
 
     public void takeNavigation() {
@@ -353,8 +351,10 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
 //        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
 //        mapIntent.setPackage("com.google.android.apps.maps");
 //        startActivity(mapIntent);
+//        ---
         Intent mapintent = new Intent(getActivity(), MapActivity.class);
-        startActivity(mapintent);
+        getActivity().startActivityForResult(mapintent, Constants.REQUEST_CODES.REQUEST_CODE_GPS);
+        Log.wtf("NULL : ", "sendim gpsimg in fragment");
     }
 
     @Override
@@ -362,6 +362,7 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
         Log.wtf("NULL : ", "onActivityResult in fragment " + requestCode + " " + resultCode);
 
         switch (requestCode) {
+
             case Constants.REQUEST_CODES.REQUEST_CODE_CAMERA:
                 if (resultCode == Activity.RESULT_OK) {
                     Uri imageUri = data.getData();
@@ -376,9 +377,28 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
                     sendImage(data.getData());
                 }
                 break;
+            case Constants.REQUEST_CODES.REQUEST_CODE_GPS:
+                if (resultCode == Activity.RESULT_OK && null != data) {
+                    String link = data.getStringExtra("staticmap");
+//                    Toast.makeText(getContext(), link, Toast.LENGTH_SHORT).show();
+                    Log.wtf("NULL : ", "sendImage " + link);
+                    sendGeo(link);
+
+                }
+                break;
             default:
                 super.onActivityResult(requestCode, resultCode, data);
         }
+
+    }
+
+    public boolean sendGeo(String link) {
+        Log.wtf("NULL : ", "sendGeo " + link);
+        if (link == null) {
+            return false;
+        }
+        presenter.onSendGPSButtonPress(link);
+        return true;
     }
 
     public boolean sendImage(Uri uri) {

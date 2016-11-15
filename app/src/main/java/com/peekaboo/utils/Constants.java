@@ -38,6 +38,7 @@ public class Constants {
         int REQUEST_CODE_GALERY = 1819;
 //        int REQUEST_CODE_GALERY_FOR_FRAGMENT = 1820;
         int REQUEST_CODE_SPEECH_INPUT = 1822;
+        int REQUEST_CODE_GPS = 1823;
     }
 
     public interface SOUND_RECORDING {

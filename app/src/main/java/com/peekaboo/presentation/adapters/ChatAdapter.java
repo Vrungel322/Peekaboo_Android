@@ -282,7 +282,7 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 });
     }
 
-    private void setLocationMessage(ChatAdapter.ViewHolderImage holder, String locationUri) {
+    private void setLocationMessage(ChatAdapter.ViewHolderImage holder, String locati) {
         holder.pbLoadingImage.setVisibility(View.VISIBLE);
         String latEiffelTower = "50.459507";
         String lngEiffelTower = "30.514554";

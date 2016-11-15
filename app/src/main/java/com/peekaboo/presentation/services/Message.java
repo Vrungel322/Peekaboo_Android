@@ -121,6 +121,7 @@ public class Message {
         String TEXT = "text";
         String AUDIO = "audio";
         String IMAGE = "image";
+        String GEO = "geo";
     }
 
     public interface Reason {

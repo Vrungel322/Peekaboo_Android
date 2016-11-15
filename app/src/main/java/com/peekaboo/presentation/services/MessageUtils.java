@@ -45,9 +45,21 @@ public class MessageUtils {
 
         result = new Message(Message.Command.MESSAGE);
 
-        String type = message.mediaType() == PMessageAbs.PMESSAGE_MEDIA_TYPE.TEXT_MESSAGE ?
-                Message.Type.TEXT : message.mediaType() == PMessageAbs.PMESSAGE_MEDIA_TYPE.AUDIO_MESSAGE ?
-                Message.Type.AUDIO : Message.Type.IMAGE;
+        String type = null;
+        switch (message.mediaType()) {
+            case PMessageAbs.PMESSAGE_MEDIA_TYPE.TEXT_MESSAGE:
+                type = Message.Type.TEXT;
+                break;
+            case PMessageAbs.PMESSAGE_MEDIA_TYPE.AUDIO_MESSAGE:
+                type = Message.Type.AUDIO;
+                break;
+            case PMessageAbs.PMESSAGE_MEDIA_TYPE.IMAGE_MESSAGE:
+                type = Message.Type.IMAGE;
+                break;
+            case PMessageAbs.PMESSAGE_MEDIA_TYPE.GEO_MESSAGE:
+                type = Message.Type.GEO;
+                break;
+        }
         result.addParam(Message.Params.TYPE, type);
         result.addParam(Message.Params.DESTINATION, message.receiverId());
         result.addParam(Message.Params.FROM, message.senderId());
@@ -75,6 +87,9 @@ public class MessageUtils {
                     break;
                 case Message.Type.IMAGE:
                     mediaType = PMessageAbs.PMESSAGE_MEDIA_TYPE.IMAGE_MESSAGE;
+                    break;
+                case Message.Type.GEO:
+                    mediaType = PMessageAbs.PMESSAGE_MEDIA_TYPE.GEO_MESSAGE;
                     break;
             }
         }
