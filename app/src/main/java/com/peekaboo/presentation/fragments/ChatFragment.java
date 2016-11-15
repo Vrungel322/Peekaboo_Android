@@ -35,6 +35,7 @@ import android.widget.Toast;
 import com.peekaboo.R;
 import com.peekaboo.data.repositories.database.contacts.Contact;
 import com.peekaboo.data.repositories.database.messages.PMessage;
+import com.peekaboo.data.repositories.database.messages.PMessageAbs;
 import com.peekaboo.domain.AccountUser;
 import com.peekaboo.presentation.PeekabooApplication;
 import com.peekaboo.presentation.activities.MainActivity;
@@ -182,19 +183,30 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
                 }
             }
         });
+        adapter.setOnItemClickListener((position) -> {
+//            android.support.v4.app.FragmentTransaction ft = getActivity()
+//                    .getSupportFragmentManager().beginTransaction();
+//            @Override
+//            public void onClick(int position){
+//                if (adapter.getItemViewType(position) == PMessageAbs.PMESSAGE_MEDIA_TYPE.GEO_MESSAGE){
+//
+//                }
+//            }
+            if (adapter.getItemViewType(position) == PMessageAbs.PMESSAGE_MEDIA_TYPE.GEO_MESSAGE){
+
+                Intent mapintent = new Intent(getActivity(), MapActivity.class);
+                getActivity().startActivity(mapintent);
+
+            }
+
+        });
         adapter.setOnItemLongClickListener((position) -> {
             android.support.v4.app.FragmentTransaction ft = getActivity()
                     .getSupportFragmentManager().beginTransaction();
             chatItemDialog = new ChatItemDialog();
             Bundle itemIndexBundle = new Bundle();
             chatItemDialog.setChatItemEventListener(new ChatItemDialog.IChatItemEventListener() {
-                @Override
-                public void copyText(int index) {
-                    presenter.onCopyMessageTextClick((ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE),
-                            adapter.getItem(index));
-                }
-
-//        rvMessages.addOnItemTouchListener(new ChatRecyclerTouchListener(getActivity(), rvMessages, new ChatClickListener() {
+                //        rvMessages.addOnItemTouchListener(new ChatRecyclerTouchListener(getActivity(), rvMessages, new ChatClickListener() {
 //            @Override
 //            public void onClick(View view, int position) {
 //                if (adapter.getItemViewType(position) == PMessageAbs.PMESSAGE_MEDIA_TYPE.IMAGE_MESSAGE) {
@@ -206,7 +218,7 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
 //                    previewImageFragment.show(getFragmentManager(), Constants.FRAGMENT_TAGS.PREVIEW_IMAGE_FRAGMENT);
 //                }
 //            }
-
+//
 //            @Override
 //            public void onLongClick(View view, int position) {
 //                android.support.v4.app.FragmentTransaction ft = ((AppCompatActivity) getActivity())
@@ -220,6 +232,12 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
 //                                adapter.getItem(index));
 //                    }
 //>>>>>>> development
+
+                @Override
+                public void copyText(int index) {
+                    presenter.onCopyMessageTextClick((ClipboardManager) getActivity().getSystemService(Context.CLIPBOARD_SERVICE),
+                            adapter.getItem(index));
+                }
 
                 @Override
                 public void deleteMess(int index) {
@@ -354,6 +372,7 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
 //        ---
         Intent mapintent = new Intent(getActivity(), MapActivity.class);
         getActivity().startActivityForResult(mapintent, Constants.REQUEST_CODES.REQUEST_CODE_GPS);
+//        activityNavigator.startMapActivity(getContext());
         Log.wtf("NULL : ", "sendim gpsimg in fragment");
     }
 
@@ -381,7 +400,7 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
                 if (resultCode == Activity.RESULT_OK && null != data) {
                     String link = data.getStringExtra("staticmap");
 //                    Toast.makeText(getContext(), link, Toast.LENGTH_SHORT).show();
-                    Log.wtf("NULL : ", "sendImage " + link);
+//                    Log.wtf("NULL : ", "sendImage " + link);
                     sendGeo(link);
 
                 }

@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -37,6 +38,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 /**
  * Created by sebastian on 08.09.16.
@@ -101,6 +103,8 @@ public class ChatAdapter2 extends RecyclerView.Adapter<ChatAdapter2.ViewHolder> 
     };
     @Nullable
     private OnItemLongClickListener onItemLongClickListener;
+    @Nullable
+    private OnItemClickListener onItemClickListener;
 
     public ChatAdapter2(Context context, ChatPresenter2 presenter, RecyclerView recyclerView, Contact contact,
                         Picasso mPicasso) {
@@ -160,6 +164,12 @@ public class ChatAdapter2 extends RecyclerView.Adapter<ChatAdapter2.ViewHolder> 
                 onItemLongClickListener.onLongClick(finalPosition);
             }
             return false;
+        });
+        holder.itemView.setOnClickListener(view -> {
+            if (onItemClickListener != null) {
+                onItemClickListener.onClick(finalPosition);
+            }
+//            return false;
         });
         boolean nextMine;
         boolean prevMine;
@@ -380,9 +390,15 @@ public class ChatAdapter2 extends RecyclerView.Adapter<ChatAdapter2.ViewHolder> 
     public void setOnItemLongClickListener(@Nullable OnItemLongClickListener onItemLongClickListener) {
         this.onItemLongClickListener = onItemLongClickListener;
     }
+    public void setOnItemClickListener(@Nullable OnItemClickListener onItemClickListener) {
+        this.onItemClickListener = onItemClickListener;
+    }
 
     public interface OnItemLongClickListener {
         void onLongClick(int position);
+    }
+    public interface OnItemClickListener {
+        void onClick(int position);
     }
 
 

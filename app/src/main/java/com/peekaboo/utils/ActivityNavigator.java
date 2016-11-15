@@ -11,6 +11,7 @@ import com.peekaboo.R;
 import com.peekaboo.data.repositories.database.contacts.Contact;
 import com.peekaboo.presentation.activities.LogInActivity;
 import com.peekaboo.presentation.activities.MainActivity;
+import com.peekaboo.presentation.activities.MapActivity;
 import com.peekaboo.presentation.activities.SignUpActivity;
 import com.peekaboo.presentation.animation.DepthAnimation;
 import com.peekaboo.presentation.fragments.ChatFragment;
@@ -55,6 +56,12 @@ public class ActivityNavigator {
     public void startMainActivity(Context mActivityContext) {
         Intent intent = new Intent(mActivityContext, MainActivity.class);
         mActivityContext.startActivity(intent);
+    }
+
+    public void startMapActivity (Context mActivityContext){
+        Intent intent = new Intent(mActivityContext, MapActivity.class);
+        mActivityContext.startActivity(intent);
+//        mActivityContext.startActivity(intent, Constants.REQUEST_CODES.REQUEST_CODE_GPS);
     }
 
     public void startChatFragment(AppCompatActivity activity, Contact companion, boolean addToBackStack) {
