@@ -109,5 +109,10 @@
     <string name="advanced">Advanced</string>
     <string name="nickname">Nickname</string>
     <string name="general">General</string>
+    <string name="galleryIsNotAvailable">Gallery is not available</string>
+    <string name="cameraIsNotAvailable">Camera is not available</string>
+    <string name="gallery">Gallery</string>
+    <string name="camera">Camera</string>
+    <string name="selectFile">Select File</string>
 
 </resources>

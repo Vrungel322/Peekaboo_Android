@@ -1,7 +1,7 @@
 package com.peekaboo.presentation.presenters;
 
 import android.content.Context;
-import android.net.Uri;
+import android.util.Log;
 
 import com.peekaboo.data.FileEntity;
 import com.peekaboo.domain.AccountUser;
@@ -12,7 +12,6 @@ import com.peekaboo.domain.usecase.AvatarUpdateUseCase;
 import com.peekaboo.domain.usecase.GetDialogsListUseCase;
 import com.peekaboo.domain.usecase.UserModeChangerUseCase;
 import com.peekaboo.presentation.comparators.DialogComparator;
-import com.peekaboo.presentation.utils.ResourcesUtils;
 import com.peekaboo.presentation.views.IMainView;
 
 import java.util.Collections;
@@ -57,11 +56,9 @@ public class MainActivityPresenter extends ProgressPresenter<IMainView> implemen
     }
 
     @Override
-    public void updateAvatar(Uri avatarUri) {
-        if(getView() != null) {
-            getView().showProgress();
-        }
-        avatarUpdateUseCase.setDataForUpdatingAvatar(ResourcesUtils.getRealPathFromURI(mContext, avatarUri));
+    public void updateAvatar(String avatarPath) {
+        Log.e("progress", "updateAvatar ");
+        avatarUpdateUseCase.setDataForUpdatingAvatar(avatarPath);
         avatarUpdateUseCase.execute(getAvatarSubscriber());
     }
 
@@ -70,9 +67,10 @@ public class MainActivityPresenter extends ProgressPresenter<IMainView> implemen
             @Override
             public void onNext(FileEntity response) {
                 super.onNext(response);
-                if(getView() != null){
-                    getView().hideProgress();
-                    getView().updateAvatarView(response.getResult());
+                IMainView view = getView();
+                if(view != null){
+                    view.hideProgress();
+                    view.updateAvatarView(response.getResult());
                 }
             }
         };
