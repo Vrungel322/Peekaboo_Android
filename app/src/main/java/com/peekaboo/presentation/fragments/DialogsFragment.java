@@ -61,6 +61,7 @@ public class DialogsFragment extends Fragment implements TabLayout.OnTabSelected
         ButterKnife.bind(this, rootView);
 //        setHasOptionsMenu(true);
 
+
         tabLayout.addTab(tabLayout.newTab().setText("Chat"));
         tabLayout.addTab(tabLayout.newTab().setText("Sms"));
         tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
