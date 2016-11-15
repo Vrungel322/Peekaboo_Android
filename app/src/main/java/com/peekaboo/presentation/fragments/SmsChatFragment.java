@@ -85,7 +85,7 @@ public class SmsChatFragment extends Fragment implements ISmsChatView {
         View view = inflater.inflate(R.layout.fragment_sms_chat, container, false);
         ButterKnife.bind(this, view);
 
-        adapter = new SmsChatAdapter(rvMessages);
+        adapter = new SmsChatAdapter(rvMessages, getActivity());
         LinearLayoutManager layoutManager = new LinearLayoutManager(getActivity());
 //        layoutManager.setReverseLayout(true);
         layoutManager.setStackFromEnd(true);

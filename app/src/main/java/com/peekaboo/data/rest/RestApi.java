@@ -1,13 +1,18 @@
 package com.peekaboo.data.rest;
 
+import android.content.Context;
+
+import com.peekaboo.data.Constants;
 import com.peekaboo.data.FileEntity;
 import com.peekaboo.data.rest.entity.Credentials;
 import com.peekaboo.data.rest.entity.CredentialsSignUp;
 import com.peekaboo.data.rest.entity.TokenEntity;
 import com.peekaboo.data.rest.entity.UserEntity;
 import com.peekaboo.data.rest.entity.UserResponse;
+import com.peekaboo.utils.FilesUtils;
 
 import java.io.File;
+import java.io.IOException;
 
 import okhttp3.MediaType;
 import okhttp3.MultipartBody;
@@ -15,6 +20,7 @@ import okhttp3.RequestBody;
 import okhttp3.ResponseBody;
 import retrofit2.Call;
 import rx.Observable;
+import rx.Subscriber;
 
 /**
  * Created by Arkadiy on 05.06.2016.
@@ -22,9 +28,13 @@ import rx.Observable;
 public class RestApi {
 
     private final PeekabooApi api;
+    private Context c;
+    private FilesUtils filesUtils;
 
-    public RestApi(PeekabooApi api) {
+    public RestApi(PeekabooApi api, Context c, FilesUtils filesUtils) {
         this.api = api;
+        this.c = c;
+        this.filesUtils = filesUtils;
     }
 
     public Observable<TokenEntity> login(Credentials credentials) {
@@ -52,11 +62,24 @@ public class RestApi {
     }
 
     public Observable<FileEntity> updateAvatar(String fileName, String bearer){
-        File file = new File(fileName);
-        RequestBody requestFile =
-                RequestBody.create(MediaType.parse("multipart/form-data"), file);
-        MultipartBody.Part part = MultipartBody.Part.createFormData("image", file.getName(), requestFile);
-        return api.updateAvatar(part, bearer);
+        return Observable.create(new Observable.OnSubscribe<MultipartBody.Part>() {
+            @Override
+            public void call(Subscriber<? super MultipartBody.Part> subscriber) {
+                try {
+                    File tmpFile = filesUtils.createUploadableImageFile(fileName, Constants.IMAGE_SIZES.AVATAR_SIZE);
+                    RequestBody requestFile =
+                            RequestBody.create(MediaType.parse("multipart/form-data"), tmpFile);
+                    MultipartBody.Part part = MultipartBody.Part.createFormData("image", tmpFile.getName(), requestFile);
+
+                    subscriber.onNext(part);
+                    FilesUtils.deleteFile(tmpFile);
+                    subscriber.onCompleted();
+
+                } catch (IOException e) {
+                    subscriber.onError(new Throwable("file loading error"));
+                }
+            }
+        }).flatMap(part -> api.updateAvatar(part, bearer));
     }
 
     public Call<ResponseBody> downloadFile(String fileType, String remoteFileName, String bearer) {

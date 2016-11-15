@@ -226,12 +226,12 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 = (RelativeLayout.LayoutParams) holder.chatBubble.getLayoutParams();
         layoutParams.addRule(isMine ? RelativeLayout.ALIGN_PARENT_LEFT : RelativeLayout.ALIGN_PARENT_RIGHT, 0);
         layoutParams.addRule(isMine ? RelativeLayout.ALIGN_PARENT_RIGHT : RelativeLayout.ALIGN_PARENT_LEFT);
-        layoutParams.setMargins(
-                isMine ? Constants.DESIGN_CONSTANTS.BIG_SIDE_MARGIN : Constants.DESIGN_CONSTANTS.SIDE_MARGIN,
-                Constants.DESIGN_CONSTANTS.TOP_OR_BOTTOM_MARGIN,
-                isMine ? Constants.DESIGN_CONSTANTS.SIDE_MARGIN : Constants.DESIGN_CONSTANTS.BIG_SIDE_MARGIN,
-                Constants.DESIGN_CONSTANTS.TOP_OR_BOTTOM_MARGIN
-        );
+//        layoutParams.setMargins(
+//                isMine ? Constants.DESIGN_CONSTANTS.BIG_SIDE_MARGIN : Constants.DESIGN_CONSTANTS.SIDE_MARGIN,
+//                Constants.DESIGN_CONSTANTS.TOP_OR_BOTTOM_MARGIN,
+//                isMine ? Constants.DESIGN_CONSTANTS.SIDE_MARGIN : Constants.DESIGN_CONSTANTS.BIG_SIDE_MARGIN,
+//                Constants.DESIGN_CONSTANTS.TOP_OR_BOTTOM_MARGIN
+//        );
         holder.chatBubble.setLayoutParams(layoutParams);
         if (isMine) {
             if (!isNextMine) {
@@ -264,22 +264,22 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     private void setImageMessage(ChatAdapter.ViewHolderImage holder, String imageUri) {
         holder.pbLoadingImage.setVisibility(View.VISIBLE);
-        mPicasso.load(imageUri).resizeDimen(R.dimen.chat_image_width, R.dimen.chat_image_height)
-                .error(R.drawable.ic_alert_circle_outline)
-                .centerInside()
-                .transform(new RoundedTransformation(25, 0))
-                .into(holder.ivImageMessage, new Callback.EmptyCallback() {
-                    @Override
-                    public void onSuccess() {
-                        holder.pbLoadingImage.setVisibility(View.GONE);
-                    }
-
-                    @Override
-                    public void onError() {
-                        holder.pbLoadingImage.setVisibility(View.GONE);
-                    }
-
-                });
+//        mPicasso.load(imageUri).resizeDimen(R.dimen.chat_image_width, R.dimen.chat_image_height)
+//                .error(R.drawable.ic_alert_circle_outline)
+//                .centerInside()
+//                .transform(new RoundedTransformation(25, 0))
+//                .into(holder.ivImageMessage, new Callback.EmptyCallback() {
+//                    @Override
+//                    public void onSuccess() {
+//                        holder.pbLoadingImage.setVisibility(View.GONE);
+//                    }
+//
+//                    @Override
+//                    public void onError() {
+//                        holder.pbLoadingImage.setVisibility(View.GONE);
+//                    }
+//
+//                });
     }
 
     private void setLocationMessage(ChatAdapter.ViewHolderImage holder, String locati) {
@@ -287,22 +287,22 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         String latEiffelTower = "50.459507";
         String lngEiffelTower = "30.514554";
         String url = "http://maps.google.com/maps/api/staticmap?center=" + latEiffelTower + "," + lngEiffelTower + "&zoom=15&size=100x50&sensor=true";
-        mPicasso.load(url).resizeDimen(R.dimen.chat_image_width, R.dimen.chat_image_height)
-                .error(R.drawable.ic_alert_circle_outline)
-                .centerInside()
-                .transform(new RoundedTransformation(25, 0))
-                .into(holder.ivImageMessage, new Callback.EmptyCallback() {
-                    @Override
-                    public void onSuccess() {
-                        holder.pbLoadingImage.setVisibility(View.GONE);
-                    }
-
-                    @Override
-                    public void onError() {
-                        holder.pbLoadingImage.setVisibility(View.GONE);
-                    }
-
-                });
+//        mPicasso.load(url).resizeDimen(R.dimen.chat_image_width, R.dimen.chat_image_height)
+//                .error(R.drawable.ic_alert_circle_outline)
+//                .centerInside()
+//                .transform(new RoundedTransformation(25, 0))
+//                .into(holder.ivImageMessage, new Callback.EmptyCallback() {
+//                    @Override
+//                    public void onSuccess() {
+//                        holder.pbLoadingImage.setVisibility(View.GONE);
+//                    }
+//
+//                    @Override
+//                    public void onError() {
+//                        holder.pbLoadingImage.setVisibility(View.GONE);
+//                    }
+//
+//                });
     }
 
     public void clearList() {

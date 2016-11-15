@@ -8,6 +8,7 @@ import com.peekaboo.data.rest.entity.Credentials;
 import com.peekaboo.presentation.di.ApplicationComponent;
 import com.peekaboo.presentation.di.ApplicationModule;
 import com.peekaboo.presentation.di.DaggerApplicationComponent;
+import com.peekaboo.utils.FilesUtils;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -19,6 +20,8 @@ import rx.observers.TestSubscriber;
 public class RestApiTest {
     @Mock
     Context context;
+    @Mock
+    FilesUtils filesUtils;
     private RestApi restApi;
 
     @Before
@@ -26,7 +29,7 @@ public class RestApiTest {
         MockitoAnnotations.initMocks(this);
         ApplicationComponent applicationComponent = DaggerApplicationComponent.builder().applicationModule(new ApplicationModule(context)).build();
         PeekabooApi api = applicationComponent.api();
-        restApi = new RestApi(api);
+        restApi = new RestApi(api, context, filesUtils);
     }
 
 //

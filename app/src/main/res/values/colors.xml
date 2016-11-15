@@ -40,4 +40,7 @@
     <color name="offline_text">#303030</color>
     <color name="unread_msg_background">#d4eded</color>
     <color name="online">#29a3a3</color>
+    <color name="dialog_icon_tint">#212121</color>
+    <color name="out_message_bubble_color">#d6f5f5</color>
+    <color name="in_message_bubble_color">#e5e5e5</color>
 </resources>

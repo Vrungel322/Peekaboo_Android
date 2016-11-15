@@ -57,11 +57,11 @@ public class Constants {
         String IMAGE_SENDING_FILE_EXT_JPG = ".jpg";
 
     }
-
-    public interface DESIGN_CONSTANTS{
-        int BIG_SIDE_MARGIN = 45;
-        int TOP_OR_BOTTOM_MARGIN = 6;
-        int SIDE_MARGIN = 0;
-        int BIG_TOP_OR_BOTTOM_MARGIN = 8;
-    }
+//
+//    public interface DESIGN_CONSTANTS{
+//        int BIG_SIDE_MARGIN = 45;
+//        int TOP_OR_BOTTOM_MARGIN = 6;
+//        int SIDE_MARGIN = 0;
+//        int BIG_TOP_OR_BOTTOM_MARGIN = 8;
+//    }
 }

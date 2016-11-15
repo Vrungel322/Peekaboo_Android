@@ -23,8 +23,8 @@ android {
         versionCode 1
         versionName "1.0"
 
-        renderscriptTargetApi 18
-        renderscriptSupportModeEnabled true
+//        renderscriptTargetApi 18
+//        renderscriptSupportModeEnabled true
 //        multiDexEnabled true
 
     }

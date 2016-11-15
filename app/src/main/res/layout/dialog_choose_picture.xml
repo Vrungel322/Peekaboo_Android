@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/item_camera"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:gravity="center_vertical"
+        android:paddingEnd="@dimen/dialog_padding"
+        android:paddingLeft="@dimen/dialog_padding"
+        android:paddingRight="@dimen/dialog_padding"
+        android:paddingStart="@dimen/dialog_padding">
+
+        <ImageView
+            android:layout_width="@dimen/list_item_icon_size"
+            android:layout_height="@dimen/list_item_icon_size"
+            android:layout_marginBottom="@dimen/list_padding"
+            android:layout_marginTop="@dimen/list_padding"
+            android:src="@drawable/ic_photo_camera_white_36dp"
+            android:tint="@color/dialog_icon_tint" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dialog_padding"
+            android:layout_marginStart="@dimen/dialog_padding"
+            android:text="@string/camera"
+            android:textColor="?attr/textColorAlertDialogListItem"
+            android:textSize="16sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/item_gallery"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground"
+        android:clickable="true"
+        android:gravity="center_vertical"
+        android:paddingEnd="@dimen/dialog_padding"
+        android:paddingLeft="@dimen/dialog_padding"
+        android:paddingRight="@dimen/dialog_padding"
+        android:paddingStart="@dimen/dialog_padding">
+
+        <ImageView
+            android:layout_width="@dimen/list_item_icon_size"
+            android:layout_height="@dimen/list_item_icon_size"
+            android:layout_marginBottom="@dimen/list_padding"
+            android:layout_marginTop="@dimen/list_padding"
+            android:src="@drawable/ic_photo_library_white_36dp"
+            android:tint="@color/dialog_icon_tint" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dialog_padding"
+            android:layout_marginStart="@dimen/dialog_padding"
+            android:text="@string/gallery"
+            android:textColor="?attr/textColorAlertDialogListItem"
+            android:textSize="16sp" />
+
+    </LinearLayout>
+
+</LinearLayout>

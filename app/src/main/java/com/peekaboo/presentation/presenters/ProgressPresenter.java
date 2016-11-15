@@ -1,6 +1,5 @@
 package com.peekaboo.presentation.presenters;
 
-import android.content.Context;
 
 import com.peekaboo.domain.UserMessageMapper;
 import com.peekaboo.domain.subscribers.BaseProgressSubscriber;

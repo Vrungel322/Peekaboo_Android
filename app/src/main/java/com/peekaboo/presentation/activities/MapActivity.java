@@ -3,16 +3,11 @@ package com.peekaboo.presentation.activities;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.os.Environment;
 import android.support.design.widget.FloatingActionButton;
 import android.util.Log;
-import android.view.View;
-import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdate;
@@ -26,16 +21,8 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.peekaboo.R;
-import com.peekaboo.presentation.app.view.RoundedTransformation;
-import com.squareup.picasso.Callback;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
 
 //import static com.google.android.gms.wearable.DataMap.TAG;
-import java.io.File;
-import java.io.FileOutputStream;
-
-import static com.peekaboo.R.id.imageView;
 
 
 /**
@@ -51,6 +38,7 @@ public class MapActivity extends Activity implements OnMapReadyCallback {
     private LocationManager locationManager;
     StringBuilder sbGPS = new StringBuilder();
     StringBuilder sbNet = new StringBuilder();
+    private FloatingActionButton fab;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -88,6 +76,7 @@ public class MapActivity extends Activity implements OnMapReadyCallback {
             }
         });
 
+        fab = (FloatingActionButton) findViewById(R.id.mapfab);
 
         GoogleMap.OnMyLocationChangeListener myLocationChangeListener = new GoogleMap.OnMyLocationChangeListener() {
             @Override
@@ -128,6 +117,26 @@ public class MapActivity extends Activity implements OnMapReadyCallback {
         googleMap = map;
         init();
         setUpMap();
+        fab.setOnClickListener(v -> {
+            Toast.makeText(this, googleMap.getMyLocation().getLatitude() + " " + googleMap.getMyLocation().getLongitude(), Toast.LENGTH_LONG).show();
+            CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(googleMap.getMyLocation().getLatitude(), googleMap.getMyLocation().getLongitude()))
+                    .zoom(10)
+                    .build();
+            CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition);
+            googleMap.animateCamera(cameraUpdate);
+
+            String lat = String.valueOf(googleMap.getMyLocation().getLatitude());//"50.459507";
+            String lng = String.valueOf(googleMap.getMyLocation().getLongitude());//"30.514554";
+            String mapuri = "http://maps.google.com/maps/api/staticmap?center=" + lat + "," + lng +
+                    "&zoom=18&size=350x230" + "&markers=icon:http://chart.apis.google.com/chart?chst=d_map_pin_icon|" + lat + "," + lng +
+                    "&sensor=true";
+            Intent intent = new Intent();
+            intent.putExtra("staticmap", mapuri);
+            setResult(RESULT_OK, intent);
+
+            finish();
+
+        });
 
     }
 

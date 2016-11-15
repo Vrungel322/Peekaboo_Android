@@ -19,6 +19,7 @@ import com.peekaboo.data.rest.RestApi;
 import com.peekaboo.domain.AccountUser;
 import com.peekaboo.domain.SessionRepository;
 import com.peekaboo.domain.UserMessageMapper;
+import com.peekaboo.utils.FilesUtils;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -150,8 +151,8 @@ public class DataModule {
 
     @Provides
     @Singleton
-    public RestApi provideRestApi(PeekabooApi api) {
-        return new RestApi(api);
+    public RestApi provideRestApi(PeekabooApi api, Context c, FilesUtils filesUtils) {
+        return new RestApi(api, c, filesUtils);
     }
 
     @Provides
