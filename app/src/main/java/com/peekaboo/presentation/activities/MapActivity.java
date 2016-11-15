@@ -49,32 +49,32 @@ public class MapActivity extends Activity implements OnMapReadyCallback {
         createMapView();
 
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.mapfab);
-        fab.setOnClickListener(v -> {
-//            Toast.makeText(this, googleMap.getMyLocation().getLatitude() + " " + googleMap.getMyLocation().getLongitude(), Toast.LENGTH_LONG).show();
-//            CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(googleMap.getMyLocation().getLatitude(), googleMap.getMyLocation().getLongitude()))
-//                    .zoom(10)
-//                    .build();
-//            CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition);
-//            googleMap.animateCamera(cameraUpdate);
-            String lat = String.valueOf(googleMap.getMyLocation().getLatitude());//"50.459507";
-            String lng = String.valueOf(googleMap.getMyLocation().getLongitude());//"30.514554";
-            if (markerPosLng != "" || markerPosLat != "") {
-                String mapuri = "http://maps.google.com/maps/api/staticmap?center=" + lat + "," + lng +
-                        "&zoom=12&size=350x230" +
-                        "&markers=icon:http://95.85.24.64:8080/avatar/578|" + markerPosLat + "," + markerPosLng +
-                        "|" + lat + "," + lng +
-                        "&path=color:0xff0000ff|weight:5|fillcolor:0xFFFF0033|" + lat + "," + lng + "|" + markerPosLat + "," + markerPosLng +
-                        "&sensor=true&scale=2";
-                //http://95.85.24.64:8080/avatar/578
-
-                Intent intent = new Intent();
-                intent.putExtra("staticmap", mapuri);
-                setResult(RESULT_OK, intent);
-
-                finish();
-            }
-        });
+//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.mapfab);
+//        fab.setOnClickListener(v -> {
+////            Toast.makeText(this, googleMap.getMyLocation().getLatitude() + " " + googleMap.getMyLocation().getLongitude(), Toast.LENGTH_LONG).show();
+////            CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(googleMap.getMyLocation().getLatitude(), googleMap.getMyLocation().getLongitude()))
+////                    .zoom(10)
+////                    .build();
+////            CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition);
+////            googleMap.animateCamera(cameraUpdate);
+//            String lat = String.valueOf(googleMap.getMyLocation().getLatitude());//"50.459507";
+//            String lng = String.valueOf(googleMap.getMyLocation().getLongitude());//"30.514554";
+//            if (markerPosLng != "" || markerPosLat != "") {
+//                String mapuri = "http://maps.google.com/maps/api/staticmap?center=" + lat + "," + lng +
+//                        "&zoom=12&size=350x230" +
+//                        "&markers=icon:http://95.85.24.64:8080/avatar/578|" + markerPosLat + "," + markerPosLng +
+//                        "|" + lat + "," + lng +
+//                        "&path=color:0xff0000ff|weight:5|fillcolor:0xFFFF0033|" + lat + "," + lng + "|" + markerPosLat + "," + markerPosLng +
+//                        "&sensor=true&scale=2";
+//                //http://95.85.24.64:8080/avatar/578
+//
+//                Intent intent = new Intent();
+//                intent.putExtra("staticmap", mapuri);
+//                setResult(RESULT_OK, intent);
+//
+//                finish();
+//            }
+//        });
 
         fab = (FloatingActionButton) findViewById(R.id.mapfab);
 
@@ -127,14 +127,21 @@ public class MapActivity extends Activity implements OnMapReadyCallback {
 
             String lat = String.valueOf(googleMap.getMyLocation().getLatitude());//"50.459507";
             String lng = String.valueOf(googleMap.getMyLocation().getLongitude());//"30.514554";
-            String mapuri = "http://maps.google.com/maps/api/staticmap?center=" + lat + "," + lng +
-                    "&zoom=18&size=350x230" + "&markers=icon:http://chart.apis.google.com/chart?chst=d_map_pin_icon|" + lat + "," + lng +
-                    "&sensor=true";
-            Intent intent = new Intent();
-            intent.putExtra("staticmap", mapuri);
-            setResult(RESULT_OK, intent);
+            if (markerPosLng != "" || markerPosLat != "") {
+                String mapuri = "http://maps.google.com/maps/api/staticmap?center=" + lat + "," + lng +
+                        "&zoom=12&size=350x230" +
+                        "&markers=icon:http://95.85.24.64:8080/avatar/578|" + markerPosLat + "," + markerPosLng +
+                        "|" + lat + "," + lng +
+                        "&path=color:0xff0000ff|weight:5|fillcolor:0xFFFF0033|" + lat + "," + lng + "|" + markerPosLat + "," + markerPosLng +
+                        "&sensor=true&scale=2";
+                //http://95.85.24.64:8080/avatar/578
 
-            finish();
+                Intent intent = new Intent();
+                intent.putExtra("staticmap", mapuri);
+                setResult(RESULT_OK, intent);
+
+                finish();
+            }
 
         });
 
