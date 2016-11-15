@@ -1,16 +1,25 @@
 package com.peekaboo.presentation.adapters;
 
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
 import android.graphics.Color;
 import android.content.Intent;
+import android.graphics.Paint;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.LayerDrawable;
 import android.net.Uri;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
@@ -21,6 +30,7 @@ import com.peekaboo.data.repositories.database.messages.PMessageAbs;
 import com.peekaboo.domain.Dialog;
 import com.peekaboo.presentation.activities.MainActivity;
 import com.peekaboo.presentation.activities.MapActivity;
+import com.peekaboo.presentation.utils.AvatarIcon;
 import com.peekaboo.presentation.utils.ResourcesUtils;
 import com.peekaboo.utils.ActivityNavigator;
 import com.peekaboo.utils.Utility;
@@ -38,6 +48,7 @@ public final class DialogsLargeAdapter extends RecyclerView.Adapter<DialogsLarge
     private MainActivity activity;
     private ActivityNavigator navigator;
     private Picasso mPicasso;
+    private AvatarIcon avatarIcon;
     private List<Dialog> items = new ArrayList<>();
 
     public DialogsLargeAdapter(MainActivity activity, ActivityNavigator navigator) {
@@ -58,23 +69,28 @@ public final class DialogsLargeAdapter extends RecyclerView.Adapter<DialogsLarge
         Dialog dialog = getItem(position);
         Contact contact = dialog.getContact();
         PMessage lastMessage = dialog.getLastMessage();
+        avatarIcon = new AvatarIcon();
         final boolean[] muted = {false};
         final boolean[] stared = {false};
 
+        String contactName = contact.contactName();
+        String contactSurname = contact.contactSurname();
+        String avatarText;
+        if (contactSurname == null) {
+            holder.tvContactName.setText(contactName);
+            avatarText = contactName.substring(0,1).toUpperCase();
+        } else {
+            holder.tvContactName.setText(contactName + " " + contactSurname);
+            avatarText = contactName.substring(0,1).toUpperCase() + contactSurname.substring(0,1).toUpperCase();
+        }
+
         int avatarSize = ResourcesUtils.getDimenInPx(activity, R.dimen.contact_list_avatar_size);
+        Drawable drawable = holder.ivAvatar.getDrawable();
 
         mPicasso.load(contact.contactImgUri())
                 .resize(0, avatarSize)
-                .error(R.drawable.ic_alert_circle_outline)
+                .error(avatarIcon.createAvatarIcon(drawable, avatarText, avatarSize, avatarSize))
                 .into(holder.ivAvatar);
-
-        String contactName = contact.contactName();
-        String contactSurname = contact.contactSurname();
-        if (contactSurname == null) {
-            holder.tvContactName.setText(contactName);
-        } else {
-            holder.tvContactName.setText(contactName + " " + contactSurname);
-        }
 
         setMessageBody(holder, lastMessage);
 
@@ -188,6 +204,7 @@ public final class DialogsLargeAdapter extends RecyclerView.Adapter<DialogsLarge
         return holder.itemView.getContext().getString(id);
     }
 
+
     private void setMessageStatus(ViewHolder holder, PMessage message) {
         if (!message.isMine() || message.status() == PMessageAbs.PMESSAGE_STATUS.STATUS_SENT) {
             holder.ivMessageStatus.setVisibility(View.GONE);
@@ -250,6 +267,7 @@ public final class DialogsLargeAdapter extends RecyclerView.Adapter<DialogsLarge
             ButterKnife.bind(this, itemView);
 
         }
-
     }
+
+
 }
