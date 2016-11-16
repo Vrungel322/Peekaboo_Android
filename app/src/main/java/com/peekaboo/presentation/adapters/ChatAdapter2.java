@@ -327,7 +327,7 @@ public class ChatAdapter2 extends RecyclerView.Adapter<ChatAdapter2.ViewHolder> 
         mPicasso.load(Uri.parse(link)).resize(bubbleMaxWidth, imageMaxHeight)
                 .error(R.drawable.ic_alert_circle_outline)
                 .centerInside()
-                .transform(new RoundedTransformation(25, 0))
+                .transform(new RoundedTransformation(imageMessageRadius, 0))
                 .into(holder.ivImageMessage, new Callback.EmptyCallback() {
                     @Override
                     public void onSuccess() {

@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -61,6 +62,8 @@ import butterknife.OnFocusChange;
 import butterknife.OnTouch;
 import io.codetail.animation.ViewAnimationUtils;
 import io.codetail.widget.RevealFrameLayout;
+
+import static android.app.Activity.RESULT_OK;
 
 /**
  * Created by sebastian on 09.09.16.
@@ -197,9 +200,16 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
 //            }
             if (adapter.getItemViewType(position) == PMessageAbs.PMESSAGE_MEDIA_TYPE.GEO_MESSAGE){
 
-                Intent mapintent = new Intent(getActivity(), MapActivity.class);
-                getActivity().startActivity(mapintent);
-
+                String link = adapter.getItem(position).messageBody();
+//                Intent mapintent = new Intent(getActivity(), MapActivity.class);
+//                mapintent.putExtra("mesmap",link);
+//                getActivity().startActivity(mapintent);
+//                setResult(RESULT_OK, mapintent);
+//--
+        Uri gmmIntentUri = Uri.parse("geo:50.459507,30.514554?z=20=d");
+        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+        mapIntent.setPackage("com.google.android.apps.maps");
+        startActivity(mapIntent);
             }
 
         });
@@ -381,7 +391,7 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
         switch (requestCode) {
             case IntentUtils.CAMERA_REQUEST_CODE:
             case IntentUtils.GALLERY_REQUEST_CODE:
-                if (resultCode == Activity.RESULT_OK) {
+                if (resultCode == RESULT_OK) {
                     if (imageFile == null) {
                         imageFile = IntentUtils.onGalleryActivityResult(getActivity(), requestCode, resultCode, data);
                     }
@@ -395,7 +405,7 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
                 }
                 break;
             case Constants.REQUEST_CODES.REQUEST_CODE_GPS:
-                if (resultCode == Activity.RESULT_OK && null != data) {
+                if (resultCode == RESULT_OK && null != data) {
                     String link = data.getStringExtra("staticmap");
 //                    Toast.makeText(getContext(), link, Toast.LENGTH_SHORT).show();
 //                    Log.wtf("NULL : ", "sendImage " + link);

@@ -117,6 +117,7 @@ public class MapActivity extends Activity implements OnMapReadyCallback {
         googleMap = map;
         init();
         setUpMap();
+
         fab.setOnClickListener(v -> {
             Toast.makeText(this, googleMap.getMyLocation().getLatitude() + " " + googleMap.getMyLocation().getLongitude(), Toast.LENGTH_LONG).show();
             CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(googleMap.getMyLocation().getLatitude(), googleMap.getMyLocation().getLongitude()))
@@ -129,7 +130,7 @@ public class MapActivity extends Activity implements OnMapReadyCallback {
             String lng = String.valueOf(googleMap.getMyLocation().getLongitude());//"30.514554";
             if (markerPosLng != "" || markerPosLat != "") {
                 String mapuri = "http://maps.google.com/maps/api/staticmap?center=" + lat + "," + lng +
-                        "&zoom=12&size=350x230" +
+                        "&zoom=15&size=350x230" +
                         "&markers=icon:http://95.85.24.64:8080/avatar/578|" + markerPosLat + "," + markerPosLng +
                         "|" + lat + "," + lng +
                         "&path=color:0xff0000ff|weight:5|fillcolor:0xFFFF0033|" + lat + "," + lng + "|" + markerPosLat + "," + markerPosLng +
@@ -187,6 +188,7 @@ public class MapActivity extends Activity implements OnMapReadyCallback {
     public void setUpMap() {
 
         googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
+
         googleMap.setMyLocationEnabled(true);
         googleMap.setTrafficEnabled(false);
         googleMap.setIndoorEnabled(false);
