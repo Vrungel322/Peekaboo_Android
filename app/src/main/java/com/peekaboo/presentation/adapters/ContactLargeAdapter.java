@@ -48,7 +48,11 @@ public final class ContactLargeAdapter extends RecyclerView.Adapter<ContactLarge
         Contact contact = getItem(position);
         int avatarSize = ResourcesUtils.getDimenInPx(activity, R.dimen.contact_list_avatar_size);
 
-        mPicasso.load(contact.contactImgUri())
+//        mPicasso.load(contact.contactImgUri())
+        Picasso.with(activity)
+                .load("https://secure.gravatar.com/avatar/67283abf3e13430b424e4e3e8a2233c7?s=64&d=mm&r=g")
+//                .load(contact.contactImgUri())
+                .tag(activity)
                 .resize(0, avatarSize)
                 .error(R.drawable.ic_alert_circle_outline)
 //                .centerInside()
