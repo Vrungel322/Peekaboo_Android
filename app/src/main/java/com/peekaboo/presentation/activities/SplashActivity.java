@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 
 import com.peekaboo.R;
+import com.peekaboo.data.di.UserComponent;
 import com.peekaboo.domain.AccountUser;
 import com.peekaboo.presentation.PeekabooApplication;
 import com.peekaboo.presentation.di.ApplicationComponent;
@@ -25,7 +26,7 @@ public class SplashActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash);
-        ApplicationComponent component = PeekabooApplication.getApp(this).getComponent();
+        UserComponent component = PeekabooApplication.getApp(this).getComponent();
         component.inject(this);
 
         /*if (splashActivityPresenter.isFirstLaunch()) {
@@ -34,7 +35,7 @@ public class SplashActivity extends AppCompatActivity {
         } else*/ if (user.isAuthorized()) {
             mNavigator.startMainActivity(this);
         } else {
-            mNavigator.startLogInActivity(this);
+            mNavigator.startLogInActivity(this, false);
         }
         finish();
     }

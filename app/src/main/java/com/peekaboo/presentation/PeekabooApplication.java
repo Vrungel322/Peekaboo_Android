@@ -5,12 +5,15 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 
+import com.peekaboo.data.di.UserComponent;
+import com.peekaboo.data.di.UserModule;
 import com.peekaboo.presentation.activities.LogInActivity;
 import com.peekaboo.presentation.di.ApplicationComponent;
 import com.peekaboo.presentation.di.ApplicationModule;
 import com.peekaboo.presentation.di.DaggerApplicationComponent;
 import com.peekaboo.presentation.services.NotificationService;
 import com.peekaboo.presentation.services.WearLink;
+import com.peekaboo.utils.ActivityNavigator;
 import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKAccessTokenTracker;
 import com.vk.sdk.VKSdk;
@@ -24,6 +27,7 @@ import com.vk.sdk.VKSdk;
 public class PeekabooApplication extends Application {
 
     private ApplicationComponent component;
+    private UserComponent userComponent;
     private Handler handler;
     VKAccessTokenTracker vkAccessTokenTracker = new VKAccessTokenTracker() {
         @Override
@@ -51,6 +55,7 @@ public class PeekabooApplication extends Application {
         super.onCreate();
         handler = new Handler();
         buildAppComponent();
+        buildUserComponent();
         NotificationService.launch(this, NotificationService.ACTION.TRY_CONNECT);
         WearLink.launch(this);
         vkAccessTokenTracker.startTracking();
@@ -64,8 +69,28 @@ public class PeekabooApplication extends Application {
                 .build();
     }
 
-    public ApplicationComponent getComponent() {
+    private void buildUserComponent() {
+        userComponent = component.plus(new UserModule());
+    }
+
+
+    public UserComponent getComponent() {
+        return userComponent;
+    }
+
+    public ApplicationComponent getApplicationComponent() {
         return component;
+    }
+
+    public void logout() {
+        NotificationService.stop(this);
+        WearLink.stop(this);
+        userComponent.messenger().disconnect();
+        userComponent.accountUser().logout();
+        buildUserComponent();
+        WearLink.launch(this);
+        ActivityNavigator navigator = component.navigator();
+        navigator.startLogInActivity(this, true);
     }
 
 }

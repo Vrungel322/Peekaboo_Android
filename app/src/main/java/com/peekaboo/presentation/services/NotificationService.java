@@ -45,7 +45,7 @@ public class NotificationService extends Service {
     public void onCreate() {
         super.onCreate();
         PeekabooApplication.getApp(this).getComponent().inject(this);
-        Log.e("socket", "service onCreate()");
+        Log.e("NotificationService", "onCreate() " + user.getUsername());
         ibrInternetCheck = new InternetBroadcastReceiver();
         IntentFilter ifInternetCheck = new IntentFilter();
         ifInternetCheck.addAction(ConnectivityManager.CONNECTIVITY_ACTION);
@@ -87,10 +87,16 @@ public class NotificationService extends Service {
 
     @Override
     public void onDestroy() {
-        Log.e("socket", "service onDestroy()");
+        Log.e("NotificationService", "onDestroy() " + user.getUsername());
         unregisterReceiver(ibrInternetCheck);
         Intent intent = new Intent("com.peekaboo.start");
         sendBroadcast(intent);
+        super.onDestroy();
+    }
+
+    public static void stop(Context context) {
+        Intent intent = new Intent(context, NotificationService.class);
+        context.stopService(intent);
     }
 
     public interface ACTION {

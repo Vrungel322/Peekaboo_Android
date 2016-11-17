@@ -6,24 +6,11 @@ import android.content.SharedPreferences;
 import com.jakewharton.picasso.OkHttp3Downloader;
 import com.peekaboo.data.Constants;
 import com.peekaboo.data.di.DataModule;
-import com.peekaboo.data.mappers.AbstractMapperFactory;
-import com.peekaboo.data.repositories.database.messages.PMessageHelper;
-import com.peekaboo.data.repositories.database.service.ReadMessagesHelper;
-import com.peekaboo.data.repositories.database.utils_db.DbModule;
-import com.peekaboo.domain.AccountUser;
 import com.peekaboo.domain.schedulers.ObserveOn;
 import com.peekaboo.domain.schedulers.SubscribeOn;
-import com.peekaboo.domain.usecase.FileDownloadUseCase;
-import com.peekaboo.domain.usecase.FileUploadUseCase;
 import com.peekaboo.presentation.PeekabooApplication;
-import com.peekaboo.presentation.services.IMessenger;
-import com.peekaboo.presentation.services.INotifier;
 import com.peekaboo.presentation.services.ISmsManager;
-import com.peekaboo.presentation.services.Message;
-import com.peekaboo.presentation.services.MessageNotificator;
-import com.peekaboo.presentation.services.Messenger;
 import com.peekaboo.presentation.services.SMSManager;
-import com.peekaboo.presentation.services.WebSocketNotifier;
 import com.peekaboo.utils.MainThread;
 import com.squareup.otto.Bus;
 import com.squareup.picasso.Picasso;
@@ -41,7 +28,7 @@ import okhttp3.OkHttpClient;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-@Module(includes = {DataModule.class, DbModule.class})
+@Module(includes = {DataModule.class})
 public class ApplicationModule {
     private final PeekabooApplication application;
 
@@ -90,24 +77,6 @@ public class ApplicationModule {
         return domens.get(0) + "avatar/";
     }
 
-    @Provides
-    @Singleton
-    public AccountUser provideUser(SharedPreferences prefs, @Named("avatar") String avatarUrl) {
-        return new AccountUser(prefs, avatarUrl);
-    }
-
-    @Singleton
-    @Provides
-    public INotifier<Message> provideNotifier(MainThread mainThread, @Named("domens") List<String> domens, AbstractMapperFactory abstractMapperFactory) {
-        return new WebSocketNotifier(domens.get(1), 5000, abstractMapperFactory, mainThread);
-    }
-
-    @Singleton
-    @Provides
-    public IMessenger provideMessanger(INotifier<Message> notifier, MessageNotificator messageNotificator, PMessageHelper helper, ReadMessagesHelper readMessagesHelper, AccountUser user, FileUploadUseCase fileUploadUseCase, FileDownloadUseCase downloadFileUseCase) {
-        return new Messenger(notifier, helper, messageNotificator, readMessagesHelper, user, fileUploadUseCase, downloadFileUseCase);
-    }
-
     @Singleton
     @Provides
     public Picasso providePicasso(Context context) {
@@ -123,7 +92,7 @@ public class ApplicationModule {
 
     @Singleton
     @Provides
-    public ISmsManager provideSMSManager(Context context){
+    public ISmsManager provideSMSManager(Context context) {
         return new SMSManager(context);
     }
 }

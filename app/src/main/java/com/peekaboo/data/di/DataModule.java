@@ -155,15 +155,6 @@ public class DataModule {
         return new RestApi(api, c, filesUtils);
     }
 
-    @Provides
-    @Singleton
-    public SessionRepository provideRepository(AccountUser user, RestApi restApi,
-                                               PContactHelper dbHelper,
-                                               PMessageHelper messageHelper,
-                                               AbstractMapperFactory mapperFactory,
-                                               ContentResolver contentResolver) {
-        return new SessionDataRepository(restApi, mapperFactory, user, dbHelper, messageHelper, contentResolver);
-    }
 
     @Provides
     @Singleton
@@ -177,12 +168,6 @@ public class DataModule {
         });
         return textToSpeech;
     }
-
-    @Provides
-    public AbstractMapperFactory provideMapperFactory(@Named("avatar") String avatarUrl){
-        return new MapperFactory(avatarUrl);
-    }
-
 
     @Provides
     @Singleton

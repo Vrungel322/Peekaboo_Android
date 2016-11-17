@@ -31,8 +31,11 @@ public class ActivityNavigator {
     public ActivityNavigator() {
     }
 
-    public void startLogInActivity(Context mActivityContext) {
+    public void startLogInActivity(Context mActivityContext, boolean newTask) {
         Intent intent = new Intent(mActivityContext, LogInActivity.class);
+        if (newTask) {
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        }
         mActivityContext.startActivity(intent);
     }
 

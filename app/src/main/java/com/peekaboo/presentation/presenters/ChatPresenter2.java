@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.peekaboo.data.di.scope.UserScope;
 import com.peekaboo.data.repositories.database.messages.PMessage;
 import com.peekaboo.data.repositories.database.messages.PMessageAbs;
 import com.peekaboo.data.repositories.database.messages.PMessageHelper;
@@ -21,14 +22,13 @@ import com.peekaboo.presentation.utils.AudioPlayer;
 import com.peekaboo.presentation.views.IChatView2;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 import rx.subscriptions.CompositeSubscription;
 
 /**
  * Created by sebastian on 24.08.16.
  */
-@Singleton
+@UserScope
 public class ChatPresenter2 extends BasePresenter<IChatView2> implements IChatPresenter2<IChatView2>,
         IMessenger.MessengerListener {
     private final IMessenger messenger;

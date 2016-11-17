@@ -380,6 +380,7 @@ public class MainActivity extends AppCompatActivity implements IMainView, Choose
                 newFragment.show(getSupportFragmentManager(), ChooseImageDialogFragment.TAG);
                 break;
             case R.id.llExit:
+                PeekabooApplication.getApp(this).logout();
 //                throw new RuntimeException();
 
         }

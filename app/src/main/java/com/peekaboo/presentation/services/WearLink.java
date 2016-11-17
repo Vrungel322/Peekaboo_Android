@@ -268,10 +268,23 @@ public class WearLink extends Service implements IMessenger.MessengerListener
         context.startService(new Intent(context, WearLink.class));
     }
 
+    public static void stop(Context context) {
+        context.stopService(new Intent(context, WearLink.class));
+    }
+
+
+    @Override
+    public void onDestroy() {
+        Log.e(TAG, "onDestroy() " + accountUser.getUsername());
+        notifier.removeMessageListener(this);
+        super.onDestroy();
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();
         PeekabooApplication.getApp(this).getComponent().inject(this);
+        Log.e(TAG, "onCreate() " + accountUser.getUsername());
         notifier.addMessageListener(this);
         Intent intent = new Intent("com.peekaboo.started");
         sendBroadcast(intent);

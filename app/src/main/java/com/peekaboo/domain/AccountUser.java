@@ -85,6 +85,13 @@ public class AccountUser extends User {
         username = preferences.getString(USERNAME, null);
     }
 
+    public void logout() {
+        token = null;
+        mode = 0;
+        username = null;
+        setId(null);
+        preferences.edit().clear().commit();
+    }
     @Override
     public String toString() {
         return "AccountUser{" +

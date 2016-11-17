@@ -10,9 +10,9 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
-import android.widget.RemoteViews;
 
 import com.peekaboo.R;
+import com.peekaboo.data.di.scope.UserScope;
 import com.peekaboo.data.repositories.database.contacts.Contact;
 import com.peekaboo.data.repositories.database.messages.PMessage;
 import com.peekaboo.domain.Pair;
@@ -25,12 +25,11 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 /**
  * Created by arkadius on 10/5/16.
  */
-@Singleton
+@UserScope
 public class MessageNotificator {
 
     public static final int NOTIFICATION_ID = 101;
