@@ -1,15 +1,18 @@
 package com.peekaboo.presentation.adapters;
 
+import android.graphics.drawable.Drawable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.peekaboo.R;
 import com.peekaboo.data.repositories.database.contacts.Contact;
+import com.peekaboo.presentation.utils.AvatarIcon;
 import com.peekaboo.presentation.utils.ResourcesUtils;
 import com.peekaboo.presentation.widget.RecyclerViewFastScroller.BubbleTextGetter;
 import com.peekaboo.utils.ActivityNavigator;
@@ -31,10 +34,14 @@ public final class ContactLargeAdapter extends RecyclerView.Adapter<ContactLarge
     private Picasso mPicasso;
     private ActivityNavigator navigator;
 
+    private AvatarIcon avatarIcon;
+
+
     public ContactLargeAdapter(AppCompatActivity activity, ActivityNavigator navigator, Picasso mPicasso) {
         this.activity = activity;
         this.navigator = navigator;
         this.mPicasso = mPicasso;
+        avatarIcon = new AvatarIcon();
     }
 
     @Override
@@ -46,11 +53,27 @@ public final class ContactLargeAdapter extends RecyclerView.Adapter<ContactLarge
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
         Contact contact = getItem(position);
+        String contactName = contact.contactName();
+        String contactSurname = contact.contactSurname();
+        String avatarText;
+
+        if (contactSurname == null) {
+            holder.tvContactName.setText(contactName);
+            avatarText = contactName.substring(0,1).toUpperCase();
+        } else {
+            holder.tvContactName.setText(contactName + " " + contactSurname);
+            avatarText = contactName.substring(0,1).toUpperCase() + contactSurname.substring(0,1).toUpperCase();
+        }
+        holder.defaultAvatarText.setText(avatarText);
+
         int avatarSize = ResourcesUtils.getDimenInPx(activity, R.dimen.contact_list_avatar_size);
+        Drawable drawable = activity.getResources().getDrawable(R.drawable.avatar_icon);
+
+        holder.defaultAvatar.setImageDrawable(AvatarIcon.setDrawableColor(drawable, contactName, contactSurname));
 
         mPicasso.load(contact.contactImgUri())
                 .resize(0, avatarSize)
-                .error(R.drawable.ic_alert_circle_outline)
+//                .error(avatarIcon.createAvatarIcon(drawable, contactName, contactSurname, avatarSize, avatarSize))
 //                .centerInside()
                 .into(holder.ivAvatar, new Callback.EmptyCallback(){
                     @Override
@@ -66,13 +89,7 @@ public final class ContactLargeAdapter extends RecyclerView.Adapter<ContactLarge
                     }
                 });
 
-        String contactName = contact.contactName();
-        String contactSurname = contact.contactSurname();
-        if (contactSurname == null) {
-            holder.tvContactName.setText(contactName);
-        } else {
-            holder.tvContactName.setText(contactName + " " + contactSurname);
-        }
+
         if (contact.isOnline()) {
             holder.ivStatus.setBackgroundResource(R.drawable.list_online_indicator);
         } else {
@@ -114,6 +131,11 @@ public final class ContactLargeAdapter extends RecyclerView.Adapter<ContactLarge
         View ivStatus;
         @BindView(R.id.loading_image_progress_bar)
         ProgressBar pbImageLoading;
+        @BindView(R.id.default_avatar_text)
+        TextView defaultAvatarText;
+        @BindView(R.id.default_avatar)
+        ImageView defaultAvatar;
+
 
         ViewHolder(View itemView) {
             super(itemView);

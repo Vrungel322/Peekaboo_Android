@@ -76,6 +76,7 @@ public final class DialogsLargeAdapter extends RecyclerView.Adapter<DialogsLarge
         String contactName = contact.contactName();
         String contactSurname = contact.contactSurname();
         String avatarText;
+
         if (contactSurname == null) {
             holder.tvContactName.setText(contactName);
             avatarText = contactName.substring(0,1).toUpperCase();
@@ -83,13 +84,15 @@ public final class DialogsLargeAdapter extends RecyclerView.Adapter<DialogsLarge
             holder.tvContactName.setText(contactName + " " + contactSurname);
             avatarText = contactName.substring(0,1).toUpperCase() + contactSurname.substring(0,1).toUpperCase();
         }
+        holder.defaultAvatarText.setText(avatarText);
+
 
         int avatarSize = ResourcesUtils.getDimenInPx(activity, R.dimen.contact_list_avatar_size);
-        Drawable drawable = holder.ivAvatar.getDrawable();
+        Drawable drawable = activity.getResources().getDrawable(R.drawable.avatar_icon);
 
+        holder.defaultAvatar.setImageDrawable(AvatarIcon.setDrawableColor(drawable, contactName, contactSurname));
         mPicasso.load(contact.contactImgUri())
                 .resize(0, avatarSize)
-                .error(avatarIcon.createAvatarIcon(drawable, avatarText, avatarSize, avatarSize))
                 .into(holder.ivAvatar);
 
         setMessageBody(holder, lastMessage);
@@ -260,6 +263,10 @@ public final class DialogsLargeAdapter extends RecyclerView.Adapter<DialogsLarge
         CoordinatorLayout dialogContainer;
         @BindView(R.id.dialogs_divider)
         View dialogsDivider;
+        @BindView(R.id.default_avatar_text)
+        TextView defaultAvatarText;
+        @BindView(R.id.default_avatar)
+        ImageView defaultAvatar;
 
 
         ViewHolder(View itemView) {
