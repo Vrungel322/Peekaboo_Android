@@ -43,8 +43,8 @@
 
                     <de.hdodenhof.circleimageview.CircleImageView
                         android:id="@+id/ivAccountAvatar"
-                        android:layout_width="@dimen/widthOfIconInDrawer"
-                        android:layout_height="@dimen/heightOfIconInDrawer"
+                        android:layout_width="@dimen/sizeOfIconInDrawer"
+                        android:layout_height="@dimen/sizeOfIconInDrawer"
                         android:layout_gravity="center"
                         android:clickable="true"
                         app:border_color="@android:color/transparent"
@@ -52,17 +52,17 @@
 
                     <ProgressBar
                         android:id="@+id/pbLoading_avatar_progress_bar"
-                        android:layout_width="@dimen/widthOfIconInDrawer"
+                        android:layout_width="@dimen/sizeOfIconInDrawer"
                         android:visibility="gone"
-                        android:layout_height="@dimen/heightOfIconInDrawer" />
+                        android:layout_height="@dimen/sizeOfIconInDrawer" />
 
                     <View
                         android:id="@+id/ivOnlineStatus"
-                        android:layout_width="@dimen/hotFriendStatusIconSize"
-                        android:layout_height="@dimen/hotFriendStatusIconSize"
-                        android:layout_gravity="right|top"
-                        android:layout_marginRight="2dp"
-                        tools:background="@drawable/drawer_offline_indicator" />
+                        android:layout_width="@dimen/online_indicator_inner_size"
+                        android:layout_height="@dimen/online_indicator_inner_size"
+                        android:layout_gravity="right"
+                        android:layout_marginRight="6dp"
+                        tools:background="@drawable/circle_offline" />
 
                 </FrameLayout>
 

@@ -41,6 +41,7 @@ import com.peekaboo.domain.usecase.UserModeChangerUseCase;
 import com.peekaboo.presentation.PeekabooApplication;
 import com.peekaboo.presentation.adapters.HotFriendsAdapter;
 import com.peekaboo.presentation.dialogs.AvatarChangeDialog;
+import com.peekaboo.presentation.fragments.BlankDialogFragment;
 import com.peekaboo.presentation.fragments.CallsFragment;
 import com.peekaboo.presentation.dialogs.ChooseImageDialogFragment;
 import com.peekaboo.presentation.fragments.ChatFragment;
@@ -322,7 +323,7 @@ public class MainActivity extends AppCompatActivity implements IMainView, Choose
         String userName = accountUser.getUsername();
         tvNameSurname.setText(userName);
         Log.e("animator", "avatarUrl " + avatarUrl);
-        int avatarSize = ResourcesUtils.getDimenInPx(this, R.dimen.widthOfIconInDrawer);
+        int avatarSize = ResourcesUtils.getDimenInPx(this, R.dimen.sizeOfIconInDrawer);
         Picasso.with(this).load(avatarUrl)
                 .resize(0, avatarSize)
                 .into(avatarTarget);
@@ -331,7 +332,7 @@ public class MainActivity extends AppCompatActivity implements IMainView, Choose
     }
 
     private void showAvatar(String avatarUrl) {
-        int avatarSize = ResourcesUtils.getDimenInPx(this, R.dimen.widthOfIconInDrawer);
+        int avatarSize = ResourcesUtils.getDimenInPx(this, R.dimen.sizeOfIconInDrawer);
         Picasso.with(this).load(avatarUrl).memoryPolicy(MemoryPolicy.NO_CACHE)
                 .resize(0, avatarSize)
                 .into(avatarTargetAnimated);
@@ -356,6 +357,7 @@ public class MainActivity extends AppCompatActivity implements IMainView, Choose
         }
         switch (v.getId()) {
             case R.id.llDialogs:
+//                changeFragment(new BlankDialogFragment(), null);
                 changeFragment(new DialogsFragment(), Constants.FRAGMENT_TAGS.DIALOGS_FRAGMENT);
                 break;
             case R.id.llCalls:
@@ -470,12 +472,12 @@ public class MainActivity extends AppCompatActivity implements IMainView, Choose
 
     @Override
     public void onConnected() {
-        ivOnlineStatus.setBackgroundResource(R.drawable.drawer_online_indicator);
+        ivOnlineStatus.setBackgroundResource(R.drawable.circle_online);
     }
 
     @Override
     public void onDisconnected() {
-        ivOnlineStatus.setBackgroundResource(R.drawable.drawer_offline_indicator);
+        ivOnlineStatus.setBackgroundResource(R.drawable.circle_offline);
     }
 
     @Override

@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.peekaboo.R;
 import com.peekaboo.domain.Dialog;
 import com.peekaboo.presentation.activities.MainActivity;
+import com.peekaboo.presentation.app.view.OnlineIndicatorView;
 import com.peekaboo.utils.ActivityNavigator;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
@@ -88,32 +89,11 @@ public class HotFriendsAdapter extends BaseAdapter {
                         mViewHolder.loading_hotFriend_progress_bar.setVisibility(View.GONE);
                     }
                 });
-
-        showIfContactIsOnline(mViewHolder, currentListData);
-
-        showUnreadMesCount(mViewHolder, currentListData);
+        mViewHolder.oiIndicatorOnline.setState(currentListData.getContact().isOnline(), currentListData.getUnreadMessagesCount());
 
         convertView.setOnClickListener(v ->
                 navigator.startChatFragment(activity, currentListData.getContact(), true));
         return convertView;
-    }
-
-    private void showIfContactIsOnline(HotFriendsViewHolder mViewHolder, Dialog currentListData) {
-        if (currentListData.getContact().isOnline()) {
-            mViewHolder.civHotFriendStatus.setBackgroundResource(R.drawable.list_online_indicator);
-        } else {
-            mViewHolder.civHotFriendStatus.setBackgroundResource(R.drawable.list_offline_indicator);
-        }
-    }
-
-    private void showUnreadMesCount(HotFriendsViewHolder mViewHolder, Dialog currentListData) {
-        if (currentListData.getUnreadMessagesCount() == 0) {
-            mViewHolder.tvUnreadMesCountInRightDrawer
-                    .setText(null);
-        } else {
-            mViewHolder.tvUnreadMesCountInRightDrawer
-                    .setText(String.valueOf(currentListData.getUnreadMessagesCount()));
-        }
     }
 
     public void setItems(List<Dialog> dialogs) {
@@ -127,11 +107,8 @@ public class HotFriendsAdapter extends BaseAdapter {
         ProgressBar loading_hotFriend_progress_bar;
         @BindView(R.id.civHotFriendIcon)
         CircleImageView civHotFriendIcon;
-        @BindView(R.id.civHotFriendStatus)
-        View civHotFriendStatus;
-        @BindView(R.id.tvUnreadMesCountInRightDrawer)
-        TextView tvUnreadMesCountInRightDrawer;
-
+        @BindView(R.id.oiOnlineIndicator)
+        OnlineIndicatorView oiIndicatorOnline;
         public HotFriendsViewHolder(View item) {
             ButterKnife.bind(this, item);
         }

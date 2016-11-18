@@ -2,7 +2,6 @@ package com.peekaboo.data.di;
 
 import com.peekaboo.data.di.scope.UserScope;
 import com.peekaboo.domain.AccountUser;
-import com.peekaboo.presentation.activities.ChatActivity;
 import com.peekaboo.presentation.activities.LogInActivity;
 import com.peekaboo.presentation.activities.MainActivity;
 import com.peekaboo.presentation.activities.SignUpActivity;
@@ -45,8 +44,6 @@ public interface UserComponent {
     void inject(SignUpActivity signUpActivity);
 
     void inject(MainActivity mainActivity);
-
-    void inject(ChatActivity chatActivity);
 
     //    Inject of Fragments
     void inject(ContactsFragment contactsFragment);

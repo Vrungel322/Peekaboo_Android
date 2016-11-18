@@ -30,6 +30,7 @@ import com.peekaboo.data.repositories.database.messages.PMessageAbs;
 import com.peekaboo.domain.Dialog;
 import com.peekaboo.presentation.activities.MainActivity;
 import com.peekaboo.presentation.activities.MapActivity;
+import com.peekaboo.presentation.app.view.OnlineIndicatorView;
 import com.peekaboo.presentation.utils.AvatarIcon;
 import com.peekaboo.presentation.utils.ResourcesUtils;
 import com.peekaboo.utils.ActivityNavigator;
@@ -100,39 +101,10 @@ public final class DialogsLargeAdapter extends RecyclerView.Adapter<DialogsLarge
 
         setMessageStatus(holder, lastMessage);
 
-        if (contact.isOnline()) {
-            holder.contact_status_view.setBackgroundResource(R.drawable.list_online_indicator);
-            holder.unread_count_text_view.setTextColor(Color.WHITE);
 
-        } else {
-            holder.contact_status_view.setBackgroundResource(R.drawable.list_offline_indicator);
-            holder.unread_count_text_view.setTextColor(activity.getResources().getColor(R.color.offline_text));
-        }
 
         int unreadMessagesCount = dialog.getUnreadMessagesCount();
-        CoordinatorLayout.LayoutParams layoutParams = (CoordinatorLayout.LayoutParams) holder.dialogsDivider.getLayoutParams();
-        int topMargin = layoutParams.topMargin;
-        if(unreadMessagesCount > 0 && unreadMessagesCount < 100){
-            if(unreadMessagesCount > 10){
-                holder.unread_count_text_view.setTextSize(11);
-            }
-            holder.unread_count_text_view.setText(String.valueOf(unreadMessagesCount));
-            holder.dialogContainer.setBackgroundColor(activity.getResources().getColor(R.color.unread_msg_background));
-
-            layoutParams.setMargins(0, topMargin, 0, 0);
-        } else {
-            if(unreadMessagesCount >= 100){
-                holder.unread_count_text_view.setTextSize(10);
-                holder.unread_count_text_view.setText("99+");
-                holder.dialogContainer.setBackgroundColor(activity.getResources().getColor(R.color.unread_msg_background));
-                layoutParams.setMargins(0, topMargin, 0, 0);
-
-            }else{
-                holder.unread_count_text_view.setText(null);
-                holder.dialogContainer.setBackgroundColor(Color.WHITE);
-
-            }
-        }
+        holder.oiOnlineIndicator.setState(contact.isOnline(), unreadMessagesCount);
 
         holder.itemView.setOnClickListener(v -> navigator.startChatFragment(activity, contact, true));
 
@@ -238,10 +210,8 @@ public final class DialogsLargeAdapter extends RecyclerView.Adapter<DialogsLarge
     static class ViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.contact_avatar_image_view)
         CircleImageView ivAvatar;
-        @BindView(R.id.contact_status_image_view)
-        View contact_status_view;
-        @BindView(R.id.unread_count_text_view)
-        TextView unread_count_text_view;
+        @BindView(R.id.oiOnlineIndicator)
+        OnlineIndicatorView oiOnlineIndicator;
         @BindView(R.id.contact_name_text_view)
         TextView tvContactName;
         @BindView(R.id.message_preview_text_view)

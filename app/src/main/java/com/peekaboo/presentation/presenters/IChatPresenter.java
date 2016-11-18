@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.net.Uri;
 
 import com.peekaboo.data.repositories.database.messages.PMessageAbs;
-import com.peekaboo.presentation.adapters.ChatAdapter;
 import com.peekaboo.presentation.views.IChatView;
 
 import rx.functions.Action1;
@@ -15,8 +14,6 @@ import rx.functions.Action1;
  */
 public interface IChatPresenter extends IPresenter<IChatView> {
     void onChatHistoryLoading(Action1 adapter);
-
-    void onDeleteChatHistoryButtonPress(ChatAdapter adapter);
 
     void onStartRecordingAudioClick();
 

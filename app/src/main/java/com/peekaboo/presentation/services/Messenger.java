@@ -317,6 +317,7 @@ public class Messenger implements IMessenger,
 
     @Override
     public void tryConnect(String authorization) {
+        Log.e("Messenger", "try connect " + hashCode());
         notifier.tryConnect(authorization);
     }
 
@@ -330,11 +331,13 @@ public class Messenger implements IMessenger,
 
     @Override
     public void disconnect() {
+        Log.e("Messenger", "disconnect " + hashCode());
         notifier.disconnect();
     }
 
     @Override
     public void onConnected() {
+        Log.e("Messenger", "connected " + hashCode());
         deliverSentMessages();
         deliverReadServiceMessages();
     }

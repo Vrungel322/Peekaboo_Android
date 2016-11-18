@@ -81,8 +81,7 @@
     <dimen name="chat_image_height">400dp</dimen>
     <dimen name="margin_drawer_divider">16dp</dimen>
     <dimen name="switcher_item_size">24dp</dimen>
-    <dimen name="widthOfIconInDrawer">80dp</dimen>
-    <dimen name="heightOfIconInDrawer">80dp</dimen>
+    <dimen name="sizeOfIconInDrawer">72dp</dimen>
     <dimen name="name_surnameSizeInDrawer">18sp</dimen>
     <dimen name="marginTopForSwitcher">154dp</dimen>
     <dimen name="chat_buttons_margin">10dp</dimen>
@@ -120,4 +119,10 @@
     <dimen name="chat_vertical_margin">4dp</dimen>
     <dimen name="chat_horizontal_margin">16dp</dimen>
     <dimen name="chat_image_message_padding">4dp</dimen>
+    <dimen name="online_indicator_size">20dp</dimen>
+    <dimen name="online_indicator_inner_size">17dp</dimen>
+    <dimen name="online_indicator_stroke_width">1.5dp</dimen>
+    <dimen name="online_indicator_1_symbol_text_size">11dp</dimen>
+    <dimen name="online_indicator_2_symbol_text_size">9dp</dimen>
+    <dimen name="online_indicator_3_symbol_text_size">8dp</dimen>
 </resources>

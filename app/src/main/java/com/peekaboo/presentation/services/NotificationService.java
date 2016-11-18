@@ -64,7 +64,7 @@ public class NotificationService extends Service {
 
                 case ACTION.TRY_CONNECT:
                     boolean shouldTryConnect = user.isAuthorized() && !notifier.isAvailable();
-                    Log.e("socket", "onStartCommand() try connect " + shouldTryConnect + intent.hashCode());
+                    Log.e("socket", "onStartCommand() try connect " + shouldTryConnect);
                     if (shouldTryConnect) {
                         notifier.tryConnect(user.getBearer());
                     }
@@ -87,6 +87,7 @@ public class NotificationService extends Service {
 
     @Override
     public void onDestroy() {
+
         Log.e("NotificationService", "onDestroy() " + user.getUsername());
         unregisterReceiver(ibrInternetCheck);
         Intent intent = new Intent("com.peekaboo.start");
