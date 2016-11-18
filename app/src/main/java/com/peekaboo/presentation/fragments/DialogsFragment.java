@@ -34,12 +34,12 @@ public class DialogsFragment extends Fragment implements TabLayout.OnTabSelected
     @Inject
     ActivityNavigator navigator;
 
-    @BindView(R.id.tabLayout)
     TabLayout tabLayout;
     @BindView(R.id.pager)
     ViewPager viewPager;
 
     private TabsAdapter adapter;
+
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -59,19 +59,23 @@ public class DialogsFragment extends Fragment implements TabLayout.OnTabSelected
 
         View rootView = inflater.inflate(R.layout.tab_dialogs, container, false);
         ButterKnife.bind(this, rootView);
-//        setHasOptionsMenu(true);
 
-
-        tabLayout.addTab(tabLayout.newTab().setText("Chat"));
-        tabLayout.addTab(tabLayout.newTab().setText("Sms"));
-        tabLayout.setTabGravity(TabLayout.GRAVITY_FILL);
-
-        adapter = new TabsAdapter(getFragmentManager(), tabLayout.getTabCount());
+        tabLayout = (TabLayout) getActivity().findViewById(R.id.tabLayout);
+        tabLayout.setVisibility(View.VISIBLE);
+        adapter = new TabsAdapter(getChildFragmentManager(), getActivity());
 
         viewPager.setAdapter(adapter);
-        tabLayout.setOnTabSelectedListener(this);
+        tabLayout.setupWithViewPager(viewPager);
 
         return rootView;
+    }
+
+    @Override
+    public void onDestroyView() {
+        tabLayout.setupWithViewPager(null);
+        tabLayout.setVisibility(View.GONE);
+        tabLayout = null;
+        super.onDestroyView();
     }
 
     @Override
