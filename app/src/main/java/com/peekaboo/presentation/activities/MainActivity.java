@@ -9,14 +9,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -41,18 +38,13 @@ import com.peekaboo.domain.usecase.UserModeChangerUseCase;
 import com.peekaboo.presentation.PeekabooApplication;
 import com.peekaboo.presentation.adapters.HotFriendsAdapter;
 import com.peekaboo.presentation.app.view.OnlineIndicatorView;
-import com.peekaboo.presentation.dialogs.AvatarChangeDialog;
-import com.peekaboo.presentation.fragments.BlankDialogFragment;
-import com.peekaboo.presentation.fragments.CallsFragment;
 import com.peekaboo.presentation.dialogs.ChooseImageDialogFragment;
+import com.peekaboo.presentation.fragments.CallsFragment;
 import com.peekaboo.presentation.fragments.ChatFragment;
 import com.peekaboo.presentation.fragments.ContactsFragment;
-import com.peekaboo.presentation.fragments.CreateDialogFragment;
 import com.peekaboo.presentation.fragments.DialogsFragment;
 import com.peekaboo.presentation.fragments.ProfileFragment;
 import com.peekaboo.presentation.fragments.SettingsFragment;
-import com.peekaboo.presentation.pojo.HotFriendPOJO;
-import com.peekaboo.presentation.fragments.SmsDialogsFragment;
 import com.peekaboo.presentation.presenters.MainActivityPresenter;
 import com.peekaboo.presentation.services.INotifier;
 import com.peekaboo.presentation.services.Message;
@@ -63,14 +55,11 @@ import com.peekaboo.presentation.utils.ResourcesUtils;
 import com.peekaboo.presentation.views.IMainView;
 import com.peekaboo.utils.ActivityNavigator;
 import com.peekaboo.utils.Constants;
-import com.peekaboo.utils.Utility;
 import com.squareup.otto.Bus;
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
 
-import java.io.File;
-import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -82,7 +71,10 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
 
-public class MainActivity extends AppCompatActivity implements IMainView, ChooseImageDialogFragment.ChooseImageListener, INotifier.NotificationListener<Message> {
+public class MainActivity extends AppCompatActivity implements IMainView,
+        ChooseImageDialogFragment.ChooseImageListener,
+        INotifier.NotificationListener<Message>,
+        SettingsFragment.IUpdateAvatarInDrawer {
     public static final int BLUR_RATE = 20;
     public static final String IMAGE_URI = "image_uri";
     @BindView(R.id.drawer_layout)
@@ -365,7 +357,7 @@ public class MainActivity extends AppCompatActivity implements IMainView, Choose
                 changeFragment(new CallsFragment(), Constants.FRAGMENT_TAGS.CALLS_FRAGMENT);
                 //TESTING
 //                startActivity(new Intent(this, TestSmsChatActivity.class));
-            //    changeFragment(new SmsDialogsFragment(), Constants.FRAGMENT_TAGS.SMS_DIALOGS_FRAGMENT);
+                //    changeFragment(new SmsDialogsFragment(), Constants.FRAGMENT_TAGS.SMS_DIALOGS_FRAGMENT);
                 break;
             case R.id.llContacts:
                 changeFragment(ContactsFragment.newInstance(), Constants.FRAGMENT_TAGS.CONTACTS_FRAGMENT);
@@ -375,7 +367,6 @@ public class MainActivity extends AppCompatActivity implements IMainView, Choose
                 break;
             case R.id.llSettings:
                 settingsFragment = new SettingsFragment();
-                settingsFragment.setUpdaterOfAvatarInDrawer(() -> showAvatar(accountUser.getAvatar()));
                 changeFragment(settingsFragment, Constants.FRAGMENT_TAGS.SETTINGS_FRAGMENT);
                 break;
             case R.id.ivAccountAvatar:
@@ -500,6 +491,11 @@ public class MainActivity extends AppCompatActivity implements IMainView, Choose
     public void onImageChosen(String file) {
         Log.e("MainActivity", "image " + file);
         presenter.updateAvatar(file);
+    }
+
+    @Override
+    public void updateAvatarInDrawer() {
+        showAvatar(accountUser.getAvatar());
     }
 
     public interface OnBackPressListener {

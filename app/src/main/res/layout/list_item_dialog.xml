@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/list_item_dialog_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingTop="@dimen/dialog_item_margin_top"
-    >
+    android:paddingTop="@dimen/dialog_item_margin_top">
 
     <View
         android:id="@+id/dialogs_divider"
@@ -28,31 +28,47 @@
             android:paddingRight="1dp">
 
             <FrameLayout
-                android:layout_width="wrap_content"
-                android:layout_height="@dimen/dialog_item_size"
-                android:paddingRight="8dp">
+                android:layout_width="@dimen/dialog_item_photo_size"
+                android:layout_height="@dimen/dialog_item_photo_size"
+                android:layout_margin="@dimen/dialog_item_margin"
+                android:layout_marginBottom="@dimen/dialog_photo_margin">
 
-                <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
+                <ImageView
+                    android:id="@+id/default_avatar"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="1dp"
+                    android:src="@drawable/avatar_icon" />
+
+                <TextView
+                    android:id="@+id/default_avatar_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    tools:text="AB"
+                    android:textColor="#FFF"
+                    android:textSize="28sp" />
+
+                <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/contact_avatar_image_view"
-                    android:layout_width="@dimen/dialog_item_photo_size"
-                    android:layout_height="@dimen/dialog_item_photo_size"
-                    android:layout_margin="@dimen/dialog_item_margin"
-                    android:layout_marginBottom="@dimen/dialog_photo_margin"
-                    android:src="@drawable/avatar_icon"
-                    app:border_color="@color/colorPrimaryLight" />
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    app:border_color="@android:color/transparent"/>
+
 
                 <com.peekaboo.presentation.app.view.OnlineIndicatorView
                     android:id="@+id/oiOnlineIndicator"
-                    android:layout_gravity="right"
                     android:layout_width="@dimen/online_indicator_size"
-                    android:layout_height="@dimen/online_indicator_size"/>
-
-
+                    android:layout_height="@dimen/online_indicator_size"
+                    android:layout_gravity="right" />
             </FrameLayout>
+
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
                 android:orientation="vertical">
 
                 <LinearLayout

@@ -18,24 +18,48 @@
             android:id="@+id/loading_image_progress_bar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:visibility="gone" />
+
+        <FrameLayout
+            android:layout_width="@dimen/dialog_item_photo_size"
+            android:layout_height="@dimen/dialog_item_photo_size"
             android:layout_margin="@dimen/dialog_item_margin"
-            android:layout_marginBottom="@dimen/dialog_photo_margin" />
+            android:layout_marginBottom="@dimen/dialog_photo_margin">
 
-        <!-- TODO  make custom ImageView with appropriate size -->
-        <de.hdodenhof.circleimageview.CircleImageView
-            android:id="@+id/contact_avatar_image_view"
-            android:layout_width="@dimen/contact_list_avatar_size"
-            android:layout_height="@dimen/contact_list_avatar_size"
-            android:layout_margin="@dimen/dialog_item_margin"
-            android:layout_marginBottom="@dimen/dialog_photo_margin"
-            app:border_color="#0000" />
+            <ImageView
+                android:id="@+id/default_avatar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_margin="1dp"
+                android:src="@drawable/avatar_icon" />
+
+            <TextView
+                android:id="@+id/default_avatar_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:text="AB"
+                android:paddingBottom="1dp"
+                android:paddingLeft="1dp"
+                android:textColor="#FFF"
+                android:textSize="28sp" />
+
+            <!-- TODO  make custom ImageView with appropriate size -->
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/contact_avatar_image_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:border_color="@android:color/transparent"/>
+
+            <com.peekaboo.presentation.app.view.OnlineIndicatorView
+                android:id="@+id/oiOnlineIndicator"
+                android:layout_width="@dimen/online_indicator_size"
+                android:layout_height="@dimen/online_indicator_size"
+                android:layout_gravity="right" />
+        </FrameLayout>
 
 
-        <com.peekaboo.presentation.app.view.OnlineIndicatorView
-            android:id="@+id/oiOnlineIndicator"
-            android:layout_width="@dimen/online_indicator_size"
-            android:layout_gravity="right"
-            android:layout_height="@dimen/online_indicator_size" />
     </FrameLayout>
 
     <TextView
@@ -47,4 +71,5 @@
         android:maxLines="1"
         android:textColor="@color/underline_selected_color"
         android:textSize="@dimen/dialog_contact_name_text_size" />
+
 </LinearLayout>

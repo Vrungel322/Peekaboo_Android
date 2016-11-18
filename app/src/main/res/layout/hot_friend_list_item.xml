@@ -8,8 +8,8 @@
 
     <FrameLayout
         android:id="@+id/flEachHotFriend"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/hotFriendIconSize"
+        android:layout_height="@dimen/hotFriendIconSize"
         android:layout_gravity="right"
         android:layout_marginBottom="@dimen/top_botMarginHotFriendLayout"
         android:layout_marginLeft="@dimen/left_rightMarginHotFriendLayout"
@@ -20,14 +20,14 @@
             android:id="@+id/loading_hotFriend_progress_bar"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:visibility="gone"
             android:layout_margin="@dimen/dialog_item_margin"
             android:layout_marginBottom="@dimen/dialog_photo_margin" />
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/civHotFriendIcon"
-            android:layout_width="@dimen/hotFriendIconSize"
-            android:layout_height="@dimen/hotFriendIconSize"
-            android:layout_gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             app:border_color="@android:color/transparent"
             tools:src="@drawable/raccoon" />
 

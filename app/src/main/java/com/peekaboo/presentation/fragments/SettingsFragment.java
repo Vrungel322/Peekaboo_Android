@@ -68,7 +68,7 @@ public class SettingsFragment extends Fragment implements ISettingsView {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         PeekabooApplication.getApp(getActivity()).getComponent().inject(this);
-
+        this.iUpdateAvatarInDrawer = (IUpdateAvatarInDrawer) getActivity();
     }
 
     @Nullable
@@ -154,9 +154,9 @@ public class SettingsFragment extends Fragment implements ISettingsView {
         }
     }
 
-    public void setUpdaterOfAvatarInDrawer(IUpdateAvatarInDrawer iUpdateAvatarInDrawer){
-        this.iUpdateAvatarInDrawer = iUpdateAvatarInDrawer;
-    }
+//    public void setUpdaterOfAvatarInDrawer(IUpdateAvatarInDrawer iUpdateAvatarInDrawer){
+////        this.iUpdateAvatarInDrawer = iUpdateAvatarInDrawer;
+//    }
 
 
     @Override
@@ -198,5 +198,11 @@ public class SettingsFragment extends Fragment implements ISettingsView {
     public void onDestroyView() {
         settingsFragmentPresenter.unbind();
         super.onDestroyView();
+    }
+
+    @Override
+    public void onDestroy() {
+        this.iUpdateAvatarInDrawer = null;
+        super.onDestroy();
     }
 }
