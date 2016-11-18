@@ -190,26 +190,26 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
             }
         });
         adapter.setOnItemClickListener((position) -> {
-//            android.support.v4.app.FragmentTransaction ft = getActivity()
-//                    .getSupportFragmentManager().beginTransaction();
-//            @Override
-//            public void onClick(int position){
-//                if (adapter.getItemViewType(position) == PMessageAbs.PMESSAGE_MEDIA_TYPE.GEO_MESSAGE){
-//
-//                }
-//            }
-            if (adapter.getItemViewType(position) == PMessageAbs.PMESSAGE_MEDIA_TYPE.GEO_MESSAGE){
+            if (adapter.getItemViewType(position) == PMessageAbs.PMESSAGE_MEDIA_TYPE.GEO_MESSAGE) {
 
                 String link = adapter.getItem(position).messageBody();
+                Log.wtf("NULL : ", "parse link " + link);
 //                Intent mapintent = new Intent(getActivity(), MapActivity.class);
 //                mapintent.putExtra("mesmap",link);
 //                getActivity().startActivity(mapintent);
 //                setResult(RESULT_OK, mapintent);
 //--
-        Uri gmmIntentUri = Uri.parse("geo:50.459507,30.514554?z=20=d");
-        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-        mapIntent.setPackage("com.google.android.apps.maps");
-        startActivity(mapIntent);
+//        Uri gmmIntentUri = Uri.parse("geo:51.4597048,32.516204?q=(restaurants)&mode=d");
+//        Uri gmmIntentUri = Uri.parse(link);
+//                String lat = link.substring(249, 266);
+//                String lng = link.substring(267, 285);
+//                Log.wtf("NULL : ", lat + " " + lng);
+
+//                Uri gmmIntentUri = Uri.parse("geo:"+link.substring(249, 285));
+                Uri gmmIntentUri = Uri.parse("google.navigation:q=" + link.substring(249, 285) + "&mode=w");
+                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+                mapIntent.setPackage("com.google.android.apps.maps");
+                startActivity(mapIntent);
             }
 
         });
@@ -426,7 +426,7 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
         }
         presenter.onSendGPSButtonPress(link);
         return true;
-        }
+    }
 
     public void sendImage(String imageFile) {
         pbLoadingImageToServer.setVisibility(View.VISIBLE);
