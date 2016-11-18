@@ -40,6 +40,7 @@ import com.peekaboo.domain.Dialog;
 import com.peekaboo.domain.usecase.UserModeChangerUseCase;
 import com.peekaboo.presentation.PeekabooApplication;
 import com.peekaboo.presentation.adapters.HotFriendsAdapter;
+import com.peekaboo.presentation.app.view.OnlineIndicatorView;
 import com.peekaboo.presentation.dialogs.AvatarChangeDialog;
 import com.peekaboo.presentation.fragments.BlankDialogFragment;
 import com.peekaboo.presentation.fragments.CallsFragment;
@@ -114,8 +115,8 @@ public class MainActivity extends AppCompatActivity implements IMainView, Choose
     ImageView ivAvatarBlur;
     @BindView(R.id.pbLoading_avatar_progress_bar)
     ProgressBar pbLoading_avatar_progress_bar;
-    @BindView(R.id.ivOnlineStatus)
-    View ivOnlineStatus;
+    @BindView(R.id.oiOnlineIndicator)
+    OnlineIndicatorView oiOnlineIndicator;
     @Inject
     INotifier<Message> notifier;
     @Inject
@@ -472,12 +473,12 @@ public class MainActivity extends AppCompatActivity implements IMainView, Choose
 
     @Override
     public void onConnected() {
-        ivOnlineStatus.setBackgroundResource(R.drawable.circle_online);
+        oiOnlineIndicator.setState(true, 0);
     }
 
     @Override
     public void onDisconnected() {
-        ivOnlineStatus.setBackgroundResource(R.drawable.circle_offline);
+        oiOnlineIndicator.setState(false, 0);
     }
 
     @Override

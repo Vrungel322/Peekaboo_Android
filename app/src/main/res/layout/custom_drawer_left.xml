@@ -56,13 +56,11 @@
                         android:visibility="gone"
                         android:layout_height="@dimen/sizeOfIconInDrawer" />
 
-                    <View
-                        android:id="@+id/ivOnlineStatus"
-                        android:layout_width="@dimen/online_indicator_inner_size"
-                        android:layout_height="@dimen/online_indicator_inner_size"
+                    <com.peekaboo.presentation.app.view.OnlineIndicatorView
+                        android:id="@+id/oiOnlineIndicator"
+                        android:layout_width="@dimen/online_indicator_size"
                         android:layout_gravity="right"
-                        android:layout_marginRight="6dp"
-                        tools:background="@drawable/circle_offline" />
+                        android:layout_height="@dimen/online_indicator_size"/>
 
                 </FrameLayout>
 
