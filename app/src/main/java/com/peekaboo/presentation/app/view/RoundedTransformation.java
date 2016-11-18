@@ -26,18 +26,44 @@ public class RoundedTransformation implements Transformation{
 
     @Override
     public Bitmap transform(final Bitmap source) {
-        final Paint paint = new Paint();
+//        int size = Math.min(source.getWidth(), source.getHeight());
+
+//        int x = (source.getWidth() - size) / 2;
+//        int y = (source.getHeight() - size) / 2;
+
+//        Bitmap squaredBitmap = Bitmap.createBitmap(source, x, y, size, size);
+//        if (squaredBitmap != source) {
+//            source.recycle();
+//        }
+
+        Bitmap bitmap = Bitmap.createBitmap(source.getWidth(), source.getHeight(), source.getConfig());
+
+        Canvas canvas = new Canvas(bitmap);
+        Paint paint = new Paint();
+        BitmapShader shader = new BitmapShader(source,
+                BitmapShader.TileMode.CLAMP, BitmapShader.TileMode.CLAMP);
+        paint.setShader(shader);
         paint.setAntiAlias(true);
-        paint.setShader(new BitmapShader(source, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP));
 
-        Bitmap output = Bitmap.createBitmap(source.getWidth(), source.getHeight(), Bitmap.Config.ARGB_8888);
-        Canvas canvas = new Canvas(output);
-        canvas.drawRoundRect(new RectF(margin, margin, source.getWidth() - margin, source.getHeight() - margin), radius, radius, paint);
-        if (source != output) {
-            source.recycle();
-        }
+//        float r = size / 2f;
+        float r = radius;
+        canvas.drawRoundRect(new RectF(0, 0, source.getWidth(), source.getHeight()), r, r, paint);
+//        canvas.drawCircle(r, r, r, paint);
 
-        return output;
+        source.recycle();
+        return bitmap;
+//        final Paint paint = new Paint();
+//        paint.setAntiAlias(true);
+//        paint.setShader(new BitmapShader(source, Shader.TileMode.CLAMP, Shader.TileMode.CLAMP));
+//
+//        Bitmap output = Bitmap.createBitmap(source.getWidth(), source.getHeight(), Bitmap.Config.ARGB_8888);
+//        Canvas canvas = new Canvas(output);
+//        canvas.drawRoundRect(new RectF(margin, margin, source.getWidth() - margin, source.getHeight() - margin), radius, radius, paint);
+//        if (source != output) {
+//            source.recycle();
+//        }
+//
+//        return output;
     }
 
     @Override

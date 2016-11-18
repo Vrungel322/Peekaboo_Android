@@ -71,7 +71,11 @@ public final class ContactLargeAdapter extends RecyclerView.Adapter<ContactLarge
 
         holder.defaultAvatar.setImageDrawable(AvatarIcon.setDrawableColor(drawable, contactName, contactSurname));
 
-        mPicasso.load(contact.contactImgUri())
+//        mPicasso.load(contact.contactImgUri())
+        Picasso.with(activity)
+                .load("https://secure.gravatar.com/avatar/67283abf3e13430b424e4e3e8a2233c7?s=64&d=mm&r=g")
+//                .load(contact.contactImgUri())
+                .tag(activity)
                 .resize(0, avatarSize)
 //                .error(avatarIcon.createAvatarIcon(drawable, contactName, contactSurname, avatarSize, avatarSize))
 //                .centerInside()

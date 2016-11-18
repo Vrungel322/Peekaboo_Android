@@ -35,4 +35,9 @@ public interface Constants {
         int RECORDER_CHANNELS = AudioFormat.CHANNEL_IN_MONO;
         int RECORDER_AUDIO_ENCODING = AudioFormat.ENCODING_PCM_16BIT;
     }
+
+    interface IMAGE_SIZES {
+        int AVATAR_SIZE = 500;
+        int IMAGE_SIZE = 500;
+    }
 }

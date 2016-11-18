@@ -77,8 +77,8 @@
     <dimen name="text_size">20sp</dimen>
     <dimen name="hint_text_size">14sp</dimen>
 
-    <dimen name="chat_image_width">350dp</dimen>
-    <dimen name="chat_image_height">230dp</dimen>
+    <!--<dimen name="chat_image_width">350dp</dimen>-->
+    <dimen name="chat_image_height">400dp</dimen>
     <dimen name="margin_drawer_divider">16dp</dimen>
     <dimen name="switcher_item_size">24dp</dimen>
     <dimen name="widthOfIconInDrawer">80dp</dimen>
@@ -104,10 +104,20 @@
     <dimen name="primary_text_size">16sp</dimen>
     <dimen name="secondary_text_size">12sp</dimen>
     <dimen name="notification_avatar_size">64dp</dimen>
-<dimen name="right_panel_width">69dp</dimen>
+    <dimen name="right_panel_width">69dp</dimen>
     <dimen name="contact_status_image_size">20dp</dimen>
     <dimen name="margin_divider_top">18dp</dimen>
     <dimen name="settings_text_size">16sp</dimen>
     <dimen name="settings_underline_margin">18dp</dimen>
     <dimen name="settings_card_margin">14dp</dimen>
+    <dimen name="list_padding">8dp</dimen>
+    <dimen name="list_item_icon_size">36dp</dimen>
+    <dimen name="bubble_corner_radius">24dp</dimen>
+    <dimen name="bubble_corner_radius_code">20dp</dimen>
+    <dimen name="bubble_content_padding">6dp</dimen>
+    <dimen name="chat_small_horizontal_margin">0dp</dimen>
+    <dimen name="chat_large_horizontal_margin">88dp</dimen>
+    <dimen name="chat_vertical_margin">4dp</dimen>
+    <dimen name="chat_horizontal_margin">16dp</dimen>
+    <dimen name="chat_image_message_padding">4dp</dimen>
 </resources>

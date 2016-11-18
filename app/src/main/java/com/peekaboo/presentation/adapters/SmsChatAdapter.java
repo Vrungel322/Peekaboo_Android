@@ -1,5 +1,6 @@
 package com.peekaboo.presentation.adapters;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,11 +27,17 @@ import butterknife.ButterKnife;
 
 public class SmsChatAdapter extends RecyclerView.Adapter<SmsChatAdapter.ViewHolder> {
 
+    private final int bubbleSmallHorizontalMargin;
+    private final int bubbleLargeHorizontalMargin;
+    private final int bubbleVerticalMargin;
     private List<Sms> smsList = new ArrayList<>();
     private RecyclerView recyclerView;
 
-    public SmsChatAdapter(RecyclerView recyclerView) {
+    public SmsChatAdapter(RecyclerView recyclerView, Context context) {
         this.recyclerView = recyclerView;
+        bubbleSmallHorizontalMargin = ResourcesUtils.getDimenInPx(context, R.dimen.chat_small_horizontal_margin);
+        bubbleLargeHorizontalMargin = ResourcesUtils.getDimenInPx(context, R.dimen.chat_large_horizontal_margin);
+        bubbleVerticalMargin = ResourcesUtils.getDimenInPx(context, R.dimen.chat_vertical_margin);
     }
 
     @Override
@@ -69,10 +76,10 @@ public class SmsChatAdapter extends RecyclerView.Adapter<SmsChatAdapter.ViewHold
         layoutParams.addRule(isMine ? RelativeLayout.ALIGN_PARENT_LEFT : RelativeLayout.ALIGN_PARENT_RIGHT, 0);
         layoutParams.addRule(isMine ? RelativeLayout.ALIGN_PARENT_RIGHT : RelativeLayout.ALIGN_PARENT_LEFT);
         layoutParams.setMargins(
-                isMine ? Constants.DESIGN_CONSTANTS.BIG_SIDE_MARGIN : Constants.DESIGN_CONSTANTS.SIDE_MARGIN,
-                Constants.DESIGN_CONSTANTS.TOP_OR_BOTTOM_MARGIN,
-                isMine ? Constants.DESIGN_CONSTANTS.SIDE_MARGIN : Constants.DESIGN_CONSTANTS.BIG_SIDE_MARGIN,
-                Constants.DESIGN_CONSTANTS.TOP_OR_BOTTOM_MARGIN
+                isMine ? bubbleLargeHorizontalMargin : bubbleSmallHorizontalMargin,
+                bubbleVerticalMargin,
+                isMine ? bubbleSmallHorizontalMargin : bubbleLargeHorizontalMargin,
+                bubbleVerticalMargin
         );
         holder.chatBubble.setLayoutParams(layoutParams);
         if (isMine) {
