@@ -66,7 +66,7 @@ public class PMessageHelper {
     }
 
     public PMessage getLastMessage(String id) {
-        Log.e("helper", "get last message: " + id);
+//        Log.e("helper", "get last message: " + id);
         String tableName = PREFIX + id;
         String selectLast = "SELECT * FROM " + tableName +
                 " WHERE " + PMessageAbs.ID + " = " +
@@ -175,7 +175,7 @@ public class PMessageHelper {
 
     @NonNull
     private Observable<List<PMessage>> select(String query) {
-        Log.e("helper", query);
+//        Log.e("helper", query);
         return Observable.create(subscriber -> {
             List<PMessage> messages = new ArrayList<>();
             SQLiteDatabase db = helper.getWritableDatabase();
@@ -193,7 +193,7 @@ public class PMessageHelper {
     }
 
     private Observable<Integer> selectCount(String query) {
-        Log.e("helper", query);
+//        Log.e("helper", query);
         return Observable.create(subscriber -> {
             SQLiteDatabase db = helper.getWritableDatabase();
             Cursor cursor = db.rawQuery(query, null);

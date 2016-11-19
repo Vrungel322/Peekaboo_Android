@@ -45,6 +45,7 @@ public class ChatPresenter2 extends BasePresenter<IChatView2> implements IChatPr
                           AccountUser accountUser, AsyncAudioPlayer player,
                           PMessageHelper pMessageHelper, TextToSpeech textToSpeech) {
         this.messenger = messenger;
+        Log.e("ChatPresenter", "messenger: " + messenger.hashCode());
         this.accountUser = accountUser;
         this.player = player;
         this.recorder = recorder;

@@ -122,7 +122,7 @@ public class WebSocketNotifier implements INotifier<Message> {
 
     @Override
     public void tryConnect(String authorization) {
-        Log.e(TAG, "try connect " + ws);
+        Log.e(TAG, "try connect notifier:" + hashCode() + " websocket:" + ws);
         this.authorization = authorization;
         connectSocket(authorization);
     }

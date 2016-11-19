@@ -8,6 +8,7 @@ import android.util.Log;
 
 import com.peekaboo.data.di.UserComponent;
 import com.peekaboo.data.di.UserModule;
+import com.peekaboo.data.repositories.database.service.DBHelper;
 import com.peekaboo.presentation.activities.LogInActivity;
 import com.peekaboo.presentation.di.ApplicationComponent;
 import com.peekaboo.presentation.di.ApplicationModule;
@@ -86,11 +87,12 @@ public class PeekabooApplication extends Application {
     public void logout() {
         NotificationService.stop(this);
         WearLink.stop(this);
-        Log.e("PeekaboApplication", "logout " + userComponent.hashCode() + " " + userComponent.messenger().hashCode());
+        Log.e("PeekaboApplication", "logout " + userComponent.messenger().hashCode());
         userComponent.messenger().disconnect();
         userComponent.accountUser().logout();
+        DBHelper.deleteHistory(this);
         buildUserComponent();
-        Log.e("PeekaboApplication", "logout " + userComponent.hashCode() + " " + userComponent.messenger().hashCode());
+        Log.e("PeekaboApplication", "logout " + userComponent.messenger().hashCode());
         WearLink.launch(this);
         ActivityNavigator navigator = component.navigator();
         navigator.startLogInActivity(this, true);

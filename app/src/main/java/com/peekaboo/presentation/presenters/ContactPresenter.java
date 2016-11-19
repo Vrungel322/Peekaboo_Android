@@ -66,7 +66,7 @@ public class ContactPresenter extends ProgressPresenter<IContactsView> implement
                 }
                 for (PhoneContactPOJO p : response) {
                     //TODO : sent response to view
-                    Log.wtf("PhoneContactPOJO : ", "name : " + p.getName() + " phone : " + p.getPhone() + " photo : " + p.getPhotoThumbnail());
+//                    Log.wtf("PhoneContactPOJO : ", "name : " + p.getName() + " phone : " + p.getPhone() + " photo : " + p.getPhotoThumbnail());
                 }
             }
         };

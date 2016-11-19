@@ -22,4 +22,8 @@ public class DBHelper extends SQLiteOpenHelper {
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion){}
 
+    public static void deleteHistory(Context context) {
+        context.deleteDatabase(DB_NAME);
+    }
+
 }
