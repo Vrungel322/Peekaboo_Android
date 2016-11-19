@@ -152,6 +152,8 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
+            ActivityUtils.hideKeyboard(getActivity());
+            closeInputField();
             getActivity().onBackPressed();
         }
         return super.onOptionsItemSelected(item);
@@ -555,10 +557,14 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
         if (bMessageOpen.getVisibility() == View.VISIBLE) {
             return false;
         } else {
-            bMessageOpen.setVisibility(View.VISIBLE);
-            bSendMessage.setVisibility(View.GONE);
-            rflMessageBody.setVisibility(View.GONE);
+            closeInputField();
             return true;
         }
+    }
+
+    private void closeInputField() {
+        bMessageOpen.setVisibility(View.VISIBLE);
+        bSendMessage.setVisibility(View.GONE);
+        rflMessageBody.setVisibility(View.GONE);
     }
 }

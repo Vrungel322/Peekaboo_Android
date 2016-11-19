@@ -63,7 +63,6 @@ public class WebSocketNotifier implements INotifier<Message> {
                             public void onError(WebSocket websocket, WebSocketException cause) throws Exception {
                                 Log.e(TAG, "Status: Error " + cause);
                                 mainThread.run(() -> {
-                                    WebSocketNotifier.this.authorization = null;
                                     disconnect();
                                 });
                             }
@@ -74,7 +73,7 @@ public class WebSocketNotifier implements INotifier<Message> {
                                 Log.e(TAG, "Status: Disconnected ");
 
                                 mainThread.run(() -> {
-                                    disconnect();
+                                    abandonSocket();
 
                                     for (NotificationListener<Message> listener : listeners) {
                                         listener.onDisconnected();
@@ -135,6 +134,11 @@ public class WebSocketNotifier implements INotifier<Message> {
 
     @Override
     public void disconnect() {
+        this.authorization = null;
+        abandonSocket();
+    }
+
+    private void abandonSocket() {
         if (ws != null) {
             ws.disconnect();
             ws = null;
