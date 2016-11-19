@@ -17,6 +17,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -131,6 +132,7 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
         Bundle args = new Bundle();
         args.putParcelable(COMPANION, companion);
         fragment.setArguments(args);
+
         return fragment;
     }
 
@@ -144,8 +146,16 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
         PeekabooApplication.getApp(getActivity()).getComponent().inject(this);
         companion = getArguments().getParcelable(COMPANION);
         restoreState(savedInstanceState);
+        setHasOptionsMenu(true);
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == android.R.id.home) {
+            getActivity().onBackPressed();
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
     private void restoreState(Bundle savedInstanceState) {
         if (savedInstanceState != null) {

@@ -74,7 +74,9 @@
 
     <dimen name="padding_from_logo">40dp</dimen>
 
-    <dimen name="text_size">20sp</dimen>
+    <dimen name="credentials_text_size">18sp</dimen>
+    <dimen name="credentials_button_text_size">18sp</dimen>
+
     <dimen name="hint_text_size">14sp</dimen>
 
     <!--<dimen name="chat_image_width">350dp</dimen>-->
@@ -125,4 +127,5 @@
     <dimen name="online_indicator_1_symbol_text_size">11dp</dimen>
     <dimen name="online_indicator_2_symbol_text_size">9dp</dimen>
     <dimen name="online_indicator_3_symbol_text_size">8dp</dimen>
+    <dimen name="logo_size">80dp</dimen>
 </resources>

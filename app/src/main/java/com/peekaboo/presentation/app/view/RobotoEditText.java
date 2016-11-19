@@ -63,7 +63,6 @@ public class RobotoEditText extends TextInputEditText {
     public void setInputType(int type) {
         int selectionStart = getSelectionStart();
         super.setInputType(type);
-//        setTypeface(roboto);
         setSelection(selectionStart);
     }
 }
