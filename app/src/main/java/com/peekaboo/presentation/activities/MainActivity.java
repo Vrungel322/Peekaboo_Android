@@ -58,6 +58,7 @@ import com.squareup.otto.Bus;
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Target;
+import com.twitter.sdk.android.core.identity.TwitterAuthClient;
 
 import java.util.HashSet;
 import java.util.List;
@@ -511,6 +512,11 @@ public class MainActivity extends AppCompatActivity implements IMainView,
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        TwitterAuthClient twitterAuthClient = new TwitterAuthClient();
+        if(twitterAuthClient.getRequestCode()==requestCode) {
+            twitterAuthClient.onActivityResult(requestCode, resultCode, data);
+        }
+
         switch (requestCode) {
             case Constants.REQUEST_CODES.REQUEST_CODE_GPS:
                 if (resultCode == RESULT_OK && null != data) {

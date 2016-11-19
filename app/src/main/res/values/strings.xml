@@ -106,7 +106,9 @@
     <string name="default_cloud_storage">Default cloud storage</string>
     <string name="google_cloud">Google Cloud Storage</string>
     <string name="services_integration">Services integration</string>
+    <string name="logIn_to_Twitter">LogIn to Twitter</string>
     <string name="advanced">Advanced</string>
+    <string name="social_network">Social network integration</string>
     <string name="nickname">Nickname</string>
     <string name="general">General</string>
     <string name="galleryIsNotAvailable">Gallery is not available</string>

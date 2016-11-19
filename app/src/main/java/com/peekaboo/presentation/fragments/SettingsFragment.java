@@ -15,6 +15,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -28,6 +29,10 @@ import com.peekaboo.utils.Constants;
 import com.peekaboo.utils.Utility;
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
+import com.twitter.sdk.android.core.Result;
+import com.twitter.sdk.android.core.TwitterException;
+import com.twitter.sdk.android.core.TwitterSession;
+import com.twitter.sdk.android.core.identity.TwitterAuthClient;
 
 import java.io.File;
 import java.io.IOException;
@@ -54,6 +59,8 @@ public class SettingsFragment extends Fragment implements ISettingsView {
 
     @BindView(R.id.userAvatarInSettings)
     ImageView userAvatarInSettings;
+    @BindView(R.id.bLogInToTwitter)
+    Button bLogInToTwitter;
     @Nullable
     private IUpdateAvatarInDrawer iUpdateAvatarInDrawer;
 
@@ -134,6 +141,27 @@ public class SettingsFragment extends Fragment implements ISettingsView {
         avatarChangeDialog.show(ft, "avatar_change_dialog");
     }
 
+    @OnClick(R.id.bLogInToTwitter)
+    public void bLogInToTwitterClicked(){
+
+        TwitterAuthClient mTwitterAuthClient= new TwitterAuthClient();
+        mTwitterAuthClient.authorize(getActivity(), new com.twitter.sdk.android.core.Callback<TwitterSession>() {
+
+            @Override
+            public void success(Result<TwitterSession> twitterSessionResult) {
+                // Success
+                String msg = "@" + twitterSessionResult.data.getUserName()
+                        + " logged in! (#" + twitterSessionResult.data.getUserId() + ")";
+                showToastMessage(msg);
+            }
+
+            @Override
+            public void failure(TwitterException e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
@@ -153,11 +181,6 @@ public class SettingsFragment extends Fragment implements ISettingsView {
                 break;
         }
     }
-
-//    public void setUpdaterOfAvatarInDrawer(IUpdateAvatarInDrawer iUpdateAvatarInDrawer){
-////        this.iUpdateAvatarInDrawer = iUpdateAvatarInDrawer;
-//    }
-
 
     @Override
     public void updateAvatarViewInSettings(String result) {
