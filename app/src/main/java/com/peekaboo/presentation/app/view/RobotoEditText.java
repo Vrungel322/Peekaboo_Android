@@ -3,10 +3,9 @@ package com.peekaboo.presentation.app.view;
 import android.content.Context;
 import android.graphics.PorterDuff;
 import android.os.Build;
+import android.support.annotation.Nullable;
 import android.support.design.widget.TextInputEditText;
 import android.util.AttributeSet;
-import android.util.Log;
-import android.view.View;
 
 import com.peekaboo.R;
 import com.peekaboo.presentation.utils.ResourcesUtils;
@@ -19,6 +18,8 @@ public class RobotoEditText extends TextInputEditText {
     private int controlNormal;
     private int controlActivated;
     private android.graphics.Typeface roboto;
+    @Nullable
+    private FocusChangeListener focusChangeListener;
 
     public RobotoEditText(Context context) {
         super(context);
@@ -29,6 +30,7 @@ public class RobotoEditText extends TextInputEditText {
         super(context, attrs);
         configure(context);
     }
+
     public RobotoEditText(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         configure(context);
@@ -42,10 +44,10 @@ public class RobotoEditText extends TextInputEditText {
         setBackgroundDrawable(ResourcesUtils.getDrawable(context, R.drawable.edit_text_background));
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.LOLLIPOP) {
             getBackground().setColorFilter(controlNormal, PorterDuff.Mode.SRC_ATOP);
-            setOnFocusChangeListener((v, hasFocus) -> {
-                onFocusChanged(hasFocus);
-            });
         }
+        setOnFocusChangeListener((v, hasFocus) -> {
+            onFocusChanged(hasFocus);
+        });
     }
 
     public void onFocusChanged(boolean hasFocus) {
@@ -57,6 +59,13 @@ public class RobotoEditText extends TextInputEditText {
                 getBackground().setColorFilter(controlNormal, PorterDuff.Mode.SRC_ATOP);
             }
         }
+        if (focusChangeListener != null) {
+            focusChangeListener.onFocusChanged(hasFocus);
+        }
+    }
+
+    public void setFocusChangeListener(@Nullable FocusChangeListener focusChangeListener) {
+        this.focusChangeListener = focusChangeListener;
     }
 
     @Override
@@ -64,5 +73,9 @@ public class RobotoEditText extends TextInputEditText {
         int selectionStart = getSelectionStart();
         super.setInputType(type);
         setSelection(selectionStart);
+    }
+
+    public interface FocusChangeListener {
+        void onFocusChanged(boolean hasFocus);
     }
 }

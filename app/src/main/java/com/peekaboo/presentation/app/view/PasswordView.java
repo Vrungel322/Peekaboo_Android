@@ -20,7 +20,7 @@ import com.peekaboo.presentation.utils.ResourcesUtils;
 /**
  * Created by sebastian on 01.08.16.
  */
-public class PasswordView extends FrameLayout {
+public class PasswordView extends FrameLayout implements RobotoEditText.FocusChangeListener {
     private int TOP_MARGIN_ERROR_VISIBLE;
     private int BOTTOM_MARGIN_ERROR_VISIBLE;
     private int BOTTOM_MARGIN_ERROR_INVISIBLE;
@@ -83,6 +83,13 @@ public class PasswordView extends FrameLayout {
             if (getChildAt(i) instanceof TextInputLayout) {
                 inputLayout = (TextInputLayout) getChildAt(i);
                 editText = (RobotoEditText) inputLayout.getChildAt(0);
+                editText.setFocusChangeListener(this);
+                editText.addTextChangedListener(new TextWatcher() {
+                    @Override
+                    public void onTextChanged(CharSequence s, int start, int before, int count) {
+                        updateShowViewVisibility(editText.hasFocus());
+                    }
+                });
                 updateEditTextPadding();
             } else {
                 showView = (ImageView) getChildAt(i);
@@ -95,23 +102,27 @@ public class PasswordView extends FrameLayout {
         setHint(hint);
         editText.setInputType(InputType.TYPE_CLASS_TEXT |
                 InputType.TYPE_TEXT_VARIATION_PASSWORD);
-        editText.setTypeface(android.graphics.Typeface.create("sans-serif", android.graphics.Typeface.NORMAL));
+        setProperTypeface();
         showView.setOnTouchListener((v, event) -> {
             switch (event.getAction()) {
                 case MotionEvent.ACTION_DOWN:
                     editText.setInputType(InputType.TYPE_CLASS_TEXT |
                             InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
-                    editText.setTypeface(android.graphics.Typeface.create("sans-serif", android.graphics.Typeface.NORMAL));
+                    setProperTypeface();
                     break;
                 case MotionEvent.ACTION_CANCEL:
                 case MotionEvent.ACTION_UP:
                     editText.setInputType(InputType.TYPE_CLASS_TEXT |
                             InputType.TYPE_TEXT_VARIATION_PASSWORD);
-                    editText.setTypeface(android.graphics.Typeface.create("sans-serif", android.graphics.Typeface.NORMAL));
+                    setProperTypeface();
                     break;
             }
             return true;
         });
+    }
+
+    private void setProperTypeface() {
+        editText.setTypeface(android.graphics.Typeface.create("sans-serif", android.graphics.Typeface.NORMAL));
     }
 
     private void updateEditTextPadding() {
@@ -142,5 +153,14 @@ public class PasswordView extends FrameLayout {
 
     public String getPassword() {
         return editText.getText().toString();
+    }
+
+    @Override
+    public void onFocusChanged(boolean hasFocus) {
+        updateShowViewVisibility(hasFocus);
+    }
+
+    private void updateShowViewVisibility(boolean hasFocus) {
+        showView.setVisibility(hasFocus && editText.getText().length() > 0 ? VISIBLE : GONE);
     }
 }
