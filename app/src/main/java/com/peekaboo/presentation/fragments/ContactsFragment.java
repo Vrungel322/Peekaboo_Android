@@ -24,6 +24,7 @@ import com.peekaboo.R;
 import com.peekaboo.data.repositories.database.contacts.Contact;
 import com.peekaboo.presentation.PeekabooApplication;
 import com.peekaboo.presentation.adapters.ContactLargeAdapter;
+import com.peekaboo.presentation.utils.ViewUtils;
 import com.peekaboo.presentation.pojo.PhoneContactPOJO;
 import com.peekaboo.presentation.presenters.ContactPresenter;
 import com.peekaboo.presentation.views.IContactsView;
@@ -183,6 +184,7 @@ public class ContactsFragment extends Fragment implements IContactsView, MenuIte
         inflater.inflate(R.menu.contacts_menu, menu);
         searchMenuItem = menu.findItem(R.id.action_search);
         mSearchView = (SearchView) searchMenuItem.getActionView();
+        ViewUtils.changeSearchViewTextColor(mSearchView);
         super.onCreateOptionsMenu(menu, inflater);
     }
 
