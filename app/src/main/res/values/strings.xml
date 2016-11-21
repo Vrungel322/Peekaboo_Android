@@ -116,5 +116,6 @@
     <string name="gallery">Gallery</string>
     <string name="camera">Camera</string>
     <string name="selectFile">Select File</string>
+    <string name="search_toolbar_hint">Search contact</string>
 
 </resources>
