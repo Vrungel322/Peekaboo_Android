@@ -39,13 +39,13 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     GoogleMap googleMap;
     String markerPosLat, markerPosLng;
-
+    Marker redmarker, bluemarker;
 
     private LocationManager locationManager;
     StringBuilder sbGPS = new StringBuilder();
     StringBuilder sbNet = new StringBuilder();
     private FloatingActionButton fabpush, fabswitch;
-    private Marker marker;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -171,16 +171,20 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         googleMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
             @Override
             public void onMapLongClick(LatLng latLng) {
-//                if (markerPosLng == "" && markerPosLat == "") {
+                if (redmarker != null) {
+                    redmarker.setPosition(latLng);
+                    markerPosLat = String.valueOf(latLng.latitude);
+                    markerPosLng = String.valueOf(latLng.longitude);
 
-                Log.d("MAPS_TAG", "onMapLongClick: " + latLng.latitude + "," + latLng.longitude);
+                } else {
+//                    Log.d("MAPS_TAG", "onMapLongClick: " + latLng.latitude + "," + latLng.longitude);
 
-                googleMap.addMarker(new MarkerOptions().position(new LatLng(latLng.latitude, latLng.longitude)).draggable(true).icon(
-                        BitmapDescriptorFactory.fromResource(R.drawable.red_point)));//R.drawable.locationbuble
-                markerPosLat = String.valueOf(latLng.latitude);
-                markerPosLng = String.valueOf(latLng.longitude);
-                Toast.makeText(getApplicationContext(), latLng.latitude + " " + latLng.longitude, Toast.LENGTH_SHORT).show();
-//                }
+                    redmarker = googleMap.addMarker(new MarkerOptions().position(new LatLng(latLng.latitude, latLng.longitude)).draggable(true).icon(
+                            BitmapDescriptorFactory.fromResource(R.drawable.red_point)));//R.drawable.locationbuble
+                    markerPosLat = String.valueOf(latLng.latitude);
+                    markerPosLng = String.valueOf(latLng.longitude);
+//                    Toast.makeText(getApplicationContext(), latLng.latitude + " " + latLng.longitude, Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -212,14 +216,18 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         //marker placed on your location
         fabswitch.setOnClickListener(v -> {
             if (googleMap.getMyLocation() != null) {
-                marker = googleMap.addMarker(new MarkerOptions().position(new LatLng(googleMap.getMyLocation().getLatitude(), googleMap.getMyLocation().getLongitude())).draggable(true).icon(
-                        BitmapDescriptorFactory.fromResource(R.drawable.locationbuble)));
+                if (bluemarker != null) {
+                    bluemarker.setPosition(new LatLng(googleMap.getMyLocation().getLatitude(), googleMap.getMyLocation().getLongitude()));
+                } else {
+                    bluemarker = googleMap.addMarker(new MarkerOptions().position(new LatLng(googleMap.getMyLocation().getLatitude(), googleMap.getMyLocation().getLongitude())).draggable(true).icon(
+                            BitmapDescriptorFactory.fromResource(R.drawable.locationbuble)));
 
-                CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(marker.getPosition().latitude, marker.getPosition().longitude))
-                        .zoom(16)
-                        .build();
-                CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition);
-                googleMap.animateCamera(cameraUpdate);
+                    CameraPosition cameraPosition = new CameraPosition.Builder().target(new LatLng(bluemarker.getPosition().latitude, bluemarker.getPosition().longitude))
+                            .zoom(16)
+                            .build();
+                    CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition);
+                    googleMap.animateCamera(cameraUpdate);
+                }
             }
 
         });
