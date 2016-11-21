@@ -3,7 +3,6 @@ package com.peekaboo.presentation.adapters;
 import android.graphics.drawable.Drawable;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,7 +22,9 @@ import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -39,6 +40,7 @@ public final class ContactLargeAdapter extends RecyclerView.Adapter<ContactLarge
 
     private ActivityNavigator navigator;
     private AvatarIcon avatarIcon;
+    private List<Contact> filteredList = new ArrayList<>();
 
 
     public ContactLargeAdapter(AppCompatActivity activity, ActivityNavigator navigator, Picasso mPicasso) {
@@ -118,6 +120,8 @@ public final class ContactLargeAdapter extends RecyclerView.Adapter<ContactLarge
     public void setItems(List<Contact> items) {
         this.items.clear();
         this.items.addAll(items);
+        this.savedList.clear();
+        this.savedList.addAll(items);
         notifyDataSetChanged();
     }
 
@@ -133,25 +137,20 @@ public final class ContactLargeAdapter extends RecyclerView.Adapter<ContactLarge
     @Override
     public Filter getFilter() {
         Filter filter = new Filter() {
-
             @Override
             protected FilterResults performFiltering(CharSequence constraint) {
-
                 FilterResults results = new FilterResults();
-                List<Contact> filteredArrayNames = new ArrayList<Contact>();
-
-                // perform your search here using the searchConstraint String.
+                Set<Contact> filteredArrayNames = new HashSet<Contact>();
 
                 String filterString = constraint.toString().toLowerCase();
-                for (Contact eachContact : items) {
-                    if (eachContact.contactNickname().toLowerCase().contains(filterString)) {
-                        filteredArrayNames.add(eachContact);
+                for (int i = 0; i < items.size(); i++) {
+                    if (items.get(i).contactNickname().toLowerCase().contains(filterString)) {
+                        filteredArrayNames.add(items.get(i));
                     }
                 }
-
                 results.count = filteredArrayNames.size();
                 results.values = filteredArrayNames;
-                Log.e("VALUES", results.values.toString());
+//                Log.e("VALUES", results.values.toString() + items.size());
 
                 return results;
             }
@@ -159,16 +158,27 @@ public final class ContactLargeAdapter extends RecyclerView.Adapter<ContactLarge
             @SuppressWarnings("unchecked")
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results) {
-                items = (List<Contact>) results.values;
-//                setItems(items);
-//                items = savedList;
-//                savedList();
+                items.clear();
+                items.addAll((Set<Contact>) results.values);
+//                for (int i = 0; i < items.size(); i++) {
+//                    Log.e("VALUES", items.get(i).contactNickname() + " i = " + i);
+//                }
                 notifyDataSetChanged();
             }
         };
-
         return filter;
 
+    }
+
+    public void filter(String query) {
+        getFilter().filter(query);
+        items.clear();
+        items.addAll(savedList);
+
+    }
+
+    public List<Contact> getItems() {
+        return items;
     }
 
     public void savedList(List<Contact> response) {
