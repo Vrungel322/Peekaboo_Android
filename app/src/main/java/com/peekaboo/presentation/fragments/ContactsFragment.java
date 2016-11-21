@@ -143,6 +143,7 @@ public class ContactsFragment extends Fragment implements IContactsView, MenuIte
     @Override
     public void showContactsList(List<Contact> response) {
         contactLargeAdapter.setItems(response);
+        contactLargeAdapter.savedList(response);
         Parcelable state = getArguments().getParcelable(LAYOUT_MANAGER_STATE);
         if (state != null) {
             recyclerView.getLayoutManager().onRestoreInstanceState(state);
@@ -192,7 +193,6 @@ public class ContactsFragment extends Fragment implements IContactsView, MenuIte
             if (null != searchManager) {
                 mSearchView.setSearchableInfo(searchManager.getSearchableInfo(getActivity().getComponentName()));
             }
-//            mSearchView.setIconifiedByDefault(false);
             mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                 @Override
                 public boolean onQueryTextSubmit(String query) {
@@ -201,7 +201,10 @@ public class ContactsFragment extends Fragment implements IContactsView, MenuIte
 
                 @Override
                 public boolean onQueryTextChange(String newText) {
-                    showToastMessage(newText);
+                    if (!newText.isEmpty()) {
+                        showToastMessage(newText);
+                        contactLargeAdapter.getFilter().filter(newText);
+                    }
                     return false;
                 }
             });
