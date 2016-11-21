@@ -45,7 +45,6 @@ public class ChatPresenter2 extends BasePresenter<IChatView2> implements IChatPr
                           AccountUser accountUser, AsyncAudioPlayer player,
                           PMessageHelper pMessageHelper, TextToSpeech textToSpeech) {
         this.messenger = messenger;
-        Log.e("ChatPresenter", "messenger: " + messenger.hashCode());
         this.accountUser = accountUser;
         this.player = player;
         this.recorder = recorder;
@@ -156,21 +155,6 @@ public class ChatPresenter2 extends BasePresenter<IChatView2> implements IChatPr
     public void onCopyMessageTextClick(ClipboardManager clipboard, PMessageAbs message) {
         ClipData clip = ClipData.newPlainText("", message.messageBody());
         clipboard.setPrimaryClip(clip);
-    }
-
-    private void showRecordStart() {
-        IChatView2 view = getView();
-        if (view != null) {
-            view.showRecordStart();
-        }
-    }
-
-
-    private void showRecordStop() {
-        IChatView2 view = getView();
-        if (view != null) {
-            view.showRecordStop();
-        }
     }
 
     @Override

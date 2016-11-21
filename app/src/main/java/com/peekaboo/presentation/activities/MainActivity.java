@@ -225,8 +225,7 @@ public class MainActivity extends AppCompatActivity implements IMainView,
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragmentContainer);
-        handleNotificationIntent(intent, fragment == null || !(fragment instanceof ChatFragment));
+        handleNotificationIntent(intent, true);
     }
 
     private boolean handleNotificationIntent(Intent intent, boolean addToStack) {

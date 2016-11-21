@@ -2,6 +2,7 @@ package com.peekaboo.utils;
 
 import android.content.Context;
 import android.content.Intent;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -61,14 +62,21 @@ public class ActivityNavigator {
     }
 
     public void startChatFragment(AppCompatActivity activity, Contact companion, boolean addToBackStack) {
-        Log.e("notif", "start chat " + companion);
-        FragmentTransaction replace = activity.getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.fragmentContainer, ChatFragment.newInstance(companion), Constants.FRAGMENT_TAGS.CHAT_FRAGMENT_TAG);
-        if (addToBackStack) {
-            replace.addToBackStack(null);
+        FragmentManager fragmentManager = activity.getSupportFragmentManager();
+
+        Fragment chatFragment = fragmentManager.findFragmentByTag(Constants.FRAGMENT_TAGS.CHAT_FRAGMENT_TAG);
+        Log.e("Navigator", "chat fragment " + chatFragment);
+        if (chatFragment != null) {
+            fragmentManager.popBackStack();
         }
-        replace.commit();
+
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.replace(R.id.fragmentContainer, ChatFragment.newInstance(companion), Constants.FRAGMENT_TAGS.CHAT_FRAGMENT_TAG);
+        if (addToBackStack) {
+            transaction.addToBackStack(null);
+        }
+        transaction.commit();
+        fragmentManager.executePendingTransactions();
     }
 
     public void startSmsChatFragment(AppCompatActivity activity, PhoneContactPOJO companion, boolean addToBackStack) {
