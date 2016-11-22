@@ -14,8 +14,6 @@ public interface IMessenger extends INotifier<PMessage> {
 
     void readMessage(PMessage message);
 
-    void setpbLoadingImageToServerDisableListener(ChatFragment.DISABLE_pbLoadingImageToServer pbLoadingImageToServerDisableListener);
-
     Observable<List<PMessage>> getAllMessages(String tableName);
 
     Observable<List<PMessage>> getUnreadMessages(String tableName);

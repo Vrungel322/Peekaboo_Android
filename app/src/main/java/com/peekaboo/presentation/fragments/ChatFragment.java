@@ -7,7 +7,9 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.SystemClock;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.app.ActionBar;
@@ -28,7 +30,6 @@ import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.peekaboo.R;
@@ -39,6 +40,7 @@ import com.peekaboo.presentation.PeekabooApplication;
 import com.peekaboo.presentation.activities.MainActivity;
 import com.peekaboo.presentation.activities.MapActivity;
 import com.peekaboo.presentation.adapters.ChatAdapter2;
+import com.peekaboo.presentation.app.ActivityResult;
 import com.peekaboo.presentation.app.view.PHorizontalScrollView;
 import com.peekaboo.presentation.presenters.ChatPresenter2;
 import com.peekaboo.presentation.services.INotifier;
@@ -68,6 +70,7 @@ import io.codetail.widget.RevealFrameLayout;
 public class ChatFragment extends Fragment implements IChatView2, MainActivity.OnBackPressListener {
     public static final String COMPANION = "companion";
     public static final String IMAGE_FILE = "image_file";
+    public static final int RESUME_DELAY = 100;
     @BindView(R.id.etMessageBody)
     EditText etMessageBody;
     @BindView(R.id.rvMessages)
@@ -98,13 +101,8 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
     Chronometer timerRecord;
     @BindView(R.id.rflTimer)
     RevealFrameLayout rflTimer;
-    ////////
     @BindView(R.id.navigation_btn)
     ImageButton bNavigation;
-
-    ////////
-    @BindView(R.id.pbLoadingImageToServer)
-    ProgressBar pbLoadingImageToServer;
     @Inject
     ChatPresenter2 presenter;
     @Inject
@@ -115,15 +113,31 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
     ActivityNavigator activityNavigator;
     @Inject
     Picasso mPicasso;
+    private final Handler handler = new Handler();
     private ChatAdapter2 adapter;
     private LinearLayout.LayoutParams layoutParams;
     private boolean isFirstResumeAfterCreate = true;
     private Contact companion;
     private String imageFile;
-
+    @Nullable
+    private ActivityResult activityResult;
     private Animator animator;
     private ChatItemDialog chatItemDialog;
-    private ChatItemDialog.IChatItemEventListener iChatItemEventListener;
+    private boolean isResumed;
+    private Runnable resumeRunnable = new Runnable() {
+        @Override
+        public void run() {
+            isResumed = true;
+            ((MainActivity) getActivity()).addListener(ChatFragment.this);
+            presenter.onResume(isFirstResumeAfterCreate, getCompanionId());
+            isFirstResumeAfterCreate = false;
+            if (activityResult != null) {
+                handleActivityResult(activityResult);
+                activityResult = null;
+            }
+
+        }
+    };
 
     public static ChatFragment newInstance(Contact companion) {
 
@@ -134,10 +148,6 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
         fragment.setArguments(args);
 
         return fragment;
-    }
-
-    public interface DISABLE_pbLoadingImageToServer {
-        void disablePbLoadingImageToServer();
     }
 
     @Override
@@ -358,11 +368,6 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
     }
 
     public void takeNavigation() {
-//        Uri gmmIntentUri = Uri.parse("geo:37.7749,-122.4194?z=20");
-//        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-//        mapIntent.setPackage("com.google.android.apps.maps");
-//        startActivity(mapIntent);
-//        ---
         Intent mapintent = new Intent(getActivity(), MapActivity.class);
         getActivity().startActivityForResult(mapintent, Constants.REQUEST_CODES.REQUEST_CODE_GPS);
         Log.wtf("NULL : ", "sendim gpsimg in fragment");
@@ -371,6 +376,13 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        activityResult = new ActivityResult(resultCode, requestCode, data);
+    }
+
+    private void handleActivityResult(@NonNull ActivityResult activityResult) {
+        Intent data = activityResult.data;
+        int requestCode = activityResult.requestCode;
+        int resultCode = activityResult.resultCode;
         switch (requestCode) {
             case IntentUtils.CAMERA_REQUEST_CODE:
             case IntentUtils.GALLERY_REQUEST_CODE:
@@ -390,16 +402,12 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
             case Constants.REQUEST_CODES.REQUEST_CODE_GPS:
                 if (resultCode == Activity.RESULT_OK && null != data) {
                     String link = data.getStringExtra("staticmap");
-//                    Toast.makeText(getContext(), link, Toast.LENGTH_SHORT).show();
                     Log.wtf("NULL : ", "sendImage " + link);
                     sendGeo(link);
 
                 }
                 break;
-            default:
-                super.onActivityResult(requestCode, resultCode, data);
         }
-
     }
 
     public boolean sendGeo(String link) {
@@ -409,28 +417,28 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
         }
         presenter.onSendGPSButtonPress(link);
         return true;
-        }
+    }
 
     public void sendImage(String imageFile) {
-        pbLoadingImageToServer.setVisibility(View.VISIBLE);
         presenter.onSendImageButtonPress(imageFile);
-//        Utility.galleryAddPic(getContext(), uri);
-//        return true;
     }
 
     @Override
-    public void onStart() {
-        super.onStart();
-        ((MainActivity) getActivity()).addListener(this);
-        presenter.onResume(isFirstResumeAfterCreate, getCompanionId());
-        isFirstResumeAfterCreate = false;
+    public void onPause() {
+        handler.removeCallbacks(resumeRunnable);
+        if (isResumed) {
+            presenter.onPause();
+            ((MainActivity) getActivity()).removeListener(this);
+            isResumed = false;
+        }
+        super.onPause();
     }
 
     @Override
-    public void onStop() {
-        presenter.onPause();
-        ((MainActivity) getActivity()).removeListener(this);
-        super.onStop();
+    public void onResume() {
+        super.onResume();
+        handler.postDelayed(resumeRunnable, RESUME_DELAY);
+
     }
 
     @Override
@@ -527,11 +535,6 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
             animator.cancel();
             animator = null;
         }
-    }
-
-    @Override
-    public void hidePbLoadingImageToServer() {
-        pbLoadingImageToServer.setVisibility(View.GONE);
     }
 
     @Override

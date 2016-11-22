@@ -137,13 +137,11 @@ public class MessageNotificator {
     }
 
     public void onMessageObtained(final PMessage message) {
-        Log.e("notificator", "1 " + message);
         if (!message.isMine() && message.status() == PMessage.PMESSAGE_STATUS.STATUS_DELIVERED) {
-            Log.e("notificator", "2 " + message);
+            Log.e("Messenger", "onMessageObtained " + message);
             getAllUnreadMessagesInfoUseCase.execute(new BaseUseCaseSubscriber<Pair<List<PMessage>, List<Contact>>>() {
                 @Override
                 public void onNext(final Pair<List<PMessage>, List<Contact>> pair) {
-                    Log.e("notificator", "3 " + message);
                     showNotification(pair.first, pair.second, message);
                 }
             });

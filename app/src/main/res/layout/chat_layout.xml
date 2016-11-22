@@ -46,12 +46,6 @@
             android:paddingRight="@dimen/chat_horizontal_margin"
             android:scrollbars="none" />
 
-        <ProgressBar
-            android:id="@+id/pbLoadingImageToServer"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_gravity="end"
-            android:visibility="gone" />
 
         <com.peekaboo.presentation.app.view.PHorizontalScrollView
             android:id="@+id/svItems"

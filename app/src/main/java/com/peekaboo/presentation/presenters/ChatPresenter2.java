@@ -35,7 +35,7 @@ public class ChatPresenter2 extends BasePresenter<IChatView2> implements IChatPr
     private final AccountUser accountUser;
     private final AsyncAudioPlayer player;
     private final AudioRecorder recorder;
-    private CompositeSubscription subscriptions;
+//    private CompositeSubscription subscriptions;
     private PMessageHelper pMessageHelper;
     private String receiver;
     private android.speech.tts.TextToSpeech textToSpeech;
@@ -66,27 +66,29 @@ public class ChatPresenter2 extends BasePresenter<IChatView2> implements IChatPr
         messenger.addMessageListener(this);
         this.receiver = receiver;
 
-        subscriptions = new CompositeSubscription();
 
         if (isFirstLaunch) {
             showUpdatedMessages(receiver);
         } else {
-            subscriptions.add(messenger.getUnreadMessages(receiver)
+            messenger.getUnreadMessages(receiver)
                     .subscribe(pMessageAbses -> {
-                        subscriptions.unsubscribe();
                         IChatView2 view = getView();
                         if (view != null && !pMessageAbses.isEmpty()) {
                             view.appendMessages(pMessageAbses);
                         }
-                    }));
+                    });
         }
 
+    }
+
+    @Override
+    public void onPause() {
+        messenger.removeMessageListener(this);
     }
 
     public void showUpdatedMessages(String receiver) {
         messenger.getAllMessages(receiver)
                 .subscribe(pMessageAbses -> {
-                    subscriptions.unsubscribe();
                     Log.e("chat presenter", "" + pMessageAbses);
                     IChatView2 view = getView();
                     if (view != null) {
@@ -158,15 +160,8 @@ public class ChatPresenter2 extends BasePresenter<IChatView2> implements IChatPr
     }
 
     @Override
-    public void onPause() {
-        messenger.removeMessageListener(this);
-        subscriptions.unsubscribe();
-    }
-
-    @Override
     public void unbind() {
         player.setListener(null);
-        messenger.setpbLoadingImageToServerDisableListener(null);
         super.unbind();
     }
 
@@ -192,20 +187,8 @@ public class ChatPresenter2 extends BasePresenter<IChatView2> implements IChatPr
                     true, PMessageAbs.PMESSAGE_MEDIA_TYPE.IMAGE_MESSAGE, realPath, System.currentTimeMillis(),
                     PMessageAbs.PMESSAGE_STATUS.STATUS_SENT,
                     receiver, accountUser.getId());
-            messenger.setpbLoadingImageToServerDisableListener(() -> {
-                IChatView2 view1 = getView();
-                if (view1 != null) {
-                    view1.hidePbLoadingImageToServer();
-                }
-            });
             messenger.sendMessage(pMessage);
         }
-
-
-        //TODO save image real path to db
-//        pMessageHelper.saveContactToDb(receiver, convertPMessage(new PMessage(Utility.getPackageId(),
-//                true, uri.toString(), System.currentTimeMillis(),
-//                false, false, false)));
     }
 
     @Override
@@ -216,22 +199,10 @@ public class ChatPresenter2 extends BasePresenter<IChatView2> implements IChatPr
                     true, PMessageAbs.PMESSAGE_MEDIA_TYPE.GEO_MESSAGE, link, System.currentTimeMillis(),
                     PMessageAbs.PMESSAGE_STATUS.STATUS_SENT,
                     receiver, accountUser.getId());
-//            messenger.setpbLoadingImageToServerDisableListener(() -> {
-//                IChatView2 view1 = getView();
-//                if (view1 != null) {
-//                    view1.hidePbLoadingImageToServer();
-//                }
-//            });
             Log.wtf("NULL : ", "sendim gpsimg in presenter");
 
             messenger.sendMessage(pMessage);
         }
-
-
-        //TODO save image real path to db
-//        pMessageHelper.saveContactToDb(receiver, convertPMessage(new PMessage(Utility.getPackageId(),
-//                true, uri.toString(), System.currentTimeMillis(),
-//                false, false, false)));
     }
 
     @Override

@@ -43,8 +43,6 @@ public class Messenger implements IMessenger,
     private Set<MessengerListener> messageListeners = new HashSet<>();
     private MessageNotificator messageNotificator;
 
-    @Nullable
-    private ChatFragment.DISABLE_pbLoadingImageToServer pbLoadingImageToServerDisableListener;
 
     public Messenger(INotifier<Message> notifier, PMessageHelper helper,
                      MessageNotificator messageNotificator,
@@ -128,7 +126,7 @@ public class Messenger implements IMessenger,
      */
     private void handleIncomingMessage(Message message) {
         PMessage pMessage = MessageUtils.convert(message);
-        Log.e("Messenger", "type " + pMessage.mediaType());
+        Log.e("Messenger", "handleIncomingMessage " + pMessage);
         pMessage.setStatus(PMessage.PMESSAGE_STATUS.STATUS_DELIVERED);
         String tableName = pMessage.senderId();
         helper.insert(tableName, pMessage);
@@ -150,21 +148,15 @@ public class Messenger implements IMessenger,
             readMessage(pMessage);
         } else {
             if (isIgnored) {
-                Log.e("messenger", "" + message);
                 messageNotificator.onMessageObtained(pMessage);
             }
             for (MessengerListener listener : messageListeners) {
                 listener.onMessageUpdated(pMessage);
             }
         }
-        Log.e("Messenger", "type " + pMessage.mediaType());
         if (pMessage.mediaType() == PMessage.PMESSAGE_MEDIA_TYPE.AUDIO_MESSAGE) {
-            Log.e("Messenger", "download begin");
             downloadFileUseCase.execute(pMessage, getDownloadSubscriber(), Constants.MESSAGE_TYPE.TYPE_AUDIO);
-        }
-
-        if (pMessage.mediaType() == PMessage.PMESSAGE_MEDIA_TYPE.IMAGE_MESSAGE) {
-            Log.e("Messenger", "download begin");
+        } else if (pMessage.mediaType() == PMessage.PMESSAGE_MEDIA_TYPE.IMAGE_MESSAGE) {
             downloadFileUseCase.execute(pMessage, getDownloadSubscriber(), Constants.MESSAGE_TYPE.TYPE_IMAGE);
         }
 
@@ -276,9 +268,6 @@ public class Messenger implements IMessenger,
                 if (isAvailable() && pMessageFileEntityPair.second != null) {
                     Log.wtf("getUploadSubscriber : ", "upload end");
                     PMessage pMessage = pMessageFileEntityPair.first;
-                    if (pMessage.mediaType() == PMessageAbs.PMESSAGE_MEDIA_TYPE.IMAGE_MESSAGE & pbLoadingImageToServerDisableListener != null) {
-                        pbLoadingImageToServerDisableListener.disablePbLoadingImageToServer();
-                    }
                     FileEntity fileEntity = pMessageFileEntityPair.second;
                     String remote = fileEntity.getName();
                     String local = pMessage.messageBody();
@@ -305,10 +294,6 @@ public class Messenger implements IMessenger,
         }
     }
 
-    @Override
-    public void setpbLoadingImageToServerDisableListener(ChatFragment.DISABLE_pbLoadingImageToServer pbLoadingImageToServerDisableListener) {
-        this.pbLoadingImageToServerDisableListener = pbLoadingImageToServerDisableListener;
-    }
 
     @Override
     public boolean isAvailable() {

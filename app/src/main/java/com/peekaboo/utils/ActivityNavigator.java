@@ -65,7 +65,6 @@ public class ActivityNavigator {
         FragmentManager fragmentManager = activity.getSupportFragmentManager();
 
         Fragment chatFragment = fragmentManager.findFragmentByTag(Constants.FRAGMENT_TAGS.CHAT_FRAGMENT_TAG);
-        Log.e("Navigator", "chat fragment " + chatFragment);
         if (chatFragment != null) {
             fragmentManager.popBackStack();
         }
@@ -80,7 +79,6 @@ public class ActivityNavigator {
     }
 
     public void startSmsChatFragment(AppCompatActivity activity, PhoneContactPOJO companion, boolean addToBackStack) {
-        Log.e("notif", "start sms chat");
         FragmentTransaction replace = activity.getSupportFragmentManager()
                 .beginTransaction()
                 .replace(R.id.fragmentContainer, SmsChatFragment.newInstance(companion));
@@ -91,7 +89,6 @@ public class ActivityNavigator {
     }
 
     public void startDialogFragment(AppCompatActivity appCompatActivity) {
-        Log.e("notif", "start dialog");
         FragmentManager fm = appCompatActivity.getSupportFragmentManager();
         for (int i = 0; i < fm.getBackStackEntryCount(); ++i) {
             fm.popBackStack();
