@@ -152,6 +152,13 @@
             android:name="com.google.android.maps.v2.API_KEY"
             android:value="AIzaSyBgvfOAHtAXloBsf4lD5VrSRM4kiej40b0" />
 
+        <!--For twitter-->
+        <!--Key created by Vrungel-->
+        <meta-data
+            android:name="io.fabric.ApiKey"
+            android:value="0b9f5b07e15ee0de575c01c80bbd9b912cab335f"
+            />
+
     </application>
 
 </manifest>
