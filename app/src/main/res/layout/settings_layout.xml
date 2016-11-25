@@ -130,7 +130,7 @@
                     android:background="@color/dialog_underline_color" />
 
                 <EditText
-                    android:id="@+id/number"
+                    android:id="@+id/etPhonenumber"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/settings_underline_margin"

@@ -16,6 +16,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -24,6 +25,7 @@ import com.peekaboo.domain.AccountUser;
 import com.peekaboo.presentation.PeekabooApplication;
 import com.peekaboo.presentation.dialogs.AvatarChangeDialog;
 import com.peekaboo.presentation.presenters.SettingsFragmentPresenter;
+import com.peekaboo.presentation.utils.CredentialUtils;
 import com.peekaboo.presentation.utils.ResourcesUtils;
 import com.peekaboo.utils.Constants;
 import com.peekaboo.utils.Utility;
@@ -61,6 +63,8 @@ public class SettingsFragment extends Fragment implements ISettingsView {
     ImageView userAvatarInSettings;
     @BindView(R.id.bLogInToTwitter)
     Button bLogInToTwitter;
+    @BindView(R.id.etPhonenumber)
+    EditText etPhonenumber;
     @Nullable
     private IUpdateAvatarInDrawer iUpdateAvatarInDrawer;
 
@@ -87,6 +91,7 @@ public class SettingsFragment extends Fragment implements ISettingsView {
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Settings");
         showAvatar();
         settingsFragmentPresenter.bind(this);
+        etPhonenumber.setText(CredentialUtils.getPhoneNumber(getApplicationContext()));
         return rootView;
     }
 
