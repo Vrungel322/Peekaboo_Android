@@ -20,14 +20,14 @@ public class AccountUser extends User {
     private String username;
 
     public AccountUser(SharedPreferences preferences, String domen) {
-        super(null, null);
+        super(null, null, null, null);
         this.preferences = preferences;
         this.domen = domen;
         restoreData();
     }
 
     public AccountUser(String id) {
-        super(id, null);
+        super(id, null, null, null);
     }
 
     @Nullable
