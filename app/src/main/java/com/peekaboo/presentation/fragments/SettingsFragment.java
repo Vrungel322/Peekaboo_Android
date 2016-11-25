@@ -83,7 +83,7 @@ public class SettingsFragment extends Fragment implements ISettingsView {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.settings_layout, container, false);
         ButterKnife.bind(this, rootView);
-//        setHasOptionsMenu(true);
+        setHasOptionsMenu(true);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Settings");
         showAvatar();
         settingsFragmentPresenter.bind(this);
@@ -104,6 +104,12 @@ public class SettingsFragment extends Fragment implements ISettingsView {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.action_save_preferences:{
+                showToastMessage("TODO Save");
+                break;
+            }
+        }
         return super.onOptionsItemSelected(item);
     }
 
