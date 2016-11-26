@@ -207,7 +207,7 @@ public final class DialogsLargeAdapter extends RecyclerView.Adapter<DialogsLarge
     public void setItems(List<Dialog> dialogs) {
         items.clear();
         items.addAll(dialogs);
-        notifyDataSetChanged();
+        notifyItemRangeInserted(0, dialogs.size());
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {

@@ -3,6 +3,7 @@ package com.peekaboo.presentation.adapters;
 import android.content.Context;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
 
 import com.peekaboo.R;
@@ -24,14 +25,15 @@ public class TabsAdapter extends FragmentStatePagerAdapter {
     //integer to count number of tabs
     private final List<Fragment> fragments = new ArrayList<>();
 
-    public TabsAdapter(FragmentManager fm, Context context) {
+    public TabsAdapter(FragmentManager fm, String[] tabNames) {
         super(fm);
-        tabNames = context.getResources().getStringArray(R.array.dialog_tab_names);
+        this.tabNames = tabNames;
         //Initializing tab count
         fragments.add(new PeekabooDialogsFragment());
         fragments.add(new SmsDialogsFragment());
 
     }
+
 
     @Override
     public CharSequence getPageTitle(int position) {

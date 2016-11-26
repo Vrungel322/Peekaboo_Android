@@ -37,6 +37,7 @@ import com.peekaboo.domain.usecase.UserModeChangerUseCase;
 import com.peekaboo.presentation.PeekabooApplication;
 import com.peekaboo.presentation.adapters.HotFriendsAdapter;
 import com.peekaboo.presentation.app.view.OnlineIndicatorView;
+import com.peekaboo.presentation.app.view.listener.DrawerListener;
 import com.peekaboo.presentation.dialogs.ChooseImageDialogFragment;
 import com.peekaboo.presentation.fragments.CallsFragment;
 import com.peekaboo.presentation.fragments.ChatFragment;
@@ -75,7 +76,6 @@ public class MainActivity extends AppCompatActivity implements IMainView,
         INotifier.NotificationListener<Message>,
         SettingsFragment.IUpdateAvatarInDrawer {
     public static final int BLUR_RATE = 20;
-    public static final String IMAGE_URI = "image_uri";
     @BindView(R.id.drawer_layout)
     DrawerLayout drawer;
     @BindView(R.id.bText)
@@ -122,7 +122,8 @@ public class MainActivity extends AppCompatActivity implements IMainView,
     Bus eventBus;
     private HotFriendsAdapter hotFriendsAdapter;
     private final Set<OnBackPressListener> listeners = new HashSet<>();
-    private SettingsFragment settingsFragment;
+    private Fragment fragment;
+    private String fragmentTag;
     private Target avatarTarget = new Target() {
         @Override
         public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
@@ -159,6 +160,29 @@ public class MainActivity extends AppCompatActivity implements IMainView,
         @Override
         public void onPrepareLoad(Drawable placeHolderDrawable) {
             Log.e("animator", "prepareLoad");
+        }
+    };
+    private DrawerLayout.DrawerListener drawerListener = new DrawerListener() {
+
+        @Override
+        public void onDrawerOpened(View drawerView) {
+            presenter.fillHotAdapter();
+        }
+
+        @Override
+        public void onDrawerClosed(View drawerView) {
+            if (fragment != null) {
+                changeFragment(fragment, fragmentTag);
+                fragment = null;
+                fragmentTag = null;
+            }
+        }
+
+        @Override
+        public void onDrawerStateChanged(int newState) {
+            if (newState > DrawerLayout.STATE_IDLE) {
+                ActivityUtils.hideKeyboard(MainActivity.this);
+            }
         }
     };
 
@@ -253,30 +277,7 @@ public class MainActivity extends AppCompatActivity implements IMainView,
         hotFriendsAdapter = new HotFriendsAdapter(MainActivity.this, mPicasso, navigator);
         OverScrollDecoratorHelper.setUpOverScroll(lvHotFriends);
         lvHotFriends.setAdapter(hotFriendsAdapter);
-        drawer.addDrawerListener(
-                new DrawerLayout.DrawerListener() {
-                    @Override
-                    public void onDrawerSlide(View drawerView, float slideOffset) {
-                    }
 
-                    @Override
-                    public void onDrawerOpened(View drawerView) {
-                        presenter.fillHotAdapter();
-                    }
-
-                    @Override
-                    public void onDrawerClosed(View drawerView) {
-                    }
-
-                    @Override
-                    public void onDrawerStateChanged(int newState) {
-                        if (newState > DrawerLayout.STATE_IDLE) {
-                            ActivityUtils.hideKeyboard(MainActivity.this);
-                        }
-                    }
-                }
-
-        );
     }
 
     @Override
@@ -297,12 +298,15 @@ public class MainActivity extends AppCompatActivity implements IMainView,
     private void prepareDrawer() {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        toolbar.setNavigationIcon(R.drawable.back_arrow1);
         ActionBar supportActionBar = getSupportActionBar();
         if (supportActionBar != null) {
 //            supportActionBar.setHomeButtonEnabled(true);
-//            supportActionBar.setDisplayHomeAsUpEnabled(true);
+            supportActionBar.setDisplayHomeAsUpEnabled(true);
         }
+        drawer.addDrawerListener(drawerListener);
+//        supportActionBar.setIcon(R.drawable.back_arrow1);
+//        toolbar.setNavigationIcon(R.drawable.back_arrow1);
+
 //        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
 //                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
 //        drawer.addDrawerListener(toggle);
@@ -323,6 +327,7 @@ public class MainActivity extends AppCompatActivity implements IMainView,
         renderState(mode);
     }
 
+
     private void showAvatar(String avatarUrl) {
         int avatarSize = ResourcesUtils.getDimenInPx(this, R.dimen.sizeOfIconInDrawer);
         Picasso.with(this).load(avatarUrl).memoryPolicy(MemoryPolicy.NO_CACHE)
@@ -332,6 +337,7 @@ public class MainActivity extends AppCompatActivity implements IMainView,
 
     @Override
     protected void onDestroy() {
+        drawer.removeDrawerListener(drawerListener);
         notifier.removeListener(this);
         presenter.unbind();
         eventBus.unregister(this);
@@ -344,29 +350,30 @@ public class MainActivity extends AppCompatActivity implements IMainView,
         if (v.getId() != R.id.llExit) {
             FragmentManager fm = getSupportFragmentManager();
             for (int i = 0; i < fm.getBackStackEntryCount(); ++i) {
+//                fm.beginTransaction().
                 fm.popBackStack();
             }
         }
         switch (v.getId()) {
             case R.id.llDialogs:
-//                changeFragment(new BlankDialogFragment(), null);
-                changeFragment(new DialogsFragment(), Constants.FRAGMENT_TAGS.DIALOGS_FRAGMENT);
+                fragment = DialogsFragment.newInstance();
+                fragmentTag = Constants.FRAGMENT_TAGS.DIALOGS_FRAGMENT;
                 break;
             case R.id.llCalls:
-                changeFragment(new CallsFragment(), Constants.FRAGMENT_TAGS.CALLS_FRAGMENT);
-                //TESTING
-//                startActivity(new Intent(this, TestSmsChatActivity.class));
-                //    changeFragment(new SmsDialogsFragment(), Constants.FRAGMENT_TAGS.SMS_DIALOGS_FRAGMENT);
+                fragment = new CallsFragment();
+                fragmentTag = Constants.FRAGMENT_TAGS.CALLS_FRAGMENT;
                 break;
             case R.id.llContacts:
-                changeFragment(ContactsFragment.newInstance(), Constants.FRAGMENT_TAGS.CONTACTS_FRAGMENT);
+                fragment = ContactsFragment.newInstance();
+                fragmentTag = Constants.FRAGMENT_TAGS.CONTACTS_FRAGMENT;
                 break;
             case R.id.llProfile:
-                changeFragment(new ProfileFragment(), Constants.FRAGMENT_TAGS.PROFILE_FRAGMENT);
+                fragment = new ProfileFragment();
+                fragmentTag = Constants.FRAGMENT_TAGS.PROFILE_FRAGMENT;
                 break;
             case R.id.llSettings:
-                settingsFragment = new SettingsFragment();
-                changeFragment(settingsFragment, Constants.FRAGMENT_TAGS.SETTINGS_FRAGMENT);
+                fragment = new SettingsFragment();
+                fragmentTag = Constants.FRAGMENT_TAGS.SETTINGS_FRAGMENT;
                 break;
             case R.id.ivAccountAvatar:
                 DialogFragment newFragment = new ChooseImageDialogFragment();
@@ -374,18 +381,15 @@ public class MainActivity extends AppCompatActivity implements IMainView,
                 break;
             case R.id.llExit:
                 PeekabooApplication.getApp(this).logout();
-//                throw new RuntimeException();
-
+                break;
         }
+        drawer.closeDrawer(Gravity.LEFT);
 
     }
 
     @OnClick({R.id.bText, R.id.bAudio, R.id.bVideo})
     public void onRadioButtonClicked(View v) {
         if (notifier.isAvailable()) {
-//            bText.setSelected(v.getId() == R.id.bText);
-//            bAudio.setSelected(v.getId() == R.id.bAudio);
-//            bVideo.setSelected(v.getId() == R.id.bVideo);
             byte mode = (v.getId() == R.id.bText
                     ? UserModeChangerUseCase.IUserMode.TEXT_MODE : v.getId() == R.id.bAudio ?
                     UserModeChangerUseCase.IUserMode.AUDIO_MODE : UserModeChangerUseCase.IUserMode.ALL_MODE);
@@ -426,7 +430,6 @@ public class MainActivity extends AppCompatActivity implements IMainView,
         getSupportFragmentManager().beginTransaction()
                 .replace(R.id.fragmentContainer, fragment, tag)
                 .commit();
-        drawer.closeDrawer(Gravity.LEFT);
     }
 
     @Override
@@ -497,6 +500,12 @@ public class MainActivity extends AppCompatActivity implements IMainView,
         showAvatar(accountUser.getAvatar());
     }
 
+    public void onBurgerPress() {
+        if (!drawer.isDrawerOpen(Gravity.LEFT)) {
+            drawer.openDrawer(Gravity.LEFT);
+        }
+    }
+
     public interface OnBackPressListener {
         boolean onBackPress();
     }
@@ -539,6 +548,7 @@ public class MainActivity extends AppCompatActivity implements IMainView,
         chatFragment.onActivityResult(Constants.REQUEST_CODES.REQUEST_CODE_GPS, RESULT_OK, data);
 
     }
+
 
     private void setAvatarWithBlur(Bitmap bitmap) {
         final Bitmap blurredImage = ImageUtils.getBlurredImage(bitmap, BLUR_RATE, false);

@@ -2,26 +2,46 @@
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
     android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-            <android.support.v7.widget.RecyclerView
-            android:id="@+id/recyclerview"
+        <include
+            android:id="@+id/appbarLayout"
+            layout="@layout/appbar"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:clipToPadding="false" />
+            android:layout_below="@id/appbarLayout">
 
-        <com.peekaboo.presentation.widget.RecyclerViewFastScroller
-            android:id="@+id/fastscroller"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_alignBottom="@id/recyclerview"
-            android:layout_alignParentEnd="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignTop="@id/recyclerview" />
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerview"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:clipToPadding="false" />
+
+            <com.peekaboo.presentation.widget.RecyclerViewFastScroller
+                android:id="@+id/fastscroller"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignBottom="@id/recyclerview"
+                android:layout_alignParentEnd="true"
+                android:layout_alignParentRight="true"
+                android:layout_alignTop="@id/recyclerview" />
+        </RelativeLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="4dp"
+            android:layout_below="@id/appbarLayout"
+            android:background="@drawable/below_shadow" />
     </RelativeLayout>
 
     <android.support.design.widget.FloatingActionButton

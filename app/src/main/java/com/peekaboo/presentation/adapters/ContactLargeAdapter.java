@@ -115,7 +115,8 @@ public final class ContactLargeAdapter extends RecyclerView.Adapter<ContactLarge
     public void setItems(List<Contact> items) {
         this.items.clear();
         this.items.addAll(items);
-        notifyDataSetChanged();
+        notifyItemRangeInserted(0, items.size());
+//        notifyDataSetChanged();
     }
 
     @Override

@@ -17,6 +17,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -67,7 +68,7 @@ import io.codetail.widget.RevealFrameLayout;
 /**
  * Created by sebastian on 09.09.16.
  */
-public class ChatFragment extends Fragment implements IChatView2, MainActivity.OnBackPressListener {
+public class ChatFragment extends BaseFragment implements IChatView2, MainActivity.OnBackPressListener {
     public static final String COMPANION = "companion";
     public static final String IMAGE_FILE = "image_file";
     public static final int RESUME_DELAY = 100;
@@ -101,6 +102,8 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
     Chronometer timerRecord;
     @BindView(R.id.rflTimer)
     RevealFrameLayout rflTimer;
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
     @BindView(R.id.navigation_btn)
     ImageButton bNavigation;
     @Inject
@@ -150,6 +153,12 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
         return fragment;
     }
 
+    private void restoreState(Bundle savedInstanceState) {
+        if (savedInstanceState != null) {
+            imageFile = savedInstanceState.getString(IMAGE_FILE);
+        }
+    }
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -159,29 +168,29 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
         setHasOptionsMenu(true);
     }
 
+    private AppCompatActivity getAppCompatActivity() {
+        return ((AppCompatActivity) getActivity());
+    }
+
+    @Override
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        AppCompatActivity activity = getAppCompatActivity();
+        activity.setSupportActionBar(toolbar);
+        toolbar.setNavigationIcon(R.drawable.back_arrow1);
+        activity.getSupportActionBar().setTitle(companion.contactNickname());
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (item.getItemId() == android.R.id.home) {
-            ActivityUtils.hideKeyboard(getActivity());
-            closeInputField();
-            getActivity().onBackPressed();
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                ActivityUtils.hideKeyboard(getActivity());
+                closeInputField();
+                getActivity().onBackPressed();
+                break;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    private void restoreState(Bundle savedInstanceState) {
-        if (savedInstanceState != null) {
-            imageFile = savedInstanceState.getString(IMAGE_FILE);
-        }
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        ActionBar supportActionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
-        if (supportActionBar != null) {
-            supportActionBar.setTitle(companion.contactNickname());
-        }
     }
 
     @Nullable

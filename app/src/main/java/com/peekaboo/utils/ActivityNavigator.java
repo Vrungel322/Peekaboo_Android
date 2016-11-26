@@ -6,7 +6,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 
 import com.peekaboo.R;
 import com.peekaboo.data.repositories.database.contacts.Contact;
@@ -15,8 +14,7 @@ import com.peekaboo.presentation.activities.MainActivity;
 import com.peekaboo.presentation.activities.SignUpActivity;
 import com.peekaboo.presentation.animation.DepthAnimation;
 import com.peekaboo.presentation.fragments.ChatFragment;
-import com.peekaboo.presentation.fragments.PeekabooDialogsFragment;
-import com.peekaboo.presentation.fragments.SmsChatFragment;
+import com.peekaboo.presentation.fragments.DialogsFragment;
 import com.peekaboo.presentation.pojo.PhoneContactPOJO;
 
 import javax.inject.Inject;
@@ -70,6 +68,9 @@ public class ActivityNavigator {
         }
 
         FragmentTransaction transaction = fragmentManager.beginTransaction();
+        if (addToBackStack) {
+            transaction.setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_in, R.anim.pop_out);
+        }
         transaction.replace(R.id.fragmentContainer, ChatFragment.newInstance(companion), Constants.FRAGMENT_TAGS.CHAT_FRAGMENT_TAG);
         if (addToBackStack) {
             transaction.addToBackStack(null);
@@ -79,13 +80,13 @@ public class ActivityNavigator {
     }
 
     public void startSmsChatFragment(AppCompatActivity activity, PhoneContactPOJO companion, boolean addToBackStack) {
-        FragmentTransaction replace = activity.getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.fragmentContainer, SmsChatFragment.newInstance(companion));
-        if (addToBackStack) {
-            replace.addToBackStack(null);
-        }
-        replace.commit();
+//        FragmentTransaction replace = activity.getSupportFragmentManager()
+//                .beginTransaction()
+//                .replace(R.id.toolbar_fragment_container, SmsChatFragment.newInstance(companion));
+//        if (addToBackStack) {
+//            replace.addToBackStack(null);
+//        }
+//        replace.commit();
     }
 
     public void startDialogFragment(AppCompatActivity appCompatActivity) {
@@ -93,9 +94,8 @@ public class ActivityNavigator {
         for (int i = 0; i < fm.getBackStackEntryCount(); ++i) {
             fm.popBackStack();
         }
-        PeekabooDialogsFragment fragment = new PeekabooDialogsFragment();
         fm.beginTransaction()
-                .replace(R.id.fragmentContainer, fragment, com.peekaboo.utils.Constants.FRAGMENT_TAGS.DIALOGS_FRAGMENT)
+                .replace(R.id.fragmentContainer, DialogsFragment.newInstance(), com.peekaboo.utils.Constants.FRAGMENT_TAGS.DIALOGS_FRAGMENT)
                 .commit();
     }
 }

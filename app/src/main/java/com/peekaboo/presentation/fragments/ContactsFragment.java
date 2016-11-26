@@ -1,17 +1,13 @@
 package com.peekaboo.presentation.fragments;
 
-import android.content.Context;
-import android.content.Intent;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.annotation.Nullable;
-import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -24,10 +20,10 @@ import com.peekaboo.R;
 import com.peekaboo.data.repositories.database.contacts.Contact;
 import com.peekaboo.presentation.PeekabooApplication;
 import com.peekaboo.presentation.activities.MainActivity;
-import com.peekaboo.presentation.activities.MapActivity;
 import com.peekaboo.presentation.adapters.ContactLargeAdapter;
 import com.peekaboo.presentation.pojo.PhoneContactPOJO;
 import com.peekaboo.presentation.presenters.ContactPresenter;
+import com.peekaboo.presentation.utils.ActivityUtils;
 import com.peekaboo.presentation.views.IContactsView;
 import com.peekaboo.presentation.widget.RecyclerViewFastScroller;
 import com.peekaboo.utils.ActivityNavigator;
@@ -43,7 +39,7 @@ import butterknife.ButterKnife;
 /**
  * Created by Nikita on 13.07.2016.
  */
-public class ContactsFragment extends Fragment implements IContactsView {
+public class ContactsFragment extends BaseFragment implements IContactsView {
 
     public static final String LAYOUT_MANAGER_STATE = "layout_manager_state";
     @Inject
@@ -53,6 +49,8 @@ public class ContactsFragment extends Fragment implements IContactsView {
     @Inject
     Picasso picasso;
 
+    @BindView(R.id.toolbar)
+    Toolbar toolbar;
     @BindView(R.id.recyclerview)
     RecyclerView recyclerView;
     @BindView(R.id.fastscroller)
@@ -73,18 +71,32 @@ public class ContactsFragment extends Fragment implements IContactsView {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        setHasOptionsMenu(true);
+        setHasOptionsMenu(true);
         PeekabooApplication.getApp(getActivity()).getComponent().inject(this);
 
     }
 
+    private MainActivity getMainActivity() {
+        return ((MainActivity) getActivity());
+    }
+
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        ActionBar supportActionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
-        if (supportActionBar != null) {
-            supportActionBar.setTitle(R.string.contacts);
+    public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        MainActivity activity = getMainActivity();
+        activity.setSupportActionBar(toolbar);
+        toolbar.setNavigationIcon(R.drawable.burger);
+        activity.getSupportActionBar().setTitle(R.string.title_contacts);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                getMainActivity().onBurgerPress();
+                break;
         }
+        return super.onOptionsItemSelected(item);
     }
 
     @Nullable
@@ -175,23 +187,10 @@ public class ContactsFragment extends Fragment implements IContactsView {
         super.onDestroyView();
     }
 
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.contacts_menu, menu);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onResume(){
-//        RecyclerView.LayoutParams lp = new RecyclerView.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
-//        recyclerView.setLayoutParams(lp);
-        super.onResume();
-
-    }
+//    @Override
+//    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+//        inflater.inflate(R.menu.contacts_menu, menu);
+//        super.onCreateOptionsMenu(menu, inflater);
+//    }
 
 }

@@ -31,7 +31,7 @@ import butterknife.ButterKnife;
  * Created by st1ch on 19.10.2016.
  */
 
-public class SmsDialogsFragment extends Fragment implements ISmsDialogsView {
+public class SmsDialogsFragment extends BaseFragment implements ISmsDialogsView {
 
     @BindView(R.id.sms_dialogs_recycler_view)
     RecyclerView rvDialogs;

@@ -4,17 +4,14 @@ import android.content.Context;
 import android.content.res.TypedArray;
 import android.support.design.widget.TextInputLayout;
 import android.text.InputType;
-import android.text.method.PasswordTransformationMethod;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
-import android.view.View;
-import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import com.peekaboo.R;
+import com.peekaboo.presentation.app.view.listener.TextWatcher;
 import com.peekaboo.presentation.utils.ResourcesUtils;
 
 /**
