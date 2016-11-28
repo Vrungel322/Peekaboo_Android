@@ -1,4 +1,4 @@
-package com.peekaboo.presentation.app.view.listener;
+package com.peekaboo.presentation.listeners;
 
 import android.text.Editable;
 

@@ -11,7 +11,7 @@ import android.widget.FrameLayout;
 import android.widget.ImageView;
 
 import com.peekaboo.R;
-import com.peekaboo.presentation.app.view.listener.TextWatcher;
+import com.peekaboo.presentation.listeners.TextWatcher;
 import com.peekaboo.presentation.utils.ResourcesUtils;
 
 /**

@@ -127,5 +127,6 @@ public class Message {
         String MODE = "mode";
         String READ = "read";
         String CREATE_DIALOG = "create_dialog";
+        String NEW_DIALOG = "new_dialog";
     }
 }

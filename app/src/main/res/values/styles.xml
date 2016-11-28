@@ -89,6 +89,8 @@
         <item name="windowNoTitle">true</item>
     </style>
 
+    <style name="asd" parent="@android:style/Animation.Activity"
+
     <!--<style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light">-->
     <!--</style>-->
 

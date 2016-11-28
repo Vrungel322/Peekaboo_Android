@@ -37,11 +37,12 @@ import com.peekaboo.domain.usecase.UserModeChangerUseCase;
 import com.peekaboo.presentation.PeekabooApplication;
 import com.peekaboo.presentation.adapters.HotFriendsAdapter;
 import com.peekaboo.presentation.app.view.OnlineIndicatorView;
-import com.peekaboo.presentation.app.view.listener.DrawerListener;
+import com.peekaboo.presentation.listeners.DrawerListener;
 import com.peekaboo.presentation.dialogs.ChooseImageDialogFragment;
 import com.peekaboo.presentation.fragments.CallsFragment;
 import com.peekaboo.presentation.fragments.ChatFragment;
 import com.peekaboo.presentation.fragments.ContactsFragment;
+import com.peekaboo.presentation.fragments.CreateDialogFragment;
 import com.peekaboo.presentation.fragments.DialogsFragment;
 import com.peekaboo.presentation.fragments.ProfileFragment;
 import com.peekaboo.presentation.fragments.SettingsFragment;
@@ -199,8 +200,8 @@ public class MainActivity extends AppCompatActivity implements IMainView,
 
         if (getSupportFragmentManager().findFragmentById(R.id.fragmentContainer) == null) {
             if (!handleNotificationIntent(getIntent(), false)) {
-                changeFragment(ContactsFragment.newInstance(), Constants.FRAGMENT_TAGS.CONTACTS_FRAGMENT);
-//                changeFragment(new CreateDialogFragment(), null);
+//                changeFragment(ContactsFragment.newInstance(), Constants.FRAGMENT_TAGS.CONTACTS_FRAGMENT);
+                changeFragment(new CreateDialogFragment(), null);
                 selectionMode(R.id.llContacts);
             }
         }
