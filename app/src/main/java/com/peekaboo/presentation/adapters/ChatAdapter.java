@@ -14,6 +14,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.VideoView;
 
 import com.peekaboo.R;
 import com.peekaboo.data.repositories.database.messages.PMessageAbs;
@@ -100,7 +101,8 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                 v = inflater.inflate(R.layout.list_item_chat_image_message, parent, false);
                 return new ViewHolderImage(v);
             case PMessageAbs.PMESSAGE_MEDIA_TYPE.VIDEO_MESSAGE:
-                return null;
+                v = inflater.inflate(R.layout.list_item_chat_video_message, parent, false);
+                return new ViewHolderVideo(v);
             case PMessageAbs.PMESSAGE_MEDIA_TYPE.DOCUMENT_MESSAGE:
                 return null;
             case DateSeparator.MEDIA_TYPE:
@@ -134,6 +136,8 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             setAlignment((ViewHolder) holder, pMessageAbs.isMine(), prevMine, nextMine, mediaType);
 
             switch (mediaType) {
+
+
                 case PMessageAbs.PMESSAGE_MEDIA_TYPE.TEXT_MESSAGE:
                     ViewHolderText chatHolder = (ViewHolderText) holder;
                     chatHolder.tvChatMessage.setText(pMessageAbs.messageBody());
@@ -153,6 +157,9 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
                     Log.i("IMAGE", Integer.toString(mediaType));
                     break;
                 case PMessageAbs.PMESSAGE_MEDIA_TYPE.VIDEO_MESSAGE:
+                    String video = pMessageAbs.messageBody();
+                    ViewHolderVideo holderVideo = (ViewHolderVideo) holder;
+                    holderVideo.vvVideoMessage.setVideoPath(video);
                     break;
                 case PMessageAbs.PMESSAGE_MEDIA_TYPE.DOCUMENT_MESSAGE:
                     break;
@@ -402,6 +409,16 @@ public class ChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         @BindView(R.id.navigation_btn)
         ImageButton ibNavigation;
         public ViewHolderNavigation(View view){
+            super(view);
+            ButterKnife.bind(this, view);
+        }
+
+    }
+
+    static class ViewHolderVideo extends ViewHolder {
+        @BindView(R.id.vvVideoMessage)
+        VideoView vvVideoMessage;
+        public ViewHolderVideo(View view){
             super(view);
             ButterKnife.bind(this, view);
         }

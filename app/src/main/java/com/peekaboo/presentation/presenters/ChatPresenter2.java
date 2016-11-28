@@ -203,17 +203,26 @@ public class ChatPresenter2 extends BasePresenter<IChatView2> implements IChatPr
     public void onSendImageButtonPress(String realPath) {
         IChatView2 view = getView();
         if (view != null) {
-            PMessage pMessage = new PMessage(
-                    true, PMessageAbs.PMESSAGE_MEDIA_TYPE.IMAGE_MESSAGE, realPath, System.currentTimeMillis(),
-                    PMessageAbs.PMESSAGE_STATUS.STATUS_SENT,
-                    receiver, accountUser.getId());
-            messenger.setpbLoadingImageToServerDisableListener(() -> {
-                IChatView2 view1 = getView();
-                if (view1 != null) {
-                    view1.hidePbLoadingImageToServer();
-                }
-            });
-            messenger.sendMessage(pMessage);
+            if(realPath.toLowerCase().contains(".jpg") || realPath.toLowerCase().contains(".bmp") || realPath.toLowerCase().contains(".png") || realPath.toLowerCase().contains(".jpeg") ) {
+                PMessage pMessage = new PMessage(
+                        true, PMessageAbs.PMESSAGE_MEDIA_TYPE.IMAGE_MESSAGE, realPath, System.currentTimeMillis(),
+                        PMessageAbs.PMESSAGE_STATUS.STATUS_SENT,
+                        receiver, accountUser.getId());
+                messenger.setpbLoadingImageToServerDisableListener(() -> {
+                    IChatView2 view1 = getView();
+                    if (view1 != null) {
+                        view1.hidePbLoadingImageToServer();
+                    }
+                });
+                messenger.sendMessage(pMessage);
+            }else if(realPath.toLowerCase().contains(".mp4") || realPath.toLowerCase().contains(".avi") || realPath.toLowerCase().contains(".flv")){
+                PMessage pMessage = new PMessage(
+                        true, PMessageAbs.PMESSAGE_MEDIA_TYPE.VIDEO_MESSAGE, realPath, System.currentTimeMillis(),
+                        PMessageAbs.PMESSAGE_STATUS.STATUS_SENT,
+                        receiver, accountUser.getId());
+
+                messenger.sendMessage(pMessage);
+            }
         }
 
 

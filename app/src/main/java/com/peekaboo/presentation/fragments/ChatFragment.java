@@ -320,6 +320,8 @@ public class ChatFragment extends Fragment implements IChatView2, MainActivity.O
         takeGalleryImage();
     }
 
+
+
     public void takeGalleryImage() {
         boolean canTake = IntentUtils.takeGalleryImage(this);
         if (!canTake) {

@@ -42,6 +42,7 @@
                         android:id="@+id/default_avatar"
                         android:layout_width="60dp"
                         android:layout_height="60dp"
+                        android:foregroundGravity="center"
                         android:layout_gravity="center"
                         android:src="@drawable/avatar_icon"
                         />
