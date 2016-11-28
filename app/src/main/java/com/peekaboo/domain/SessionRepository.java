@@ -22,6 +22,8 @@ public interface SessionRepository {
 
     Observable<AccountUser> confirm(String id, String key);
 
+    Observable updateAccountData(AccountUser accountUser);
+
     Observable<User> findFriendByName(String friendName);
 
     Call<FileEntity> uploadFile(String fileType, String fileName, String receiverId);

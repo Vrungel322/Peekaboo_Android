@@ -99,6 +99,11 @@ public class SessionDataRepository implements SessionRepository {
     }
 
     @Override
+    public Observable updateAccountData(AccountUser accountUser) {
+        return restApi.updateAccountData(accountUser);
+    }
+
+    @Override
     public Observable<User> findFriendByName(String friendName) {
         return restApi.findFriendByName(friendName)
                 .map(user -> abstractMapperFactory.getUserMapper().transform(user));

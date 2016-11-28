@@ -4,9 +4,11 @@ import android.content.Context;
 import android.net.Uri;
 
 import com.peekaboo.data.FileEntity;
+import com.peekaboo.domain.AccountUser;
 import com.peekaboo.domain.UserMessageMapper;
 import com.peekaboo.domain.subscribers.BaseProgressSubscriber;
 import com.peekaboo.domain.usecase.AvatarUpdateUseCase;
+import com.peekaboo.domain.usecase.UpdateAccountUserDataUseCase;
 import com.peekaboo.presentation.fragments.ISettingsView;
 import com.peekaboo.presentation.utils.ResourcesUtils;
 
@@ -20,13 +22,16 @@ public class SettingsFragmentPresenter extends ProgressPresenter<ISettingsView> 
 
     private Context mContext;
     private AvatarUpdateUseCase avatarUpdateUseCase;
+    private UpdateAccountUserDataUseCase updateAccountUserDataUseCase;
 
     @Inject
     public SettingsFragmentPresenter(Context context,UserMessageMapper errorHandler,
-                                     AvatarUpdateUseCase avatarUpdateUseCase) {
+                                     AvatarUpdateUseCase avatarUpdateUseCase,
+                                     UpdateAccountUserDataUseCase updateAccountUserDataUseCase) {
         super(errorHandler);
         this.mContext = context;
         this.avatarUpdateUseCase = avatarUpdateUseCase;
+        this.updateAccountUserDataUseCase = updateAccountUserDataUseCase;
 
     }
 
@@ -38,6 +43,7 @@ public class SettingsFragmentPresenter extends ProgressPresenter<ISettingsView> 
     @Override
     public void unbind() {
         avatarUpdateUseCase.unsubscribe();
+        updateAccountUserDataUseCase.unsubscribe();
         super.unbind();
     }
 
@@ -50,6 +56,12 @@ public class SettingsFragmentPresenter extends ProgressPresenter<ISettingsView> 
         avatarUpdateUseCase.execute(getAvatarSettingsSubscriber());
     }
 
+    @Override
+    public void updateAccountData(AccountUser accountUser) {
+        updateAccountUserDataUseCase.setCredentials(accountUser);
+        updateAccountUserDataUseCase.execute(getUpdateDataSubscriber());
+    }
+
     public BaseProgressSubscriber<FileEntity> getAvatarSettingsSubscriber() {
         return new BaseProgressSubscriber<FileEntity>(this){
             @Override
@@ -59,6 +71,15 @@ public class SettingsFragmentPresenter extends ProgressPresenter<ISettingsView> 
                     getView().hideProgress();
                     getView().updateAvatarViewInSettings(response.getResult());
                 }
+            }
+        };
+    }
+
+    public BaseProgressSubscriber getUpdateDataSubscriber() {
+        return new BaseProgressSubscriber(this){
+            @Override
+            public void onNext(Object response) {
+                super.onNext(response);
             }
         };
     }

@@ -125,6 +125,12 @@ public class SettingsFragment extends Fragment implements ISettingsView {
         switch (item.getItemId()){
             case R.id.action_save_preferences:{
                 showToastMessage("TODO Save");
+                accountUser.saveFirstName(etName.getText().toString());
+                accountUser.saveLastName(etSurname.getText().toString());
+                accountUser.savePhone(etPhonenumber.getText().toString());
+                accountUser.saveCountry(etCountry.getText().toString());
+                accountUser.saveCity(etCity.getText().toString());
+                settingsFragmentPresenter.updateAccountData(accountUser);
                 break;
             }
         }

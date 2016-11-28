@@ -6,6 +6,7 @@ import com.peekaboo.data.rest.entity.CredentialsSignUp;
 import com.peekaboo.data.rest.entity.TokenEntity;
 import com.peekaboo.data.rest.entity.UserEntity;
 import com.peekaboo.data.rest.entity.UserResponse;
+import com.peekaboo.domain.AccountUser;
 
 import okhttp3.MultipartBody;
 import okhttp3.ResponseBody;
@@ -28,6 +29,7 @@ public interface PeekabooApi {
     String SIGNIN = "signin";
     String SIGNUP = "signup";
     String CONFIRM = "confirm";
+    String SETTINGS = "settings";
     String GET_KEY = "";
 
     @POST(SIGNIN)
@@ -45,6 +47,11 @@ public interface PeekabooApi {
             @Body ConfirmKey confirmKey
     );
 
+    @POST(SETTINGS + "/{userId}")
+    Observable updateAccountData(
+            @Path("userId") String userId,
+            @Body AccountUser accountUser
+            );
 
     @GET("friend/find")
     Observable<UserEntity> getFriend(

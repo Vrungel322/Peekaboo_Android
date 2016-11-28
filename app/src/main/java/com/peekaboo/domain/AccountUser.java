@@ -50,7 +50,7 @@ public class AccountUser extends User {
         return country;
     }
 
-    public void saveCountry(String country){
+    public void saveCountry(String country) {
         this.country = country;
         preferences.edit().putString(COUNTRY, country).apply();
     }
@@ -60,7 +60,7 @@ public class AccountUser extends User {
         return city;
     }
 
-    public void saveCity(String city){
+    public void saveCity(String city) {
         this.city = city;
         preferences.edit().putString(CITY, city).apply();
     }
@@ -70,7 +70,7 @@ public class AccountUser extends User {
         return firstName;
     }
 
-    public void saveFirstName(String firstName){
+    public void saveFirstName(String firstName) {
         this.firstName = firstName;
         preferences.edit().putString(FIRST_NAME, firstName).apply();
     }
@@ -80,9 +80,9 @@ public class AccountUser extends User {
         return lastName;
     }
 
-    public void saveLastName(String lastName){
+    public void saveLastName(String lastName) {
         this.lastName = lastName;
-        preferences.edit().putString(LAST_NAME, lastName).commit();
+        preferences.edit().putString(LAST_NAME, lastName).apply();
     }
 
     @Nullable
@@ -90,9 +90,9 @@ public class AccountUser extends User {
         return phone;
     }
 
-    public void savePhone(String phone){
+    public void savePhone(String phone) {
         this.phone = phone;
-        preferences.edit().putString(PHONE, phone).commit();
+        preferences.edit().putString(PHONE, phone).apply();
     }
 
     @Nullable
