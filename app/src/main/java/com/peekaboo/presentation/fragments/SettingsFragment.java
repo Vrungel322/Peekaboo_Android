@@ -25,7 +25,6 @@ import com.peekaboo.domain.AccountUser;
 import com.peekaboo.presentation.PeekabooApplication;
 import com.peekaboo.presentation.dialogs.AvatarChangeDialog;
 import com.peekaboo.presentation.presenters.SettingsFragmentPresenter;
-import com.peekaboo.presentation.utils.CredentialUtils;
 import com.peekaboo.presentation.utils.ResourcesUtils;
 import com.peekaboo.utils.Constants;
 import com.peekaboo.utils.Utility;
@@ -65,6 +64,14 @@ public class SettingsFragment extends Fragment implements ISettingsView {
     Button bLogInToTwitter;
     @BindView(R.id.etPhonenumber)
     EditText etPhonenumber;
+    @BindView(R.id.etName)
+    EditText etName;
+    @BindView(R.id.etSurname)
+    EditText etSurname;
+    @BindView(R.id.etCountry)
+    EditText etCountry;
+    @BindView(R.id.etCity)
+    EditText etCity;
     @Nullable
     private IUpdateAvatarInDrawer iUpdateAvatarInDrawer;
 
@@ -91,7 +98,13 @@ public class SettingsFragment extends Fragment implements ISettingsView {
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Settings");
         showAvatar();
         settingsFragmentPresenter.bind(this);
-        etPhonenumber.setText(CredentialUtils.getPhoneNumber(getApplicationContext()));
+//        etPhonenumber.setText(CredentialUtils.getPhoneNumber(getApplicationContext()));
+        etName.setText(accountUser.getFirstName());
+        etSurname.setText(accountUser.getLastName());
+        etPhonenumber.setText(accountUser.getPhone());
+        etCountry.setText(accountUser.getCountry());
+        etCountry.setText(accountUser.getCountry());
+        etCity.setText(accountUser.getCity());
         return rootView;
     }
 

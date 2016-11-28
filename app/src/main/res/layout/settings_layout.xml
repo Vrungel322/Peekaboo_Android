@@ -60,7 +60,7 @@
 
 
                     <EditText
-                        android:id="@+id/name"
+                        android:id="@+id/etName"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
@@ -85,7 +85,7 @@
                         android:background="@color/dialog_underline_color" />
 
                     <EditText
-                        android:id="@+id/surname"
+                        android:id="@+id/etSurname"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_alignParentRight="true"
@@ -102,7 +102,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="1dp"
                         android:layout_alignParentRight="true"
-                        android:layout_below="@id/surname"
+                        android:layout_below="@id/etSurname"
                         android:layout_marginLeft="@dimen/settings_card_margin"
                         android:layout_marginTop="@dimen/settings_underline_margin"
                         android:layout_toRightOf="@id/flSettingsIconAvatar"
@@ -119,12 +119,14 @@
                     android:layout_marginTop="@dimen/settings_underline_margin"
                     android:background="@null"
                     android:hint="@string/nickname"
+                    android:visibility="gone"
                     android:textColor="#000"
                     android:textSize="@dimen/primary_text_size" />
 
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
+                    android:visibility="gone"
                     android:layout_marginBottom="@dimen/settings_underline_margin"
                     android:layout_marginTop="@dimen/settings_underline_margin"
                     android:background="@color/dialog_underline_color" />
@@ -136,6 +138,7 @@
                     android:layout_marginBottom="@dimen/settings_underline_margin"
                     android:layout_marginLeft="@dimen/settings_card_margin"
                     android:layout_marginRight="@dimen/settings_card_margin"
+                    android:layout_marginTop="@dimen/settings_underline_margin"
                     android:background="@null"
                     android:hint="@string/phoneNumber"
                     android:textColor="#000"
@@ -166,7 +169,7 @@
                     android:textColor="@color/colorAccent" />
 
                 <EditText
-                    android:id="@+id/country"
+                    android:id="@+id/etCountry"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/settings_card_margin"
@@ -184,7 +187,7 @@
                     android:background="@color/dialog_underline_color" />
 
                 <EditText
-                    android:id="@+id/city"
+                    android:id="@+id/etCity"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="@dimen/settings_underline_margin"
