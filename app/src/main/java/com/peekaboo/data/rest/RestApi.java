@@ -50,7 +50,7 @@ public class RestApi {
         return api.confirm(confirmKey);
     }
 
-    public Observable updateAccountData(AccountUser accountUser){
+    public Observable<ResponseBody> updateAccountData(AccountUser accountUser){
         return api.updateAccountData(accountUser.getId(), accountUser);
     }
 

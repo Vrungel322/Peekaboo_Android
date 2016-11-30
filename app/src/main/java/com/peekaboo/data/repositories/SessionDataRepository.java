@@ -99,7 +99,7 @@ public class SessionDataRepository implements SessionRepository {
     }
 
     @Override
-    public Observable updateAccountData(AccountUser accountUser) {
+    public Observable<ResponseBody> updateAccountData(AccountUser accountUser) {
         return restApi.updateAccountData(accountUser);
     }
 

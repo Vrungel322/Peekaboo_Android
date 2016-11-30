@@ -48,7 +48,7 @@ public interface PeekabooApi {
     );
 
     @POST(SETTINGS + "/{userId}")
-    Observable updateAccountData(
+    Observable<ResponseBody> updateAccountData(
             @Path("userId") String userId,
             @Body AccountUser accountUser
             );

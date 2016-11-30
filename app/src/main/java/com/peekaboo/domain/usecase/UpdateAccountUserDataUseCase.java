@@ -7,13 +7,14 @@ import com.peekaboo.domain.schedulers.SubscribeOn;
 
 import javax.inject.Inject;
 
+import okhttp3.ResponseBody;
 import rx.Observable;
 
 /**
  * Created by Nikita on 28.11.2016.
  */
 
-public class UpdateAccountUserDataUseCase extends UseCase {
+public class UpdateAccountUserDataUseCase extends UseCase<ResponseBody> {
 
     private final SessionRepository sessionRepository;
     private AccountUser accountUser;
@@ -29,7 +30,7 @@ public class UpdateAccountUserDataUseCase extends UseCase {
     }
 
     @Override
-    protected Observable getUseCaseObservable() {
+    protected Observable<ResponseBody> getUseCaseObservable() {
         return sessionRepository.updateAccountData(accountUser);
     }
 }

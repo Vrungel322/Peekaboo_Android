@@ -14,6 +14,8 @@ import com.peekaboo.presentation.utils.ResourcesUtils;
 
 import javax.inject.Inject;
 
+import okhttp3.ResponseBody;
+
 /**
  * Created by Nikita on 02.11.2016.
  */
@@ -75,11 +77,12 @@ public class SettingsFragmentPresenter extends ProgressPresenter<ISettingsView> 
         };
     }
 
-    public BaseProgressSubscriber getUpdateDataSubscriber() {
-        return new BaseProgressSubscriber(this){
+    public BaseProgressSubscriber<ResponseBody> getUpdateDataSubscriber() {
+        return new BaseProgressSubscriber<ResponseBody>(this){
             @Override
-            public void onNext(Object response) {
+            public void onNext(ResponseBody response) {
                 super.onNext(response);
+
             }
         };
     }
