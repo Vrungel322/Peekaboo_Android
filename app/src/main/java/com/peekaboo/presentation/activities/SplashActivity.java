@@ -7,7 +7,6 @@ import com.peekaboo.R;
 import com.peekaboo.data.di.UserComponent;
 import com.peekaboo.domain.AccountUser;
 import com.peekaboo.presentation.PeekabooApplication;
-import com.peekaboo.presentation.di.ApplicationComponent;
 import com.peekaboo.presentation.presenters.SplashActivityPresenter;
 import com.peekaboo.utils.ActivityNavigator;
 
@@ -33,7 +32,7 @@ public class SplashActivity extends AppCompatActivity {
             splashActivityPresenter.setSecondLaunch();
             mNavigator.startIntroScreen(this);
         } else*/ if (user.isAuthorized()) {
-            mNavigator.startMainActivity(this);
+            mNavigator.startMainActivity(this, null);
         } else {
             mNavigator.startLogInActivity(this, false);
         }

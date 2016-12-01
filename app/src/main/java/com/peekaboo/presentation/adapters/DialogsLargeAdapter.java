@@ -200,7 +200,6 @@ public final class DialogsLargeAdapter extends RecyclerView.Adapter<DialogsLarge
         int size = items.size();
         items.clear();
         items.addAll(dialogs);
-//        notifyDataSetChanged();
         if (size == 0) {
             notifyItemRangeChanged(0, items.size());
         } else {

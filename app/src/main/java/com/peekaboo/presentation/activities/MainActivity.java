@@ -4,18 +4,15 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.Toolbar;
 import android.view.Gravity;
-import android.view.View;
 
 import com.peekaboo.R;
 import com.peekaboo.data.repositories.database.contacts.Contact;
 import com.peekaboo.presentation.PeekabooApplication;
-import com.peekaboo.presentation.dialogs.ChooseImageDialogFragment;
 import com.peekaboo.presentation.fragments.CallsFragment;
 import com.peekaboo.presentation.fragments.ContactsFragment;
 import com.peekaboo.presentation.fragments.DialogsFragment;
@@ -36,6 +33,7 @@ public class MainActivity extends DrawerActivity {
             fragmentTag = null;
         }
     }
+
 
     @Override
     protected void handleDrawerClick(int id) {
@@ -66,25 +64,15 @@ public class MainActivity extends DrawerActivity {
                 fragment = new SettingsFragment();
                 fragmentTag = Constants.FRAGMENT_TAGS.SETTINGS_FRAGMENT;
                 break;
-            case R.id.ivAccountAvatar:
-                DialogFragment newFragment = new ChooseImageDialogFragment();
-                newFragment.show(getSupportFragmentManager(), ChooseImageDialogFragment.TAG);
-                break;
-            case R.id.llExit:
-                PeekabooApplication.getApp(this).logout();
-                break;
         }
     }
 
     @Override
     protected void prepareActionBar(Toolbar toolbar, DrawerLayout drawer) {
         toolbar.setNavigationIcon(R.drawable.burger);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!drawer.isDrawerOpen(Gravity.LEFT)) {
-                    drawer.openDrawer(Gravity.LEFT);
-                }
+        toolbar.setNavigationOnClickListener(v -> {
+            if (!drawer.isDrawerOpen(Gravity.LEFT)) {
+                drawer.openDrawer(Gravity.LEFT);
             }
         });
     }
@@ -97,8 +85,7 @@ public class MainActivity extends DrawerActivity {
             Intent intent = getIntent();
             handleNotificationIntent(intent);
 
-//                changeFragment(new CreateDialogFragment(), null);
-            if (!DrawerActivity.ACTION.SHOW_DIALOGS.equals(intent.getAction())) {
+            if (!MainActivity.ACTION.SHOW_DIALOGS.equals(intent.getAction())) {
                 changeFragment(ContactsFragment.newInstance(), Constants.FRAGMENT_TAGS.CONTACTS_FRAGMENT);
                 selectionMode(R.id.llContacts);
             }
@@ -112,30 +99,56 @@ public class MainActivity extends DrawerActivity {
         handleNotificationIntent(intent);
     }
 
-    private boolean handleNotificationIntent(Intent intent) {
+    private void handleNotificationIntent(Intent intent) {
         String action = intent.getAction();
+        if (action != null) {
 
-        if (DrawerActivity.ACTION.SHOW_CHAT.equals(action) && intent.hasExtra(DrawerActivity.ACTION.EXTRA.CONTACT_EXTRA)) {
-            Contact contact = intent.getParcelableExtra(DrawerActivity.ACTION.EXTRA.CONTACT_EXTRA);
-            NotificationManager notificationManager =
-                    (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            notificationManager.cancel(MessageNotificator.NOTIFICATION_ID);
-            navigator.startChat(this, contact);
-        } else if (DrawerActivity.ACTION.SHOW_DIALOGS.equals(action)) {
-            NotificationManager notificationManager =
-                    (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            notificationManager.cancel(MessageNotificator.NOTIFICATION_ID);
-            navigator.startDialogFragment(this);
-        } else {
-            return false;
+            switch (action) {
+                case ACTION.SHOW_CONTACTS:
+                    changeFragment(ContactsFragment.newInstance(), Constants.FRAGMENT_TAGS.CONTACTS_FRAGMENT);
+                    selectionMode(R.id.llContacts);
+                    break;
+                case ACTION.SHOW_CALLS:
+                    changeFragment(new CallsFragment(), Constants.FRAGMENT_TAGS.CALLS_FRAGMENT);
+                    selectionMode(R.id.llCalls);
+                    break;
+                case ACTION.SHOW_DIALOGS: {
+                    NotificationManager notificationManager =
+                            (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                    notificationManager.cancel(MessageNotificator.NOTIFICATION_ID);
+                    navigator.startDialogFragment(this);
+                }
+                selectionMode(R.id.llDialogs);
+                break;
+                case ACTION.SHOW_SETTINGS:
+                    changeFragment(new SettingsFragment(), Constants.FRAGMENT_TAGS.SETTINGS_FRAGMENT);
+                    selectionMode(R.id.llSettings);
+                    break;
+                case ACTION.SHOW_PROFILE:
+                    changeFragment(new ProfileFragment(), Constants.FRAGMENT_TAGS.PROFILE_FRAGMENT);
+                    selectionMode(R.id.llProfile);
+                    break;
+                case ACTION.SHOW_CHAT: {
+                    Contact contact = intent.getParcelableExtra(MainActivity.ACTION.EXTRA.CONTACT_EXTRA);
+                    if (contact != null) {
+                        NotificationManager notificationManager =
+                                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                        notificationManager.cancel(MessageNotificator.NOTIFICATION_ID);
+                        navigator.startChat(this, contact);
+                    }
+                }
+                break;
+            }
         }
-
-        return true;
     }
 
     public interface ACTION {
         String SHOW_DIALOGS = "action.show_dialogs";
         String SHOW_CHAT = "action.show_chat";
+        String SHOW_CONTACTS = "action.show_contacts";
+        String SHOW_CALLS = "action.show_calls";
+        String SHOW_PROFILE = "action.show_profile";
+        String SHOW_SETTINGS = "action.show_settings";
 
         interface EXTRA {
             String CONTACT_EXTRA = "contact_extra";

@@ -213,7 +213,9 @@ public abstract class DrawerActivity extends AppCompatActivity implements IMainV
 
     protected abstract void inject();
 
-    protected abstract void onDrawerClosed();
+    protected void onDrawerClosed() {
+
+    }
 
     protected abstract void handleDrawerClick(int id);
 
@@ -314,7 +316,18 @@ public abstract class DrawerActivity extends AppCompatActivity implements IMainV
     @OnClick({R.id.llDialogs, R.id.llCalls, R.id.llContacts, R.id.llProfile, R.id.llSettings, R.id.llExit, R.id.ivAccountAvatar})
     public void onDrawerItemClick(View v) {
         selectionMode(v.getId());
-        handleDrawerClick(v.getId());
+        switch (v.getId()) {
+            case R.id.ivAccountAvatar:
+                DialogFragment newFragment = new ChooseImageDialogFragment();
+                newFragment.show(getSupportFragmentManager(), ChooseImageDialogFragment.TAG);
+                break;
+            case R.id.llExit:
+                PeekabooApplication.getApp(this).logout();
+                break;
+            default:
+                handleDrawerClick(v.getId());
+                break;
+        }
         drawer.closeDrawer(Gravity.LEFT);
     }
 
@@ -440,18 +453,6 @@ public abstract class DrawerActivity extends AppCompatActivity implements IMainV
     public interface OnBackPressListener {
         boolean onBackPress();
     }
-
-    public interface ACTION {
-        String SHOW_DIALOGS = "action.show_dialogs";
-        String SHOW_CHAT = "action.show_chat";
-
-        interface EXTRA {
-            String CONTACT_EXTRA = "contact_extra";
-        }
-
-    }
-
-
 
     private void setAvatarWithBlur(Bitmap bitmap) {
         final Bitmap blurredImage = ImageUtils.getBlurredImage(bitmap, BLUR_RATE, false);
