@@ -94,10 +94,13 @@ public class MainActivity extends DrawerActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getSupportFragmentManager().findFragmentById(R.id.fragmentContainer) == null) {
-            handleNotificationIntent(getIntent());
+            Intent intent = getIntent();
+            handleNotificationIntent(intent);
 
 //                changeFragment(new CreateDialogFragment(), null);
-            changeFragment(ContactsFragment.newInstance(), Constants.FRAGMENT_TAGS.CONTACTS_FRAGMENT);
+            if (!DrawerActivity.ACTION.SHOW_DIALOGS.equals(intent.getAction())) {
+                changeFragment(ContactsFragment.newInstance(), Constants.FRAGMENT_TAGS.CONTACTS_FRAGMENT);
+            }
 //                selectionMode(R.id.llContacts);
 
         }

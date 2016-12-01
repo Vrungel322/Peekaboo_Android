@@ -80,11 +80,13 @@ public class ActivityNavigator {
 
     public void startDialogFragment(AppCompatActivity appCompatActivity) {
         FragmentManager fm = appCompatActivity.getSupportFragmentManager();
-        for (int i = 0; i < fm.getBackStackEntryCount(); ++i) {
-            fm.popBackStack();
+        if (!(fm.findFragmentById(R.id.fragmentContainer) instanceof DialogsFragment)) {
+            for (int i = 0; i < fm.getBackStackEntryCount(); ++i) {
+                fm.popBackStack();
+            }
+            fm.beginTransaction()
+                    .replace(R.id.fragmentContainer, DialogsFragment.newInstance(), com.peekaboo.utils.Constants.FRAGMENT_TAGS.DIALOGS_FRAGMENT)
+                    .commit();
         }
-        fm.beginTransaction()
-                .replace(R.id.fragmentContainer, DialogsFragment.newInstance(), com.peekaboo.utils.Constants.FRAGMENT_TAGS.DIALOGS_FRAGMENT)
-                .commit();
     }
 }
