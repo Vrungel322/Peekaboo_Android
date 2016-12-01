@@ -38,7 +38,7 @@ import com.peekaboo.data.repositories.database.contacts.Contact;
 import com.peekaboo.data.repositories.database.messages.PMessage;
 import com.peekaboo.domain.AccountUser;
 import com.peekaboo.presentation.PeekabooApplication;
-import com.peekaboo.presentation.activities.MainActivity;
+import com.peekaboo.presentation.activities.DrawerActivity;
 import com.peekaboo.presentation.activities.MapActivity;
 import com.peekaboo.presentation.adapters.ChatAdapter2;
 import com.peekaboo.presentation.app.ActivityResult;
@@ -68,7 +68,7 @@ import io.codetail.widget.RevealFrameLayout;
 /**
  * Created by sebastian on 09.09.16.
  */
-public class ChatFragment extends BaseFragment implements IChatView2, MainActivity.OnBackPressListener {
+public class ChatFragment extends BaseFragment implements IChatView2, DrawerActivity.OnBackPressListener {
     public static final String COMPANION = "companion";
     public static final String IMAGE_FILE = "image_file";
     public static final int RESUME_DELAY = 100;
@@ -102,8 +102,6 @@ public class ChatFragment extends BaseFragment implements IChatView2, MainActivi
     Chronometer timerRecord;
     @BindView(R.id.rflTimer)
     RevealFrameLayout rflTimer;
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
     @BindView(R.id.navigation_btn)
     ImageButton bNavigation;
     @Inject
@@ -131,7 +129,7 @@ public class ChatFragment extends BaseFragment implements IChatView2, MainActivi
         @Override
         public void run() {
             isResumed = true;
-            ((MainActivity) getActivity()).addListener(ChatFragment.this);
+            ((DrawerActivity) getActivity()).addListener(ChatFragment.this);
             presenter.onResume(isFirstResumeAfterCreate, getCompanionId());
             isFirstResumeAfterCreate = false;
             if (activityResult != null) {
@@ -165,33 +163,27 @@ public class ChatFragment extends BaseFragment implements IChatView2, MainActivi
         PeekabooApplication.getApp(getActivity()).getComponent().inject(this);
         companion = getArguments().getParcelable(COMPANION);
         restoreState(savedInstanceState);
-        setHasOptionsMenu(true);
     }
 
-    private AppCompatActivity getAppCompatActivity() {
-        return ((AppCompatActivity) getActivity());
-    }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        AppCompatActivity activity = getAppCompatActivity();
-        activity.setSupportActionBar(toolbar);
-        toolbar.setNavigationIcon(R.drawable.back_arrow1);
-        activity.getSupportActionBar().setTitle(companion.contactNickname());
+        ((AppCompatActivity) getActivity()).getSupportActionBar()
+                .setTitle(companion.contactNickname());
     }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                ActivityUtils.hideKeyboard(getActivity());
-                closeInputField();
-                getActivity().onBackPressed();
-                break;
-        }
-        return super.onOptionsItemSelected(item);
-    }
+//
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item) {
+//        switch (item.getItemId()) {
+//            case android.R.id.home:
+//                ActivityUtils.hideKeyboard(getActivity());
+//                closeInputField();
+//                getActivity().onBackPressed();
+//                break;
+//        }
+//        return super.onOptionsItemSelected(item);
+//    }
 
     @Nullable
     @Override
@@ -437,7 +429,7 @@ public class ChatFragment extends BaseFragment implements IChatView2, MainActivi
         handler.removeCallbacks(resumeRunnable);
         if (isResumed) {
             presenter.onPause();
-            ((MainActivity) getActivity()).removeListener(this);
+            ((DrawerActivity) getActivity()).removeListener(this);
             isResumed = false;
         }
         super.onPause();

@@ -109,7 +109,7 @@ public final class DialogsLargeAdapter extends RecyclerView.Adapter<DialogsLarge
         int unreadMessagesCount = dialog.getUnreadMessagesCount();
         holder.oiOnlineIndicator.setState(contact.isOnline(), unreadMessagesCount);
 
-        holder.itemView.setOnClickListener(v -> navigator.startChatFragment(activity, contact, true));
+        holder.itemView.setOnClickListener(v -> navigator.startChat(activity, contact));
 
         holder.ivFavorite.setOnClickListener(v -> {
             YoYo.with(Techniques.Tada).duration(500).delay(100).playOn(holder.ivFavorite);

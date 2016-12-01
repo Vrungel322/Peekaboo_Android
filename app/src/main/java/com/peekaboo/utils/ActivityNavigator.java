@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.peekaboo.R;
 import com.peekaboo.data.repositories.database.contacts.Contact;
+import com.peekaboo.presentation.activities.DetailsActivity;
 import com.peekaboo.presentation.activities.LogInActivity;
 import com.peekaboo.presentation.activities.MainActivity;
 import com.peekaboo.presentation.activities.SignUpActivity;
@@ -59,24 +60,12 @@ public class ActivityNavigator {
         mActivityContext.startActivity(intent);
     }
 
-    public void startChatFragment(AppCompatActivity activity, Contact companion, boolean addToBackStack) {
-        FragmentManager fragmentManager = activity.getSupportFragmentManager();
-
-        Fragment chatFragment = fragmentManager.findFragmentByTag(Constants.FRAGMENT_TAGS.CHAT_FRAGMENT_TAG);
-        if (chatFragment != null) {
-            fragmentManager.popBackStack();
-        }
-
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
-        if (addToBackStack) {
-            transaction.setCustomAnimations(R.anim.enter, R.anim.exit, R.anim.pop_in, R.anim.pop_out);
-        }
-        transaction.replace(R.id.fragmentContainer, ChatFragment.newInstance(companion), Constants.FRAGMENT_TAGS.CHAT_FRAGMENT_TAG);
-        if (addToBackStack) {
-            transaction.addToBackStack(null);
-        }
-        transaction.commit();
-        fragmentManager.executePendingTransactions();
+    public void startChat(AppCompatActivity activity, Contact companion) {
+        Intent intent = new Intent(activity, DetailsActivity.class);
+        intent.setAction(DetailsActivity.ACTION_CHAT);
+        intent.putExtra(DetailsActivity.EXTRA, companion);
+        intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        activity.startActivity(intent);
     }
 
     public void startSmsChatFragment(AppCompatActivity activity, PhoneContactPOJO companion, boolean addToBackStack) {

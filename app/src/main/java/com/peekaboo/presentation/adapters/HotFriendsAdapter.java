@@ -1,5 +1,7 @@
 package com.peekaboo.presentation.adapters;
 
+import android.app.Activity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,14 +29,14 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 public class HotFriendsAdapter extends BaseAdapter {
 
-    private MainActivity activity;
+    private AppCompatActivity activity;
     private LayoutInflater inflater;
     private Picasso mPicasso;
     private ActivityNavigator navigator;
     private List<Dialog> items = new ArrayList<>();
 
 
-    public HotFriendsAdapter(MainActivity activity, Picasso mPicasso, ActivityNavigator navigator) {
+    public HotFriendsAdapter(AppCompatActivity activity, Picasso mPicasso, ActivityNavigator navigator) {
         this.activity = activity;
         this.mPicasso = mPicasso;
         this.navigator = navigator;
@@ -96,7 +98,7 @@ public class HotFriendsAdapter extends BaseAdapter {
         mViewHolder.oiIndicatorOnline.setState(currentListData.getContact().isOnline(), currentListData.getUnreadMessagesCount());
 
         convertView.setOnClickListener(v ->
-                navigator.startChatFragment(activity, currentListData.getContact(), true));
+                navigator.startChat(activity, currentListData.getContact()));
         return convertView;
     }
 
@@ -113,6 +115,7 @@ public class HotFriendsAdapter extends BaseAdapter {
         CircleImageView civHotFriendIcon;
         @BindView(R.id.oiOnlineIndicator)
         OnlineIndicatorView oiIndicatorOnline;
+
         public HotFriendsViewHolder(View item) {
             ButterKnife.bind(this, item);
         }

@@ -25,22 +25,20 @@ public class TabsAdapter extends FragmentStatePagerAdapter {
     //integer to count number of tabs
     private final List<Fragment> fragments = new ArrayList<>();
 
-    public TabsAdapter(FragmentManager fm, String[] tabNames) {
+    public TabsAdapter(FragmentManager fm, Context context) {
         super(fm);
-        this.tabNames = tabNames;
+        this.tabNames = context.getResources().getStringArray(R.array.dialog_tab_names);
         //Initializing tab count
         fragments.add(new PeekabooDialogsFragment());
         fragments.add(new SmsDialogsFragment());
 
     }
 
-
     @Override
     public CharSequence getPageTitle(int position) {
         return tabNames[position];
     }
 
-    //Overriding method getItem
     @Override
     public Fragment getItem(int position) {
         //Returning the current tabs

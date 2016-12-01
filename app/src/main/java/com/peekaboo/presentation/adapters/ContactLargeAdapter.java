@@ -102,7 +102,7 @@ public final class ContactLargeAdapter extends RecyclerView.Adapter<ContactLarge
         holder.oiOnlineIndicator.setState(contact.isOnline(), 0);
 
         holder.itemView.setOnClickListener(v -> {
-            navigator.startChatFragment(activity, contact, true);
+            navigator.startChat(activity, contact);
         });
 
     }

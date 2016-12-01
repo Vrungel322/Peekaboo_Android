@@ -49,8 +49,6 @@ public class ContactsFragment extends BaseFragment implements IContactsView {
     @Inject
     Picasso picasso;
 
-    @BindView(R.id.toolbar)
-    Toolbar toolbar;
     @BindView(R.id.recyclerview)
     RecyclerView recyclerView;
     @BindView(R.id.fastscroller)
@@ -71,32 +69,14 @@ public class ContactsFragment extends BaseFragment implements IContactsView {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setHasOptionsMenu(true);
         PeekabooApplication.getApp(getActivity()).getComponent().inject(this);
 
-    }
-
-    private MainActivity getMainActivity() {
-        return ((MainActivity) getActivity());
     }
 
     @Override
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        MainActivity activity = getMainActivity();
-        activity.setSupportActionBar(toolbar);
-        toolbar.setNavigationIcon(R.drawable.burger);
-        activity.getSupportActionBar().setTitle(R.string.title_contacts);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                getMainActivity().onBurgerPress();
-                break;
-        }
-        return super.onOptionsItemSelected(item);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle(R.string.title_contacts);
     }
 
     @Nullable
@@ -186,11 +166,4 @@ public class ContactsFragment extends BaseFragment implements IContactsView {
         contactPresenter.unbind();
         super.onDestroyView();
     }
-
-//    @Override
-//    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-//        inflater.inflate(R.menu.contacts_menu, menu);
-//        super.onCreateOptionsMenu(menu, inflater);
-//    }
-
 }

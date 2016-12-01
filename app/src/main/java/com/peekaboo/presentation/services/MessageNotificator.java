@@ -138,7 +138,6 @@ public class MessageNotificator {
 
     public void onMessageObtained(final PMessage message) {
         if (!message.isMine() && message.status() == PMessage.PMESSAGE_STATUS.STATUS_DELIVERED) {
-            Log.e("Messenger", "onMessageObtained " + message);
             getAllUnreadMessagesInfoUseCase.execute(new BaseUseCaseSubscriber<Pair<List<PMessage>, List<Contact>>>() {
                 @Override
                 public void onNext(final Pair<List<PMessage>, List<Contact>> pair) {

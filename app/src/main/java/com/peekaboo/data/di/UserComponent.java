@@ -2,6 +2,7 @@ package com.peekaboo.data.di;
 
 import com.peekaboo.data.di.scope.UserScope;
 import com.peekaboo.domain.AccountUser;
+import com.peekaboo.presentation.activities.DetailsActivity;
 import com.peekaboo.presentation.activities.LogInActivity;
 import com.peekaboo.presentation.activities.MainActivity;
 import com.peekaboo.presentation.activities.SignUpActivity;
@@ -80,4 +81,6 @@ public interface UserComponent {
     AccountUser accountUser();
 
     IMessenger messenger();
+
+    void inject(DetailsActivity detailsActivity);
 }
