@@ -146,6 +146,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         googleMap = map;
         init();
         setUpMap();
+//        googleMap.setOnInfoWindowClickListener();
 
 
     }
@@ -179,8 +180,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 } else {
 //                    Log.d("MAPS_TAG", "onMapLongClick: " + latLng.latitude + "," + latLng.longitude);
 
-                    redmarker = googleMap.addMarker(new MarkerOptions().position(new LatLng(latLng.latitude, latLng.longitude)).draggable(true).icon(
-                            BitmapDescriptorFactory.fromResource(R.drawable.red_point)));//R.drawable.locationbuble
+                    redmarker = googleMap.addMarker(new MarkerOptions().position(new LatLng(latLng.latitude, latLng.longitude))
+                            .draggable(true)
+                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.red_point))
+                            .snippet("Delete marker?"));//R.drawable.locationbuble
                     markerPosLat = String.valueOf(latLng.latitude);
                     markerPosLng = String.valueOf(latLng.longitude);
 //                    Toast.makeText(getApplicationContext(), latLng.latitude + " " + latLng.longitude, Toast.LENGTH_SHORT).show();
