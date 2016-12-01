@@ -1,25 +1,13 @@
 package com.peekaboo.presentation.adapters;
 
-import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.content.Intent;
-import android.graphics.Paint;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.LayerDrawable;
-import android.net.Uri;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
@@ -29,7 +17,6 @@ import com.peekaboo.data.repositories.database.messages.PMessage;
 import com.peekaboo.data.repositories.database.messages.PMessageAbs;
 import com.peekaboo.domain.Dialog;
 import com.peekaboo.presentation.activities.MainActivity;
-import com.peekaboo.presentation.activities.MapActivity;
 import com.peekaboo.presentation.app.view.OnlineIndicatorView;
 import com.peekaboo.presentation.utils.AvatarIcon;
 import com.peekaboo.presentation.utils.ResourcesUtils;
@@ -51,11 +38,16 @@ public final class DialogsLargeAdapter extends RecyclerView.Adapter<DialogsLarge
     private Picasso mPicasso;
     private AvatarIcon avatarIcon;
     private List<Dialog> items = new ArrayList<>();
+    private final int unreadMessagesDialogBackgroundColor;
+    private final int avatarSize;
 
     public DialogsLargeAdapter(MainActivity activity, ActivityNavigator navigator) {
         this.activity = activity;
         this.navigator = navigator;
         this.mPicasso = Picasso.with(this.activity);
+        unreadMessagesDialogBackgroundColor = ResourcesUtils.getColor(activity, R.color.unread_msg_background);
+        avatarSize = ResourcesUtils.getDimenInPx(activity, R.dimen.contact_list_avatar_size);
+
     }
 
     @Override
@@ -80,16 +72,15 @@ public final class DialogsLargeAdapter extends RecyclerView.Adapter<DialogsLarge
 
         if (contactSurname == null) {
             holder.tvContactName.setText(contactName);
-            avatarText = contactName.substring(0,1).toUpperCase();
+            avatarText = contactName.substring(0, 1).toUpperCase();
         } else {
             holder.tvContactName.setText(contactName + " " + contactSurname);
-            avatarText = contactName.substring(0,1).toUpperCase() + contactSurname.substring(0,1).toUpperCase();
+            avatarText = contactName.substring(0, 1).toUpperCase() + contactSurname.substring(0, 1).toUpperCase();
         }
         holder.defaultAvatarText.setText(avatarText);
 
 
-        int avatarSize = ResourcesUtils.getDimenInPx(activity, R.dimen.contact_list_avatar_size);
-        Drawable drawable = activity.getResources().getDrawable(R.drawable.avatar_icon);
+        Drawable drawable = ResourcesUtils.getDrawable(activity, R.drawable.avatar_icon);
 
         holder.defaultAvatar.setImageDrawable(AvatarIcon.setDrawableColor(drawable, contactName, contactSurname));
         mPicasso.load(contact.contactImgUri())
@@ -105,9 +96,10 @@ public final class DialogsLargeAdapter extends RecyclerView.Adapter<DialogsLarge
         setMessageStatus(holder, lastMessage);
 
 
-
         int unreadMessagesCount = dialog.getUnreadMessagesCount();
         holder.oiOnlineIndicator.setState(contact.isOnline(), unreadMessagesCount);
+        int backgroundColor = unreadMessagesCount > 0 ? unreadMessagesDialogBackgroundColor : 0;
+        holder.dialogContainer.setBackgroundColor(backgroundColor);
 
         holder.itemView.setOnClickListener(v -> navigator.startChat(activity, contact));
 
@@ -148,12 +140,12 @@ public final class DialogsLargeAdapter extends RecyclerView.Adapter<DialogsLarge
     }
 
 
-    private void delete(int position){
+    private void delete(int position) {
         items.remove(position);
         notifyItemRemoved(position);
-        }
+    }
 
-    private void setMessageBody(ViewHolder holder, PMessage message){
+    private void setMessageBody(ViewHolder holder, PMessage message) {
         int messageType = message.mediaType();
         switch (messageType) {
             case PMessageAbs.PMESSAGE_MEDIA_TYPE.TEXT_MESSAGE:
@@ -175,7 +167,7 @@ public final class DialogsLargeAdapter extends RecyclerView.Adapter<DialogsLarge
     }
 
 
-    private String getStringResource(ViewHolder holder, int id){
+    private String getStringResource(ViewHolder holder, int id) {
         return holder.itemView.getContext().getString(id);
     }
 
@@ -229,7 +221,7 @@ public final class DialogsLargeAdapter extends RecyclerView.Adapter<DialogsLarge
         ImageView ivFavorite;
         @BindView(R.id.mute_image_view)
         ImageView ivMute;
-        @BindView (R.id.list_item_dialog_container)
+        @BindView(R.id.list_item_dialog_container)
         CoordinatorLayout dialogContainer;
         @BindView(R.id.dialogs_divider)
         View dialogsDivider;
