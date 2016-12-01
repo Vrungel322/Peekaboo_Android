@@ -197,15 +197,21 @@ public final class DialogsLargeAdapter extends RecyclerView.Adapter<DialogsLarge
     }
 
     public void setItems(List<Dialog> dialogs) {
+        int size = items.size();
         items.clear();
         items.addAll(dialogs);
-        notifyItemRangeInserted(0, dialogs.size());
+//        notifyDataSetChanged();
+        if (size == 0) {
+            notifyItemRangeChanged(0, items.size());
+        } else {
+            notifyDataSetChanged();
+        }
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.contact_avatar_image_view)
         CircleImageView ivAvatar;
-        @BindView(R.id.oiOnlineIndicator)
+        @BindView(R.id.oiOnlineIndicatorDialogItem)
         OnlineIndicatorView oiOnlineIndicator;
         @BindView(R.id.contact_name_text_view)
         TextView tvContactName;

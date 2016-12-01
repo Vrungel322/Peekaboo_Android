@@ -60,7 +60,7 @@
 
 
                 <com.peekaboo.presentation.app.view.OnlineIndicatorView
-                    android:id="@+id/oiOnlineIndicator"
+                    android:id="@+id/oiOnlineIndicatorDialogItem"
                     android:layout_width="@dimen/online_indicator_size"
                     android:layout_height="@dimen/online_indicator_size"
                     android:layout_gravity="right" />

@@ -39,7 +39,7 @@ import butterknife.ButterKnife;
 /**
  * Created by Nikita on 13.07.2016.
  */
-public class ContactsFragment extends BaseFragment implements IContactsView {
+public class ContactsFragment extends Fragment implements IContactsView {
 
     public static final String LAYOUT_MANAGER_STATE = "layout_manager_state";
     @Inject

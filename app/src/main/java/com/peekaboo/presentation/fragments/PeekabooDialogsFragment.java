@@ -34,7 +34,7 @@ import butterknife.ButterKnife;
 /**
  * Created by Nikita on 13.07.2016.
  */
-public class PeekabooDialogsFragment extends BaseFragment implements IDialogsView {
+public class PeekabooDialogsFragment extends Fragment implements IDialogsView {
 
     @BindView(R.id.recycler_dialog)
     public RecyclerView recyclerView;

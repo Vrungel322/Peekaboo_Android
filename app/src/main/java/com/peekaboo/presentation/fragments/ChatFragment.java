@@ -68,7 +68,7 @@ import io.codetail.widget.RevealFrameLayout;
 /**
  * Created by sebastian on 09.09.16.
  */
-public class ChatFragment extends BaseFragment implements IChatView2, DrawerActivity.OnBackPressListener {
+public class ChatFragment extends Fragment implements IChatView2, DrawerActivity.OnBackPressListener {
     public static final String COMPANION = "companion";
     public static final String IMAGE_FILE = "image_file";
     public static final int RESUME_DELAY = 100;

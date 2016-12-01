@@ -36,7 +36,7 @@ import static com.peekaboo.utils.Constants.EXTRA_RECEIVER_CONTACT;
  * Created by st1ch on 19.10.2016.
  */
 
-public class SmsChatFragment extends BaseFragment implements ISmsChatView {
+public class SmsChatFragment extends Fragment implements ISmsChatView {
 
     @BindView(R.id.message_body_edit_text)
     EditText etMessageBody;
