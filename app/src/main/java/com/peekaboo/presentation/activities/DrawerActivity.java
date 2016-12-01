@@ -111,7 +111,7 @@ public abstract class DrawerActivity extends AppCompatActivity implements IMainV
     ImageView ivAvatarBlur;
     @BindView(R.id.pbLoading_avatar_progress_bar)
     ProgressBar pbLoading_avatar_progress_bar;
-    @BindView(R.id.oiOnlineIndicator)
+    @BindView(R.id.oiUserOnlineIndicator)
     OnlineIndicatorView oiOnlineIndicator;
     @Inject
     INotifier<Message> notifier;
@@ -127,8 +127,6 @@ public abstract class DrawerActivity extends AppCompatActivity implements IMainV
     Bus eventBus;
     private HotFriendsAdapter hotFriendsAdapter;
     private final Set<OnBackPressListener> listeners = new HashSet<>();
-    private Fragment fragment;
-    private String fragmentTag;
     private Target avatarTarget = new Target() {
         @Override
         public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {

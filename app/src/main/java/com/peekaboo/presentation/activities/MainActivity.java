@@ -100,8 +100,8 @@ public class MainActivity extends DrawerActivity {
 //                changeFragment(new CreateDialogFragment(), null);
             if (!DrawerActivity.ACTION.SHOW_DIALOGS.equals(intent.getAction())) {
                 changeFragment(ContactsFragment.newInstance(), Constants.FRAGMENT_TAGS.CONTACTS_FRAGMENT);
+                selectionMode(R.id.llContacts);
             }
-//                selectionMode(R.id.llContacts);
 
         }
     }
