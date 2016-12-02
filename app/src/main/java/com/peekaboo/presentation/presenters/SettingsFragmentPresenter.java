@@ -89,9 +89,6 @@ public class SettingsFragmentPresenter extends ProgressPresenter<ISettingsView> 
             @Override
             public void onNext(ResponseBody response) {
                 Toast.makeText(mContext, "Data changed", Toast.LENGTH_LONG).show();
-                if(getView() != null) {
-                    getView().saveSettingsData();
-                }
                 super.onNext(response);
             }
         };

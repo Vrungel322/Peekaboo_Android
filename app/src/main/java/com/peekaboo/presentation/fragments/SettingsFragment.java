@@ -124,6 +124,7 @@ public class SettingsFragment extends Fragment implements ISettingsView {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.action_save_preferences:{
+                saveSettingsData();
                 settingsFragmentPresenter.updateAccountData(accountUser);
                 break;
             }
@@ -238,6 +239,8 @@ public class SettingsFragment extends Fragment implements ISettingsView {
         accountUser.savePhone(etPhonenumber.getText().toString());
         accountUser.saveCountry(etCountry.getText().toString());
         accountUser.saveCity(etCity.getText().toString());
+        Toast.makeText(getContext(), "saveSettingsData", Toast.LENGTH_LONG).show();
+
     }
 
     @Override
