@@ -80,7 +80,7 @@
                         android:layout_below="@id/name"
                         android:layout_marginBottom="@dimen/settings_underline_margin"
                         android:layout_marginLeft="@dimen/settings_card_margin"
-                        android:layout_marginTop="@dimen/settings_underline_margin"
+                        android:layout_marginTop="36dp"
                         android:layout_toRightOf="@id/flSettingsIconAvatar"
                         android:background="@color/dialog_underline_color" />
 

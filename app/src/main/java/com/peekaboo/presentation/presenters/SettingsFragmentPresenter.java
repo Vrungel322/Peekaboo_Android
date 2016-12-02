@@ -2,6 +2,7 @@ package com.peekaboo.presentation.presenters;
 
 import android.content.Context;
 import android.net.Uri;
+import android.widget.Toast;
 
 import com.peekaboo.data.FileEntity;
 import com.peekaboo.domain.AccountUser;
@@ -64,7 +65,7 @@ public class SettingsFragmentPresenter extends ProgressPresenter<ISettingsView> 
         updateAccountUserDataUseCase.execute(getUpdateDataSubscriber());
     }
 
-    public BaseProgressSubscriber<FileEntity> getAvatarSettingsSubscriber() {
+    private BaseProgressSubscriber<FileEntity> getAvatarSettingsSubscriber() {
         return new BaseProgressSubscriber<FileEntity>(this){
             @Override
             public void onNext(FileEntity response) {
@@ -77,12 +78,21 @@ public class SettingsFragmentPresenter extends ProgressPresenter<ISettingsView> 
         };
     }
 
-    public BaseProgressSubscriber<ResponseBody> getUpdateDataSubscriber() {
+    private BaseProgressSubscriber<ResponseBody> getUpdateDataSubscriber() {
         return new BaseProgressSubscriber<ResponseBody>(this){
             @Override
-            public void onNext(ResponseBody response) {
-                super.onNext(response);
+            public void onError(Throwable e) {
+                Toast.makeText(mContext, "Something went wrong", Toast.LENGTH_LONG).show();
+                super.onError(e);
+            }
 
+            @Override
+            public void onNext(ResponseBody response) {
+                Toast.makeText(mContext, "Data changed", Toast.LENGTH_LONG).show();
+                if(getView() != null) {
+                    getView().saveSettingsData();
+                }
+                super.onNext(response);
             }
         };
     }

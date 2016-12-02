@@ -7,4 +7,5 @@ import com.peekaboo.presentation.views.IProgressView;
  */
 public interface ISettingsView extends IProgressView {
     void updateAvatarViewInSettings(String result);
+     void saveSettingsData();
 }

@@ -124,12 +124,6 @@ public class SettingsFragment extends Fragment implements ISettingsView {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.action_save_preferences:{
-                showToastMessage("TODO Save");
-                accountUser.saveFirstName(etName.getText().toString());
-                accountUser.saveLastName(etSurname.getText().toString());
-                accountUser.savePhone(etPhonenumber.getText().toString());
-                accountUser.saveCountry(etCountry.getText().toString());
-                accountUser.saveCity(etCity.getText().toString());
                 settingsFragmentPresenter.updateAccountData(accountUser);
                 break;
             }
@@ -235,6 +229,15 @@ public class SettingsFragment extends Fragment implements ISettingsView {
         Picasso.with(getContext()).load(accountUser.getAvatar()).memoryPolicy(MemoryPolicy.NO_CACHE)
                 .resize(0, ResourcesUtils.getDimenInPx(getContext(), R.dimen.widthOfIconInDrawer))
                 .into(userAvatarInSettings);
+    }
+
+    @Override
+    public void saveSettingsData(){
+        accountUser.saveFirstName(etName.getText().toString());
+        accountUser.saveLastName(etSurname.getText().toString());
+        accountUser.savePhone(etPhonenumber.getText().toString());
+        accountUser.saveCountry(etCountry.getText().toString());
+        accountUser.saveCity(etCity.getText().toString());
     }
 
     @Override
