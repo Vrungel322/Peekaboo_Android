@@ -4,9 +4,6 @@ import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.AnimatorSet;
 import android.animation.ObjectAnimator;
-import android.app.NotificationManager;
-import android.content.Context;
-import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
@@ -14,7 +11,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -31,7 +27,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.peekaboo.R;
-import com.peekaboo.data.repositories.database.contacts.Contact;
 import com.peekaboo.domain.AccountUser;
 import com.peekaboo.domain.Dialog;
 import com.peekaboo.domain.usecase.UserModeChangerUseCase;
@@ -39,23 +34,16 @@ import com.peekaboo.presentation.PeekabooApplication;
 import com.peekaboo.presentation.adapters.HotFriendsAdapter;
 import com.peekaboo.presentation.app.view.OnlineIndicatorView;
 import com.peekaboo.presentation.dialogs.ChooseImageDialogFragment;
-import com.peekaboo.presentation.fragments.CallsFragment;
-import com.peekaboo.presentation.fragments.ChatFragment;
-import com.peekaboo.presentation.fragments.ContactsFragment;
-import com.peekaboo.presentation.fragments.DialogsFragment;
-import com.peekaboo.presentation.fragments.ProfileFragment;
 import com.peekaboo.presentation.fragments.SettingsFragment;
 import com.peekaboo.presentation.listeners.DrawerListener;
 import com.peekaboo.presentation.presenters.MainActivityPresenter;
 import com.peekaboo.presentation.services.INotifier;
 import com.peekaboo.presentation.services.Message;
-import com.peekaboo.presentation.services.MessageNotificator;
 import com.peekaboo.presentation.utils.ActivityUtils;
 import com.peekaboo.presentation.utils.ImageUtils;
 import com.peekaboo.presentation.utils.ResourcesUtils;
 import com.peekaboo.presentation.views.IMainView;
 import com.peekaboo.utils.ActivityNavigator;
-import com.peekaboo.utils.Constants;
 import com.squareup.otto.Bus;
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
@@ -186,7 +174,6 @@ public abstract class DrawerActivity extends AppCompatActivity implements IMainV
     };
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -313,21 +300,22 @@ public abstract class DrawerActivity extends AppCompatActivity implements IMainV
         super.onDestroy();
     }
 
-    @OnClick({R.id.llDialogs, R.id.llCalls, R.id.llContacts, R.id.llProfile, R.id.llSettings, R.id.llExit, R.id.ivAccountAvatar})
+
+    @OnClick(R.id.ivAccountAvatar)
+    public void onAvatarClick() {
+        DialogFragment newFragment = new ChooseImageDialogFragment();
+        newFragment.show(getSupportFragmentManager(), ChooseImageDialogFragment.TAG);
+    }
+
+    @OnClick(R.id.llExit)
+    public void onExitClick() {
+        PeekabooApplication.getApp(this).logout();
+    }
+
+    @OnClick({R.id.llDialogs, R.id.llCalls, R.id.llContacts, R.id.llProfile, R.id.llSettings})
     public void onDrawerItemClick(View v) {
         selectionMode(v.getId());
-        switch (v.getId()) {
-            case R.id.ivAccountAvatar:
-                DialogFragment newFragment = new ChooseImageDialogFragment();
-                newFragment.show(getSupportFragmentManager(), ChooseImageDialogFragment.TAG);
-                break;
-            case R.id.llExit:
-                PeekabooApplication.getApp(this).logout();
-                break;
-            default:
-                handleDrawerClick(v.getId());
-                break;
-        }
+        handleDrawerClick(v.getId());
         drawer.closeDrawer(Gravity.LEFT);
     }
 

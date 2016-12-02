@@ -16,6 +16,7 @@ import com.peekaboo.domain.AccountUser;
 import com.peekaboo.domain.SessionRepository;
 import com.peekaboo.domain.usecase.FileDownloadUseCase;
 import com.peekaboo.domain.usecase.FileUploadUseCase;
+import com.peekaboo.domain.usecase.GetAllUnreadMessagesInfoUseCase;
 import com.peekaboo.presentation.services.IMessenger;
 import com.peekaboo.presentation.services.INotifier;
 import com.peekaboo.presentation.services.Message;
@@ -70,7 +71,12 @@ public class UserModule {
 
     @Provides
     @UserScope
-    public IMessenger provideMessenger(INotifier<Message> notifier, MessageNotificator messageNotificator, PMessageHelper helper, ReadMessagesHelper readMessagesHelper, AccountUser user, FileUploadUseCase fileUploadUseCase, FileDownloadUseCase downloadFileUseCase) {
-        return new Messenger(notifier, helper, messageNotificator, readMessagesHelper, user, fileUploadUseCase, downloadFileUseCase);
+    public IMessenger provideMessenger(INotifier<Message> notifier,
+                                       MessageNotificator messageNotificator,
+                                       PMessageHelper helper, ReadMessagesHelper readMessagesHelper,
+                                       AccountUser user, FileUploadUseCase fileUploadUseCase,
+                                       FileDownloadUseCase downloadFileUseCase,
+                                       GetAllUnreadMessagesInfoUseCase getAllUnreadMessagesInfoUseCase) {
+        return new Messenger(notifier, helper, messageNotificator, readMessagesHelper, user, fileUploadUseCase, downloadFileUseCase, getAllUnreadMessagesInfoUseCase);
     }
 }

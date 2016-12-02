@@ -37,7 +37,6 @@ public class MessageNotificator {
     private static final int OFF_MS = 2000;
     private static final int ARGB = Color.CYAN;
     private final NotificationManager notificationManager;
-    private final GetAllUnreadMessagesInfoUseCase getAllUnreadMessagesInfoUseCase;
     private final Picasso picasso;
     private final Uri ringtoneUri;
     private final int avatarSize;
@@ -45,17 +44,15 @@ public class MessageNotificator {
 
     @Inject
     public MessageNotificator(Context context,
-                              GetAllUnreadMessagesInfoUseCase getAllUnreadMessagesInfoUseCase,
                               Picasso picasso) {
         this.context = context;
         notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        this.getAllUnreadMessagesInfoUseCase = getAllUnreadMessagesInfoUseCase;
         this.picasso = picasso;
         ringtoneUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         avatarSize = ResourcesUtils.getDimenInPx(context, R.dimen.notification_avatar_size);
     }
 
-    private void showNotification(List<PMessage> messages, List<Contact> contacts, PMessage message) {
+    public void showNotification(List<PMessage> messages, List<Contact> contacts, PMessage message) {
         Contact currentContact = null;
         for (Contact contact : contacts) {
             if (message.senderId().equals(contact.contactId())) {
@@ -134,16 +131,5 @@ public class MessageNotificator {
                 .setSound(ringtoneUri)
                 .setContentIntent(resultPendingIntent)
                 .build();
-    }
-
-    public void onMessageObtained(final PMessage message) {
-        if (!message.isMine() && message.status() == PMessage.PMESSAGE_STATUS.STATUS_DELIVERED) {
-            getAllUnreadMessagesInfoUseCase.execute(new BaseUseCaseSubscriber<Pair<List<PMessage>, List<Contact>>>() {
-                @Override
-                public void onNext(final Pair<List<PMessage>, List<Contact>> pair) {
-                    showNotification(pair.first, pair.second, message);
-                }
-            });
-        }
     }
 }

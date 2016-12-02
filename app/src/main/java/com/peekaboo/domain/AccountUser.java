@@ -11,6 +11,7 @@ public class AccountUser extends User {
     public static final String ID = "user_id";
     public static final String MODE = "mode";
     public static final String USERNAME = "username";
+    public static final String NOTIFICATIONS_ENABLED = "notifications_enabled";
     private SharedPreferences preferences;
     private String domen;
     @Nullable
@@ -18,6 +19,7 @@ public class AccountUser extends User {
     private byte mode;
     @Nullable
     private String username;
+    private boolean notificationsEnabled;
 
     public AccountUser(SharedPreferences preferences, String domen) {
         super(null, null);
@@ -83,6 +85,7 @@ public class AccountUser extends User {
         setId(preferences.getString(ID, null));
         mode = (byte) preferences.getInt(MODE, 0);
         username = preferences.getString(USERNAME, null);
+        notificationsEnabled = preferences.getBoolean(NOTIFICATIONS_ENABLED, true);
     }
 
     public void logout() {
@@ -90,6 +93,7 @@ public class AccountUser extends User {
         mode = 0;
         username = null;
         setId(null);
+        notificationsEnabled = true;
         preferences.edit().clear().commit();
     }
     @Override
@@ -98,5 +102,14 @@ public class AccountUser extends User {
                 "token='" + token + '\'' +
                 ", id='" + getId() + '\'' +
                 '}';
+    }
+
+    public void saveNotificationsEnabled(boolean notificationsEnabled) {
+        this.notificationsEnabled = notificationsEnabled;
+        preferences.edit().putBoolean(NOTIFICATIONS_ENABLED, notificationsEnabled).commit();
+    }
+
+    public boolean notificationsEnabled() {
+        return notificationsEnabled;
     }
 }
