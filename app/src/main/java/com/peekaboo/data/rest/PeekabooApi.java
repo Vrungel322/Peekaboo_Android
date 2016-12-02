@@ -6,7 +6,7 @@ import com.peekaboo.data.rest.entity.CredentialsSignUp;
 import com.peekaboo.data.rest.entity.TokenEntity;
 import com.peekaboo.data.rest.entity.UserEntity;
 import com.peekaboo.data.rest.entity.UserResponse;
-import com.peekaboo.domain.AccountUser;
+import com.peekaboo.domain.User;
 
 import okhttp3.MultipartBody;
 import okhttp3.ResponseBody;
@@ -50,7 +50,7 @@ public interface PeekabooApi {
     @POST(SETTINGS + "/{userId}")
     Observable<ResponseBody> updateAccountData(
             @Path("userId") String userId,
-            @Body AccountUser accountUser
+            @Body User user
             );
 
     @GET("friend/find")

@@ -22,7 +22,7 @@ public interface SessionRepository {
 
     Observable<AccountUser> confirm(String id, String key);
 
-    Observable<ResponseBody> updateAccountData(AccountUser accountUser);
+    Observable<ResponseBody> updateAccountData(User user);
 
     Observable<User> findFriendByName(String friendName);
 

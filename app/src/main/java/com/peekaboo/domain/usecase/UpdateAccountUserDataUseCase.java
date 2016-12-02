@@ -1,7 +1,7 @@
 package com.peekaboo.domain.usecase;
 
-import com.peekaboo.domain.AccountUser;
 import com.peekaboo.domain.SessionRepository;
+import com.peekaboo.domain.User;
 import com.peekaboo.domain.schedulers.ObserveOn;
 import com.peekaboo.domain.schedulers.SubscribeOn;
 
@@ -17,7 +17,7 @@ import rx.Observable;
 public class UpdateAccountUserDataUseCase extends UseCase<ResponseBody> {
 
     private final SessionRepository sessionRepository;
-    private AccountUser accountUser;
+    private User user;
 
     @Inject
     public UpdateAccountUserDataUseCase(SessionRepository sessionRepository, SubscribeOn subscribeOn, ObserveOn observeOn) {
@@ -25,12 +25,12 @@ public class UpdateAccountUserDataUseCase extends UseCase<ResponseBody> {
         this.sessionRepository = sessionRepository;
     }
 
-    public void setCredentials(AccountUser accountUser) {
-      this.accountUser = accountUser;
+    public void setCredentials(User accountUser) {
+      this.user = accountUser;
     }
 
     @Override
     protected Observable<ResponseBody> getUseCaseObservable() {
-        return sessionRepository.updateAccountData(accountUser);
+        return sessionRepository.updateAccountData(user);
     }
 }

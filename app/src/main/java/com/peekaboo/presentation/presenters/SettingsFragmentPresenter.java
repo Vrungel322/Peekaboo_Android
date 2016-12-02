@@ -5,7 +5,7 @@ import android.net.Uri;
 import android.widget.Toast;
 
 import com.peekaboo.data.FileEntity;
-import com.peekaboo.domain.AccountUser;
+import com.peekaboo.domain.User;
 import com.peekaboo.domain.UserMessageMapper;
 import com.peekaboo.domain.subscribers.BaseProgressSubscriber;
 import com.peekaboo.domain.usecase.AvatarUpdateUseCase;
@@ -60,7 +60,7 @@ public class SettingsFragmentPresenter extends ProgressPresenter<ISettingsView> 
     }
 
     @Override
-    public void updateAccountData(AccountUser accountUser) {
+    public void updateAccountData(User accountUser) {
         updateAccountUserDataUseCase.setCredentials(accountUser);
         updateAccountUserDataUseCase.execute(getUpdateDataSubscriber());
     }
@@ -88,6 +88,7 @@ public class SettingsFragmentPresenter extends ProgressPresenter<ISettingsView> 
 
             @Override
             public void onNext(ResponseBody response) {
+                getView().updateAccountUserFromSettings();
                 Toast.makeText(mContext, "Data changed", Toast.LENGTH_LONG).show();
                 super.onNext(response);
             }

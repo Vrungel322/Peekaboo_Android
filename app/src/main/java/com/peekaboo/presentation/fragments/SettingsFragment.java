@@ -22,6 +22,7 @@ import android.widget.Toast;
 
 import com.peekaboo.R;
 import com.peekaboo.domain.AccountUser;
+import com.peekaboo.domain.User;
 import com.peekaboo.presentation.PeekabooApplication;
 import com.peekaboo.presentation.dialogs.AvatarChangeDialog;
 import com.peekaboo.presentation.presenters.SettingsFragmentPresenter;
@@ -124,8 +125,7 @@ public class SettingsFragment extends Fragment implements ISettingsView {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.action_save_preferences:{
-                saveSettingsData();
-                settingsFragmentPresenter.updateAccountData(accountUser);
+                settingsFragmentPresenter.updateAccountData(getFilledUser());
                 break;
             }
         }
@@ -232,8 +232,14 @@ public class SettingsFragment extends Fragment implements ISettingsView {
                 .into(userAvatarInSettings);
     }
 
+    private User getFilledUser(){
+        return new User(etCity.getText().toString(), etCountry.getText().toString(),
+                etName.getText().toString(), accountUser.getId(), etSurname.getText().toString(),
+                etPhonenumber.getText().toString(), accountUser.getUsername());
+    }
+
     @Override
-    public void saveSettingsData(){
+    public void updateAccountUserFromSettings(){
         accountUser.saveFirstName(etName.getText().toString());
         accountUser.saveLastName(etSurname.getText().toString());
         accountUser.savePhone(etPhonenumber.getText().toString());

@@ -9,9 +9,9 @@ public interface Constants {
 //    String BASE_URL = "http://10.0.1.34:8080/";
 //    String DOMEN = "http://b34703ca.ngrok.io/";
 //    String DOMEN = "95.85.24.64"; // remote server
-//    String DOMEN = "10.0.1.4"; // Boroda server
+    String DOMEN = "10.0.1.13"; // Boroda server
 //    String DOMEN = "10.0.1.33"; // Igor server
-    String DOMEN = "10.0.1.14"; // Lesha server
+//    String DOMEN = "10.0.1.14"; // Lesha server
     String BASE_URL = "http://" + DOMEN + ":8080/";
 //    String BASE_URL = "http://b34703ca.ngrok.io/";
     String BASE_URL_SOCKET = "ws://" + DOMEN + ":8080/socket/send";
