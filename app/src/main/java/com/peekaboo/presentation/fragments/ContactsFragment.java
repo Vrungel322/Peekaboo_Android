@@ -203,7 +203,6 @@ public class ContactsFragment extends Fragment implements IContactsView, MenuIte
 
                 @Override
                 public boolean onQueryTextChange(String newText) {
-                    Toast.makeText(getContext(), newText, Toast.LENGTH_SHORT).show();
                     contactLargeAdapter.filter(newText);
                     return true;
                 }
