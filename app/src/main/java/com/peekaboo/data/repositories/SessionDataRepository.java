@@ -67,6 +67,11 @@ public class SessionDataRepository implements SessionRepository {
                     user.saveId(token.getId());
                     user.saveUsername(token.getUsername());
                     user.saveMode(token.getMode());
+                    user.saveFirstName(token.getFirstName());
+                    user.saveLastName(token.getLastName());
+                    user.saveCountry(token.getCountry());
+                    user.saveCity(token.getCity());
+                    user.savePhone(token.getPhone());
                     return user;
                 }).flatMap(accountUser -> loadAllContacts())
 //                .flatMap(contacts -> getPhoneContactList())
@@ -91,6 +96,11 @@ public class SessionDataRepository implements SessionRepository {
                     return user;
                 }).flatMap(accountUser -> loadAllContacts())
                 .map(contacts -> user);
+    }
+
+    @Override
+    public Observable<ResponseBody> updateAccountData(User user) {
+        return restApi.updateAccountData(user);
     }
 
     @Override

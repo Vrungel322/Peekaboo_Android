@@ -6,6 +6,8 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -21,21 +23,25 @@ import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public final class ContactLargeAdapter extends RecyclerView.Adapter<ContactLargeAdapter.ViewHolder>
-        implements BubbleTextGetter {
+        implements BubbleTextGetter, Filterable {
 
     private AppCompatActivity activity;
-    private final List<Contact> items = new ArrayList<>();
+    private List<Contact> items = new ArrayList<>();
+    private List<Contact> savedList = new ArrayList<>();
     private Picasso mPicasso;
-    private ActivityNavigator navigator;
 
+    private ActivityNavigator navigator;
     private AvatarIcon avatarIcon;
+    private List<Contact> filteredList = new ArrayList<>();
 
 
     public ContactLargeAdapter(AppCompatActivity activity, ActivityNavigator navigator, Picasso mPicasso) {
@@ -60,10 +66,10 @@ public final class ContactLargeAdapter extends RecyclerView.Adapter<ContactLarge
 
         if (contactSurname == null) {
             holder.tvContactName.setText(contactName);
-            avatarText = contactName.substring(0,1).toUpperCase();
+            avatarText = contactName.substring(0, 1).toUpperCase();
         } else {
             holder.tvContactName.setText(contactName + " " + contactSurname);
-            avatarText = contactName.substring(0,1).toUpperCase() + contactSurname.substring(0,1).toUpperCase();
+            avatarText = contactName.substring(0, 1).toUpperCase() + contactSurname.substring(0, 1).toUpperCase();
         }
         holder.defaultAvatarText.setText(avatarText);
 
@@ -80,7 +86,7 @@ public final class ContactLargeAdapter extends RecyclerView.Adapter<ContactLarge
                 .resize(0, avatarSize)
 //                .error(avatarIcon.createAvatarIcon(drawable, contactName, contactSurname, avatarSize, avatarSize))
 //                .centerInside()
-                .into(holder.ivAvatar, new Callback.EmptyCallback(){
+                .into(holder.ivAvatar, new Callback.EmptyCallback() {
                     @Override
                     public void onSuccess() {
                         super.onSuccess();
@@ -126,6 +132,57 @@ public final class ContactLargeAdapter extends RecyclerView.Adapter<ContactLarge
 
     private Contact getItem(int position) {
         return items.get(position);
+    }
+
+    @Override
+    public Filter getFilter() {
+        Filter filter = new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                FilterResults results = new FilterResults();
+                Set<Contact> filteredArrayNames = new HashSet<Contact>();
+
+                String filterString = constraint.toString().toLowerCase();
+                for (int i = 0; i < items.size(); i++) {
+                    if (items.get(i).contactNickname().toLowerCase().contains(filterString)) {
+                        filteredArrayNames.add(items.get(i));
+                    }
+                }
+                results.count = filteredArrayNames.size();
+                results.values = filteredArrayNames;
+//                Log.e("VALUES", results.values.toString() + items.size());
+
+                return results;
+            }
+
+            @SuppressWarnings("unchecked")
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                items.clear();
+                items.addAll((Set<Contact>) results.values);
+//                for (int i = 0; i < items.size(); i++) {
+//                    Log.e("VALUES", items.get(i).contactNickname() + " i = " + i);
+//                }
+                notifyDataSetChanged();
+            }
+        };
+        return filter;
+
+    }
+
+    public void filter(String query) {
+        getFilter().filter(query);
+        items.clear();
+        items.addAll(savedList);
+
+    }
+
+    public List<Contact> getItems() {
+        return items;
+    }
+
+    public void savedList(List<Contact> response) {
+        this.savedList.addAll(response);
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {

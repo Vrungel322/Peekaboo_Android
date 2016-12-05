@@ -1,18 +1,22 @@
 package com.peekaboo.utils;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
 import com.peekaboo.R;
 import com.peekaboo.data.repositories.database.contacts.Contact;
 import com.peekaboo.presentation.activities.DetailsActivity;
 import com.peekaboo.presentation.activities.LogInActivity;
 import com.peekaboo.presentation.activities.MainActivity;
+import com.peekaboo.presentation.activities.MapActivity;
 import com.peekaboo.presentation.activities.SignUpActivity;
 import com.peekaboo.presentation.animation.DepthAnimation;
 import com.peekaboo.presentation.fragments.CallsFragment;
@@ -114,5 +118,11 @@ public class ActivityNavigator {
                         .commit();
             }
         }
+    }
+
+    public void startMapActivity(Activity activity, int requestCodeGps) {
+        Intent mapIntent = new Intent(activity, MapActivity.class);
+        activity.startActivityForResult(mapIntent, requestCodeGps);
+        Log.wtf("NULL : ", "sendim gpsimg in fragment");
     }
 }

@@ -16,9 +16,12 @@ import com.peekaboo.presentation.di.DaggerApplicationComponent;
 import com.peekaboo.presentation.services.NotificationService;
 import com.peekaboo.presentation.services.WearLink;
 import com.peekaboo.utils.ActivityNavigator;
+import com.twitter.sdk.android.Twitter;
+import com.twitter.sdk.android.core.TwitterAuthConfig;
 import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKAccessTokenTracker;
 import com.vk.sdk.VKSdk;
+import io.fabric.sdk.android.Fabric;
 
 //import timber.log.Timber;
 
@@ -27,6 +30,11 @@ import com.vk.sdk.VKSdk;
  * Created by sebastian on 14.06.16.
  */
 public class PeekabooApplication extends Application {
+
+    // Note: Your consumer key and secret should be obfuscated in your source code before shipping.
+    private static final String TWITTER_KEY = "ccsmwzxwtzlxM5bMfA1XJWCe3";
+    private static final String TWITTER_SECRET = "vEMidEY9KwkQnT1nB2xDiw9Eny8mRfJdVl4nlhKhqDmj0q8krQ";
+
 
     private ApplicationComponent component;
     private UserComponent userComponent;
@@ -55,6 +63,8 @@ public class PeekabooApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
+        TwitterAuthConfig authConfig = new TwitterAuthConfig(TWITTER_KEY, TWITTER_SECRET);
+        Fabric.with(this, new Twitter(authConfig));
         handler = new Handler();
         buildAppComponent();
         buildUserComponent();

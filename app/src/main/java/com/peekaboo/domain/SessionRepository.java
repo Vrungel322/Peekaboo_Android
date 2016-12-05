@@ -3,8 +3,8 @@ package com.peekaboo.domain;
 
 import com.peekaboo.data.FileEntity;
 import com.peekaboo.data.repositories.database.contacts.Contact;
-import com.peekaboo.presentation.pojo.PhoneContactPOJO;
 import com.peekaboo.data.repositories.database.messages.PMessage;
+import com.peekaboo.presentation.pojo.PhoneContactPOJO;
 
 import java.util.List;
 
@@ -21,6 +21,8 @@ public interface SessionRepository {
     Observable<AccountUser> signUp(String phone, String username, String login, String password);
 
     Observable<AccountUser> confirm(String id, String key);
+
+    Observable<ResponseBody> updateAccountData(User user);
 
     Observable<User> findFriendByName(String friendName);
 

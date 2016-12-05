@@ -4,7 +4,6 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.widget.Toolbar;
@@ -15,6 +14,7 @@ import com.peekaboo.data.repositories.database.contacts.Contact;
 import com.peekaboo.presentation.PeekabooApplication;
 import com.peekaboo.presentation.services.MessageNotificator;
 import com.peekaboo.utils.Constants;
+import com.twitter.sdk.android.core.identity.TwitterAuthClient;
 
 public class MainActivity extends DrawerActivity {
     String fragmentTag;
@@ -147,5 +147,13 @@ public class MainActivity extends DrawerActivity {
         PeekabooApplication.getApp(this).getComponent().inject(this);
     }
 
-
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        TwitterAuthClient twitterAuthClient = new TwitterAuthClient();
+        if (twitterAuthClient.getRequestCode() == requestCode) {
+            twitterAuthClient.onActivityResult(requestCode, resultCode, data);
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
+    }
 }

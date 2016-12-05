@@ -72,6 +72,7 @@ public class ChatFragment extends Fragment implements IChatView2, DrawerActivity
     public static final String COMPANION = "companion";
     public static final String IMAGE_FILE = "image_file";
     public static final int RESUME_DELAY = 100;
+    public static final String STATICMAP = "staticmap";
     @BindView(R.id.etMessageBody)
     EditText etMessageBody;
     @BindView(R.id.rvMessages)
@@ -363,14 +364,9 @@ public class ChatFragment extends Fragment implements IChatView2, DrawerActivity
 
     @OnClick(R.id.navigation_btn)
     void onNavigationButtonClick() {
-        takeNavigation();
+        activityNavigator.startMapActivity(getActivity(), Constants.REQUEST_CODES.REQUEST_CODE_GPS);
     }
 
-    public void takeNavigation() {
-        Intent mapintent = new Intent(getActivity(), MapActivity.class);
-        getActivity().startActivityForResult(mapintent, Constants.REQUEST_CODES.REQUEST_CODE_GPS);
-        Log.wtf("NULL : ", "sendim gpsimg in fragment");
-    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -400,7 +396,7 @@ public class ChatFragment extends Fragment implements IChatView2, DrawerActivity
                 break;
             case Constants.REQUEST_CODES.REQUEST_CODE_GPS:
                 if (resultCode == Activity.RESULT_OK && null != data) {
-                    String link = data.getStringExtra("staticmap");
+                    String link = data.getStringExtra(STATICMAP);
                     Log.wtf("NULL : ", "sendImage " + link);
                     sendGeo(link);
 
