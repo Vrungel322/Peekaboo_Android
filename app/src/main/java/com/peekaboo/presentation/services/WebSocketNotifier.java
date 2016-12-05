@@ -86,7 +86,7 @@ public class WebSocketNotifier implements INotifier<Message> {
 
                             @Override
                             public void onBinaryMessage(WebSocket websocket, byte[] binary) throws Exception {
-                                Log.e(TAG, "Status: Binary Message received");
+                                Log.e(TAG, "Status: Binary Message received" + new String(binary));
 
                                 mainThread.run(() -> {
 
@@ -147,7 +147,11 @@ public class WebSocketNotifier implements INotifier<Message> {
 
     @Override
     public void sendMessage(Message message) {
-        Log.e(TAG, "send message " + message);
+        boolean enabled = ws != null && ws.isOpen();
+        Log.e(TAG, "socket enabled " + enabled);
+        if (enabled) {
+            Log.e(TAG, "send message " + message);
+        }
         sendBinaryMessage(mtb.transform(message));
     }
 

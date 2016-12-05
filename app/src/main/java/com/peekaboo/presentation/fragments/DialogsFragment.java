@@ -16,6 +16,7 @@ import com.peekaboo.R;
 import com.peekaboo.presentation.PeekabooApplication;
 import com.peekaboo.presentation.activities.MainActivity;
 import com.peekaboo.presentation.adapters.TabsAdapter;
+import com.peekaboo.presentation.presenters.DialogPresenter;
 import com.peekaboo.utils.ActivityNavigator;
 
 import javax.inject.Inject;
@@ -30,6 +31,8 @@ import butterknife.ButterKnife;
 public class DialogsFragment extends Fragment {
     @Inject
     ActivityNavigator navigator;
+    @Inject
+    DialogPresenter presenter;
     TabLayout tabLayout;
     @BindView(R.id.pager)
     ViewPager viewPager;

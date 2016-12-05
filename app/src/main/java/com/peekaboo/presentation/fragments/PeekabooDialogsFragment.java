@@ -72,7 +72,6 @@ public class PeekabooDialogsFragment extends Fragment implements IDialogsView {
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
 
-        presenter.loadDialogList();
         Log.wtf("Peekaboo", "onCreateView()");
 
         return rootView;
@@ -82,7 +81,6 @@ public class PeekabooDialogsFragment extends Fragment implements IDialogsView {
     public void onViewCreated(View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         presenter.bind(this);
-        presenter.onCreate();
     }
 
     @Override
@@ -99,7 +97,7 @@ public class PeekabooDialogsFragment extends Fragment implements IDialogsView {
 
     @Override
     public void onDestroyView() {
-        presenter.onDestroy();
+        presenter.unbind();
         super.onDestroyView();
     }
 

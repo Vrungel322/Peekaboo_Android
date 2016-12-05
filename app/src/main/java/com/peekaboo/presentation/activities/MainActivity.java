@@ -13,23 +13,16 @@ import android.view.Gravity;
 import com.peekaboo.R;
 import com.peekaboo.data.repositories.database.contacts.Contact;
 import com.peekaboo.presentation.PeekabooApplication;
-import com.peekaboo.presentation.fragments.CallsFragment;
-import com.peekaboo.presentation.fragments.ContactsFragment;
-import com.peekaboo.presentation.fragments.DialogsFragment;
-import com.peekaboo.presentation.fragments.ProfileFragment;
-import com.peekaboo.presentation.fragments.SettingsFragment;
 import com.peekaboo.presentation.services.MessageNotificator;
 import com.peekaboo.utils.Constants;
 
 public class MainActivity extends DrawerActivity {
-    Fragment fragment;
     String fragmentTag;
 
     @Override
     protected void onDrawerClosed() {
-        if (fragment != null) {
-            changeFragment(fragment, fragmentTag);
-            fragment = null;
+        if (fragmentTag != null) {
+            navigator.startFragment(this, fragmentTag);
             fragmentTag = null;
         }
     }
@@ -45,23 +38,18 @@ public class MainActivity extends DrawerActivity {
         }
         switch (id) {
             case R.id.llDialogs:
-                fragment = DialogsFragment.newInstance();
                 fragmentTag = Constants.FRAGMENT_TAGS.DIALOGS_FRAGMENT;
                 break;
             case R.id.llCalls:
-                fragment = new CallsFragment();
                 fragmentTag = Constants.FRAGMENT_TAGS.CALLS_FRAGMENT;
                 break;
             case R.id.llContacts:
-                fragment = ContactsFragment.newInstance();
                 fragmentTag = Constants.FRAGMENT_TAGS.CONTACTS_FRAGMENT;
                 break;
             case R.id.llProfile:
-                fragment = new ProfileFragment();
                 fragmentTag = Constants.FRAGMENT_TAGS.PROFILE_FRAGMENT;
                 break;
             case R.id.llSettings:
-                fragment = new SettingsFragment();
                 fragmentTag = Constants.FRAGMENT_TAGS.SETTINGS_FRAGMENT;
                 break;
         }
@@ -84,12 +72,11 @@ public class MainActivity extends DrawerActivity {
         if (getSupportFragmentManager().findFragmentById(R.id.fragmentContainer) == null) {
             Intent intent = getIntent();
             handleNotificationIntent(intent);
-
+//            changeFragment(new CreateDialogFragment(), null);
             if (!MainActivity.ACTION.SHOW_DIALOGS.equals(intent.getAction())) {
-                changeFragment(ContactsFragment.newInstance(), Constants.FRAGMENT_TAGS.CONTACTS_FRAGMENT);
+                navigator.startFragment(this, Constants.FRAGMENT_TAGS.CONTACTS_FRAGMENT);
                 selectionMode(R.id.llContacts);
             }
-
         }
     }
 
@@ -102,30 +89,29 @@ public class MainActivity extends DrawerActivity {
     private void handleNotificationIntent(Intent intent) {
         String action = intent.getAction();
         if (action != null) {
-
             switch (action) {
                 case ACTION.SHOW_CONTACTS:
-                    changeFragment(ContactsFragment.newInstance(), Constants.FRAGMENT_TAGS.CONTACTS_FRAGMENT);
+                    navigator.startFragment(this, Constants.FRAGMENT_TAGS.CONTACTS_FRAGMENT);
                     selectionMode(R.id.llContacts);
                     break;
                 case ACTION.SHOW_CALLS:
-                    changeFragment(new CallsFragment(), Constants.FRAGMENT_TAGS.CALLS_FRAGMENT);
+                    navigator.startFragment(this, Constants.FRAGMENT_TAGS.CALLS_FRAGMENT);
                     selectionMode(R.id.llCalls);
                     break;
                 case ACTION.SHOW_DIALOGS: {
                     NotificationManager notificationManager =
                             (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
                     notificationManager.cancel(MessageNotificator.NOTIFICATION_ID);
-                    navigator.startDialogFragment(this);
+                    navigator.startFragment(this, Constants.FRAGMENT_TAGS.DIALOGS_FRAGMENT);
                 }
                 selectionMode(R.id.llDialogs);
                 break;
                 case ACTION.SHOW_SETTINGS:
-                    changeFragment(new SettingsFragment(), Constants.FRAGMENT_TAGS.SETTINGS_FRAGMENT);
+                    navigator.startFragment(this, Constants.FRAGMENT_TAGS.SETTINGS_FRAGMENT);
                     selectionMode(R.id.llSettings);
                     break;
                 case ACTION.SHOW_PROFILE:
-                    changeFragment(new ProfileFragment(), Constants.FRAGMENT_TAGS.PROFILE_FRAGMENT);
+                    navigator.startFragment(this, Constants.FRAGMENT_TAGS.PROFILE_FRAGMENT);
                     selectionMode(R.id.llProfile);
                     break;
                 case ACTION.SHOW_CHAT: {

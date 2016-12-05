@@ -109,8 +109,6 @@ public class ChatFragment extends Fragment implements IChatView2, DrawerActivity
     @Inject
     AccountUser accountUser;
     @Inject
-    INotifier<Message> notifier;
-    @Inject
     ActivityNavigator activityNavigator;
     @Inject
     Picasso mPicasso;

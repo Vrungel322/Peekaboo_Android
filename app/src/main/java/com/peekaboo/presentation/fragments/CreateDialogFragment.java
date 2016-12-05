@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
+import com.google.gson.Gson;
 import com.peekaboo.R;
 import com.peekaboo.data.GroupChatCreationEntity;
 import com.peekaboo.data.GroupChatMemberEntity;
@@ -71,15 +72,31 @@ public class CreateDialogFragment extends Fragment implements INotifier.Notifica
             case SYSTEMMESSAGE:
                 if (Message.Reason.NEW_DIALOG.equals(
                         message.getParams().get(Message.Params.REASON))) {
-                    notifier.sendMessage(new Message(Message.Command.MESSAGE)
-                            .addParam(Message.Params.FROM, accountUser.getId())
-                            .addParam(Message.Params.DESTINATION, message.getParams().get(Message.Params.FROM))
-                            .addParam(Message.Params.TYPE, Message.Type.TEXT)
-                            .setTextBody("бамжур"));
 
+//                    notifier.sendMessage(new Message(Message.Command.MESSAGE)
+//                            .addParam(Message.Params.FROM, accountUser.getId())
+//                            .addParam(Message.Params.DESTINATION, message.getParams().get(Message.Params.FROM))
+//                            .addParam(Message.Params.TYPE, Message.Type.TEXT)
+//                            .setTextBody("бамжур"));
+
+                    List<GroupChatMemberEntity> members = new ArrayList<>();
+                    members.add(new GroupChatMemberEntity("1759", "dudec", "476"));
+                    GroupChatCreationEntity gavnina = new GroupChatCreationEntity(members, null, null);
+                    String chatId = message.getParams().get(Message.Params.FROM);
+                    notifier.sendMessage(new Message(Message.Command.SYSTEMMESSAGE)
+                            .addParam(Message.Params.FROM, accountUser.getId())
+                            .addParam(Message.Params.DESTINATION, chatId)
+                            .addParam(Message.Params.REASON, Message.Reason.ADD_USER)
+                            .setTextBody(new Gson().toJson(gavnina)));
                 }
                 break;
         }
+    }
+
+    @Override
+    public void onDestroyView() {
+        notifier.removeListener(this);
+        super.onDestroyView();
     }
 
     @Override

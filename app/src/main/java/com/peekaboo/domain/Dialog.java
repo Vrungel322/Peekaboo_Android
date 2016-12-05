@@ -40,4 +40,13 @@ public class Dialog {
     public void setLastMessage(PMessage lastMessage) {
         this.lastMessage = lastMessage;
     }
+
+    @Override
+    public String toString() {
+        return "Dialog{" +
+                "contact=" + contact +
+                ", lastMessage=" + lastMessage +
+                ", unreadMessagesCount=" + unreadMessagesCount +
+                '}';
+    }
 }
