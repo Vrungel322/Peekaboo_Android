@@ -12,6 +12,6 @@ public class AccoutUSerToUserMapper implements Mapper<AccountUser, User> {
     public User transform(AccountUser obj) throws RuntimeException {
         return new User(obj.getCity(),
                 obj.getCountry(),obj.getFirstName(), obj.getId(),
-                obj.getLastName(), obj.getPhone(), obj.getUsername());
+                obj.getLastName(), obj.getPhone(), obj.getUsername(), obj.getEmail());
     }
 }

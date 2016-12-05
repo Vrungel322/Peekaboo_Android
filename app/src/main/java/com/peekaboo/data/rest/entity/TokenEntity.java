@@ -13,8 +13,9 @@ public class TokenEntity {
     private String country;
     private String city;
     private String phone;
+    private String email;
 
-    public TokenEntity(String city, String country, String firstName, String id, String lastName, byte mode, String phone, String token, String username) {
+    public TokenEntity(String city, String country, String firstName, String id, String lastName, byte mode, String phone, String token, String username, String email) {
         this.city = city;
         this.country = country;
         this.firstName = firstName;
@@ -24,6 +25,7 @@ public class TokenEntity {
         this.phone = phone;
         this.token = token;
         this.username = username;
+        this.email = email;
     }
 
     public String getCity() {
@@ -58,9 +60,11 @@ public class TokenEntity {
         return token;
     }
 
-
     public byte getMode() {
         return mode;
     }
 
+    public String getEmail() {
+        return email;
+    }
 }

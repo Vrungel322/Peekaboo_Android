@@ -16,6 +16,7 @@ public class AccountUser extends User {
     public static final String CITY = "city";
     public static final String COUNTRY = "country";
     public static final String PHONE = "phone";
+    public static final String EMAIL = "email";
     private SharedPreferences preferences;
     private String domen;
     @Nullable
@@ -33,16 +34,28 @@ public class AccountUser extends User {
     private String city;
     @Nullable
     private String phone;
+    @Nullable
+    private String email;
 
     public AccountUser(SharedPreferences preferences, String domen) {
-        super(null, null, null, null, null, null, null);
+        super(null, null, null, null, null, null, null, null);
         this.preferences = preferences;
         this.domen = domen;
         restoreData();
     }
 
     public AccountUser(String id) {
-        super(id, null, null, null, null, null, null);
+        super(id, null, null, null, null, null, null, null);
+    }
+
+    @Nullable
+    public String getEmail() {
+        return email;
+    }
+
+    public void saveEmail(String email){
+        this.email = email;
+        preferences.edit().putString(EMAIL, email).apply();
     }
 
     @Nullable

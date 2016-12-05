@@ -72,6 +72,7 @@ public class SessionDataRepository implements SessionRepository {
                     user.saveCountry(token.getCountry());
                     user.saveCity(token.getCity());
                     user.savePhone(token.getPhone());
+                    user.saveEmail(token.getEmail());
                     return user;
                 }).flatMap(accountUser -> loadAllContacts())
 //                .flatMap(contacts -> getPhoneContactList())

@@ -65,6 +65,8 @@ public class SettingsFragment extends Fragment implements ISettingsView {
     Button bLogInToTwitter;
     @BindView(R.id.etPhonenumber)
     EditText etPhonenumber;
+    @BindView(R.id.etEmail)
+    EditText etEmail;
     @BindView(R.id.etName)
     EditText etName;
     @BindView(R.id.etSurname)
@@ -106,6 +108,7 @@ public class SettingsFragment extends Fragment implements ISettingsView {
         etCountry.setText(accountUser.getCountry());
         etCountry.setText(accountUser.getCountry());
         etCity.setText(accountUser.getCity());
+        etEmail.setText(accountUser.getEmail());
         return rootView;
     }
 
@@ -235,7 +238,7 @@ public class SettingsFragment extends Fragment implements ISettingsView {
     private User getFilledUser(){
         return new User(etCity.getText().toString(), etCountry.getText().toString(),
                 etName.getText().toString(), accountUser.getId(), etSurname.getText().toString(),
-                etPhonenumber.getText().toString(), accountUser.getUsername());
+                etPhonenumber.getText().toString(), accountUser.getUsername(), etEmail.getText().toString());
     }
 
     @Override
@@ -245,6 +248,7 @@ public class SettingsFragment extends Fragment implements ISettingsView {
         accountUser.savePhone(etPhonenumber.getText().toString());
         accountUser.saveCountry(etCountry.getText().toString());
         accountUser.saveCity(etCity.getText().toString());
+        accountUser.saveEmail(etEmail.getText().toString());
         Toast.makeText(getContext(), "saveSettingsData", Toast.LENGTH_LONG).show();
 
     }

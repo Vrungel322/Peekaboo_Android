@@ -18,9 +18,11 @@ public class User {
     private String city;
     @Nullable
     private String phone;
+    @Nullable
+    private String email;
 
     public User(@Nullable String city, @Nullable String country, @Nullable String firstName,
-                String id, @Nullable String lastName, @Nullable String phone, String username) {
+                String id, @Nullable String lastName, @Nullable String phone, String username, String email) {
         this.city = city;
         this.country = country;
         this.firstName = firstName;
@@ -28,6 +30,7 @@ public class User {
         this.lastName = lastName;
         this.phone = phone;
         this.username = username;
+        this.email = email;
     }
 
     @Nullable
@@ -89,6 +92,15 @@ public class User {
 
     public void setUsername(String username) {
         this.username = username;
+    }
+
+    @Nullable
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(@Nullable String email) {
+        this.email = email;
     }
 
     @Override

@@ -2,13 +2,14 @@
     <string name="app_name">Peekaboo</string>
     <string name="pleaseWait">Please, wait...</string>
     <string name="phoneNumber">Phone Number</string>
+    <string name="email">Email</string>
     <string name="username">Username</string>
     <string name="password">Password</string>
     <string name="createAccount">Create Account</string>
     <string name="signIn">Sign In</string>
     <string name="skip">Skip</string>
     <string name="confirmPassword">Confirm password</string>
-    <string name="email">Email or phone number</string>
+    <string name="email_or_phone">Email or phone number</string>
     <string name="invalidPhoneNumber">Invalid phone number</string>
     <string name="invalidLogin">Invalid login</string>
     <string name="invalidUsername">Invalid username</string>

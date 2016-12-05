@@ -10,6 +10,6 @@ public class UserMapper implements Mapper<UserEntity, User> {
     @Override
     public User transform(UserEntity obj) throws RuntimeException {
         return new User(null, null, obj.getRealName(), obj.getId(), obj.getRealSurname(),
-                null, obj.getName());
+                null, obj.getName(), null);
     }
 }
