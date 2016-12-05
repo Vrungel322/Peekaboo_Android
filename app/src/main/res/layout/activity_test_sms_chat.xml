@@ -16,7 +16,7 @@
         android:layout_height="wrap_content"
         android:inputType="text" />
     <Button
-        android:id="@+id/send_message_button"
+        android:id="@+id/bSendSmsMessage"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_toRightOf="@id/message_input_edit_text"

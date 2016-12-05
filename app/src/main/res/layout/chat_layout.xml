@@ -235,8 +235,6 @@
                     </LinearLayout>
                 </LinearLayout>
             </com.peekaboo.presentation.app.view.PHorizontalScrollView>
-
-
         </LinearLayout>
 
         <io.codetail.widget.RevealFrameLayout

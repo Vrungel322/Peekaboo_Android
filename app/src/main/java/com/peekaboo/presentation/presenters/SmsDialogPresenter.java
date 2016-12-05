@@ -46,6 +46,9 @@ public class SmsDialogPresenter extends ProgressPresenter<ISmsDialogsView>
 
     @Override
     public void onMessageNotSent() {
+        if (getView() != null) {
+            getView().showToastMessage("Message not sent!");
+        }
     }
 
     @Override

@@ -36,7 +36,6 @@ public final class DialogsLargeAdapter extends RecyclerView.Adapter<DialogsLarge
     private MainActivity activity;
     private ActivityNavigator navigator;
     private Picasso mPicasso;
-    private AvatarIcon avatarIcon;
     private List<Dialog> items = new ArrayList<>();
     private final int unreadMessagesDialogBackgroundColor;
     private final int avatarSize;
@@ -62,22 +61,12 @@ public final class DialogsLargeAdapter extends RecyclerView.Adapter<DialogsLarge
         Dialog dialog = getItem(position);
         Contact contact = dialog.getContact();
         PMessage lastMessage = dialog.getLastMessage();
-        avatarIcon = new AvatarIcon();
-        final boolean[] muted = {false};
-        final boolean[] stared = {false};
 
         String contactName = contact.contactName();
         String contactSurname = contact.contactSurname();
-        String avatarText;
 
-        if (contactSurname == null) {
-            holder.tvContactName.setText(contactName);
-            avatarText = contactName.substring(0, 1).toUpperCase();
-        } else {
-            holder.tvContactName.setText(contactName + " " + contactSurname);
-            avatarText = contactName.substring(0, 1).toUpperCase() + contactSurname.substring(0, 1).toUpperCase();
-        }
-        holder.defaultAvatarText.setText(avatarText);
+
+        setUpDefaultAvatarText(holder, contactName, contactSurname);
 
 
         Drawable drawable = ResourcesUtils.getDrawable(activity, R.drawable.avatar_icon);
@@ -88,13 +77,8 @@ public final class DialogsLargeAdapter extends RecyclerView.Adapter<DialogsLarge
                 .into(holder.ivAvatar);
 
         setMessageBody(holder, lastMessage);
-
-        long timestamp = lastMessage.timestamp();
-        // todo write converting timestamp
-        holder.tvTimestamp.setText(Utility.getFriendlyDayString(holder.itemView.getContext(), timestamp));
-
+        setUpTimestamp(holder, lastMessage);
         setMessageStatus(holder, lastMessage);
-
 
         int unreadMessagesCount = dialog.getUnreadMessagesCount();
         holder.oiOnlineIndicator.setState(contact.isOnline(), unreadMessagesCount);
@@ -103,20 +87,15 @@ public final class DialogsLargeAdapter extends RecyclerView.Adapter<DialogsLarge
 
         holder.itemView.setOnClickListener(v -> navigator.startChat(activity, contact));
 
+        setUpDFMfeatures(holder, position);
+
+
+    }
+
+    private void setUpDFMfeatures(ViewHolder holder, int position) {
         holder.ivFavorite.setOnClickListener(v -> {
             YoYo.with(Techniques.Tada).duration(500).delay(100).playOn(holder.ivFavorite);
-//                items.set(0,getItem(position));
-            if (stared[0] == false) {
-                stared[0] = true;
-                holder.ivFavorite.setImageResource(R.drawable.stared);
-
-
-            } else {
-                stared[0] = false;
-                holder.ivFavorite.setImageResource(R.drawable.star);
-
-            }
-
+//                holder.ivFavorite.setImageResource(R.drawable.stared);
         });
         holder.ivDelete.setOnClickListener(v -> {
             YoYo.with(Techniques.Tada).duration(500).delay(100).playOn(holder.ivDelete);
@@ -125,18 +104,27 @@ public final class DialogsLargeAdapter extends RecyclerView.Adapter<DialogsLarge
         holder.ivMute.setOnClickListener(v -> {
 
             YoYo.with(Techniques.Tada).duration(500).delay(100).playOn(holder.ivMute);
-
-            if (muted[0] == false) {
-                muted[0] = true;
-                holder.ivMute.setImageResource(R.drawable.nosound);
-            } else {
-                muted[0] = false;
-                holder.ivMute.setImageResource(R.drawable.sound);
-            }
-
+//            holder.ivMute.setImageResource(R.drawable.nosound);
         });
+    }
 
 
+    private void setUpTimestamp(ViewHolder holder, PMessage lastMessage) {
+        long timestamp = lastMessage.timestamp();
+        // todo write converting timestamp
+        holder.tvTimestamp.setText(Utility.getFriendlyDayString(holder.itemView.getContext(), timestamp));
+    }
+
+    private void setUpDefaultAvatarText(ViewHolder holder, String contactName, String contactSurname) {
+        String avatarText;
+        if (contactSurname == null) {
+            holder.tvContactName.setText(contactName);
+            avatarText = contactName.substring(0, 1).toUpperCase();
+        } else {
+            holder.tvContactName.setText(contactName + " " + contactSurname);
+            avatarText = contactName.substring(0, 1).toUpperCase() + contactSurname.substring(0, 1).toUpperCase();
+        }
+        holder.defaultAvatarText.setText(avatarText);
     }
 
 
