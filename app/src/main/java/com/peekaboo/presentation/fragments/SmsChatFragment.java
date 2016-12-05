@@ -96,7 +96,7 @@ public class SmsChatFragment extends Fragment implements ISmsChatView {
         return view;
     }
 
-    @OnClick(R.id.send_message_button)
+    @OnClick(R.id.bSendSmsMessage)
     public void send(){
         presenter.sendMessage(getMessageText());
     }
