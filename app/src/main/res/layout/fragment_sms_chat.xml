@@ -26,10 +26,12 @@
         android:id="@+id/send_containter"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:gravity="center_horizontal"
-        android:orientation="vertical">
-        
+        android:orientation="vertical"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
+
         <com.peekaboo.presentation.app.view.PHorizontalScrollView
             android:id="@+id/svItems"
             android:layout_width="match_parent"
@@ -52,7 +54,7 @@
                     android:background="@drawable/bot_bar_gradient" />
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:paddingLeft="8dp"
@@ -100,31 +102,18 @@
                     <LinearLayout
                         android:id="@+id/llItems"
                         android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="bottom"
                         android:layout_weight="2"
-                        android:foregroundGravity="center"
-                        android:gravity="bottom"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:gravity="center"
                         android:orientation="horizontal">
 
                         <ImageButton
                             android:id="@+id/bSendSmsMessage"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/chat_buttons_margin"
-                            android:layout_marginRight="@dimen/chat_buttons_margin"
                             android:background="@drawable/plane"
-                            android:foregroundGravity="center_vertical"
-                            android:visibility="visible" />
-
-
-                        <FrameLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/chat_buttons_margin"
-                            android:layout_marginRight="@dimen/chat_buttons_margin">
-
-                        </FrameLayout>
+                            android:layout_gravity="center" />
 
                     </LinearLayout>
                 </LinearLayout>
