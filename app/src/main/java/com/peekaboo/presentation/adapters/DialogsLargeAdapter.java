@@ -1,25 +1,14 @@
 package com.peekaboo.presentation.adapters;
 
-import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
 import android.graphics.Color;
-import android.content.Intent;
-import android.graphics.Paint;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.LayerDrawable;
-import android.net.Uri;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
@@ -29,7 +18,6 @@ import com.peekaboo.data.repositories.database.messages.PMessage;
 import com.peekaboo.data.repositories.database.messages.PMessageAbs;
 import com.peekaboo.domain.Dialog;
 import com.peekaboo.presentation.activities.MainActivity;
-import com.peekaboo.presentation.activities.MapActivity;
 import com.peekaboo.presentation.utils.AvatarIcon;
 import com.peekaboo.presentation.utils.ResourcesUtils;
 import com.peekaboo.utils.ActivityNavigator;
@@ -77,14 +65,7 @@ public final class DialogsLargeAdapter extends RecyclerView.Adapter<DialogsLarge
         String contactSurname = contact.contactSurname();
         String avatarText;
 
-        if (contactSurname == null) {
-            holder.tvContactName.setText(contactName);
-            avatarText = contactName.substring(0,1).toUpperCase();
-        } else {
-            holder.tvContactName.setText(contactName + " " + contactSurname);
-            avatarText = contactName.substring(0,1).toUpperCase() + contactSurname.substring(0,1).toUpperCase();
-        }
-        holder.defaultAvatarText.setText(avatarText);
+        setUpDefaultAvatarText(holder, contactName, contactSurname);
 
 
         int avatarSize = ResourcesUtils.getDimenInPx(activity, R.dimen.contact_list_avatar_size);
@@ -97,48 +78,22 @@ public final class DialogsLargeAdapter extends RecyclerView.Adapter<DialogsLarge
 
         setMessageBody(holder, lastMessage);
 
-        long timestamp = lastMessage.timestamp();
-        // todo write converting timestamp
-        holder.tvTimestamp.setText(Utility.getFriendlyDayString(holder.itemView.getContext(), timestamp));
+        setUpTimestamp(holder, lastMessage);
 
         setMessageStatus(holder, lastMessage);
 
-        if (contact.isOnline()) {
-            holder.contact_status_view.setBackgroundResource(R.drawable.list_online_indicator);
-            holder.unread_count_text_view.setTextColor(Color.WHITE);
+        setUpOnlineStatus(holder, contact);
 
-        } else {
-            holder.contact_status_view.setBackgroundResource(R.drawable.list_offline_indicator);
-            holder.unread_count_text_view.setTextColor(activity.getResources().getColor(R.color.offline_text));
-        }
-
-        int unreadMessagesCount = dialog.getUnreadMessagesCount();
-        CoordinatorLayout.LayoutParams layoutParams = (CoordinatorLayout.LayoutParams) holder.dialogsDivider.getLayoutParams();
-        int topMargin = layoutParams.topMargin;
-        if(unreadMessagesCount > 0 && unreadMessagesCount < 100){
-            if(unreadMessagesCount > 10){
-                holder.unread_count_text_view.setTextSize(11);
-            }
-            holder.unread_count_text_view.setText(String.valueOf(unreadMessagesCount));
-            holder.dialogContainer.setBackgroundColor(activity.getResources().getColor(R.color.unread_msg_background));
-
-            layoutParams.setMargins(0, topMargin, 0, 0);
-        } else {
-            if(unreadMessagesCount >= 100){
-                holder.unread_count_text_view.setTextSize(10);
-                holder.unread_count_text_view.setText("99+");
-                holder.dialogContainer.setBackgroundColor(activity.getResources().getColor(R.color.unread_msg_background));
-                layoutParams.setMargins(0, topMargin, 0, 0);
-
-            }else{
-                holder.unread_count_text_view.setText(null);
-                holder.dialogContainer.setBackgroundColor(Color.WHITE);
-
-            }
-        }
+        setUpUnreadMessageCount(holder, dialog);
 
         holder.itemView.setOnClickListener(v -> navigator.startChatFragment(activity, contact, true));
 
+        setUpDFMfeatures(holder, position, muted, stared);
+
+
+    }
+
+    private void setUpDFMfeatures(ViewHolder holder, int position, boolean[] muted, boolean[] stared) {
         holder.ivFavorite.setOnClickListener(v -> {
             YoYo.with(Techniques.Tada).duration(500).delay(100).playOn(holder.ivFavorite);
 //                items.set(0,getItem(position));
@@ -171,8 +126,62 @@ public final class DialogsLargeAdapter extends RecyclerView.Adapter<DialogsLarge
             }
 
         });
+    }
 
+    private void setUpUnreadMessageCount(ViewHolder holder, Dialog dialog) {
+        int unreadMessagesCount = dialog.getUnreadMessagesCount();
+        CoordinatorLayout.LayoutParams layoutParams = (CoordinatorLayout.LayoutParams) holder.dialogsDivider.getLayoutParams();
+        int topMargin = layoutParams.topMargin;
+        if(unreadMessagesCount > 0 && unreadMessagesCount < 100){
+            if(unreadMessagesCount > 10){
+                holder.unread_count_text_view.setTextSize(11);
+            }
+            holder.unread_count_text_view.setText(String.valueOf(unreadMessagesCount));
+            holder.dialogContainer.setBackgroundColor(activity.getResources().getColor(R.color.unread_msg_background));
 
+            layoutParams.setMargins(0, topMargin, 0, 0);
+        } else {
+            if(unreadMessagesCount >= 100){
+                holder.unread_count_text_view.setTextSize(10);
+                holder.unread_count_text_view.setText("99+");
+                holder.dialogContainer.setBackgroundColor(activity.getResources().getColor(R.color.unread_msg_background));
+                layoutParams.setMargins(0, topMargin, 0, 0);
+
+            }else{
+                holder.unread_count_text_view.setText(null);
+                holder.dialogContainer.setBackgroundColor(Color.WHITE);
+
+            }
+        }
+    }
+
+    private void setUpOnlineStatus(ViewHolder holder, Contact contact) {
+        if (contact.isOnline()) {
+            holder.contact_status_view.setBackgroundResource(R.drawable.list_online_indicator);
+            holder.unread_count_text_view.setTextColor(Color.WHITE);
+
+        } else {
+            holder.contact_status_view.setBackgroundResource(R.drawable.list_offline_indicator);
+            holder.unread_count_text_view.setTextColor(activity.getResources().getColor(R.color.offline_text));
+        }
+    }
+
+    private void setUpTimestamp(ViewHolder holder, PMessage lastMessage) {
+        long timestamp = lastMessage.timestamp();
+        // todo write converting timestamp
+        holder.tvTimestamp.setText(Utility.getFriendlyDayString(holder.itemView.getContext(), timestamp));
+    }
+
+    private void setUpDefaultAvatarText(ViewHolder holder, String contactName, String contactSurname) {
+        String avatarText;
+        if (contactSurname == null) {
+            holder.tvContactName.setText(contactName);
+            avatarText = contactName.substring(0,1).toUpperCase();
+        } else {
+            holder.tvContactName.setText(contactName + " " + contactSurname);
+            avatarText = contactName.substring(0,1).toUpperCase() + contactSurname.substring(0,1).toUpperCase();
+        }
+        holder.defaultAvatarText.setText(avatarText);
     }
 
 
