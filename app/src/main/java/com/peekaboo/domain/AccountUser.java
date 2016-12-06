@@ -11,6 +11,7 @@ public class AccountUser extends User {
     public static final String ID = "user_id";
     public static final String MODE = "mode";
     public static final String USERNAME = "username";
+    public static final String NOTIFICATIONS_ENABLED = "notifications_enabled";
     public static final String FIRST_NAME = "firstName";
     public static final String LAST_NAME = "lastName";
     public static final String CITY = "city";
@@ -24,6 +25,7 @@ public class AccountUser extends User {
     private byte mode;
     @Nullable
     private String username;
+    private boolean notificationsEnabled;
     @Nullable
     private String firstName;
     @Nullable
@@ -161,6 +163,7 @@ public class AccountUser extends User {
         setId(preferences.getString(ID, null));
         mode = (byte) preferences.getInt(MODE, 0);
         username = preferences.getString(USERNAME, null);
+        notificationsEnabled = preferences.getBoolean(NOTIFICATIONS_ENABLED, true);
         firstName = preferences.getString(FIRST_NAME, null);
         lastName = preferences.getString(LAST_NAME, null);
         country = preferences.getString(COUNTRY, null);
@@ -168,11 +171,28 @@ public class AccountUser extends User {
         phone = preferences.getString(PHONE, null);
     }
 
+    public void logout() {
+        token = null;
+        mode = 0;
+        username = null;
+        setId(null);
+        notificationsEnabled = true;
+        preferences.edit().clear().commit();
+    }
     @Override
     public String toString() {
         return "AccountUser{" +
                 "token='" + token + '\'' +
                 ", id='" + getId() + '\'' +
                 '}';
+    }
+
+    public void saveNotificationsEnabled(boolean notificationsEnabled) {
+        this.notificationsEnabled = notificationsEnabled;
+        preferences.edit().putBoolean(NOTIFICATIONS_ENABLED, notificationsEnabled).commit();
+    }
+
+    public boolean notificationsEnabled() {
+        return notificationsEnabled;
     }
 }

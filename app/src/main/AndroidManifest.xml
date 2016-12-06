@@ -73,15 +73,8 @@
             <!--</intent-filter>-->
         </activity>
         <activity
-            android:name=".presentation.activities.ChatActivity"
-            android:theme="@style/ChatActivityTheme">
-
-            <!-- <intent-filter> -->
-            <!-- <action android:name="android.intent.action.MAIN" /> -->
-            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
-            <!-- </intent-filter> -->
-        </activity>
-
+            android:name=".presentation.activities.DetailsActivity"
+            android:theme="@style/AppTheme"/>
         <activity
             android:name=".presentation.activities.MapActivity"
             android:theme="@style/ChatActivityTheme">

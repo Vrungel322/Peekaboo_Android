@@ -1,5 +1,7 @@
 package com.peekaboo.presentation.adapters;
 
+import android.app.Activity;
+import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,6 +12,7 @@ import android.widget.TextView;
 import com.peekaboo.R;
 import com.peekaboo.domain.Dialog;
 import com.peekaboo.presentation.activities.MainActivity;
+import com.peekaboo.presentation.app.view.OnlineIndicatorView;
 import com.peekaboo.utils.ActivityNavigator;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
@@ -26,14 +29,14 @@ import de.hdodenhof.circleimageview.CircleImageView;
  */
 public class HotFriendsAdapter extends BaseAdapter {
 
-    private MainActivity activity;
+    private AppCompatActivity activity;
     private LayoutInflater inflater;
     private Picasso mPicasso;
     private ActivityNavigator navigator;
     private List<Dialog> items = new ArrayList<>();
 
 
-    public HotFriendsAdapter(MainActivity activity, Picasso mPicasso, ActivityNavigator navigator) {
+    public HotFriendsAdapter(AppCompatActivity activity, Picasso mPicasso, ActivityNavigator navigator) {
         this.activity = activity;
         this.mPicasso = mPicasso;
         this.navigator = navigator;
@@ -76,8 +79,8 @@ public class HotFriendsAdapter extends BaseAdapter {
 
 //        mPicasso.load(currentListData.getContact().contactImgUri())
         Picasso.with(activity)
-                .load("https://secure.gravatar.com/avatar/67283abf3e13430b424e4e3e8a2233c7?s=64&d=mm&r=g")
-//                .load(currentListData.getContact().contactImgUri())
+//                .load("https://secure.gravatar.com/avatar/67283abf3e13430b424e4e3e8a2233c7?s=64&d=mm&r=g")
+                .load(currentListData.getContact().contactImgUriSmall())
                 .tag(activity)
                 .into(mViewHolder.civHotFriendIcon, new Callback.EmptyCallback() {
                     @Override
@@ -92,32 +95,11 @@ public class HotFriendsAdapter extends BaseAdapter {
                         mViewHolder.loading_hotFriend_progress_bar.setVisibility(View.GONE);
                     }
                 });
-
-        showIfContactIsOnline(mViewHolder, currentListData);
-
-        showUnreadMesCount(mViewHolder, currentListData);
+        mViewHolder.oiIndicatorOnline.setState(currentListData.getContact().isOnline(), currentListData.getUnreadMessagesCount());
 
         convertView.setOnClickListener(v ->
-                navigator.startChatFragment(activity, currentListData.getContact(), true));
+                navigator.startChat(activity, currentListData.getContact()));
         return convertView;
-    }
-
-    private void showIfContactIsOnline(HotFriendsViewHolder mViewHolder, Dialog currentListData) {
-        if (currentListData.getContact().isOnline()) {
-            mViewHolder.civHotFriendStatus.setBackgroundResource(R.drawable.list_online_indicator);
-        } else {
-            mViewHolder.civHotFriendStatus.setBackgroundResource(R.drawable.list_offline_indicator);
-        }
-    }
-
-    private void showUnreadMesCount(HotFriendsViewHolder mViewHolder, Dialog currentListData) {
-        if (currentListData.getUnreadMessagesCount() == 0) {
-            mViewHolder.tvUnreadMesCountInRightDrawer
-                    .setText(null);
-        } else {
-            mViewHolder.tvUnreadMesCountInRightDrawer
-                    .setText(String.valueOf(currentListData.getUnreadMessagesCount()));
-        }
     }
 
     public void setItems(List<Dialog> dialogs) {
@@ -131,10 +113,8 @@ public class HotFriendsAdapter extends BaseAdapter {
         ProgressBar loading_hotFriend_progress_bar;
         @BindView(R.id.civHotFriendIcon)
         CircleImageView civHotFriendIcon;
-        @BindView(R.id.civHotFriendStatus)
-        View civHotFriendStatus;
-        @BindView(R.id.tvUnreadMesCountInRightDrawer)
-        TextView tvUnreadMesCountInRightDrawer;
+        @BindView(R.id.oiOnlineIndicator)
+        OnlineIndicatorView oiIndicatorOnline;
 
         public HotFriendsViewHolder(View item) {
             ButterKnife.bind(this, item);

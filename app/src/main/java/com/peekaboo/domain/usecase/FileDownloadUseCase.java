@@ -1,5 +1,6 @@
 package com.peekaboo.domain.usecase;
 
+import com.peekaboo.data.di.scope.UserScope;
 import com.peekaboo.data.repositories.database.messages.PMessage;
 import com.peekaboo.data.utils.FileUtils;
 import com.peekaboo.domain.SessionRepository;
@@ -9,12 +10,11 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 import okhttp3.ResponseBody;
 import retrofit2.Response;
 
-@Singleton
+@UserScope
 public class FileDownloadUseCase extends QueueUseCase<PMessage, String> {
 
     private final SessionRepository repository;

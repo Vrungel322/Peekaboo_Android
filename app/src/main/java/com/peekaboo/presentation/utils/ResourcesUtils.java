@@ -57,6 +57,11 @@ public class ResourcesUtils {
         return (int) c.getResources().getDimension(resId);
     }
 
+    public static int getDimenInDp(Context c, int resId) {
+        float density = c.getResources().getDisplayMetrics().density;
+        return (int) (c.getResources().getDimension(resId) / density);
+    }
+
     public static String getRealPathFromURI(Context context, Uri contentUri) {
         Cursor cursor = null;
         try {

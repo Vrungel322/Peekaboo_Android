@@ -80,7 +80,7 @@ public class PContactHelper {
 
     @NonNull
     private Observable<List<Contact>> select(String query) {
-        Log.e("helper", query);
+//        Log.e("helper", query);
         return Observable.create(subscriber -> {
             List<Contact> messages = synchronousSelect(query);
 

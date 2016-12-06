@@ -26,7 +26,7 @@
     <string name="comfortaa_bold_font">fonts/comfortaa_bold.ttf</string>
     <string name="roboto_font">fonts/roboto.ttf</string>
     <string name="helvetica_font">fonts/helvetika.ttf</string>
-    <string name="usernameOrLogin">Username or login</string>
+    <string name="usernameOrLogin">Username or Login</string>
     <string name="emailOrPhoneNum">Email</string>
     <integer name="com_vk_sdk_AppId">5527207</integer>
 
@@ -62,6 +62,10 @@
         <item>Photo</item>
         <item>Pick from gallery</item>
     </string-array>
+    <string-array name="dialog_tab_names">
+        <item>Chat</item>
+        <item>Sms</item>
+    </string-array>
     <!-- TODO: Remove or change this placeholder payload -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="selectImage">Select Image</string>
@@ -77,7 +81,7 @@
     <string name="exit">Exit</string>
 
     <string name="forgot">Forgot</string>
-    <string name="forgot_password"> password?</string>
+    <string name="forgot_password"> Password?</string>
 
     <string name="sign_up">Sign Up</string>
     <string name="hintConfirmationCode">Confirmation code</string>

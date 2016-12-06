@@ -37,9 +37,13 @@
     <color name="borderCircle_status_color">#303010</color>
     <color name="selected_itemIn_drawer">#33cccc</color>
     <color name="offline">#c6c6c6</color>
-    <color name="offline_text">#303030</color>
+    <color name="offlineBackground">#ffffff</color>
+    <!--<color name="offline_text">#303030</color>-->
+    <color name="offline_text">#29a3a3</color>
     <color name="unread_msg_background">#d4eded</color>
     <color name="online">#29a3a3</color>
+    <color name="onlineBackground">#29a3a3</color>
+    <color name="online_text">#ffffff</color>
     <color name="dialog_icon_tint">#212121</color>
     <color name="out_message_bubble_color">#d6f5f5</color>
     <color name="in_message_bubble_color">#e5e5e5</color>

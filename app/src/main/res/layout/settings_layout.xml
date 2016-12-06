@@ -39,8 +39,8 @@
 
                     <FrameLayout
                         android:id="@+id/flSettingsIconAvatar"
-                        android:layout_width="@dimen/widthOfIconInDrawer"
-                        android:layout_height="@dimen/widthOfIconInDrawer"
+                        android:layout_width="@dimen/sizeOfIconInDrawer"
+                        android:layout_height="@dimen/sizeOfIconInDrawer"
                         android:layout_alignParentLeft="true"
                         android:layout_alignParentStart="true"
                         android:clickable="true">
@@ -53,8 +53,8 @@
 
                         <ImageView
                             android:id="@+id/userAvatarInSettings"
-                            android:layout_width="@dimen/widthOfIconInDrawer"
-                            android:layout_height="@dimen/widthOfIconInDrawer"
+                            android:layout_width="@dimen/sizeOfIconInDrawer"
+                            android:layout_height="@dimen/sizeOfIconInDrawer"
                             tools:background="@drawable/raccoon" />
                     </FrameLayout>
 

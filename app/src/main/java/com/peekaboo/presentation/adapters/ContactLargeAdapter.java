@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.peekaboo.R;
 import com.peekaboo.data.repositories.database.contacts.Contact;
+import com.peekaboo.presentation.app.view.OnlineIndicatorView;
 import com.peekaboo.presentation.utils.AvatarIcon;
 import com.peekaboo.presentation.utils.ResourcesUtils;
 import com.peekaboo.presentation.widget.RecyclerViewFastScroller.BubbleTextGetter;
@@ -79,8 +80,8 @@ public final class ContactLargeAdapter extends RecyclerView.Adapter<ContactLarge
 
 //        mPicasso.load(contact.contactImgUri())
         Picasso.with(activity)
-                .load("https://secure.gravatar.com/avatar/67283abf3e13430b424e4e3e8a2233c7?s=64&d=mm&r=g")
-//                .load(contact.contactImgUri())
+//                .load("https://secure.gravatar.com/avatar/67283abf3e13430b424e4e3e8a2233c7?s=64&d=mm&r=g")
+                .load(contact.contactImgUriSmall())
                 .tag(activity)
                 .resize(0, avatarSize)
 //                .error(avatarIcon.createAvatarIcon(drawable, contactName, contactSurname, avatarSize, avatarSize))
@@ -99,15 +100,15 @@ public final class ContactLargeAdapter extends RecyclerView.Adapter<ContactLarge
                     }
                 });
 
-
-        if (contact.isOnline()) {
-            holder.ivStatus.setBackgroundResource(R.drawable.list_online_indicator);
+        if (contactSurname == null) {
+            holder.tvContactName.setText(contactName);
         } else {
-            holder.ivStatus.setBackgroundResource(R.drawable.list_offline_indicator);
+            holder.tvContactName.setText(contactName + " " + contactSurname);
         }
+        holder.oiOnlineIndicator.setState(contact.isOnline(), 0);
 
         holder.itemView.setOnClickListener(v -> {
-            navigator.startChatFragment(activity, contact, true);
+            navigator.startChat(activity, contact);
         });
 
     }
@@ -120,9 +121,8 @@ public final class ContactLargeAdapter extends RecyclerView.Adapter<ContactLarge
     public void setItems(List<Contact> items) {
         this.items.clear();
         this.items.addAll(items);
-        this.savedList.clear();
-        this.savedList.addAll(items);
-        notifyDataSetChanged();
+        notifyItemRangeInserted(0, items.size());
+//        notifyDataSetChanged();
     }
 
     @Override
@@ -190,8 +190,10 @@ public final class ContactLargeAdapter extends RecyclerView.Adapter<ContactLarge
         TextView tvContactName;
         @BindView(R.id.contact_avatar_image_view)
         CircleImageView ivAvatar;
-        @BindView(R.id.contact_status_image_view)
-        View ivStatus;
+        @BindView(R.id.oiOnlineIndicator)
+        OnlineIndicatorView oiOnlineIndicator;
+//        @BindView(R.id.contact_status_image_view)
+//        View ivStatus;
         @BindView(R.id.loading_image_progress_bar)
         ProgressBar pbImageLoading;
         @BindView(R.id.default_avatar_text)

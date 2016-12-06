@@ -20,6 +20,4 @@ public interface IChatView2 extends IView {
     void showRecordStart();
 
     void showRecordStop();
-
-    void hidePbLoadingImageToServer();
 }

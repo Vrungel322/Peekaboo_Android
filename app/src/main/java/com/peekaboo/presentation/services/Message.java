@@ -113,7 +113,7 @@ public class Message {
 
     public enum Command {MESSAGE, SYSTEMMESSAGE}
 
-    public enum Params {DESTINATION, FROM, TYPE, REASON, DATE, ID}
+    public enum Params {DESTINATION, FROM, TYPE, REASON, DATE, ID, SENDER}
 
     public interface Type {
         String TEXT = "text";
@@ -127,5 +127,9 @@ public class Message {
         String MODE = "mode";
         String READ = "read";
         String CREATE_DIALOG = "create_dialog";
+        String ADD_USER = "add_user";
+        String ADD_USER_SUCCESS = "add_user_success";
+        String REMOVE_USER = "remove_user";
+        String NEW_DIALOG = "new_dialog";
     }
 }

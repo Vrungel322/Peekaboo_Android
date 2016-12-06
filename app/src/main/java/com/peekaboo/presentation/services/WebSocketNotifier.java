@@ -63,7 +63,6 @@ public class WebSocketNotifier implements INotifier<Message> {
                             public void onError(WebSocket websocket, WebSocketException cause) throws Exception {
                                 Log.e(TAG, "Status: Error " + cause);
                                 mainThread.run(() -> {
-                                    WebSocketNotifier.this.authorization = null;
                                     disconnect();
                                 });
                             }
@@ -74,7 +73,7 @@ public class WebSocketNotifier implements INotifier<Message> {
                                 Log.e(TAG, "Status: Disconnected ");
 
                                 mainThread.run(() -> {
-                                    disconnect();
+                                    abandonSocket();
 
                                     for (NotificationListener<Message> listener : listeners) {
                                         listener.onDisconnected();
@@ -87,7 +86,7 @@ public class WebSocketNotifier implements INotifier<Message> {
 
                             @Override
                             public void onBinaryMessage(WebSocket websocket, byte[] binary) throws Exception {
-                                Log.e(TAG, "Status: Binary Message received");
+                                Log.e(TAG, "Status: Binary Message received" + new String(binary));
 
                                 mainThread.run(() -> {
 
@@ -123,7 +122,7 @@ public class WebSocketNotifier implements INotifier<Message> {
 
     @Override
     public void tryConnect(String authorization) {
-        Log.e(TAG, "try connect " + ws);
+        Log.e(TAG, "try connect notifier:" + hashCode() + " websocket:" + ws);
         this.authorization = authorization;
         connectSocket(authorization);
     }
@@ -135,6 +134,11 @@ public class WebSocketNotifier implements INotifier<Message> {
 
     @Override
     public void disconnect() {
+        this.authorization = null;
+        abandonSocket();
+    }
+
+    private void abandonSocket() {
         if (ws != null) {
             ws.disconnect();
             ws = null;
@@ -143,7 +147,11 @@ public class WebSocketNotifier implements INotifier<Message> {
 
     @Override
     public void sendMessage(Message message) {
-        Log.e(TAG, "send message " + message);
+        boolean enabled = ws != null && ws.isOpen();
+        Log.e(TAG, "socket enabled " + enabled);
+        if (enabled) {
+            Log.e(TAG, "send message " + message);
+        }
         sendBinaryMessage(mtb.transform(message));
     }
 

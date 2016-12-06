@@ -66,6 +66,13 @@ public class Contact extends ContactAbs implements Parcelable {
         return contactImgUri;
     }
 
+    public String contactImgUriSmall() {
+        return contactImgUri + "2";
+    }
+    public String contactImgUriMiddle() {
+        return contactImgUri + "1";
+    }
+
     public void setId(long id) {
         this.id = id;
     }

@@ -15,6 +15,7 @@ public interface Constants {
     String BASE_URL = "http://" + DOMEN + ":8080/";
 //    String BASE_URL = "http://b34703ca.ngrok.io/";
     String BASE_URL_SOCKET = "ws://" + DOMEN + ":8080/socket/send";
+//    String BASE_URL_SOCKET = "ws://10.0.1.14:8080/socket";
 //    String BASE_URL_SOCKET = "ws://b34703ca.ngrok.io/socket/send";
 //    String BASE_URL = "http://192.168.1.115:8080/";
 

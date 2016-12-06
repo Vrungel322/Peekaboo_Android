@@ -8,8 +8,8 @@
 
     <FrameLayout
         android:id="@+id/flEachHotFriend"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/hotFriendIconSize"
+        android:layout_height="@dimen/hotFriendIconSize"
         android:layout_gravity="right"
         android:layout_marginBottom="@dimen/top_botMarginHotFriendLayout"
         android:layout_marginLeft="@dimen/left_rightMarginHotFriendLayout"
@@ -26,35 +26,17 @@
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/civHotFriendIcon"
-            android:layout_width="@dimen/hotFriendIconSize"
-            android:layout_height="@dimen/hotFriendIconSize"
-            android:layout_gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             app:border_color="@android:color/transparent"
             tools:src="@drawable/raccoon" />
 
-        <FrameLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end">
 
-
-            <View
-                android:id="@+id/civHotFriendStatus"
-                android:layout_width="@dimen/hotFriendStatusIconSize"
-                android:layout_height="@dimen/hotFriendStatusIconSize"
-                android:layout_gravity="right|top" />
-
-            <TextView
-                android:id="@+id/tvUnreadMesCountInRightDrawer"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="000"
-                android:textColor="@android:color/white"
-                android:textSize="12sp"
-                android:textStyle="bold" />
-        </FrameLayout>
-
+        <com.peekaboo.presentation.app.view.OnlineIndicatorView
+            android:id="@+id/oiOnlineIndicator"
+            android:layout_width="@dimen/online_indicator_size"
+            android:layout_height="@dimen/online_indicator_size"
+            android:layout_gravity="right" />
 
     </FrameLayout>
 </LinearLayout>

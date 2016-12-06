@@ -84,15 +84,15 @@ public class SmsChatAdapter extends RecyclerView.Adapter<SmsChatAdapter.ViewHold
         holder.chatBubble.setLayoutParams(layoutParams);
         if (isMine) {
             if (!isNextMine) {
-                holder.chatBubble.setBackgroundResource(R.drawable.circle_blue_corner);
+                holder.chatBubble.setBackgroundResource(R.drawable.circle_blue_corner2);
             } else {
-                holder.chatBubble.setBackgroundResource(R.drawable.circle_blue);
+                holder.chatBubble.setBackgroundResource(R.drawable.circle_blue2);
             }
         } else {
             if (wasPreviousMine) {
-                holder.chatBubble.setBackgroundResource(R.drawable.circle_gray_corner);
+                holder.chatBubble.setBackgroundResource(R.drawable.circle_gray_corner2);
             } else {
-                holder.chatBubble.setBackgroundResource(R.drawable.circle_gray);
+                holder.chatBubble.setBackgroundResource(R.drawable.circle_gray2);
             }
         }
     }

@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.peekaboo.data.di.scope.UserScope;
 import com.peekaboo.data.repositories.database.utils_db.Db;
 import com.peekaboo.domain.schedulers.ObserveOn;
 import com.peekaboo.domain.schedulers.SubscribeOn;
@@ -14,15 +15,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 import rx.Observable;
-import rx.android.schedulers.AndroidSchedulers;
 
 /**
  * Created by sebastian on 31.08.16.
  */
-@Singleton
+@UserScope
 public class ReadMessagesHelper {
     private static final String TABLE_NAME = "ServiceMessages";
     private DBHelper helper;

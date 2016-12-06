@@ -7,7 +7,7 @@ import com.peekaboo.domain.User;
  * Created by Nikita on 02.12.2016.
  */
 
-public class AccoutUSerToUserMapper implements Mapper<AccountUser, User> {
+public class AccountUserToUserMapper implements Mapper<AccountUser, User> {
     @Override
     public User transform(AccountUser obj) throws RuntimeException {
         return new User(obj.getCity(),

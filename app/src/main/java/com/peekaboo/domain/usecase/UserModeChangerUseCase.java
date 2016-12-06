@@ -3,18 +3,18 @@ package com.peekaboo.domain.usecase;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import com.peekaboo.data.di.scope.UserScope;
 import com.peekaboo.domain.AccountUser;
 import com.peekaboo.presentation.services.INotifier;
 import com.peekaboo.presentation.services.Message;
 import com.peekaboo.presentation.services.MessageUtils;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 /**
  * Created by Nikita on 18.10.2016.
  */
-@Singleton
+@UserScope
 public class UserModeChangerUseCase {
     INotifier<Message> messageINotifier;
     AccountUser user;
@@ -28,7 +28,7 @@ public class UserModeChangerUseCase {
         byte ALL_MODE = 0;
     }
 
-    public interface IModeChangeListener{
+    public interface IModeChangeListener {
         void changeModeInView(byte type);
     }
 
@@ -38,7 +38,7 @@ public class UserModeChangerUseCase {
         this.user = user;
     }
 
-    public void setListener(@Nullable IModeChangeListener listener){
+    public void setListener(@Nullable IModeChangeListener listener) {
         this.listener = listener;
     }
 

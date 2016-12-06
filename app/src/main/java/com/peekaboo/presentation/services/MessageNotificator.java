@@ -10,9 +10,9 @@ import android.media.RingtoneManager;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
-import android.widget.RemoteViews;
 
 import com.peekaboo.R;
+import com.peekaboo.data.di.scope.UserScope;
 import com.peekaboo.data.repositories.database.contacts.Contact;
 import com.peekaboo.data.repositories.database.messages.PMessage;
 import com.peekaboo.domain.Pair;
@@ -25,12 +25,11 @@ import com.squareup.picasso.Picasso;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 /**
  * Created by arkadius on 10/5/16.
  */
-@Singleton
+@UserScope
 public class MessageNotificator {
 
     public static final int NOTIFICATION_ID = 101;
@@ -38,7 +37,6 @@ public class MessageNotificator {
     private static final int OFF_MS = 2000;
     private static final int ARGB = Color.CYAN;
     private final NotificationManager notificationManager;
-    private final GetAllUnreadMessagesInfoUseCase getAllUnreadMessagesInfoUseCase;
     private final Picasso picasso;
     private final Uri ringtoneUri;
     private final int avatarSize;
@@ -46,17 +44,15 @@ public class MessageNotificator {
 
     @Inject
     public MessageNotificator(Context context,
-                              GetAllUnreadMessagesInfoUseCase getAllUnreadMessagesInfoUseCase,
                               Picasso picasso) {
         this.context = context;
         notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        this.getAllUnreadMessagesInfoUseCase = getAllUnreadMessagesInfoUseCase;
         this.picasso = picasso;
         ringtoneUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         avatarSize = ResourcesUtils.getDimenInPx(context, R.dimen.notification_avatar_size);
     }
 
-    private void showNotification(List<PMessage> messages, List<Contact> contacts, PMessage message) {
+    public void showNotification(List<PMessage> messages, List<Contact> contacts, PMessage message) {
         Contact currentContact = null;
         for (Contact contact : contacts) {
             if (message.senderId().equals(contact.contactId())) {
@@ -135,19 +131,5 @@ public class MessageNotificator {
                 .setSound(ringtoneUri)
                 .setContentIntent(resultPendingIntent)
                 .build();
-    }
-
-    public void onMessageObtained(final PMessage message) {
-        Log.e("notificator", "1 " + message);
-        if (!message.isMine() && message.status() == PMessage.PMESSAGE_STATUS.STATUS_DELIVERED) {
-            Log.e("notificator", "2 " + message);
-            getAllUnreadMessagesInfoUseCase.execute(new BaseUseCaseSubscriber<Pair<List<PMessage>, List<Contact>>>() {
-                @Override
-                public void onNext(final Pair<List<PMessage>, List<Contact>> pair) {
-                    Log.e("notificator", "3 " + message);
-                    showNotification(pair.first, pair.second, message);
-                }
-            });
-        }
     }
 }
