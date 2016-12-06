@@ -22,13 +22,13 @@
             app:errorTextAppearance="@style/Error.Design">
 
             <com.peekaboo.presentation.app.view.RobotoEditText
-                android:id="@+id/etPhone"
+                android:id="@+id/etPhoneSignUp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
                 android:hint="@string/phoneNumber"
                 android:imeOptions="actionNext"
-                android:inputType="text" />
+                android:inputType="phone" />
         </com.peekaboo.presentation.app.view.RobotoTextInputLayout>
 
         <com.peekaboo.presentation.app.view.RobotoTextInputLayout
@@ -38,7 +38,7 @@
             app:errorTextAppearance="@style/Error.Design">
 
             <com.peekaboo.presentation.app.view.RobotoEditText
-                android:id="@+id/etUsername"
+                android:id="@+id/etUsernameSignUp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
@@ -55,18 +55,18 @@
             app:errorTextAppearance="@style/Error.Design">
 
             <com.peekaboo.presentation.app.view.RobotoEditText
-                android:id="@+id/etLogin"
+                android:id="@+id/etEmailSignUp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center_horizontal"
-                android:hint="@string/email_or_phone"
+                android:hint="Email"
                 android:imeOptions="actionNext"
-                android:inputType="text" />
+                android:inputType="textEmailAddress" />
 
         </com.peekaboo.presentation.app.view.RobotoTextInputLayout>
 
         <com.peekaboo.presentation.app.view.PasswordView
-            android:id="@+id/pvPassword"
+            android:id="@+id/pvPasswordSignUp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/padding_top"
@@ -74,7 +74,7 @@
             custom:textHint="@string/password" />
 
         <com.peekaboo.presentation.app.view.PasswordView
-            android:id="@+id/pvPasswordConfirm"
+            android:id="@+id/pvPasswordConfirmSignUp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/padding_top"
@@ -82,7 +82,7 @@
             custom:textHint="@string/confirmPassword" />
 
         <com.peekaboo.presentation.app.view.ComfortaaButton
-            android:id="@+id/bSignIn"
+            android:id="@+id/bSignInSignUp"
             android:layout_width="match_parent"
             android:layout_height="@dimen/credentials_button_height"
             android:textColor="@color/textColor"

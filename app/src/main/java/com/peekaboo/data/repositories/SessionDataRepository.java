@@ -80,8 +80,8 @@ public class SessionDataRepository implements SessionRepository {
     }
 
     @Override
-    public Observable<AccountUser> signUp(String phone, String username, String login, String password) {
-        return restApi.signUp(new CredentialsSignUp(phone, username, login, password))
+    public Observable<AccountUser> signUp(String phone, String username, String email, String password) {
+        return restApi.signUp(new CredentialsSignUp(phone, username, email, password))
                 .map(token -> {
                     user.saveId(token.getId());
                     user.saveUsername(token.getUsername());

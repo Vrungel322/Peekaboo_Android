@@ -33,15 +33,15 @@ public class SignUpActivity  extends AppCompatActivity implements ISignUpView {
     public static final String PROGRESS_DIALOG = "progress_dialog";
     public static final String CONFIRM_SIGN_UP_DIALOG = "confirmSignUpDialog";
 
-    @BindView(R.id.etPhone)
+    @BindView(R.id.etPhoneSignUp)
     EditText etPhone;
-    @BindView(R.id.etLogin)
-    EditText etLogin;
-    @BindView(R.id.etUsername)
+    @BindView(R.id.etEmailSignUp)
+    EditText etEmail;
+    @BindView(R.id.etUsernameSignUp)
     EditText etUsername;
-    @BindView(R.id.pvPassword)
+    @BindView(R.id.pvPasswordSignUp)
     PasswordView pvPassword;
-    @BindView(R.id.pvPasswordConfirm)
+    @BindView(R.id.pvPasswordConfirmSignUp)
     PasswordView pvPasswordConfirm;
     @BindView(R.id.ilPhone)
     TextInputLayout ilPhone;
@@ -88,7 +88,7 @@ public class SignUpActivity  extends AppCompatActivity implements ISignUpView {
 //    protected void onStart() {
 //        super.onStart();
 //        etUsername.setText("Vrungel");
-//        etLogin.setText("geronimoapachi@gmail.com");
+//        etEmail.setText("geronimoapachi@gmail.com");
 //        pvPasswordConfirm.setText("asdasd");
 //        pvPassword.setText("asdasd");
 //
@@ -132,11 +132,11 @@ public class SignUpActivity  extends AppCompatActivity implements ISignUpView {
             case LOGIN:
                 ilLogin.setErrorEnabled(true);
                 ilLogin.setError(getString(R.string.invalidLogin));
-                etLogin.setText("");
+                etEmail.setText("");
         }
     }
 
-    @OnTouch(R.id.etUsername)
+    @OnTouch(R.id.etUsernameSignUp)
     boolean onUsernameEditText() {
         ilUsername.setErrorEnabled(false);
         ilUsername.setError(null);
@@ -144,19 +144,19 @@ public class SignUpActivity  extends AppCompatActivity implements ISignUpView {
     }
 
 
-    @OnTouch(R.id.pvPassword)
+    @OnTouch(R.id.pvPasswordSignUp)
     boolean onPasswordEditText() {
         pvPassword.setError(null);
         return false;
     }
 
-    @OnTouch(R.id.pvPasswordConfirm)
+    @OnTouch(R.id.pvPasswordConfirmSignUp)
     boolean onPasswordConfirmEditText() {
         pvPasswordConfirm.setError(null);
         return false;
     }
 
-    @OnTouch(R.id.etLogin)
+    @OnTouch(R.id.etEmailSignUp)
     boolean onLoginEditText() {
         ilLogin.setErrorEnabled(false);
         ilLogin.setError(null);
@@ -185,14 +185,14 @@ public class SignUpActivity  extends AppCompatActivity implements ISignUpView {
         }
     }
 
-    @OnClick(R.id.bSignIn)
+    @OnClick(R.id.bSignInSignUp)
     void onSignInButtonClick() {
         String phone = etPhone.getText().toString();
         String username = etUsername.getText().toString();
-        String login = etLogin.getText().toString();
+        String email = etEmail.getText().toString();
         String password = pvPassword.getPassword();
         String passwordConfirm = pvPasswordConfirm.getPassword();
-        signUpPresenter.onSignUpButtonClick(phone, username, login, password, passwordConfirm);
+        signUpPresenter.onSignUpButtonClick(phone, username, email, password, passwordConfirm);
     }
 
 }

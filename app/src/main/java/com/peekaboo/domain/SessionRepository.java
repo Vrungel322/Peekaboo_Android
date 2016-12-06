@@ -18,7 +18,7 @@ import rx.Observable;
 public interface SessionRepository {
     Observable<AccountUser> login(String login, String password);
 
-    Observable<AccountUser> signUp(String phone, String username, String login, String password);
+    Observable<AccountUser> signUp(String phone, String username, String email, String password);
 
     Observable<AccountUser> confirm(String id, String key);
 

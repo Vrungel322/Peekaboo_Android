@@ -71,9 +71,9 @@ public class SignUpPresenter extends ProgressPresenter<ISignUpView> implements I
     }
 
     @Override
-    public void onSignUpButtonClick(String phone, String username, String login, String password, String passwordConfirm) {
-        if (isValid(username, login, password, passwordConfirm)) {
-            signUpUseCase.setCredentials(phone, username, login, password);
+    public void onSignUpButtonClick(String phone, String username, String email, String password, String passwordConfirm) {
+        if (isValid(username, email, password, passwordConfirm)) {
+            signUpUseCase.setCredentials(phone, username, email, password);
             signUpUseCase.execute(getSignUpSubscriber());
         }
     }
