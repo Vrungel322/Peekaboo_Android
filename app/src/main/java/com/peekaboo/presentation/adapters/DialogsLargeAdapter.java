@@ -72,7 +72,7 @@ public final class DialogsLargeAdapter extends RecyclerView.Adapter<DialogsLarge
         Drawable drawable = ResourcesUtils.getDrawable(activity, R.drawable.avatar_icon);
 
         holder.defaultAvatar.setImageDrawable(AvatarIcon.setDrawableColor(drawable, contactName, contactSurname));
-        mPicasso.load(contact.contactImgUri())
+        mPicasso.load(contact.contactImgUriSmall())
                 .resize(0, avatarSize)
                 .into(holder.ivAvatar);
 

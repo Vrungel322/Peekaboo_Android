@@ -80,13 +80,13 @@ public class CreateDialogFragment extends Fragment implements INotifier.Notifica
 //                            .setTextBody("бамжур"));
 
                     List<GroupChatMemberEntity> members = new ArrayList<>();
-                    members.add(new GroupChatMemberEntity("1759", "dudec", "476"));
+                    members.add(new GroupChatMemberEntity("140", "Oleksii", "476"));
                     GroupChatCreationEntity gavnina = new GroupChatCreationEntity(members, null, null);
                     String chatId = message.getParams().get(Message.Params.FROM);
                     notifier.sendMessage(new Message(Message.Command.SYSTEMMESSAGE)
                             .addParam(Message.Params.FROM, accountUser.getId())
                             .addParam(Message.Params.DESTINATION, chatId)
-                            .addParam(Message.Params.REASON, Message.Reason.ADD_USER)
+                            .addParam(Message.Params.REASON, Message.Reason.REMOVE_USER)
                             .setTextBody(new Gson().toJson(gavnina)));
                 }
                 break;

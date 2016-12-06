@@ -67,6 +67,7 @@ public class ApplicationModule {
     }
 
     @Provides
+    @Singleton
     Bus provideEventBus() {
         return new Bus();
     }

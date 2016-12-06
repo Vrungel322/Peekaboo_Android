@@ -58,35 +58,35 @@ public class DataModule {
     @Provides
     @Named("domens")
     public List<String> getStringFromFile() {
-        BufferedReader br = null;
+//        BufferedReader br = null;
         List<String> domens = new ArrayList<>();
-
-        try {
-
-            String sCurrentLine;
-            String filename = Environment.getExternalStorageDirectory() + File.separator + "domens.txt";
-            File file = new File(filename);
-            if (!file.exists()) {
-                file.createNewFile();
-                BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(file));
-                String domen = Constants.BASE_URL + "\n" + Constants.BASE_URL_SOCKET;
-                bufferedWriter.write(domen, 0, domen.length());
-                bufferedWriter.close();
-            }
-            br = new BufferedReader(new FileReader(filename));
-            while ((sCurrentLine = br.readLine()) != null) {
-                domens.add(sCurrentLine);
-            }
-        } catch (IOException e) {
+//
+//        try {
+//
+//            String sCurrentLine;
+//            String filename = Environment.getExternalStorageDirectory() + File.separator + "domens.txt";
+//            File file = new File(filename);
+//            if (!file.exists()) {
+//                file.createNewFile();
+//                BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(file));
+//                String domen = Constants.BASE_URL + "\n" + Constants.BASE_URL_SOCKET;
+//                bufferedWriter.write(domen, 0, domen.length());
+//                bufferedWriter.close();
+//            }
+//            br = new BufferedReader(new FileReader(filename));
+//            while ((sCurrentLine = br.readLine()) != null) {
+//                domens.add(sCurrentLine);
+//            }
+//        } catch (IOException e) {
             domens.add(Constants.BASE_URL);
             domens.add(Constants.BASE_URL_SOCKET);
-        } finally {
-            try {
-                if (br != null) br.close();
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
-        }
+//        } finally {
+//            try {
+//                if (br != null) br.close();
+//            } catch (IOException ex) {
+//                ex.printStackTrace();
+//            }
+//        }
         return domens;
     }
 

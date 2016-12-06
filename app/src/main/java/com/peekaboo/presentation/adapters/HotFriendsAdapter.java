@@ -80,7 +80,7 @@ public class HotFriendsAdapter extends BaseAdapter {
 //        mPicasso.load(currentListData.getContact().contactImgUri())
         Picasso.with(activity)
 //                .load("https://secure.gravatar.com/avatar/67283abf3e13430b424e4e3e8a2233c7?s=64&d=mm&r=g")
-                .load(currentListData.getContact().contactImgUri())
+                .load(currentListData.getContact().contactImgUriSmall())
                 .tag(activity)
                 .into(mViewHolder.civHotFriendIcon, new Callback.EmptyCallback() {
                     @Override
