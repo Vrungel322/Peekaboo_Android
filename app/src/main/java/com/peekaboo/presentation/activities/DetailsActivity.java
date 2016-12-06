@@ -10,6 +10,8 @@ import com.peekaboo.R;
 import com.peekaboo.data.repositories.database.contacts.Contact;
 import com.peekaboo.presentation.PeekabooApplication;
 import com.peekaboo.presentation.fragments.ChatFragment;
+import com.peekaboo.presentation.fragments.SmsChatFragment;
+import com.peekaboo.presentation.pojo.PhoneContactPOJO;
 import com.peekaboo.presentation.utils.ActivityUtils;
 import com.peekaboo.utils.ActivityNavigator;
 
@@ -22,6 +24,7 @@ import javax.inject.Inject;
 public class DetailsActivity extends DrawerActivity {
 
     public static final String ACTION_CHAT = "action_chat";
+    public static final String ACTION_SMS_CHAT = "action_sms_chat";
     public static final String EXTRA = "extra";
     @Inject
     ActivityNavigator navigator;
@@ -44,7 +47,7 @@ public class DetailsActivity extends DrawerActivity {
         String action = intent.getAction();
         if (action != null) {
             switch (action) {
-                case ACTION_CHAT:
+                case ACTION_CHAT: {
                     Contact contact = (Contact) intent.getParcelableExtra(EXTRA);
                     Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragmentContainer);
                     if (fragment == null || !(fragment instanceof ChatFragment) ||
@@ -53,6 +56,15 @@ public class DetailsActivity extends DrawerActivity {
                                 .replace(R.id.fragmentContainer, ChatFragment.newInstance(contact))
                                 .commit();
                     }
+                    break;
+                }
+                case ACTION_SMS_CHAT:{
+                    PhoneContactPOJO companion = (PhoneContactPOJO) intent.getParcelableExtra(EXTRA);
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.fragmentContainer, SmsChatFragment.newInstance(companion))
+                            .commit();
+                    break;
+                }
             }
         }
     }

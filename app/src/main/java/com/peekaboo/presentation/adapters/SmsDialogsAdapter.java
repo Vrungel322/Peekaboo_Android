@@ -65,7 +65,7 @@ public class SmsDialogsAdapter extends RecyclerView.Adapter<SmsDialogsAdapter.Vi
 
         setUpUnreadMessageCount(holder, dialog);
 
-        holder.itemView.setOnClickListener(v -> navigator.startSmsChatFragment(activity, contact, true));
+        holder.itemView.setOnClickListener(v -> navigator.startSmsChat(activity, contact));
     }
 
     private void setUpTimestamp(ViewHolder holder, Sms lastMessage) {

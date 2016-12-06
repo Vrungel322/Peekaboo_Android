@@ -79,7 +79,12 @@ public class ActivityNavigator {
         activity.startActivity(intent);
     }
 
-    public void startSmsChatFragment(AppCompatActivity activity, PhoneContactPOJO companion, boolean addToBackStack) {
+    public void startSmsChat(AppCompatActivity activity, PhoneContactPOJO contact) {
+        Intent intent = new Intent(activity, DetailsActivity.class);
+        intent.setAction(DetailsActivity.ACTION_SMS_CHAT);
+        intent.putExtra(DetailsActivity.EXTRA, contact);
+        intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        activity.startActivity(intent);
 //        FragmentTransaction replace = activity.getSupportFragmentManager()
 //                .beginTransaction()
 //                .replace(R.id.toolbar_fragment_container, SmsChatFragment.newInstance(companion));
