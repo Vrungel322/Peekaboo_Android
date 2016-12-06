@@ -11,4 +11,8 @@ import com.peekaboo.presentation.views.IView;
 public interface ISettingsPresenter <V extends IView> extends IPresenter<V> {
     void updateAvatarInSettings(Uri avatarUri);
     void updateAccountData(User accountUser);
+
+    void onNotificationsEnabled();
+
+    void onNotificationsDisabled();
 }

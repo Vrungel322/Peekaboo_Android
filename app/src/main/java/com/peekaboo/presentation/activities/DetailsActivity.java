@@ -4,6 +4,7 @@ import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
@@ -58,14 +59,23 @@ public class DetailsActivity extends DrawerActivity {
                 case ACTION_CHAT:
                     Contact contact = (Contact) intent.getParcelableExtra(EXTRA);
                     Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragmentContainer);
-                    if (fragment == null || !(fragment instanceof ChatFragment) ||
-                            !((ChatFragment) fragment).getCompanionId().equals(contact.contactId())) {
+                    if (!isChatFragment(fragment) ||
+                            !isContactFromChat(contact, (ChatFragment) fragment)) {
                         getSupportFragmentManager().beginTransaction()
                                 .replace(R.id.fragmentContainer, ChatFragment.newInstance(contact))
                                 .commit();
                     }
             }
         }
+    }
+
+    private boolean isContactFromChat(@NonNull Contact contact, @NonNull ChatFragment fragment) {
+        return fragment.getCompanionId().equals(contact.contactId());
+    }
+
+
+    private boolean isChatFragment(Fragment fragment) {
+        return fragment != null && !(fragment instanceof ChatFragment);
     }
 
     @Override
