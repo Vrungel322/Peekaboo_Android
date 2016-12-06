@@ -12,7 +12,6 @@ import android.view.Gravity;
 import com.peekaboo.R;
 import com.peekaboo.data.repositories.database.contacts.Contact;
 import com.peekaboo.presentation.PeekabooApplication;
-import com.peekaboo.presentation.fragments.CreateDialogFragment;
 import com.peekaboo.presentation.services.MessageNotificator;
 import com.peekaboo.utils.Constants;
 import com.twitter.sdk.android.core.identity.TwitterAuthClient;
