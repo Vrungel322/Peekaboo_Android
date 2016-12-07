@@ -67,10 +67,10 @@ public class Contact extends ContactAbs implements Parcelable {
     }
 
     public String contactImgUriSmall() {
-        return contactImgUri + "2";
+        return contactImgUri + "/2";
     }
     public String contactImgUriMiddle() {
-        return contactImgUri + "1";
+        return contactImgUri + "/1";
     }
 
     public void setId(long id) {
