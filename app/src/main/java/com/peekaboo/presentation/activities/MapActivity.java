@@ -28,6 +28,8 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.peekaboo.R;
 
+import static com.peekaboo.presentation.fragments.ChatFragment.STATICMAP;
+
 //import static com.google.android.gms.wearable.DataMap.TAG;
 
 
@@ -209,6 +211,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                     Intent intent = new Intent();
                     intent.putExtra("staticmap", mapuri);
                     setResult(RESULT_OK, intent);
+                    Log.wtf("NULL : ", "send gps from activity!!!!!");
 
                     finish();
                 }

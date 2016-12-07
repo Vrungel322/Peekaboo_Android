@@ -393,6 +393,7 @@ public class ChatFragment extends Fragment implements IChatView2, DrawerActivity
     @OnClick(R.id.navigation_btn)
     void onNavigationButtonClick() {
         activityNavigator.startMapActivity(getActivity(), Constants.REQUEST_CODES.REQUEST_CODE_GPS);
+//        takeNavigation();
     }
 
     public void takeNavigation() {
@@ -404,19 +405,20 @@ public class ChatFragment extends Fragment implements IChatView2, DrawerActivity
         Intent mapintent = new Intent(getActivity(), MapActivity.class);
         getActivity().startActivityForResult(mapintent, Constants.REQUEST_CODES.REQUEST_CODE_GPS);
 //        activityNavigator.startMapActivity(getContext());
-        Log.wtf("NULL : ", "sendim gpsimg in fragment");
+        Log.wtf("NULL : ", "sendim gpsimg in fragment tn");
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
         activityResult = new ActivityResult(resultCode, requestCode, data);
+        super.onActivityResult(requestCode, resultCode, data);
     }
 
     private void handleActivityResult(@NonNull ActivityResult activityResult) {
         Intent data = activityResult.data;
         int requestCode = activityResult.requestCode;
         int resultCode = activityResult.resultCode;
+        Log.wtf("NULL : ", "--GPS " + requestCode);
         switch (requestCode) {
             case IntentUtils.CAMERA_REQUEST_CODE:
             case IntentUtils.GALLERY_REQUEST_CODE:
@@ -435,8 +437,8 @@ public class ChatFragment extends Fragment implements IChatView2, DrawerActivity
                 break;
             case Constants.REQUEST_CODES.REQUEST_CODE_GPS:
                 if (resultCode == Activity.RESULT_OK && null != data) {
-                    String link = data.getStringExtra(STATICMAP);
-                    Log.wtf("NULL : ", "sendImage " + link);
+                    String link = data.getStringExtra("staticmap");
+                    Log.wtf("NULL : ", "sendGPS " + link);
                     sendGeo(link);
 
                 }
