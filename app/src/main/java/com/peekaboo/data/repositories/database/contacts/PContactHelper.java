@@ -3,7 +3,6 @@ package com.peekaboo.data.repositories.database.contacts;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.peekaboo.data.mappers.AbstractMapperFactory;
 import com.peekaboo.data.repositories.database.messages.PMessage;
@@ -48,7 +47,7 @@ public class PContactHelper {
                 ContactAbs.CONTACT_SURNAME + " TEXT," +
                 ContactAbs.CONTACT_NICKNAME + " TEXT NOT NULL," +
                 ContactAbs.CONTACT_IS_ONLINE + " INTEGER NOT NULL," +
-//                ContactAbs.CONTACT_IMG_URI + " TEXT " +
+//                ContactAbs.GROUP_CHAT_MEMBERS + " TEXT " +
                 ContactAbs.CONTACT_IMG_URI + " TEXT, " +
                 " UNIQUE (" + ContactAbs.CONTACT_ID + ") ON CONFLICT REPLACE" +
                 ")" +
@@ -115,8 +114,10 @@ public class PContactHelper {
         String contactNickname = Db.getString(cursor, ContactAbs.CONTACT_NICKNAME);
         boolean isOnline = Db.getBoolean(cursor, ContactAbs.CONTACT_IS_ONLINE);
         String contactImgUri = Db.getString(cursor, ContactAbs.CONTACT_IMG_URI);
+//        GroupChat groupChat = Db.getString(cursor, ContactAbs.GROUP_CHAT_MEMBERS);
 
-        return new Contact(id, contactName, contactSurname, contactNickname, isOnline, contactImgUri, contactId);
+//        return new Contact(id, contactName, contactSurname, contactNickname, isOnline, contactImgUri, contactId, groupChat);
+        return new Contact(id, contactName, contactSurname, contactNickname, isOnline, contactImgUri, contactId, null);
     }
 
     public Observable<Contact> getContactByContactId(String contactId) {

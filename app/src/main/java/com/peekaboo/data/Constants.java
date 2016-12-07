@@ -10,6 +10,7 @@ public interface Constants {
 //    String DOMEN = "http://b34703ca.ngrok.io/";
     String DOMEN = "95.85.24.64"; // remote server
 //    String DOMEN = "10.0.1.13"; // Boroda server
+//    String DOMEN = "10.0.1.8"; // Vrungel server
 //    String DOMEN = "10.0.1.33"; // Igor server
 //    String DOMEN = "10.0.1.14"; // Lesha server
     String BASE_URL = "http://" + DOMEN + ":8080/";

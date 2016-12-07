@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.widget.Toast;
 
 import com.peekaboo.data.FileEntity;
+import com.peekaboo.domain.AccountUser;
 import com.peekaboo.domain.User;
 import com.peekaboo.domain.UserMessageMapper;
 import com.peekaboo.domain.subscribers.BaseProgressSubscriber;
@@ -21,26 +22,28 @@ import okhttp3.ResponseBody;
  * Created by Nikita on 02.11.2016.
  */
 
-public class SettingsFragmentPresenter extends ProgressPresenter<ISettingsView> implements ISettingsPresenter<ISettingsView> {
+public class SettingsPresenter extends ProgressPresenter<ISettingsView> implements ISettingsPresenter<ISettingsView> {
 
     private Context mContext;
     private AvatarUpdateUseCase avatarUpdateUseCase;
     private UpdateAccountUserDataUseCase updateAccountUserDataUseCase;
+    private AccountUser accountUser;
 
     @Inject
-    public SettingsFragmentPresenter(Context context,UserMessageMapper errorHandler,
-                                     AvatarUpdateUseCase avatarUpdateUseCase,
-                                     UpdateAccountUserDataUseCase updateAccountUserDataUseCase) {
+    public SettingsPresenter(Context context, UserMessageMapper errorHandler,
+                             AvatarUpdateUseCase avatarUpdateUseCase,
+                             UpdateAccountUserDataUseCase updateAccountUserDataUseCase, AccountUser accountUser) {
         super(errorHandler);
         this.mContext = context;
         this.avatarUpdateUseCase = avatarUpdateUseCase;
         this.updateAccountUserDataUseCase = updateAccountUserDataUseCase;
-
+        this.accountUser = accountUser;
     }
 
     @Override
     public void bind(ISettingsView view) {
         super.bind(view);
+        view.renderSettings(accountUser);
     }
 
     @Override
@@ -65,14 +68,25 @@ public class SettingsFragmentPresenter extends ProgressPresenter<ISettingsView> 
         updateAccountUserDataUseCase.execute(getUpdateDataSubscriber());
     }
 
+    @Override
+    public void onNotificationsEnabled() {
+        accountUser.saveNotificationsEnabled(true);
+    }
+
+    @Override
+    public void onNotificationsDisabled() {
+        accountUser.saveNotificationsEnabled(false);
+    }
+
     private BaseProgressSubscriber<FileEntity> getAvatarSettingsSubscriber() {
         return new BaseProgressSubscriber<FileEntity>(this){
             @Override
             public void onNext(FileEntity response) {
                 super.onNext(response);
-                if(getView() != null){
-                    getView().hideProgress();
-                    getView().updateAvatarViewInSettings(response.getResult());
+                ISettingsView view = getView();
+                if(view != null){
+                    view.hideProgress();
+                    view.updateAvatarViewInSettings(response.getResult());
                 }
             }
         };
@@ -88,10 +102,14 @@ public class SettingsFragmentPresenter extends ProgressPresenter<ISettingsView> 
 
             @Override
             public void onNext(ResponseBody response) {
-                getView().updateAccountUserFromSettings();
+                ISettingsView view = getView();
+                if (view != null) {
+                    view.updateAccountUserFromSettings();
+                }
                 Toast.makeText(mContext, "Data changed", Toast.LENGTH_LONG).show();
                 super.onNext(response);
             }
         };
     }
+
 }

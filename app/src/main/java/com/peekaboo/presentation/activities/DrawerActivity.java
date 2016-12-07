@@ -251,7 +251,7 @@ public abstract class DrawerActivity extends AppCompatActivity implements IMainV
     public void updateAvatarView(String result) {
         showProgress();
         if (result.equals("Ok")) {
-            showAvatar(accountUser.getAvatar());
+            showAvatar(accountUser.getAvatarMiddle());
         } else {
             showToastMessage("Error in updating avatar... Sorryan");
         }
@@ -271,7 +271,7 @@ public abstract class DrawerActivity extends AppCompatActivity implements IMainV
 
     private void updateAccountData(AccountUser accountUser) {
         byte mode = accountUser.getMode();
-        String avatarUrl = accountUser.getAvatar();
+        String avatarUrl = accountUser.getAvatarMiddle();
         String userName = accountUser.getUsername();
         tvNameSurname.setText(userName);
         Log.e("animator", "avatarUrl " + avatarUrl);
@@ -431,7 +431,7 @@ public abstract class DrawerActivity extends AppCompatActivity implements IMainV
 
     @Override
     public void updateAvatarInDrawer() {
-        showAvatar(accountUser.getAvatar());
+        showAvatar(accountUser.getAvatarMiddle());
     }
 
     public TabLayout getTabLayout() {

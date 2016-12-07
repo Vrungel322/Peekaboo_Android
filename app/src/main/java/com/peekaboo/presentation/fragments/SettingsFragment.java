@@ -9,6 +9,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -25,10 +26,12 @@ import com.peekaboo.domain.AccountUser;
 import com.peekaboo.domain.User;
 import com.peekaboo.presentation.PeekabooApplication;
 import com.peekaboo.presentation.dialogs.AvatarChangeDialog;
-import com.peekaboo.presentation.presenters.SettingsFragmentPresenter;
+import com.peekaboo.presentation.dialogs.ProgressDialogFragment;
+import com.peekaboo.presentation.presenters.SettingsPresenter;
 import com.peekaboo.presentation.utils.ResourcesUtils;
 import com.peekaboo.utils.Constants;
 import com.peekaboo.utils.Utility;
+import com.rm.rmswitch.RMSwitch;
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
 import com.twitter.sdk.android.core.Result;
@@ -57,7 +60,7 @@ public class SettingsFragment extends Fragment implements ISettingsView {
     @Inject
     Picasso mPicasso;
     @Inject
-    SettingsFragmentPresenter settingsFragmentPresenter;
+    SettingsPresenter settingsPresenter;
 
     @BindView(R.id.userAvatarInSettings)
     ImageView userAvatarInSettings;
@@ -75,6 +78,8 @@ public class SettingsFragment extends Fragment implements ISettingsView {
     EditText etCountry;
     @BindView(R.id.etCity)
     EditText etCity;
+    @BindView(R.id.notificationOff)
+    RMSwitch notificationOff;
     @Nullable
     private IUpdateAvatarInDrawer iUpdateAvatarInDrawer;
 
@@ -92,16 +97,38 @@ public class SettingsFragment extends Fragment implements ISettingsView {
         this.iUpdateAvatarInDrawer = (IUpdateAvatarInDrawer) getActivity();
     }
 
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        setHasOptionsMenu(true);
+        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Settings");
+    }
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.settings_layout, container, false);
         ButterKnife.bind(this, rootView);
-        setHasOptionsMenu(true);
-        ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Settings");
+        notificationOff.addSwitchObserver(new RMSwitch.RMSwitchObserver() {
+            @Override
+            public void onCheckStateChange(boolean isChecked) {
+                Log.e("Settings", "checked " + isChecked);
+                if (isChecked) {
+                    settingsPresenter.onNotificationsDisabled();
+                } else {
+                    settingsPresenter.onNotificationsEnabled();
+                }
+            }
+        });
         showAvatar();
-        settingsFragmentPresenter.bind(this);
+        settingsPresenter.bind(this);
 //        etPhonenumber.setText(CredentialUtils.getPhoneNumber(getApplicationContext()));
+        return rootView;
+    }
+
+    @Override
+    public void renderSettings(AccountUser accountUser) {
+        notificationOff.setChecked(!accountUser.notificationsEnabled());
         etName.setText(accountUser.getFirstName());
         etSurname.setText(accountUser.getLastName());
         etPhonenumber.setText(accountUser.getPhone());
@@ -109,13 +136,19 @@ public class SettingsFragment extends Fragment implements ISettingsView {
         etCountry.setText(accountUser.getCountry());
         etCity.setText(accountUser.getCity());
         etEmail.setText(accountUser.getEmail());
-        return rootView;
+        showAvatar();
     }
 
     @Override
     public void onResume() {
         super.onResume();
         showAvatar();
+    }
+
+    private void showAvatar() {
+        Picasso.with(getContext()).load(accountUser.getAvatarMiddle()).memoryPolicy(MemoryPolicy.NO_CACHE)
+                .resize(0, ResourcesUtils.getDimenInPx(getContext(), R.dimen.sizeOfIconInDrawer))
+                .into(userAvatarInSettings);
     }
 
     @Override
@@ -128,7 +161,7 @@ public class SettingsFragment extends Fragment implements ISettingsView {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()){
             case R.id.action_save_preferences:{
-                settingsFragmentPresenter.updateAccountData(getFilledUser());
+                settingsPresenter.updateAccountData(getFilledUser());
                 break;
             }
         }
@@ -195,13 +228,13 @@ public class SettingsFragment extends Fragment implements ISettingsView {
         switch (requestCode) {
             case Constants.REQUEST_CODES.REQUEST_CODE_CAMERA:
                 if (resultCode == RESULT_OK) {
-                    settingsFragmentPresenter.updateAvatarInSettings(data.getData());
+                    settingsPresenter.updateAvatarInSettings(data.getData());
                 }
                 break;
             case Constants.REQUEST_CODES.REQUEST_CODE_GALERY:
                 if (resultCode == RESULT_OK && data != null) {
                     Uri imageUri = data.getData();
-                    settingsFragmentPresenter.updateAvatarInSettings(imageUri);
+                    settingsPresenter.updateAvatarInSettings(imageUri);
                 }
                 break;
             default:
@@ -229,12 +262,6 @@ public class SettingsFragment extends Fragment implements ISettingsView {
 
     }
 
-    private void showAvatar() {
-        Picasso.with(getContext()).load(accountUser.getAvatar()).memoryPolicy(MemoryPolicy.NO_CACHE)
-                .resize(0, ResourcesUtils.getDimenInPx(getContext(), R.dimen.sizeOfIconInDrawer))
-                .into(userAvatarInSettings);
-    }
-
     private User getFilledUser(){
         return new User(etCity.getText().toString(), etCountry.getText().toString(),
                 etName.getText().toString(), accountUser.getId(), etSurname.getText().toString(),
@@ -255,17 +282,21 @@ public class SettingsFragment extends Fragment implements ISettingsView {
 
     @Override
     public void showProgress() {
-//        showToastMessage("showProgress");
+        DialogFragment fragment = ProgressDialogFragment.newInstance();
+        fragment.show(getChildFragmentManager(), ProgressDialogFragment.TAG);
     }
 
     @Override
     public void hideProgress() {
-//        showToastMessage("hideProgress");
+        DialogFragment fragment = (DialogFragment) getChildFragmentManager().findFragmentByTag(ProgressDialogFragment.TAG);
+        if (fragment != null) {
+            fragment.dismiss();
+        }
     }
 
     @Override
     public void onDestroyView() {
-        settingsFragmentPresenter.unbind();
+        settingsPresenter.unbind();
         super.onDestroyView();
     }
 

@@ -15,6 +15,8 @@ import com.peekaboo.R;
 
 public class ProgressDialogFragment extends DialogFragment {
 
+    public static final String TAG = "progress_dialog";
+
     public static DialogFragment newInstance() {
         DialogFragment fragment = new ProgressDialogFragment();
 

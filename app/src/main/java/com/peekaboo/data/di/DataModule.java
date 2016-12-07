@@ -9,15 +9,9 @@ import android.widget.Toast;
 import com.peekaboo.R;
 import com.peekaboo.data.Constants;
 import com.peekaboo.data.ResponseErrorHandler;
-import com.peekaboo.data.mappers.AbstractMapperFactory;
-import com.peekaboo.data.mappers.MapperFactory;
-import com.peekaboo.data.repositories.SessionDataRepository;
-import com.peekaboo.data.repositories.database.contacts.PContactHelper;
-import com.peekaboo.data.repositories.database.messages.PMessageHelper;
+import com.peekaboo.data.mappers.JsonMapper;
 import com.peekaboo.data.rest.PeekabooApi;
 import com.peekaboo.data.rest.RestApi;
-import com.peekaboo.domain.AccountUser;
-import com.peekaboo.domain.SessionRepository;
 import com.peekaboo.domain.UserMessageMapper;
 import com.peekaboo.utils.FilesUtils;
 
@@ -56,37 +50,43 @@ public class DataModule {
 
     @Singleton
     @Provides
+    public JsonMapper provideJsonMapper() {
+        return new GsonMapper();
+    }
+
+    @Singleton
+    @Provides
     @Named("domens")
     public List<String> getStringFromFile() {
-//        BufferedReader br = null;
+        BufferedReader br = null;
         List<String> domens = new ArrayList<>();
-//
-//        try {
-//
-//            String sCurrentLine;
-//            String filename = Environment.getExternalStorageDirectory() + File.separator + "domens.txt";
-//            File file = new File(filename);
-//            if (!file.exists()) {
-//                file.createNewFile();
-//                BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(file));
-//                String domen = Constants.BASE_URL + "\n" + Constants.BASE_URL_SOCKET;
-//                bufferedWriter.write(domen, 0, domen.length());
-//                bufferedWriter.close();
-//            }
-//            br = new BufferedReader(new FileReader(filename));
-//            while ((sCurrentLine = br.readLine()) != null) {
-//                domens.add(sCurrentLine);
-//            }
-//        } catch (IOException e) {
+
+        try {
+
+            String sCurrentLine;
+            String filename = Environment.getExternalStorageDirectory() + File.separator + "domens.txt";
+            File file = new File(filename);
+            if (!file.exists()) {
+                file.createNewFile();
+                BufferedWriter bufferedWriter = new BufferedWriter(new FileWriter(file));
+                String domen = Constants.BASE_URL + "\n" + Constants.BASE_URL_SOCKET;
+                bufferedWriter.write(domen, 0, domen.length());
+                bufferedWriter.close();
+            }
+            br = new BufferedReader(new FileReader(filename));
+            while ((sCurrentLine = br.readLine()) != null) {
+                domens.add(sCurrentLine);
+            }
+        } catch (IOException e) {
             domens.add(Constants.BASE_URL);
             domens.add(Constants.BASE_URL_SOCKET);
-//        } finally {
-//            try {
-//                if (br != null) br.close();
-//            } catch (IOException ex) {
-//                ex.printStackTrace();
-//            }
-//        }
+        } finally {
+            try {
+                if (br != null) br.close();
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
         return domens;
     }
 

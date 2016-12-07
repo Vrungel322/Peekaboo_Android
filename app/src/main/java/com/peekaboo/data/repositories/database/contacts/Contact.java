@@ -3,6 +3,8 @@ package com.peekaboo.data.repositories.database.contacts;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.peekaboo.domain.GroupChat;
+
 /**
  * Created by Nikita on 10.08.2016.
  */
@@ -15,9 +17,10 @@ public class Contact extends ContactAbs implements Parcelable {
     private boolean isOnline;
     private String contactImgUri;
     private String contactId;
+    private GroupChat groupChat;
 
     public Contact(long id, String contactName, String contactSurname, String contactNickname,
-                   boolean isOnline, String contactImgUri, String contactId) {
+                   boolean isOnline, String contactImgUri, String contactId, GroupChat groupChat) {
         this.id = id;
         this.contactName = contactName;
         this.contactSurname = contactSurname;
@@ -25,6 +28,7 @@ public class Contact extends ContactAbs implements Parcelable {
         this.isOnline = isOnline;
         this.contactImgUri = contactImgUri;
         this.contactId = contactId;
+        this.groupChat = groupChat;
     }
 
     @Override
@@ -66,11 +70,16 @@ public class Contact extends ContactAbs implements Parcelable {
         return contactImgUri;
     }
 
+    @Override
+    public GroupChat groupChat() {
+        return groupChat;
+    }
+
     public String contactImgUriSmall() {
-        return contactImgUri + "2";
+        return contactImgUri + "/2";
     }
     public String contactImgUriMiddle() {
-        return contactImgUri + "1";
+        return contactImgUri + "/1";
     }
 
     public void setId(long id) {

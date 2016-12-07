@@ -94,6 +94,13 @@ public class SessionDataRepository implements SessionRepository {
         return restApi.confirm(new ConfirmKey(id, key))
                 .map(token -> {
                     user.saveToken(token.getToken());
+                    user.saveMode(token.getMode());
+                    user.saveFirstName(token.getFirstName());
+                    user.saveLastName(token.getLastName());
+                    user.saveCountry(token.getCountry());
+                    user.saveCity(token.getCity());
+                    user.savePhone(token.getPhone());
+                    user.saveEmail(token.getEmail());
                     return user;
                 }).flatMap(accountUser -> loadAllContacts())
                 .map(contacts -> user);

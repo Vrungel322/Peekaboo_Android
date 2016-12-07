@@ -13,15 +13,12 @@ import android.os.SystemClock;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,13 +38,10 @@ import com.peekaboo.data.repositories.database.messages.PMessageAbs;
 import com.peekaboo.domain.AccountUser;
 import com.peekaboo.presentation.PeekabooApplication;
 import com.peekaboo.presentation.activities.DrawerActivity;
-import com.peekaboo.presentation.activities.MapActivity;
 import com.peekaboo.presentation.adapters.ChatAdapter2;
 import com.peekaboo.presentation.app.ActivityResult;
 import com.peekaboo.presentation.app.view.PHorizontalScrollView;
 import com.peekaboo.presentation.presenters.ChatPresenter2;
-import com.peekaboo.presentation.services.INotifier;
-import com.peekaboo.presentation.services.Message;
 import com.peekaboo.presentation.utils.ActivityUtils;
 import com.peekaboo.presentation.views.IChatView2;
 import com.peekaboo.utils.ActivityNavigator;
@@ -392,21 +386,9 @@ public class ChatFragment extends Fragment implements IChatView2, DrawerActivity
 
     @OnClick(R.id.navigation_btn)
     void onNavigationButtonClick() {
-        activityNavigator.startMapActivity(getActivity(), Constants.REQUEST_CODES.REQUEST_CODE_GPS);
-//        takeNavigation();
+        activityNavigator.startMapActivity(this, Constants.REQUEST_CODES.REQUEST_CODE_GPS);
     }
 
-    public void takeNavigation() {
-//        Uri gmmIntentUri = Uri.parse("geo:37.7749,-122.4194?z=20");
-//        Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-//        mapIntent.setPackage("com.google.android.apps.maps");
-//        startActivity(mapIntent);
-//        ---
-        Intent mapintent = new Intent(getActivity(), MapActivity.class);
-        getActivity().startActivityForResult(mapintent, Constants.REQUEST_CODES.REQUEST_CODE_GPS);
-//        activityNavigator.startMapActivity(getContext());
-        Log.wtf("NULL : ", "sendim gpsimg in fragment tn");
-    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -415,6 +397,7 @@ public class ChatFragment extends Fragment implements IChatView2, DrawerActivity
     }
 
     private void handleActivityResult(@NonNull ActivityResult activityResult) {
+        Log.e("ChatFragment", "handleActivityResult()");
         Intent data = activityResult.data;
         int requestCode = activityResult.requestCode;
         int resultCode = activityResult.resultCode;
@@ -436,9 +419,9 @@ public class ChatFragment extends Fragment implements IChatView2, DrawerActivity
                 }
                 break;
             case Constants.REQUEST_CODES.REQUEST_CODE_GPS:
+                Log.e("ChatFragment", "handle result gps " + resultCode + " " + data);
                 if (resultCode == Activity.RESULT_OK && null != data) {
-                    String link = data.getStringExtra("staticmap");
-                    Log.wtf("NULL : ", "sendGPS " + link);
+                    String link = data.getStringExtra(STATICMAP);
                     sendGeo(link);
 
                 }

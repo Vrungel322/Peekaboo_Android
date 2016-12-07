@@ -2,6 +2,7 @@ package com.peekaboo.domain;
 
 import android.content.SharedPreferences;
 import android.support.annotation.Nullable;
+import android.util.Log;
 
 /**
  * Created by sebastian on 28.06.16.
@@ -130,6 +131,12 @@ public class AccountUser extends User {
         return domen + getId();
     }
 
+
+    public String getAvatarMiddle() {
+        return getAvatar() + "";
+    }
+
+
     @Nullable
     public String getToken() {
         return token;
@@ -188,6 +195,7 @@ public class AccountUser extends User {
     }
 
     public void saveNotificationsEnabled(boolean notificationsEnabled) {
+        Log.e("AccountUser", "notifications enabled " + notificationsEnabled);
         this.notificationsEnabled = notificationsEnabled;
         preferences.edit().putBoolean(NOTIFICATIONS_ENABLED, notificationsEnabled).commit();
     }
