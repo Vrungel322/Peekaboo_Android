@@ -1,10 +1,10 @@
 package com.peekaboo.domain.usecase;
 
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import com.peekaboo.data.Constants;
 import com.peekaboo.data.FileEntity;
+import com.peekaboo.data.di.scope.UserScope;
 import com.peekaboo.data.repositories.database.messages.PMessage;
 import com.peekaboo.data.repositories.database.messages.PMessageAbs;
 import com.peekaboo.domain.SessionRepository;
@@ -15,11 +15,10 @@ import java.io.File;
 import java.io.IOException;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 import retrofit2.Response;
 
-@Singleton
+@UserScope
 public class FileUploadUseCase extends QueueUseCase<PMessage, FileEntity> {
 
     private final SessionRepository repository;

@@ -15,11 +15,14 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.peekaboo.R;
 import com.peekaboo.domain.AccountUser;
+import com.peekaboo.domain.User;
 import com.peekaboo.presentation.PeekabooApplication;
 import com.peekaboo.presentation.dialogs.AvatarChangeDialog;
 import com.peekaboo.presentation.presenters.SettingsFragmentPresenter;
@@ -28,6 +31,10 @@ import com.peekaboo.utils.Constants;
 import com.peekaboo.utils.Utility;
 import com.squareup.picasso.MemoryPolicy;
 import com.squareup.picasso.Picasso;
+import com.twitter.sdk.android.core.Result;
+import com.twitter.sdk.android.core.TwitterException;
+import com.twitter.sdk.android.core.TwitterSession;
+import com.twitter.sdk.android.core.identity.TwitterAuthClient;
 
 import java.io.File;
 import java.io.IOException;
@@ -54,6 +61,20 @@ public class SettingsFragment extends Fragment implements ISettingsView {
 
     @BindView(R.id.userAvatarInSettings)
     ImageView userAvatarInSettings;
+    @BindView(R.id.bLogInToTwitter)
+    Button bLogInToTwitter;
+    @BindView(R.id.etPhonenumber)
+    EditText etPhonenumber;
+    @BindView(R.id.etEmail)
+    EditText etEmail;
+    @BindView(R.id.etName)
+    EditText etName;
+    @BindView(R.id.etSurname)
+    EditText etSurname;
+    @BindView(R.id.etCountry)
+    EditText etCountry;
+    @BindView(R.id.etCity)
+    EditText etCity;
     @Nullable
     private IUpdateAvatarInDrawer iUpdateAvatarInDrawer;
 
@@ -68,7 +89,7 @@ public class SettingsFragment extends Fragment implements ISettingsView {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         PeekabooApplication.getApp(getActivity()).getComponent().inject(this);
-
+        this.iUpdateAvatarInDrawer = (IUpdateAvatarInDrawer) getActivity();
     }
 
     @Nullable
@@ -76,10 +97,18 @@ public class SettingsFragment extends Fragment implements ISettingsView {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.settings_layout, container, false);
         ButterKnife.bind(this, rootView);
-//        setHasOptionsMenu(true);
+        setHasOptionsMenu(true);
         ((AppCompatActivity) getActivity()).getSupportActionBar().setTitle("Settings");
         showAvatar();
         settingsFragmentPresenter.bind(this);
+//        etPhonenumber.setText(CredentialUtils.getPhoneNumber(getApplicationContext()));
+        etName.setText(accountUser.getFirstName());
+        etSurname.setText(accountUser.getLastName());
+        etPhonenumber.setText(accountUser.getPhone());
+        etCountry.setText(accountUser.getCountry());
+        etCountry.setText(accountUser.getCountry());
+        etCity.setText(accountUser.getCity());
+        etEmail.setText(accountUser.getEmail());
         return rootView;
     }
 
@@ -97,6 +126,12 @@ public class SettingsFragment extends Fragment implements ISettingsView {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.action_save_preferences:{
+                settingsFragmentPresenter.updateAccountData(getFilledUser());
+                break;
+            }
+        }
         return super.onOptionsItemSelected(item);
     }
 
@@ -134,6 +169,27 @@ public class SettingsFragment extends Fragment implements ISettingsView {
         avatarChangeDialog.show(ft, "avatar_change_dialog");
     }
 
+    @OnClick(R.id.bLogInToTwitter)
+    public void bLogInToTwitterClicked(){
+
+        TwitterAuthClient mTwitterAuthClient= new TwitterAuthClient();
+        mTwitterAuthClient.authorize(getActivity(), new com.twitter.sdk.android.core.Callback<TwitterSession>() {
+
+            @Override
+            public void success(Result<TwitterSession> twitterSessionResult) {
+                // Success
+                String msg = "@" + twitterSessionResult.data.getUserName()
+                        + " logged in! (#" + twitterSessionResult.data.getUserId() + ")";
+                showToastMessage(msg);
+            }
+
+            @Override
+            public void failure(TwitterException e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         switch (requestCode) {
@@ -153,11 +209,6 @@ public class SettingsFragment extends Fragment implements ISettingsView {
                 break;
         }
     }
-
-    public void setUpdaterOfAvatarInDrawer(IUpdateAvatarInDrawer iUpdateAvatarInDrawer){
-        this.iUpdateAvatarInDrawer = iUpdateAvatarInDrawer;
-    }
-
 
     @Override
     public void updateAvatarViewInSettings(String result) {
@@ -180,8 +231,26 @@ public class SettingsFragment extends Fragment implements ISettingsView {
 
     private void showAvatar() {
         Picasso.with(getContext()).load(accountUser.getAvatar()).memoryPolicy(MemoryPolicy.NO_CACHE)
-                .resize(0, ResourcesUtils.getDimenInPx(getContext(), R.dimen.widthOfIconInDrawer))
+                .resize(0, ResourcesUtils.getDimenInPx(getContext(), R.dimen.sizeOfIconInDrawer))
                 .into(userAvatarInSettings);
+    }
+
+    private User getFilledUser(){
+        return new User(etCity.getText().toString(), etCountry.getText().toString(),
+                etName.getText().toString(), accountUser.getId(), etSurname.getText().toString(),
+                etPhonenumber.getText().toString(), accountUser.getUsername(), etEmail.getText().toString());
+    }
+
+    @Override
+    public void updateAccountUserFromSettings(){
+        accountUser.saveFirstName(etName.getText().toString());
+        accountUser.saveLastName(etSurname.getText().toString());
+        accountUser.savePhone(etPhonenumber.getText().toString());
+        accountUser.saveCountry(etCountry.getText().toString());
+        accountUser.saveCity(etCity.getText().toString());
+        accountUser.saveEmail(etEmail.getText().toString());
+        Toast.makeText(getContext(), "saveSettingsData", Toast.LENGTH_LONG).show();
+
     }
 
     @Override
@@ -198,5 +267,11 @@ public class SettingsFragment extends Fragment implements ISettingsView {
     public void onDestroyView() {
         settingsFragmentPresenter.unbind();
         super.onDestroyView();
+    }
+
+    @Override
+    public void onDestroy() {
+        this.iUpdateAvatarInDrawer = null;
+        super.onDestroy();
     }
 }

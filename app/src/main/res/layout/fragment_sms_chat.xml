@@ -9,6 +9,8 @@
         android:id="@+id/sms_messages_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_above="@+id/send_containter"
+        android:layout_alignParentTop="true"
         android:cacheColorHint="@android:color/transparent"
         android:clipToPadding="false"
         android:divider="@null"
@@ -18,72 +20,105 @@
         android:paddingBottom="4dp"
         android:paddingLeft="16dp"
         android:paddingRight="16dp"
-        android:scrollbars="none"
-        android:layout_above="@+id/send_containter"
-        android:layout_alignParentTop="true"
-        />
+        android:scrollbars="none" />
 
     <LinearLayout
         android:id="@+id/send_containter"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/colorPrimary"
         android:gravity="center_horizontal"
         android:orientation="vertical"
         android:layout_alignParentBottom="true"
-        >
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true">
 
-        <View
+        <com.peekaboo.presentation.app.view.PHorizontalScrollView
+            android:id="@+id/svItems"
             android:layout_width="match_parent"
-            android:layout_height="4dp"
-            android:background="@drawable/bot_bar_gradient" />
-
-        <LinearLayout
-            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingLeft="8dp"
-            android:paddingTop="8dp"
-            android:weightSum="10">
+            android:layout_gravity="center"
+            android:fillViewport="true"
+            android:foregroundGravity="center"
+            android:paddingBottom="@dimen/marginBotForBar"
+            android:scrollbars="none">
 
             <LinearLayout
-                android:id="@+id/llMessageBody"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:background="@drawable/round_left_bubble"
-                android:orientation="horizontal">
+                android:gravity="center_horizontal"
+                android:orientation="vertical">
 
-                <com.peekaboo.presentation.app.view.SmartWidthEditText
-                    android:id="@+id/message_body_edit_text"
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="4dp"
+                    android:background="@drawable/bot_bar_gradient" />
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="2dp"
-                    android:background="@null"
-                    android:ellipsize="end"
+                    android:orientation="horizontal"
+                    android:paddingLeft="8dp"
+                    android:paddingTop="8dp"
+                    android:weightSum="10">
 
-                    android:focusable="true"
-                    android:focusableInTouchMode="true"
-                    android:maxLines="2"
-                    android:paddingBottom="@dimen/edit_text_tb_padding"
-                    android:paddingLeft="@dimen/edit_text_side_padding"
-                    android:paddingRight="@dimen/edit_text_side_padding"
-                    android:paddingTop="@dimen/edit_text_tb_padding"
-                    android:textColor="#000"
-                    android:textCursorDrawable="@drawable/color_cursor" />
+                    <io.codetail.widget.RevealFrameLayout
+                        android:id="@+id/rflMessageBody"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="8"
+                        android:visibility="visible">
+
+                        <!--android:focusable="true"-->
+                        <!--android:focusableInTouchMode="true"-->
+                        <LinearLayout
+                            android:id="@+id/llMessageBody"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/message_edittext"
+                            android:orientation="horizontal">
+
+                            <com.peekaboo.presentation.app.view.SmartWidthEditText
+                                android:id="@+id/message_body_edit_text"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="2dp"
+                                android:background="@null"
+                                android:ellipsize="end"
+                                android:focusable="true"
+                                android:focusableInTouchMode="true"
+                                android:maxLines="2"
+                                android:paddingBottom="@dimen/edit_text_tb_padding"
+                                android:paddingLeft="@dimen/edit_text_side_padding"
+                                android:paddingRight="@dimen/edit_text_side_padding"
+                                android:paddingTop="@dimen/edit_text_tb_padding"
+                                android:textColor="#000"
+                                android:textCursorDrawable="@drawable/color_cursor" />
 
 
+                        </LinearLayout>
+
+                    </io.codetail.widget.RevealFrameLayout>
+
+                    <LinearLayout
+                        android:id="@+id/llItems"
+                        android:layout_width="0dp"
+                        android:layout_weight="2"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:orientation="horizontal">
+
+                        <ImageButton
+                            android:id="@+id/bSendSmsMessage"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:background="@drawable/plane"
+                            android:layout_gravity="center" />
+
+                    </LinearLayout>
+                </LinearLayout>
             </LinearLayout>
-
-            <ImageButton
-                android:id="@+id/send_message_button"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/chat_buttons_margin"
-                android:layout_marginRight="@dimen/chat_buttons_margin"
-                android:background="@drawable/plane"
-                android:foregroundGravity="center_vertical" />
-
-        </LinearLayout>
+        </com.peekaboo.presentation.app.view.PHorizontalScrollView>
     </LinearLayout>
 
 </RelativeLayout>

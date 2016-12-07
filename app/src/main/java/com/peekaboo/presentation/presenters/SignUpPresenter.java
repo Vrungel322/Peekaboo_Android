@@ -1,6 +1,7 @@
 package com.peekaboo.presentation.presenters;
 
 import com.peekaboo.R;
+import com.peekaboo.data.di.scope.UserScope;
 import com.peekaboo.domain.AccountUser;
 import com.peekaboo.domain.UserMessageMapper;
 import com.peekaboo.domain.subscribers.BaseProgressSubscriber;
@@ -11,12 +12,11 @@ import com.peekaboo.presentation.views.ICredentialsView;
 import com.peekaboo.presentation.views.ISignUpView;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 /**
  * Created by sebastian on 28.06.16.
  */
-@Singleton
+@UserScope
 public class SignUpPresenter extends ProgressPresenter<ISignUpView> implements ISignUpPresenter,
         BaseProgressSubscriber.ProgressSubscriberListener {
     private SignUpUseCase signUpUseCase;
@@ -71,9 +71,9 @@ public class SignUpPresenter extends ProgressPresenter<ISignUpView> implements I
     }
 
     @Override
-    public void onSignUpButtonClick(String phone, String username, String login, String password, String passwordConfirm) {
-        if (isValid(username, login, password, passwordConfirm)) {
-            signUpUseCase.setCredentials(phone, username, login, password);
+    public void onSignUpButtonClick(String phone, String username, String email, String password, String passwordConfirm) {
+        if (isValid(username, email, password, passwordConfirm)) {
+            signUpUseCase.setCredentials(phone, username, email, password);
             signUpUseCase.execute(getSignUpSubscriber());
         }
     }

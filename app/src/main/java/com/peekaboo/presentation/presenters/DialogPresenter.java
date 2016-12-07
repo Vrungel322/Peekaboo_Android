@@ -2,6 +2,7 @@ package com.peekaboo.presentation.presenters;
 
 import android.util.Log;
 
+import com.peekaboo.data.di.scope.UserScope;
 import com.peekaboo.data.repositories.database.messages.PMessage;
 import com.peekaboo.domain.Dialog;
 import com.peekaboo.domain.UserMessageMapper;
@@ -20,8 +21,9 @@ import javax.inject.Inject;
  * Created by st1ch on 27.09.2016.
  */
 
+@UserScope
 public class DialogPresenter extends ProgressPresenter<IDialogsView>
-        implements  IDialogPresenter, IMessenger.MessengerListener {
+        implements IDialogPresenter, IMessenger.MessengerListener {
 
     private final IMessenger messenger;
     private GetDialogsListUseCase getDialogsListUseCase;
@@ -36,10 +38,6 @@ public class DialogPresenter extends ProgressPresenter<IDialogsView>
     }
 
     @Override
-    public void onCreate() {
-    }
-
-    @Override
     public void onPause() {
         messenger.removeMessageListener(this);
     }
@@ -47,31 +45,29 @@ public class DialogPresenter extends ProgressPresenter<IDialogsView>
     @Override
     public void onResume() {
         messenger.addMessageListener(this);
+        loadDialogList();
+
     }
 
     @Override
-    public void onDestroy() {
+    public void unbind() {
         getDialogsListUseCase.unsubscribe();
-        unbind();
+        super.unbind();
     }
 
-    @Override
     public void loadDialogList() {
         getDialogsListUseCase.execute(getDialogsListSubscriber());
-        Log.wtf("DialogPresenter", "loadDialogList()");
-
     }
 
-    private BaseProgressSubscriber<List<Dialog>> getDialogsListSubscriber(){
-        return new BaseProgressSubscriber<List<Dialog>>(this){
+    private BaseProgressSubscriber<List<Dialog>> getDialogsListSubscriber() {
+        return new BaseProgressSubscriber<List<Dialog>>(this) {
             @Override
             public void onNext(List<Dialog> response) {
                 super.onNext(response);
-                Log.wtf("DialogPresenter", "onNext()" + getView());
-
-                if(getView() != null){
+                IDialogsView view = getView();
+                if (view != null) {
                     Collections.sort(response, new DialogComparator());
-                    getView().showDialogsList(response);
+                    view.showDialogsList(response);
                 }
             }
         };

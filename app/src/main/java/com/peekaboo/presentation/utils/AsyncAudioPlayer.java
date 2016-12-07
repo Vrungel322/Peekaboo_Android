@@ -7,17 +7,17 @@ import android.os.PowerManager;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
+import com.peekaboo.data.di.scope.UserScope;
 import com.peekaboo.utils.MainThread;
 
 import java.io.IOException;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 /**
  * Created by sebastian on 07.09.16.
  */
-@Singleton
+@UserScope
 public class AsyncAudioPlayer implements AudioPlayer, MediaPlayer.OnPreparedListener, MediaPlayer.OnCompletionListener, MediaPlayer.OnErrorListener {
     public static final int ACTION_ID = 1010;
     public static final int UPDATE_PROGRESS_INTERVAL_MILLIS = 200;

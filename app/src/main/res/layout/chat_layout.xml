@@ -1,271 +1,267 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    style="@style/ChatActivityBackgroundTheme"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:layout_height="match_parent">
 
-    <LinearLayout
+
+    <FrameLayout
         style="@style/ChatActivityBackgroundTheme"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="match_parent">
 
-        <!--<android.support.design.widget.AppBarLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:theme="@style/AppTheme.AppBarOverlay">-->
-
-        <!--<android.support.v7.widget.Toolbar-->
-        <!--android:id="@+id/toolbarChat"-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="?attr/actionBarSize"-->
-        <!--android:background="@color/colorAccent"-->
-        <!--android:titleTextColor="@color/textColor"-->
-        <!--app:contentInsetStart="-20dp">-->
-
-        <!--<include layout="@layout/toolbar_layout" />-->
-
-        <!--</android.support.v7.widget.Toolbar>-->
-
-        <!--</android.support.design.widget.AppBarLayout>-->
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rvMessages"
+        <LinearLayout
+            style="@style/ChatActivityBackgroundTheme"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:cacheColorHint="@android:color/transparent"
-            android:clipToPadding="false"
-            android:divider="@null"
-            android:listSelector="@android:color/transparent"
-            android:overScrollMode="ifContentScrolls"
-            android:padding="@dimen/items_margin"
-            android:paddingBottom="4dp"
-            android:paddingLeft="@dimen/chat_horizontal_margin"
-            android:paddingRight="@dimen/chat_horizontal_margin"
-            android:scrollbars="none" />
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-        <ProgressBar
-            android:id="@+id/pbLoadingImageToServer"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_gravity="end"
-            android:visibility="gone" />
+            <!--<android.support.design.widget.AppBarLayout-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:theme="@style/AppTheme.AppBarOverlay">-->
 
-        <com.peekaboo.presentation.app.view.PHorizontalScrollView
-            android:id="@+id/svItems"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:fillViewport="true"
-            android:foregroundGravity="center"
-            android:paddingBottom="@dimen/marginBotForBar"
-            android:scrollbars="none">
+            <!--<android.support.v7.widget.Toolbar-->
+            <!--android:id="@+id/toolbarChat"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="?attr/actionBarSize"-->
+            <!--android:background="@color/colorAccent"-->
+            <!--android:titleTextColor="@color/textColor"-->
+            <!--app:contentInsetStart="-20dp">-->
 
-            <LinearLayout
+            <!--<include layout="@layout/toolbar_layout" />-->
+
+            <!--</android.support.v7.widget.Toolbar>-->
+
+            <!--</android.support.design.widget.AppBarLayout>-->
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rvMessages"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:cacheColorHint="@android:color/transparent"
+                android:clipToPadding="false"
+                android:divider="@null"
+                android:listSelector="@android:color/transparent"
+                android:overScrollMode="ifContentScrolls"
+                android:padding="@dimen/items_margin"
+                android:paddingBottom="4dp"
+                android:paddingLeft="@dimen/chat_horizontal_margin"
+                android:paddingRight="@dimen/chat_horizontal_margin"
+                android:scrollbars="none" />
+
+
+            <com.peekaboo.presentation.app.view.PHorizontalScrollView
+                android:id="@+id/svItems"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:gravity="center_horizontal"
-                android:orientation="vertical">
-
-                <View
-                    android:layout_width="match_parent"
-                    android:layout_height="4dp"
-                    android:background="@drawable/bot_bar_gradient" />
+                android:layout_gravity="center"
+                android:fillViewport="true"
+                android:foregroundGravity="center"
+                android:paddingBottom="@dimen/marginBotForBar"
+                android:scrollbars="none">
 
                 <LinearLayout
-                    android:layout_width="wrap_content"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:paddingLeft="8dp"
-                    android:paddingTop="8dp"
-                    android:weightSum="10">
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
 
-                    <io.codetail.widget.RevealFrameLayout
-                        android:id="@+id/rflMessageBody"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="8"
-                        android:visibility="gone">
-
-                        <!--android:focusable="true"-->
-                        <!--android:focusableInTouchMode="true"-->
-                        <LinearLayout
-                            android:id="@+id/llMessageBody"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:background="@drawable/message_edittext"
-                            android:orientation="horizontal">
-
-                            <com.peekaboo.presentation.app.view.SmartWidthEditText
-                                android:id="@+id/etMessageBody"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="2dp"
-                                android:background="@null"
-                                android:ellipsize="end"
-                                android:focusable="true"
-                                android:focusableInTouchMode="true"
-                                android:maxLines="2"
-                                android:paddingBottom="@dimen/edit_text_tb_padding"
-                                android:paddingLeft="@dimen/edit_text_side_padding"
-                                android:paddingRight="@dimen/edit_text_side_padding"
-                                android:paddingTop="@dimen/edit_text_tb_padding"
-                                android:textColor="#000"
-                                android:textCursorDrawable="@drawable/color_cursor" />
-
-
-                        </LinearLayout>
-
-                    </io.codetail.widget.RevealFrameLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="4dp"
+                        android:background="@drawable/bot_bar_gradient" />
 
                     <LinearLayout
-                        android:id="@+id/llItems"
-                        android:layout_width="0dp"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="bottom"
-                        android:layout_weight="2"
-                        android:foregroundGravity="center"
-                        android:gravity="bottom"
-                        android:orientation="horizontal">
+                        android:orientation="horizontal"
+                        android:paddingLeft="8dp"
+                        android:paddingTop="8dp"
+                        android:weightSum="10">
 
-                        <ImageButton
-                            android:id="@+id/bSendMessage"
-                            android:layout_width="wrap_content"
+                        <io.codetail.widget.RevealFrameLayout
+                            android:id="@+id/rflMessageBody"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/chat_buttons_margin"
-                            android:layout_marginRight="@dimen/chat_buttons_margin"
-                            android:background="@drawable/plane"
-                            android:foregroundGravity="center_vertical"
-                            android:visibility="gone" />
+                            android:layout_weight="8"
+                            android:visibility="gone">
 
-                        <ImageButton
-                            android:id="@+id/bMessageOpen"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/chat_buttons_margin"
-                            android:layout_marginRight="@dimen/chat_buttons_margin"
-                            android:layout_weight="2"
-                            android:background="@drawable/text" />
+                            <!--android:focusable="true"-->
+                            <!--android:focusableInTouchMode="true"-->
+                            <LinearLayout
+                                android:id="@+id/llMessageBody"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:background="@drawable/message_edittext"
+                                android:orientation="horizontal">
 
-                        <ImageButton
-                            android:id="@+id/smile_btn"
-                            android:layout_width="wrap_content"
+                                <com.peekaboo.presentation.app.view.SmartWidthEditText
+                                    android:id="@+id/etMessageBody"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginLeft="2dp"
+                                    android:background="@null"
+                                    android:ellipsize="end"
+                                    android:focusable="true"
+                                    android:focusableInTouchMode="true"
+                                    android:maxLines="2"
+                                    android:paddingBottom="@dimen/edit_text_tb_padding"
+                                    android:paddingLeft="@dimen/edit_text_side_padding"
+                                    android:paddingRight="@dimen/edit_text_side_padding"
+                                    android:paddingTop="@dimen/edit_text_tb_padding"
+                                    android:textColor="#000"
+                                    android:textCursorDrawable="@drawable/color_cursor" />
+
+
+                            </LinearLayout>
+
+                        </io.codetail.widget.RevealFrameLayout>
+
+                        <LinearLayout
+                            android:id="@+id/llItems"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_gravity="bottom"
-                            android:layout_marginLeft="@dimen/chat_buttons_margin"
-                            android:layout_marginRight="@dimen/chat_buttons_margin"
                             android:layout_weight="2"
-                            android:background="@drawable/smile"
-                            android:foregroundGravity="bottom" />
-
-
-                        <FrameLayout
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/chat_buttons_margin"
-                            android:layout_marginRight="@dimen/chat_buttons_margin">
-
-                            <io.codetail.widget.RevealFrameLayout
-                                android:id="@+id/rflButtonRecord"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:visibility="gone">
-
-                                <LinearLayout
-                                    android:id="@+id/llRecord"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content">
-
-                                    <ImageView
-                                        android:id="@+id/micro_anim"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:background="@drawable/selected_item_anim_background" />
-                                </LinearLayout>
-
-                            </io.codetail.widget.RevealFrameLayout>
+                            android:foregroundGravity="center"
+                            android:gravity="bottom"
+                            android:orientation="horizontal">
 
                             <ImageButton
-                                android:id="@+id/micro_btn"
+                                android:id="@+id/bSendMessage"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_gravity="center"
+                                android:layout_marginLeft="@dimen/chat_buttons_margin"
+                                android:layout_marginRight="@dimen/chat_buttons_margin"
+                                android:background="@drawable/plane"
+                                android:foregroundGravity="center_vertical"
+                                android:visibility="gone" />
+
+                            <ImageButton
+                                android:id="@+id/bMessageOpen"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/chat_buttons_margin"
+                                android:layout_marginRight="@dimen/chat_buttons_margin"
                                 android:layout_weight="2"
-                                android:background="@drawable/voice" />
-                        </FrameLayout>
+                                android:background="@drawable/text" />
+
+                            <ImageButton
+                                android:id="@+id/smile_btn"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="bottom"
+                                android:layout_marginLeft="@dimen/chat_buttons_margin"
+                                android:layout_marginRight="@dimen/chat_buttons_margin"
+                                android:layout_weight="2"
+                                android:background="@drawable/smile"
+                                android:foregroundGravity="bottom" />
 
 
-                        <ImageButton
-                            android:id="@+id/photo_btn"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/chat_buttons_margin"
-                            android:layout_marginRight="@dimen/chat_buttons_margin"
-                            android:layout_weight="2"
-                            android:background="@drawable/photo" />
+                            <FrameLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/chat_buttons_margin"
+                                android:layout_marginRight="@dimen/chat_buttons_margin">
 
-                        <ImageButton
-                            android:id="@+id/camera_btn"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/chat_buttons_margin"
-                            android:layout_marginRight="@dimen/chat_buttons_margin"
-                            android:layout_weight="2"
-                            android:background="@drawable/video" />
+                                <io.codetail.widget.RevealFrameLayout
+                                    android:id="@+id/rflButtonRecord"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:visibility="gone">
 
-                        <ImageButton
-                            android:id="@+id/gallery_btn"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/chat_buttons_margin"
-                            android:layout_marginRight="@dimen/chat_buttons_margin"
-                            android:layout_weight="2"
-                            android:background="@drawable/image" />
+                                    <LinearLayout
+                                        android:id="@+id/llRecord"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content">
 
-                        <ImageButton
-                            android:id="@+id/navigation_btn"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginLeft="@dimen/chat_buttons_margin"
-                            android:layout_marginRight="@dimen/chat_buttons_margin"
-                            android:layout_weight="2"
-                            android:background="@drawable/location" />
+                                        <ImageView
+                                            android:id="@+id/micro_anim"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:background="@drawable/selected_item_anim_background" />
+                                    </LinearLayout>
 
+                                </io.codetail.widget.RevealFrameLayout>
+
+                                <ImageButton
+                                    android:id="@+id/micro_btn"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_gravity="center"
+                                    android:layout_weight="2"
+                                    android:background="@drawable/voice" />
+                            </FrameLayout>
+
+
+                            <ImageButton
+                                android:id="@+id/photo_btn"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/chat_buttons_margin"
+                                android:layout_marginRight="@dimen/chat_buttons_margin"
+                                android:layout_weight="2"
+                                android:background="@drawable/photo" />
+
+                            <ImageButton
+                                android:id="@+id/camera_btn"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/chat_buttons_margin"
+                                android:layout_marginRight="@dimen/chat_buttons_margin"
+                                android:layout_weight="2"
+                                android:background="@drawable/video" />
+
+                            <ImageButton
+                                android:id="@+id/gallery_btn"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/chat_buttons_margin"
+                                android:layout_marginRight="@dimen/chat_buttons_margin"
+                                android:layout_weight="2"
+                                android:background="@drawable/image" />
+
+                            <ImageButton
+                                android:id="@+id/navigation_btn"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/chat_buttons_margin"
+                                android:layout_marginRight="@dimen/chat_buttons_margin"
+                                android:layout_weight="2"
+                                android:background="@drawable/location" />
+
+                        </LinearLayout>
                     </LinearLayout>
                 </LinearLayout>
-            </LinearLayout>
-        </com.peekaboo.presentation.app.view.PHorizontalScrollView>
+            </com.peekaboo.presentation.app.view.PHorizontalScrollView>
+        </LinearLayout>
 
-
-    </LinearLayout>
-
-    <io.codetail.widget.RevealFrameLayout
-        android:id="@+id/rflTimer"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/audio_anim_height"
-        android:layout_gravity="bottom"
-        android:visibility="gone">
-
-        <FrameLayout
-            android:id="@+id/flTimer"
+        <io.codetail.widget.RevealFrameLayout
+            android:id="@+id/rflTimer"
             android:layout_width="match_parent"
             android:layout_height="@dimen/audio_anim_height"
             android:layout_gravity="bottom"
-            android:background="@color/colorAccent">
+            android:visibility="gone">
 
-            <Chronometer
-                android:id="@+id/timerRecord"
+            <FrameLayout
+                android:id="@+id/flTimer"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_gravity="center"
-                android:background="@color/colorAccent"
-                android:gravity="center"
-                android:textColor="@color/textColor"
-                android:textSize="@dimen/audio_chronometer_text_size"
-                android:textStyle="bold" />
-        </FrameLayout>
-    </io.codetail.widget.RevealFrameLayout>
+                android:layout_height="@dimen/audio_anim_height"
+                android:layout_gravity="bottom"
+                android:background="@color/colorAccent">
 
-</FrameLayout>
+                <Chronometer
+                    android:id="@+id/timerRecord"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:background="@color/colorAccent"
+                    android:gravity="center"
+                    android:textColor="@color/textColor"
+                    android:textSize="@dimen/audio_chronometer_text_size"
+                    android:textStyle="bold" />
+            </FrameLayout>
+        </io.codetail.widget.RevealFrameLayout>
+    </FrameLayout>
+</android.support.design.widget.CoordinatorLayout>

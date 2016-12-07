@@ -26,8 +26,8 @@
             <ImageView
                 android:id="@+id/ivAvatarBlur"
                 android:layout_width="match_parent"
-                android:scaleType="centerCrop"
-                android:layout_height="@dimen/nav_header_height" />
+                android:layout_height="@dimen/nav_header_height"
+                android:scaleType="centerCrop" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -35,34 +35,31 @@
                 android:orientation="vertical">
 
                 <FrameLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="@dimen/sizeOfIconInDrawer"
+                    android:layout_height="@dimen/sizeOfIconInDrawer"
                     android:layout_gravity="center_horizontal"
                     android:layout_marginTop="25dp">
 
 
                     <de.hdodenhof.circleimageview.CircleImageView
                         android:id="@+id/ivAccountAvatar"
-                        android:layout_width="@dimen/widthOfIconInDrawer"
-                        android:layout_height="@dimen/heightOfIconInDrawer"
-                        android:layout_gravity="center"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
                         android:clickable="true"
                         app:border_color="@android:color/transparent"
                         tools:src="@drawable/raccoon" />
 
                     <ProgressBar
                         android:id="@+id/pbLoading_avatar_progress_bar"
-                        android:layout_width="@dimen/widthOfIconInDrawer"
-                        android:visibility="gone"
-                        android:layout_height="@dimen/heightOfIconInDrawer" />
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:visibility="gone" />
 
-                    <View
-                        android:id="@+id/ivOnlineStatus"
-                        android:layout_width="@dimen/hotFriendStatusIconSize"
-                        android:layout_height="@dimen/hotFriendStatusIconSize"
-                        android:layout_gravity="right|top"
-                        android:layout_marginRight="2dp"
-                        tools:background="@drawable/drawer_offline_indicator" />
+                    <com.peekaboo.presentation.app.view.OnlineIndicatorView
+                        android:id="@+id/oiUserOnlineIndicator"
+                        android:layout_width="@dimen/online_indicator_size"
+                        android:layout_height="@dimen/online_indicator_size"
+                        android:layout_gravity="right" />
 
                 </FrameLayout>
 

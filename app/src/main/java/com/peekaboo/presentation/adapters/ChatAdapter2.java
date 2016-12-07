@@ -229,10 +229,13 @@ public class ChatAdapter2 extends RecyclerView.Adapter<ChatAdapter2.ViewHolder> 
                 break;
             case PMessageAbs.PMESSAGE_MEDIA_TYPE.IMAGE_MESSAGE:
                 if (holder instanceof ViewHolderImage) {
+                    ViewHolderImage holderImage = (ViewHolderImage) holder;
                     String image = pMessageAbs.messageBody();
+                    holderImage.ivImageMessage.setImageBitmap(null);
+                    holderImage.pbLoadingImage.setVisibility(pMessageAbs.hasBothPaths() || pMessageAbs.hasFileError() ? View.GONE : View.VISIBLE);
                     if (image.split(PMessage.DIVIDER).length == 2) {
                         Log.wtf("image : ", ResourcesUtils.splitImagePath(image, 2));
-                        setImageMessage((ViewHolderImage) holder, ResourcesUtils.splitImagePath(image, 2));
+                        setImageMessage(holderImage, ResourcesUtils.splitImagePath(image, 2));
                     }
                 }
                 break;
@@ -302,7 +305,7 @@ public class ChatAdapter2 extends RecyclerView.Adapter<ChatAdapter2.ViewHolder> 
     }
 
     private void setImageMessage(ChatAdapter2.ViewHolderImage holder, String imageUri) {
-        holder.pbLoadingImage.setVisibility(View.VISIBLE);
+//        holder.pbLoadingImage.setVisibility(View.VISIBLE);
         mPicasso.load(Uri.fromFile(new File(imageUri))).resize(bubbleMaxWidth, imageMaxHeight)
                 .error(R.drawable.ic_alert_circle_outline)
                 .centerInside()
@@ -310,12 +313,12 @@ public class ChatAdapter2 extends RecyclerView.Adapter<ChatAdapter2.ViewHolder> 
                 .into(holder.ivImageMessage, new Callback.EmptyCallback() {
                     @Override
                     public void onSuccess() {
-                        holder.pbLoadingImage.setVisibility(View.GONE);
+//                        holder.pbLoadingImage.setVisibility(View.GONE);
                     }
 
                     @Override
                     public void onError() {
-                        holder.pbLoadingImage.setVisibility(View.GONE);
+//                        holder.pbLoadingImage.setVisibility(View.GONE);
                     }
 
                 });

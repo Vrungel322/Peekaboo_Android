@@ -67,6 +67,12 @@ public class SessionDataRepository implements SessionRepository {
                     user.saveId(token.getId());
                     user.saveUsername(token.getUsername());
                     user.saveMode(token.getMode());
+                    user.saveFirstName(token.getFirstName());
+                    user.saveLastName(token.getLastName());
+                    user.saveCountry(token.getCountry());
+                    user.saveCity(token.getCity());
+                    user.savePhone(token.getPhone());
+                    user.saveEmail(token.getEmail());
                     return user;
                 }).flatMap(accountUser -> loadAllContacts())
 //                .flatMap(contacts -> getPhoneContactList())
@@ -74,8 +80,8 @@ public class SessionDataRepository implements SessionRepository {
     }
 
     @Override
-    public Observable<AccountUser> signUp(String phone, String username, String login, String password) {
-        return restApi.signUp(new CredentialsSignUp(phone, username, login, password))
+    public Observable<AccountUser> signUp(String phone, String username, String email, String password) {
+        return restApi.signUp(new CredentialsSignUp(phone, username, email, password))
                 .map(token -> {
                     user.saveId(token.getId());
                     user.saveUsername(token.getUsername());
@@ -91,6 +97,11 @@ public class SessionDataRepository implements SessionRepository {
                     return user;
                 }).flatMap(accountUser -> loadAllContacts())
                 .map(contacts -> user);
+    }
+
+    @Override
+    public Observable<ResponseBody> updateAccountData(User user) {
+        return restApi.updateAccountData(user);
     }
 
     @Override

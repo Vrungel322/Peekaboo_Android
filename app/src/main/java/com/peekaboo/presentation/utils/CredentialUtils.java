@@ -9,7 +9,8 @@ import android.telephony.TelephonyManager;
 public class CredentialUtils {
     public static String getPhoneNumber(Context context){
         TelephonyManager tMgr = (TelephonyManager)context.getSystemService(Context.TELEPHONY_SERVICE);
-        return tMgr.getLine1Number().replace("+", "");
+        String line1Number = tMgr.getLine1Number();
+        return line1Number != null ? line1Number.replace("+", "") : null;
     }
 
     public static boolean isUsernameValid(String login) {

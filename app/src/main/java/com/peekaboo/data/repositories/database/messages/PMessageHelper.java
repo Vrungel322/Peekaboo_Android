@@ -57,7 +57,7 @@ public class PMessageHelper {
     }
 
     public Observable<List<PMessage>> getAllMessages(String id) {
-        Log.e("helper", "get all messages");
+//        Log.e("helper", "get all messages");
         String tableName = PREFIX + id;
         String selectAll = "SELECT * FROM " + tableName;
         return select(selectAll)
@@ -66,7 +66,7 @@ public class PMessageHelper {
     }
 
     public PMessage getLastMessage(String id) {
-        Log.e("helper", "get last message: " + id);
+//        Log.e("helper", "get last message: " + id);
         String tableName = PREFIX + id;
         String selectLast = "SELECT * FROM " + tableName +
                 " WHERE " + PMessageAbs.ID + " = " +
@@ -108,7 +108,7 @@ public class PMessageHelper {
     }
 
     public Observable<List<PMessage>> getUndeliveredMessages() {
-        Log.e("helper", "get undelivered messages");
+//        Log.e("helper", "get undelivered messages");
         return contactHelper.getAllContacts()
                 .flatMapIterable(l -> l)
                 .concatMap(pContactAbs -> {
@@ -133,11 +133,11 @@ public class PMessageHelper {
         SQLiteDatabase db = helper.getWritableDatabase();
         tableName = PREFIX + tableName;
         message.setId(db.insert(tableName, null, mapperFactory.getPMessageMapper().transform(message)));
-        Log.e("helper", "saveMessageToDb " + message);
+//        Log.e("helper", "saveMessageToDb " + message);
     }
 
     public int updateStatus(String tableName, int status, PMessage message) {
-        Log.e("helper", "update status " + status + " " + message);
+//        Log.e("helper", "update status " + status + " " + message);
         message.setStatus(status);
         SQLiteDatabase db = helper.getWritableDatabase();
         tableName = PREFIX + tableName;
@@ -148,7 +148,7 @@ public class PMessageHelper {
     }
 
     public int updateBody(String tableName, PMessage message, String newBody) {
-        Log.e("helper", "update body " + newBody + " " + message);
+//        Log.e("helper", "update body " + newBody + " " + message);
         message.setMessageBody(newBody);
         SQLiteDatabase db = helper.getWritableDatabase();
         tableName = PREFIX + tableName;
@@ -175,7 +175,7 @@ public class PMessageHelper {
 
     @NonNull
     private Observable<List<PMessage>> select(String query) {
-        Log.e("helper", query);
+//        Log.e("helper", query);
         return Observable.create(subscriber -> {
             List<PMessage> messages = new ArrayList<>();
             SQLiteDatabase db = helper.getWritableDatabase();
@@ -193,7 +193,7 @@ public class PMessageHelper {
     }
 
     private Observable<Integer> selectCount(String query) {
-        Log.e("helper", query);
+//        Log.e("helper", query);
         return Observable.create(subscriber -> {
             SQLiteDatabase db = helper.getWritableDatabase();
             Cursor cursor = db.rawQuery(query, null);

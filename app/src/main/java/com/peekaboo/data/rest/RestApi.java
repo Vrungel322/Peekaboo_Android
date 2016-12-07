@@ -9,6 +9,7 @@ import com.peekaboo.data.rest.entity.CredentialsSignUp;
 import com.peekaboo.data.rest.entity.TokenEntity;
 import com.peekaboo.data.rest.entity.UserEntity;
 import com.peekaboo.data.rest.entity.UserResponse;
+import com.peekaboo.domain.User;
 import com.peekaboo.utils.FilesUtils;
 
 import java.io.File;
@@ -47,6 +48,10 @@ public class RestApi {
 
     public Observable<TokenEntity> confirm(ConfirmKey confirmKey) {
         return api.confirm(confirmKey);
+    }
+
+    public Observable<ResponseBody> updateAccountData(User user){
+        return api.updateAccountData(user.getId(), user);
     }
 
     public Observable<UserEntity> findFriendByName(String friendName) {

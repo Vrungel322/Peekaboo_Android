@@ -2,6 +2,7 @@ package com.peekaboo.presentation.presenters;
 
 import android.util.Log;
 
+import com.peekaboo.data.di.scope.UserScope;
 import com.peekaboo.data.repositories.database.contacts.Contact;
 import com.peekaboo.domain.UserMessageMapper;
 import com.peekaboo.domain.subscribers.BaseProgressSubscriber;
@@ -15,12 +16,11 @@ import java.util.Collections;
 import java.util.List;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 /**
  * Created by Nikita on 11.08.2016.
  */
-@Singleton
+@UserScope
 public class ContactPresenter extends ProgressPresenter<IContactsView> implements IContactPresenter {
 
     private GetContactFromDbUseCase getContactFromDbUseCase;
@@ -66,7 +66,7 @@ public class ContactPresenter extends ProgressPresenter<IContactsView> implement
                 }
                 for (PhoneContactPOJO p : response) {
                     //TODO : sent response to view
-                    Log.wtf("PhoneContactPOJO : ","name : " + p.getName() + " phone : " + p.getPhone() + " photo : " + p.getPhotoThumbnail());
+//                    Log.wtf("PhoneContactPOJO : ","name : " + p.getName() + " phone : " + p.getPhone() + " photo : " + p.getPhotoThumbnail());
                 }
             }
         };

@@ -9,6 +9,7 @@ import com.peekaboo.domain.User;
 public class UserMapper implements Mapper<UserEntity, User> {
     @Override
     public User transform(UserEntity obj) throws RuntimeException {
-        return new User(obj.getId(), obj.getName());
+        return new User(null, null, obj.getRealName(), obj.getId(), obj.getRealSurname(),
+                null, obj.getName(), null);
     }
 }

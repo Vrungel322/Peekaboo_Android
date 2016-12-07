@@ -1,15 +1,59 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
+    android:background="@color/offline"
+    android:gravity="center_horizontal"
     tools:context=".presentation.fragments.CallsFragment">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="Dialogs"
-        android:layout_gravity="center" />
-</FrameLayout>
+
+    <com.peekaboo.presentation.app.view.OnlineIndicatorView
+        android:id="@+id/ind1"
+        android:layout_width="@dimen/online_indicator_size"
+        android:layout_height="@dimen/online_indicator_size"
+        android:layout_marginTop="16dp" />
+
+    <com.peekaboo.presentation.app.view.OnlineIndicatorView
+        android:id="@+id/ind2"
+        android:layout_width="@dimen/online_indicator_size"
+        android:layout_height="@dimen/online_indicator_size"
+        android:layout_marginTop="16dp" />
+
+    <com.peekaboo.presentation.app.view.OnlineIndicatorView
+        android:id="@+id/ind3"
+        android:layout_width="@dimen/online_indicator_size"
+        android:layout_height="@dimen/online_indicator_size"
+        android:layout_marginTop="16dp" />
+
+    <com.peekaboo.presentation.app.view.OnlineIndicatorView
+        android:id="@+id/ind4"
+        android:layout_width="@dimen/online_indicator_size"
+        android:layout_height="@dimen/online_indicator_size"
+        android:layout_marginTop="16dp" />
+
+    <com.peekaboo.presentation.app.view.OnlineIndicatorView
+        android:id="@+id/ind5"
+        android:layout_width="@dimen/online_indicator_size"
+        android:layout_height="@dimen/online_indicator_size"
+        android:layout_marginTop="16dp" />
+
+    <com.peekaboo.presentation.app.view.OnlineIndicatorView
+        android:id="@+id/ind6"
+        android:layout_width="@dimen/online_indicator_size"
+        android:layout_height="@dimen/online_indicator_size"
+        android:layout_marginTop="16dp" />
+
+    <com.peekaboo.presentation.app.view.OnlineIndicatorView
+        android:id="@+id/ind7"
+        android:layout_width="@dimen/online_indicator_size"
+        android:layout_height="@dimen/online_indicator_size"
+        android:layout_marginTop="16dp" />
+
+    <com.peekaboo.presentation.app.view.OnlineIndicatorView
+        android:id="@+id/ind8"
+        android:layout_width="@dimen/online_indicator_size"
+        android:layout_height="@dimen/online_indicator_size"
+        android:layout_marginTop="16dp" />
+</LinearLayout>

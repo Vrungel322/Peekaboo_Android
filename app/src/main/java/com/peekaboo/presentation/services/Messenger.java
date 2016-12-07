@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.peekaboo.data.FileEntity;
+import com.peekaboo.data.repositories.database.contacts.Contact;
 import com.peekaboo.data.repositories.database.messages.PMessage;
 import com.peekaboo.data.repositories.database.messages.PMessageAbs;
 import com.peekaboo.data.repositories.database.messages.PMessageHelper;
@@ -15,6 +16,7 @@ import com.peekaboo.domain.Pair;
 import com.peekaboo.domain.subscribers.BaseUseCaseSubscriber;
 import com.peekaboo.domain.usecase.FileDownloadUseCase;
 import com.peekaboo.domain.usecase.FileUploadUseCase;
+import com.peekaboo.domain.usecase.GetAllUnreadMessagesInfoUseCase;
 import com.peekaboo.presentation.fragments.ChatFragment;
 import com.peekaboo.utils.Constants;
 
@@ -37,19 +39,22 @@ public class Messenger implements IMessenger,
     Subscription unreadMessages = Subscriptions.empty();
     Subscription undeliveredMessages = Subscriptions.empty();
     Subscription serviceMessages = Subscriptions.empty();
-    private AccountUser user;
-    private FileUploadUseCase uploadFileUseCase;
-    private FileDownloadUseCase downloadFileUseCase;
-    private Set<MessengerListener> messageListeners = new HashSet<>();
-    private MessageNotificator messageNotificator;
+    private final AccountUser user;
+    private final FileUploadUseCase uploadFileUseCase;
+    private final FileDownloadUseCase downloadFileUseCase;
+    private final GetAllUnreadMessagesInfoUseCase getAllUnreadMessagesInfoUseCase;
+    private final Set<MessengerListener> messageListeners = new HashSet<>();
+    private final MessageNotificator messageNotificator;
 
-    @Nullable
-    private ChatFragment.DISABLE_pbLoadingImageToServer pbLoadingImageToServerDisableListener;
 
-    public Messenger(INotifier<Message> notifier, PMessageHelper helper,
+    public Messenger(INotifier<Message> notifier,
+                     PMessageHelper helper,
                      MessageNotificator messageNotificator,
-                     ReadMessagesHelper readMessagesHelper, AccountUser user,
-                     FileUploadUseCase uploadFileUseCase, FileDownloadUseCase downloadFileUseCase) {
+                     ReadMessagesHelper readMessagesHelper,
+                     AccountUser user,
+                     FileUploadUseCase uploadFileUseCase,
+                     FileDownloadUseCase downloadFileUseCase,
+                     GetAllUnreadMessagesInfoUseCase getAllUnreadMessagesInfoUseCase) {
         this.notifier = notifier;
         this.helper = helper;
         this.messageNotificator = messageNotificator;
@@ -57,6 +62,7 @@ public class Messenger implements IMessenger,
         this.user = user;
         this.uploadFileUseCase = uploadFileUseCase;
         this.downloadFileUseCase = downloadFileUseCase;
+        this.getAllUnreadMessagesInfoUseCase = getAllUnreadMessagesInfoUseCase;
         notifier.addListener(this);
     }
 
@@ -128,7 +134,7 @@ public class Messenger implements IMessenger,
      */
     private void handleIncomingMessage(Message message) {
         PMessage pMessage = MessageUtils.convert(message);
-        Log.e("Messenger", "type " + pMessage.mediaType());
+        Log.e("Messenger", "handleIncomingMessage " + pMessage);
         pMessage.setStatus(PMessage.PMESSAGE_STATUS.STATUS_DELIVERED);
         String tableName = pMessage.senderId();
         helper.insert(tableName, pMessage);
@@ -149,25 +155,31 @@ public class Messenger implements IMessenger,
         if (isRead) {
             readMessage(pMessage);
         } else {
-            if (isIgnored) {
-                Log.e("messenger", "" + message);
-                messageNotificator.onMessageObtained(pMessage);
+            if (isIgnored && user.notificationsEnabled()) {
+                showNotification(pMessage);
+//                messageNotificator.onMessageObtained(pMessage);
             }
             for (MessengerListener listener : messageListeners) {
                 listener.onMessageUpdated(pMessage);
             }
         }
-        Log.e("Messenger", "type " + pMessage.mediaType());
         if (pMessage.mediaType() == PMessage.PMESSAGE_MEDIA_TYPE.AUDIO_MESSAGE) {
-            Log.e("Messenger", "download begin");
             downloadFileUseCase.execute(pMessage, getDownloadSubscriber(), Constants.MESSAGE_TYPE.TYPE_AUDIO);
-        }
-
-        if (pMessage.mediaType() == PMessage.PMESSAGE_MEDIA_TYPE.IMAGE_MESSAGE) {
-            Log.e("Messenger", "download begin");
+        } else if (pMessage.mediaType() == PMessage.PMESSAGE_MEDIA_TYPE.IMAGE_MESSAGE) {
             downloadFileUseCase.execute(pMessage, getDownloadSubscriber(), Constants.MESSAGE_TYPE.TYPE_IMAGE);
         }
 
+    }
+
+    public void showNotification(final PMessage message) {
+        if (!message.isMine() && message.status() == PMessage.PMESSAGE_STATUS.STATUS_DELIVERED) {
+            getAllUnreadMessagesInfoUseCase.execute(new BaseUseCaseSubscriber<Pair<List<PMessage>, List<Contact>>>() {
+                @Override
+                public void onNext(final Pair<List<PMessage>, List<Contact>> pair) {
+                    messageNotificator.showNotification(pair.first, pair.second, message);
+                }
+            });
+        }
     }
 
     /**
@@ -276,9 +288,6 @@ public class Messenger implements IMessenger,
                 if (isAvailable() && pMessageFileEntityPair.second != null) {
                     Log.wtf("getUploadSubscriber : ", "upload end");
                     PMessage pMessage = pMessageFileEntityPair.first;
-                    if (pMessage.mediaType() == PMessageAbs.PMESSAGE_MEDIA_TYPE.IMAGE_MESSAGE & pbLoadingImageToServerDisableListener != null) {
-                        pbLoadingImageToServerDisableListener.disablePbLoadingImageToServer();
-                    }
                     FileEntity fileEntity = pMessageFileEntityPair.second;
                     String remote = fileEntity.getName();
                     String local = pMessage.messageBody();
@@ -305,10 +314,6 @@ public class Messenger implements IMessenger,
         }
     }
 
-    @Override
-    public void setpbLoadingImageToServerDisableListener(ChatFragment.DISABLE_pbLoadingImageToServer pbLoadingImageToServerDisableListener) {
-        this.pbLoadingImageToServerDisableListener = pbLoadingImageToServerDisableListener;
-    }
 
     @Override
     public boolean isAvailable() {
@@ -317,6 +322,7 @@ public class Messenger implements IMessenger,
 
     @Override
     public void tryConnect(String authorization) {
+        Log.e("Messenger", "try connect " + hashCode());
         notifier.tryConnect(authorization);
     }
 
@@ -330,11 +336,13 @@ public class Messenger implements IMessenger,
 
     @Override
     public void disconnect() {
+        Log.e("Messenger", "disconnect " + hashCode());
         notifier.disconnect();
     }
 
     @Override
     public void onConnected() {
+        Log.e("Messenger", "connected " + hashCode());
         deliverSentMessages();
         deliverReadServiceMessages();
     }

@@ -1,25 +1,13 @@
 package com.peekaboo.presentation.adapters;
 
-import android.content.res.Resources;
-import android.graphics.Bitmap;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.content.Intent;
-import android.graphics.Paint;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.LayerDrawable;
-import android.net.Uri;
 import android.support.design.widget.CoordinatorLayout;
-import android.support.v4.content.res.ResourcesCompat;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
@@ -29,7 +17,7 @@ import com.peekaboo.data.repositories.database.messages.PMessage;
 import com.peekaboo.data.repositories.database.messages.PMessageAbs;
 import com.peekaboo.domain.Dialog;
 import com.peekaboo.presentation.activities.MainActivity;
-import com.peekaboo.presentation.activities.MapActivity;
+import com.peekaboo.presentation.app.view.OnlineIndicatorView;
 import com.peekaboo.presentation.utils.AvatarIcon;
 import com.peekaboo.presentation.utils.ResourcesUtils;
 import com.peekaboo.utils.ActivityNavigator;
@@ -48,13 +36,17 @@ public final class DialogsLargeAdapter extends RecyclerView.Adapter<DialogsLarge
     private MainActivity activity;
     private ActivityNavigator navigator;
     private Picasso mPicasso;
-    private AvatarIcon avatarIcon;
     private List<Dialog> items = new ArrayList<>();
+    private final int unreadMessagesDialogBackgroundColor;
+    private final int avatarSize;
 
     public DialogsLargeAdapter(MainActivity activity, ActivityNavigator navigator) {
         this.activity = activity;
         this.navigator = navigator;
         this.mPicasso = Picasso.with(this.activity);
+        unreadMessagesDialogBackgroundColor = ResourcesUtils.getColor(activity, R.color.unread_msg_background);
+        avatarSize = ResourcesUtils.getDimenInPx(activity, R.dimen.contact_list_avatar_size);
+
     }
 
     @Override
@@ -69,87 +61,41 @@ public final class DialogsLargeAdapter extends RecyclerView.Adapter<DialogsLarge
         Dialog dialog = getItem(position);
         Contact contact = dialog.getContact();
         PMessage lastMessage = dialog.getLastMessage();
-        avatarIcon = new AvatarIcon();
-        final boolean[] muted = {false};
-        final boolean[] stared = {false};
 
         String contactName = contact.contactName();
         String contactSurname = contact.contactSurname();
-        String avatarText;
-        if (contactSurname == null) {
-            holder.tvContactName.setText(contactName);
-            avatarText = contactName.substring(0,1).toUpperCase();
-        } else {
-            holder.tvContactName.setText(contactName + " " + contactSurname);
-            avatarText = contactName.substring(0,1).toUpperCase() + contactSurname.substring(0,1).toUpperCase();
-        }
 
-        int avatarSize = ResourcesUtils.getDimenInPx(activity, R.dimen.contact_list_avatar_size);
-        Drawable drawable = holder.ivAvatar.getDrawable();
 
-        mPicasso.load(contact.contactImgUri())
+        setUpDefaultAvatarText(holder, contactName, contactSurname);
+
+
+        Drawable drawable = ResourcesUtils.getDrawable(activity, R.drawable.avatar_icon);
+
+        holder.defaultAvatar.setImageDrawable(AvatarIcon.setDrawableColor(drawable, contactName, contactSurname));
+        mPicasso.load(contact.contactImgUriSmall())
                 .resize(0, avatarSize)
-                .error(avatarIcon.createAvatarIcon(drawable, avatarText, avatarSize, avatarSize))
                 .into(holder.ivAvatar);
 
         setMessageBody(holder, lastMessage);
-
-        long timestamp = lastMessage.timestamp();
-        // todo write converting timestamp
-        holder.tvTimestamp.setText(Utility.getFriendlyDayString(holder.itemView.getContext(), timestamp));
-
+        setUpTimestamp(holder, lastMessage);
         setMessageStatus(holder, lastMessage);
 
-        if (contact.isOnline()) {
-            holder.contact_status_view.setBackgroundResource(R.drawable.list_online_indicator);
-            holder.unread_count_text_view.setTextColor(Color.WHITE);
-
-        } else {
-            holder.contact_status_view.setBackgroundResource(R.drawable.list_offline_indicator);
-            holder.unread_count_text_view.setTextColor(activity.getResources().getColor(R.color.offline_text));
-        }
-
         int unreadMessagesCount = dialog.getUnreadMessagesCount();
-        CoordinatorLayout.LayoutParams layoutParams = (CoordinatorLayout.LayoutParams) holder.dialogsDivider.getLayoutParams();
-        int topMargin = layoutParams.topMargin;
-        if(unreadMessagesCount > 0 && unreadMessagesCount < 100){
-            if(unreadMessagesCount > 10){
-                holder.unread_count_text_view.setTextSize(11);
-            }
-            holder.unread_count_text_view.setText(String.valueOf(unreadMessagesCount));
-            holder.dialogContainer.setBackgroundColor(activity.getResources().getColor(R.color.unread_msg_background));
+        holder.oiOnlineIndicator.setState(contact.isOnline(), unreadMessagesCount);
+        int backgroundColor = unreadMessagesCount > 0 ? unreadMessagesDialogBackgroundColor : 0;
+        holder.dialogContainer.setBackgroundColor(backgroundColor);
 
-            layoutParams.setMargins(0, topMargin, 0, 0);
-        } else {
-            if(unreadMessagesCount >= 100){
-                holder.unread_count_text_view.setTextSize(10);
-                holder.unread_count_text_view.setText("99+");
-                holder.dialogContainer.setBackgroundColor(activity.getResources().getColor(R.color.unread_msg_background));
-                layoutParams.setMargins(0, topMargin, 0, 0);
+        holder.itemView.setOnClickListener(v -> navigator.startChat(activity, contact));
 
-            }else{
-                holder.unread_count_text_view.setText(null);
-                holder.dialogContainer.setBackgroundColor(Color.WHITE);
+        setUpDFMfeatures(holder, position);
 
-            }
-        }
 
-        holder.itemView.setOnClickListener(v -> navigator.startChatFragment(activity, contact, true));
+    }
 
+    private void setUpDFMfeatures(ViewHolder holder, int position) {
         holder.ivFavorite.setOnClickListener(v -> {
             YoYo.with(Techniques.Tada).duration(500).delay(100).playOn(holder.ivFavorite);
-//                items.set(0,getItem(position));
-            if (stared[0] == false) {
-                stared[0] = true;
-                holder.ivFavorite.setImageResource(R.drawable.stared);
-
-
-            } else {
-                stared[0] = false;
-                holder.ivFavorite.setImageResource(R.drawable.star);
-
-            }
-
+//                holder.ivFavorite.setImageResource(R.drawable.stared);
         });
         holder.ivDelete.setOnClickListener(v -> {
             YoYo.with(Techniques.Tada).duration(500).delay(100).playOn(holder.ivDelete);
@@ -158,27 +104,36 @@ public final class DialogsLargeAdapter extends RecyclerView.Adapter<DialogsLarge
         holder.ivMute.setOnClickListener(v -> {
 
             YoYo.with(Techniques.Tada).duration(500).delay(100).playOn(holder.ivMute);
-
-            if (muted[0] == false) {
-                muted[0] = true;
-                holder.ivMute.setImageResource(R.drawable.nosound);
-            } else {
-                muted[0] = false;
-                holder.ivMute.setImageResource(R.drawable.sound);
-            }
-
+//            holder.ivMute.setImageResource(R.drawable.nosound);
         });
-
-
     }
 
 
-    private void delete(int position){
+    private void setUpTimestamp(ViewHolder holder, PMessage lastMessage) {
+        long timestamp = lastMessage.timestamp();
+        // todo write converting timestamp
+        holder.tvTimestamp.setText(Utility.getFriendlyDayString(holder.itemView.getContext(), timestamp));
+    }
+
+    private void setUpDefaultAvatarText(ViewHolder holder, String contactName, String contactSurname) {
+        String avatarText;
+        if (contactSurname == null) {
+            holder.tvContactName.setText(contactName);
+            avatarText = contactName.substring(0, 1).toUpperCase();
+        } else {
+            holder.tvContactName.setText(contactName + " " + contactSurname);
+            avatarText = contactName.substring(0, 1).toUpperCase() + contactSurname.substring(0, 1).toUpperCase();
+        }
+        holder.defaultAvatarText.setText(avatarText);
+    }
+
+
+    private void delete(int position) {
         items.remove(position);
         notifyItemRemoved(position);
-        }
+    }
 
-    private void setMessageBody(ViewHolder holder, PMessage message){
+    private void setMessageBody(ViewHolder holder, PMessage message) {
         int messageType = message.mediaType();
         switch (messageType) {
             case PMessageAbs.PMESSAGE_MEDIA_TYPE.TEXT_MESSAGE:
@@ -200,7 +155,7 @@ public final class DialogsLargeAdapter extends RecyclerView.Adapter<DialogsLarge
     }
 
 
-    private String getStringResource(ViewHolder holder, int id){
+    private String getStringResource(ViewHolder holder, int id) {
         return holder.itemView.getContext().getString(id);
     }
 
@@ -230,18 +185,21 @@ public final class DialogsLargeAdapter extends RecyclerView.Adapter<DialogsLarge
     }
 
     public void setItems(List<Dialog> dialogs) {
+        int size = items.size();
         items.clear();
         items.addAll(dialogs);
-        notifyDataSetChanged();
+        if (size == 0) {
+            notifyItemRangeChanged(0, items.size());
+        } else {
+            notifyDataSetChanged();
+        }
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.contact_avatar_image_view)
         CircleImageView ivAvatar;
-        @BindView(R.id.contact_status_image_view)
-        View contact_status_view;
-        @BindView(R.id.unread_count_text_view)
-        TextView unread_count_text_view;
+        @BindView(R.id.oiOnlineIndicatorDialogItem)
+        OnlineIndicatorView oiOnlineIndicator;
         @BindView(R.id.contact_name_text_view)
         TextView tvContactName;
         @BindView(R.id.message_preview_text_view)
@@ -256,10 +214,14 @@ public final class DialogsLargeAdapter extends RecyclerView.Adapter<DialogsLarge
         ImageView ivFavorite;
         @BindView(R.id.mute_image_view)
         ImageView ivMute;
-        @BindView (R.id.list_item_dialog_container)
+        @BindView(R.id.list_item_dialog_container)
         CoordinatorLayout dialogContainer;
         @BindView(R.id.dialogs_divider)
         View dialogsDivider;
+        @BindView(R.id.default_avatar_text)
+        TextView defaultAvatarText;
+        @BindView(R.id.default_avatar)
+        ImageView defaultAvatar;
 
 
         ViewHolder(View itemView) {

@@ -2,6 +2,6 @@
     android:shape="oval">
     <solid android:color="@color/offline"/>
     <stroke
-        android:width="2dp"
+        android:width="@dimen/online_indicator_stroke_width"
         android:color="#FFFFFF"/>
 </shape>

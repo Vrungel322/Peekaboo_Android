@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/list_item_dialog_container"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingTop="@dimen/dialog_item_margin_top"
-    >
+    android:paddingTop="@dimen/dialog_item_margin_top">
 
     <View
         android:id="@+id/dialogs_divider"
@@ -32,13 +32,31 @@
                 android:layout_height="@dimen/dialog_item_size"
                 android:paddingRight="8dp">
 
+                <ImageView
+                    android:id="@+id/default_sms_avatar"
+                    android:layout_width="60dp"
+                    android:layout_height="60dp"
+                    android:layout_gravity="center"
+                    android:src="@drawable/avatar_icon"
+                    />
+
+                <TextView
+                    android:id="@+id/default_avatar_sms_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="#FFF"
+                    android:layout_gravity="center"
+                    android:gravity="center"
+                    android:textSize="28sp"
+                    android:text="AB"/>
+
                 <de.hdodenhof.circleimageview.CircleImageView xmlns:app="http://schemas.android.com/apk/res-auto"
                     android:id="@+id/sms_contact_avatar_image_view"
                     android:layout_width="@dimen/dialog_item_photo_size"
                     android:layout_height="@dimen/dialog_item_photo_size"
                     android:layout_margin="@dimen/dialog_item_margin"
                     android:layout_marginBottom="@dimen/dialog_photo_margin"
-                    android:src="@mipmap/ic_launcher"
+                    tools:src="@mipmap/ic_launcher"
                     app:border_color="@color/colorPrimaryLight" />
 
                 <FrameLayout

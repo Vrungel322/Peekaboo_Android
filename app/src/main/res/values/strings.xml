@@ -2,13 +2,14 @@
     <string name="app_name">Peekaboo</string>
     <string name="pleaseWait">Please, wait...</string>
     <string name="phoneNumber">Phone Number</string>
+    <string name="email">Email</string>
     <string name="username">Username</string>
     <string name="password">Password</string>
     <string name="createAccount">Create Account</string>
     <string name="signIn">Sign In</string>
     <string name="skip">Skip</string>
     <string name="confirmPassword">Confirm password</string>
-    <string name="email">Email or phone number</string>
+    <string name="email_or_phone">Email or phone number</string>
     <string name="invalidPhoneNumber">Invalid phone number</string>
     <string name="invalidLogin">Invalid login</string>
     <string name="invalidUsername">Invalid username</string>
@@ -25,7 +26,7 @@
     <string name="comfortaa_bold_font">fonts/comfortaa_bold.ttf</string>
     <string name="roboto_font">fonts/roboto.ttf</string>
     <string name="helvetica_font">fonts/helvetika.ttf</string>
-    <string name="usernameOrLogin">Username or login</string>
+    <string name="usernameOrLogin">Username or Login</string>
     <string name="emailOrPhoneNum">Email</string>
     <integer name="com_vk_sdk_AppId">5527207</integer>
 
@@ -61,6 +62,10 @@
         <item>Photo</item>
         <item>Pick from gallery</item>
     </string-array>
+    <string-array name="dialog_tab_names">
+        <item>Chat</item>
+        <item>Sms</item>
+    </string-array>
     <!-- TODO: Remove or change this placeholder payload -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="selectImage">Select Image</string>
@@ -76,7 +81,7 @@
     <string name="exit">Exit</string>
 
     <string name="forgot">Forgot</string>
-    <string name="forgot_password"> password?</string>
+    <string name="forgot_password"> Password?</string>
 
     <string name="sign_up">Sign Up</string>
     <string name="hintConfirmationCode">Confirmation code</string>
@@ -106,7 +111,9 @@
     <string name="default_cloud_storage">Default cloud storage</string>
     <string name="google_cloud">Google Cloud Storage</string>
     <string name="services_integration">Services integration</string>
+    <string name="logIn_to_Twitter">LogIn to Twitter</string>
     <string name="advanced">Advanced</string>
+    <string name="social_network">Social network integration</string>
     <string name="nickname">Nickname</string>
     <string name="general">General</string>
     <string name="galleryIsNotAvailable">Gallery is not available</string>
@@ -114,5 +121,7 @@
     <string name="gallery">Gallery</string>
     <string name="camera">Camera</string>
     <string name="selectFile">Select File</string>
+    <string name="search_toolbar_hint">Search contact</string>
+    <string name="save">Save</string>
 
 </resources>

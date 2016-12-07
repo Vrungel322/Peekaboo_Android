@@ -1,11 +1,10 @@
 package com.peekaboo.presentation.presenters;
 
 import android.app.Activity;
-import android.content.Context;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
-import com.peekaboo.data.repositories.database.contacts.Contact;
+import com.peekaboo.data.di.scope.UserScope;
 import com.peekaboo.domain.AccountUser;
 import com.peekaboo.domain.UserMessageMapper;
 import com.peekaboo.domain.subscribers.BaseProgressSubscriber;
@@ -14,17 +13,13 @@ import com.peekaboo.presentation.utils.CredentialUtils;
 import com.peekaboo.presentation.views.ICredentialsView;
 import com.vk.sdk.VKScope;
 import com.vk.sdk.VKSdk;
-import com.vk.sdk.util.VKUtil;
-
-import java.util.List;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 
 /**
  * Created by sebastian on 28.06.16.
  */
-@Singleton
+@UserScope
 public class LoginPresenter extends ProgressPresenter<ICredentialsView> implements ILoginPresenter,
         BaseProgressSubscriber.ProgressSubscriberListener {
 
@@ -65,7 +60,8 @@ public class LoginPresenter extends ProgressPresenter<ICredentialsView> implemen
                 || CredentialUtils.isPhoneNumberValid(login))) {
             if (getView() != null) getView().showInputError(ICredentialsView.InputFieldError.LOGIN);
         } else if (!CredentialUtils.isPasswordValid(password)) {
-            if (getView() != null) getView().showInputError(ICredentialsView.InputFieldError.PASSWORD);
+            if (getView() != null)
+                getView().showInputError(ICredentialsView.InputFieldError.PASSWORD);
         } else {
             return true;
         }

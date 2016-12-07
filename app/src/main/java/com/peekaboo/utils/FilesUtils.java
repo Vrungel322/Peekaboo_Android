@@ -23,7 +23,7 @@ import javax.inject.Singleton;
  */
 @Singleton
 public class FilesUtils {
-    private static final String IMAGE_DIRECTORY_NAME = "Costo";
+    private static final String IMAGE_DIRECTORY_NAME = "Peekaboo";
     private Context context;
 
     @Inject

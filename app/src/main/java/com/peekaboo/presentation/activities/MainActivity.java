@@ -1,510 +1,140 @@
 package com.peekaboo.presentation.activities;
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
-import android.animation.AnimatorSet;
-import android.animation.ObjectAnimator;
 import android.app.NotificationManager;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.Drawable;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
-import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBar;
-import android.support.v7.app.ActionBarDrawerToggle;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Gravity;
-import android.view.View;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.peekaboo.R;
 import com.peekaboo.data.repositories.database.contacts.Contact;
-import com.peekaboo.domain.AccountUser;
-import com.peekaboo.domain.Dialog;
-import com.peekaboo.domain.usecase.UserModeChangerUseCase;
 import com.peekaboo.presentation.PeekabooApplication;
-import com.peekaboo.presentation.adapters.HotFriendsAdapter;
-import com.peekaboo.presentation.dialogs.AvatarChangeDialog;
-import com.peekaboo.presentation.fragments.CallsFragment;
-import com.peekaboo.presentation.dialogs.ChooseImageDialogFragment;
-import com.peekaboo.presentation.fragments.ChatFragment;
-import com.peekaboo.presentation.fragments.ContactsFragment;
-import com.peekaboo.presentation.fragments.CreateDialogFragment;
-import com.peekaboo.presentation.fragments.DialogsFragment;
-import com.peekaboo.presentation.fragments.ProfileFragment;
-import com.peekaboo.presentation.fragments.SettingsFragment;
-import com.peekaboo.presentation.pojo.HotFriendPOJO;
-import com.peekaboo.presentation.fragments.SmsDialogsFragment;
-import com.peekaboo.presentation.presenters.MainActivityPresenter;
-import com.peekaboo.presentation.services.INotifier;
-import com.peekaboo.presentation.services.Message;
 import com.peekaboo.presentation.services.MessageNotificator;
-import com.peekaboo.presentation.utils.ActivityUtils;
-import com.peekaboo.presentation.utils.ImageUtils;
-import com.peekaboo.presentation.utils.ResourcesUtils;
-import com.peekaboo.presentation.views.IMainView;
-import com.peekaboo.utils.ActivityNavigator;
 import com.peekaboo.utils.Constants;
-import com.peekaboo.utils.Utility;
-import com.squareup.otto.Bus;
-import com.squareup.picasso.MemoryPolicy;
-import com.squareup.picasso.Picasso;
-import com.squareup.picasso.Target;
+import com.twitter.sdk.android.core.identity.TwitterAuthClient;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+public class MainActivity extends DrawerActivity {
+    String fragmentTag;
 
-import javax.inject.Inject;
-
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-import me.everything.android.ui.overscroll.OverScrollDecoratorHelper;
-
-public class MainActivity extends AppCompatActivity implements IMainView, ChooseImageDialogFragment.ChooseImageListener, INotifier.NotificationListener<Message> {
-    public static final int BLUR_RATE = 20;
-    public static final String IMAGE_URI = "image_uri";
-    @BindView(R.id.drawer_layout)
-    DrawerLayout drawer;
-    @BindView(R.id.bText)
-    Button bText;
-    @BindView(R.id.bAudio)
-    Button bAudio;
-    @BindView(R.id.bVideo)
-    Button bVideo;
-    @BindView(R.id.lvHotFriends)
-    ListView lvHotFriends;
-    @BindView(R.id.llDialogs)
-    LinearLayout llDialogs;
-    @BindView(R.id.llCalls)
-    LinearLayout llCalls;
-    @BindView(R.id.llContacts)
-    LinearLayout llContacts;
-    @BindView(R.id.llProfile)
-    LinearLayout llProfile;
-    @BindView(R.id.llSettings)
-    LinearLayout llSettings;
-    @BindView(R.id.llExit)
-    LinearLayout llExit;
-    @BindView(R.id.tvNameSurname)
-    TextView tvNameSurname;
-    @BindView(R.id.ivAccountAvatar)
-    ImageView ivAccountAvatar;
-    @BindView(R.id.ivAvatarBlur)
-    ImageView ivAvatarBlur;
-    @BindView(R.id.pbLoading_avatar_progress_bar)
-    ProgressBar pbLoading_avatar_progress_bar;
-    @BindView(R.id.ivOnlineStatus)
-    View ivOnlineStatus;
-    @Inject
-    INotifier<Message> notifier;
-    @Inject
-    AccountUser accountUser;
-    @Inject
-    MainActivityPresenter presenter;
-    @Inject
-    Picasso mPicasso;
-    @Inject
-    ActivityNavigator navigator;
-    @Inject
-    Bus eventBus;
-    private HotFriendsAdapter hotFriendsAdapter;
-    private final Set<OnBackPressListener> listeners = new HashSet<>();
-    private SettingsFragment settingsFragment;
-    private Target avatarTarget = new Target() {
-        @Override
-        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-            final Bitmap blurredImage = ImageUtils.getBlurredImage(bitmap, BLUR_RATE, false);
-            ivAccountAvatar.setImageBitmap(bitmap);
-            ivAvatarBlur.setImageBitmap(blurredImage);
+    @Override
+    protected void onDrawerClosed() {
+        if (fragmentTag != null) {
+            navigator.startFragment(this, fragmentTag);
+            fragmentTag = null;
         }
+    }
 
-        @Override
-        public void onBitmapFailed(Drawable errorDrawable) {
-            Log.e("animator", "bitmapFailed");
-            ivAvatarBlur.setImageBitmap(null);
 
+    @Override
+    protected void handleDrawerClick(int id) {
+        if (id != R.id.llExit) {
+            FragmentManager fm = getSupportFragmentManager();
+            for (int i = 0; i < fm.getBackStackEntryCount(); ++i) {
+                fm.popBackStack();
+            }
         }
-
-        @Override
-        public void onPrepareLoad(Drawable placeHolderDrawable) {
-            Log.e("animator", "prepareLoad");
+        switch (id) {
+            case R.id.llDialogs:
+                fragmentTag = Constants.FRAGMENT_TAGS.DIALOGS_FRAGMENT;
+                break;
+            case R.id.llCalls:
+                fragmentTag = Constants.FRAGMENT_TAGS.CALLS_FRAGMENT;
+                break;
+            case R.id.llContacts:
+                fragmentTag = Constants.FRAGMENT_TAGS.CONTACTS_FRAGMENT;
+                break;
+            case R.id.llProfile:
+                fragmentTag = Constants.FRAGMENT_TAGS.PROFILE_FRAGMENT;
+                break;
+            case R.id.llSettings:
+                fragmentTag = Constants.FRAGMENT_TAGS.SETTINGS_FRAGMENT;
+                break;
         }
-    };
-    private Target avatarTargetAnimated = new Target() {
-        @Override
-        public void onBitmapLoaded(Bitmap bitmap, Picasso.LoadedFrom from) {
-            setAvatarWithBlur(bitmap);
-        }
+    }
 
-        @Override
-        public void onBitmapFailed(Drawable errorDrawable) {
-            Log.e("animator", "bitmapFailed");
-            ivAvatarBlur.setImageBitmap(null);
+    @Override
+    protected void prepareActionBar(Toolbar toolbar, DrawerLayout drawer) {
+        toolbar.setNavigationIcon(R.drawable.burger);
+        toolbar.setNavigationOnClickListener(v -> {
+            if (!drawer.isDrawerOpen(Gravity.LEFT)) {
+                drawer.openDrawer(Gravity.LEFT);
+            }
+        });
+    }
 
-        }
-
-        @Override
-        public void onPrepareLoad(Drawable placeHolderDrawable) {
-            Log.e("animator", "prepareLoad");
-        }
-    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        ButterKnife.bind(this);
-        PeekabooApplication.getApp(this).getComponent().inject(this);
-        eventBus.register(this);
-        presenter.bind(this);
-        prepareDrawer();
-        updateAccountData(accountUser);
-
         if (getSupportFragmentManager().findFragmentById(R.id.fragmentContainer) == null) {
-            if (!handleNotificationIntent(getIntent(), false)) {
-                changeFragment(ContactsFragment.newInstance(), Constants.FRAGMENT_TAGS.CONTACTS_FRAGMENT);
-//                changeFragment(new CreateDialogFragment(), null);
+            Intent intent = getIntent();
+            handleIntent(intent);
+//            changeFragment(new CreateDialogFragment(), null);
+            if (!MainActivity.ACTION.SHOW_DIALOGS.equals(intent.getAction())) {
+                navigator.startFragment(this, Constants.FRAGMENT_TAGS.CONTACTS_FRAGMENT);
                 selectionMode(R.id.llContacts);
             }
-        }
-        //Hardcode list in right drawer
-        prepareHotFriends();
-
-        notifier.addListener(this);
-        if (notifier.isAvailable()) {
-            onConnected();
-        } else {
-            onDisconnected();
-            notifier.tryConnect(accountUser.getBearer());
-        }
-
-        presenter.setUserModeListener(this::renderState);
-    }
-
-    private void renderState(byte type) {
-        switch (type) {
-            case UserModeChangerUseCase.IUserMode.TEXT_MODE:
-                bText.setSelected(true);
-                bAudio.setSelected(false);
-                bVideo.setSelected(false);
-                break;
-
-            case UserModeChangerUseCase.IUserMode.AUDIO_MODE:
-                bText.setSelected(false);
-                bAudio.setSelected(true);
-                bVideo.setSelected(false);
-                break;
-
-            case UserModeChangerUseCase.IUserMode.VIDEO_MODE:
-                bText.setSelected(false);
-                bAudio.setSelected(false);
-                bVideo.setSelected(true);
-                break;
-
-            case UserModeChangerUseCase.IUserMode.ALL_MODE:
-                bText.setSelected(true);
-                bAudio.setSelected(true);
-                bVideo.setSelected(true);
-                break;
         }
     }
 
     @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
-        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragmentContainer);
-        handleNotificationIntent(intent, fragment == null || !(fragment instanceof ChatFragment));
+        handleIntent(intent);
     }
 
-    private boolean handleNotificationIntent(Intent intent, boolean addToStack) {
+    private void handleIntent(Intent intent) {
         String action = intent.getAction();
-
-        if (ACTION.SHOW_CHAT.equals(action) && intent.hasExtra(ACTION.EXTRA.CONTACT_EXTRA)) {
-            Contact contact = intent.getParcelableExtra(ACTION.EXTRA.CONTACT_EXTRA);
-            NotificationManager notificationManager =
-                    (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            notificationManager.cancel(MessageNotificator.NOTIFICATION_ID);
-            navigator.startChatFragment(this, contact, addToStack);
-        } else if (ACTION.SHOW_DIALOGS.equals(action)) {
-            NotificationManager notificationManager =
-                    (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-            notificationManager.cancel(MessageNotificator.NOTIFICATION_ID);
-            navigator.startDialogFragment(this);
-        } else {
-            return false;
-        }
-
-        return true;
-    }
-
-    private void prepareHotFriends() {
-        hotFriendsAdapter = new HotFriendsAdapter(MainActivity.this, mPicasso, navigator);
-        OverScrollDecoratorHelper.setUpOverScroll(lvHotFriends);
-        lvHotFriends.setAdapter(hotFriendsAdapter);
-        drawer.addDrawerListener(
-                new DrawerLayout.DrawerListener() {
-                    @Override
-                    public void onDrawerSlide(View drawerView, float slideOffset) {
-                    }
-
-                    @Override
-                    public void onDrawerOpened(View drawerView) {
-                        presenter.fillHotAdapter();
-                    }
-
-                    @Override
-                    public void onDrawerClosed(View drawerView) {
-                    }
-
-                    @Override
-                    public void onDrawerStateChanged(int newState) {
-                        if (newState > DrawerLayout.STATE_IDLE) {
-                            ActivityUtils.hideKeyboard(MainActivity.this);
-                        }
+        if (action != null) {
+            switch (action) {
+                case ACTION.SHOW_CONTACTS:
+                    navigator.startFragment(this, Constants.FRAGMENT_TAGS.CONTACTS_FRAGMENT);
+                    selectionMode(R.id.llContacts);
+                    break;
+                case ACTION.SHOW_CALLS:
+                    navigator.startFragment(this, Constants.FRAGMENT_TAGS.CALLS_FRAGMENT);
+                    selectionMode(R.id.llCalls);
+                    break;
+                case ACTION.SHOW_DIALOGS: {
+                    NotificationManager notificationManager =
+                            (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                    notificationManager.cancel(MessageNotificator.NOTIFICATION_ID);
+                    navigator.startFragment(this, Constants.FRAGMENT_TAGS.DIALOGS_FRAGMENT);
+                }
+                selectionMode(R.id.llDialogs);
+                break;
+                case ACTION.SHOW_SETTINGS:
+                    navigator.startFragment(this, Constants.FRAGMENT_TAGS.SETTINGS_FRAGMENT);
+                    selectionMode(R.id.llSettings);
+                    break;
+                case ACTION.SHOW_PROFILE:
+                    navigator.startFragment(this, Constants.FRAGMENT_TAGS.PROFILE_FRAGMENT);
+                    selectionMode(R.id.llProfile);
+                    break;
+                case ACTION.SHOW_CHAT: {
+                    Contact contact = intent.getParcelableExtra(MainActivity.ACTION.EXTRA.CONTACT_EXTRA);
+                    if (contact != null) {
+                        NotificationManager notificationManager =
+                                (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                        notificationManager.cancel(MessageNotificator.NOTIFICATION_ID);
+                        navigator.startChat(this, contact);
                     }
                 }
-
-        );
-    }
-
-    @Override
-    public void hotFriendToShow(List<Dialog> hotDialogs) {
-        hotFriendsAdapter.setItems(hotDialogs);
-    }
-
-    @Override
-    public void updateAvatarView(String result) {
-        showProgress();
-        if (result.equals("Ok")) {
-            showAvatar(accountUser.getAvatar());
-        } else {
-            showToastMessage("Error in updating avatar... Sorryan");
-        }
-    }
-
-    private void prepareDrawer() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        ActionBar supportActionBar = getSupportActionBar();
-        if (supportActionBar != null) {
-            supportActionBar.setHomeButtonEnabled(true);
-            supportActionBar.setDisplayHomeAsUpEnabled(true);
-        }
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.addDrawerListener(toggle);
-        toggle.syncState();
-    }
-
-    private void updateAccountData(AccountUser accountUser) {
-        byte mode = accountUser.getMode();
-        String avatarUrl = accountUser.getAvatar();
-        String userName = accountUser.getUsername();
-        tvNameSurname.setText(userName);
-        Log.e("animator", "avatarUrl " + avatarUrl);
-        int avatarSize = ResourcesUtils.getDimenInPx(this, R.dimen.widthOfIconInDrawer);
-        Picasso.with(this).load(avatarUrl)
-                .resize(0, avatarSize)
-                .into(avatarTarget);
-
-        renderState(mode);
-    }
-
-    private void showAvatar(String avatarUrl) {
-        int avatarSize = ResourcesUtils.getDimenInPx(this, R.dimen.widthOfIconInDrawer);
-        Picasso.with(this).load(avatarUrl).memoryPolicy(MemoryPolicy.NO_CACHE)
-                .resize(0, avatarSize)
-                .into(avatarTargetAnimated);
-    }
-
-    @Override
-    protected void onDestroy() {
-        notifier.removeListener(this);
-        presenter.unbind();
-        eventBus.unregister(this);
-        super.onDestroy();
-    }
-
-    @OnClick({R.id.llDialogs, R.id.llCalls, R.id.llContacts, R.id.llProfile, R.id.llSettings, R.id.llExit, R.id.ivAccountAvatar})
-    public void onDrawerItemClick(View v) {
-        selectionMode(v.getId());
-        if (v.getId() != R.id.llExit) {
-            FragmentManager fm = getSupportFragmentManager();
-            for (int i = 0; i < fm.getBackStackEntryCount(); ++i) {
-                fm.popBackStack();
+                break;
             }
         }
-        switch (v.getId()) {
-            case R.id.llDialogs:
-                changeFragment(new DialogsFragment(), Constants.FRAGMENT_TAGS.DIALOGS_FRAGMENT);
-                break;
-            case R.id.llCalls:
-                changeFragment(new CallsFragment(), Constants.FRAGMENT_TAGS.CALLS_FRAGMENT);
-                //TESTING
-//                startActivity(new Intent(this, TestSmsChatActivity.class));
-            //    changeFragment(new SmsDialogsFragment(), Constants.FRAGMENT_TAGS.SMS_DIALOGS_FRAGMENT);
-                break;
-            case R.id.llContacts:
-                changeFragment(ContactsFragment.newInstance(), Constants.FRAGMENT_TAGS.CONTACTS_FRAGMENT);
-                break;
-            case R.id.llProfile:
-                changeFragment(new ProfileFragment(), Constants.FRAGMENT_TAGS.PROFILE_FRAGMENT);
-                break;
-            case R.id.llSettings:
-                settingsFragment = new SettingsFragment();
-                settingsFragment.setUpdaterOfAvatarInDrawer(() -> showAvatar(accountUser.getAvatar()));
-                changeFragment(settingsFragment, Constants.FRAGMENT_TAGS.SETTINGS_FRAGMENT);
-                break;
-            case R.id.ivAccountAvatar:
-                DialogFragment newFragment = new ChooseImageDialogFragment();
-                newFragment.show(getSupportFragmentManager(), ChooseImageDialogFragment.TAG);
-                break;
-            case R.id.llExit:
-//                throw new RuntimeException();
-
-        }
-
-    }
-
-    @OnClick({R.id.bText, R.id.bAudio, R.id.bVideo})
-    public void onRadioButtonClicked(View v) {
-        if (notifier.isAvailable()) {
-//            bText.setSelected(v.getId() == R.id.bText);
-//            bAudio.setSelected(v.getId() == R.id.bAudio);
-//            bVideo.setSelected(v.getId() == R.id.bVideo);
-            byte mode = (v.getId() == R.id.bText
-                    ? UserModeChangerUseCase.IUserMode.TEXT_MODE : v.getId() == R.id.bAudio ?
-                    UserModeChangerUseCase.IUserMode.AUDIO_MODE : UserModeChangerUseCase.IUserMode.ALL_MODE);
-            presenter.setUserMode(mode);
-        }
-    }
-
-    private void selectionMode(int id) {
-        llDialogs.setSelected(false);
-        llCalls.setSelected(false);
-        llContacts.setSelected(false);
-        llProfile.setSelected(false);
-        llSettings.setSelected(false);
-        llExit.setSelected(false);
-        switch (id) {
-            case R.id.llDialogs:
-                llDialogs.setSelected(true);
-                break;
-            case R.id.llCalls:
-                llCalls.setSelected(true);
-                break;
-            case R.id.llContacts:
-                llContacts.setSelected(true);
-                break;
-            case R.id.llProfile:
-                llProfile.setSelected(true);
-                break;
-            case R.id.llSettings:
-                llSettings.setSelected(true);
-                break;
-            case R.id.llExit:
-                llExit.setSelected(true);
-                break;
-        }
-    }
-
-    private void changeFragment(Fragment fragment, @Nullable String tag) {
-        getSupportFragmentManager().beginTransaction()
-                .replace(R.id.fragmentContainer, fragment, tag)
-                .commit();
-        drawer.closeDrawer(Gravity.LEFT);
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (drawer.isDrawerOpen(Gravity.LEFT)) {
-            drawer.closeDrawer(Gravity.LEFT);
-        } else if (drawer.isDrawerOpen(Gravity.RIGHT)) {
-            drawer.closeDrawer(Gravity.RIGHT);
-        } else {
-            boolean callSuper = true;
-            for (OnBackPressListener listener : listeners) {
-                if (listener.onBackPress()) {
-                    callSuper = false;
-                }
-            }
-            if (callSuper) {
-                super.onBackPressed();
-            }
-        }
-    }
-
-    public void addListener(OnBackPressListener listener) {
-        listeners.add(listener);
-    }
-
-    public void removeListener(OnBackPressListener listener) {
-        listeners.remove(listener);
-    }
-
-    @Override
-    public void onMessageObtained(Message message) {
-
-    }
-
-    @Override
-    public void onConnected() {
-        ivOnlineStatus.setBackgroundResource(R.drawable.drawer_online_indicator);
-    }
-
-    @Override
-    public void onDisconnected() {
-        ivOnlineStatus.setBackgroundResource(R.drawable.drawer_offline_indicator);
-    }
-
-    @Override
-    public void showToastMessage(String text) {
-        Toast.makeText(getApplicationContext(), text, Toast.LENGTH_LONG).show();
-    }
-
-    @Override
-    public void showProgress() {
-//        pbLoading_avatar_progress_bar.setVisibility(View.VISIBLE);
-    }
-
-    @Override
-    public void hideProgress() {
-//        pbLoading_avatar_progress_bar.setVisibility(View.GONE);
-    }
-
-    @Override
-    public void onImageChosen(String file) {
-        Log.e("MainActivity", "image " + file);
-        presenter.updateAvatar(file);
-    }
-
-    public interface OnBackPressListener {
-        boolean onBackPress();
     }
 
     public interface ACTION {
         String SHOW_DIALOGS = "action.show_dialogs";
         String SHOW_CHAT = "action.show_chat";
+        String SHOW_CONTACTS = "action.show_contacts";
+        String SHOW_CALLS = "action.show_calls";
+        String SHOW_PROFILE = "action.show_profile";
+        String SHOW_SETTINGS = "action.show_settings";
 
         interface EXTRA {
             String CONTACT_EXTRA = "contact_extra";
@@ -513,50 +143,17 @@ public class MainActivity extends AppCompatActivity implements IMainView, Choose
     }
 
     @Override
+    protected void inject() {
+        PeekabooApplication.getApp(this).getComponent().inject(this);
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        switch (requestCode) {
-            case Constants.REQUEST_CODES.REQUEST_CODE_GPS:
-                if (resultCode == RESULT_OK && null != data) {
-                    sendGPSToChatFragment(data);
-                }
-                break;
-            default:
-                super.onActivityResult(requestCode, resultCode, data);
-                break;
+        TwitterAuthClient twitterAuthClient = new TwitterAuthClient();
+        if (twitterAuthClient.getRequestCode() == requestCode) {
+            twitterAuthClient.onActivityResult(requestCode, resultCode, data);
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
         }
-    }
-
-
-    public void sendEventToChatFragment(Intent data) {
-        ChatFragment chatFragment = (ChatFragment) getSupportFragmentManager()
-                .findFragmentByTag(Constants.FRAGMENT_TAGS.CHAT_FRAGMENT_TAG);
-        chatFragment.onActivityResult(Constants.REQUEST_CODES.REQUEST_CODE_GALERY, RESULT_OK, data);
-
-    }
-
-    public void sendGPSToChatFragment(Intent data) {
-        ChatFragment chatFragment = (ChatFragment) getSupportFragmentManager()
-                .findFragmentByTag(Constants.FRAGMENT_TAGS.CHAT_FRAGMENT_TAG);
-        chatFragment.onActivityResult(Constants.REQUEST_CODES.REQUEST_CODE_GPS, RESULT_OK, data);
-
-    }
-
-    private void setAvatarWithBlur(Bitmap bitmap) {
-        final Bitmap blurredImage = ImageUtils.getBlurredImage(bitmap, BLUR_RATE, false);
-        ivAccountAvatar.setImageBitmap(bitmap);
-        AnimatorSet animatorSet = new AnimatorSet();
-        Log.e("animator", "bitmapLoaded " + blurredImage + " " + bitmap);
-        Animator hide = ObjectAnimator.ofFloat(ivAvatarBlur, "alpha", 0f).setDuration(200);
-        hide.addListener(new AnimatorListenerAdapter() {
-            @Override
-            public void onAnimationEnd(Animator animation) {
-                super.onAnimationEnd(animation);
-                Log.e("animator", "" + animation);
-                ivAvatarBlur.setImageBitmap(blurredImage);
-            }
-        });
-        Animator show = ObjectAnimator.ofFloat(ivAvatarBlur, "alpha", 1f).setDuration(200);
-        animatorSet.playSequentially(hide, show);
-        animatorSet.start();
     }
 }
