@@ -120,9 +120,9 @@ public class ActivityNavigator {
         }
     }
 
-    public void startMapActivity(Activity activity, int requestCodeGps) {
-        Intent mapIntent = new Intent(activity, MapActivity.class);
-        activity.startActivityForResult(mapIntent, requestCodeGps);
+    public void startMapActivity(Fragment fragment, int requestCodeGps) {
+        Intent mapIntent = new Intent(fragment.getActivity(), MapActivity.class);
+        fragment.startActivityForResult(mapIntent, requestCodeGps);
         Log.wtf("NULL : ", "sendim gpsimg in fragment");
     }
 }

@@ -120,7 +120,7 @@ public class AccountUser extends User {
 
 
     public String getAvatarMiddle() {
-        return getAvatar() + "/1";
+        return getAvatar() + "";
     }
 
 

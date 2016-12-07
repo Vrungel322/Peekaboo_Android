@@ -10,6 +10,8 @@ import com.peekaboo.R;
 import com.peekaboo.data.Constants;
 import com.peekaboo.data.ResponseErrorHandler;
 import com.peekaboo.data.mappers.AbstractMapperFactory;
+import com.peekaboo.data.mappers.GsonMapper;
+import com.peekaboo.data.mappers.JsonMapper;
 import com.peekaboo.data.mappers.MapperFactory;
 import com.peekaboo.data.repositories.SessionDataRepository;
 import com.peekaboo.data.repositories.database.contacts.PContactHelper;
@@ -53,6 +55,12 @@ public class DataModule {
 
     TextToSpeech textToSpeech;
 
+
+    @Singleton
+    @Provides
+    public JsonMapper provideJsonMapper() {
+        return new GsonMapper();
+    }
 
     @Singleton
     @Provides

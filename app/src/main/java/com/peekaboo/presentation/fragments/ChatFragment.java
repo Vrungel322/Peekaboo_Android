@@ -39,7 +39,6 @@ import com.peekaboo.data.repositories.database.messages.PMessage;
 import com.peekaboo.domain.AccountUser;
 import com.peekaboo.presentation.PeekabooApplication;
 import com.peekaboo.presentation.activities.DrawerActivity;
-import com.peekaboo.presentation.activities.MapActivity;
 import com.peekaboo.presentation.adapters.ChatAdapter2;
 import com.peekaboo.presentation.app.ActivityResult;
 import com.peekaboo.presentation.app.view.PHorizontalScrollView;
@@ -364,7 +363,7 @@ public class ChatFragment extends Fragment implements IChatView2, DrawerActivity
 
     @OnClick(R.id.navigation_btn)
     void onNavigationButtonClick() {
-        activityNavigator.startMapActivity(getActivity(), Constants.REQUEST_CODES.REQUEST_CODE_GPS);
+        activityNavigator.startMapActivity(this, Constants.REQUEST_CODES.REQUEST_CODE_GPS);
     }
 
 
@@ -375,6 +374,7 @@ public class ChatFragment extends Fragment implements IChatView2, DrawerActivity
     }
 
     private void handleActivityResult(@NonNull ActivityResult activityResult) {
+        Log.e("ChatFragment", "handleActivityResult()");
         Intent data = activityResult.data;
         int requestCode = activityResult.requestCode;
         int resultCode = activityResult.resultCode;
@@ -395,9 +395,9 @@ public class ChatFragment extends Fragment implements IChatView2, DrawerActivity
                 }
                 break;
             case Constants.REQUEST_CODES.REQUEST_CODE_GPS:
+                Log.e("ChatFragment", "handle result gps " + resultCode + " " + data);
                 if (resultCode == Activity.RESULT_OK && null != data) {
                     String link = data.getStringExtra(STATICMAP);
-                    Log.wtf("NULL : ", "sendImage " + link);
                     sendGeo(link);
 
                 }
