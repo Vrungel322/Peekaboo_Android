@@ -143,7 +143,7 @@ public class SettingsFragment extends Fragment implements ISettingsView {
     }
 
     private void showAvatar() {
-        Picasso.with(getContext()).load(accountUser.getAvatar()).memoryPolicy(MemoryPolicy.NO_CACHE)
+        Picasso.with(getContext()).load(accountUser.getAvatarMiddle()).memoryPolicy(MemoryPolicy.NO_CACHE)
                 .resize(0, ResourcesUtils.getDimenInPx(getContext(), R.dimen.sizeOfIconInDrawer))
                 .into(userAvatarInSettings);
     }

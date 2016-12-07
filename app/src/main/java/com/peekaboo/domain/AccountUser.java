@@ -118,6 +118,12 @@ public class AccountUser extends User {
         return domen + getId();
     }
 
+
+    public String getAvatarMiddle() {
+        return getAvatar() + "/1";
+    }
+
+
     @Nullable
     public String getToken() {
         return token;
