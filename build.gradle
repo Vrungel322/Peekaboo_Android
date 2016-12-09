@@ -11,11 +11,8 @@ buildscript {
         }
     }
     dependencies {
-//<<<<<<< HEAD
-//        classpath 'com.android.tools.build:gradle:2.2.1'
-//=======
-        classpath 'com.android.tools.build:gradle:2.2.3'
-//>>>>>>> development
+        classpath 'com.android.tools.build:gradle:2.2.2'
+//        classpath 'com.google.gms:google-services:3.0.0'
         classpath 'com.neenbedankt.gradle.plugins:android-apt:1.8'
         classpath 'me.tatarka:gradle-retrolambda:3.3.0-beta4'
         classpath "net.ltgt.gradle:gradle-apt-plugin:0.6"
