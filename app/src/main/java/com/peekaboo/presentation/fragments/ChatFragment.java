@@ -222,7 +222,7 @@ public class ChatFragment extends Fragment implements IChatView2, DrawerActivity
 //                Log.wtf("NULL : ", lat + " " + lng);
 
 //                Uri gmmIntentUri = Uri.parse("geo:"+link.substring(249, 285));
-                Uri gmmIntentUri = Uri.parse("google.navigation:q=" + link.substring(249, 285) + "&mode=w");
+                Uri gmmIntentUri = Uri.parse("google.navigation:q=" + link.substring(154, 175) + "&mode=w");
                 Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
                 mapIntent.setPackage("com.google.android.apps.maps");
                 startActivity(mapIntent);
