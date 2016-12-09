@@ -131,7 +131,9 @@ dependencies {
 //    compile 'com.nineoldandroids:library:2.4.0'
 //    compile 'com.github.markushi:circlebutton:1.1'
 
-    compile 'com.google.android.gms:play-services-maps:9.4.0'
+    compile 'com.google.android.gms:play-services-maps:10.0.1'
+    compile 'com.google.android.gms:play-services-location:10.0.1'
+    compile 'com.google.android.gms:play-services-places:10.0.1'
 
     compile "com.google.auto.value:auto-value:1.2"
     compile('com.github.ozodrukh:CircularReveal:2.0.1@aar') {
@@ -141,6 +143,7 @@ dependencies {
 
     //slider lib
     compile 'com.github.lawloretienne:discreteslider:0.0.6'
+
 
 //    compile 'org.mockito:mockito-all:1.10.8'
 

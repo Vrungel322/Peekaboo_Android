@@ -5,30 +5,17 @@
 
         <!-- "Mark Favorite", should appear as action button if possible -->
         <item
+            android:id="@+id/action_search"
+            android:icon="@drawable/ic_search_white_24dp"
+            android:title="Send"
+            app:showAsAction="ifRoom"/>
+
+        <item
             android:id="@+id/action_destination"
             android:icon="@drawable/directions_walk_white_24dp"
             android:title="Destination"
             app:showAsAction="ifRoom"/>
-        <item
-            android:id="@+id/action_del_markers"
-            android:icon="@drawable/musorka"
-            android:title="Delete markers"
-            app:showAsAction="ifRoom"/>
-        <item
-            android:id="@+id/action_send"
-            android:icon="@drawable/play_gray"
-            android:title="Send"
-            app:showAsAction="ifRoom"/>
-        <item
-            android:id="@+id/action_back"
-            android:icon="@drawable/exit_grey"
-            android:title="Back"
-            app:showAsAction="ifRoom"/>
 
-    <!-- Settings, should always be in the overflow -->
-        <item android:id="@+id/action_settings"
-            android:title="@string/action_settings"
-            app:showAsAction="never"/>
 
 
 </menu>

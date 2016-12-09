@@ -421,6 +421,8 @@ public class ChatFragment extends Fragment implements IChatView2, DrawerActivity
             case Constants.REQUEST_CODES.REQUEST_CODE_GPS:
                 Log.e("ChatFragment", "handle result gps " + resultCode + " " + data);
                 if (resultCode == Activity.RESULT_OK && null != data) {
+//                    Log.wtf("NULL : ", "--GPS " + requestCode);
+
                     String link = data.getStringExtra(STATICMAP);
                     sendGeo(link);
 

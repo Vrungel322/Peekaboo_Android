@@ -9,6 +9,7 @@ import android.widget.Toast;
 import com.peekaboo.R;
 import com.peekaboo.data.Constants;
 import com.peekaboo.data.ResponseErrorHandler;
+import com.peekaboo.data.mappers.GsonMapper;
 import com.peekaboo.data.mappers.JsonMapper;
 import com.peekaboo.data.rest.PeekabooApi;
 import com.peekaboo.data.rest.RestApi;
