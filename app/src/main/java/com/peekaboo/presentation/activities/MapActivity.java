@@ -52,7 +52,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         createMapView();
 
-        fabpush = (FloatingActionButton) findViewById(R.id.mapfab);
+//        fabpush = (FloatingActionButton) findViewById(R.id.mapfab);
         fabswitch = (FloatingActionButton) findViewById(R.id.mapfabswitch);
 
         Toolbar mapToolbar = (Toolbar) findViewById(R.id.map_toolbar);
@@ -76,7 +76,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         switch (item.getItemId()) {
 
-            case R.id.action_destination:
+            case R.id.action_push:
+                push();
                 return true;
 
             case R.id.action_search:
@@ -101,6 +102,58 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         }
     }
 
+    private void push() {
+        if (bluemarker != null && redmarker != null && bluemarker.isVisible() && redmarker.isVisible()) {
+
+            double lat = (bluemarker.getPosition().latitude + redmarker.getPosition().latitude) / 2;
+            double lng = (bluemarker.getPosition().longitude + redmarker.getPosition().longitude) / 2;
+
+            String mapuri = "http://maps.google.com/maps/api/staticmap?center=" + lat + "," + lng +
+                    "&markers=icon:https://www.peekaboochat.com/assets/src/red_point.png|" + redmarker.getPosition().latitude + "," + redmarker.getPosition().longitude +
+                    "&markers=icon:https://www.peekaboochat.com/assets/src/blue_point.png|" + bluemarker.getPosition().latitude + "," + bluemarker.getPosition().longitude +
+                    "&path=color:0xff0000ff|weight:5|fillcolor:0xFFFF0033|geodesic:true|" + bluemarker.getPosition().latitude + "," + bluemarker.getPosition().longitude + "|" +
+                    redmarker.getPosition().latitude + "," + redmarker.getPosition().longitude +
+                    "&zoom=15&size=350x230" +
+                    "&sensor=true&scale=2";
+
+            Intent intent = new Intent();
+            intent.putExtra("staticmap", mapuri);
+            setResult(RESULT_OK, intent);
+            Log.wtf("NULL : ", "send gps from activity!!!!!"+mapuri);
+
+            finish();
+
+
+        } else {
+            if (bluemarker != null && bluemarker.isVisible()) {
+                String mapuri = "http://maps.google.com/maps/api/staticmap?center=" + bluemarker.getPosition().latitude + "," + bluemarker.getPosition().longitude +
+                        "&markers=icon:https://www.peekaboochat.com/assets/src/blue_point.png|" + bluemarker.getPosition().latitude + "," + bluemarker.getPosition().longitude +
+                        "&zoom=15&size=350x230" + "&sensor=true&scale=2";
+                Intent intent = new Intent();
+                intent.putExtra("staticmap", mapuri);
+                setResult(RESULT_OK, intent);
+                Log.wtf("NULL : ", "send gps from activity!!!!!");
+
+                finish();
+            } else {
+                if (redmarker != null && redmarker.isVisible()) {
+                    String mapuri = "http://maps.google.com/maps/api/staticmap?center=" + redmarker.getPosition().latitude + "," + redmarker.getPosition().longitude +
+                            "&markers=icon:https://www.peekaboochat.com/assets/src/red_point.png|" + redmarker.getPosition().latitude + "," + redmarker.getPosition().longitude +
+                            "&zoom=15&size=350x230" + "&sensor=true&scale=2";
+                    Intent intent = new Intent();
+                    intent.putExtra("staticmap", mapuri);
+                    setResult(RESULT_OK, intent);
+                    Log.wtf("NULL : ", "send gps from activity!!!!!");
+
+                    finish();
+                }
+
+
+            }
+
+        }
+    }
+
     /**
      * Initialises the mapview
      */
@@ -111,6 +164,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 MapFragment googleMap = (MapFragment) getFragmentManager()
                         .findFragmentById(R.id.mapView);
                 googleMap.getMapAsync(this);
+                Toast.makeText(getApplicationContext(),"Make long click on map to place destination marker.",Toast.LENGTH_LONG).show();
 
                 if (null == googleMap) {
                     Toast.makeText(getApplicationContext(),
@@ -184,59 +238,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             }
         });
 
-        //when you placed red(destination) marker, generated link and send to smbd
-        fabpush.setOnClickListener(v -> {
 
-            if (bluemarker != null && redmarker != null && bluemarker.isVisible() && redmarker.isVisible()) {
-
-                double lat = (bluemarker.getPosition().latitude + redmarker.getPosition().latitude) / 2;
-                double lng = (bluemarker.getPosition().longitude + redmarker.getPosition().longitude) / 2;
-
-                String mapuri = "http://maps.google.com/maps/api/staticmap?center=" + lat + "," + lng +
-                        "&markers=icon:https://www.peekaboochat.com/assets/src/red_point.png|" + redmarker.getPosition().latitude + "," + redmarker.getPosition().longitude +
-                        "&markers=icon:https://www.peekaboochat.com/assets/src/blue_point.png|" + bluemarker.getPosition().latitude + "," + bluemarker.getPosition().longitude +
-                        "&path=color:0xff0000ff|weight:5|fillcolor:0xFFFF0033|geodesic:true|" + bluemarker.getPosition().latitude + "," + bluemarker.getPosition().longitude + "|" +
-                        redmarker.getPosition().latitude + "," + redmarker.getPosition().longitude +
-                        "&zoom=15&size=350x230" +
-                        "&sensor=true&scale=2";
-
-                Intent intent = new Intent();
-                intent.putExtra("staticmap", mapuri);
-                setResult(RESULT_OK, intent);
-                Log.wtf("NULL : ", "send gps from activity!!!!!"+mapuri);
-
-                finish();
-
-
-            } else {
-                if (bluemarker != null && bluemarker.isVisible()) {
-                    String mapuri = "http://maps.google.com/maps/api/staticmap?center=" + bluemarker.getPosition().latitude + "," + bluemarker.getPosition().longitude +
-                            "&markers=icon:https://www.peekaboochat.com/assets/src/blue_point.png|" + bluemarker.getPosition().latitude + "," + bluemarker.getPosition().longitude +
-                            "&zoom=15&size=350x230" + "&sensor=true&scale=2";
-                    Intent intent = new Intent();
-                    intent.putExtra("staticmap", mapuri);
-                    setResult(RESULT_OK, intent);
-                    Log.wtf("NULL : ", "send gps from activity!!!!!");
-
-                    finish();
-                } else {
-                    if (redmarker != null && redmarker.isVisible()) {
-                        String mapuri = "http://maps.google.com/maps/api/staticmap?center=" + redmarker.getPosition().latitude + "," + redmarker.getPosition().longitude +
-                                "&markers=icon:https://www.peekaboochat.com/assets/src/red_point.png|" + redmarker.getPosition().latitude + "," + redmarker.getPosition().longitude +
-                                "&zoom=15&size=350x230" + "&sensor=true&scale=2";
-                        Intent intent = new Intent();
-                        intent.putExtra("staticmap", mapuri);
-                        setResult(RESULT_OK, intent);
-                        Log.wtf("NULL : ", "send gps from activity!!!!!");
-
-                        finish();
-                    }
-
-
-                }
-
-            }
-        });
 
         //marker placed on your location
         fabswitch.setOnClickListener(v -> {
@@ -290,6 +292,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         googleMap.setMapType(GoogleMap.MAP_TYPE_NORMAL);
         googleMap.setMyLocationEnabled(true);
+        googleMap.getUiSettings().setMyLocationButtonEnabled(false);
         googleMap.setTrafficEnabled(false);
         googleMap.setIndoorEnabled(false);
         googleMap.setBuildingsEnabled(true);
