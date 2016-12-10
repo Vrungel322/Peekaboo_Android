@@ -2,13 +2,14 @@ package com.peekaboo.data;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by arkadii on 11/26/16.
  */
 
-public class GroupChatCreationEntity {
+public class GroupChatCreationEntity implements Serializable {
     @SerializedName("chat_users")
     private List<GroupChatMemberEntity> chatUsers;
     private String image;

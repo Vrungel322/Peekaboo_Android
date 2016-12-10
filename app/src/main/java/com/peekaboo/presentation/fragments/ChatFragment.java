@@ -31,6 +31,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.peekaboo.R;
+import com.peekaboo.data.mappers.GsonMapper;
 import com.peekaboo.data.repositories.database.contacts.Contact;
 import com.peekaboo.data.repositories.database.messages.PMessage;
 import com.peekaboo.domain.AccountUser;
@@ -138,7 +139,7 @@ public class ChatFragment extends Fragment implements IChatView2, DrawerActivity
         ChatFragment fragment = new ChatFragment();
 
         Bundle args = new Bundle();
-        args.putParcelable(COMPANION, companion);
+        IntentUtils.putObject(COMPANION, args, companion);
         fragment.setArguments(args);
 
         return fragment;
@@ -154,7 +155,7 @@ public class ChatFragment extends Fragment implements IChatView2, DrawerActivity
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         PeekabooApplication.getApp(getActivity()).getComponent().inject(this);
-        companion = getArguments().getParcelable(COMPANION);
+        companion = IntentUtils.getObject(COMPANION, getArguments(), Contact.class);
         restoreState(savedInstanceState);
     }
 

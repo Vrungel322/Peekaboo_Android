@@ -74,7 +74,7 @@ public class ActivityNavigator {
     public void startChat(AppCompatActivity activity, Contact companion) {
         Intent intent = new Intent(activity, DetailsActivity.class);
         intent.setAction(DetailsActivity.ACTION_CHAT);
-        intent.putExtra(DetailsActivity.EXTRA, companion);
+        IntentUtils.putObject(DetailsActivity.EXTRA, intent, companion);
         intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_CLEAR_TOP);
         activity.startActivity(intent);
     }
