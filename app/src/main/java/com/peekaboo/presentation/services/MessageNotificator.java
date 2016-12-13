@@ -9,14 +9,17 @@ import android.graphics.Color;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 
 import com.peekaboo.R;
 import com.peekaboo.data.di.scope.UserScope;
 import com.peekaboo.data.repositories.database.contacts.Contact;
 import com.peekaboo.data.repositories.database.messages.PMessage;
+import com.peekaboo.domain.Pair;
+import com.peekaboo.domain.subscribers.BaseUseCaseSubscriber;
+import com.peekaboo.domain.usecase.GetAllUnreadMessagesInfoUseCase;
 import com.peekaboo.presentation.activities.MainActivity;
 import com.peekaboo.presentation.utils.ResourcesUtils;
-import com.peekaboo.utils.IntentUtils;
 import com.squareup.picasso.Picasso;
 
 import java.util.List;
@@ -111,8 +114,8 @@ public class MessageNotificator {
     private void showSinglePersonNotification(String ticker, String message, Contact contact) {
         Intent resultIntent = new Intent(context, MainActivity.class)
                 .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP)
-                .setAction(MainActivity.ACTION.SHOW_CHAT);
-        IntentUtils.putObject(MainActivity.ACTION.EXTRA.CONTACT_EXTRA, resultIntent, contact);
+                .setAction(MainActivity.ACTION.SHOW_CHAT)
+                .putExtra(MainActivity.ACTION.EXTRA.CONTACT_EXTRA, contact);
 
         PendingIntent resultPendingIntent = PendingIntent.getActivity(context, NOTIFICATION_ID, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         notificationManager.notify(NOTIFICATION_ID, getNotification(ticker, contact.contactNickname(), message, resultPendingIntent));

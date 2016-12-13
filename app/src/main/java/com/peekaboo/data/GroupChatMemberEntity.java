@@ -2,13 +2,11 @@ package com.peekaboo.data;
 
 import com.google.gson.annotations.SerializedName;
 
-import java.io.Serializable;
-
 /**
  * Created by arkadii on 11/26/16.
  */
 
-public class GroupChatMemberEntity implements Serializable {
+public class GroupChatMemberEntity {
     private String id;
     private String username;
     @SerializedName("creator_id")

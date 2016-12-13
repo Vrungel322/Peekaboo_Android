@@ -5,7 +5,6 @@ import android.content.Context;
 import com.google.gson.Gson;
 import com.google.gson.TypeAdapter;
 import com.peekaboo.R;
-import com.peekaboo.data.mappers.JsonMapper;
 import com.peekaboo.domain.Error;
 import com.peekaboo.domain.UserMessageMapper;
 
@@ -18,8 +17,8 @@ import retrofit2.adapter.rxjava.HttpException;
  * Created by sebastian on 05.07.16.
  */
 public class ResponseErrorHandler implements UserMessageMapper {
-    private Context context;
     private Gson gson = new Gson();
+    private Context context;
 
     public ResponseErrorHandler(Context context) {
         this.context = context;

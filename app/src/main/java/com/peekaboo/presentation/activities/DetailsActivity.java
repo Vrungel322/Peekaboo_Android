@@ -15,7 +15,6 @@ import com.peekaboo.presentation.fragments.SmsChatFragment;
 import com.peekaboo.presentation.pojo.PhoneContactPOJO;
 import com.peekaboo.presentation.utils.ActivityUtils;
 import com.peekaboo.utils.ActivityNavigator;
-import com.peekaboo.utils.IntentUtils;
 
 import javax.inject.Inject;
 
@@ -50,7 +49,7 @@ public class DetailsActivity extends DrawerActivity {
         if (action != null) {
             switch (action) {
                 case ACTION_CHAT: {
-                    Contact contact = IntentUtils.getObject(EXTRA, intent, Contact.class);
+                    Contact contact = (Contact) intent.getParcelableExtra(EXTRA);
                     Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragmentContainer);
                     if (!isChatFragment(fragment) ||
                             !isContactFromChat(contact, (ChatFragment) fragment)) {

@@ -29,5 +29,4 @@ public abstract class ContactAbs {
     public abstract boolean isOnline();
     public abstract String contactImgUri();
     public abstract GroupChat groupChat();
-    public abstract boolean isGroupChat();
 }

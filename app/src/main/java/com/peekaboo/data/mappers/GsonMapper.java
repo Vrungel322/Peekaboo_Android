@@ -7,7 +7,6 @@ import com.google.gson.Gson;
  */
 public class GsonMapper implements JsonMapper {
     private final Gson gson = new Gson();
-    private static final GsonMapper mapper = new GsonMapper();
 
     @Override
     public String toJson(Object o) {

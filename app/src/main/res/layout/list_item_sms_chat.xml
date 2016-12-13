@@ -3,7 +3,7 @@
     style="@style/AppTheme"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:paddingLeft="16dp">
+    >
 
     <FrameLayout
         android:id="@+id/chat_bubble"

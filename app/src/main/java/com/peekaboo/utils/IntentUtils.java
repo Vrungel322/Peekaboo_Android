@@ -4,16 +4,12 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Bundle;
-import android.os.Parcelable;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.widget.Toast;
 
 import com.peekaboo.R;
-import com.peekaboo.data.mappers.GsonMapper;
-import com.peekaboo.data.mappers.JsonMapper;
 
 /**
  * Created by arkadii on 11/9/16.
@@ -22,7 +18,7 @@ import com.peekaboo.data.mappers.JsonMapper;
 public class IntentUtils {
     public static final int CAMERA_REQUEST_CODE = 1020;
     public static final int GALLERY_REQUEST_CODE = 1021;
-    private static GsonMapper mapper = new GsonMapper();
+
     public static boolean takeGalleryImage(Fragment fragment) {
         Intent pickPhoto = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         if (pickPhoto.resolveActivity(fragment.getActivity().getPackageManager()) != null) {
@@ -53,34 +49,6 @@ public class IntentUtils {
             if (requestCode == GALLERY_REQUEST_CODE) {
                 return FilesUtils.getRealPathFromURI(c, data.getData());
             }
-        }
-        return null;
-    }
-
-    public static Bundle putObject(String key, Bundle bundle, Object o) {
-        bundle.putString(key, mapper.toJson(o));
-        return bundle;
-    }
-
-    public static Intent putObject(String key, Intent intent, Object o) {
-        intent.putExtra(key, mapper.toJson(o));
-        return intent;
-    }
-
-    @Nullable
-    public static <T> T getObject(String key, Bundle bundle, Class<T> destinationClass) {
-        String serializedObject = bundle.getString(key);
-        if (serializedObject != null) {
-            return mapper.fromJson(serializedObject, destinationClass);
-        }
-        return null;
-    }
-
-    @Nullable
-    public static <T> T getObject(String key, Intent intent, Class<T> destinationClass) {
-        String serializedObject = intent.getStringExtra(key);
-        if (serializedObject != null) {
-            return mapper.fromJson(serializedObject, destinationClass);
         }
         return null;
     }

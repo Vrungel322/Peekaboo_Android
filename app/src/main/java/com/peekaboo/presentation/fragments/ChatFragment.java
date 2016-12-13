@@ -32,13 +32,13 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.peekaboo.R;
-import com.peekaboo.data.mappers.GsonMapper;
 import com.peekaboo.data.repositories.database.contacts.Contact;
 import com.peekaboo.data.repositories.database.messages.PMessage;
 import com.peekaboo.data.repositories.database.messages.PMessageAbs;
 import com.peekaboo.domain.AccountUser;
 import com.peekaboo.presentation.PeekabooApplication;
 import com.peekaboo.presentation.activities.DrawerActivity;
+import com.peekaboo.presentation.activities.MapActivity;
 import com.peekaboo.presentation.adapters.ChatAdapter2;
 import com.peekaboo.presentation.app.ActivityResult;
 import com.peekaboo.presentation.app.view.PHorizontalScrollView;
@@ -143,7 +143,7 @@ public class ChatFragment extends Fragment implements IChatView2, DrawerActivity
         ChatFragment fragment = new ChatFragment();
 
         Bundle args = new Bundle();
-        IntentUtils.putObject(COMPANION, args, companion);
+        args.putParcelable(COMPANION, companion);
         fragment.setArguments(args);
 
         return fragment;
@@ -159,7 +159,7 @@ public class ChatFragment extends Fragment implements IChatView2, DrawerActivity
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         PeekabooApplication.getApp(getActivity()).getComponent().inject(this);
-        companion = IntentUtils.getObject(COMPANION, getArguments(), Contact.class);
+        companion = getArguments().getParcelable(COMPANION);
         restoreState(savedInstanceState);
     }
 
@@ -211,22 +211,27 @@ public class ChatFragment extends Fragment implements IChatView2, DrawerActivity
 
                 String link = adapter.getItem(position).messageBody();
                 Log.wtf("NULL : ", "parse link " + link);
-//                Intent mapintent = new Intent(getActivity(), MapActivity.class);
-//                mapintent.putExtra("mesmap",link);
-//                getActivity().startActivity(mapintent);
+                Intent geointent = new Intent(getActivity(), MapActivity.class);
+                geointent.putExtra("mesmap",link);
+                geointent.putExtra("contact",companion);
+                getActivity().startActivity(geointent);
+
+//                String lat = link.substring(49,58);
+//                String lng = link.substring(60,70);
+//                Log.wtf("NULL : ", "sublink " + lat+"  |  "+lng);
+//                getintent.putExtra("latitude",lat);
+//                getintent.putExtra("longitude",lng);
+
+//                Log.wtf("NULL : ", "sublink " + lat+"  |"+lng);
 //                setResult(RESULT_OK, mapintent);
-//--
-//        Uri gmmIntentUri = Uri.parse("geo:51.4597048,32.516204?q=(restaurants)&mode=d");
-//        Uri gmmIntentUri = Uri.parse(link);
-//                String lat = link.substring(249, 266);
-//                String lng = link.substring(267, 285);
+
 //                Log.wtf("NULL : ", lat + " " + lng);
 
 //                Uri gmmIntentUri = Uri.parse("geo:"+link.substring(249, 285));
-                Uri gmmIntentUri = Uri.parse("google.navigation:q=" + link.substring(154, 175) + "&mode=w");
-                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
-                mapIntent.setPackage("com.google.android.apps.maps");
-                startActivity(mapIntent);
+//                Uri gmmIntentUri = Uri.parse("google.navigation:q=" + link.substring(49, 70) + "&mode=w");
+//                Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
+//                mapIntent.setPackage("com.google.android.apps.maps");
+//                startActivity(mapIntent);
             }
 
         });
