@@ -11,8 +11,8 @@
             app:showAsAction="ifRoom"/>
 
         <item
-            android:id="@+id/action_push"
-            android:icon="@drawable/ic_done_white_24dp"
+            android:id="@+id/action_destination"
+            android:icon="@drawable/directions_walk_white_24dp"
             android:title="Destination"
             app:showAsAction="ifRoom"/>
 
