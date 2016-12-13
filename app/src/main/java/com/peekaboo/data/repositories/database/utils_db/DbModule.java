@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.peekaboo.data.di.scope.UserScope;
 import com.peekaboo.data.mappers.AbstractMapperFactory;
+import com.peekaboo.data.mappers.JsonMapper;
 import com.peekaboo.data.repositories.database.contacts.PContactHelper;
 import com.peekaboo.data.repositories.database.messages.PMessageHelper;
 import com.peekaboo.data.repositories.database.service.DBHelper;
@@ -28,8 +29,8 @@ public class DbModule {
     @Provides
     @UserScope
     public PContactHelper provideContactHelper(DBHelper helper, SubscribeOn subscribeOn, ObserveOn observeOn,
-                                               AbstractMapperFactory mapper) {
-        return new PContactHelper(helper, subscribeOn, observeOn, mapper);
+                                               AbstractMapperFactory mapper, JsonMapper jsonMapper) {
+        return new PContactHelper(helper, subscribeOn, observeOn, mapper, jsonMapper);
     }
 
 

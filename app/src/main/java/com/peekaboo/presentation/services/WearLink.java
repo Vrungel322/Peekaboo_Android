@@ -14,6 +14,7 @@ import android.os.RemoteException;
 import android.util.Log;
 
 import com.google.gson.Gson;
+import com.peekaboo.data.mappers.JsonMapper;
 import com.peekaboo.data.repositories.database.contacts.Contact;
 import com.peekaboo.data.repositories.database.contacts.PContactHelper;
 import com.peekaboo.data.repositories.database.messages.PMessage;
@@ -51,6 +52,8 @@ public class WearLink extends Service implements IMessenger.MessengerListener
     AccountUser accountUser;
     @Inject
     SessionRepository sessionRepository;
+    @Inject
+    JsonMapper jsonMapper;
     @Inject
     PContactHelper contactHelper;
 
@@ -151,7 +154,7 @@ public class WearLink extends Service implements IMessenger.MessengerListener
                     JSONObject json = new JSONObject();
                     json.put("id", accountUser.getId());
                     json.put("name", accountUser.getUsername());
-                    String value = new Gson().toJson(wearContacts);
+                    String value = jsonMapper.toJson(wearContacts);
                     Log.e("WearLink", value);
                     Log.e("WearLink", predefinedContacts);
                     json.put("contacts", new JSONArray(value));

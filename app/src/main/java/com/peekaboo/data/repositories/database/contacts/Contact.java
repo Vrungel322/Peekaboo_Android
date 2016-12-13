@@ -8,7 +8,7 @@ import com.peekaboo.domain.GroupChat;
 /**
  * Created by Nikita on 10.08.2016.
  */
-public class Contact extends ContactAbs implements Parcelable {
+public class Contact extends ContactAbs {
 
     private long id;
     private String contactName;
@@ -65,6 +65,7 @@ public class Contact extends ContactAbs implements Parcelable {
         return isOnline;
     }
 
+
     @Override
     public String contactImgUri() {
         return contactImgUri;
@@ -73,6 +74,11 @@ public class Contact extends ContactAbs implements Parcelable {
     @Override
     public GroupChat groupChat() {
         return groupChat;
+    }
+
+    @Override
+    public boolean isGroupChat() {
+        return groupChat() != null;
     }
 
     public String contactImgUriSmall() {
@@ -84,45 +90,6 @@ public class Contact extends ContactAbs implements Parcelable {
 
     public void setId(long id) {
         this.id = id;
-    }
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeLong(id);
-        dest.writeString(contactName);
-        dest.writeString(contactSurname);
-        dest.writeString(contactNickname);
-        dest.writeBooleanArray(new boolean[]{isOnline});
-        dest.writeString(contactImgUri);
-        dest.writeString(contactId);
-    }
-
-    public static final Parcelable.Creator<Contact> CREATOR = new Parcelable.Creator<Contact>() {
-
-        @Override
-        public Contact createFromParcel(Parcel source) {
-            return new Contact(source);
-        }
-
-        @Override
-        public Contact[] newArray(int size) {
-            return new Contact[size];
-        }
-    };
-
-    private Contact(Parcel in){
-        id = in.readLong();
-        contactName = in.readString();
-        contactSurname = in.readString();
-        contactNickname = in.readString();
-        isOnline = in.createBooleanArray()[0];
-        contactImgUri = in.readString();
-        contactId = in.readString();
     }
 
     @Override

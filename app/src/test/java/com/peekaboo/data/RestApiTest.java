@@ -1,7 +1,10 @@
 package com.peekaboo.data;
 
 import android.content.Context;
+import android.os.Parcel;
+import android.os.SystemClock;
 
+import com.peekaboo.data.repositories.database.contacts.Contact;
 import com.peekaboo.data.rest.PeekabooApi;
 import com.peekaboo.data.rest.RestApi;
 import com.peekaboo.data.rest.entity.Credentials;
@@ -14,6 +17,9 @@ import org.junit.Before;
 import org.junit.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import rx.Observable;
 import rx.Subscriber;
@@ -39,23 +45,27 @@ public class RestApiTest {
 
     @Test
     public void asd() {
-        Observable.create(new Observable.OnSubscribe<String>() {
-            @Override
-            public void call(Subscriber<? super String> subscriber) {
-                subscriber.onNext("asd");
-                subscriber.onCompleted();
-            }
-        }).filter(s -> !s.equals("asd")).doOnUnsubscribe(new Action0() {
-            @Override
-            public void call() {
-                System.out.println("unsubscribe");
-            }
-        }).subscribe(new Action1<String>() {
-            @Override
-            public void call(String s) {
-                System.out.println(s);
-            }
-        });
+        Contact contact = new Contact(10,"asdsgsafadfs","sdfsadgsf", "sgdsfdda", true, "safsdhgasdf", "asfdsfs", null);
+        long currentTimeMillis = System.currentTimeMillis();
+        System.out.println(System.currentTimeMillis() - currentTimeMillis);
+
+//        Observable.create(new Observable.OnSubscribe<String>() {
+//            @Override
+//            public void call(Subscriber<? super String> subscriber) {
+//                subscriber.onNext("asd");
+//                subscriber.onCompleted();
+//            }
+//        }).filter(s -> !s.equals("asd")).doOnUnsubscribe(new Action0() {
+//            @Override
+//            public void call() {
+//                System.out.println("unsubscribe");
+//            }
+//        }).subscribe(new Action1<String>() {
+//            @Override
+//            public void call(String s) {
+//                System.out.println(s);
+//            }
+//        });
     }
 //
 //    @Test

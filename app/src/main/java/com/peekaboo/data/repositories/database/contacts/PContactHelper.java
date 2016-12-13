@@ -5,9 +5,11 @@ import android.database.sqlite.SQLiteDatabase;
 import android.support.annotation.NonNull;
 
 import com.peekaboo.data.mappers.AbstractMapperFactory;
+import com.peekaboo.data.mappers.JsonMapper;
 import com.peekaboo.data.repositories.database.messages.PMessage;
 import com.peekaboo.data.repositories.database.service.DBHelper;
 import com.peekaboo.data.repositories.database.utils_db.Db;
+import com.peekaboo.domain.GroupChat;
 import com.peekaboo.domain.schedulers.ObserveOn;
 import com.peekaboo.domain.schedulers.SubscribeOn;
 
@@ -28,12 +30,14 @@ public class PContactHelper {
     private final SubscribeOn subscribeOn;
     private final ObserveOn observeOn;
     private final AbstractMapperFactory mapper;
+    private final JsonMapper jsonMapper;
 
-    public PContactHelper(DBHelper helper, SubscribeOn subscribeOn, ObserveOn observeOn, AbstractMapperFactory mapper) {
+    public PContactHelper(DBHelper helper, SubscribeOn subscribeOn, ObserveOn observeOn, AbstractMapperFactory mapper, JsonMapper jsonMapper) {
         this.helper = helper;
         this.subscribeOn = subscribeOn;
         this.observeOn = observeOn;
         this.mapper = mapper;
+        this.jsonMapper = jsonMapper;
         createTable();
     }
 
@@ -92,6 +96,7 @@ public class PContactHelper {
         String selectAll = "SELECT * FROM " + TABLE_NAME;
         return synchronousSelect(selectAll);
     }
+
     private List<Contact> synchronousSelect(String query) {
         List<Contact> messages = new ArrayList<>();
         SQLiteDatabase db = helper.getWritableDatabase();
@@ -114,10 +119,13 @@ public class PContactHelper {
         String contactNickname = Db.getString(cursor, ContactAbs.CONTACT_NICKNAME);
         boolean isOnline = Db.getBoolean(cursor, ContactAbs.CONTACT_IS_ONLINE);
         String contactImgUri = Db.getString(cursor, ContactAbs.CONTACT_IMG_URI);
-//        GroupChat groupChat = Db.getString(cursor, ContactAbs.GROUP_CHAT_MEMBERS);
+//        String groupJson = Db.getString(cursor, ContactAbs.GROUP_CHAT_MEMBERS);
+        GroupChat groupChat = null;
+//        if (groupJson != null) {
+//            groupChat = jsonMapper.fromJson(groupJson, GroupChat.class);
+//        }
 
-//        return new Contact(id, contactName, contactSurname, contactNickname, isOnline, contactImgUri, contactId, groupChat);
-        return new Contact(id, contactName, contactSurname, contactNickname, isOnline, contactImgUri, contactId, null);
+        return new Contact(id, contactName, contactSurname, contactNickname, isOnline, contactImgUri, contactId, groupChat);
     }
 
     public Observable<Contact> getContactByContactId(String contactId) {
