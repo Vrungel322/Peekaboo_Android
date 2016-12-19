@@ -112,6 +112,8 @@ public class ContactsFragment extends Fragment implements IContactsView, MenuIte
     private void setUpRecyclerView() {
         contactLargeAdapter = new ContactLargeAdapter((AppCompatActivity) getActivity(), navigator, picasso);
         recyclerView.setAdapter(contactLargeAdapter);
+//        GridLayoutManager gridLayoutManager = new GridLayoutManager(getContext(), 2);
+//        recyclerView.setLayoutManager(gridLayoutManager);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false) {
             @Override
             public void onLayoutChildren(final RecyclerView.Recycler recycler, final RecyclerView.State state) {
@@ -193,12 +195,12 @@ public class ContactsFragment extends Fragment implements IContactsView, MenuIte
             mSearchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                 @Override
                 public boolean onQueryTextSubmit(String query) {
-                    return false;
+                    return true;
                 }
 
                 @Override
                 public boolean onQueryTextChange(String newText) {
-                    contactLargeAdapter.filter(newText);
+                        contactLargeAdapter.filter(newText);
                     return true;
                 }
             });

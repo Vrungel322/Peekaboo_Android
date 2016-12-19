@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.peekaboo.R;
 import com.peekaboo.data.repositories.database.contacts.Contact;
 import com.peekaboo.presentation.app.view.OnlineIndicatorView;
+import com.peekaboo.presentation.comparators.ContactComparator;
 import com.peekaboo.presentation.utils.AvatarIcon;
 import com.peekaboo.presentation.utils.ResourcesUtils;
 import com.peekaboo.presentation.widget.RecyclerViewFastScroller.BubbleTextGetter;
@@ -23,6 +24,7 @@ import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -142,9 +144,9 @@ public final class ContactLargeAdapter extends RecyclerView.Adapter<ContactLarge
                 FilterResults results = new FilterResults();
                 Set<Contact> filteredArrayNames = new HashSet<Contact>();
 
-                String filterString = constraint.toString().toLowerCase();
+                String filterString = constraint.toString().toLowerCase().trim();
                 for (int i = 0; i < items.size(); i++) {
-                    if (items.get(i).contactNickname().toLowerCase().contains(filterString)) {
+                    if (items.get(i).contactNickname().toLowerCase().trim().startsWith(filterString)) {
                         filteredArrayNames.add(items.get(i));
                     }
                 }
@@ -160,6 +162,7 @@ public final class ContactLargeAdapter extends RecyclerView.Adapter<ContactLarge
             protected void publishResults(CharSequence constraint, FilterResults results) {
                 items.clear();
                 items.addAll((Set<Contact>) results.values);
+                Collections.sort(items, new ContactComparator());
 //                for (int i = 0; i < items.size(); i++) {
 //                    Log.e("VALUES", items.get(i).contactNickname() + " i = " + i);
 //                }
