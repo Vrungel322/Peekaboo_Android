@@ -15,14 +15,20 @@ import com.peekaboo.presentation.presenters.SignUpPresenter;
 
 import javax.inject.Inject;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 /**
  * Created by Nikita on 06.07.2016.
  */
 public class ConfirmSignUpDialog extends DialogFragment {
+    @BindView(R.id.ciConfirmation)
     NormalCodeInput ciConfirmation;
+    @BindView(R.id.bOk)
+    View okButton;
+
     @Inject
     SignUpPresenter signUpPresenter;
-    private View okButton;
 
     @Nullable
     @Override
@@ -30,9 +36,10 @@ public class ConfirmSignUpDialog extends DialogFragment {
         Log.e("dialog", "onCreateView");
         PeekabooApplication.getApp(getActivity()).getComponent().inject(this);
         View view = inflater.inflate(R.layout.confirmation_dialog_fragment, container, false);
-        ciConfirmation = (NormalCodeInput) view.findViewById(R.id.ciConfirmation);
+        ButterKnife.bind(this, view);
+//        ciConfirmation = (NormalCodeInput) view.findViewById(R.id.ciConfirmation);
         ciConfirmation.setOnCodeChangedListener(code -> okButton.setEnabled(code[code.length - 1] != null));
-        okButton = view.findViewById(R.id.bOk);
+//        okButton = view.findViewById(R.id.bOk);
         okButton.setOnClickListener(v -> bOkClicked());
 //        setCancelable(false);
         return view;
