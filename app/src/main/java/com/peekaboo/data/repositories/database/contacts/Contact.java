@@ -1,5 +1,8 @@
 package com.peekaboo.data.repositories.database.contacts;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.peekaboo.domain.GroupChat;
 
 /**
@@ -88,6 +91,8 @@ public class Contact extends ContactAbs implements Parcelable {
     public int describeContents() {
         return 0;
     }
+
+
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
