@@ -41,6 +41,8 @@ import com.peekaboo.R;
 import com.peekaboo.data.repositories.database.contacts.Contact;
 
 import java.text.DecimalFormat;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Created by patri_000 on 18.10.2016.
@@ -105,92 +107,108 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             Contact contact = intent.getExtras().getParcelable("contact");
             Log.wtf("NULL : ", "get contact image -" + contact.contactImgUriSmall());
 
-//            contact.contactImgUriSmall();
 
-            String lat = null;
-            String lng = null;
+            if (link.length() < 300) {
+                String regexp = "[\\=|\\|]([-+]?\\d*\\.\\d+(.*?))\\&";
+                Pattern pattern = Pattern.compile(regexp);
+                Matcher matcher = pattern.matcher(link);
+                System.out.println(matcher.find() ? "I found0 '" + matcher.group() : "I found nothing!");
+                String result = matcher.group();
 
-            switch (link.length()) {
-                case 201:
-                    //only blue marker
-                    lat = link.substring(49, 59);
-                    lng = link.substring(60, 70);
-                    Log.wtf("NULL : ", "sublink blue " + lat + "  |  " + lng);
-//                    addCustomMarker();
-                    double lat1 = Double.parseDouble(lat);
-                    double lng1 = Double.parseDouble(lng);
-//                    googleMap.addMarker(new MarkerOptions()
-//                            .position(new LatLng(lat1,lng1))
-//                            .icon(BitmapDescriptorFactory.fromBitmap()));
-                    googleMap.addMarker(new MarkerOptions()
-                            .position(new LatLng(lat1, lng1))
-                            .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(R.drawable.avatar))));
-                    break;
-                case 230:
-                    //only red marker
-                    lat = link.substring(49, 66);
-                    lng = link.substring(67, 85);
-                    Log.wtf("NULL : ", "sublink red " + lat + "  |  " + lng);
-                    break;
-                case 400:
-                    //red+blue
-                    lat = link.substring(49, 66);
-                    lng = link.substring(67, 85);
-                    Log.wtf("NULL : ", "sublink red+blue " + lat + "  |  " + lng);
+                String reg = "(-?(?:\\d*\\.)?\\d+)(-?(?:\\d*\\.)?\\d+)";
+                Pattern pattern1 = Pattern.compile(reg);
+                Matcher matcher1 = pattern1.matcher(result);
 
-                    break;
-                default:
-                    Log.wtf("NULL : ", "tekushchaya dlina -" + link.length());
-                    break;
+                System.out.println(matcher1.find() ? "I found1 '" + matcher1.group(0) : "I found nothing!");
+                double lat = Double.parseDouble(matcher1.group(0));
+                System.out.println(matcher1.find() ? "I found2 '" + matcher1.group(1) : "I found nothing!");
+                double lng = Double.parseDouble(matcher1.group(1));
+
+                Log.wtf("NULL : ", matcher1.group(0) + "<-lat|matcher|lng->" + matcher1.group(1));
+                Log.wtf("NULL : ", lat + "<-lat||lng->" + lng);
+                CameraPosition cameraPosition = new CameraPosition.Builder()
+                        .target(new LatLng(lat, lng))
+                        .zoom(16)
+                        .build();
+                CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition);
+                googleMap.animateCamera(cameraUpdate);
+
+                if (redmarker != null) {
+                    redmarker.setPosition(new LatLng(lat, lng));
+                    redmarker.setVisible(true);
+                    markerPosLat = String.valueOf(lat);
+                    markerPosLng = String.valueOf(lng);
+                } else {
+                    redmarker = googleMap.addMarker(new MarkerOptions().position(new LatLng(lat, lng))
+                            .draggable(true)
+                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.red_point))
+                            .title("Delete marker?"));
+                    markerPosLat = String.valueOf(lat);
+                    markerPosLng = String.valueOf(lng);
+                }
+            } else {
+
+                String regexp = "[\\|\\|]([-+]?\\d*\\.\\d+(.*?))\\&";
+                Pattern pattern = Pattern.compile(regexp);
+                Matcher matcher = pattern.matcher(link);
+                System.out.println(matcher.find() ? "I found group1 " + matcher.group(0) : "I found nothing!");
+
+                String result = matcher.group();
+                String reg = "(-?(?:\\d*\\.)?\\d+)(-?(?:\\d*\\.)?\\d+)";
+                Pattern pattern1 = Pattern.compile(reg);
+                Matcher matcher1 = pattern1.matcher(result);
+
+                System.out.println(matcher1.find() ? "I found1 '" + matcher1.group(0) : "I found nothing!");
+                double lat = Double.parseDouble(matcher1.group(0));
+                System.out.println(matcher1.find() ? "I found2 '" + matcher1.group(1) : "I found nothing!");
+                double lng = Double.parseDouble(matcher1.group(1));
+
+                Log.wtf("NULL : ", matcher1.group(0) + "<-lat|matcher|lng->" + matcher1.group(1));
+                Log.wtf("NULL : ", lat + "<-lat||lng->" + lng);
+                CameraPosition cameraPosition = new CameraPosition.Builder()
+                        .target(new LatLng(lat, lng))
+                        .zoom(16)
+                        .build();
+                CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition);
+                googleMap.animateCamera(cameraUpdate);
+
+                if (redmarker != null) {
+                    redmarker.setPosition(new LatLng(lat, lng));
+                    redmarker.setVisible(true);
+                    markerPosLat = String.valueOf(lat);
+                    markerPosLng = String.valueOf(lng);
+                } else {
+                    redmarker = googleMap.addMarker(new MarkerOptions().position(new LatLng(lat, lng))
+                            .draggable(true)
+                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.red_point))
+                            .title("Delete marker?"));
+                    markerPosLat = String.valueOf(lat);
+                    markerPosLng = String.valueOf(lng);
+                }
+
+                System.out.println(matcher.find() ? "I found group2 " + matcher.group(1) : "I found nothing!");
+                result = matcher.group(1);
+                matcher1 = pattern1.matcher(result);
+                System.out.println(matcher1.find() ? "I found1 '" + matcher1.group(0) : "I found nothing!");
+                lat = Double.parseDouble(matcher1.group(0));
+                System.out.println(matcher1.find() ? "I found2 '" + matcher1.group(1) : "I found nothing!");
+                lng = Double.parseDouble(matcher1.group(1));
+                Log.wtf("NULL : ", matcher1.group(0) + "<-lat|matcher|lng->" + matcher1.group(1));
+                Log.wtf("NULL : ", lat + "<-lat||lng->" + lng);
+                cameraPosition = new CameraPosition.Builder()
+                        .target(new LatLng(lat, lng))
+                        .zoom(16)
+                        .build();
+                cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition);
+                googleMap.animateCamera(cameraUpdate);
+                googleMap.addMarker(new MarkerOptions()
+                        .position(new LatLng(lat, lng))
+                        .title("Delete marker?")
+                        .draggable(true)
+                        .icon(BitmapDescriptorFactory.fromBitmap(getMarkerBitmapFromView(R.drawable.avatar))));
             }
-            double lat1 = Double.parseDouble(lat);
-            double lng1 = Double.parseDouble(lng);
 
-//            String lat = link.substring(49, 58);
-//            String lng = link.substring(60, 70);
-//
-//        double lat = Double.parseDouble(intent.getStringExtra("latitude"));
-//        double lng = Double.parseDouble(intent.getStringExtra("longitude"));
-//            String lat = intent.getStringExtra("latitude");
-//            String lng = intent.getStringExtra("longitude");
-//            StringBuilder latbld = new StringBuilder(lat);
-//            latbld.setCharAt(2, '.');
-//            StringBuilder lngbld = new StringBuilder(lng);
-//            lngbld.setCharAt(2, '.');
 
-//            Log.wtf("NULL : ", "NEW PUSH " + lat + "  |  " + lng + "  |  " + latbld + "  |  " + lngbld);
-
-//        intent.getDoubleExtra("latitude",lat);
-//        intent.getDoubleExtra("longitude",lng);
-
-//            if (googleMap != null) {
-//
-//                CameraPosition cameraPosition = new CameraPosition.Builder()
-//                        .target(new LatLng(lat1,lng1))//Double.parseDouble(String.valueOf(latbld)), Double.parseDouble(String.valueOf(lngbld))))
-//                        .zoom(16)
-//                        .build();
-//                CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition);
-//                Log.wtf("NULL : ", "get intent ");
-//                googleMap.animateCamera(cameraUpdate);
-//                if (new LatLng(Double.parseDouble(lat), Double.parseDouble(lng)) != null) {
-//                    if (redmarker != null) {
-//                        redmarker.setPosition(new LatLng(lat1,lng1));//Double.parseDouble(String.valueOf(latbld)), Double.parseDouble(String.valueOf(lngbld))));
-//                        redmarker.setVisible(true);
-//                        markerPosLat = String.valueOf(lat);
-//                        markerPosLng = String.valueOf(lng);
-//
-//                    } else {
-//                        redmarker = googleMap.addMarker(new MarkerOptions().position(new LatLng(lat1,lng1))//Double.parseDouble(String.valueOf(latbld)), Double.parseDouble(String.valueOf(lngbld))))
-//                                .draggable(true)
-//                                .icon(BitmapDescriptorFactory.fromResource(R.drawable.red_point))
-//                                .title("Delete marker?"));
-//                        markerPosLat = String.valueOf(lat);
-//                        markerPosLng = String.valueOf(lng);
-//                    }
-////                redmarker.setPosition(new LatLng(lat, lng));
-//                }
-//                redmarker.setVisible(true);
-//            }
         }
     }
 
@@ -244,8 +262,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
 
             String mapuri = "http://maps.google.com/maps/api/staticmap?center=" + lat + "," + lng +
-                    "&markers=icon:https://www.peekaboochat.com/assets/src/red_point.png|" + redmarker.getPosition().latitude + "," + redmarker.getPosition().longitude +
                     "&markers=icon:https://www.peekaboochat.com/assets/src/blue_point.png|" + bluemarker.getPosition().latitude + "," + bluemarker.getPosition().longitude +
+                    "&markers=icon:https://www.peekaboochat.com/assets/src/red_point.png|" + redmarker.getPosition().latitude + "," + redmarker.getPosition().longitude +
                     "&path=color:0xff0000ff|weight:5|fillcolor:0xFFFF0033|geodesic:true|" + bluemarker.getPosition().latitude + "," + bluemarker.getPosition().longitude + "|" +
                     redmarker.getPosition().latitude + "," + redmarker.getPosition().longitude +
                     "&zoom=15&size=350x230" +
