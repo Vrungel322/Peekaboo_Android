@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.peekaboo.R;
 import com.peekaboo.data.repositories.database.contacts.Contact;
 import com.peekaboo.presentation.app.view.OnlineIndicatorView;
+import com.peekaboo.presentation.comparators.ContactComparator;
 import com.peekaboo.presentation.utils.AvatarIcon;
 import com.peekaboo.presentation.utils.ResourcesUtils;
 import com.peekaboo.presentation.widget.RecyclerViewFastScroller.BubbleTextGetter;
@@ -23,6 +24,7 @@ import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -122,7 +124,6 @@ public final class ContactLargeAdapter extends RecyclerView.Adapter<ContactLarge
         this.items.clear();
         this.items.addAll(items);
         notifyItemRangeInserted(0, items.size());
-//        notifyDataSetChanged();
     }
 
     @Override
@@ -141,17 +142,15 @@ public final class ContactLargeAdapter extends RecyclerView.Adapter<ContactLarge
             protected FilterResults performFiltering(CharSequence constraint) {
                 FilterResults results = new FilterResults();
                 Set<Contact> filteredArrayNames = new HashSet<Contact>();
+                String filterString = constraint.toString().toLowerCase().trim();
 
-                String filterString = constraint.toString().toLowerCase();
                 for (int i = 0; i < items.size(); i++) {
-                    if (items.get(i).contactNickname().toLowerCase().contains(filterString)) {
+                    if (items.get(i).contactNickname().toLowerCase().trim().startsWith(filterString)) {
                         filteredArrayNames.add(items.get(i));
                     }
                 }
-                results.count = filteredArrayNames.size();
-                results.values = filteredArrayNames;
-//                Log.e("VALUES", results.values.toString() + items.size());
 
+                setResults(results, filteredArrayNames);
                 return results;
             }
 
@@ -160,10 +159,13 @@ public final class ContactLargeAdapter extends RecyclerView.Adapter<ContactLarge
             protected void publishResults(CharSequence constraint, FilterResults results) {
                 items.clear();
                 items.addAll((Set<Contact>) results.values);
-//                for (int i = 0; i < items.size(); i++) {
-//                    Log.e("VALUES", items.get(i).contactNickname() + " i = " + i);
-//                }
+                Collections.sort(items, new ContactComparator());
                 notifyDataSetChanged();
+            }
+
+            private void setResults(FilterResults results, Set<Contact> filteredArrayNames) {
+                results.count = filteredArrayNames.size();
+                results.values = filteredArrayNames;
             }
         };
         return filter;

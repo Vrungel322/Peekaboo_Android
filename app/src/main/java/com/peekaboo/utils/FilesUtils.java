@@ -91,9 +91,9 @@ public class FilesUtils {
         if (!cacheDir.exists()) cacheDir.mkdir();
 
         File result = new File(cacheDir.getPath() + File.separator
-                + System.currentTimeMillis() + ".png");
+                + System.currentTimeMillis() + ".jpeg");
         FileOutputStream fos = new FileOutputStream(result);
-        bitmap.compress(Bitmap.CompressFormat.PNG, 90, fos);
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 90, fos);
         fos.close();
         return result;
     }
