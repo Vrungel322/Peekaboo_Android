@@ -1,8 +1,5 @@
 package com.peekaboo.data.repositories.database.contacts;
 
-import android.os.Parcel;
-import android.os.Parcelable;
-
 import com.peekaboo.domain.GroupChat;
 
 /**
@@ -84,6 +81,7 @@ public class Contact extends ContactAbs {
     public String contactImgUriSmall() {
         return contactImgUri + "/2";
     }
+
     public String contactImgUriMiddle() {
         return contactImgUri + "/1";
     }

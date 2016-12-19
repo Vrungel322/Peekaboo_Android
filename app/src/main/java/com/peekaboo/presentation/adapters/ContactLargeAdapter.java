@@ -124,7 +124,6 @@ public final class ContactLargeAdapter extends RecyclerView.Adapter<ContactLarge
         this.items.clear();
         this.items.addAll(items);
         notifyItemRangeInserted(0, items.size());
-//        notifyDataSetChanged();
     }
 
     @Override
@@ -143,17 +142,15 @@ public final class ContactLargeAdapter extends RecyclerView.Adapter<ContactLarge
             protected FilterResults performFiltering(CharSequence constraint) {
                 FilterResults results = new FilterResults();
                 Set<Contact> filteredArrayNames = new HashSet<Contact>();
-
                 String filterString = constraint.toString().toLowerCase().trim();
+
                 for (int i = 0; i < items.size(); i++) {
                     if (items.get(i).contactNickname().toLowerCase().trim().startsWith(filterString)) {
                         filteredArrayNames.add(items.get(i));
                     }
                 }
-                results.count = filteredArrayNames.size();
-                results.values = filteredArrayNames;
-//                Log.e("VALUES", results.values.toString() + items.size());
 
+                setResults(results, filteredArrayNames);
                 return results;
             }
 
@@ -163,10 +160,12 @@ public final class ContactLargeAdapter extends RecyclerView.Adapter<ContactLarge
                 items.clear();
                 items.addAll((Set<Contact>) results.values);
                 Collections.sort(items, new ContactComparator());
-//                for (int i = 0; i < items.size(); i++) {
-//                    Log.e("VALUES", items.get(i).contactNickname() + " i = " + i);
-//                }
                 notifyDataSetChanged();
+            }
+
+            private void setResults(FilterResults results, Set<Contact> filteredArrayNames) {
+                results.count = filteredArrayNames.size();
+                results.values = filteredArrayNames;
             }
         };
         return filter;
