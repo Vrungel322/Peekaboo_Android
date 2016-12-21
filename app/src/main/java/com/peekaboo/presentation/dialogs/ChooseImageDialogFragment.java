@@ -56,8 +56,8 @@ public class ChooseImageDialogFragment extends DialogFragment {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         switch (requestCode) {
-            case IntentUtils.CAMERA_REQUEST_CODE:
-            case IntentUtils.GALLERY_REQUEST_CODE:
+            case IntentUtils.CAMERA_REQUEST_CODE_PHOTO:
+            case IntentUtils.GALLERY_REQUEST_CODE_PHOTO:
                 if (resultCode == Activity.RESULT_OK) {
                     if (file == null) {
                         file = IntentUtils.onGalleryActivityResult(getActivity(), requestCode, resultCode, data);

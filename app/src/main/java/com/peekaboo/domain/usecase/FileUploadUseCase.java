@@ -34,19 +34,26 @@ public class FileUploadUseCase extends QueueUseCase<PMessage, FileEntity> {
     @Nullable
     @Override
     protected FileEntity getValue(PMessage take, String fileType) throws IOException {
-        File uploadableImageFile = null;
+        File uploadableFile = null;
 
         String fileName = take.messageBody();
         if (take.mediaType() == PMessageAbs.PMESSAGE_MEDIA_TYPE.IMAGE_MESSAGE) {
-            uploadableImageFile = filesUtils.createUploadableImageFile(fileName, Constants.IMAGE_SIZES.IMAGE_SIZE);
-            fileName = uploadableImageFile.getAbsolutePath();
+            uploadableFile = filesUtils.createUploadableImageFile(fileName, Constants.IMAGE_SIZES.IMAGE_SIZE);
+            fileName = uploadableFile.getAbsolutePath();
         }
+
+        if (take.mediaType() == PMessageAbs.PMESSAGE_MEDIA_TYPE.VIDEO_MESSAGE) {
+            //TODO: compress video mb
+            uploadableFile = filesUtils.createUploadableVideoFile(fileName, Constants.IMAGE_SIZES.IMAGE_SIZE);
+            fileName = uploadableFile.getAbsolutePath();
+        }
+
         Response<FileEntity> execute =
                 repository.uploadFile(fileType, fileName, take.receiverId())
                         .execute();
         if (take.mediaType() == PMessageAbs.PMESSAGE_MEDIA_TYPE.IMAGE_MESSAGE &&
-                uploadableImageFile != null) {
-            FilesUtils.deleteFile(uploadableImageFile);
+                uploadableFile != null) {
+            FilesUtils.deleteFile(uploadableFile);
         }
 
         if (execute.isSuccessful()) {

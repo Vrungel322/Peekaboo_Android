@@ -1,21 +1,11 @@
 package com.peekaboo.presentation.services;
 
-import android.net.Uri;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import com.google.gson.Gson;
 import com.peekaboo.data.GroupChatCreationEntity;
-import com.peekaboo.data.GroupChatMemberEntity;
 import com.peekaboo.data.repositories.database.messages.PMessage;
 import com.peekaboo.data.repositories.database.messages.PMessageAbs;
-import com.peekaboo.domain.GroupChatMember;
-
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 
 public class MessageUtils {
 
@@ -60,6 +50,9 @@ public class MessageUtils {
                 break;
             case PMessageAbs.PMESSAGE_MEDIA_TYPE.IMAGE_MESSAGE:
                 type = Message.Type.IMAGE;
+                break;
+            case PMessageAbs.PMESSAGE_MEDIA_TYPE.VIDEO_MESSAGE:
+                type = Message.Type.VIDEO;
                 break;
             case PMessageAbs.PMESSAGE_MEDIA_TYPE.GEO_MESSAGE:
                 type = Message.Type.GEO;

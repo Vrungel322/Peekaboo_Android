@@ -32,7 +32,6 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.peekaboo.R;
-import com.peekaboo.data.mappers.GsonMapper;
 import com.peekaboo.data.repositories.database.contacts.Contact;
 import com.peekaboo.data.repositories.database.messages.PMessage;
 import com.peekaboo.data.repositories.database.messages.PMessageAbs;
@@ -118,6 +117,7 @@ public class ChatFragment extends Fragment implements IChatView2, DrawerActivity
     private boolean isFirstResumeAfterCreate = true;
     private Contact companion;
     private String imageFile;
+    private String vidoeFile;
     @Nullable
     private ActivityResult activityResult;
     private Animator animator;
@@ -356,8 +356,13 @@ public class ChatFragment extends Fragment implements IChatView2, DrawerActivity
     }
 
     @OnClick(R.id.photo_btn)
-    void onCameraButtonClick() {
+    void onPhotoCameraButtonClick() {
         takePhoto();
+    }
+
+    @OnClick(R.id.camera_btn)
+    void onVideoCameraButtonCkicked(){
+        takeVideo();
     }
 
     @OnClick(R.id.gallery_btn)
@@ -375,6 +380,13 @@ public class ChatFragment extends Fragment implements IChatView2, DrawerActivity
     public void takePhoto() {
         imageFile = IntentUtils.capturePhoto(this);
         if (imageFile == null) {
+            showToastMessage(getString(R.string.cameraIsNotAvailable));
+        }
+    }
+
+    public void takeVideo() {
+        vidoeFile = IntentUtils.captureVideo(this);
+        if (vidoeFile == null) {
             showToastMessage(getString(R.string.cameraIsNotAvailable));
         }
     }
@@ -404,8 +416,8 @@ public class ChatFragment extends Fragment implements IChatView2, DrawerActivity
         int resultCode = activityResult.resultCode;
         Log.wtf("NULL : ", "--GPS " + requestCode);
         switch (requestCode) {
-            case IntentUtils.CAMERA_REQUEST_CODE:
-            case IntentUtils.GALLERY_REQUEST_CODE:
+            case IntentUtils.CAMERA_REQUEST_CODE_PHOTO:
+            case IntentUtils.GALLERY_REQUEST_CODE_PHOTO:
                 if (resultCode == RESULT_OK) {
                     if (imageFile == null) {
                         imageFile = IntentUtils.onGalleryActivityResult(getActivity(), requestCode, resultCode, data);
@@ -418,6 +430,10 @@ public class ChatFragment extends Fragment implements IChatView2, DrawerActivity
                 } else {
                     imageFile = null;
                 }
+                break;
+            case IntentUtils.CAMERA_REQUEST_CODE_VIDEO:
+            case IntentUtils.GALLERY_REQUEST_CODE_VIDEO:
+                //TODO handling file and send it
                 break;
             case Constants.REQUEST_CODES.REQUEST_CODE_GPS:
                 Log.e("ChatFragment", "handle result gps " + resultCode + " " + data);
@@ -443,6 +459,10 @@ public class ChatFragment extends Fragment implements IChatView2, DrawerActivity
 
     public void sendImage(String imageFile) {
         presenter.onSendImageButtonPress(imageFile);
+    }
+
+    public void sendVideo(String videoFile) {
+        presenter.onSendVideoButtonPress(videoFile);
     }
 
     @Override

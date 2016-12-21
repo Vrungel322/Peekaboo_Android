@@ -5,7 +5,6 @@ import android.content.ClipboardManager;
 import com.peekaboo.data.repositories.database.messages.PMessage;
 import com.peekaboo.data.repositories.database.messages.PMessageAbs;
 import com.peekaboo.presentation.utils.AudioPlayer;
-import com.peekaboo.presentation.views.IChatView2;
 import com.peekaboo.presentation.views.IView;
 
 /**
@@ -20,6 +19,8 @@ public interface IChatPresenter2<V extends IView> extends IPresenter<V>{
     void onSendTextButtonPress(String text);
 
     void onSendImageButtonPress(String realPath);
+
+    void onSendVideoButtonPress(String realPath);
 
     void onSendGPSButtonPress(String link);
 

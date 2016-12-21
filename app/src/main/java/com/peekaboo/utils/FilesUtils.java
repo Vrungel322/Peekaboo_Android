@@ -67,7 +67,12 @@ public class FilesUtils {
 
     public File createUploadableImageFile(String originalFile, int preferredSize) throws IOException {
         double max = 0.8 * Math.sqrt(Runtime.getRuntime().freeMemory() / 4);
-        return FilesUtils.saveTempFile(context, originalFile, Math.min((int) max, preferredSize));
+        return FilesUtils.saveTempImageFile(context, originalFile, Math.min((int) max, preferredSize));
+    }
+
+    public File createUploadableVideoFile(String originalFile, int preferredSize) throws IOException {
+        double max = 0.8 * Math.sqrt(Runtime.getRuntime().freeMemory() / 4);
+        return FilesUtils.saveTempVideoFile(context, originalFile, Math.min((int) max, preferredSize));
     }
 
     public static String getRealPathFromURI(Context context, Uri contentURI) {
@@ -84,7 +89,7 @@ public class FilesUtils {
         return result;
     }
 
-    public static File saveTempFile(Context c, String fileName, int size) throws IOException {
+    public static File saveTempImageFile(Context c, String fileName, int size) throws IOException {
         Bitmap bitmap = ImageUtils.decodeSampledBitmapFromResource(fileName, size);
 
         File cacheDir = c.getExternalCacheDir();
@@ -96,6 +101,11 @@ public class FilesUtils {
         bitmap.compress(Bitmap.CompressFormat.JPEG, 90, fos);
         fos.close();
         return result;
+    }
+
+    public static File saveTempVideoFile(Context c, String fileName, int size) throws IOException {
+
+        return null;
     }
 
 
