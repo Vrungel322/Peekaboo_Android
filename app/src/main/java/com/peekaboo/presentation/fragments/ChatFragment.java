@@ -10,6 +10,7 @@ import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -104,6 +105,9 @@ public class ChatFragment extends Fragment implements IChatView2, DrawerActivity
     RevealFrameLayout rflTimer;
     @BindView(R.id.navigation_btn)
     ImageButton bNavigation;
+
+    @BindView(R.id.camera_btn)
+    ImageButton bCamera;
     @Inject
     ChatPresenter2 presenter;
     @Inject
@@ -118,6 +122,7 @@ public class ChatFragment extends Fragment implements IChatView2, DrawerActivity
     private boolean isFirstResumeAfterCreate = true;
     private Contact companion;
     private String imageFile;
+    private String videoFile;
     @Nullable
     private ActivityResult activityResult;
     private Animator animator;
@@ -212,8 +217,8 @@ public class ChatFragment extends Fragment implements IChatView2, DrawerActivity
                 String link = adapter.getItem(position).messageBody();
                 Log.wtf("NULL : ", "parse link " + link);
                 Intent geointent = new Intent(getActivity(), MapActivity.class);
-                geointent.putExtra("mesmap",link);
-                geointent.putExtra("contact",companion);
+                geointent.putExtra("mesmap", link);
+                geointent.putExtra("contact", companion);
                 getActivity().startActivity(geointent);
 
 //                String lat = link.substring(49,58);
@@ -370,17 +375,30 @@ public class ChatFragment extends Fragment implements IChatView2, DrawerActivity
         takeGalleryImage();
     }
 
-    public void takeGalleryImage() {
-        boolean canTake = IntentUtils.takeGalleryImage(this);
-        if (!canTake) {
-            showToastMessage(getString(R.string.galleryIsNotAvailable));
+    @OnClick(R.id.camera_btn)
+    void onVideoButtonClick() {
+        takeVideo();
+    }
+
+    private void takeVideo() {
+        videoFile = IntentUtils.captureVideo(this);
+        if (videoFile == null) {
+            showToastMessage(getString(R.string.cameraIsNotAvailable));
         }
+
     }
 
     public void takePhoto() {
         imageFile = IntentUtils.capturePhoto(this);
         if (imageFile == null) {
             showToastMessage(getString(R.string.cameraIsNotAvailable));
+        }
+    }
+
+    public void takeGalleryImage() {
+        boolean canTake = IntentUtils.takeGalleryImage(this);
+        if (!canTake) {
+            showToastMessage(getString(R.string.galleryIsNotAvailable));
         }
     }
 
@@ -409,6 +427,21 @@ public class ChatFragment extends Fragment implements IChatView2, DrawerActivity
         int resultCode = activityResult.resultCode;
         Log.wtf("NULL : ", "--GPS " + requestCode);
         switch (requestCode) {
+            case IntentUtils.VIDEO_REQUEST_CODE:
+                if (resultCode == RESULT_OK) {
+                    if (videoFile == null) {
+                        videoFile = IntentUtils.onGalleryActivityResult(getActivity(), requestCode, resultCode, data);
+                    }
+                    Log.e("ChatFragment", "onActivityResult() " + videoFile);
+                    if (videoFile != null) {
+                        sendVideo(videoFile);
+                        imageFile = null;
+                    }
+                } else {
+                    videoFile = null;
+                }
+                break;
+
             case IntentUtils.CAMERA_REQUEST_CODE:
             case IntentUtils.GALLERY_REQUEST_CODE:
                 if (resultCode == RESULT_OK) {
@@ -448,6 +481,10 @@ public class ChatFragment extends Fragment implements IChatView2, DrawerActivity
 
     public void sendImage(String imageFile) {
         presenter.onSendImageButtonPress(imageFile);
+    }
+
+    public void sendVideo(String videoFile) {
+        presenter.onSendVideoButtonPress(videoFile);
     }
 
     @Override

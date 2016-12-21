@@ -21,6 +21,8 @@ public interface IChatPresenter2<V extends IView> extends IPresenter<V>{
 
     void onSendImageButtonPress(String realPath);
 
+    void onSendVideoButtonPress(String realPath);
+
     void onSendGPSButtonPress(String link);
 
     void onUserMessageRead(PMessage message);

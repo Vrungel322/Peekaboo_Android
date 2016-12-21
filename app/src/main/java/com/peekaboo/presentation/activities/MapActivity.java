@@ -63,7 +63,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.gmapstest);
-        Intent intent = getIntent();
+//        Intent intent = getIntent();
 
 
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
@@ -77,7 +77,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         ab.setDisplayShowHomeEnabled(true);
         ab.setDisplayHomeAsUpEnabled(true);
 
-//        getextra();
+
     }
 
     private Bitmap getMarkerBitmapFromView(@DrawableRes int resId) {

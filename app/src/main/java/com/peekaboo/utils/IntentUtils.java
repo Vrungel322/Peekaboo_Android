@@ -18,6 +18,8 @@ import com.peekaboo.R;
 public class IntentUtils {
     public static final int CAMERA_REQUEST_CODE = 1020;
     public static final int GALLERY_REQUEST_CODE = 1021;
+    public  static final int VIDEO_REQUEST_CODE = 1022;
+
 
     public static boolean takeGalleryImage(Fragment fragment) {
         Intent pickPhoto = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -40,6 +42,20 @@ public class IntentUtils {
             file = uri.getPath();
             intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
             fragment.startActivityForResult(intent, CAMERA_REQUEST_CODE);
+        }
+        return file;
+    }
+    @Nullable
+    public static String captureVideo(Fragment fragment) {
+        Intent intent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
+        intent.putExtra(MediaStore.EXTRA_DURATION_LIMIT, 10);
+        String file = null;
+        if (intent.resolveActivity(fragment.getActivity().getPackageManager()) != null) {
+            Uri uri = FilesUtils.getOutputMediaFileUri();
+            file = uri.getPath();
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
+
+            fragment.startActivityForResult(intent, VIDEO_REQUEST_CODE);
         }
         return file;
     }
