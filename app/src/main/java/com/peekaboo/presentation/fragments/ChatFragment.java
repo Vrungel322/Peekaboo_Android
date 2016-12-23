@@ -425,17 +425,17 @@ public class ChatFragment extends Fragment implements IChatView2, DrawerActivity
         Intent data = activityResult.data;
         int requestCode = activityResult.requestCode;
         int resultCode = activityResult.resultCode;
-        Log.wtf("NULL : ", "--GPS " + requestCode);
+//        Log.wtf("NULL : ", "--GPS " + requestCode);
         switch (requestCode) {
             case IntentUtils.VIDEO_REQUEST_CODE:
                 if (resultCode == RESULT_OK) {
                     if (videoFile == null) {
                         videoFile = IntentUtils.onGalleryActivityResult(getActivity(), requestCode, resultCode, data);
                     }
-                    Log.e("ChatFragment", "onActivityResult() " + videoFile);
+                    Log.e("ChatFragment", "video onActivityResult() " + videoFile);
                     if (videoFile != null) {
                         sendVideo(videoFile);
-                        imageFile = null;
+                        videoFile = null;
                     }
                 } else {
                     videoFile = null;

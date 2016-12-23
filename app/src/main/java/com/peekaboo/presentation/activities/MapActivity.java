@@ -1,6 +1,7 @@
 package com.peekaboo.presentation.activities;
 
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -9,9 +10,11 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.DrawableRes;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -51,7 +54,6 @@ import java.util.regex.Pattern;
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     GoogleMap googleMap;
-    String markerPosLat, markerPosLng;
     Marker redmarker, bluemarker;
 
     private LocationManager locationManager;
@@ -68,6 +70,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
         createMapView();
+        checkGPS();
 
         fabswitch = (FloatingActionButton) findViewById(R.id.mapfabswitch);
 
@@ -78,6 +81,31 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         ab.setDisplayHomeAsUpEnabled(true);
 
 
+    }
+
+    private void checkGPS() {
+        if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+            //Ask the user to enable GPS
+            AlertDialog.Builder builder = new AlertDialog.Builder(this);
+            builder.setTitle("Location Manager");
+            builder.setMessage("Would you like to enable GPS?");
+            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    //Launch settings, allowing user to make a change
+                    Intent i = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                    startActivity(i);
+                }
+            });
+            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    //No location service, no Activity
+//                    finish();
+                }
+            });
+            builder.create().show();
+        }
     }
 
     private Bitmap getMarkerBitmapFromView(@DrawableRes int resId) {
@@ -136,15 +164,13 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 if (redmarker != null) {
                     redmarker.setPosition(new LatLng(lat, lng));
                     redmarker.setVisible(true);
-                    markerPosLat = String.valueOf(lat);
-                    markerPosLng = String.valueOf(lng);
+
                 } else {
                     redmarker = googleMap.addMarker(new MarkerOptions().position(new LatLng(lat, lng))
                             .draggable(true)
                             .icon(BitmapDescriptorFactory.fromResource(R.drawable.red_point))
                             .title("Delete marker?"));
-                    markerPosLat = String.valueOf(lat);
-                    markerPosLng = String.valueOf(lng);
+
                 }
             } else {
 
@@ -175,15 +201,13 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 if (redmarker != null) {
                     redmarker.setPosition(new LatLng(lat, lng));
                     redmarker.setVisible(true);
-                    markerPosLat = String.valueOf(lat);
-                    markerPosLng = String.valueOf(lng);
+
                 } else {
                     redmarker = googleMap.addMarker(new MarkerOptions().position(new LatLng(lat, lng))
                             .draggable(true)
                             .icon(BitmapDescriptorFactory.fromResource(R.drawable.red_point))
                             .title("Delete marker?"));
-                    markerPosLat = String.valueOf(lat);
-                    markerPosLng = String.valueOf(lng);
+
                 }
 
                 System.out.println(matcher.find() ? "I found group2 " + matcher.group(1) : "I found nothing!");
@@ -344,8 +368,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         googleMap.setOnInfoWindowClickListener(redmarker -> {
             if (redmarker != null) {
                 redmarker.setVisible(false);
-                markerPosLng = "";
-                markerPosLat = "";
+
             }
         });
 
@@ -377,16 +400,14 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 if (redmarker != null) {
                     redmarker.setPosition(latLng);
                     redmarker.setVisible(true);
-                    markerPosLat = String.valueOf(latLng.latitude);
-                    markerPosLng = String.valueOf(latLng.longitude);
+
 
                 } else {
                     redmarker = googleMap.addMarker(new MarkerOptions().position(new LatLng(latLng.latitude, latLng.longitude))
                             .draggable(true)
                             .icon(BitmapDescriptorFactory.fromResource(R.drawable.red_point))
                             .title("Delete marker?"));
-                    markerPosLat = String.valueOf(latLng.latitude);
-                    markerPosLng = String.valueOf(latLng.longitude);
+
                 }
             }
         });
@@ -395,7 +416,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         //marker placed on your location
         fabswitch.setOnClickListener(v -> {
             if (googleMap.getMyLocation() != null) {
-//                getextra();
                 if (bluemarker != null) {
                     bluemarker.setVisible(true);
                     bluemarker.setPosition(new LatLng(googleMap.getMyLocation().getLatitude(), googleMap.getMyLocation().getLongitude()));

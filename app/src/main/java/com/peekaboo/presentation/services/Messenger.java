@@ -248,6 +248,9 @@ public class Messenger implements IMessenger,
             case PMessage.PMESSAGE_MEDIA_TYPE.IMAGE_MESSAGE:
                 uploadAndDeliverFileMessage(message);
                 break;
+            case PMessage.PMESSAGE_MEDIA_TYPE.VIDEO_MESSAGE:
+                uploadAndDeliverFileMessage(message);
+                break;
         }
     }
 
@@ -259,6 +262,10 @@ public class Messenger implements IMessenger,
         if (message.mediaType() == PMessageAbs.PMESSAGE_MEDIA_TYPE.IMAGE_MESSAGE) {
             Log.wtf("gus :", "uploadAndDeliverFileMessage -> IMAGE_MESSAGE");
             uploadFileUseCase.execute(message, getUploadSubscriber(), Constants.MESSAGE_TYPE.TYPE_IMAGE);
+        }
+        if (message.mediaType() == PMessageAbs.PMESSAGE_MEDIA_TYPE.VIDEO_MESSAGE) {
+            Log.wtf("gus :", "uploadAndDeliverFileMessage -> VIDEO_MESSAGE");
+            uploadFileUseCase.execute(message, getUploadSubscriber(), Constants.MESSAGE_TYPE.TYPE_VIDEO);
         }
     }
 

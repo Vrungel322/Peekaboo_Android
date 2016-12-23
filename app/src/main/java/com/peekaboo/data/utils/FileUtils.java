@@ -81,6 +81,18 @@ public class FileUtils {
             return (file.getAbsolutePath() + "/" + System.currentTimeMillis()
                     + Constants.IMAGE_SENDING.IMAGE_SENDING_FILE_EXT_JPG);
         }
+        if (fileType.equals(Constants.MESSAGE_TYPE.TYPE_VIDEO)) {
+            String filepath = Environment.getExternalStorageDirectory().getPath();
+            File file = new File(filepath, Constants.VIDEO_SENDING.VIDEO_SENDING_FOLDER
+                    + "/" + folderName);
+
+            if (!file.exists()) {
+                file.mkdirs();
+            }
+
+            return (file.getAbsolutePath() + "/" + System.currentTimeMillis()
+                    + Constants.VIDEO_SENDING.VIDEO_SENDING_FILE_EXT_MP4);
+        }
         return "";
     }
 }
