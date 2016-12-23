@@ -10,7 +10,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -18,6 +17,7 @@ import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.peekaboo.R;
 import com.peekaboo.data.repositories.database.contacts.Contact;
@@ -37,7 +37,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 
 /**
  * Created by sebastian on 08.09.16.
@@ -151,6 +150,9 @@ public class ChatAdapter2 extends RecyclerView.Adapter<ChatAdapter2.ViewHolder> 
             case PMessageAbs.PMESSAGE_MEDIA_TYPE.IMAGE_MESSAGE:
                 v = inflater.inflate(R.layout.list_item_chat_image_message, parent, false);
                 return new ViewHolderImage(v);
+            case PMessageAbs.PMESSAGE_MEDIA_TYPE.VIDEO_MESSAGE:
+                v = inflater.inflate(R.layout.list_item_chat_image_message, parent, false); //TODO: need to create layout for video holder
+                return new ViewHolderVideo(v);
             case PMessageAbs.PMESSAGE_MEDIA_TYPE.GEO_MESSAGE:
                 v = inflater.inflate(R.layout.list_item_chat_image_message, parent, false);
                 return new ViewHolderGeo(v);
@@ -240,6 +242,17 @@ public class ChatAdapter2 extends RecyclerView.Adapter<ChatAdapter2.ViewHolder> 
                 }
                 break;
             case PMessageAbs.PMESSAGE_MEDIA_TYPE.VIDEO_MESSAGE:
+                if (holder instanceof ViewHolderVideo){
+                    ViewHolderVideo holderVideo = (ViewHolderVideo) holder;
+                    String video = pMessageAbs.messageBody();
+                    Toast.makeText(context, video, Toast.LENGTH_SHORT).show();
+                    holderVideo.ivImageMessage.setImageBitmap(null);
+                    holderVideo.pbLoadingImage.setVisibility(pMessageAbs.hasBothPaths() || pMessageAbs.hasFileError() ? View.GONE : View.VISIBLE);
+                    if (video.split(PMessage.DIVIDER).length == 2) {
+                        Log.wtf("image : ", ResourcesUtils.splitImagePath(video, 2));
+                        holderVideo.ivImageMessage.setImageResource(R.drawable.arrow);
+                    }
+                }
                 break;
             case PMessageAbs.PMESSAGE_MEDIA_TYPE.DOCUMENT_MESSAGE:
                 break;
@@ -465,6 +478,18 @@ public class ChatAdapter2 extends RecyclerView.Adapter<ChatAdapter2.ViewHolder> 
         ProgressBar pbLoadingImage;
 
         ViewHolderImage(View view) {
+            super(view);
+            ButterKnife.bind(this, view);
+        }
+    }
+
+    static class ViewHolderVideo extends ViewHolder {
+        @BindView(R.id.ivImageMessage)
+        ImageView ivImageMessage;
+        @BindView(R.id.pbLoadingImage)
+        ProgressBar pbLoadingImage;
+
+        ViewHolderVideo(View view) {
             super(view);
             ButterKnife.bind(this, view);
         }

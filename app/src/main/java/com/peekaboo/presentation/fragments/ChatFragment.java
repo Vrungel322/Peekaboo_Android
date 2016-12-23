@@ -117,7 +117,7 @@ public class ChatFragment extends Fragment implements IChatView2, DrawerActivity
     private boolean isFirstResumeAfterCreate = true;
     private Contact companion;
     private String imageFile;
-    private String vidoeFile;
+    private String videoFile;
     @Nullable
     private ActivityResult activityResult;
     private Animator animator;
@@ -361,7 +361,7 @@ public class ChatFragment extends Fragment implements IChatView2, DrawerActivity
     }
 
     @OnClick(R.id.camera_btn)
-    void onVideoCameraButtonCkicked(){
+    void onVideoCameraButtonCkicked() {
         takeVideo();
     }
 
@@ -385,8 +385,8 @@ public class ChatFragment extends Fragment implements IChatView2, DrawerActivity
     }
 
     public void takeVideo() {
-        vidoeFile = IntentUtils.captureVideo(this);
-        if (vidoeFile == null) {
+        videoFile = IntentUtils.captureVideo(this);
+        if (videoFile == null) {
             showToastMessage(getString(R.string.cameraIsNotAvailable));
         }
     }
@@ -410,11 +410,11 @@ public class ChatFragment extends Fragment implements IChatView2, DrawerActivity
     }
 
     private void handleActivityResult(@NonNull ActivityResult activityResult) {
-        Log.e("ChatFragment", "handleActivityResult()");
         Intent data = activityResult.data;
         int requestCode = activityResult.requestCode;
         int resultCode = activityResult.resultCode;
-        Log.wtf("NULL : ", "--GPS " + requestCode);
+        Toast.makeText(getContext(), "" + requestCode + resultCode + data, Toast.LENGTH_SHORT).show();
+//        Log.wtf("NULL : ", "--GPS " + requestCode);
         switch (requestCode) {
             case IntentUtils.CAMERA_REQUEST_CODE_PHOTO:
             case IntentUtils.GALLERY_REQUEST_CODE_PHOTO:
@@ -433,7 +433,12 @@ public class ChatFragment extends Fragment implements IChatView2, DrawerActivity
                 break;
             case IntentUtils.CAMERA_REQUEST_CODE_VIDEO:
             case IntentUtils.GALLERY_REQUEST_CODE_VIDEO:
-                //TODO handling file and send it
+                if (videoFile != null) {
+                    sendVideo(videoFile);
+                    videoFile = null;
+                } else {
+                    videoFile = null;
+                }
                 break;
             case Constants.REQUEST_CODES.REQUEST_CODE_GPS:
                 Log.e("ChatFragment", "handle result gps " + resultCode + " " + data);

@@ -42,5 +42,6 @@ public interface Constants {
     interface IMAGE_SIZES {
         int AVATAR_SIZE = 500;
         int IMAGE_SIZE = 500;
+        int VIDEO_SIZE = 50000;
     }
 }
