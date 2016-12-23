@@ -4,30 +4,32 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.widget.Toast;
 
 import com.peekaboo.R;
+import com.peekaboo.data.mappers.GsonMapper;
+import com.peekaboo.presentation.fragments.ChatFragment;
 
 /**
  * Created by arkadii on 11/9/16.
  */
 
 public class IntentUtils {
-    public static final int CAMERA_REQUEST_CODE = 1020;
-    public static final int GALLERY_REQUEST_CODE = 1021;
-    public  static final int VIDEO_REQUEST_CODE = 1022;
-
-
+    public static final int CAMERA_REQUEST_CODE_PHOTO = 1020;
+    public static final int GALLERY_REQUEST_CODE_PHOTO = 1021;
+    public static final int CAMERA_REQUEST_CODE_VIDEO = 1022;
+    public static final int GALLERY_REQUEST_CODE_VIDEO = 1023;
+    private static GsonMapper mapper = new GsonMapper();
     public static boolean takeGalleryImage(Fragment fragment) {
         Intent pickPhoto = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         if (pickPhoto.resolveActivity(fragment.getActivity().getPackageManager()) != null) {
             Intent intent = new Intent();
             intent.setType("image/*");
             intent.setAction(Intent.ACTION_GET_CONTENT);
-            fragment.startActivityForResult(Intent.createChooser(intent, fragment.getString(R.string.selectFile)), GALLERY_REQUEST_CODE);
+            fragment.startActivityForResult(Intent.createChooser(intent, fragment.getString(R.string.selectFile)), GALLERY_REQUEST_CODE_PHOTO);
             return true;
         }
         return false;
@@ -41,7 +43,7 @@ public class IntentUtils {
             Uri uri = FilesUtils.getOutputMediaFileUri();
             file = uri.getPath();
             intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
-            fragment.startActivityForResult(intent, CAMERA_REQUEST_CODE);
+            fragment.startActivityForResult(intent, CAMERA_REQUEST_CODE_PHOTO);
         }
         return file;
     }
@@ -60,9 +62,18 @@ public class IntentUtils {
         return file;
     }
 
+    @Nullable
+    public static String captureVideo(ChatFragment chatFragment) {
+        String file = null;
+
+        //Todo Dima, take video here
+
+        return file;
+    }
+
     public static String onGalleryActivityResult(Context c, int requestCode, int resultCode, Intent data) {
         if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == GALLERY_REQUEST_CODE) {
+            if (requestCode == GALLERY_REQUEST_CODE_PHOTO) {
                 return FilesUtils.getRealPathFromURI(c, data.getData());
             }
         }

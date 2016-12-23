@@ -1,7 +1,6 @@
 package com.peekaboo.presentation.services;
 
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.peekaboo.data.FileEntity;
@@ -17,7 +16,6 @@ import com.peekaboo.domain.subscribers.BaseUseCaseSubscriber;
 import com.peekaboo.domain.usecase.FileDownloadUseCase;
 import com.peekaboo.domain.usecase.FileUploadUseCase;
 import com.peekaboo.domain.usecase.GetAllUnreadMessagesInfoUseCase;
-import com.peekaboo.presentation.fragments.ChatFragment;
 import com.peekaboo.utils.Constants;
 
 import java.util.HashSet;
@@ -246,6 +244,7 @@ public class Messenger implements IMessenger,
                 break;
             case PMessage.PMESSAGE_MEDIA_TYPE.AUDIO_MESSAGE:
             case PMessage.PMESSAGE_MEDIA_TYPE.IMAGE_MESSAGE:
+            case PMessage.PMESSAGE_MEDIA_TYPE.VIDEO_MESSAGE:
                 uploadAndDeliverFileMessage(message);
                 break;
             case PMessage.PMESSAGE_MEDIA_TYPE.VIDEO_MESSAGE:
@@ -263,6 +262,7 @@ public class Messenger implements IMessenger,
             Log.wtf("gus :", "uploadAndDeliverFileMessage -> IMAGE_MESSAGE");
             uploadFileUseCase.execute(message, getUploadSubscriber(), Constants.MESSAGE_TYPE.TYPE_IMAGE);
         }
+
         if (message.mediaType() == PMessageAbs.PMESSAGE_MEDIA_TYPE.VIDEO_MESSAGE) {
             Log.wtf("gus :", "uploadAndDeliverFileMessage -> VIDEO_MESSAGE");
             uploadFileUseCase.execute(message, getUploadSubscriber(), Constants.MESSAGE_TYPE.TYPE_VIDEO);

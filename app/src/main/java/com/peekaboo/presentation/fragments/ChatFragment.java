@@ -148,7 +148,7 @@ public class ChatFragment extends Fragment implements IChatView2, DrawerActivity
         ChatFragment fragment = new ChatFragment();
 
         Bundle args = new Bundle();
-        args.putParcelable(COMPANION, companion);
+        IntentUtils.putObject(COMPANION, args, companion);
         fragment.setArguments(args);
 
         return fragment;
@@ -164,7 +164,7 @@ public class ChatFragment extends Fragment implements IChatView2, DrawerActivity
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         PeekabooApplication.getApp(getActivity()).getComponent().inject(this);
-        companion = getArguments().getParcelable(COMPANION);
+        companion = IntentUtils.getObject(COMPANION, getArguments(), Contact.class);
         restoreState(savedInstanceState);
     }
 
@@ -366,8 +366,13 @@ public class ChatFragment extends Fragment implements IChatView2, DrawerActivity
     }
 
     @OnClick(R.id.photo_btn)
-    void onCameraButtonClick() {
+    void onPhotoCameraButtonClick() {
         takePhoto();
+    }
+
+    @OnClick(R.id.camera_btn)
+    void onVideoCameraButtonCkicked(){
+        takeVideo();
     }
 
     @OnClick(R.id.gallery_btn)
@@ -456,6 +461,10 @@ public class ChatFragment extends Fragment implements IChatView2, DrawerActivity
                 } else {
                     imageFile = null;
                 }
+                break;
+            case IntentUtils.CAMERA_REQUEST_CODE_VIDEO:
+            case IntentUtils.GALLERY_REQUEST_CODE_VIDEO:
+                //TODO handling file and send it
                 break;
             case Constants.REQUEST_CODES.REQUEST_CODE_GPS:
                 Log.e("ChatFragment", "handle result gps " + resultCode + " " + data);
