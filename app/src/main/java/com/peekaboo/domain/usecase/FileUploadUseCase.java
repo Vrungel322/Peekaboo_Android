@@ -44,7 +44,7 @@ public class FileUploadUseCase extends QueueUseCase<PMessage, FileEntity> {
         Response<FileEntity> execute =
                 repository.uploadFile(fileType, fileName, take.receiverId())
                         .execute();
-        
+
         if (take.mediaType() == PMessageAbs.PMESSAGE_MEDIA_TYPE.IMAGE_MESSAGE &&
                 uploadableFile != null) {
             FilesUtils.deleteFile(uploadableFile);
@@ -52,8 +52,8 @@ public class FileUploadUseCase extends QueueUseCase<PMessage, FileEntity> {
 
         if (take.mediaType() == PMessageAbs.PMESSAGE_MEDIA_TYPE.VIDEO_MESSAGE &&
                 uploadableFile != null) {
-            FilesUtils.deleteFile(uploadableFile);
             //TODO : delete video file
+            FilesUtils.deleteFile(uploadableFile);
         }
 
         if (execute.isSuccessful()) {

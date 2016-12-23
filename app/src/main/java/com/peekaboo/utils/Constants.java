@@ -57,6 +57,11 @@ public class Constants {
         String IMAGE_SENDING_FILE_EXT_JPG = ".jpg";
 
     }
+    public interface VIDEO_SENDING {
+        String VIDEO_SENDING_FOLDER = "PeekabooVideo";
+        String VIDEO_SENDING_FILE_EXT_MP4 = ".mp4";
+
+    }
 //
 //    public interface DESIGN_CONSTANTS{
 //        int BIG_SIDE_MARGIN = 45;

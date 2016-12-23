@@ -250,6 +250,7 @@ public class ChatAdapter2 extends RecyclerView.Adapter<ChatAdapter2.ViewHolder> 
                     holderVideo.pbLoadingImage.setVisibility(pMessageAbs.hasBothPaths() || pMessageAbs.hasFileError() ? View.GONE : View.VISIBLE);
                     if (video.split(PMessage.DIVIDER).length == 2) {
                         Log.wtf("image : ", ResourcesUtils.splitImagePath(video, 2));
+                        // TODO: create layout for video message and set video into this layout
                         holderVideo.ivImageMessage.setImageResource(R.drawable.arrow);
                     }
                 }
