@@ -47,8 +47,9 @@ public class IntentUtils {
         }
         return file;
     }
+
     @Nullable
-    public static String captureVideo(Fragment fragment) {
+    public static String captureVideo(ChatFragment fragment) {
         Intent intent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
         intent.putExtra(MediaStore.EXTRA_DURATION_LIMIT, 10);
         String file = null;
@@ -57,17 +58,8 @@ public class IntentUtils {
             file = uri.getPath();
             intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
 
-            fragment.startActivityForResult(intent, VIDEO_REQUEST_CODE);
+            fragment.startActivityForResult(intent, CAMERA_REQUEST_CODE_VIDEO);
         }
-        return file;
-    }
-
-    @Nullable
-    public static String captureVideo(ChatFragment chatFragment) {
-        String file = null;
-
-        //Todo Dima, take video here
-
         return file;
     }
 
@@ -76,6 +68,31 @@ public class IntentUtils {
             if (requestCode == GALLERY_REQUEST_CODE_PHOTO) {
                 return FilesUtils.getRealPathFromURI(c, data.getData());
             }
+        }
+        return null;
+    }
+
+    public static Bundle putObject(String key, Bundle bundle, Object o) {
+        bundle.putString(key, mapper.toJson(o));
+        return bundle;
+    }
+    public static Intent putObject(String key, Intent intent, Object o) {
+        intent.putExtra(key, mapper.toJson(o));
+        return intent;
+    }
+    @Nullable
+    public static <T> T getObject(String key, Bundle bundle, Class<T> destinationClass) {
+        String serializedObject = bundle.getString(key);
+        if (serializedObject != null) {
+            return mapper.fromJson(serializedObject, destinationClass);
+        }
+        return null;
+    }
+    @Nullable
+    public static <T> T getObject(String key, Intent intent, Class<T> destinationClass) {
+        String serializedObject = intent.getStringExtra(key);
+        if (serializedObject != null) {
+            return mapper.fromJson(serializedObject, destinationClass);
         }
         return null;
     }

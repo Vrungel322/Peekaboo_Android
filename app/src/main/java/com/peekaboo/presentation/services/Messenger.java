@@ -247,9 +247,6 @@ public class Messenger implements IMessenger,
             case PMessage.PMESSAGE_MEDIA_TYPE.VIDEO_MESSAGE:
                 uploadAndDeliverFileMessage(message);
                 break;
-            case PMessage.PMESSAGE_MEDIA_TYPE.VIDEO_MESSAGE:
-                uploadAndDeliverFileMessage(message);
-                break;
         }
     }
 

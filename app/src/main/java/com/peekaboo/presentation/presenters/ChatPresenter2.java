@@ -188,17 +188,6 @@ public class ChatPresenter2 extends BasePresenter<IChatView2> implements IChatPr
             messenger.sendMessage(pMessage);
         }
     }
-    @Override
-    public void onSendVideoButtonPress(String realPath) {
-        IChatView2 view = getView();
-        if (view != null) {
-            PMessage pMessage = new PMessage(
-                    true, PMessageAbs.PMESSAGE_MEDIA_TYPE.VIDEO_MESSAGE, realPath, System.currentTimeMillis(),
-                    PMessageAbs.PMESSAGE_STATUS.STATUS_SENT,
-                    receiver, accountUser.getId());
-            messenger.sendMessage(pMessage);
-        }
-    }
 
     @Override
     public void onSendVideoButtonPress(String realPath) {

@@ -379,12 +379,7 @@ public class ChatFragment extends Fragment implements IChatView2, DrawerActivity
     void onGalleryButtonClick() {
         takeGalleryImage();
     }
-
-    @OnClick(R.id.camera_btn)
-    void onVideoButtonClick() {
-        takeVideo();
-    }
-
+    
     private void takeVideo() {
         videoFile = IntentUtils.captureVideo(this);
         if (videoFile == null) {
@@ -432,7 +427,7 @@ public class ChatFragment extends Fragment implements IChatView2, DrawerActivity
         int resultCode = activityResult.resultCode;
 //        Log.wtf("NULL : ", "--GPS " + requestCode);
         switch (requestCode) {
-            case IntentUtils.VIDEO_REQUEST_CODE:
+            case IntentUtils.CAMERA_REQUEST_CODE_VIDEO:
                 if (resultCode == RESULT_OK) {
                     if (videoFile == null) {
                         videoFile = IntentUtils.onGalleryActivityResult(getActivity(), requestCode, resultCode, data);
@@ -447,8 +442,8 @@ public class ChatFragment extends Fragment implements IChatView2, DrawerActivity
                 }
                 break;
 
-            case IntentUtils.CAMERA_REQUEST_CODE:
-            case IntentUtils.GALLERY_REQUEST_CODE:
+            case IntentUtils.CAMERA_REQUEST_CODE_PHOTO:
+            case IntentUtils.GALLERY_REQUEST_CODE_PHOTO:
                 if (resultCode == RESULT_OK) {
                     if (imageFile == null) {
                         imageFile = IntentUtils.onGalleryActivityResult(getActivity(), requestCode, resultCode, data);
@@ -462,7 +457,6 @@ public class ChatFragment extends Fragment implements IChatView2, DrawerActivity
                     imageFile = null;
                 }
                 break;
-            case IntentUtils.CAMERA_REQUEST_CODE_VIDEO:
             case IntentUtils.GALLERY_REQUEST_CODE_VIDEO:
                 //TODO handling file and send it
                 break;
