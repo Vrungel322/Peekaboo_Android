@@ -68,6 +68,9 @@ public class IntentUtils {
             if (requestCode == GALLERY_REQUEST_CODE_PHOTO) {
                 return FilesUtils.getRealPathFromURI(c, data.getData());
             }
+            if (requestCode == CAMERA_REQUEST_CODE_VIDEO) {
+                return FilesUtils.getRealPathFromURI(c, data.getData());
+            }
         }
         return null;
     }
