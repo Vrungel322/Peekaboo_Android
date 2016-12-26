@@ -371,7 +371,7 @@ public class ChatFragment extends Fragment implements IChatView2, DrawerActivity
     }
 
     @OnClick(R.id.camera_btn)
-    void onVideoCameraButtonCkicked(){
+    void onVideoCameraButtonCkicked() {
         takeVideo();
     }
 
@@ -380,12 +380,11 @@ public class ChatFragment extends Fragment implements IChatView2, DrawerActivity
         takeGalleryImage();
     }
 
-    private void takeVideo() {
-        videoFile = IntentUtils.captureVideo(this);
-        if (videoFile == null) {
-            showToastMessage(getString(R.string.cameraIsNotAvailable));
+    public void takeGalleryImage() {
+        boolean canTake = IntentUtils.takeGalleryImage(this);
+        if (!canTake) {
+            showToastMessage(getString(R.string.galleryIsNotAvailable));
         }
-
     }
 
     public void takePhoto() {
@@ -395,10 +394,10 @@ public class ChatFragment extends Fragment implements IChatView2, DrawerActivity
         }
     }
 
-    public void takeGalleryImage() {
-        boolean canTake = IntentUtils.takeGalleryImage(this);
-        if (!canTake) {
-            showToastMessage(getString(R.string.galleryIsNotAvailable));
+    public void takeVideo() {
+        videoFile = IntentUtils.captureVideo(this);
+        if (videoFile == null) {
+            showToastMessage(getString(R.string.cameraIsNotAvailable));
         }
     }
 
@@ -421,10 +420,10 @@ public class ChatFragment extends Fragment implements IChatView2, DrawerActivity
     }
 
     private void handleActivityResult(@NonNull ActivityResult activityResult) {
-        Log.e("ChatFragment", "handleActivityResult()");
         Intent data = activityResult.data;
         int requestCode = activityResult.requestCode;
         int resultCode = activityResult.resultCode;
+        Toast.makeText(getContext(), "" + requestCode + resultCode + data, Toast.LENGTH_SHORT).show();
 //        Log.wtf("NULL : ", "--GPS " + requestCode);
         switch (requestCode) {
             case IntentUtils.CAMERA_REQUEST_CODE_VIDEO:
@@ -458,7 +457,12 @@ public class ChatFragment extends Fragment implements IChatView2, DrawerActivity
                 }
                 break;
             case IntentUtils.GALLERY_REQUEST_CODE_VIDEO:
-                //TODO handling file and send it
+                if (videoFile != null) {
+                    sendVideo(videoFile);
+                    videoFile = null;
+                } else {
+                    videoFile = null;
+                }
                 break;
             case Constants.REQUEST_CODES.REQUEST_CODE_GPS:
                 Log.e("ChatFragment", "handle result gps " + resultCode + " " + data);

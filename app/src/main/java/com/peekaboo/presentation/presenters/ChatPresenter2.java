@@ -199,7 +199,6 @@ public class ChatPresenter2 extends BasePresenter<IChatView2> implements IChatPr
                     receiver, accountUser.getId());
             messenger.sendMessage(pMessage);
         }
-
     }
 
     @Override

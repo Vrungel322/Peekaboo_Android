@@ -41,18 +41,18 @@ public class FileUploadUseCase extends QueueUseCase<PMessage, FileEntity> {
             uploadableFile = filesUtils.createUploadableImageFile(fileName, Constants.IMAGE_SIZES.IMAGE_SIZE);
             fileName = uploadableFile.getAbsolutePath();
         }
-
-        if (take.mediaType() == PMessageAbs.PMESSAGE_MEDIA_TYPE.VIDEO_MESSAGE) {
-            //TODO: compress video mb
-            uploadableFile = filesUtils.createUploadableVideoFile(fileName, Constants.IMAGE_SIZES.IMAGE_SIZE);
-            fileName = uploadableFile.getAbsolutePath();
-        }
-
         Response<FileEntity> execute =
                 repository.uploadFile(fileType, fileName, take.receiverId())
                         .execute();
+
         if (take.mediaType() == PMessageAbs.PMESSAGE_MEDIA_TYPE.IMAGE_MESSAGE &&
                 uploadableFile != null) {
+            FilesUtils.deleteFile(uploadableFile);
+        }
+
+        if (take.mediaType() == PMessageAbs.PMESSAGE_MEDIA_TYPE.VIDEO_MESSAGE &&
+                uploadableFile != null) {
+            //TODO : delete video file
             FilesUtils.deleteFile(uploadableFile);
         }
 

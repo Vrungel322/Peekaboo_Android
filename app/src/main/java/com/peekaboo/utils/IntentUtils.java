@@ -11,6 +11,7 @@ import android.support.v4.app.Fragment;
 
 import com.peekaboo.R;
 import com.peekaboo.data.mappers.GsonMapper;
+import com.peekaboo.data.repositories.database.messages.PMessageAbs;
 import com.peekaboo.presentation.fragments.ChatFragment;
 
 /**
@@ -40,7 +41,7 @@ public class IntentUtils {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
         String file = null;
         if (intent.resolveActivity(fragment.getActivity().getPackageManager()) != null) {
-            Uri uri = FilesUtils.getOutputMediaFileUri();
+            Uri uri = FilesUtils.getOutputMediaFileUri(PMessageAbs.PMESSAGE_MEDIA_TYPE.IMAGE_MESSAGE);
             file = uri.getPath();
             intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
             fragment.startActivityForResult(intent, CAMERA_REQUEST_CODE_PHOTO);
@@ -49,16 +50,15 @@ public class IntentUtils {
     }
 
     @Nullable
-    public static String captureVideo(ChatFragment fragment) {
+    public static String captureVideo(ChatFragment chatFragment) {
         Intent intent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
         intent.putExtra(MediaStore.EXTRA_DURATION_LIMIT, 10);
         String file = null;
-        if (intent.resolveActivity(fragment.getActivity().getPackageManager()) != null) {
-            Uri uri = FilesUtils.getOutputMediaFileUri();
+        if (intent.resolveActivity(chatFragment.getActivity().getPackageManager()) != null) {
+            Uri uri = FilesUtils.getOutputMediaFileUri(PMessageAbs.PMESSAGE_MEDIA_TYPE.VIDEO_MESSAGE);
             file = uri.getPath();
             intent.putExtra(MediaStore.EXTRA_OUTPUT, uri);
-
-            fragment.startActivityForResult(intent, CAMERA_REQUEST_CODE_VIDEO);
+            chatFragment.startActivityForResult(intent, CAMERA_REQUEST_CODE_VIDEO);
         }
         return file;
     }

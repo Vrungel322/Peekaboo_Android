@@ -8,6 +8,8 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 
+import com.peekaboo.data.repositories.database.messages.PMessageAbs;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -31,7 +33,7 @@ public class FilesUtils {
         this.context = context;
     }
 
-    private static File getOutputMediaFile() {
+    private static File getOutputImageFile() {
         File mediaStorageDir = new File(
                 Environment
                         .getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
@@ -54,11 +56,40 @@ public class FilesUtils {
         return mediaFile;
     }
 
+    private static File getOutputVideoFile() {
+        File mediaStorageDir = new File(
+                Environment
+                        .getExternalStoragePublicDirectory(Environment.DIRECTORY_PICTURES),
+                IMAGE_DIRECTORY_NAME);
+
+        if (!mediaStorageDir.exists()) {
+            if (!mediaStorageDir.mkdirs()) {
+                Log.e(IMAGE_DIRECTORY_NAME, "Oops! Failed create "
+                        + IMAGE_DIRECTORY_NAME + " directory");
+                return null;
+            }
+        }
+
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss",
+                Locale.getDefault()).format(new Date());
+        File mediaFile;
+        mediaFile = new File(mediaStorageDir.getPath() + File.separator
+                + "VIDEO_" + timeStamp + ".mp4");
+
+        return mediaFile;
+    }
+
     /**
      * Creating file uri to store image/video
      */
-    public static Uri getOutputMediaFileUri() {
-        return Uri.fromFile(getOutputMediaFile());
+    public static Uri getOutputMediaFileUri(int typeOfMediaFile) {
+        if (typeOfMediaFile == PMessageAbs.PMESSAGE_MEDIA_TYPE.IMAGE_MESSAGE){
+            return Uri.fromFile(getOutputImageFile());
+        }
+        if (typeOfMediaFile == PMessageAbs.PMESSAGE_MEDIA_TYPE.VIDEO_MESSAGE){
+            return Uri.fromFile(getOutputVideoFile());
+        }
+        return null;
     }
 
     public String getRealPathFromURI(Uri contentURI) {
@@ -104,8 +135,14 @@ public class FilesUtils {
     }
 
     public static File saveTempVideoFile(Context c, String fileName, int size) throws IOException {
+        File cacheDir = c.getExternalCacheDir();
+        if (!cacheDir.exists()) cacheDir.mkdir();
 
-        return null;
+        File result = new File(cacheDir.getPath() + File.separator
+                + System.currentTimeMillis() + ".mp4");
+        FileOutputStream fos = new FileOutputStream(result);
+        fos.close();
+        return result;
     }
 
 

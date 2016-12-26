@@ -56,6 +56,7 @@ public class FileUtils {
 
     @NonNull
     public static String formFileName(String folderName, String fileType) {
+
         if (fileType.equals(Constants.MESSAGE_TYPE.TYPE_AUDIO)) {
             String filepath = Environment.getExternalStorageDirectory().getPath();
             File file = new File(filepath, Constants.SOUND_RECORDING.AUDIO_RECORDER_FOLDER
@@ -81,6 +82,7 @@ public class FileUtils {
             return (file.getAbsolutePath() + "/" + System.currentTimeMillis()
                     + Constants.IMAGE_SENDING.IMAGE_SENDING_FILE_EXT_JPG);
         }
+
         if (fileType.equals(Constants.MESSAGE_TYPE.TYPE_VIDEO)) {
             String filepath = Environment.getExternalStorageDirectory().getPath();
             File file = new File(filepath, Constants.VIDEO_SENDING.VIDEO_SENDING_FOLDER

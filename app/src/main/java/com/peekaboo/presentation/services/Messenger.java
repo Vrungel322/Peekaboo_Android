@@ -165,6 +165,8 @@ public class Messenger implements IMessenger,
             downloadFileUseCase.execute(pMessage, getDownloadSubscriber(), Constants.MESSAGE_TYPE.TYPE_AUDIO);
         } else if (pMessage.mediaType() == PMessage.PMESSAGE_MEDIA_TYPE.IMAGE_MESSAGE) {
             downloadFileUseCase.execute(pMessage, getDownloadSubscriber(), Constants.MESSAGE_TYPE.TYPE_IMAGE);
+        }else if (pMessage.mediaType() == PMessage.PMESSAGE_MEDIA_TYPE.VIDEO_MESSAGE) {
+            downloadFileUseCase.execute(pMessage, getDownloadSubscriber(), Constants.MESSAGE_TYPE.TYPE_VIDEO);
         }
 
     }
