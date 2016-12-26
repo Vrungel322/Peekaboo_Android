@@ -156,9 +156,7 @@ public class ChatAdapter2 extends RecyclerView.Adapter<ChatAdapter2.ViewHolder> 
             case PMessageAbs.PMESSAGE_MEDIA_TYPE.GEO_MESSAGE:
                 v = inflater.inflate(R.layout.list_item_chat_image_message, parent, false);
                 return new ViewHolderGeo(v);
-            case PMessageAbs.PMESSAGE_MEDIA_TYPE.VIDEO_MESSAGE:
-                v = inflater.inflate(R.layout.list_item_chat_image_message, parent, false);
-                return new ViewHolderGeo(v);
+
         }
 
         return null;
