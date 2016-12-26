@@ -379,7 +379,7 @@ public class ChatFragment extends Fragment implements IChatView2, DrawerActivity
     void onGalleryButtonClick() {
         takeGalleryImage();
     }
-    
+
     private void takeVideo() {
         videoFile = IntentUtils.captureVideo(this);
         if (videoFile == null) {

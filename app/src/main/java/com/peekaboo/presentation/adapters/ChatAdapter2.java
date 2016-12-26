@@ -242,6 +242,7 @@ public class ChatAdapter2 extends RecyclerView.Adapter<ChatAdapter2.ViewHolder> 
                 }
                 break;
             case PMessageAbs.PMESSAGE_MEDIA_TYPE.VIDEO_MESSAGE:
+
                 break;
             case PMessageAbs.PMESSAGE_MEDIA_TYPE.DOCUMENT_MESSAGE:
                 break;
