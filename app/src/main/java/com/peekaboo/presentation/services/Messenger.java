@@ -131,6 +131,8 @@ public class Messenger implements IMessenger,
      * @param message
      */
     private void handleIncomingMessage(Message message) {
+        // !!! to download file
+        // Do not forget to add new type of file , when documents feature will be developed
         PMessage pMessage = MessageUtils.convert(message);
         Log.e("Messenger", "handleIncomingMessage " + pMessage);
         pMessage.setStatus(PMessage.PMESSAGE_STATUS.STATUS_DELIVERED);
@@ -163,9 +165,11 @@ public class Messenger implements IMessenger,
         }
         if (pMessage.mediaType() == PMessage.PMESSAGE_MEDIA_TYPE.AUDIO_MESSAGE) {
             downloadFileUseCase.execute(pMessage, getDownloadSubscriber(), Constants.MESSAGE_TYPE.TYPE_AUDIO);
-        } else if (pMessage.mediaType() == PMessage.PMESSAGE_MEDIA_TYPE.IMAGE_MESSAGE) {
+        }
+        if (pMessage.mediaType() == PMessage.PMESSAGE_MEDIA_TYPE.IMAGE_MESSAGE) {
             downloadFileUseCase.execute(pMessage, getDownloadSubscriber(), Constants.MESSAGE_TYPE.TYPE_IMAGE);
-        }else if (pMessage.mediaType() == PMessage.PMESSAGE_MEDIA_TYPE.VIDEO_MESSAGE) {
+        }
+        if (pMessage.mediaType() == PMessage.PMESSAGE_MEDIA_TYPE.VIDEO_MESSAGE) {
             downloadFileUseCase.execute(pMessage, getDownloadSubscriber(), Constants.MESSAGE_TYPE.TYPE_VIDEO);
         }
 

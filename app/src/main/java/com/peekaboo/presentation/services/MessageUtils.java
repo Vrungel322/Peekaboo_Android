@@ -93,6 +93,9 @@ public class MessageUtils {
                 case Message.Type.IMAGE:
                     mediaType = PMessageAbs.PMESSAGE_MEDIA_TYPE.IMAGE_MESSAGE;
                     break;
+                case Message.Type.VIDEO:
+                    mediaType = PMessageAbs.PMESSAGE_MEDIA_TYPE.VIDEO_MESSAGE;
+                    break;
                 case Message.Type.GEO:
                     mediaType = PMessageAbs.PMESSAGE_MEDIA_TYPE.GEO_MESSAGE;
                     break;

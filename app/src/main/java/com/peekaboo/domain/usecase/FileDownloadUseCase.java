@@ -1,5 +1,7 @@
 package com.peekaboo.domain.usecase;
 
+import android.util.Log;
+
 import com.peekaboo.data.di.scope.UserScope;
 import com.peekaboo.data.repositories.database.messages.PMessage;
 import com.peekaboo.data.utils.FileUtils;
@@ -33,7 +35,9 @@ public class FileDownloadUseCase extends QueueUseCase<PMessage, String> {
                 .execute();
         File file = null;
         if (execute.isSuccessful()) {
+            Log.wtf("filedownloadUseCase", "start");
             file = FileUtils.writeResponseBodyToDisk(FileUtils.formFileName(key.receiverId(), fileType), execute.body());
+            Log.wtf("filedownloadUseCase", "stop");
         }
 
         if (file == null) return null;
