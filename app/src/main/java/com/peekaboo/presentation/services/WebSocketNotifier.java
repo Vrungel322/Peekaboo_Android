@@ -84,6 +84,7 @@ public class WebSocketNotifier implements INotifier<Message> {
                                 });
                             }
 
+                            // Сюда приходит сообщение
                             @Override
                             public void onBinaryMessage(WebSocket websocket, byte[] binary) throws Exception {
                                 Log.e(TAG, "Status: Binary Message received" + new String(binary));

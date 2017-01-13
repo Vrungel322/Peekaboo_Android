@@ -40,6 +40,13 @@ public interface Constants {
         int RECORDER_AUDIO_ENCODING = AudioFormat.ENCODING_PCM_16BIT;
     }
 
+    interface MAPS{
+        String BLUE_POINT = "https://www.peekaboochat.com/assets/src/blue_point.png";
+        String RED_POINT = "https://www.peekaboochat.com/assets/src/red_point.png";
+        String SEPARATOR = "|";
+        String STATICMAP_URL = "http://maps.google.com/maps/api/staticmap?center=";
+    }
+
     interface IMAGE_SIZES {
         int AVATAR_SIZE = 500;
         int IMAGE_SIZE = 500;

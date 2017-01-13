@@ -1,8 +1,8 @@
 package com.peekaboo.utils;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -128,5 +128,10 @@ public class ActivityNavigator {
         Intent mapIntent = new Intent(fragment.getActivity(), MapActivity.class);
         fragment.startActivityForResult(mapIntent, requestCodeGps);
         Log.wtf("NULL : ", "sendim gpsimg in fragment");
+    }
+
+    public void startGeoDefaultSettings(AppCompatActivity activity) {
+        Intent i = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+        activity.startActivity(i);
     }
 }

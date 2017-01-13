@@ -5,6 +5,7 @@ import com.peekaboo.domain.AccountUser;
 import com.peekaboo.presentation.activities.DetailsActivity;
 import com.peekaboo.presentation.activities.LogInActivity;
 import com.peekaboo.presentation.activities.MainActivity;
+import com.peekaboo.presentation.activities.MapActivity;
 import com.peekaboo.presentation.activities.SignUpActivity;
 import com.peekaboo.presentation.activities.SplashActivity;
 import com.peekaboo.presentation.dialogs.AvatarChangeDialog;
@@ -45,6 +46,8 @@ public interface UserComponent {
     void inject(SignUpActivity signUpActivity);
 
     void inject(MainActivity mainActivity);
+
+    void inject(MapActivity mapActivity);
 
     //    Inject of Fragments
     void inject(ContactsFragment contactsFragment);

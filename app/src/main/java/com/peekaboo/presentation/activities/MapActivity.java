@@ -1,7 +1,6 @@
 package com.peekaboo.presentation.activities;
 
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -10,7 +9,6 @@ import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.provider.Settings;
 import android.support.annotation.DrawableRes;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.ActionBar;
@@ -41,11 +39,15 @@ import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.peekaboo.R;
+import com.peekaboo.data.Constants;
 import com.peekaboo.data.repositories.database.contacts.Contact;
+import com.peekaboo.presentation.PeekabooApplication;
+import com.peekaboo.utils.ActivityNavigator;
 
-import java.text.DecimalFormat;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import javax.inject.Inject;
 
 /**
  * Created by patri_000 on 18.10.2016.
@@ -53,12 +55,16 @@ import java.util.regex.Pattern;
 
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback {
 
-    GoogleMap googleMap;
-    Marker redmarker, bluemarker;
+    @Inject
+    ActivityNavigator activityNavigator;
+    private GoogleMap googleMap;
+    private Marker redmarker;
+    private Marker bluemarker;
 
     private LocationManager locationManager;
 
     private FloatingActionButton fabpush, fabswitch;
+    public static final String COMMA = ",";
 
 
     @Override
@@ -66,6 +72,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         setContentView(R.layout.gmapstest);
 //        Intent intent = getIntent();
+        PeekabooApplication.getApp(this).getComponent().inject(MapActivity.this);
 
 
         locationManager = (LocationManager) getSystemService(LOCATION_SERVICE);
@@ -89,20 +96,13 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             AlertDialog.Builder builder = new AlertDialog.Builder(this);
             builder.setTitle("Location Manager");
             builder.setMessage("Would you like to enable GPS?");
-            builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    //Launch settings, allowing user to make a change
-                    Intent i = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
-                    startActivity(i);
-                }
+            builder.setPositiveButton("Yes", (dialog, which) -> {
+                //Launch settings, allowing user to make a change
+                activityNavigator.startGeoDefaultSettings(this);
             });
-            builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which) {
-                    //No location service, no Activity
+            builder.setNegativeButton("No", (dialog, which) -> {
+                //No location service, no Activity
 //                    finish();
-                }
             });
             builder.create().show();
         }
@@ -285,11 +285,11 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             Log.wtf("NULL : ", "NEW PUSH " + lat + "  |  " + lng);
 
 
-            String mapuri = "http://maps.google.com/maps/api/staticmap?center=" + lat + "," + lng +
-                    "&markers=icon:https://www.peekaboochat.com/assets/src/blue_point.png|" + bluemarker.getPosition().latitude + "," + bluemarker.getPosition().longitude +
-                    "&markers=icon:https://www.peekaboochat.com/assets/src/red_point.png|" + redmarker.getPosition().latitude + "," + redmarker.getPosition().longitude +
-                    "&path=color:0xff0000ff|weight:5|fillcolor:0xFFFF0033|geodesic:true|" + bluemarker.getPosition().latitude + "," + bluemarker.getPosition().longitude + "|" +
-                    redmarker.getPosition().latitude + "," + redmarker.getPosition().longitude +
+            String mapuri = Constants.MAPS.STATICMAP_URL + lat + COMMA + lng +
+                    "&markers=icon:" + Constants.MAPS.BLUE_POINT + Constants.MAPS.SEPARATOR + bluemarker.getPosition().latitude + COMMA + bluemarker.getPosition().longitude +
+                    "&markers=icon:" + Constants.MAPS.RED_POINT + Constants.MAPS.SEPARATOR + redmarker.getPosition().latitude + COMMA + redmarker.getPosition().longitude +
+                    "&path=color:0xff0000ff|weight:5|fillcolor:0xFFFF0033|geodesic:true|" + bluemarker.getPosition().latitude + COMMA + bluemarker.getPosition().longitude + Constants.MAPS.SEPARATOR +
+                    redmarker.getPosition().latitude + COMMA + redmarker.getPosition().longitude +
                     "&zoom=15&size=350x230" +
                     "&sensor=true&scale=2";
 
@@ -303,8 +303,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         } else {
             if (bluemarker != null && bluemarker.isVisible()) {
-                String mapuri = "http://maps.google.com/maps/api/staticmap?center=" + bluemarker.getPosition().latitude + "," + bluemarker.getPosition().longitude +
-                        "&markers=icon:https://www.peekaboochat.com/assets/src/blue_point.png|" + bluemarker.getPosition().latitude + "," + bluemarker.getPosition().longitude +
+                String mapuri = Constants.MAPS.STATICMAP_URL + bluemarker.getPosition().latitude + COMMA + bluemarker.getPosition().longitude +
+                        "&markers=icon:" + Constants.MAPS.BLUE_POINT + Constants.MAPS.SEPARATOR + bluemarker.getPosition().latitude + COMMA + bluemarker.getPosition().longitude +
                         "&zoom=15&size=350x230" + "&sensor=true&scale=2";
                 Intent intent = new Intent();
                 intent.putExtra("staticmap", mapuri);
@@ -314,8 +314,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 finish();
             } else {
                 if (redmarker != null && redmarker.isVisible()) {
-                    String mapuri = "http://maps.google.com/maps/api/staticmap?center=" + redmarker.getPosition().latitude + "," + redmarker.getPosition().longitude +
-                            "&markers=icon:https://www.peekaboochat.com/assets/src/red_point.png|" + redmarker.getPosition().latitude + "," + redmarker.getPosition().longitude +
+                    String mapuri = Constants.MAPS.STATICMAP_URL + redmarker.getPosition().latitude + COMMA + redmarker.getPosition().longitude +
+                            "&markers=icon:" + Constants.MAPS.RED_POINT + Constants.MAPS.SEPARATOR + redmarker.getPosition().latitude + COMMA + redmarker.getPosition().longitude +
                             "&zoom=15&size=350x230" + "&sensor=true&scale=2";
                     Intent intent = new Intent();
                     intent.putExtra("staticmap", mapuri);
@@ -358,57 +358,45 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         googleMap = map;
         init();
         setUpMap();
-
-
     }
 
 
     private void init() {
-
         googleMap.setOnInfoWindowClickListener(redmarker -> {
             if (redmarker != null) {
                 redmarker.setVisible(false);
-
             }
         });
 
         googleMap.setOnInfoWindowClickListener(bluemarker -> {
-
             if (bluemarker != null) {
                 bluemarker.setVisible(false);
             }
         });
 
-        googleMap.setOnMapClickListener(new GoogleMap.OnMapClickListener() {
+        googleMap.setOnMapClickListener(latLng -> {
+            Log.d("MAPS_TAG", "onMapClick: " + latLng.latitude + COMMA + latLng.longitude);
 
-            @Override
-            public void onMapClick(LatLng latLng) {
-                Log.d("MAPS_TAG", "onMapClick: " + latLng.latitude + "," + latLng.longitude);
-
-                CameraPosition cameraPosition = new CameraPosition.Builder()
-                        .target(new LatLng(latLng.latitude, latLng.longitude))
-                        .zoom(16)
-                        .build();
-                CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition);
-                googleMap.animateCamera(cameraUpdate);
-            }
+            CameraPosition cameraPosition = new CameraPosition.Builder()
+                    .target(new LatLng(latLng.latitude, latLng.longitude))
+                    .zoom(16)
+                    .build();
+            CameraUpdate cameraUpdate = CameraUpdateFactory.newCameraPosition(cameraPosition);
+            googleMap.animateCamera(cameraUpdate);
         });
         //placed red marker
-        googleMap.setOnMapLongClickListener(new GoogleMap.OnMapLongClickListener() {
-            @Override
-            public void onMapLongClick(LatLng latLng) {
-                if (redmarker != null) {
-                    redmarker.setPosition(latLng);
-                    redmarker.setVisible(true);
+        googleMap.setOnMapLongClickListener(latLng -> {
+            if (redmarker != null) {
+                redmarker.setPosition(latLng);
+                redmarker.setVisible(true);
 
 
-                } else {
-                    redmarker = googleMap.addMarker(new MarkerOptions().position(new LatLng(latLng.latitude, latLng.longitude))
-                            .draggable(true)
-                            .icon(BitmapDescriptorFactory.fromResource(R.drawable.red_point))
-                            .title("Delete marker?"));
+            } else {
+                redmarker = googleMap.addMarker(new MarkerOptions().position(new LatLng(latLng.latitude, latLng.longitude))
+                        .draggable(true)
+                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.red_point))
+                        .title("Delete marker?"));
 
-                }
             }
         });
 
